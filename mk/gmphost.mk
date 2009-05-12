@@ -26,15 +26,28 @@ GMP_HOST_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GMP_HOST_VERSION_STRING)))
 GMP_HOST_SITE := ftp://ftp.gmplib.org/pub/
 GMP_HOST_PACKAGE := gmp-$(GMP_HOST_VERSION).tar.bz2
 GMP_HOST_BUILD_DIR := $(TOOLS_BUILD)/gmp
+GMP_HOST_DIR := $(TOOLS_BUILD)/gmp-host
 
-$(GMP_HOST_BUILD_DIR)/.built: download_gmp_host $(GMP_HOST_BUILD_DIR)/.decompressed
+export GMP_HOST_DIR
+
+gmphost_install: $(GMP_HOST_BUILD_DIR)/.built
+
+$(GMP_HOST_BUILD_DIR)/.built: download_gmp_host $(GMP_HOST_BUILD_DIR)/.decompressed \
+	$(GMP_HOST_BUILD_DIR)/.configured
+	@cd $(GMP_HOST_BUILD_DIR); make; make install
 	@touch $@
-
-$(GMP_HOST_BUILD_DIR)/.decompressed:
-	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(GMP_HOST_PACKAGE)
-	@mkdir -p $(GMP_HOST_BUILD_DIR)
-	touch $@
 
 download_gmp_host:
 	@test -e $(DOWNLOAD_DIR)/$(GMP_HOST_PACKAGE) || \
 	wget -P $(DOWNLOAD_DIR) $(GMP_HOST_SITE)/$(GMP_HOST_PACKAGE)
+
+$(GMP_HOST_BUILD_DIR)/.decompressed:
+	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(GMP_HOST_PACKAGE)
+	@mkdir -p $(GMP_HOST_BUILD_DIR)
+	@touch $@
+
+$(GMP_HOST_BUILD_DIR)/.configured:
+	@mkdir -p $(GMP_HOST_DIR)
+	@cd $(GMP_HOST_BUILD_DIR); $(TOOLS_BUILD)/gmp-$(GMP_HOST_VERSION)/configure \
+	 --prefix=$(GMP_HOST_DIR) --disable-shared --enable-static
+	@touch $@
