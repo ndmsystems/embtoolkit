@@ -1,7 +1,6 @@
 #########################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
-# For Copyrright from linux kernel's build/configure system, see their source code
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -17,55 +16,41 @@
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
 #########################################################################################
 #
-# \file         Kconfig
-# \brief	Kconfig of Embtoolkit
+# \file         gmphost.kconfig
+# \brief	gmphost.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 #########################################################################################
-mainmenu "Embedded toolkit configuration"
 
-config EMBTK_DOTCONFIG
-	bool
-	default y
+choice
+	prompt "Version of gmp you wish"
+	default EMBTK_GMP_HOST_VERSION_4_2_4
+	help
+		GMP is a free library for arbitrary precision arithmetic,
+		operating on signed integers, rational numbers,
+		and floating point numbers.
+		GMP is necessary in order to build MPFR.
 
-menu "Architecture Selection"
-source "kconfig/arch.kconfig"
-endmenu
+	config EMBTK_GMP_HOST_VERSION_4_3_1
+		bool "gmp-4.3.1"
+	config EMBTK_GMP_HOST_VERSION_4_3_0
+		bool "gmp-4.3.0"
+	config EMBTK_GMP_HOST_VERSION_4_2_4
+		bool "gmp-4.2.4"
+	config EMBTK_GMP_HOST_VERSION_4_2_3
+		bool "gmp-4.2.3"
+	config EMBTK_GMP_HOST_VERSION_4_2_2
+		bool "gmp-4.2.2"
+	config EMBTK_GMP_HOST_VERSION_4_2_1
+		bool "gmp-4.2.1"
+endchoice
 
-menu "Architecture Variant"
-source "kconfig/arch_variant.kconfig"
-endmenu
+config EMBTK_GMP_HOST_VERSION_STRING
+string
+default "4.3.1" if EMBTK_GMP_HOST_VERSION_4_3_1
+default "4.3.0" if EMBTK_MPFR_HOST_VERSION_4_3_0
+default "4.2.4" if EMBTK_GMP_HOST_VERSION_4_2_4
+default "4.2.3" if EMBTK_GMP_HOST_VERSION_4_2_3
+default "4.2.2" if EMBTK_GMP_HOST_VERSION_4_2_2
+default "4.2.1" if EMBTK_GMP_HOST_VERSION_4_2_1
 
-menu "Toolchain configuration"
-menu "EGLIBC C library"
-source "kconfig/eglibc.kconfig"
-
-endmenu
-
-menu "GCC compiler"
-source "kconfig/gcc.kconfig"
-endmenu
-
-menu "Binutils"
-source "kconfig/binutils.kconfig"
-endmenu
-
-menu "MPFR"
-source "kconfig/mpfrhost.kconfig"
-endmenu
-
-menu "GMP"
-source "kconfig/gmphost.kconfig"
-endmenu
-
-menu "Linux kernel headers"
-source "kconfig/linux.kconfig"
-endmenu
-
-endmenu
-
-menu "Root filesystem build"
-menu "Packages selection"
-source "kconfig/packages.kconfig"
-endmenu
-endmenu

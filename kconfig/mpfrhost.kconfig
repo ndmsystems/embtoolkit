@@ -16,8 +16,8 @@
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
 #########################################################################################
 #
-# \file         mpfr.kconfig
-# \brief	mpfr.kconfig of Embtoolkit
+# \file         mpfrhost.kconfig
+# \brief	mpfrhost.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 #########################################################################################
@@ -40,6 +40,4 @@ config EMBTK_MPFR_HOST_VERSION_STRING
 string
 default "2.4.1" if EMBTK_MPFR_HOST_VERSION_2_4_1
 default "2.4.0" if EMBTK_MPFR_HOST_VERSION_2_4_0
-
-	
 

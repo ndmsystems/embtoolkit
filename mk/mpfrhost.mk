@@ -1,14 +1,40 @@
+#########################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+#########################################################################################
+#
+# \file         mpfrhost.mk
+# \brief	mpfrhost.mk of Embtoolkit. To build gcc, we need mpfr.
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         May 2009
+#########################################################################################
 
 MPFR_HOST_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_MPFR_HOST_VERSION_STRING)))
 MPFR_HOST_SITE := http://www.mpfr.org/mpfr-$(MPFR_HOST_VERSION)
-MPFR_HOST_COMPRESSOR := tar.bz2
-MPFR_HOST_COMPRESSOR_FLAGS := -xjf
-MPFR_HOST_DECOMPRESSOR := tar
-MPFR_HOST_PACKAGE := mpfr-$(MPFR_HOST_VERSION).$(MPFR_HOST_COMPRESSOR)
-MPFR_HOST_BUILD_DIR := $(TOOLS_BUILD)/$(MPFR_HOST_PACKAGE)
+MPFR_HOST_PACKAGE := mpfr-$(MPFR_HOST_VERSION).tar.bz2
+MPFR_HOST_BUILD_DIR := $(TOOLS_BUILD)/mpfr
 
-DOWNLOAD_MPFR_HOST:
+$(MPFR_HOST_BUILD_DIR)/.built: download_mpfr_host $(MPFR_HOST_BUILD_DIR)/.decompressed
+	@touch $@
+
+$(MPFR_HOST_BUILD_DIR)/.decompressed:
+	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(MPFR_HOST_PACKAGE)
+	@mkdir -p $(MPFR_HOST_BUILD_DIR)
+	touch $@
+
+download_mpfr_host:
 	@test -e $(DOWNLOAD_DIR)/$(MPFR_HOST_PACKAGE) || \
 	wget -P $(DOWNLOAD_DIR) $(MPFR_HOST_SITE)/$(MPFR_HOST_PACKAGE)
-
-BUILD_MPFR_HOST: $(DECROMPRESS_MPFR_HOST) $()
