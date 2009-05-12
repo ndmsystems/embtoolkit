@@ -37,20 +37,10 @@ choice
 		bool "gmp-4.3.0"
 	config EMBTK_GMP_HOST_VERSION_4_2_4
 		bool "gmp-4.2.4"
-	config EMBTK_GMP_HOST_VERSION_4_2_3
-		bool "gmp-4.2.3"
-	config EMBTK_GMP_HOST_VERSION_4_2_2
-		bool "gmp-4.2.2"
-	config EMBTK_GMP_HOST_VERSION_4_2_1
-		bool "gmp-4.2.1"
 endchoice
 
 config EMBTK_GMP_HOST_VERSION_STRING
 string
 default "4.3.1" if EMBTK_GMP_HOST_VERSION_4_3_1
-default "4.3.0" if EMBTK_MPFR_HOST_VERSION_4_3_0
+default "4.3.0" if EMBTK_GMP_HOST_VERSION_4_3_0
 default "4.2.4" if EMBTK_GMP_HOST_VERSION_4_2_4
-default "4.2.3" if EMBTK_GMP_HOST_VERSION_4_2_3
-default "4.2.2" if EMBTK_GMP_HOST_VERSION_4_2_2
-default "4.2.1" if EMBTK_GMP_HOST_VERSION_4_2_1
-

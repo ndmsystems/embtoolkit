@@ -39,12 +39,20 @@ $(MPFR_HOST_BUILD_DIR)/.built: download_mpfr_host $(MPFR_HOST_BUILD_DIR)/.decomp
 
 $(MPFR_HOST_BUILD_DIR)/.decompressed:
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(MPFR_HOST_PACKAGE)
+ifeq ($(CONFIG_EMBTK_MPFR_HOST_VERSION_PATCH),y)
+	cd $(TOOLS_BUILD)/mpfr-$(MPFR_HOST_VERSION); patch -p1 < $(DOWNLOAD_DIR)/mpfr-$(MPFR_HOST_VERSION).patch
+endif
 	@mkdir -p $(MPFR_HOST_BUILD_DIR)
 	@touch $@
 
 download_mpfr_host:
 	@test -e $(DOWNLOAD_DIR)/$(MPFR_HOST_PACKAGE) || \
-	wget -P $(DOWNLOAD_DIR) $(MPFR_HOST_SITE)/$(MPFR_HOST_PACKAGE)
+	wget $(MPFR_HOST_SITE)/$(MPFR_HOST_PACKAGE) \
+	-O $(DOWNLOAD_DIR)/$(MPFR_HOST_PACKAGE)
+ifeq ($(CONFIG_EMBTK_MPFR_HOST_VERSION_PATCH),y)
+	wget $(MPFR_HOST_SITE)/patches \
+	-O $(DOWNLOAD_DIR)/mpfr-$(MPFR_HOST_VERSION).patch
+endif
 
 $(MPFR_HOST_BUILD_DIR)/.configured:
 	@mkdir -p $(MPFR_HOST_DIR)

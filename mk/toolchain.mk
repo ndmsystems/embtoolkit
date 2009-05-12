@@ -22,10 +22,15 @@
 # \date         May 2009
 #########################################################################################
 
-
-
 #GMP on host
 include $(EMBTK_ROOT)/mk/gmphost.mk
 
 #MPFR
 include $(EMBTK_ROOT)/mk/mpfrhost.mk
+
+#GCC
+include $(EMBTK_ROOT)/mk/gcc.mk
+
+#targets
+buildtoolchain: gmphost_install mpfrhost_install
+
