@@ -1,0 +1,47 @@
+#########################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+#########################################################################################
+#
+# \file         binutils.kconfig
+# \brief	binutils.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         May 2009
+#########################################################################################
+
+choice
+	prompt "Version of binutils you wish"
+	default EMBTK_BINUTILS_VERSION_2_19_1
+	help
+		Here you can choose which version on binutils your toochain
+		will use.
+	config EMBTK_BINUTILS_VERSION_2_19_1
+		bool "binutils-2.19.1"
+	config EMBTK_BINUTILS_VERSION_2_19
+		bool "binutils-2.19"
+	config EMBTK_BINUTILS_VERSION_2_18
+		bool "binutils-2.18"
+	config EMBTK_BINUTILS_VERSION_2_17
+		bool "binutils-2.17"
+endchoice
+
+config EMBTK_BINUTILS_VERSION_STRING
+	string
+	default "2.19.1"	if EMBTK_BINUTILS_VERSION_2_19_1
+	default "2.19"		if EMBTK_BINUTILS_VERSION_2_19
+	default "2.18"		if EMBTK_BINUTILS_VERSION_2_18
+	default "2.17"		if EMBTK_BINUTILS_VERSION_2_17
+

@@ -59,7 +59,7 @@ endif
 ifeq ($(CONFIG_EMBTK_DOTCONFIG),)
 EMBTK_BUILD := xconfig
 else
-EMBTK_BUILD := startbuild
+EMBTK_BUILD :=
 endif
 
 All: $(EMBTK_BUILD)

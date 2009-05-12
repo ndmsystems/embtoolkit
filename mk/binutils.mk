@@ -16,24 +16,35 @@
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
 #########################################################################################
 #
-# \file         toolchain.mk
-# \brief	toolchain.mk of Embtoolkit
+# \file         binutils.mk
+# \brief	binutils.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 #########################################################################################
 
-#GMP on host
-include $(EMBTK_ROOT)/mk/gmphost.mk
+BINUTILS_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_BINUTILS_VERSION_STRING)))
+BINUTILS_SITE := http://ftp.gnu.org/gnu/binutils
+BINUTILS_PACKAGE := binutils-$(BINUTILS_VERSION).tar.bz2
+BINUTILS_BUILD_DIR := $(TOOLS_BUILD)/binutils
 
-#MPFR
-include $(EMBTK_ROOT)/mk/mpfrhost.mk
+binutils_install: $(BINUTILS_BUILD_DIR)/.built
 
-#binutils
-include $(EMBTK_ROOT)/mk/binutils.mk
+$(BINUTILS_BUILD_DIR)/.built: download_binutils $(BINUTILS_BUILD_DIR)/.decompressed \
+	$(BINUTILS_BUILD_DIR)/.configured
+	@cd $(BINUTILS_BUILD_DIR); make; make install
+	@touch $@
 
-#GCC
-include $(EMBTK_ROOT)/mk/gcc.mk
+download_binutils:
+	@test -e $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE) || \
+	wget -O $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE) $(BINUTILS_SITE)/$(BINUTILS_PACKAGE)
 
-#targets
-buildtoolchain: gmphost_install mpfrhost_install
+$(BINUTILS_BUILD_DIR)/.decompressed:
+	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE)
+	@mkdir -p $(BINUTILS_BUILD_DIR)
+	@touch $@
 
+$(BINUTILS_BUILD_DIR)/.configured:
+	@cd $(BINUTILS_BUILD_DIR); $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)/configure \
+	 --prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --disable-werror --disable-nls \
+	 --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) --target=$(GNU_TARGET)
+	@touch $@
