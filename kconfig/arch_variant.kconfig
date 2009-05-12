@@ -1,0 +1,76 @@
+#########################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+#########################################################################################
+#
+# \file         arch_variant.kconfig
+# \brief	arch_variant of project
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         May 2009
+#########################################################################################
+
+choice
+	prompt "Architecture variant"
+	depends on EMBTK_ARCH_MIPS
+	default EMBTK_ARCH_MIPS_MIPS32_LITTLE
+	help
+	 Select architecture variant.
+	config EMBTK_ARCH_MIPS_MIPS1_LITTLE
+		bool "MIPS1 little endian"
+	config EMBTK_ARCH_MIPS_MIPS1_BIG
+		bool "MIPS1 big endian"
+	config EMBTK_ARCH_MIPS_MIPS2_LITTLE
+		bool "MIPS2 little endian"
+	config EMBTK_ARCH_MIPS_MIPS2_BIG
+		bool "MIPS2 big endian"
+	config EMBTK_ARCH_MIPS_MIPS3_LITTLE
+		bool "MIPS3 little endian"
+	config EMBTK_ARCH_MIPS_MIPS3_BIG
+		bool "MIPS3 big endian"
+	config EMBTK_ARCH_MIPS_MIPS4_LITTLE
+		bool "MIPS4 little endian"
+	config EMBTK_ARCH_MIPS_MIPS4_BIG
+		bool "MIPS4 big endian"
+	config EMBTK_ARCH_MIPS_MIPS32_LITTLE
+		bool "MIPS32 little endian"
+	config EMBTK_ARCH_MIPS_MIPS32_BIG
+		bool "MIPS32 big endian"
+	config EMBTK_ARCH_MIPS_MIPS32R2_LITTLE
+		bool "MIPS32 release 2 little endian"
+	config EMBTK_ARCH_MIPS_MIPS32R2_BIG
+		bool "MIPS32 release 2 big endian"
+
+	config EMBTK_ARCH_MIPS_MIPS64_LITTLE
+		bool "MIPS64 little endian"
+	config EMBTK_ARCH_MIPS_MIPS64_BIG
+		bool "MIPS64 big endian"
+endchoice
+choice 
+	prompt "Hardware floating point"
+	default EMBTK_SOFTFLOAT_YES
+	help
+		Select if your CPU has a hardware floating point unit.
+		If you select yes here, you toolchain will be compiled without
+		software floating.
+	config EMBTK_SOFTFLOAT_NO
+		bool "No"
+		help
+		 Your CPU does not have hardware floating point unit
+	config EMBTK_SOFTFLOAT_YES
+		bool "Yes"
+		help
+		 Your CPU has hardware floating point unit
+endchoice

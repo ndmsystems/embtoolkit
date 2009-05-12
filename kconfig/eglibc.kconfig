@@ -1,0 +1,44 @@
+#########################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# For Copyrright from linux kernel's build/configure system, see their source code
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+#########################################################################################
+#
+# \file         eglibc_version.kconfig
+# \brief	eglibc_version.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         May 2009
+#########################################################################################
+choice
+	prompt "EGLIBC version"
+	default EMBTK_EGLIBC_VERSION_2_10
+	help
+	 EGLIBC version to use.
+
+	config EMBTK_EGLIBC_VERSION_2_10
+		bool "eglibc-2.10"
+	config EMBTK_EGLIBC_VERSION_2_9
+		bool "eglibc-2.9"
+endchoice
+
+if EMBTK_EGLIBC_VERSION_2_10
+source "kconfig/option-groups.def-2.10"
+endif
+
+if EMBTK_EGLIBC_VERSION_2_9
+source "kconfig/option-groups.def-2.9"
+endif
+

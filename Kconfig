@@ -1,0 +1,67 @@
+#########################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# For Copyrright from linux kernel's build/configure system, see their source code
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+#########################################################################################
+#
+# \file         Kconfig
+# \brief	Kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         May 2009
+#########################################################################################
+mainmenu "Embedded toolkit configuration"
+
+config EMBTK_DOTCONFIG
+	bool
+	default y
+
+menu "Architecture Selection"
+source "kconfig/arch.kconfig"
+endmenu
+
+menu "Architecture Variant"
+source "kconfig/arch_variant.kconfig"
+endmenu
+
+menu "Toolchain configuration"
+menu "EGLIBC C library"
+source "kconfig/eglibc.kconfig"
+
+endmenu
+
+menu "GCC compiler"
+source "kconfig/gcc.kconfig"
+endmenu
+
+menu "Binutils"
+source "kconfig/binutils.kconfig"
+endmenu
+
+menu "MPFR"
+source "kconfig/mpfrhost.kconfig"
+endmenu
+
+menu "Linux kernel headers"
+source "kconfig/linux.kconfig"
+endmenu
+
+endmenu
+
+menu "Root filesystem build"
+menu "Packages selection"
+source "kconfig/packages.kconfig"
+endmenu
+endmenu

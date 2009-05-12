@@ -1,0 +1,82 @@
+#########################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+#########################################################################################
+#
+# \file         mips_arch.mk
+# \brief	mips_arch.mk of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         May 2009
+#########################################################################################
+
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS),y)
+LINUX_ARCH := mips
+
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1_LITTLE),y)
+GNU_TARGET := mipsel-linux
+GNU_ARCH := mips1
+endif
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1_BIG),y)
+GNU_TARGET := mipseb-linux
+GNU_ARCH := mips1
+endif
+
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS2_LITTLE),y)
+GNU_TARGET := mipsel-linux
+GNU_ARCH := mips2
+endif
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS2_BIG),y)
+GNU_TARGET := mipseb-linux
+GNU_ARCH := mips2
+endif
+
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_LITTLE),y)
+GNU_TARGET := mipsel-linux
+GNU_ARCH := mips3
+endif
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_BIG),y)
+GNU_TARGET := mipseb-linux
+GNU_ARCH := mips3
+endif
+
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32_LITTLE),y)
+GNU_TARGET := mipsel-linux
+GNU_ARCH := mips32
+endif
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32_BIG),y)
+GNU_TARGET := mipseb-linux
+GNU_ARCH := mips32
+endif
+
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32R2_LITTLE),y)
+GNU_TARGET := mipsel-linux
+GNU_ARCH := mips32r2
+endif
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32R2_BIG),y)
+GNU_TARGET := mipseb-linux
+GNU_ARCH := mips32r2
+endif
+
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64_LITTLE),y)
+GNU_TARGET := mipsel-linux
+GNU_ARCH := mips64
+endif
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64_BIG),y)
+GNU_TARGET := mipseb-linux
+GNU_ARCH := mips64
+endif
+
+endif
