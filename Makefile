@@ -37,6 +37,10 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else echo sh; fi ; fi)
 export CONFIG_SHELL
 
+HOST_ARCH :=$(shell uname -m)-unknown-linux-gnu
+HOST_BUILD := $(HOST_ARCH)
+export HOST_ARCH HOST_BUILD
+
 HOSTCC       = gcc
 HOSTCXX      = g++
 HOSTCFLAGS   = -Wall
@@ -63,7 +67,7 @@ EMBTK_BUILD :=
 endif
 
 All: $(EMBTK_BUILD)
-	
+
 xconfig: basic
 	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig
 
@@ -80,6 +84,7 @@ clean: rmallpath
 
 startbuild: mkinitialpath buildtoolchain buildrootfs
 
+include mk/macros.mk
 include mk/target_mcu.mk
 include mk/initialpath.mk
 include mk/toolchain.mk
