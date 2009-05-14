@@ -34,6 +34,11 @@ choice
 		bool "eglibc-2.9"
 endchoice
 
+config EMBTK_EGLIBC_VERSION_STRING
+	string
+	default "2.10"		if EMBTK_EGLIBC_VERSION_2_10
+	default "2.9"		if EMBTK_EGLIBC_VERSION_2_9
+
 if EMBTK_EGLIBC_VERSION_2_10
 source "kconfig/option-groups.def-2.10"
 endif
