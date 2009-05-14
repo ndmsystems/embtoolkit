@@ -34,6 +34,14 @@ endef
 #unsage $(call CONFIGURE_MESSAGE,$(NAME_PACKAGE))
 define CONFIGURE_MESSAGE
 	@echo "########################### EmbToolkit ###########################"
-	@echo "configure $(1)"
+	@echo "Configuring $(1)"
+	@echo "##################################################################"
+endef
+
+#Build message
+#unsage $(call BUILD_MESSAGE,$(NAME_PACKAGE))
+define BUILD_MESSAGE
+	@echo "########################### EmbToolkit ###########################"
+	@echo "Building $(1)"
 	@echo "##################################################################"
 endef
