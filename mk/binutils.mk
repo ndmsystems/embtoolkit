@@ -31,7 +31,7 @@ binutils_install: $(BINUTILS_BUILD_DIR)/.built
 
 $(BINUTILS_BUILD_DIR)/.built: download_binutils $(BINUTILS_BUILD_DIR)/.decompressed \
 	$(BINUTILS_BUILD_DIR)/.configured
-	@cd $(BINUTILS_BUILD_DIR); make; make install
+	@cd $(BINUTILS_BUILD_DIR) && make && make install
 	@touch $@
 
 download_binutils:
