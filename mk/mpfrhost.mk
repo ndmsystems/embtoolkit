@@ -34,7 +34,7 @@ mpfrhost_install: $(MPFR_HOST_BUILD_DIR)/.built
 
 $(MPFR_HOST_BUILD_DIR)/.built: download_mpfr_host $(MPFR_HOST_BUILD_DIR)/.decompressed \
 	$(MPFR_HOST_BUILD_DIR)/.configured
-	@cd $(MPFR_HOST_BUILD_DIR); make; make install
+	@cd $(MPFR_HOST_BUILD_DIR) && make && make install
 	@touch $@
 
 $(MPFR_HOST_BUILD_DIR)/.decompressed:
@@ -50,6 +50,7 @@ download_mpfr_host:
 	wget $(MPFR_HOST_SITE)/$(MPFR_HOST_PACKAGE) \
 	-O $(DOWNLOAD_DIR)/$(MPFR_HOST_PACKAGE)
 ifeq ($(CONFIG_EMBTK_MPFR_HOST_VERSION_PATCH),y)
+	@test -e $(DOWNLOAD_DIR)/mpfr-$(MPFR_HOST_VERSION).patch || \
 	wget $(MPFR_HOST_SITE)/patches \
 	-O $(DOWNLOAD_DIR)/mpfr-$(MPFR_HOST_VERSION).patch
 endif
