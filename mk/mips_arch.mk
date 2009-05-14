@@ -27,56 +27,56 @@ LINUX_ARCH := mips
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1_LITTLE),y)
 GNU_TARGET := mipsel-linux
-GNU_ARCH := mips1
+GNU_TARGET_ARCH := mips1
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1_BIG),y)
 GNU_TARGET := mipseb-linux
-GNU_ARCH := mips1
+GNU_TARGET_ARCH := mips1
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS2_LITTLE),y)
 GNU_TARGET := mipsel-linux
-GNU_ARCH := mips2
+GNU_TARGET_ARCH := mips2
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS2_BIG),y)
 GNU_TARGET := mipseb-linux
-GNU_ARCH := mips2
+GNU_TARGET_ARCH := mips2
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_LITTLE),y)
 GNU_TARGET := mipsel-linux
-GNU_ARCH := mips3
+GNU_TARGET_ARCH := mips3
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_BIG),y)
 GNU_TARGET := mipseb-linux
-GNU_ARCH := mips3
+GNU_TARGET_ARCH := mips3
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32_LITTLE),y)
 GNU_TARGET := mipsel-linux
-GNU_ARCH := mips32
+GNU_TARGET_ARCH := mips32
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32_BIG),y)
 GNU_TARGET := mipseb-linux
-GNU_ARCH := mips32
+GNU_TARGET_ARCH := mips32
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32R2_LITTLE),y)
 GNU_TARGET := mipsel-linux
-GNU_ARCH := mips32r2
+GNU_TARGET_ARCH := mips32r2
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32R2_BIG),y)
 GNU_TARGET := mipseb-linux
-GNU_ARCH := mips32r2
+GNU_TARGET_ARCH := mips32r2
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64_LITTLE),y)
 GNU_TARGET := mipsel-linux
-GNU_ARCH := mips64
+GNU_TARGET_ARCH := mips64
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64_BIG),y)
 GNU_TARGET := mipseb-linux
-GNU_ARCH := mips64
+GNU_TARGET_ARCH := mips64
 endif
 
 endif

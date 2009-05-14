@@ -23,11 +23,11 @@
 # \date         May 2009
 #########################################################################################
 
-SYSROOT := $(EMBTK_ROOT)/sysroot-$(GNU_TARGET)-$(GNU_ARCH)
-TOOLS := $(EMBTK_ROOT)/tools-$(GNU_TARGET)-$(GNU_ARCH)
-TOOLS_BUILD := $(EMBTK_ROOT)/tools_build-$(GNU_TARGET)-$(GNU_ARCH)
-PACKAGES_BUILD := $(EMBTK_ROOT)/packages_build-$(GNU_TARGET)-$(GNU_ARCH)
-ROOTFS := $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(GNU_ARCH)
+SYSROOT := $(EMBTK_ROOT)/sysroot-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
+TOOLS := $(EMBTK_ROOT)/tools-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
+TOOLS_BUILD := $(EMBTK_ROOT)/tools_build-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
+PACKAGES_BUILD := $(EMBTK_ROOT)/packages_build-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
+ROOTFS := $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
 
 export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD ROOTFS
 
