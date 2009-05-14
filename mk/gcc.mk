@@ -21,3 +21,65 @@
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 #########################################################################################
+
+GCC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GCC_VERSION_STRING)))
+GCC_SITE := ftp://ftp.lip6.fr/pub/gcc/releases/gcc-$(GCC_VERSION)
+GCC_PACKAGE := gcc-$(GCC_VERSION).tar.bz2
+GCC1_BUILD_DIR := $(TOOLS_BUILD)/gcc1
+GCC2_BUILD_DIR := $(TOOLS_BUILD)/gcc2
+GCC3_BUILD_DIR := $(TOOLS_BUILD)/gcc3
+
+#Hard or soft floating point
+ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
+FLOAT_TYPE := soft
+else
+FLOAT_TYPE := hard
+endif
+
+gcc1_install: $(GCC1_BUILD_DIR)/.built
+
+gcc2_install: $(GCC2_BUILD_DIR)/.built
+
+#GCC first stage
+$(GCC1_BUILD_DIR)/.built: download_gcc $(GCC1_BUILD_DIR)/.decompressed \
+	$(GCC1_BUILD_DIR)/.configured
+	@cd $(GCC1_BUILD_DIR) && make && make install
+	@touch $@
+download_gcc:
+	@test -e $(DOWNLOAD_DIR)/$(GCC_PACKAGE) || \
+	wget -O $(DOWNLOAD_DIR)/$(GCC_PACKAGE) $(GCC_SITE)/$(GCC_PACKAGE)
+
+$(GCC1_BUILD_DIR)/.decompressed:
+	$(call DECOMPRESS_MESSAGE,$(GCC_PACKAGE))
+	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(GCC_PACKAGE)
+	@mkdir -p $(GCC1_BUILD_DIR)
+	@touch $@
+
+$(GCC1_BUILD_DIR)/.configured:
+	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
+	@cd $(GCC1_BUILD_DIR); $(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
+	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(GNU_TARGET) \
+	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(FLOAT_TYPE) \
+	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
+	--without-headers --with-newlib --disable-shared --disable-threads \
+	--disable-libssp --disable-libgomp --disable-libmudflap \
+	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
+	@touch $@
+
+#GCC second stage
+$(GCC2_BUILD_DIR)/.built: $(GCC2_BUILD_DIR)/.configured
+	@cd $(GCC2_BUILD_DIR) && make && make install
+	@touch $@
+
+$(GCC2_BUILD_DIR)/.configured:
+	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
+	@mkdir -p $(GCC2_BUILD_DIR)
+	@cd $(GCC2_BUILD_DIR); $(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
+	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(GNU_TARGET) \
+	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(FLOAT_TYPE) \
+	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
+	--disable-libssp --disable-libgomp --disable-libmudflap \
+	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) \
+	--with-mpfr=$(MPFR_HOST_DIR)
+	@touch $@
+
