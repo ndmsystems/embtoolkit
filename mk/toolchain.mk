@@ -35,5 +35,5 @@ include $(EMBTK_ROOT)/mk/binutils.mk
 include $(EMBTK_ROOT)/mk/gcc.mk
 
 #targets
-buildtoolchain: gmphost_install mpfrhost_install
+buildtoolchain: gmphost_install mpfrhost_install gcc1_install
 
