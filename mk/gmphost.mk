@@ -34,7 +34,7 @@ gmphost_install: $(GMP_HOST_BUILD_DIR)/.built
 
 $(GMP_HOST_BUILD_DIR)/.built: download_gmp_host $(GMP_HOST_BUILD_DIR)/.decompressed \
 	$(GMP_HOST_BUILD_DIR)/.configured
-	@cd $(GMP_HOST_BUILD_DIR); make; make install
+	@cd $(GMP_HOST_BUILD_DIR) && make && make install
 	@touch $@
 
 download_gmp_host:
