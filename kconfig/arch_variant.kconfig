@@ -58,19 +58,12 @@ choice
 	config EMBTK_ARCH_MIPS_MIPS64_BIG
 		bool "MIPS64 big endian"
 endchoice
-choice 
-	prompt "Hardware floating point"
-	default EMBTK_SOFTFLOAT_YES
+
+config EMBTK_SOFTFLOAT
+	default y
+	bool "Soft floating point"
 	help
 		Select if your CPU has a hardware floating point unit.
-		If you select yes here, you toolchain will be compiled without
-		software floating.
-	config EMBTK_SOFTFLOAT_NO
-		bool "No"
-		help
-		 Your CPU does not have hardware floating point unit
-	config EMBTK_SOFTFLOAT_YES
-		bool "Yes"
-		help
-		 Your CPU has hardware floating point unit
-endchoice
+		If you say no here, your toolchain will be built without
+		software floating point.
+
