@@ -31,7 +31,7 @@ binutils_install: $(BINUTILS_BUILD_DIR)/.built
 
 $(BINUTILS_BUILD_DIR)/.built: download_binutils $(BINUTILS_BUILD_DIR)/.decompressed \
 	$(BINUTILS_BUILD_DIR)/.configured
-	@cd $(BINUTILS_BUILD_DIR) && make && make install
+	@$(MAKE) -C $(BINUTILS_BUILD_DIR) && $(MAKE) -C $(BINUTILS_BUILD_DIR) install
 	@touch $@
 
 download_binutils:
@@ -46,5 +46,6 @@ $(BINUTILS_BUILD_DIR)/.decompressed:
 $(BINUTILS_BUILD_DIR)/.configured:
 	@cd $(BINUTILS_BUILD_DIR); $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)/configure \
 	 --prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --disable-werror --disable-nls \
-	 --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) --target=$(GNU_TARGET)
+	 --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) --target=$(GNU_TARGET) \
+	 --build=$(HOST_BUILD) --host=$(HOST_ARCH)
 	@touch $@
