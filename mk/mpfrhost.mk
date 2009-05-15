@@ -34,7 +34,7 @@ mpfrhost_install: $(MPFR_HOST_BUILD_DIR)/.built
 
 $(MPFR_HOST_BUILD_DIR)/.built: download_mpfr_host $(MPFR_HOST_BUILD_DIR)/.decompressed \
 	$(MPFR_HOST_BUILD_DIR)/.configured
-	@cd $(MPFR_HOST_BUILD_DIR) && make && make install
+	@cd $(MPFR_HOST_BUILD_DIR) && $(MAKE) && $(MAKE) install
 	@touch $@
 
 $(MPFR_HOST_BUILD_DIR)/.decompressed:
@@ -58,5 +58,6 @@ endif
 $(MPFR_HOST_BUILD_DIR)/.configured:
 	@mkdir -p $(MPFR_HOST_DIR)
 	@cd $(MPFR_HOST_BUILD_DIR); $(TOOLS_BUILD)/mpfr-$(MPFR_HOST_VERSION)/configure \
-	 --prefix=$(MPFR_HOST_DIR) --disable-shared --enable-static --with-gmp=$(GMP_HOST_DIR)
+	--prefix=$(MPFR_HOST_DIR) --disable-shared --enable-static --with-gmp=$(GMP_HOST_DIR) \
+	--build=$(HOST_BUILD) --host=$(HOST_ARCH)
 	@touch $@
