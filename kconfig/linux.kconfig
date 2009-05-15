@@ -16,8 +16,8 @@
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
 #########################################################################################
 #
-# \file         gcc.kconfig
-# \brief	gcc.kconfig of Embtoolkit
+# \file         linux.kconfig
+# \brief	linux.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 #########################################################################################
