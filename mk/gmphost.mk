@@ -34,7 +34,7 @@ gmphost_install: $(GMP_HOST_BUILD_DIR)/.built
 
 $(GMP_HOST_BUILD_DIR)/.built: download_gmp_host $(GMP_HOST_BUILD_DIR)/.decompressed \
 	$(GMP_HOST_BUILD_DIR)/.configured
-	@cd $(GMP_HOST_BUILD_DIR) && make && make install
+	@cd $(GMP_HOST_BUILD_DIR) && $(MAKE) && $(MAKE) install
 	@touch $@
 
 download_gmp_host:
@@ -49,5 +49,6 @@ $(GMP_HOST_BUILD_DIR)/.decompressed:
 $(GMP_HOST_BUILD_DIR)/.configured:
 	@mkdir -p $(GMP_HOST_DIR)
 	@cd $(GMP_HOST_BUILD_DIR); $(TOOLS_BUILD)/gmp-$(GMP_HOST_VERSION)/configure \
-	 --prefix=$(GMP_HOST_DIR) --disable-shared --enable-static
+	 --prefix=$(GMP_HOST_DIR) --disable-shared --enable-static \
+	 --build=$(HOST_BUILD) --host=$(HOST_ARCH)
 	@touch $@
