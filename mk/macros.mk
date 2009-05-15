@@ -45,3 +45,11 @@ define BUILD_MESSAGE
 	@echo "Building $(1)"
 	@echo "##################################################################"
 endef
+
+#Install message
+#unsage $(call INSTALL_MESSAGE,$(NAME_PACKAGE))
+define INSTALL_MESSAGE
+	@echo "########################### EmbToolkit ###########################"
+	@echo "Installing $(1)"
+	@echo "##################################################################"
+endef
