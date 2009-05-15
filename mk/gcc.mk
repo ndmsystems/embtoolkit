@@ -43,7 +43,8 @@ gcc2_install: $(GCC2_BUILD_DIR)/.built
 #GCC first stage
 $(GCC1_BUILD_DIR)/.built: download_gcc $(GCC1_BUILD_DIR)/.decompressed \
 	$(GCC1_BUILD_DIR)/.configured
-	@cd $(GCC1_BUILD_DIR) && make && make install
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC1_BUILD_DIR) && \
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC1_BUILD_DIR) install
 	@touch $@
 download_gcc:
 	@test -e $(DOWNLOAD_DIR)/$(GCC_PACKAGE) || \
@@ -62,13 +63,14 @@ $(GCC1_BUILD_DIR)/.configured:
 	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(FLOAT_TYPE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--without-headers --with-newlib --disable-shared --disable-threads \
-	--disable-libssp --disable-libgomp --disable-libmudflap \
+	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
 	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
 	@touch $@
 
 #GCC second stage
 $(GCC2_BUILD_DIR)/.built: $(GCC2_BUILD_DIR)/.configured
-	@cd $(GCC2_BUILD_DIR) && make && make install
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC2_BUILD_DIR) && \
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC2_BUILD_DIR) install
 	@touch $@
 
 $(GCC2_BUILD_DIR)/.configured:
