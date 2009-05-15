@@ -16,27 +16,29 @@
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
 #########################################################################################
 #
-# \file         toolchain.mk
-# \brief	toolchain.mk of Embtoolkit
+# \file         kernel-headers.mk
+# \brief	kernel-headers.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 #########################################################################################
 
-#GMP on host
-include $(EMBTK_ROOT)/mk/gmphost.mk
+LINUX_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LINUX_VERSION_STRING)))
+LINUX_SITE := ftp://ftp.kernel.org/pub/linux/kernel/v2.6
+LINUX_PACKAGE := linux-$(LINUX_VERSION).tar.bz2
+LINUX_BUILD_DIR := $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 
-#MPFR
-include $(EMBTK_ROOT)/mk/mpfrhost.mk
+kernel-headers_install:  download_linux $(LINUX_BUILD_DIR)/.decompressed
+	$(call INSTALL_MESSAGE,"headers linux-$(LINUX_VERSION)")
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) \
+	headers_install ARCH=$(LINUX_ARCH) CROSS_COMPILE=$(GNU_TARGET)- \
+	INSTALL_HDR_PATH=$(SYSROOT)/usr
 
-#binutils
-include $(EMBTK_ROOT)/mk/binutils.mk
+download_linux: 
+	@test -e $(DOWNLOAD_DIR)/$(LINUX_PACKAGE) || \
+	wget -O $(DOWNLOAD_DIR)/$(LINUX_PACKAGE) $(LINUX_SITE)/$(LINUX_PACKAGE)
 
-#GCC
-include $(EMBTK_ROOT)/mk/gcc.mk
-
-#linux kernel headers
-include $(EMBTK_ROOT)/mk/kernel-headers.mk
-
-#targets
-buildtoolchain: gmphost_install mpfrhost_install binutils_install gcc1_install
+$(LINUX_BUILD_DIR)/.decompressed:
+	$(call DECOMPRESS_MESSAGE,$(LINUX_PACKAGE))
+	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(LINUX_PACKAGE)
+	@touch $@
 
