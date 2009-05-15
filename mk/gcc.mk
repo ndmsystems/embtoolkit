@@ -31,9 +31,9 @@ GCC3_BUILD_DIR := $(TOOLS_BUILD)/gcc3
 
 #Hard or soft floating point
 ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
-FLOAT_TYPE := soft
+GCC_FLOAT_TYPE := soft
 else
-FLOAT_TYPE := hard
+GCC_FLOAT_TYPE := hard
 endif
 
 gcc1_install: $(GCC1_BUILD_DIR)/.built
@@ -60,7 +60,7 @@ $(GCC1_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
 	@cd $(GCC1_BUILD_DIR); $(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
 	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(GNU_TARGET) \
-	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(FLOAT_TYPE) \
+	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(GCC_FLOAT_TYPE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--without-headers --with-newlib --disable-shared --disable-threads \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
@@ -78,7 +78,7 @@ $(GCC2_BUILD_DIR)/.configured:
 	@mkdir -p $(GCC2_BUILD_DIR)
 	@cd $(GCC2_BUILD_DIR); $(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
 	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(GNU_TARGET) \
-	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(FLOAT_TYPE) \
+	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(GCC_FLOAT_TYPE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--disable-libssp --disable-libgomp --disable-libmudflap \
 	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) \

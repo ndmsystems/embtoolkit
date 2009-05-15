@@ -21,3 +21,56 @@
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 #########################################################################################
+EGLIBC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_VERSION_STRING)))
+EGLIBC_SITE := http://www.eglibc.org
+EGLIBC_PACKAGE := eglibc-$(EGLIBC_VERSION).tar.bz2
+EGLIBC_HEADERS_BUILD_DIR := $(TOOLS_BUILD)/eglibc-headers
+EGLIBC_BUILD_DIR := $(TOOLS_BUILD)/eglibc
+
+#Hard or soft floating point
+ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
+EGLIBC_FLOAT_TYPE := "--with-fp=no"
+else
+EGLIBC_FLOAT_TYPE := "--with-fp=yes"
+endif
+
+eglibc-headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
+
+$(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download $(EGLIBC_HEADERS_BUILD_DIR)/.decompressed \
+	$(EGLIBC_HEADERS_BUILD_DIR)/.configured
+	$(call INSTALL_MESSAGE,"headers eglibc-$(EGLIBC_VERSION)")
+	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) install-headers install_root=$(SYSROOT) \
+	install-bootstrap-headers=yes && \
+	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) csu/subdir_lib
+	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crt1.o $(SYSROOT)/usr/lib/
+	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crti.o $(SYSROOT)/usr/lib/
+	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(SYSROOT)/usr/lib/
+	$(TOOLS)/bin/$(GNU_TARGET)-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o \
+	$(SYSROOT)/usr/lib/libc.so
+	@touch $@
+
+eglibc_download:
+	@echo "downloading eglibc"
+
+$(EGLIBC_HEADERS_BUILD_DIR)/.decompressed:
+	$(call DECOMPRESS_MESSAGE,$(EGLIBC_PACKAGE))
+	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE)
+	@cp -R $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/ports \
+	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/
+	@mkdir -p $(EGLIBC_HEADERS_BUILD_DIR)
+	@mkdir -p $(EGLIBC_BUILD_DIR)
+	@touch $@
+
+$(EGLIBC_HEADERS_BUILD_DIR)/.configured:
+	$(call CONFIGURE_MESSAGE,eglibc-$(EGLIBC_VERSION))
+	@cd $(EGLIBC_HEADERS_BUILD_DIR); BUILD_CC=gcc \
+	CC=$(TOOLS)/bin/$(GNU_TARGET)-gcc \
+	CXX=$(TOOLS)/bin/$(GNU_TARGET)-g++ \
+	AR=$(TOOLS)/bin/$(GNU_TARGET)-ar \
+	RANLIB=$(TOOLS)/bin/$(GNU_TARGET)-ranlib \
+	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure --prefix=/usr \
+	--with-headers=$(SYSROOT)/usr/include \
+	--host=$(GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) --disable-nls \
+	--disable-profile --without-gd --without-cvs --enable-add-ons
+	@touch $@
+
