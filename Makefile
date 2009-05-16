@@ -37,7 +37,7 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else echo sh; fi ; fi)
 export CONFIG_SHELL
 
-HOST_ARCH :=$(shell uname -m)-unknown-linux-gnu
+HOST_ARCH := `$(CONFIG_SHELL) $(EMBTK_ROOT)/scripts/config.guess`
 HOST_BUILD := $(HOST_ARCH)
 export HOST_ARCH HOST_BUILD
 
@@ -88,5 +88,4 @@ include mk/macros.mk
 include mk/target_mcu.mk
 include mk/initialpath.mk
 include mk/toolchain.mk
-
 
