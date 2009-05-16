@@ -53,3 +53,11 @@ define INSTALL_MESSAGE
 	@echo "Installing $(1)"
 	@echo "##################################################################"
 endef
+
+#Generic message
+#unsage $(call EMBTK_GENERIC_MESSAGE,$(GENERIC_MESSAGE))
+define EMBTK_GENERIC_MESSAGE
+	@echo "####################################### EmbToolkit ######################################"
+	@echo "$(1)"
+	@echo "#########################################################################################"
+endef
