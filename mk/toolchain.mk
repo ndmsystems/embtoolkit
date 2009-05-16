@@ -42,5 +42,6 @@ include $(EMBTK_ROOT)/mk/eglibc.mk
 
 #targets
 buildtoolchain: gmphost_install mpfrhost_install binutils_install gcc1_install \
-		kernel-headers_install eglibc-headers_install gcc2_install
+		kernel-headers_install eglibc-headers_install gcc2_install \
+		eglibc_install
 

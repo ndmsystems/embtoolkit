@@ -35,6 +35,7 @@ EGLIBC_FLOAT_TYPE := "--with-fp=yes"
 endif
 
 eglibc-headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
+eglibc_install: $(EGLIBC_BUILD_DIR)/.installed
 
 $(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download $(EGLIBC_HEADERS_BUILD_DIR)/.decompressed \
 	$(EGLIBC_HEADERS_BUILD_DIR)/.configured
@@ -74,3 +75,22 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.configured:
 	--disable-profile --without-gd --without-cvs --enable-add-ons
 	@touch $@
 
+$(EGLIBC_BUILD_DIR)/.installed: $(EGLIBC_BUILD_DIR)/.configured
+	$(call INSTALL_MESSAGE,eglibc-$(EGLIBC_VERSION))
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) && \
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) install \
+	install_root=$(SYSROOT)
+	@touch $@
+
+$(EGLIBC_BUILD_DIR)/.configured:
+	$(call CONFIGURE_MESSAGE,eglibc-$(EGLIBC_VERSION))
+	@cd $(EGLIBC_BUILD_DIR); BUILD_CC=gcc \
+	CC=$(TOOLS)/bin/$(GNU_TARGET)-gcc \
+	CXX=$(TOOLS)/bin/$(GNU_TARGET)-g++ \
+	AR=$(TOOLS)/bin/$(GNU_TARGET)-ar \
+	RANLIB=$(TOOLS)/bin/$(GNU_TARGET)-ranlib \
+	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure --prefix=/usr \
+	--with-headers=$(SYSROOT)/usr/include \
+	--host=$(GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) --disable-nls \
+	--disable-profile --without-gd --without-cvs --enable-add-ons
+	@touch $@
