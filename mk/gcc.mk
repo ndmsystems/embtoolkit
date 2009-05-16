@@ -40,6 +40,8 @@ gcc1_install: $(GCC1_BUILD_DIR)/.built
 
 gcc2_install: $(GCC2_BUILD_DIR)/.built
 
+gcc3_install: $(GCC3_BUILD_DIR)/.installed
+
 #GCC first stage
 $(GCC1_BUILD_DIR)/.built: download_gcc $(GCC1_BUILD_DIR)/.decompressed \
 	$(GCC1_BUILD_DIR)/.configured
@@ -83,5 +85,25 @@ $(GCC2_BUILD_DIR)/.configured:
 	--disable-libssp --disable-libgomp --disable-libmudflap \
 	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) \
 	--with-mpfr=$(MPFR_HOST_DIR)
+	@touch $@
+
+#GCC last stage
+$(GCC3_BUILD_DIR)/.installed: $(GCC3_BUILD_DIR)/.configured
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) && \
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) install
+	cp -d $(TOOLS)/$(GNU_TARGET)/lib/libgcc_s.so* $(SYSROOT)/lib
+	cp -d $(TOOLS)/$(GNU_TARGET)/lib/libstdc++.so* $(SYSROOT)/lib
+	@touch $@
+
+$(GCC3_BUILD_DIR)/.configured:
+	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
+	@mkdir -p $(GCC3_BUILD_DIR)
+	@cd $(GCC3_BUILD_DIR); $(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
+	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(GNU_TARGET) \
+	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(GCC_FLOAT_TYPE) \
+	--host=$(HOST_ARCH) --build=$(HOST_BUILD) --enable-__cxa_atexit \
+	--disable-libssp --disable-libgomp --disable-libmudflap \
+	--enable-threads --enable-shared --enable-languages=c,c++ \
+	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
 	@touch $@
 
