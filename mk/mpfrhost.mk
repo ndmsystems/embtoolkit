@@ -56,8 +56,10 @@ ifeq ($(CONFIG_EMBTK_MPFR_HOST_VERSION_PATCH),y)
 endif
 
 $(MPFR_HOST_BUILD_DIR)/.configured:
+	$(call EMBTK_GENERIC_MESSAGE,"mpfrhost: Configuring mpfr-$(MPFR_HOST_VERSION) ...")
 	@mkdir -p $(MPFR_HOST_DIR)
-	@cd $(MPFR_HOST_BUILD_DIR); $(TOOLS_BUILD)/mpfr-$(MPFR_HOST_VERSION)/configure \
+	cd $(MPFR_HOST_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
+	$(TOOLS_BUILD)/mpfr-$(MPFR_HOST_VERSION)/configure \
 	--prefix=$(MPFR_HOST_DIR) --disable-shared --enable-static --with-gmp=$(GMP_HOST_DIR) \
 	--build=$(HOST_BUILD) --host=$(HOST_ARCH)
 	@touch $@
