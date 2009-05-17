@@ -44,7 +44,9 @@ $(BINUTILS_BUILD_DIR)/.decompressed:
 	@touch $@
 
 $(BINUTILS_BUILD_DIR)/.configured:
-	@cd $(BINUTILS_BUILD_DIR); $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)/configure \
+	$(call EMBTK_GENERIC_MESSAGE,"binutils: Configuring binutils-$(BINUTILS_VERSION) ...")
+	cd $(BINUTILS_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
+	$(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)/configure \
 	 --prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --disable-werror --disable-nls \
 	 --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) --target=$(STRICT_GNU_TARGET) \
 	 --build=$(HOST_BUILD) --host=$(HOST_ARCH)
