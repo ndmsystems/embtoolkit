@@ -57,6 +57,11 @@ choice
 		bool "MIPS64 little endian"
 	config EMBTK_ARCH_MIPS_MIPS64_BIG
 		bool "MIPS64 big endian"
+	config EMBTK_ARCH_MIPS_MIPS64R2_LITTLE
+		bool "MIPS64 release 2 little endian"
+	config EMBTK_ARCH_MIPS_MIPS64R2_BIG
+		bool "MIPS64 release 2 big endian"
+
 endchoice
 
 config EMBTK_SOFTFLOAT

@@ -91,4 +91,15 @@ STRICT_GNU_TARGET := mipsisa64-unknown-linux-gnu
 GNU_TARGET_ARCH := mips64
 endif
 
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64R2_LITTLE),y)
+GNU_TARGET := mipsel-linux
+STRICT_GNU_TARGET := mipsisa64r2el-unknown-linux-gnu
+GNU_TARGET_ARCH := mips64r2
+endif
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64R2_BIG),y)
+GNU_TARGET := mipseb-linux
+STRICT_GNU_TARGET := mipsisa64r2-unknown-linux-gnu
+GNU_TARGET_ARCH := mips64r2
+endif
+
 endif
