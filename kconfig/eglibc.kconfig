@@ -24,7 +24,7 @@
 #########################################################################################
 choice
 	prompt "EGLIBC version"
-	default EMBTK_EGLIBC_VERSION_2_10
+	default EMBTK_EGLIBC_VERSION_2_9
 	help
 	 EGLIBC version to use.
 

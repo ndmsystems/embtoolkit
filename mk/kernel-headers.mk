@@ -30,7 +30,7 @@ LINUX_BUILD_DIR := $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 kernel-headers_install:  download_linux $(LINUX_BUILD_DIR)/.decompressed
 	$(call INSTALL_MESSAGE,"headers linux-$(LINUX_VERSION)")
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) \
-	headers_install ARCH=$(LINUX_ARCH) CROSS_COMPILE=$(GNU_TARGET)- \
+	headers_install ARCH=$(LINUX_ARCH) CROSS_COMPILE=$(STRICT_GNU_TARGET)- \
 	INSTALL_HDR_PATH=$(SYSROOT)/usr
 
 download_linux: 

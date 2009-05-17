@@ -46,6 +46,6 @@ $(BINUTILS_BUILD_DIR)/.decompressed:
 $(BINUTILS_BUILD_DIR)/.configured:
 	@cd $(BINUTILS_BUILD_DIR); $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)/configure \
 	 --prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --disable-werror --disable-nls \
-	 --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) --target=$(GNU_TARGET) \
+	 --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) --target=$(STRICT_GNU_TARGET) \
 	 --build=$(HOST_BUILD) --host=$(HOST_ARCH)
 	@touch $@

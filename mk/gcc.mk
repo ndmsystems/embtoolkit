@@ -61,7 +61,7 @@ $(GCC1_BUILD_DIR)/.decompressed:
 $(GCC1_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
 	@cd $(GCC1_BUILD_DIR); $(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
-	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(GNU_TARGET) \
+	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(STRICT_GNU_TARGET) \
 	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(GCC_FLOAT_TYPE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--without-headers --with-newlib --disable-shared --disable-threads \
@@ -79,7 +79,7 @@ $(GCC2_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
 	@mkdir -p $(GCC2_BUILD_DIR)
 	@cd $(GCC2_BUILD_DIR); $(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
-	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(GNU_TARGET) \
+	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(STRICT_GNU_TARGET) \
 	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(GCC_FLOAT_TYPE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--disable-libssp --disable-libgomp --disable-libmudflap \
@@ -91,15 +91,15 @@ $(GCC2_BUILD_DIR)/.configured:
 $(GCC3_BUILD_DIR)/.installed: $(GCC3_BUILD_DIR)/.configured
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) && \
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) install
-	cp -d $(TOOLS)/$(GNU_TARGET)/lib/libgcc_s.so* $(SYSROOT)/lib
-	cp -d $(TOOLS)/$(GNU_TARGET)/lib/libstdc++.so* $(SYSROOT)/lib
+	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/libgcc_s.so* $(SYSROOT)/lib
+	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/libstdc++.so* $(SYSROOT)/lib
 	@touch $@
 
 $(GCC3_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
 	@mkdir -p $(GCC3_BUILD_DIR)
 	@cd $(GCC3_BUILD_DIR); $(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
-	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(GNU_TARGET) \
+	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(STRICT_GNU_TARGET) \
 	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(GCC_FLOAT_TYPE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) --enable-__cxa_atexit \
 	--disable-libssp --disable-libgomp --disable-libmudflap \

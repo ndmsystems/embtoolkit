@@ -46,7 +46,7 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download $(EGLIBC_HEADERS_BUILD_D
 	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crt1.o $(SYSROOT)/usr/lib/
 	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crti.o $(SYSROOT)/usr/lib/
 	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(SYSROOT)/usr/lib/
-	$(TOOLS)/bin/$(GNU_TARGET)-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o \
+	$(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o \
 	$(SYSROOT)/usr/lib/libc.so
 	@touch $@
 
@@ -65,13 +65,13 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.decompressed:
 $(EGLIBC_HEADERS_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,eglibc-$(EGLIBC_VERSION))
 	@cd $(EGLIBC_HEADERS_BUILD_DIR); BUILD_CC=gcc \
-	CC=$(TOOLS)/bin/$(GNU_TARGET)-gcc \
-	CXX=$(TOOLS)/bin/$(GNU_TARGET)-g++ \
-	AR=$(TOOLS)/bin/$(GNU_TARGET)-ar \
-	RANLIB=$(TOOLS)/bin/$(GNU_TARGET)-ranlib \
+	CC=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc \
+	CXX=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-g++ \
+	AR=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ar \
+	RANLIB=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ranlib \
 	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure --prefix=/usr \
 	--with-headers=$(SYSROOT)/usr/include \
-	--host=$(GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) --disable-nls \
+	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) --disable-nls \
 	--disable-profile --without-gd --without-cvs --enable-add-ons
 	@touch $@
 
@@ -85,12 +85,12 @@ $(EGLIBC_BUILD_DIR)/.installed: $(EGLIBC_BUILD_DIR)/.configured
 $(EGLIBC_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,eglibc-$(EGLIBC_VERSION))
 	@cd $(EGLIBC_BUILD_DIR); BUILD_CC=gcc \
-	CC=$(TOOLS)/bin/$(GNU_TARGET)-gcc \
-	CXX=$(TOOLS)/bin/$(GNU_TARGET)-g++ \
-	AR=$(TOOLS)/bin/$(GNU_TARGET)-ar \
-	RANLIB=$(TOOLS)/bin/$(GNU_TARGET)-ranlib \
+	CC=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc \
+	CXX=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-g++ \
+	AR=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ar \
+	RANLIB=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ranlib \
 	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure --prefix=/usr \
 	--with-headers=$(SYSROOT)/usr/include \
-	--host=$(GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) --disable-nls \
+	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) --disable-nls \
 	--disable-profile --without-gd --without-cvs --enable-add-ons
 	@touch $@
