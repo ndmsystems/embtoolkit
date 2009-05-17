@@ -29,21 +29,21 @@ choice
 	help
 	 Select architecture variant.
 	config EMBTK_ARCH_MIPS_MIPS1_LITTLE
-		bool "MIPS1 little endian"
+		bool "MIPS I little endian"
 	config EMBTK_ARCH_MIPS_MIPS1_BIG
-		bool "MIPS1 big endian"
+		bool "MIPS I big endian"
 	config EMBTK_ARCH_MIPS_MIPS2_LITTLE
-		bool "MIPS2 little endian"
+		bool "MIPS II little endian"
 	config EMBTK_ARCH_MIPS_MIPS2_BIG
-		bool "MIPS2 big endian"
+		bool "MIPS II big endian"
 	config EMBTK_ARCH_MIPS_MIPS3_LITTLE
-		bool "MIPS3 little endian"
+		bool "MIPS III little endian"
 	config EMBTK_ARCH_MIPS_MIPS3_BIG
-		bool "MIPS3 big endian"
+		bool "MIPS III big endian"
 	config EMBTK_ARCH_MIPS_MIPS4_LITTLE
-		bool "MIPS4 little endian"
+		bool "MIPS IV little endian"
 	config EMBTK_ARCH_MIPS_MIPS4_BIG
-		bool "MIPS4 big endian"
+		bool "MIPS IV big endian"
 	config EMBTK_ARCH_MIPS_MIPS32_LITTLE
 		bool "MIPS32 little endian"
 	config EMBTK_ARCH_MIPS_MIPS32_BIG
