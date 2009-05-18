@@ -60,7 +60,8 @@ $(GCC1_BUILD_DIR)/.decompressed:
 
 $(GCC1_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
-	@cd $(GCC1_BUILD_DIR); $(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
+	cd $(GCC1_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
+	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
 	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(STRICT_GNU_TARGET) \
 	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(GCC_FLOAT_TYPE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
@@ -78,7 +79,8 @@ $(GCC2_BUILD_DIR)/.built: $(GCC2_BUILD_DIR)/.configured
 $(GCC2_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
 	@mkdir -p $(GCC2_BUILD_DIR)
-	@cd $(GCC2_BUILD_DIR); $(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
+	cd $(GCC2_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
+	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
 	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(STRICT_GNU_TARGET) \
 	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(GCC_FLOAT_TYPE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
@@ -98,7 +100,8 @@ $(GCC3_BUILD_DIR)/.installed: $(GCC3_BUILD_DIR)/.configured
 $(GCC3_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
 	@mkdir -p $(GCC3_BUILD_DIR)
-	@cd $(GCC3_BUILD_DIR); $(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
+	cd $(GCC3_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
+	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
 	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(STRICT_GNU_TARGET) \
 	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(GCC_FLOAT_TYPE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) --enable-__cxa_atexit \
