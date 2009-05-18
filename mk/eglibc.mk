@@ -29,9 +29,9 @@ EGLIBC_BUILD_DIR := $(TOOLS_BUILD)/eglibc
 
 #Hard or soft floating point
 ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
-EGLIBC_FLOAT_TYPE := "--with-fp=no"
+EGLIBC_FLOAT_TYPE := --with-fp=no
 else
-EGLIBC_FLOAT_TYPE := "--with-fp=yes"
+EGLIBC_FLOAT_TYPE := --with-fp=yes
 endif
 
 eglibc-headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
