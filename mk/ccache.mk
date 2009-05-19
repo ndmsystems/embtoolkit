@@ -46,9 +46,9 @@ $(CCACHE_HOST_BUILD_DIR)/.installed: ccache_download \
 	@touch $@
 
 ccache_download:
-	@test -e $(DOWNLOAD_DIR)/$(CCACHE_PACKAGE_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(CCACHE_PACKAGE_PACKAGE) \
-	$(CCACHE_PACKAGE_SITE)/$(CCACHE_PACKAGE)
+	@test -e $(DOWNLOAD_DIR)/$(CCACHE_PACKAGE) || \
+	wget -O $(DOWNLOAD_DIR)/$(CCACHE_PACKAGE) \
+	$(CCACHE_SITE)/$(CCACHE_PACKAGE)
 
 $(CCACHE_HOST_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(CCACHE_PACKAGE) ...")
