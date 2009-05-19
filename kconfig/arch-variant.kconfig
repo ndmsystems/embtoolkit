@@ -16,12 +16,14 @@
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
 #########################################################################################
 #
-# \file         arch_variant.kconfig
-# \brief	arch_variant of project
+# \file         arch-variant.kconfig
+# \brief	arch-variant.kconfig of EmbToolkit, here we give users the ability to
+# \brief	choose which variant of CPU to use.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 #########################################################################################
 
+################################## MIPS ARCH ############################################
 choice
 	prompt "Architecture variant"
 	depends on EMBTK_ARCH_MIPS
@@ -63,6 +65,48 @@ choice
 		bool "MIPS64 release 2 big endian"
 
 endchoice
+
+choice
+	prompt "ABI"
+	depends on EMBTK_ARCH_MIPS
+	default EMBTK_ARCH_MIPS_ABI_O32
+	help
+	 Here you can select which abi you want to use.
+	config EMBTK_ARCH_MIPS_ABI_O32
+		bool "o32"
+	config EMBTK_ARCH_MIPS_ABI_N32
+		bool "n32" if EMBTK_ARCH_MIPS_MIPS3_LITTLE || EMBTK_ARCH_MIPS_MIPS3_BIG \
+		|| EMBTK_ARCH_MIPS_MIPS4_LITTLE || EMBTK_ARCH_MIPS_MIPS4_BIG || \
+		EMBTK_ARCH_MIPS_MIPS64_LITTLE || EMBTK_ARCH_MIPS_MIPS64_BIG || \
+		EMBTK_ARCH_MIPS_MIPS64R2_LITTLE || EMBTK_ARCH_MIPS_MIPS64R2_BIG
+
+	config EMBTK_ARCH_MIPS_ABI_EABI
+		bool "eabi" if EMBTK_ARCH_MIPS_MIPS3_LITTLE || EMBTK_ARCH_MIPS_MIPS3_BIG \
+		|| EMBTK_ARCH_MIPS_MIPS4_LITTLE || EMBTK_ARCH_MIPS_MIPS4_BIG || \
+		EMBTK_ARCH_MIPS_MIPS64_LITTLE || EMBTK_ARCH_MIPS_MIPS64_BIG || \
+		EMBTK_ARCH_MIPS_MIPS64R2_LITTLE || EMBTK_ARCH_MIPS_MIPS64R2_BIG
+
+	config EMBTK_ARCH_MIPS_ABI_O64
+		bool "o64" if EMBTK_ARCH_MIPS_MIPS3_LITTLE || EMBTK_ARCH_MIPS_MIPS3_BIG \
+		|| EMBTK_ARCH_MIPS_MIPS4_LITTLE || EMBTK_ARCH_MIPS_MIPS4_BIG || \
+		EMBTK_ARCH_MIPS_MIPS64_LITTLE || EMBTK_ARCH_MIPS_MIPS64_BIG || \
+		EMBTK_ARCH_MIPS_MIPS64R2_LITTLE || EMBTK_ARCH_MIPS_MIPS64R2_BIG
+
+	config EMBTK_ARCH_MIPS_ABI_N64
+		bool "n64" if EMBTK_ARCH_MIPS_MIPS3_LITTLE || EMBTK_ARCH_MIPS_MIPS3_BIG \
+		|| EMBTK_ARCH_MIPS_MIPS4_LITTLE || EMBTK_ARCH_MIPS_MIPS4_BIG || \
+		EMBTK_ARCH_MIPS_MIPS64_LITTLE || EMBTK_ARCH_MIPS_MIPS64_BIG || \
+		EMBTK_ARCH_MIPS_MIPS64R2_LITTLE || EMBTK_ARCH_MIPS_MIPS64R2_BIG
+endchoice
+
+################################## End MIPS ARCH ########################################
+
+config EMBTK_TOOLCHAIN_MULTILIB
+	default n
+	bool "Build multilib toolchain"
+	help
+		Say yes here, to specify that multiple target libraries to support
+		different target variants, calling conventions, etc. should be built.
 
 config EMBTK_SOFTFLOAT
 	default y

@@ -32,8 +32,8 @@ menu "Architecture Selection"
 source "kconfig/arch.kconfig"
 endmenu
 
-menu "Architecture Variant"
-source "kconfig/arch_variant.kconfig"
+menu "Architecture Variant and options"
+source "kconfig/arch-variant.kconfig"
 endmenu
 
 menu "Toolchain configuration"
