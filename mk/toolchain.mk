@@ -22,6 +22,11 @@
 # \date         May 2009
 #########################################################################################
 
+TARGETCC := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc
+TARGETCXX := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-g++
+TARGETAR := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-ar
+TARGETRANLIB := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-ranlib
+
 #ccache on host
 include $(EMBTK_ROOT)/mk/ccache.mk
 
