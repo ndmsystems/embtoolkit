@@ -42,6 +42,13 @@ gcc2_install: $(GCC2_BUILD_DIR)/.built
 
 gcc3_install: $(GCC3_BUILD_DIR)/.installed
 
+#Multilib or not?
+ifeq ($(CONFIG_EMBTK_TOOLCHAIN_MULTILIB),y)
+GCC_MULTILIB :=
+else
+GCC_MULTILIB := --disable-multilib
+endif
+
 #GCC first stage
 $(GCC1_BUILD_DIR)/.built: download_gcc $(GCC1_BUILD_DIR)/.decompressed \
 	$(GCC1_BUILD_DIR)/.configured
@@ -86,7 +93,8 @@ $(GCC2_BUILD_DIR)/.configured:
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--disable-libssp --disable-libgomp --disable-libmudflap \
 	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) \
-	--with-mpfr=$(MPFR_HOST_DIR)
+	--with-mpfr=$(MPFR_HOST_DIR) \
+	$(GCC_MULTILIB)
 	@touch $@
 
 #GCC last stage
@@ -107,6 +115,7 @@ $(GCC3_BUILD_DIR)/.configured:
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) --enable-__cxa_atexit \
 	--disable-libssp --disable-libgomp --disable-libmudflap \
 	--enable-threads --enable-shared --enable-languages=c,c++ \
-	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
+	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
+	$(GCC_MULTILIB)
 	@touch $@
 
