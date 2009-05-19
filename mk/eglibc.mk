@@ -85,10 +85,10 @@ $(EGLIBC_BUILD_DIR)/.installed: $(EGLIBC_BUILD_DIR)/.configured
 $(EGLIBC_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,eglibc-$(EGLIBC_VERSION))
 	cd $(EGLIBC_BUILD_DIR); BUILD_CC=$(HOSTCC_CACHED) \
-	CC=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc \
-	CXX=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-g++ \
-	AR=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ar \
-	RANLIB=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ranlib \
+	CC=$(TARGETCC_CACHED) \
+	CXX=$(TARGETCXX_CACHED) \
+	AR=$(TARGETAR) \
+	RANLIB=$(TARGETRANLIB) \
 	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure --prefix=/usr \
 	--with-headers=$(SYSROOT)/usr/include \
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) \
