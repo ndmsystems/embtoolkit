@@ -85,7 +85,7 @@ clean: rmallpath
 startbuild: mkinitialpath buildtoolchain buildrootfs
 
 include mk/macros.mk
-include mk/target_mcu.mk
+include mk/target-mcu.mk
 include mk/initialpath.mk
 include mk/toolchain.mk
 

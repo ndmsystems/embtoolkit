@@ -28,7 +28,7 @@
 #M68K
 
 #MIPS
-include $(EMBTK_ROOT)/mk/mips_arch.mk
+include $(EMBTK_ROOT)/mk/mips-arch.mk
 
 
 
