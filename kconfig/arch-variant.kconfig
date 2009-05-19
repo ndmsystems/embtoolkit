@@ -105,8 +105,9 @@ config EMBTK_TOOLCHAIN_MULTILIB
 	default n
 	bool "Build multilib toolchain"
 	help
-		Say yes here, to specify that multiple target libraries to support
+		You can say yes here, to specify that multiple target libraries to support
 		different target variants, calling conventions, etc. should be built.
+		It is safe to say no here.
 
 config EMBTK_SOFTFLOAT
 	default y
