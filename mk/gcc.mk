@@ -74,7 +74,8 @@ $(GCC1_BUILD_DIR)/.configured:
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--without-headers --with-newlib --disable-shared --disable-threads \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
-	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
+	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
+	$(GCC_MULTILIB) $(GCC_WITH_ABI)
 	@touch $@
 
 #GCC second stage
@@ -94,7 +95,7 @@ $(GCC2_BUILD_DIR)/.configured:
 	--disable-libssp --disable-libgomp --disable-libmudflap \
 	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) \
 	--with-mpfr=$(MPFR_HOST_DIR) \
-	$(GCC_MULTILIB)
+	$(GCC_MULTILIB) $(GCC_WITH_ABI)
 	@touch $@
 
 #GCC last stage
@@ -116,6 +117,6 @@ $(GCC3_BUILD_DIR)/.configured:
 	--disable-libssp --disable-libgomp --disable-libmudflap \
 	--enable-threads --enable-shared --enable-languages=c,c++ \
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
-	$(GCC_MULTILIB)
+	$(GCC_MULTILIB) $(GCC_WITH_ABI)
 	@touch $@
 

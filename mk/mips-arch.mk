@@ -114,3 +114,27 @@ GNU_TARGET_ARCH := mips64r2
 endif
 
 endif
+
+#GCC configure options
+
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_O32),y)
+GCC_WITH_ABI := --with-abi=32
+export GCC_WITH_ABI
+
+else ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_N32),y)
+GCC_WITH_ABI := --with-abi=n32
+export GCC_WITH_ABI
+
+else ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_EABI),y)
+GCC_WITH_ABI := --with-abi=eabi
+export GCC_WITH_ABI
+
+else ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_O64),y)
+GCC_WITH_ABI := --with-abi=o64
+export GCC_WITH_ABI
+
+else
+GCC_WITH_ABI := --with-abi=64
+export GCC_WITH_ABI
+endif
+
