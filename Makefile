@@ -63,13 +63,22 @@ endif
 ifeq ($(CONFIG_EMBTK_DOTCONFIG),)
 EMBTK_BUILD := xconfig
 else
-EMBTK_BUILD :=
+EMBTK_BUILD := startbuild
 endif
 
 All: $(EMBTK_BUILD)
 
 xconfig: basic
+ifeq ($(CONFIG_EMBTK_DOTCONFIG),y)
 	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig
+else
+	@if [ -e $(EMBTK_ROOT)/.config.old ]; then \
+	cp  $(EMBTK_ROOT)/.config.old  $(EMBTK_ROOT)/.config; \
+	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
+	else \
+	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
+	fi
+endif
 
 menuconfig: basic
 	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig menuconfig
@@ -82,7 +91,7 @@ clean: rmallpath
 	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/basic
 	$(Q)rm -rf .config kbuild.log
 
-startbuild: mkinitialpath buildtoolchain buildrootfs
+startbuild: buildtoolchain
 
 include mk/macros.mk
 include mk/target-mcu.mk
