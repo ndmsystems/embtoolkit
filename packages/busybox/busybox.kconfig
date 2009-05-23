@@ -1,7 +1,6 @@
 #########################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
-# For Copyrright from linux kernel's build/configure system, see their source code
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -17,15 +16,25 @@
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
 #########################################################################################
 #
-# \file         packages.kconfig
-# \brief	packages.kconfig of Embtoolkit
+# \file         busybox.kconfig
+# \brief	busybox.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 #########################################################################################
+choice
+	prompt "Busybox you wish"
+	default EMBTK_BB_VERSION_1_14_0
+	help
+		Here you can choose which version of busybox
+		you want to use
+	config  EMBTK_BB_VERSION_1_14_0
+		bool "busybox-1.14.0"
+	config  EMBTK_BB_VERSION_1_13_4
+		bool "busybox-1.13.4"
+endchoice
 
-#Busybox
-config EMBTK_ROOTFS_HAVE_BB
-	bool "Have Busybox in your root filesystem"
-if EMBTK_ROOTFS_HAVE_BB
-source packages/busybox/busybox.kconfig
-endif
+config EMBTK_EMBTK_BB_VERSION_STRING
+	string
+	default "1.14.0"	if EMBTK_BB_VERSION_1_14_0
+	default "1.13.4"	if EMBTK_BB_VERSION_1_13_4
+

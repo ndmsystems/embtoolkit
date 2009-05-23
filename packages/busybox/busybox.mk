@@ -1,7 +1,6 @@
 #########################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
-# For Copyrright from linux kernel's build/configure system, see their source code
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -17,15 +16,14 @@
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
 #########################################################################################
 #
-# \file         packages.kconfig
-# \brief	packages.kconfig of Embtoolkit
+# \file         busybox.mk
+# \brief	busybox.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 #########################################################################################
 
-#Busybox
-config EMBTK_ROOTFS_HAVE_BB
-	bool "Have Busybox in your root filesystem"
-if EMBTK_ROOTFS_HAVE_BB
-source packages/busybox/busybox.kconfig
-endif
+BB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_BB_VERSION_STRING)))
+BB_SITE := http://www.busybox.net/downloads
+BB_PACKAGE := busybox-$(BB_VERSION).tar.bz2
+BB_BUILD_DIR := $(TOOLS_BUILD)/busybox
+
