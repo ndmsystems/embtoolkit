@@ -42,6 +42,7 @@
 # 'option-groups.defaults'.
 
 config OPTION_EGLIBC_BACKTRACE
+   default y
    bool "Functions for producing backtraces"
    help
        This option group includes functions for producing a list of
@@ -182,6 +183,7 @@ config OPTION_EGLIBC_ENVZ
         envz_get        envz_strip 
 
 config OPTION_EGLIBC_FSTAB
+   default y
    bool "Access functions for 'fstab'"
    help
        This option group includes functions for reading the mount
@@ -196,6 +198,7 @@ config OPTION_EGLIBC_FSTAB
          getfsfile
 
 config OPTION_EGLIBC_INET
+   default y
    bool "Networking support"
    help
        This option group includes networking-specific functions and
@@ -388,6 +391,7 @@ config OPTION_EGLIBC_NIS
        group; you must enable that to enable this option group.
 
 config OPTION_EGLIBC_LIBM
+   default y
    bool "libm (math library)"
    help
        This option group includes the 'libm' library, containing
@@ -414,6 +418,7 @@ config OPTION_EGLIBC_LOCALES
 
 
 config OPTION_EGLIBC_NSSWITCH
+	default y
 	bool "Name service switch (nsswitch) support"
 	help
 		This option group includes support for the 'nsswitch' facility.
@@ -608,6 +613,7 @@ config OPTION_EGLIBC_UTMPX
          utmpxname
 
 config OPTION_EGLIBC_WORDEXP
+    default y
     bool "Shell-style word expansion"
     help
         This option group includes the 'wordexp' function for
@@ -724,6 +730,7 @@ config OPTION_EGLIBC_CATGETS
 
 
 config OPTION_POSIX_REGEXP
+    default y
     bool "Regular expressions"
     help
         This option group includes the POSIX regular expression

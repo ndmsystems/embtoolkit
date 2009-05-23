@@ -43,6 +43,7 @@
 
 
 config OPTION_EGLIBC_BACKTRACE
+	default y
 	bool "Functions for producing backtraces"
 	help
 		This option group includes functions for producing a list of
@@ -87,6 +88,7 @@ config OPTION_EGLIBC_CXX_TESTS
 		option groups are disabled, this test must also be disabled.
 
 config OPTION_EGLIBC_LIBM
+	default y
 	bool "libm (math library)"
 	help
 		This option group includes the 'libm' library, containing
@@ -219,6 +221,7 @@ config OPTION_EGLIBC_FMTMSG
 		addseverity    fmtmsg
 
 config OPTION_EGLIBC_FSTAB
+	default y
 	bool "Access functions for 'fstab'"
 	help
 		This option group includes functions for reading the mount
@@ -233,6 +236,7 @@ config OPTION_EGLIBC_FSTAB
 		getfsfile
 
 config OPTION_EGLIBC_FTRAVERSE
+	default y
 	bool "Functions for traversing file hierarchies"
 	help
 		This option group includes functions for traversing file
@@ -247,6 +251,7 @@ config OPTION_EGLIBC_FTRAVERSE
 		fts_close
 
 config OPTION_EGLIBC_INET
+	default y
 	bool "Networking support"
 	help
 		This option group includes networking-specific functions and
@@ -446,6 +451,7 @@ config OPTION_EGLIBC_LOCALES
 		only the "C" locale is supported.
 
 config OPTION_EGLIBC_NSSWITCH
+	default y
 	bool "Name service switch (nsswitch) support"
 	help
 		This option group includes support for the 'nsswitch' facility.
@@ -640,6 +646,7 @@ config OPTION_EGLIBC_UTMPX
 		utmpxname
 
 config OPTION_EGLIBC_WORDEXP
+	default y
 	bool "Shell-style word expansion"
 	help
 		This option group includes the 'wordexp' function for
@@ -755,6 +762,7 @@ config OPTION_POSIX_WIDE_CHAR_DEVICE_IO
 		errno to EINVAL.
 
 config OPTION_POSIX_REGEXP
+	default y
 	bool "Regular expressions"
 	help
 		This option group includes the POSIX regular expression
