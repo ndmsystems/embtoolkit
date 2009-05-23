@@ -27,6 +27,9 @@ EGLIBC_PACKAGE := eglibc-$(EGLIBC_VERSION).tar.bz2
 EGLIBC_HEADERS_BUILD_DIR := $(TOOLS_BUILD)/eglibc-headers
 EGLIBC_BUILD_DIR := $(TOOLS_BUILD)/eglibc
 
+#EGLIBC options
+include $(EMBTK_ROOT)/mk/eglibc-options-parse.mk
+
 #Hard or soft floating point
 ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
 EGLIBC_FLOAT_TYPE := --with-fp=no
@@ -38,7 +41,7 @@ eglibc-headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
 eglibc_install: $(EGLIBC_BUILD_DIR)/.installed
 
 $(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download $(EGLIBC_HEADERS_BUILD_DIR)/.decompressed \
-	$(EGLIBC_HEADERS_BUILD_DIR)/.configured
+	EGLIBC_OPTIONS_PARSE $(EGLIBC_HEADERS_BUILD_DIR)/.configured
 	$(call INSTALL_MESSAGE,"headers eglibc-$(EGLIBC_VERSION)")
 	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) install-headers install_root=$(SYSROOT) \
 	install-bootstrap-headers=yes && \
