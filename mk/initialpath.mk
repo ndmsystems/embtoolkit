@@ -41,5 +41,5 @@ mkinitialpath:
 	@mkdir -p $(PACKAGES_BUILD)
 
 rmallpath:
-	@rm -Rf $(SYSROOT) $(TOOLS) $(TOOLS_BUILD) $(PACKAGES_BUILD) $(ROOTFS)
+	@rm -Rf packages_build-* rootfs-* sysroot-* tools_build-* tools-*
 
