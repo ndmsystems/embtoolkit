@@ -33,7 +33,8 @@ export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD ROOTFS
 
 mkinitialpath:
 	@mkdir -p $(SYSROOT)
-	@cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(SYSROOT)/
+	@mkdir -p $(SYSROOT)/usr
+	@mkdir -p $(SYSROOT)/usr/lib
 	@mkdir -p $(ROOTFS)
 	@cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(ROOTFS)/
 	@mkdir -p $(TOOLS)
