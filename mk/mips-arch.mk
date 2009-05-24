@@ -29,104 +29,88 @@ ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1_LITTLE),y)
 GNU_TARGET := mipsel-linux
 STRICT_GNU_TARGET := mipsel-unknown-linux-gnu
 GNU_TARGET_ARCH := mips1
-EMBTK_TARGET_ARCH := 32
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1_BIG),y)
 GNU_TARGET := mips-linux
 STRICT_GNU_TARGET := mips-unknown-linux-gnu
 GNU_TARGET_ARCH := mips1
-EMBTK_TARGET_ARCH := 32
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS2_LITTLE),y)
 GNU_TARGET := mipsel-linux
 STRICT_GNU_TARGET := mipsel-unknown-linux-gnu
 GNU_TARGET_ARCH := mips2
-EMBTK_TARGET_ARCH := 32
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS2_BIG),y)
 GNU_TARGET := mips-linux
 STRICT_GNU_TARGET := mips-unknown-linux-gnu
 GNU_TARGET_ARCH := mips2
-EMBTK_TARGET_ARCH := 32
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_LITTLE),y)
 GNU_TARGET := mips64el-linux
 STRICT_GNU_TARGET := mips64el-unknown-linux-gnu
 GNU_TARGET_ARCH := mips3
-EMBTK_TARGET_ARCH := 64
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_BIG),y)
 GNU_TARGET := mips64-linux
 STRICT_GNU_TARGET := mips64-unknown-linux-gnu
 GNU_TARGET_ARCH := mips3
-EMBTK_TARGET_ARCH := 64
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS4_LITTLE),y)
 GNU_TARGET := mips64el-linux
 STRICT_GNU_TARGET := mips64el-unknown-linux-gnu
 GNU_TARGET_ARCH := mips4
-EMBTK_TARGET_ARCH := 64
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS4_BIG),y)
 GNU_TARGET := mips64-linux
 STRICT_GNU_TARGET := mips64-unknown-linux-gnu
 GNU_TARGET_ARCH := mips4
-EMBTK_TARGET_ARCH := 64
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32_LITTLE),y)
 GNU_TARGET := mipsel-linux
 STRICT_GNU_TARGET := mipsisa32el-unknown-linux-gnu
 GNU_TARGET_ARCH := mips32
-EMBTK_TARGET_ARCH := 32
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32_BIG),y)
 GNU_TARGET := mips-linux
 STRICT_GNU_TARGET := mipsisa32-unknown-linux-gnu
 GNU_TARGET_ARCH := mips32
-EMBTK_TARGET_ARCH := 32
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32R2_LITTLE),y)
 GNU_TARGET := mipsel-linux
 STRICT_GNU_TARGET := mipsisa32r2el-unknown-linux-gnu
 GNU_TARGET_ARCH := mips32r2
-EMBTK_TARGET_ARCH := 32
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32R2_BIG),y)
 GNU_TARGET := mips-linux
 STRICT_GNU_TARGET := mipsisa32r2-unknown-linux-gnu
 GNU_TARGET_ARCH := mips32r2
-EMBTK_TARGET_ARCH := 32
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64_LITTLE),y)
 GNU_TARGET := mips64el-linux
 STRICT_GNU_TARGET := mipsisa64el-unknown-linux-gnu
 GNU_TARGET_ARCH := mips64
-EMBTK_TARGET_ARCH := 64
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64_BIG),y)
 GNU_TARGET := mips64-linux
 STRICT_GNU_TARGET := mipsisa64-unknown-linux-gnu
 GNU_TARGET_ARCH := mips64
-EMBTK_TARGET_ARCH := 64
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64R2_LITTLE),y)
 GNU_TARGET := mips64el-linux
 STRICT_GNU_TARGET := mipsisa64r2el-unknown-linux-gnu
 GNU_TARGET_ARCH := mips64r2
-EMBTK_TARGET_ARCH := 64
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64R2_BIG),y)
 GNU_TARGET := mips64-linux
 STRICT_GNU_TARGET := mipsisa64r2-unknown-linux-gnu
 GNU_TARGET_ARCH := mips64r2
-EMBTK_TARGET_ARCH := 64
 endif
 
 endif
@@ -136,26 +120,31 @@ endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_O32),y)
 GCC_WITH_ABI := --with-abi=32
 EMBTK_TARGET_ABI := -mabi=32
-export GCC_WITH_ABI EMBTK_TARGET_ABI
+EMBTK_TARGET_ARCH := 32
+export GCC_WITH_ABI EMBTK_TARGET_ABI EMBTK_TARGET_ARCH
 
 else ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_N32),y)
 GCC_WITH_ABI := --with-abi=n32
 EMBTK_TARGET_ABI := -mabi=n32
-export GCC_WITH_ABI EMBTK_TARGET_ABI
+EMBTK_TARGET_ARCH := 32
+export GCC_WITH_ABI EMBTK_TARGET_ABI EMBTK_TARGET_ARCH
 
 else ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_EABI),y)
 GCC_WITH_ABI := --with-abi=eabi
 EMBTK_TARGET_ABI := -mabi=eabi
-export GCC_WITH_ABI EMBTK_TARGET_ABI
+EMBTK_TARGET_ARCH := 32
+export GCC_WITH_ABI EMBTK_TARGET_ABI EMBTK_TARGET_ARCH
 
 else ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_O64),y)
 GCC_WITH_ABI := --with-abi=o64
 EMBTK_TARGET_ABI := -mabi=o64
-export GCC_WITH_ABI EMBTK_TARGET_ABI
+EMBTK_TARGET_ARCH := 64
+export GCC_WITH_ABI EMBTK_TARGET_ABI EMBTK_TARGET_ARCH
 
 else
 GCC_WITH_ABI := --with-abi=64
 EMBTK_TARGET_ABI := -mabi=64
-export GCC_WITH_ABI EMBTK_TARGET_ABI
+EMBTK_TARGET_ARCH := 64
+export GCC_WITH_ABI EMBTK_TARGET_ABI EMBTK_TARGET_ARCH
 endif
 
