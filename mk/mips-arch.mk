@@ -48,24 +48,24 @@ GNU_TARGET_ARCH := mips2
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_LITTLE),y)
-GNU_TARGET := mipsel-linux
-STRICT_GNU_TARGET := mipsel-unknown-linux-gnu
+GNU_TARGET := mips64el-linux
+STRICT_GNU_TARGET := mips64el-unknown-linux-gnu
 GNU_TARGET_ARCH := mips3
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_BIG),y)
-GNU_TARGET := mips-linux
-STRICT_GNU_TARGET := mips-unknown-linux-gnu
+GNU_TARGET := mips64-linux
+STRICT_GNU_TARGET := mips64-unknown-linux-gnu
 GNU_TARGET_ARCH := mips3
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS4_LITTLE),y)
-GNU_TARGET := mipsel-linux
-STRICT_GNU_TARGET := mipsel-unknown-linux-gnu
+GNU_TARGET := mips64el-linux
+STRICT_GNU_TARGET := mips64el-unknown-linux-gnu
 GNU_TARGET_ARCH := mips4
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS4_BIG),y)
-GNU_TARGET := mips-linux
-STRICT_GNU_TARGET := mips-unknown-linux-gnu
+GNU_TARGET := mips64-linux
+STRICT_GNU_TARGET := mips64-unknown-linux-gnu
 GNU_TARGET_ARCH := mips4
 endif
 
