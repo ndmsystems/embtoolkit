@@ -75,7 +75,8 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.configured:
 	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure --prefix=/usr \
 	--with-headers=$(SYSROOT)/usr/include \
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) \
-	--disable-profile --without-gd --without-cvs --enable-add-ons
+	--disable-profile --without-gd --without-cvs --enable-add-ons \
+	--enable-kernel="2.6.0"
 	@touch $@
 
 $(EGLIBC_BUILD_DIR)/.installed: $(EGLIBC_BUILD_DIR)/.configured
@@ -95,5 +96,6 @@ $(EGLIBC_BUILD_DIR)/.configured:
 	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure --prefix=/usr \
 	--with-headers=$(SYSROOT)/usr/include \
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) \
-	--disable-profile --without-gd --without-cvs --enable-add-ons
+	--disable-profile --without-gd --without-cvs --enable-add-ons \
+	--enable-kernel="2.6.0"
 	@touch $@
