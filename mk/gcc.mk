@@ -102,9 +102,14 @@ $(GCC2_BUILD_DIR)/.configured:
 $(GCC3_BUILD_DIR)/.installed: $(GCC3_BUILD_DIR)/.configured
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) && \
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) install
+ifeq ($(EMBTK_TARGET_ARCH),64)
+	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib64/libgcc_s.so* $(SYSROOT)/lib64
+	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib64/libstdc++.so* $(SYSROOT)/lib64
+else
 	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/libgcc_s.so* $(SYSROOT)/lib
 	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/libstdc++.so* $(SYSROOT)/lib
 	@touch $@
+endif
 
 $(GCC3_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
