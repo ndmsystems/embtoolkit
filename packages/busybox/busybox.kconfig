@@ -33,7 +33,7 @@ choice
 		bool "busybox-1.13.4"
 endchoice
 
-config EMBTK_EMBTK_BB_VERSION_STRING
+config EMBTK_BB_VERSION_STRING
 	string
 	default "1.14.0"	if EMBTK_BB_VERSION_1_14_0
 	default "1.13.4"	if EMBTK_BB_VERSION_1_13_4
