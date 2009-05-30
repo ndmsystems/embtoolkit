@@ -97,4 +97,5 @@ include mk/macros.mk
 include mk/target-mcu.mk
 include mk/initialpath.mk
 include mk/toolchain.mk
+include mk/packages.mk
 
