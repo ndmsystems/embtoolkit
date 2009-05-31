@@ -585,6 +585,7 @@ config OPTION_EGLIBC_STREAMS
 
 config OPTION_EGLIBC_UTMP
 	bool "Older access functions for 'utmp' login records"
+	default y
 	help
 		This option group includes the older 'utent' family of
 		functions for accessing user login records in the 'utmp' file.
@@ -613,6 +614,7 @@ config OPTION_EGLIBC_UTMP
 config OPTION_EGLIBC_GETLOGIN
 	bool "The getlogin function"
 	depends on OPTION_EGLIBC_UTMP
+	default y
 	help
 		This function group includes the 'getlogin' and 'getlogin_r'
 		functions, which return the user name associated by the login
