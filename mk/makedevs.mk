@@ -29,3 +29,4 @@ makedevs_install: $(MAKEDEVS_DIR)/.installed
 $(MAKEDEVS_DIR)/.installed:
 	@mkdir -p $(MAKEDEVS_DIR)
 	$(subst ",,$(strip $(HOSTCC_CACHED))) -o $(MAKEDEVS_DIR)/makedevs $(EMBTK_ROOT)/src/makedevs/makedevs.c
+	@touch $@
