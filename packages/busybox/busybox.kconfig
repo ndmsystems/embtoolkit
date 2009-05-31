@@ -38,3 +38,7 @@ config EMBTK_BB_VERSION_STRING
 	default "1.14.0"	if EMBTK_BB_VERSION_1_14_0
 	default "1.13.4"	if EMBTK_BB_VERSION_1_13_4
 
+config EMBTK_BB_DOT_CONFIG
+	string
+	default "busybox-1.14.config"	if EMBTK_BB_VERSION_1_14_0
+	default "busybox-1.13.config"	if EMBTK_BB_VERSION_1_13_4
