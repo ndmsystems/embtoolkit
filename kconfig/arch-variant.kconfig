@@ -32,37 +32,53 @@ choice
 	 Select architecture variant.
 	config EMBTK_ARCH_MIPS_MIPS1_LITTLE
 		bool "MIPS I little endian"
+		select EMBTK_TARGET_ARCH_32BITS
 	config EMBTK_ARCH_MIPS_MIPS1_BIG
 		bool "MIPS I big endian"
+		select EMBTK_TARGET_ARCH_32BITS
 	config EMBTK_ARCH_MIPS_MIPS2_LITTLE
 		bool "MIPS II little endian"
+		select EMBTK_TARGET_ARCH_32BITS
 	config EMBTK_ARCH_MIPS_MIPS2_BIG
 		bool "MIPS II big endian"
+		select EMBTK_TARGET_ARCH_32BITS
 	config EMBTK_ARCH_MIPS_MIPS3_LITTLE
 		bool "MIPS III little endian"
+		select EMBTK_TARGET_ARCH_64BITS
 	config EMBTK_ARCH_MIPS_MIPS3_BIG
 		bool "MIPS III big endian"
+		select EMBTK_TARGET_ARCH_64BITS
 	config EMBTK_ARCH_MIPS_MIPS4_LITTLE
 		bool "MIPS IV little endian"
+		select EMBTK_TARGET_ARCH_64BITS
 	config EMBTK_ARCH_MIPS_MIPS4_BIG
 		bool "MIPS IV big endian"
+		select EMBTK_TARGET_ARCH_64BITS
 	config EMBTK_ARCH_MIPS_MIPS32_LITTLE
 		bool "MIPS32 little endian"
+		select EMBTK_TARGET_ARCH_32BITS
 	config EMBTK_ARCH_MIPS_MIPS32_BIG
 		bool "MIPS32 big endian"
+		select EMBTK_TARGET_ARCH_32BITS
 	config EMBTK_ARCH_MIPS_MIPS32R2_LITTLE
 		bool "MIPS32 release 2 little endian"
+		select EMBTK_TARGET_ARCH_32BITS
 	config EMBTK_ARCH_MIPS_MIPS32R2_BIG
 		bool "MIPS32 release 2 big endian"
+		select EMBTK_TARGET_ARCH_32BITS
 
 	config EMBTK_ARCH_MIPS_MIPS64_LITTLE
 		bool "MIPS64 little endian"
+		select EMBTK_TARGET_ARCH_64BITS
 	config EMBTK_ARCH_MIPS_MIPS64_BIG
 		bool "MIPS64 big endian"
+		select EMBTK_TARGET_ARCH_64BITS
 	config EMBTK_ARCH_MIPS_MIPS64R2_LITTLE
 		bool "MIPS64 release 2 little endian"
+		select EMBTK_TARGET_ARCH_64BITS
 	config EMBTK_ARCH_MIPS_MIPS64R2_BIG
 		bool "MIPS64 release 2 big endian"
+		select EMBTK_TARGET_ARCH_64BITS
 
 endchoice
 
