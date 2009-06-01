@@ -43,3 +43,7 @@ choice
 	config EMBTK_ARCH_X86_64
 		bool "x86_64"
 endchoice
+
+config EMBTK_TARGET_ARCH_64BITS
+config EMBTK_TARGET_ARCH_32BITS
+
