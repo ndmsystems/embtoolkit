@@ -91,11 +91,12 @@ clean: rmallpath
 	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/basic
 	$(Q)rm -rf .config kbuild.log
 
-startbuild: buildtoolchain
+startbuild: buildtoolchain rootfs_build
 
 include mk/macros.mk
 include mk/target-mcu.mk
 include mk/initialpath.mk
 include mk/toolchain.mk
 include mk/packages.mk
+include mk/rootfs.mk
 
