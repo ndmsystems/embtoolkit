@@ -45,5 +45,7 @@ choice
 endchoice
 
 config EMBTK_TARGET_ARCH_64BITS
+	bool
 config EMBTK_TARGET_ARCH_32BITS
+	bool
 
