@@ -23,22 +23,22 @@
 #########################################################################################
 choice
 	prompt "Busybox you wish"
-	default EMBTK_BB_VERSION_1_14_0
+	default EMBTK_BB_VERSION_1_14_1
 	help
 		Here you can choose which version of busybox
 		you want to use
-	config  EMBTK_BB_VERSION_1_14_0
-		bool "busybox-1.14.0"
+	config  EMBTK_BB_VERSION_1_14_1
+		bool "busybox-1.14.1"
 	config  EMBTK_BB_VERSION_1_13_4
 		bool "busybox-1.13.4"
 endchoice
 
 config EMBTK_BB_VERSION_STRING
 	string
-	default "1.14.0"	if EMBTK_BB_VERSION_1_14_0
+	default "1.14.1"	if EMBTK_BB_VERSION_1_14_1
 	default "1.13.4"	if EMBTK_BB_VERSION_1_13_4
 
 config EMBTK_BB_DOT_CONFIG
 	string
-	default "busybox-1.14.config"	if EMBTK_BB_VERSION_1_14_0
+	default "busybox-1.14.config"	if EMBTK_BB_VERSION_1_14_1
 	default "busybox-1.13.config"	if EMBTK_BB_VERSION_1_13_4
