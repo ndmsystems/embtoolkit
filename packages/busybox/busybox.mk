@@ -34,7 +34,7 @@ $(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed
 	CFLAGS="-Os -pipe -fno-strict-aliasing" \
 	$(MAKE) -C $(BB_BUILD_DIR) CROSS_COMPILE=$(TOOLS)/bin/$(STRICT_GNU_TARGET)- \
 	CONFIG_PREFIX=$(ROOTFS) install
-	touch $@
+	@touch $@
 
 download_busybox:
 	@test -e $(DOWNLOAD_DIR)/$(BB_PACKAGE) || \
