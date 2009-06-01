@@ -22,6 +22,10 @@
 # \date         May 2009
 #########################################################################################
 
-#Busybox
-include $(EMBTK_ROOT)/packages/busybox/busybox.mk
+ROOTFS_COMPONENTS := makedevs_install fakeroot_install
 
+#Busybox
+ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),y)
+include $(EMBTK_ROOT)/packages/busybox/busybox.mk
+ROOTFS_COMPONENTS += busybox_install
+endif
