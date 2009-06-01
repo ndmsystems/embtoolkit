@@ -35,11 +35,13 @@ mkinitialpath:
 	@mkdir -p $(SYSROOT)
 	@mkdir -p $(SYSROOT)/usr
 	@mkdir -p $(SYSROOT)/usr/lib
-	@mkdir -p $(ROOTFS)
-	@cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(ROOTFS)/
 	@mkdir -p $(TOOLS)
 	@mkdir -p $(TOOLS_BUILD)
+ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
+	@mkdir -p $(ROOTFS)
+	@cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(ROOTFS)/
 	@mkdir -p $(PACKAGES_BUILD)
+endif
 
 rmallpath:
 	@rm -Rf packages_build-* rootfs-* sysroot-* tools_build-* tools-*
