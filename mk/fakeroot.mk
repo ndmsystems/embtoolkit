@@ -28,6 +28,7 @@ FAKEROOT_SITE := http://snapshot.debian.net/archive/2008/12/31/debian/pool/main/
 FAKEROOT_PACKAGE := fakeroot_$(FAKEROOT_VERSION).tar.gz
 FAKEROOT_BUILD_DIR := $(TOOLS_BUILD)/fakeroot-build
 FAKEROOT_DIR := $(EMBTK_ROOT)/fakeroot
+FAKEROOT_BIN := $(FAKEROOT_DIR)/bin/fakeroot
 
 fakeroot_install: $(FAKEROOT_BUILD_DIR)/.installed
 
