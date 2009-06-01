@@ -89,7 +89,7 @@ basic:
 clean: rmallpath
 	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/kconfig
 	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/basic
-	$(Q)rm -rf .config kbuild.log
+	$(Q)rm -rf .config kbuild.log .fakeroot*
 
 startbuild: buildtoolchain rootfs_build
 
