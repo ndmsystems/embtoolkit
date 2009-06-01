@@ -64,8 +64,15 @@ endmenu
 
 endmenu
 
-menu "Root filesystem build"
+config EMBTK_HAVE_ROOTFS
+	help
+	 If you want to build a root filesystem, you must say yes here
+	 for your target, you must yes here.
+	bool "Build a root filesystem"
+
+if EMBTK_HAVE_ROOTFS
 menu "Packages selection"
 source "kconfig/packages.kconfig"
 endmenu
-endmenu
+endif
+
