@@ -8,7 +8,9 @@ lex.*.c
 zconf.hash.c
 *.moc
 lkc_defs.h
-
+*.cmd
+*.o
+*.tmp_qtcheck
 #
 # configuration programs
 #
