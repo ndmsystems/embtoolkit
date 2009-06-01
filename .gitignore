@@ -5,3 +5,4 @@ rootfs-*
 sysroot-*
 tools_build-*
 tools-*
+.fakeroot*
