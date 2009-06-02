@@ -28,8 +28,9 @@ TOOLS := $(EMBTK_ROOT)/tools-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
 TOOLS_BUILD := $(EMBTK_ROOT)/tools_build-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
 PACKAGES_BUILD := $(EMBTK_ROOT)/packages_build-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
 ROOTFS := $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
+HOSTTOOLS :=$(EMBTK_ROOT)/host-tools
 
-export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD ROOTFS
+export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD ROOTFS HOSTTOOLS
 
 mkinitialpath:
 	@mkdir -p $(SYSROOT)
@@ -37,6 +38,7 @@ mkinitialpath:
 	@mkdir -p $(SYSROOT)/usr/lib
 	@mkdir -p $(TOOLS)
 	@mkdir -p $(TOOLS_BUILD)
+	@mkdir -p $(HOSTTOOLS)
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 	@mkdir -p $(ROOTFS)
 	@cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(ROOTFS)/
