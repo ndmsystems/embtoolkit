@@ -22,7 +22,7 @@
 # \date         May 2009
 #########################################################################################
 
-MAKEDEVS_DIR := $(EMBTK_ROOT)/makedevs
+MAKEDEVS_DIR := $(HOSTTOOLS)/makedevs
 
 makedevs_install: $(MAKEDEVS_DIR)/.installed
 
