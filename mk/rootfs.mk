@@ -30,7 +30,7 @@ include $(EMBTK_ROOT)/mk/makedevs.mk
 include $(EMBTK_ROOT)/mk/fakeroot.mk
 
 rootfs_build: $(ROOTFS_COMPONENTS)
-ifeq ($(EMBTK_TARGET_ARCH),64)
+ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	@cp -d $(SYSROOT)/lib64/* $(ROOTFS)/lib64/
 	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/lib64/*.so
 else
