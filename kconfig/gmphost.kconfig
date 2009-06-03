@@ -24,7 +24,7 @@
 
 choice
 	prompt "Version of gmp you wish"
-	default EMBTK_GMP_HOST_VERSION_4_2_4
+	default EMBTK_GMP_HOST_VERSION_4_3_1
 	help
 		GMP is a free library for arbitrary precision arithmetic,
 		operating on signed integers, rational numbers,
