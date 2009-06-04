@@ -31,6 +31,9 @@ include $(EMBTK_ROOT)/mk/fakeroot.mk
 
 rootfs_build: $(ROOTFS_COMPONENTS)
 ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
+	@mkdir -p $(ROOTFS)/lib64
+	@mkdir -p $(ROOTFS)/usr/lib64
+	@rm -rf $(ROOTFS)/lib $(ROOTFS)/usr/lib
 	@cp -d $(SYSROOT)/lib64/* $(ROOTFS)/lib64/
 	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/lib64/*.so
 else
