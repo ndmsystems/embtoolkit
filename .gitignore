@@ -7,3 +7,4 @@ tools_build-*
 tools-*
 .fakeroot*
 dl/*
+host-tools/
