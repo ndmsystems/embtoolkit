@@ -26,7 +26,7 @@ CCACHE_VERSION := 2.4
 CCACHE_SITE := http://samba.org/ftp/ccache
 CCACHE_PACKAGE := ccache-$(CCACHE_VERSION).tar.gz
 CCACHE_HOST_BUILD_DIR := $(TOOLS_BUILD)/ccachehost-build
-CCACHE_HOST_DIR := $(EMBTK_ROOT)/ccachehost
+CCACHE_HOST_DIR := $(HOSTTOOLS)/ccachehost
 
 CCACHE_DIR := $(CCACHE_HOST_DIR)
 HOSTCC_CACHED := "$(CCACHE_HOST_DIR)/bin/ccache $(HOSTCC)"
