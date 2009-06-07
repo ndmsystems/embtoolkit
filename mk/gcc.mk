@@ -92,7 +92,7 @@ $(GCC2_BUILD_DIR)/.configured:
 	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(STRICT_GNU_TARGET) \
 	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(GCC_FLOAT_TYPE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
-	--disable-libssp --disable-libgomp --disable-libmudflap \
+	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
 	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) \
 	--with-mpfr=$(MPFR_HOST_DIR) \
 	$(GCC_MULTILIB) $(GCC_WITH_ABI)
@@ -119,7 +119,7 @@ $(GCC3_BUILD_DIR)/.configured:
 	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(STRICT_GNU_TARGET) \
 	--with-arch=$(GNU_TARGET_ARCH) --with-float=$(GCC_FLOAT_TYPE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) --enable-__cxa_atexit \
-	--disable-libssp --disable-libgomp --disable-libmudflap \
+	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
 	--enable-threads --enable-shared --enable-languages=c,c++ \
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
 	$(GCC_MULTILIB) $(GCC_WITH_ABI)
