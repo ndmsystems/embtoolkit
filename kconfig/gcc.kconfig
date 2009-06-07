@@ -23,7 +23,7 @@
 #########################################################################################
 choice
 	prompt "Version of gcc you wish"
-	default EMBTK_GCC_VERSION_4_4_0
+	default EMBTK_GCC_VERSION_4_3_3
 	help
 		Here you can choose which version of gcc
 		you want to use
