@@ -22,7 +22,10 @@
 # \date         May 2009
 #########################################################################################
 EGLIBC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_VERSION_STRING)))
+EGLIBC_BRANCH := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_BRANCH_STRING)))
+EGLIBC_SVN_REVISION := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_SVN_REVISION)))
 EGLIBC_SITE := http://www.eglibc.org
+EGLIBC_SVN_SITE := svn://svn.eglibc.org
 EGLIBC_PACKAGE := eglibc-$(EGLIBC_VERSION).tar.bz2
 EGLIBC_HEADERS_BUILD_DIR := $(TOOLS_BUILD)/eglibc-headers
 EGLIBC_BUILD_DIR := $(TOOLS_BUILD)/eglibc
@@ -54,7 +57,15 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download $(EGLIBC_HEADERS_BUILD_D
 	@touch $@
 
 eglibc_download:
-	@echo "downloading eglibc"
+	$(call EMBTK_GENERIC_MESSAGE,"downloading eglibc-$(EGLIBC_VERSION) if necessary ...")
+	@cd $(EMBTK_ROOT)/src; \
+	svn co $(EGLIBC_SVN_SITE)/branches/eglibc-$(EGLIBC_BRANCH) \
+	-r$(EGLIBC_SVN_REVISION) eglibc-$(EGLIBC_VERSION); \
+	cd eglibc-$(EGLIBC_VERSION); touch `find . -name configure`; cd ../;\
+	test -e $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE) || \
+	tar cjvf $(EGLIBC_PACKAGE) eglibc-$(EGLIBC_VERSION); \
+	test -e $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE) || \
+	mv $(EGLIBC_PACKAGE) $(DOWNLOAD_DIR)
 
 $(EGLIBC_HEADERS_BUILD_DIR)/.decompressed:
 	$(call DECOMPRESS_MESSAGE,$(EGLIBC_PACKAGE))
