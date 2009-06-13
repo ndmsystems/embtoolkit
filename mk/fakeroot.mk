@@ -38,16 +38,19 @@ $(FAKEROOT_BUILD_DIR)/.installed: download_fakeroot $(FAKEROOT_BUILD_DIR)/.decom
 	@touch $@
 
 download_fakeroot:
+	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(FAKEROOT_PACKAGE) if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(FAKEROOT_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(FAKEROOT_PACKAGE) $(FAKEROOT_SITE)/$(FAKEROOT_PACKAGE)
 
 $(FAKEROOT_BUILD_DIR)/.decompressed:
+	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(FAKEROOT_PACKAGE)...")
 	@tar -C $(TOOLS_BUILD) -xzf $(DOWNLOAD_DIR)/$(FAKEROOT_PACKAGE)
 	@mkdir -p $(FAKEROOT_BUILD_DIR)
 	@mkdir -p $(FAKEROOT_DIR)
 	@touch $@
 
 $(FAKEROOT_BUILD_DIR)/.configured:
+	$(call EMBTK_GENERIC_MESSAGE,"Configuring fakeroot_$(FAKEROOT_VERSION)...")
 	@cd $(FAKEROOT_BUILD_DIR); \
 	$(TOOLS_BUILD)/fakeroot-$(FAKEROOT_VERSION)/configure \
 	--prefix=$(FAKEROOT_DIR) --build=$(HOST_BUILD) --host=$(HOST_ARCH)

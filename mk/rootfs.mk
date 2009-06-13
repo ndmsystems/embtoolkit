@@ -29,7 +29,7 @@ include $(EMBTK_ROOT)/mk/makedevs.mk
 #fakeroot
 include $(EMBTK_ROOT)/mk/fakeroot.mk
 
-rootfs_build: $(ROOTFS_COMPONENTS)
+rootfs_build: mkinitialpath $(ROOTFS_COMPONENTS)
 ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	@mkdir -p $(ROOTFS)/lib64
 	@mkdir -p $(ROOTFS)/usr/lib64
