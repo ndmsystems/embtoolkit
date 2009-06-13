@@ -26,6 +26,7 @@ EGLIBC_BRANCH := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_BRANCH_STRING)))
 EGLIBC_SVN_REVISION := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_SVN_REVISION)))
 EGLIBC_SITE := http://www.eglibc.org
 EGLIBC_SVN_SITE := svn://svn.eglibc.org
+EGLIBC_PATCHES_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/eglibc/patches
 EGLIBC_PACKAGE := eglibc-$(EGLIBC_VERSION).tar.bz2
 EGLIBC_HEADERS_BUILD_DIR := $(TOOLS_BUILD)/eglibc-headers
 EGLIBC_BUILD_DIR := $(TOOLS_BUILD)/eglibc
@@ -66,10 +67,18 @@ eglibc_download:
 	tar cjvf $(EGLIBC_PACKAGE) eglibc-$(EGLIBC_VERSION); \
 	test -e $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE) || \
 	mv $(EGLIBC_PACKAGE) $(DOWNLOAD_DIR)
+ifeq	($(CONFIG_EMBTK_EGLIBC_NEED_PATCH),y)
+	wget $(EGLIBC_PATCHES_SITE)/eglibc-$(EGLIBC_VERSION)-*.patch \
+	-O $(DOWNLOAD_DIR)/eglibc-$(EGLIBC_VERSION).patch
+endif
 
 $(EGLIBC_HEADERS_BUILD_DIR)/.decompressed:
 	$(call DECOMPRESS_MESSAGE,$(EGLIBC_PACKAGE))
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE)
+ifeq	($(CONFIG_EMBTK_EGLIBC_NEED_PATCH),y)
+	cd $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION); \
+	patch -p0 < $(DOWNLOAD_DIR)/eglibc-$(EGLIBC_VERSION).patch
+endif
 	@cp -R $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/ports \
 	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/
 	@mkdir -p $(EGLIBC_HEADERS_BUILD_DIR)

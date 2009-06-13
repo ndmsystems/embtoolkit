@@ -50,6 +50,12 @@ config EMBTK_EGLIBC_VERSION_STRING
 	default "2.10"		if EMBTK_EGLIBC_VERSION_2_10
 	default "2.9"		if EMBTK_EGLIBC_VERSION_2_9
 
+#Does we need patches?
+config EMBTK_EGLIBC_NEED_PATCH
+	depends on EMBTK_EGLIBC_VERSION_2_9
+	bool
+	default y
+
 if EMBTK_EGLIBC_VERSION_2_10
 source "kconfig/option-groups.def-2.10"
 endif
