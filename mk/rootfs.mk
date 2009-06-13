@@ -48,6 +48,5 @@ endif
 	$(call EMBTK_GENERIC_MESSAGE,"You successfully built your toolchain and your root filesystem $(GNU_TARGET) !!!")
 else
 rootfs_build:
-	@echo "Build of root filesystem not selected ..."
-	$(call EMBTK_GENERIC_MESSAGE,"You successfully built your toolchain for $(GNU_TARGET) !!!")
+	$(call EMBTK_GENERIC_MESSAGE,"Build of root filesystem not selected !!!")
 endif
