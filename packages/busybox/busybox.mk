@@ -30,7 +30,8 @@ BB_BUILD_DIR := $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
 
 busybox_install: $(BB_BUILD_DIR)/.installed
 
-$(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed
+$(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed \
+	$(BB_BUILD_DIR)/.patched $(BB_BUILD_DIR)/.Config.in.renewed
 	CFLAGS="-Os -pipe -fno-strict-aliasing" \
 	$(MAKE) -C $(BB_BUILD_DIR) CROSS_COMPILE=$(TOOLS)/bin/$(STRICT_GNU_TARGET)- \
 	CONFIG_PREFIX=$(ROOTFS) install
@@ -46,3 +47,12 @@ $(BB_BUILD_DIR)/.decompressed:
 	@test -e $(BB_BUILD_DIR)/.config || \
 	cp $(EMBTK_ROOT)/packages/busybox/$(BB_DOT_CONFIG) $(BB_BUILD_DIR)/.config
 	@touch $@
+
+$(BB_BUILD_DIR)/.Config.in.renewed:
+	@cd $(PACKAGES_BUILD)/busybox-$(BB_VERSION); \
+	sed 's|source |source $(BB_BUILD_DIR)/|' < Config.in >Config.in.tmp; \
+	sed 's/networking\/Config.in/&.new/' <Config.in.tmp >Config.in.new; \
+	cd networking; \
+	sed 's|source networking|source $(BB_BUILD_DIR)/networking|' < Config.in >Config.in.new
+	touch $@
+
