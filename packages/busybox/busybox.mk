@@ -31,7 +31,7 @@ BB_BUILD_DIR := $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
 busybox_install: $(BB_BUILD_DIR)/.installed
 
 $(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed \
-	$(BB_BUILD_DIR)/.patched $(BB_BUILD_DIR)/.Config.in.renewed
+	$(BB_BUILD_DIR)/.Config.in.renewed
 	CFLAGS="-Os -pipe -fno-strict-aliasing" \
 	$(MAKE) -C $(BB_BUILD_DIR) CROSS_COMPILE=$(TOOLS)/bin/$(STRICT_GNU_TARGET)- \
 	CONFIG_PREFIX=$(ROOTFS) install
