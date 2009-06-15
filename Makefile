@@ -127,14 +127,21 @@ help:
 	@echo "| Building and configuring: |"
 	@echo " ---------------------------"
 	@echo "make xconfig:    Show EmbToolkit configure GUI and let you to"
-	@echo "                 configure your toolchain and your root filesystem."
+	@echo "                 configure your toolchain and your root filesystem,"
+	@echo "                 (if selected)."
+	@echo
 	@echo "make menuconfig: Same as xconfig but using this time ncurse GUI."
+	@echo
+	@echo "make:            Start building your toolchain and your root"
+	@echo "                 filesystem (if selected) or start xconfig if you"
+	@echo "                 did not configure before."
 	@echo
 	@echo " -----------"
 	@echo "| Cleaning: |"
 	@echo " -----------"
 	@echo "make clean:      Remove all built files, but keep downloaded"
 	@echo "                 packages and host tools."
+	@echo
 	@echo "make distclean:  Same as clean, but remove all downloaded packages,"
 	@echo "                 host tools and .config.old files."
 	@echo
