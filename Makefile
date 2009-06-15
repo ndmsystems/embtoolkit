@@ -145,6 +145,13 @@ help:
 	@echo "make distclean:  Same as clean, but remove all downloaded packages,"
 	@echo "                 host tools and .config.old files."
 	@echo
+	@echo " -------------------"
+	@echo "| Packages: Busybox |"
+	@echo " -------------------"
+	@echo "make busybox_config:"
+	@echo "                 Download busybox (if necessary) and show you a GUI"
+	@echo "                 in order to configure busybox."
+	@echo
 
 distclean: clean
 	$(Q)rm -rf dl/* src/eglibc* host-tools .config.old
