@@ -135,9 +135,10 @@ help:
 	@echo " -----------"
 	@echo "make clean:      Remove all built files, but keep downloaded"
 	@echo "                 packages and host tools."
-	@echo "make distclean:  Same as clean, but remove all downloaded packages."
+	@echo "make distclean:  Same as clean, but remove all downloaded packages,"
+	@echo "                 host tools and .config.old files."
 	@echo
 
 distclean: clean
-	$(Q)rm -rf dl/* src/eglibc* host-tools
+	$(Q)rm -rf dl/* src/eglibc* host-tools .config.old
 
