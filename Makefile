@@ -138,3 +138,6 @@ help:
 	@echo "make distclean:  Same as clean, but remove all downloaded packages."
 	@echo
 
+distclean: clean
+	$(Q)rm -rf dl/* src/eglibc* host-tools
+
