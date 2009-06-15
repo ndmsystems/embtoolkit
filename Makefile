@@ -121,3 +121,20 @@ else
 	scripts/kconfig/qconf $(BB_BUILD_DIR)/Config.in.new
 endif
 
+help:
+	$(call EMBTK_GENERIC_MESSAGE,"Embedded systems Toolkit help. Please visit - http://embtoolkit.org -for more details")
+	@echo " ---------------------------"
+	@echo "| Building and configuring: |"
+	@echo " ---------------------------"
+	@echo "make xconfig:    Show EmbToolkit configure GUI and let you to"
+	@echo "                 configure your toolchain and your root filesystem."
+	@echo "make menuconfig: Same as xconfig but using this time ncurse GUI."
+	@echo
+	@echo " -----------"
+	@echo "| Cleaning: |"
+	@echo " -----------"
+	@echo "make clean:      Remove all built files, but keep downloaded"
+	@echo "                 packages and host tools."
+	@echo "make distclean:  Same as clean, but remove all downloaded packages."
+	@echo
+
