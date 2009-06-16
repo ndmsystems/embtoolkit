@@ -45,7 +45,7 @@ endif
 	cd $(ROOTFS) ; $(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	tar cjf rootfs-$(STRICT_GNU_TARGET).tar.bz2 * ; \
 	mv rootfs-$(STRICT_GNU_TARGET).tar.bz2 $(EMBTK_ROOT)
-	$(call EMBTK_GENERIC_MESSAGE,"You successfully built your toolchain and your root filesystem $(GNU_TARGET) !!!")
+	$(call EMBTK_GENERIC_MESSAGE,"You successfully built your toolchain and your root filesystem for $(GNU_TARGET) !!!")
 else
 rootfs_build:
 	$(call EMBTK_GENERIC_MESSAGE,"Build of root filesystem not selected !!!")
