@@ -61,3 +61,35 @@ define EMBTK_GENERIC_MESSAGE
 	@echo "$(1)"
 	@echo "#########################################################################################"
 endef
+
+#Successful build of EmbToolkit message
+successful_build:
+	@echo "####################################### EmbToolkit ######################################"
+	@echo " --------------------- "
+	@echo "| Toolchain build log |"
+	@echo " --------------------- "
+	@echo "You successfully build your toolchain for $(GNU_TARGET)"
+	@echo "Tools built (GCC compiler, Binutils, etc.) are located in:"
+	@echo "    $(TOOLS)/bin"
+	@echo
+	@echo " ---------------------------- "
+	@echo "| Root file system build log |"
+	@echo " ---------------------------- "
+ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
+	@echo "You also successfully build a root filesystem for located in the root directory"
+	@echo "of EmbToolkit."
+else
+	@echo "Build of root filesystem not selected."
+endif
+	@echo
+	@echo " ---------------------------- "
+	@echo "| Embedded systems Toolkit   |"
+	@echo " ---------------------------- "
+	@echo "Hope that EmbToolkit will be useful for your project !!!"
+	@echo "Please report any bugs/suggestion at:"
+	@echo "   http://www.embtoolkit.org/issues/projects/show/embtoolkit"
+	@echo "You can also visit the wiki at:"
+	@echo "   http://www.embtoolkit.org"
+	@echo
+	@echo "#########################################################################################"
+
