@@ -39,6 +39,9 @@ mkinitialpath:
 	@mkdir -p $(TOOLS)
 	@mkdir -p $(TOOLS_BUILD)
 	@mkdir -p $(HOSTTOOLS)
+	@mkdir -p $(HOSTTOOLS)/usr/
+	@mkdir -p $(HOSTTOOLS)/usr/include
+	@mkdir -p $(HOSTTOOLS)/usr/local
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 	@mkdir -p $(ROOTFS)
 	@cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(ROOTFS)/
