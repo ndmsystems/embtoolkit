@@ -49,10 +49,10 @@ include $(EMBTK_ROOT)/mk/kernel-headers.mk
 include $(EMBTK_ROOT)/mk/eglibc.mk
 
 #targets
-buildtoolchain: mkinitialpath ccachehost_install gmphost_install \
-		mpfrhost_install binutils_install gcc1_install \
-		kernel-headers_install eglibc-headers_install \
-		gcc2_install eglibc_install gcc3_install symlink_tools
+buildtoolchain: mkinitialpath kernel-headers_install ccachehost_install \
+		gmphost_install mpfrhost_install binutils_install \
+		gcc1_install eglibc-headers_install gcc2_install \
+		eglibc_install gcc3_install symlink_tools
 	$(call EMBTK_GENERIC_MESSAGE,"You successfully build a toolchain for $(STRICT_GNU_TARGET) !!!")
 symlink_tools:
 	@cd $(TOOLS)/bin/; export TOOLS_LIST="`ls`"; \

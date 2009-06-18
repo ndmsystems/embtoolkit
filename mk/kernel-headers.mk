@@ -32,6 +32,8 @@ kernel-headers_install:  download_linux $(LINUX_BUILD_DIR)/.decompressed
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) \
 	headers_install ARCH=$(LINUX_ARCH) CROSS_COMPILE=$(STRICT_GNU_TARGET)- \
 	INSTALL_HDR_PATH=$(SYSROOT)/usr
+	$(MAKE) -C $(LINUX_BUILD_DIR) distclean
+	$(MAKE) -C $(LINUX_BUILD_DIR) headers_install INSTALL_HDR_PATH=$(HOSTTOOLS)/usr
 
 download_linux: 
 	@test -e $(DOWNLOAD_DIR)/$(LINUX_PACKAGE) || \
