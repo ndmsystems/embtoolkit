@@ -26,7 +26,7 @@ GMP_HOST_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GMP_HOST_VERSION_STRING)))
 GMP_HOST_SITE := ftp://ftp.gmplib.org/pub/gmp-$(GMP_HOST_VERSION)
 GMP_HOST_PACKAGE := gmp-$(GMP_HOST_VERSION).tar.bz2
 GMP_HOST_BUILD_DIR := $(TOOLS_BUILD)/gmp
-GMP_HOST_DIR := $(HOSTTOOLS)/gmp-host
+GMP_HOST_DIR := $(HOSTTOOLS)/usr/local/gmp-host
 
 export GMP_HOST_DIR
 
