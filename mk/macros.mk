@@ -76,7 +76,7 @@ successful_build:
 	@echo "| Root file system build log |"
 	@echo " ---------------------------- "
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-	@echo "You also successfully build a root filesystem for located in the root directory"
+	@echo "You also successfully build a root filesystem located in the root directory"
 	@echo "of EmbToolkit."
 else
 	@echo "Build of root filesystem not selected."
