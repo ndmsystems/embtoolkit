@@ -25,13 +25,14 @@
 LZO_VERSION := 2.03
 LZO_SITE := http://www.oberhumer.com/opensource/lzo/download
 LZO_PACKAGE := lzo-$(LZO_VERSION).tar.gz
-LZO_BUILD_DIR := $(TOOLS_BUILD)/lzo-build
+LZO_HOST_BUILD_DIR := $(TOOLS_BUILD)/lzo-build-host
 
-lzo_install: $(LZO_BUILD_DIR)/.installed
+lzo_host_install: $(LZO_HOST_BUILD_DIR)/.installed
 
-$(LZO_BUILD_DIR)/.installed: download_lzo $(LZO_BUILD_DIR)/.decompressed \
-	$(LZO_BUILD_DIR)/.configured
-	$(MAKE) -C $(LZO_BUILD_DIR) && $(MAKE) -C $(LZO_BUILD_DIR) install
+$(LZO_HOST_BUILD_DIR)/.installed: download_lzo $(LZO_HOST_BUILD_DIR)/.decompressed \
+	$(LZO_HOST_BUILD_DIR)/.configured
+	$(MAKE) -C $(LZO_HOST_BUILD_DIR)
+	$(MAKE) -C $(LZO_HOST_BUILD_DIR) install
 	@touch $@
 
 download_lzo:
@@ -39,15 +40,15 @@ download_lzo:
 	@test -e $(DOWNLOAD_DIR)/$(LZO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(LZO_PACKAGE) $(LZO_SITE)/$(LZO_PACKAGE)
 
-$(LZO_BUILD_DIR)/.decompressed:
+$(LZO_HOST_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LZO_PACKAGE)...")
 	@tar -C $(TOOLS_BUILD) -xzf $(DOWNLOAD_DIR)/$(LZO_PACKAGE)
-	@mkdir -p $(LZO_BUILD_DIR)
+	@mkdir -p $(LZO_HOST_BUILD_DIR)
 	@touch $@
 
-$(LZO_BUILD_DIR)/.configured:
+$(LZO_HOST_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring lzo-$(LZO_VERSION)...")
-	@cd $(LZO_BUILD_DIR); \
+	@cd $(LZO_HOST_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/lzo-$(LZO_VERSION)/configure \
 	--prefix=$(HOSTTOOLS)/usr/local --build=$(HOST_BUILD) --host=$(HOST_ARCH)
 	@touch $@
