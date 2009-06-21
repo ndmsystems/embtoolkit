@@ -30,6 +30,11 @@ MTD-UTILS_PATCH := mtd-utils.patch
 MTD-UTILS_HOST_BUILD_DIR := $(TOOLS_BUILD)/mtd-utils-build
 MTD-UTILS_TARGET_BUILD_DIR := $(PACKAGES_BUILD)/mtd-utils-build
 
+MTD-UTILS_BINS := docfdisk flash_erase flash_lock flash_unlock jffs2dump \
+nanddump nftldump rfddump sumtool doc_loadbios flash_eraseall flash_otp_dump \
+ftl_check mkfs.jffs2 nandtest nftl_format rfdformat flashcp flash_info \
+flash_otp_info ftl_format mtd_debug nandwrite recv_image serve_image
+
 mtd-utils_host_install: $(MTD-UTILS_HOST_BUILD_DIR)/.installed
 mtd-utils_target_install: $(MTD-UTILS_TARGET_BUILD_DIR)/.installed
 
@@ -67,6 +72,11 @@ $(MTD-UTILS_TARGET_BUILD_DIR)/.decompressed:
 	patch -p1 < $(DOWNLOAD_DIR)/mtd-utils.patch
 	@mkdir -p $(MTD-UTILS_TARGET_BUILD_DIR)
 	@touch $@
+
+mtd-utils_target_clean:
+	@if [ -e $(MTD-UTILS_TARGET_BUILD_DIR)/.installed ]; then \
+		cd $(SYSROOT)/usr/sbin; rm -rf $(MTD-UTILS_BINS); \
+	fi
 
 download_mtd-utils:
 	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(MTD-UTILS_PACKAGE) \
