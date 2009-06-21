@@ -34,8 +34,8 @@ mtd-utils_host_install: $(MTD-UTILS_HOST_BUILD_DIR)/.installed
 mtd-utils_target_install: $(MTD-UTILS_TARGET_BUILD_DIR)/.installed
 
 #mtd-utils for host
-$(MTD-UTILS_HOST_BUILD_DIR)/.installed: download_mtd-utils \
-$(MTD-UTILS_HOST_BUILD_DIR)/.decompressed
+$(MTD-UTILS_HOST_BUILD_DIR)/.installed: zlib_host_install lzo_host_install \
+download_mtd-utils $(MTD-UTILS_HOST_BUILD_DIR)/.decompressed
 	LDFLAGS="-L$(HOSTTOOLS)/usr/local/lib" \
 	CFLAGS="-I. -I./include -I$(HOSTTOOLS)/usr/local/include \
 	-I$(HOSTTOOLS)/usr/include" DESTDIR=$(HOSTTOOLS) \
@@ -51,8 +51,8 @@ $(MTD-UTILS_HOST_BUILD_DIR)/.decompressed:
 	@touch $@
 
 #mtd-utils for target
-$(MTD-UTILS_TARGET_BUILD_DIR)/.installed: download_mtd-utils \
-$(MTD-UTILS_TARGET_BUILD_DIR)/.decompressed
+$(MTD-UTILS_TARGET_BUILD_DIR)/.installed: zlib_target_install \
+lzo_target_install download_mtd-utils $(MTD-UTILS_HOST_BUILD_DIR)/.decompressed
 	LDFLAGS="-L$(SYSROOT)/usr/local/lib" \
 	CFLAGS="-I. -I./include -I$(SYSROOT)/usr/local/include \
 	-I$(SYSROOT)/usr/include" DESTDIR=$(SYSROOT) \
