@@ -52,7 +52,7 @@ $(MTD-UTILS_HOST_BUILD_DIR)/.decompressed:
 
 #mtd-utils for target
 $(MTD-UTILS_TARGET_BUILD_DIR)/.installed: zlib_target_install \
-lzo_target_install download_mtd-utils $(MTD-UTILS_HOST_BUILD_DIR)/.decompressed
+lzo_target_install download_mtd-utils $(MTD-UTILS_TARGET_BUILD_DIR)/.decompressed
 	LDFLAGS="-L$(SYSROOT)/usr/local/lib" \
 	CFLAGS="-I. -I./include -I$(SYSROOT)/usr/local/include \
 	-I$(SYSROOT)/usr/include" DESTDIR=$(SYSROOT) \
