@@ -26,8 +26,10 @@ ZLIB_VERSION := 1.2.3
 ZLIB_SITE := http://www.gzip.org/zlib
 ZLIB_PACKAGE := zlib-$(ZLIB_VERSION).tar.bz2
 ZLIB_HOST_BUILD_DIR := $(TOOLS_BUILD)/zlib-host-build
+ZLIB_TARGET_BUILD_DIR := $(PACKAGES_BUILD)/zlib-target-build
 
 zlib_host_install: $(ZLIB_HOST_BUILD_DIR)/.installed
+zlib_target_install: $(ZLIB_TARGET_BUILD_DIR)/.installed
 
 #zlib on host machine
 $(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib $(ZLIB_HOST_BUILD_DIR)/.decompressed
@@ -36,11 +38,6 @@ $(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib $(ZLIB_HOST_BUILD_DIR)/.decompr
 	prefix=$(HOSTTOOLS)/usr/local install
 	@touch $@
 
-download_zlib:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(ZLIB_PACKAGE) if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(ZLIB_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(ZLIB_PACKAGE) $(ZLIB_SITE)/$(ZLIB_PACKAGE)
-
 $(ZLIB_HOST_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(ZLIB_PACKAGE)...")
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(ZLIB_PACKAGE)
@@ -48,4 +45,30 @@ $(ZLIB_HOST_BUILD_DIR)/.decompressed:
 	$(TOOLS_BUILD)/zlib-$(ZLIB_VERSION)-host
 	@mkdir -p $(ZLIB_HOST_BUILD_DIR)
 	@touch $@
+
+#zlib on target machine
+$(ZLIB_TARGET_BUILD_DIR)/.installed: download_zlib \
+$(ZLIB_TARGET_BUILD_DIR)/.decompressed
+	@$(MAKE) -C $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)-target \
+	CC=$(TARGETCC_CACHED) AR="$(TOOLS)/bin/$(GNU_TARGET)-ar rc" \
+	RANLIB=$(TOOLS)/bin/$(GNU_TARGET)-ranlib
+	@$(MAKE) -C $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)-target \
+	CC=$(TARGETCC_CACHED) AR="$(TOOLS)/bin/$(GNU_TARGET)-ar rc" \
+	RANLIB=$(TOOLS)/bin/$(GNU_TARGET)-ranlib \
+	prefix=$(SYSROOT)/usr/ install
+	@touch $@
+
+$(ZLIB_TARGET_BUILD_DIR)/.decompressed:
+	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(ZLIB_PACKAGE)...")
+	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(ZLIB_PACKAGE)
+	@mv  $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION) \
+	$(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)-target
+	@mkdir -p $(ZLIB_TARGET_BUILD_DIR)
+	@touch $@
+
+#zlib download
+download_zlib:
+	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(ZLIB_PACKAGE) if necessary...")
+	@test -e $(DOWNLOAD_DIR)/$(ZLIB_PACKAGE) || \
+	wget -O $(DOWNLOAD_DIR)/$(ZLIB_PACKAGE) $(ZLIB_SITE)/$(ZLIB_PACKAGE)
 
