@@ -23,9 +23,17 @@
 #########################################################################################
 
 ROOTFS_COMPONENTS := makedevs_install fakeroot_install
+ROOTFS_COMPONENTS_CLEAN :=
 
 #Busybox
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),y)
 include $(EMBTK_ROOT)/packages/busybox/busybox.mk
 ROOTFS_COMPONENTS += busybox_install
 endif
+
+#mtd-utils
+ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS),y)
+ROOTFS_COMPONENTS += mtd-utils_target_install
+ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
+endif
+
