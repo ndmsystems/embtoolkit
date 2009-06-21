@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         Makefile
 # \brief	root Makefile of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 VERSION = 0
 PATCHLEVEL = 1
 SUBLEVEL = 0
@@ -102,15 +102,18 @@ include mk/rootfs.mk
 
 busybox_config:
 ifeq ($(CONFIG_EMBTK_DOTCONFIG),)
-	$(call EMBTK_GENERIC_MESSAGE,"Please run make xconfig and configure EmbToolkit first")
+	$(call EMBTK_GENERIC_MESSAGE,"Please run make xconfig and configure \
+	EmbToolkit first")
 	@echo
 	@echo
 else ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),)
-	$(call EMBTK_GENERIC_MESSAGE,"Please run make xconfig and enable build of root filesystem")
+	$(call EMBTK_GENERIC_MESSAGE,"Please run make xconfig and enable build \
+	of root filesystem")
 	@echo
 	@echo
 else ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),)
-	$(call EMBTK_GENERIC_MESSAGE,"Please run make xconfig and enable build of Busybox")
+	$(call EMBTK_GENERIC_MESSAGE,"Please run make xconfig and enable build \
+	of Busybox")
 	@echo
 	@echo
 else
@@ -122,19 +125,20 @@ else
 endif
 
 help:
-	$(call EMBTK_GENERIC_MESSAGE,"Embedded systems Toolkit help. Please visit - http://embtoolkit.org -for more details")
+	$(call EMBTK_GENERIC_MESSAGE,"Embedded systems Toolkit help. Please \
+	visit - http://embtoolkit.org -for more details")
 	@echo " ---------------------------"
 	@echo "| Building and configuring: |"
 	@echo " ---------------------------"
 	@echo "make xconfig:    Show EmbToolkit configure GUI and let you to"
-	@echo "                 configure your toolchain and your root filesystem,"
-	@echo "                 (if selected)."
+	@echo "                 configure your toolchain and your root"
+	@echo "                 filesystem (if selected)."
 	@echo
 	@echo "make menuconfig: Same as xconfig but using this time ncurse GUI."
 	@echo
 	@echo "make:            Start building your toolchain and your root"
-	@echo "                 filesystem (if selected) or start xconfig if you"
-	@echo "                 did not configure before."
+	@echo "                 filesystem (if selected) or start xconfig if"
+	@echo "                 you did not configure before."
 	@echo
 	@echo " -----------"
 	@echo "| Cleaning: |"
@@ -142,15 +146,24 @@ help:
 	@echo "make clean:      Remove all built files, but keep downloaded"
 	@echo "                 packages and host tools."
 	@echo
-	@echo "make distclean:  Same as clean, but remove all downloaded packages,"
-	@echo "                 host tools and .config.old files."
+	@echo "make distclean:  Same as clean, but remove all downloaded"
+	@echo "                 packages, host tools and .config.old files."
 	@echo
 	@echo " -------------------"
 	@echo "| Packages: Busybox |"
 	@echo " -------------------"
 	@echo "make busybox_config:"
-	@echo "                 Download busybox (if necessary) and show you a GUI"
-	@echo "                 in order to configure busybox."
+	@echo "                 Download busybox (if necessary) and show you a"
+	@echo "                 GUI in order to configure busybox."
+	@echo
+	@echo " -----------------"
+	@echo "| Root filesystem |"
+	@echo " -----------------"
+	@echo "make rootfs_build:"
+	@echo "                 if after a first build of your toolchain and"
+	@echo "                 your root filesystem, you change the contents"
+	@echo "                 of the root filesystem, use this target to"
+	@echo "                 rebuild it."
 	@echo
 
 distclean: clean
