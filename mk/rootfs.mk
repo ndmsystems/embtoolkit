@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         rootfs.mk
 # \brief	rootfs.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         June 2009
-#########################################################################################
+################################################################################
 
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 #makedevs
@@ -53,11 +53,17 @@ else
 	@cp -d $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
 	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/usr/sbin/*
 endif
-	$(FAKEROOT_BIN) -s $(EMBTK_ROOT)/.fakeroot.001 -- $(MAKEDEVS_DIR)/makedevs \
+	$(FAKEROOT_BIN) -s $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(MAKEDEVS_DIR)/makedevs \
 	-d $(EMBTK_ROOT)/src/devices_table.txt $(ROOTFS)
 	cd $(ROOTFS) ; $(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	tar cjf rootfs-$(STRICT_GNU_TARGET).tar.bz2 * ; \
 	mv rootfs-$(STRICT_GNU_TARGET).tar.bz2 $(EMBTK_ROOT)
+ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS),y)
+	$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(HOSTTOOLS)/usr/sbin/mkfs.jffs2 -n -e 128 -r $(ROOTFS) \
+	-o $(EMBTK_ROOT)/rootfs-$(STRICT_GNU_TARGET).jffs2
+endif
 
 rootfs_clean: $(ROOTFS_COMPONENTS_CLEAN)
 	@rm -rf rootfs-*
