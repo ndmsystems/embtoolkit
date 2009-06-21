@@ -22,7 +22,7 @@
 # \date         May 2009
 #########################################################################################
 
-MAKEDEVS_DIR := $(HOSTTOOLS)/makedevs
+MAKEDEVS_DIR := $(HOSTTOOLS)/usr/local/makedevs
 
 makedevs_install: $(MAKEDEVS_DIR)/.installed
 
