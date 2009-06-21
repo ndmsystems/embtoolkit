@@ -74,6 +74,7 @@ $(MTD-UTILS_TARGET_BUILD_DIR)/.decompressed:
 	@touch $@
 
 mtd-utils_target_clean:
+	$(call EMBTK_GENERIC_MESSAGE,"Cleaning mtd-utils in target ...")
 	@if [ -e $(MTD-UTILS_TARGET_BUILD_DIR)/.installed ]; then \
 		cd $(SYSROOT)/usr/sbin; rm -rf $(MTD-UTILS_BINS); \
 	fi
