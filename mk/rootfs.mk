@@ -62,7 +62,12 @@ endif
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS),y)
 	$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	$(HOSTTOOLS)/usr/sbin/mkfs.jffs2 -n -e 128 -r $(ROOTFS) \
+	-o $(EMBTK_ROOT)/rootfs-$(STRICT_GNU_TARGET).jffs2.temp
+	$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(HOSTTOOLS)/usr/sbin/sumtool -n -e 128 \
+	-i $(EMBTK_ROOT)/rootfs-$(STRICT_GNU_TARGET).jffs2.temp \
 	-o $(EMBTK_ROOT)/rootfs-$(STRICT_GNU_TARGET).jffs2
+	rm -rf $(EMBTK_ROOT)/rootfs-$(STRICT_GNU_TARGET).jffs2.temp
 endif
 
 rootfs_clean: $(ROOTFS_COMPONENTS_CLEAN)
