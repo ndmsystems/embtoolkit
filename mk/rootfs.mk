@@ -45,6 +45,8 @@ ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	@rm -rf $(ROOTFS)/lib $(ROOTFS)/usr/lib
 	@cp -d $(SYSROOT)/lib64/* $(ROOTFS)/lib64/
 	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/lib64/*.so
+	@cp -d $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
+	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/usr/sbin/*
 else
 	@cp -d $(SYSROOT)/lib/* $(ROOTFS)/lib/
 	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/lib/*.so
