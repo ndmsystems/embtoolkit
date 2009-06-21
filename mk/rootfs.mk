@@ -64,5 +64,6 @@ rootfs_clean: $(ROOTFS_COMPONENTS_CLEAN)
 
 else
 rootfs_build:
+rootfs_clean:
 
 endif
