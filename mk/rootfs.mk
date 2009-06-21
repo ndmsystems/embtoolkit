@@ -38,7 +38,7 @@ include $(EMBTK_ROOT)/mk/zlib.mk
 #mtd-utils
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
 
-rootfs_build: mkinitialpath $(ROOTFS_COMPONENTS)
+rootfs_build: rootfs_clean mkinitialpath $(ROOTFS_COMPONENTS)
 ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	@mkdir -p $(ROOTFS)/lib64
 	@mkdir -p $(ROOTFS)/usr/lib64
@@ -48,12 +48,18 @@ ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 else
 	@cp -d $(SYSROOT)/lib/* $(ROOTFS)/lib/
 	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/lib/*.so
+	@cp -d $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
+	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/usr/sbin/*
 endif
 	$(FAKEROOT_BIN) -s $(EMBTK_ROOT)/.fakeroot.001 -- $(MAKEDEVS_DIR)/makedevs \
 	-d $(EMBTK_ROOT)/src/devices_table.txt $(ROOTFS)
 	cd $(ROOTFS) ; $(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	tar cjf rootfs-$(STRICT_GNU_TARGET).tar.bz2 * ; \
 	mv rootfs-$(STRICT_GNU_TARGET).tar.bz2 $(EMBTK_ROOT)
+
+rootfs_clean: $(ROOTFS_COMPONENTS_CLEAN)
+	@rm -rf rootfs-*
+
 else
 rootfs_build:
 
