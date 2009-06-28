@@ -116,6 +116,8 @@ endif
 endif
 
 #GCC configure options
+GCC_WITH_ARCH := --with-arch=$(GNU_TARGET_ARCH)
+export GCC_WITH_ARCH
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_O32),y)
 GCC_WITH_ABI := --with-abi=32
