@@ -113,8 +113,6 @@ STRICT_GNU_TARGET := mipsisa64r2-unknown-linux-gnu
 GNU_TARGET_ARCH := mips64r2
 endif
 
-endif
-
 #GCC configure options
 GCC_WITH_ARCH := --with-arch=$(GNU_TARGET_ARCH)
 export GCC_WITH_ARCH
@@ -143,5 +141,14 @@ else
 GCC_WITH_ABI := --with-abi=64
 EMBTK_TARGET_ABI := -mabi=64
 export GCC_WITH_ABI EMBTK_TARGET_ABI
+endif
+
+#Hard or soft floating point
+ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
+GCC_WITH_FLOAT := --with-float=soft
+else
+GCC_WITH_FLOAT := --with-float=hard
+endif
+
 endif
 

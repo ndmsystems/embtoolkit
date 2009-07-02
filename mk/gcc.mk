@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         gcc.mk
 # \brief	gcc.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 GCC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GCC_VERSION_STRING)))
 GCC_SITE := ftp://ftp.lip6.fr/pub/gcc/releases/gcc-$(GCC_VERSION)
@@ -28,13 +28,6 @@ GCC_PACKAGE := gcc-$(GCC_VERSION).tar.bz2
 GCC1_BUILD_DIR := $(TOOLS_BUILD)/gcc1
 GCC2_BUILD_DIR := $(TOOLS_BUILD)/gcc2
 GCC3_BUILD_DIR := $(TOOLS_BUILD)/gcc3
-
-#Hard or soft floating point
-ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
-GCC_FLOAT_TYPE := soft
-else
-GCC_FLOAT_TYPE := hard
-endif
 
 gcc1_install: $(GCC1_BUILD_DIR)/.built
 
@@ -69,13 +62,14 @@ $(GCC1_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
 	cd $(GCC1_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
-	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(STRICT_GNU_TARGET) \
-	$(GCC_WITH_ARCH) $(GCC_WITH_CPU) --with-float=$(GCC_FLOAT_TYPE) \
+	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) \
+	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ARCH) $(GCC_WITH_CPU) \
+	$(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_ABI) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--without-headers --with-newlib --disable-shared --disable-threads \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
-	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
-	$(GCC_MULTILIB) $(GCC_WITH_ABI)
+	--enable-languages=c \
+	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
 	@touch $@
 
 #GCC second stage
@@ -89,13 +83,13 @@ $(GCC2_BUILD_DIR)/.configured:
 	@mkdir -p $(GCC2_BUILD_DIR)
 	cd $(GCC2_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
-	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(STRICT_GNU_TARGET) \
-	$(GCC_WITH_ARCH) $(GCC_WITH_CPU) --with-float=$(GCC_FLOAT_TYPE) \
+	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) \
+	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ARCH) $(GCC_WITH_CPU) \
+	$(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_ABI) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
-	--enable-languages=c --with-gmp=$(GMP_HOST_DIR) \
-	--with-mpfr=$(MPFR_HOST_DIR) \
-	$(GCC_MULTILIB) $(GCC_WITH_ABI)
+	--enable-languages=c \
+	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
 	@touch $@
 
 #GCC last stage
@@ -116,12 +110,12 @@ $(GCC3_BUILD_DIR)/.configured:
 	@mkdir -p $(GCC3_BUILD_DIR)
 	cd $(GCC3_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
-	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --target=$(STRICT_GNU_TARGET) \
-	$(GCC_WITH_ARCH) $(GCC_WITH_CPU) --with-float=$(GCC_FLOAT_TYPE) \
+	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) \
+	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ARCH) $(GCC_WITH_CPU) \
+	$(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_ABI) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) --enable-__cxa_atexit \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
 	--enable-threads --enable-shared --enable-languages=c,c++ \
-	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
-	$(GCC_MULTILIB) $(GCC_WITH_ABI)
+	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
 	@touch $@
 
