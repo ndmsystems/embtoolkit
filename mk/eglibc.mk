@@ -34,13 +34,6 @@ EGLIBC_BUILD_DIR := $(TOOLS_BUILD)/eglibc
 #EGLIBC options
 include $(EMBTK_ROOT)/mk/eglibc-options-parse.mk
 
-#Hard or soft floating point
-ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
-EGLIBC_FLOAT_TYPE := --with-fp=no
-else
-EGLIBC_FLOAT_TYPE := --with-fp=yes
-endif
-
 eglibc-headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
 eglibc_install: $(EGLIBC_BUILD_DIR)/.installed
 
@@ -88,7 +81,7 @@ endif
 $(EGLIBC_HEADERS_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,eglibc-$(EGLIBC_VERSION))
 	cd $(EGLIBC_HEADERS_BUILD_DIR); BUILD_CC=$(HOSTCC_CACHED) \
-	CFLAGS="-Os -pipe $(EMBTK_TARGET_ABI)" \
+	CFLAGS="-Os -pipe $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)" \
 	CC=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc \
 	CXX=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-g++ \
 	AR=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ar \
@@ -110,7 +103,7 @@ $(EGLIBC_BUILD_DIR)/.installed: $(EGLIBC_BUILD_DIR)/.configured
 $(EGLIBC_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,eglibc-$(EGLIBC_VERSION))
 	cd $(EGLIBC_BUILD_DIR); BUILD_CC=$(HOSTCC_CACHED) \
-	CFLAGS="-Os -pipe $(EMBTK_TARGET_ABI)" \
+	CFLAGS="-Os -pipe $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)" \
 	CC=$(TARGETCC_CACHED) \
 	CXX=$(TARGETCXX_CACHED) \
 	AR=$(TARGETAR) \

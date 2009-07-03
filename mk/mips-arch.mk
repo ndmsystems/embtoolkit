@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         mips_arch.mk
 # \brief	mips_arch.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS),y)
 LINUX_ARCH := mips
@@ -148,6 +148,13 @@ ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
 GCC_WITH_FLOAT := --with-float=soft
 else
 GCC_WITH_FLOAT := --with-float=hard
+endif
+
+#Hard or soft floating point
+ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
+EGLIBC_FLOAT_TYPE := --with-fp=no
+else
+EGLIBC_FLOAT_TYPE := --with-fp=yes
 endif
 
 endif
