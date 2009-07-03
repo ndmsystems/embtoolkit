@@ -30,6 +30,7 @@ choice
 	 Select the architecture you wish.
 	config EMBTK_ARCH_ARM
 		bool "ARM"
+		select EMBTK_TARGET_ARCH_32BITS
 	config EMBTK_ARCH_MIPS
 		bool "MIPS"
 	config EMBTK_ARCH_M68k

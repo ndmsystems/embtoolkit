@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,16 +14,16 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         arch-variant.kconfig
 # \brief	arch-variant.kconfig of EmbToolkit, here we give users the ability to
 # \brief	choose which variant of CPU to use.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
-################################## MIPS ARCH ############################################
+################################## MIPS ARCH ###################################
 choice
 	prompt "Architecture variant"
 	depends on EMBTK_ARCH_MIPS
@@ -104,7 +104,252 @@ choice
 		bool "n64" if EMBTK_TARGET_ARCH_64BITS
 endchoice
 
-################################## End MIPS ARCH ########################################
+################################## End MIPS ARCH ###############################
+
+################################## ARM ARCH ####################################
+choice
+	prompt "ARM Endian"
+	depends on EMBTK_ARCH_ARM
+	help
+	 Select your ARM MCU endian
+
+	config EMBTK_ARCH_ARM_LITTLE_ENDIAN
+		bool "armel: Little endian"
+		help
+		 Your ARM MCU is little endian
+	config EMBTK_ARCH_ARM_BIG_ENDIAN
+		bool "armeb: Big endian"
+		help
+		 Your ARM MCU is big endian
+endchoice
+
+choice
+	prompt "ARM ABI to use"
+	depends on EMBTK_ARCH_ARM
+	help
+	 Select ARM abi to use.
+
+	config EMBTK_ARCH_ARM_ABI_EABI
+		bool "eabi"
+endchoice
+
+choice
+	prompt "ARM Family"
+	depends on EMBTK_ARCH_ARM
+	help
+	 Select ARM MCU family you want to use.
+
+	config EMBTK_ARCH_ARM_FAMILY_ARM7TDMI
+		bool "arm7tdmi"
+	config EMBTK_ARCH_ARM_FAMILY_STRONGARM
+		bool "StrongARM"
+	config EMBTK_ARCH_ARM_FAMILY_ARM8
+		bool "arm8"
+	config EMBTK_ARCH_ARM_FAMILY_ARM9TDMI
+		bool "arm9tdmi"
+	config EMBTK_ARCH_ARM_FAMILY_ARM9E
+		bool "arm9e"
+	config EMBTK_ARCH_ARM_FAMILY_ARM10E
+		bool "arm10e"
+	config EMBTK_ARCH_ARM_FAMILY_XSCALE
+		bool "xscale"
+	config EMBTK_ARCH_ARM_FAMILY_ARM11
+		bool "arm11"
+	config EMBTK_ARCH_ARM_FAMILY_CORTEX
+		bool "cortex"
+	config EMBTK_ARCH_ARM_FAMILY_IWMMXT
+		bool "iwmmxt"
+endchoice
+
+choice
+	prompt "ARM MCU"
+	depends on EMBTK_ARCH_ARM
+
+#### arm7tdmi MCU Family ####
+	config EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM7TDMI
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM7TDMI
+		bool "arm7tdmi"
+	config EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM7TDMI-S
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM7TDMI
+		bool "arm7tdmi-s"
+	config EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM710T
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM7TDMI
+		bool "arm710t"
+	config EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM720T
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM7TDMI
+		bool "arm720t"
+	config EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM740T
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM7TDMI
+		bool "arm740t"
+#	config EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM7EJ-S
+#		depends on EMBTK_ARCH_ARM_FAMILY_ARM7TDMI
+#		bool "arm7ej-s"
+
+#### StrongARM MCU Family ####
+	config EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA
+		depends on EMBTK_ARCH_ARM_FAMILY_STRONGARM
+		bool "strongarm"
+	config EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA-110
+		depends on EMBTK_ARCH_ARM_FAMILY_STRONGARM
+		bool "strongarm110"
+	config EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA-1100
+		depends on EMBTK_ARCH_ARM_FAMILY_STRONGARM
+		bool "strongarm1100"
+	config EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA-1110
+		depends on EMBTK_ARCH_ARM_FAMILY_STRONGARM
+		bool "strongarm1110"
+
+#### ARM8 MCU Family ####
+	config EMBTK_ARCH_ARM_FAMILY_ARM8_ARM810
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM8
+		bool "arm810"
+
+#### ARM9TDMI MCU Family ####
+	config EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM9TDMI
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM9TDMI
+		bool "arm9tdmi"
+	config EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM920T
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM9TDMI
+		bool "arm920t"
+	config EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM922T
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM9TDMI
+		bool "arm922t"
+	config EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM940T
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM9TDMI
+		bool "arm940t"
+
+#### ARM9E MCU Family ####
+	config EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM946E-S
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM9E
+		bool "arm946e-s"
+	config EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM966E-S
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM9E
+		bool "arm966e-s"
+	config EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM968E-S
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM9E
+		bool "arm968e-s"
+	config EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM926EJ-S
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM9E
+		bool "arm926ej-s"
+#	config EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM996HS
+#		depends on EMBTK_ARCH_ARM_FAMILY_ARM9E
+#		bool "arm996hs"
+
+#### ARM10E MCU Family ####
+	config EMBTK_ARCH_ARM_FAMILY_ARM10E_ARM1020E
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM10E
+		bool "arm1020e"
+	config EMBTK_ARCH_ARM_FAMILY_ARM10E_ARM1022E
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM10E
+		bool "arm1022e"
+	config EMBTK_ARCH_ARM_FAMILY_ARM10E_ARM1026EJ-S
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM10E
+		bool "arm1026ej-s"
+
+#### XSCALE MCU Family ####
+	config EMBTK_ARCH_ARM_FAMILY_XSCALE_XSCALE
+		depends on EMBTK_ARCH_ARM_FAMILY_XSCALE
+		bool "xscale"
+
+#### ARM11 MCU Family ####
+	config EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1136J-S
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM11
+		bool "arm1136j-s"
+	config EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1136JF-S
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM11
+		bool "arm1136jf-s"
+	config EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1156T2-S
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM11
+		bool "arm1156t2-s"
+#	config EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1156T2F-S
+#		depends on EMBTK_ARCH_ARM_FAMILY_ARM11
+#		bool "arm1156t2f-s"
+	config EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1176JZ-S
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM11
+		bool "arm1176jz-s"
+	config EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1176JZF-S
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM11
+		bool "arm1176jzf-s"
+	config EMBTK_ARCH_ARM_FAMILY_ARM11_MPCORE
+		depends on EMBTK_ARCH_ARM_FAMILY_ARM11
+		bool "mpcore"
+
+#### CORTEX MCU Family ####
+	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A8
+		depends on EMBTK_ARCH_ARM_FAMILY_CORTEX
+		bool "cortex-a8"
+	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A9
+		depends on EMBTK_ARCH_ARM_FAMILY_CORTEX
+		bool "cortex-a9"
+#	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A9_MPCORE
+#		depends on EMBTK_ARCH_ARM_FAMILY_CORTEX
+#		bool "cortex-a9 mpcore"
+	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-R4
+		depends on EMBTK_ARCH_ARM_FAMILY_CORTEX
+		bool "cortex-r4"
+	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-R4F
+		depends on EMBTK_ARCH_ARM_FAMILY_CORTEX
+		bool "cortex-r4f"
+	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-M3
+		depends on EMBTK_ARCH_ARM_FAMILY_CORTEX
+		bool "cortex-m3"
+#	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-M0
+#		depends on EMBTK_ARCH_ARM_FAMILY_CORTEX
+#		bool "cortex-m0"
+	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-M1
+		depends on EMBTK_ARCH_ARM_FAMILY_CORTEX
+		bool "cortex-m1"
+
+#### IWMMXT MCU Family ####
+	config EMBTK_ARCH_ARM_FAMILY_IWMMXT_IWMMXT
+		depends on EMBTK_ARCH_ARM_FAMILY_IWMMXT
+		bool "iwmmxt"
+	config EMBTK_ARCH_ARM_FAMILY_IWMMXT_IWMMXT2
+		depends on EMBTK_ARCH_ARM_FAMILY_IWMMXT
+		bool "iwmmxt2"
+endchoice
+
+config EMBTK_ARM_MCU_STRING
+	depends on EMBTK_ARCH_ARM
+	string
+	default "arm7tdmi"	if EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM7TDMI
+	default "arm7tdmi-s"	if EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM7TDMI-S
+	default "arm710t"	if EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM710T
+	default "arm720t"	if EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM720T
+	default "arm740t"	if EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM740T
+	default "strongarm"	if EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA
+	default "strongarm110"	if EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA-110
+	default "strongarm1100"	if EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA-1100
+	default "strongarm1110"	if EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA-1110
+	default "arm810"	if EMBTK_ARCH_ARM_FAMILY_ARM8_ARM810
+	default "arm9tdmi"	if EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM9TDMI
+	default "arm920t"	if EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM920T
+	default "arm922t"	if EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM922T
+	default "arm940t"	if EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM940T
+	default "arm946e-s"	if EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM946E-S
+	default "arm966e-s"	if EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM966E-S
+	default "arm968e-s"	if EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM968E-S
+	default "arm926ej-s"	if EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM926EJ-S
+	default "arm1020e"	if EMBTK_ARCH_ARM_FAMILY_ARM10E_ARM1020E
+	default "arm1022e" 	if EMBTK_ARCH_ARM_FAMILY_ARM10E_ARM1022E
+	default "arm1026ej-s"	if EMBTK_ARCH_ARM_FAMILY_ARM10E_ARM1026EJ-S
+	default "xscale"	if EMBTK_ARCH_ARM_FAMILY_XSCALE_XSCALE
+	default "arm1136j-s"	if EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1136J-S
+	default "arm1136jf-s"	if EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1136JF-S
+	default "arm1156t2-s"	if EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1156T2-S
+	default "arm1176jz-s"	if EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1176JZ-S
+	default "arm1176jzf-s"	if EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1176JZF-S
+	default "mpcore"	if EMBTK_ARCH_ARM_FAMILY_ARM11_MPCORE
+	default "cortex-a8"	if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A8
+	default "cortex-a9"	if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A9
+	default "cortex-r4"	if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-R4
+	default "cortex-r4f"	if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-R4F
+	default "cortex-m3"	if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-M3
+	default "cortex-m1"	if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-M1
+	default "iwmmxt"	if EMBTK_ARCH_ARM_FAMILY_IWMMXT_IWMMXT
+	default "iwmmxt2"	if EMBTK_ARCH_ARM_FAMILY_IWMMXT_IWMMXT2
+
+################################## End ARM ARCH ################################
 
 config EMBTK_TOOLCHAIN_MULTILIB
 	default n
