@@ -43,14 +43,15 @@ ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	@mkdir -p $(ROOTFS)/lib64
 	@mkdir -p $(ROOTFS)/usr/lib64
 	@rm -rf $(ROOTFS)/lib $(ROOTFS)/usr/lib
-	@cp -d $(SYSROOT)/lib64/* $(ROOTFS)/lib64/
+	@cp -R $(SYSROOT)/lib64/* $(ROOTFS)/lib64/
 	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/lib64/*.so
-	@cp -d $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
+	@cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
 	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/usr/sbin/*
 else
-	@cp -d $(SYSROOT)/lib/* $(ROOTFS)/lib/
+	@mkdir -p $(ROOTFS)/lib
+	@cp -R $(SYSROOT)/lib/* $(ROOTFS)/lib/
 	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/lib/*.so
-	@cp -d $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
+	@cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
 	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/usr/sbin/*
 endif
 	$(FAKEROOT_BIN) -s $(EMBTK_ROOT)/.fakeroot.001 -- \
