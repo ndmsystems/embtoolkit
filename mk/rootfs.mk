@@ -38,6 +38,11 @@ include $(EMBTK_ROOT)/mk/zlib.mk
 #mtd-utils
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
 
+ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
+ROOTFS_COMPONENTS += mtd-utils_host_install
+ROOTFS_COMPONENTS_CLEAN += mtd-utils_host_install
+endif
+
 rootfs_build: rootfs_clean mkinitialpath $(ROOTFS_COMPONENTS)
 ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	@mkdir -p $(ROOTFS)/lib64
@@ -60,7 +65,7 @@ endif
 	cd $(ROOTFS) ; $(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	tar cjf rootfs-$(STRICT_GNU_TARGET).tar.bz2 * ; \
 	mv rootfs-$(STRICT_GNU_TARGET).tar.bz2 $(EMBTK_ROOT)
-ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS),y)
+ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
 	$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	$(HOSTTOOLS)/usr/sbin/mkfs.jffs2 -n -e 128 -r $(ROOTFS) \
 	-o $(EMBTK_ROOT)/rootfs-$(STRICT_GNU_TARGET).jffs2.temp
