@@ -40,7 +40,7 @@ include $(EMBTK_ROOT)/mk/mtd-utils.mk
 
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
 ROOTFS_COMPONENTS += mtd-utils_host_install
-ROOTFS_COMPONENTS_CLEAN += mtd-utils_host_install
+ROOTFS_COMPONENTS_CLEAN += mtd-utils_host_clean
 endif
 
 rootfs_build: rootfs_clean mkinitialpath $(ROOTFS_COMPONENTS)

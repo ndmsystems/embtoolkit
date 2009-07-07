@@ -55,6 +55,12 @@ $(MTD-UTILS_HOST_BUILD_DIR)/.decompressed:
 	@mkdir -p $(MTD-UTILS_HOST_BUILD_DIR)
 	@touch $@
 
+mtd-utils_host_clean:
+	$(call EMBTK_GENERIC_MESSAGE,"Cleaning mtd-utils in host ...")
+	@if [ -e $(MTD-UTILS_HOST_BUILD_DIR)/.installed ]; then \
+		cd $(HOSTTOOLS)/usr/sbin; rm -rf $(MTD-UTILS_BINS); \
+	fi
+
 #mtd-utils for target
 $(MTD-UTILS_TARGET_BUILD_DIR)/.installed: zlib_target_install \
 lzo_target_install download_mtd-utils $(MTD-UTILS_TARGET_BUILD_DIR)/.decompressed
