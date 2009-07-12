@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         gcc.kconfig
 # \brief	gcc.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 choice
 	prompt "Version of gcc you wish"
 	default EMBTK_GCC_VERSION_4_3_3
@@ -39,10 +39,46 @@ choice
 		bool "gcc-4.1.2"
 endchoice
 
-config EMBTK_GCC_CFLAGS
-string "Additional CFLAGS"
+config EMBTK_GCC_MORE_LANGUAGES
+	bool "Support additional languages"
 	help
-	additional CFLAGS to use at build time
+	 Additional languages that you wish your toolchain generates binaries.
+
+config EMBTK_GCC_LANGUAGE_CPP
+	bool "Support C++"
+	depends on EMBTK_GCC_MORE_LANGUAGES
+	help
+	 Your toolchain will be able to build C++ source code
+
+#config EMBTK_GCC_LANGUAGE_JAVA
+#	bool "Support Java"
+#	depends on EMBTK_GCC_MORE_LANGUAGES
+#	help
+#	 Your toolchain will be able to build Java source code
+
+config EMBTK_GCC_LANGUAGE_OBJECTIVEC
+	bool "Support Objective-C"
+	depends on EMBTK_GCC_MORE_LANGUAGES
+	help
+	 Your toolchain will be able to build Objective-C source code
+
+config EMBTK_GCC_LANGUAGE_OBJECTIVECPP
+	bool "Support Objective-C++"
+	depends on EMBTK_GCC_MORE_LANGUAGES
+	help
+	 Your toolchain will be able to build Objective-C source code
+
+config EMBTK_GCC_LANGUAGE_FORTRAN
+	bool "Support Fortran"
+	depends on EMBTK_GCC_MORE_LANGUAGES
+	help
+	 Your toolchain will be able to build fortran source code
+
+#config EMBTK_GCC_LANGUAGE_ADA
+#	bool "Support Ada"
+#	depends on EMBTK_GCC_MORE_LANGUAGES
+#	help
+#	 Your toolchain will be able to build Ada source code
 
 config EMBTK_GCC_VERSION_STRING
 	string

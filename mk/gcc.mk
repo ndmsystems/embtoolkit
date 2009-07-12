@@ -29,6 +29,34 @@ GCC1_BUILD_DIR := $(TOOLS_BUILD)/gcc1
 GCC2_BUILD_DIR := $(TOOLS_BUILD)/gcc2
 GCC3_BUILD_DIR := $(TOOLS_BUILD)/gcc3
 
+GCC_LANGUAGES =c
+
+ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_CPP),y)
+GCC_LANGUAGES +=,c++
+endif
+
+ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),y)
+GCC_LANGUAGES +=,java
+GCC3_CONFIGURE_EXTRA_OPTIONS += --enable-java-home
+endif
+
+ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC),y)
+GCC_LANGUAGES +=,objc
+endif
+
+ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP),y)
+GCC_LANGUAGES +=,obj-c++
+endif
+
+ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_FORTRAN),y)
+GCC_LANGUAGES +=,fortran
+endif
+
+ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_ADA),y)
+GCC_LANGUAGES +=,ada
+endif
+GCC_LANGUAGES :=$(patsubst "",,$(GCC_LANGUAGES))
+
 gcc1_install: $(GCC1_BUILD_DIR)/.built
 
 gcc2_install: $(GCC2_BUILD_DIR)/.built
@@ -97,11 +125,9 @@ $(GCC3_BUILD_DIR)/.installed: $(GCC3_BUILD_DIR)/.configured
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) && \
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) install
 ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
-	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib64/libgcc_s.so* $(SYSROOT)/lib64
-	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib64/libstdc++.so* $(SYSROOT)/lib64
+	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib64/*.so* $(SYSROOT)/lib64
 else
-	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/libgcc_s.so* $(SYSROOT)/lib
-	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/libstdc++.so* $(SYSROOT)/lib
+	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/*.so* $(SYSROOT)/lib
 	@touch $@
 endif
 
@@ -115,7 +141,9 @@ $(GCC3_BUILD_DIR)/.configured:
 	$(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_ABI) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) --enable-__cxa_atexit \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
-	--enable-threads --enable-shared --enable-languages=c,c++ \
-	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
+	--enable-threads --enable-shared \
+	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
+	--enable-languages=`echo $(GCC_LANGUAGES) | sed 's/ //g'` \
+	$(GCC3_CONFIGURE_EXTRA_OPTIONS)
 	@touch $@
 
