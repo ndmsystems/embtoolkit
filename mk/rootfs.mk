@@ -49,15 +49,19 @@ ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	@mkdir -p $(ROOTFS)/usr/lib64
 	@rm -rf $(ROOTFS)/lib $(ROOTFS)/usr/lib
 	@cp -R $(SYSROOT)/lib64/* $(ROOTFS)/lib64/
-	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/lib64/*.so
+	@-$(TARGETSTRIP)  $(ROOTFS)/lib64/*.so
+	@cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
+	@-$(TARGETSTRIP)  $(ROOTFS)/usr/bin/*
 	@cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
-	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/usr/sbin/*
+	@$(TARGETSTRIP)  $(ROOTFS)/usr/sbin/*
 else
 	@mkdir -p $(ROOTFS)/lib
 	@cp -R $(SYSROOT)/lib/* $(ROOTFS)/lib/
-	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/lib/*.so
+	@-$(TARGETSTRIP)  $(ROOTFS)/lib/*.so
+	@cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
+	@-$(TARGETSTRIP)  $(ROOTFS)/usr/bin/*
 	@cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
-	@$(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip  $(ROOTFS)/usr/sbin/*
+	@-$(TARGETSTRIP)  $(ROOTFS)/usr/sbin/*
 endif
 	$(FAKEROOT_BIN) -s $(EMBTK_ROOT)/.fakeroot.001 -- \
 	$(MAKEDEVS_DIR)/makedevs \
