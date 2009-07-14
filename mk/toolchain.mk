@@ -29,6 +29,8 @@ TARGETRANLIB := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-ranlib
 TARGETLD := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-ld
 TARGETNM := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-nm
 TARGETSTRIP := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip
+TARGETOBJDUMP := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-objdump
+TARGETOBJCOPY := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-objcopy
 
 #ccache on host
 include $(EMBTK_ROOT)/mk/ccache.mk
