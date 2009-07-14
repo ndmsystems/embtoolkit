@@ -1,7 +1,8 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
-# For Copyrright from linux kernel's build/configure system, see their source code
+# For Copyrright from linux kernel's build/configure system, see their source
+code.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -15,13 +16,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         Kconfig
 # \brief	Kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 mainmenu "Embedded toolkit configuration"
 
 config EMBTK_DOTCONFIG
@@ -64,6 +65,16 @@ endmenu
 
 endmenu
 
+menu "Target build options"
+config EMBTK_TARGET_COMPILER_CFLAGS
+	string "Additional compiler flags for your target"
+	help
+	 Here you can change default flags passed to gcc when components of your
+	 embedded system target are built: C library, packages, ...
+	 By default we optimize for size.
+	default "-Os"
+endmenu
+
 menu "Debugging system"
 source "kconfig/gdb.kconfig"
 endmenu
@@ -79,3 +90,4 @@ if EMBTK_HAVE_ROOTFS
 source "kconfig/packages.kconfig"
 endif
 endmenu
+
