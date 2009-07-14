@@ -1,0 +1,54 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         gdb.kconfig
+# \brief	gdb.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         July 2009
+################################################################################
+
+config EMBTK_HAVE_GDB
+	bool "Have GDB: Gnu debugging system"
+	help
+	 Have GNU debugger components on your embedded target and/or on your
+	 development machine.
+
+choice
+	prompt "GDB on your target embedded system"
+	depends on EMBTK_HAVE_GDB
+	depends on EMBTK_HAVE_ROOTFS
+	config EMBTK_HAVE_GDBSERVER_ON_TARGET
+		bool "Have gdbserver on target"
+		help
+		 Say yes if you want to have only gdbserver on your embedded
+		 system target.
+
+	config EMBTK_HAVE_GDB_ON_TARGET
+		bool "Have gdb on target"
+		help
+		 Say yes if you want to have full gdb on your embedded system
+		 target.
+endchoice
+
+config EMBTK_HAVE_GDB_ON_HOST
+	bool "Have gdb on host"
+	depends on EMBTK_HAVE_GDB
+	help
+	 Say yes if you want to have gdb on your host development machine.
+
+
