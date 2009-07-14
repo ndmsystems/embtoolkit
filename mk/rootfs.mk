@@ -23,20 +23,6 @@
 ################################################################################
 
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-#makedevs
-include $(EMBTK_ROOT)/mk/makedevs.mk
-
-#fakeroot
-include $(EMBTK_ROOT)/mk/fakeroot.mk
-
-#lzo
-include $(EMBTK_ROOT)/mk/lzo.mk
-
-#zlib
-include $(EMBTK_ROOT)/mk/zlib.mk
-
-#mtd-utils
-include $(EMBTK_ROOT)/mk/mtd-utils.mk
 
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
 HOSTTOOLS_COMPONENTS += mtd-utils_host_install
@@ -85,7 +71,7 @@ rootfs_clean: $(HOSTTOOLS_COMPONENTS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)
 	@rm -rf rootfs-*
 
 else
-rootfs_build:
-rootfs_clean:
+rootfs_build: $(HOSTTOOLS_COMPONENTS)
+rootfs_clean: $(HOSTTOOLS_COMPONENTS_CLEAN)
 
 endif
