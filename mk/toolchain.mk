@@ -26,6 +26,9 @@ TARGETCC := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc
 TARGETCXX := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-g++
 TARGETAR := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-ar
 TARGETRANLIB := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-ranlib
+TARGETLD := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-ld
+TARGETNM := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-nm
+TARGETSTRIP := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip
 
 #ccache on host
 include $(EMBTK_ROOT)/mk/ccache.mk
