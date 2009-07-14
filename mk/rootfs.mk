@@ -39,11 +39,12 @@ include $(EMBTK_ROOT)/mk/zlib.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
 
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
-ROOTFS_COMPONENTS += mtd-utils_host_install
-ROOTFS_COMPONENTS_CLEAN += mtd-utils_host_clean
+HOSTTOOLS_COMPONENTS += mtd-utils_host_install
+HOSTTOOLS_COMPONENTS_CLEAN += mtd-utils_host_clean
 endif
 
-rootfs_build: rootfs_clean mkinitialpath $(ROOTFS_COMPONENTS)
+rootfs_build: rootfs_clean mkinitialpath $(HOSTTOOLS_COMPONENTS) \
+$(ROOTFS_COMPONENTS)
 ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	@mkdir -p $(ROOTFS)/lib64
 	@mkdir -p $(ROOTFS)/usr/lib64
@@ -80,7 +81,7 @@ ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
 	rm -rf $(EMBTK_ROOT)/rootfs-$(STRICT_GNU_TARGET).jffs2.temp
 endif
 
-rootfs_clean: $(ROOTFS_COMPONENTS_CLEAN)
+rootfs_clean: $(HOSTTOOLS_COMPONENTS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)
 	@rm -rf rootfs-*
 
 else
