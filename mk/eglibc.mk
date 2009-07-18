@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         eglibc.mk
 # \brief	eglibc.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 EGLIBC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_VERSION_STRING)))
 EGLIBC_BRANCH := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_BRANCH_STRING)))
 EGLIBC_SVN_REVISION := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_SVN_REVISION)))
@@ -37,21 +37,23 @@ include $(EMBTK_ROOT)/mk/eglibc-options-parse.mk
 eglibc-headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
 eglibc_install: $(EGLIBC_BUILD_DIR)/.installed
 
-$(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download $(EGLIBC_HEADERS_BUILD_DIR)/.decompressed \
+$(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download \
+	$(EGLIBC_HEADERS_BUILD_DIR)/.decompressed \
 	EGLIBC_OPTIONS_PARSE $(EGLIBC_HEADERS_BUILD_DIR)/.configured
 	$(call INSTALL_MESSAGE,"headers eglibc-$(EGLIBC_VERSION)")
-	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) install-headers install_root=$(SYSROOT) \
-	install-bootstrap-headers=yes && \
+	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) install-headers \
+	install_root=$(SYSROOT) install-bootstrap-headers=yes && \
 	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) csu/subdir_lib
 	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crt1.o $(SYSROOT)/usr/lib/
 	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crti.o $(SYSROOT)/usr/lib/
 	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(SYSROOT)/usr/lib/
-	$(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o \
-	$(SYSROOT)/usr/lib/libc.so
+	$(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc -nostdlib -nostartfiles \
+	-shared -x c /dev/null -o $(SYSROOT)/usr/lib/libc.so
 	@touch $@
 
 eglibc_download:
-	$(call EMBTK_GENERIC_MESSAGE,"downloading eglibc-$(EGLIBC_VERSION) if necessary ...")
+	$(call EMBTK_GENERIC_MESSAGE,"downloading eglibc-$(EGLIBC_VERSION) \
+	if necessary ...")
 	@cd $(EMBTK_ROOT)/src; \
 	svn co $(EGLIBC_SVN_SITE)/branches/eglibc-$(EGLIBC_BRANCH) \
 	-r$(EGLIBC_SVN_REVISION) eglibc-$(EGLIBC_VERSION); \
@@ -81,7 +83,8 @@ endif
 $(EGLIBC_HEADERS_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,eglibc-$(EGLIBC_VERSION))
 	cd $(EGLIBC_HEADERS_BUILD_DIR); BUILD_CC=$(HOSTCC_CACHED) \
-	CFLAGS="-Os -pipe $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)" \
+	CFLAGS="$(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS) \
+	$(TARGET_CFLAGS) -pipe" \
 	CC=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc \
 	CXX=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-g++ \
 	AR=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ar \
@@ -103,7 +106,8 @@ $(EGLIBC_BUILD_DIR)/.installed: $(EGLIBC_BUILD_DIR)/.configured
 $(EGLIBC_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,eglibc-$(EGLIBC_VERSION))
 	cd $(EGLIBC_BUILD_DIR); BUILD_CC=$(HOSTCC_CACHED) \
-	CFLAGS="-Os -pipe $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)" \
+	CFLAGS="$(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS) \
+	$(TARGET_CFLAGS) -pipe" \
 	CC=$(TARGETCC_CACHED) \
 	CXX=$(TARGETCXX_CACHED) \
 	AR=$(TARGETAR) \
