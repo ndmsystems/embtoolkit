@@ -36,6 +36,7 @@ endif
 
 #GCC configure options
 GCC_WITH_CPU := --with-cpu=$(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
+EMBTK_MCU_FLAG := $(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
 
 #GCC extra configure options for arm
 ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),y)

@@ -167,5 +167,5 @@ help:
 	@echo
 
 distclean: clean
-	$(Q)rm -rf dl/* src/eglibc* host-tools .config.old
+	$(Q)rm -rf dl/* src/eglibc* host-tools* .config.old
 

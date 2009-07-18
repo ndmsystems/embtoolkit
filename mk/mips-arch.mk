@@ -113,6 +113,8 @@ STRICT_GNU_TARGET := mipsisa64r2-unknown-linux-gnu
 GNU_TARGET_ARCH := mips64r2
 endif
 
+EMBTK_MCU_FLAG := $(GNU_TARGET_ARCH)
+
 #GCC configure options
 GCC_WITH_ARCH := --with-arch=$(GNU_TARGET_ARCH)
 export GCC_WITH_ARCH

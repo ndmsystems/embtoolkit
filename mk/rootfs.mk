@@ -54,17 +54,17 @@ endif
 	$(MAKEDEVS_DIR)/makedevs \
 	-d $(EMBTK_ROOT)/src/devices_table.txt $(ROOTFS)
 	cd $(ROOTFS) ; $(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	tar cjf rootfs-$(STRICT_GNU_TARGET).tar.bz2 * ; \
-	mv rootfs-$(STRICT_GNU_TARGET).tar.bz2 $(EMBTK_ROOT)
+	tar cjf rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).tar.bz2 * ; \
+	mv rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).tar.bz2 $(EMBTK_ROOT)
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
 	$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	$(HOSTTOOLS)/usr/sbin/mkfs.jffs2 -n -e 128 -r $(ROOTFS) \
-	-o $(EMBTK_ROOT)/rootfs-$(STRICT_GNU_TARGET).jffs2.temp
+	-o $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp
 	$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	$(HOSTTOOLS)/usr/sbin/sumtool -n -e 128 \
-	-i $(EMBTK_ROOT)/rootfs-$(STRICT_GNU_TARGET).jffs2.temp \
-	-o $(EMBTK_ROOT)/rootfs-$(STRICT_GNU_TARGET).jffs2
-	rm -rf $(EMBTK_ROOT)/rootfs-$(STRICT_GNU_TARGET).jffs2.temp
+	-i $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp \
+	-o $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2
+	rm -rf $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp
 endif
 
 rootfs_clean: $(HOSTTOOLS_COMPONENTS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)

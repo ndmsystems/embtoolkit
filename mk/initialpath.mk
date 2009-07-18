@@ -23,12 +23,12 @@
 # \date         May 2009
 #########################################################################################
 
-SYSROOT := $(EMBTK_ROOT)/sysroot-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
-TOOLS := $(EMBTK_ROOT)/tools-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
-TOOLS_BUILD := $(EMBTK_ROOT)/tools_build-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
-PACKAGES_BUILD := $(EMBTK_ROOT)/packages_build-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
-ROOTFS := $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(GNU_TARGET_ARCH)
-HOSTTOOLS :=$(EMBTK_ROOT)/host-tools
+SYSROOT:=$(EMBTK_ROOT)/sysroot-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+TOOLS:=$(EMBTK_ROOT)/tools-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+TOOLS_BUILD:=$(EMBTK_ROOT)/build/tools_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+PACKAGES_BUILD:=$(EMBTK_ROOT)/build/packages_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+ROOTFS:=$(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+HOSTTOOLS :=$(EMBTK_ROOT)/host-tools-$(EMBTK_MCU_FLAG)
 
 export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD ROOTFS HOSTTOOLS
 
@@ -49,5 +49,5 @@ ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 endif
 
 rmallpath:
-	@rm -Rf packages_build-* rootfs-* sysroot-* tools_build-* tools-*
+	@rm -Rf build rootfs-* sysroot-* tools-*
 
