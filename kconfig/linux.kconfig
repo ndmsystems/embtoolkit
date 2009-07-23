@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,32 +14,46 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         linux.kconfig
 # \brief	linux.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 choice
 	prompt "Linux kernel headers you wish to use"
-	default EMBTK_LINUX_VERSION_2_6_29_2
+	default EMBTK_LINUX_VERSION_2_6_29_X
 	help
 		Here you can choose which Linux kernel headers you
 		you want to use.
 
-	config EMBTK_LINUX_VERSION_2_6_29_2
-		bool "linux-2.6.29.2"
-	config EMBTK_LINUX_VERSION_2_6_29_1
-		bool "linux-2.6.29.1"
-	config EMBTK_LINUX_VERSION_2_6_29
-		bool "linux-2.6.29"
+	config EMBTK_LINUX_VERSION_2_6_30_X
+		bool "linux-2.6.30.x"
+	config EMBTK_LINUX_VERSION_2_6_29_X
+		bool "linux-2.6.29.x"
+	config EMBTK_LINUX_VERSION_2_6_28_X
+		bool "linux-2.6.28.x"
+	config EMBTK_LINUX_VERSION_2_6_27_X
+		bool "linux-2.6.27.x"
 endchoice
+
+config EMBTK_LINUX_HAVE_MIRROR
+	bool "Use a linux mirror"
+	help
+	 specify an alternate location where to download linux sources
+config EMBTK_LINUX_HAVE_MIRROR_SITE
+	depends on EMBTK_LINUX_HAVE_MIRROR
+	string "Mirror site"
+	default "ftp://ftp.free.fr/pub/linux/kernel/v2.6"
+	help
+	 specify an alternate location where to download linux sources
 
 config EMBTK_LINUX_VERSION_STRING
 	string
-	default "2.6.29.2"		if EMBTK_LINUX_VERSION_2_6_29_2
-	default "2.6.29.1"		if EMBTK_LINUX_VERSION_2_6_29_1
-	default "2.6.29"		if EMBTK_LINUX_VERSION_2_6_29
+	default "2.6.30.2"		if EMBTK_LINUX_VERSION_2_6_30_X
+	default "2.6.29.6"		if EMBTK_LINUX_VERSION_2_6_29_X
+	default "2.6.28.10"		if EMBTK_LINUX_VERSION_2_6_28_X
+	default "2.6.27.19"		if EMBTK_LINUX_VERSION_2_6_27_X
 
