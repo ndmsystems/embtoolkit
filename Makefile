@@ -56,6 +56,8 @@ export Q
 
 -include .config
 
+J := -j$(CONFIG_EMBTK_NUMBER_BUILD_JOBS)
+
 ifeq ($(CONFIG_EMBTK_DOWNLOAD_DIR),)
 DOWNLOAD_DIR := $(EMBTK_ROOT)/dl
 endif
