@@ -67,3 +67,9 @@ source "kconfig/packages.kconfig"
 endif
 endmenu
 
+menu "Embtoolkit build options"
+config EMBTK_NUMBER_BUILD_JOBS
+	int "Number of parallel build jobs"
+	default 1
+endmenu
+
