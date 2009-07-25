@@ -23,7 +23,7 @@
 ################################################################################
 
 GCC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GCC_VERSION_STRING)))
-GCC_SITE := ftp://ftp.lip6.fr/pub/gcc/releases/gcc-$(GCC_VERSION)
+GCC_SITE := ftp://ftp.gnu.org/gnu/gcc/gcc-$(GCC_VERSION)
 GCC_PACKAGE := gcc-$(GCC_VERSION).tar.bz2
 GCC1_BUILD_DIR := $(TOOLS_BUILD)/gcc1
 GCC2_BUILD_DIR := $(TOOLS_BUILD)/gcc2
