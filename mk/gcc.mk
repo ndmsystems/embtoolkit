@@ -23,7 +23,11 @@
 ################################################################################
 
 GCC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GCC_VERSION_STRING)))
+ifeq ($(CONFIG_EMBTK_GCC_HAVE_MIRROR),y)
+GCC_SITE := $(subst ",,$(strip $(CONFIG_EMBTK_GCC_HAVE_MIRROR_SITE)))
+else
 GCC_SITE := ftp://ftp.gnu.org/gnu/gcc/gcc-$(GCC_VERSION)
+endif
 GCC_PACKAGE := gcc-$(GCC_VERSION).tar.bz2
 GCC1_BUILD_DIR := $(TOOLS_BUILD)/gcc1
 GCC2_BUILD_DIR := $(TOOLS_BUILD)/gcc2

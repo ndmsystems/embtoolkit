@@ -39,6 +39,17 @@ choice
 		bool "gcc-4.1.2"
 endchoice
 
+config EMBTK_GCC_HAVE_MIRROR
+	bool "Use a gcc mirror"
+	help
+	 specify an alternate location where to download gcc sources
+config EMBTK_GCC_HAVE_MIRROR_SITE
+	depends on EMBTK_GCC_HAVE_MIRROR
+	string "Mirror site"
+	default "ftp://ftp.lip6.fr/pub/gcc/releases/gcc-4.4.1"
+	help
+	 specify an alternate location where to download gcc sources.
+
 config EMBTK_GCC_MORE_LANGUAGES
 	bool "Support additional languages"
 	help
