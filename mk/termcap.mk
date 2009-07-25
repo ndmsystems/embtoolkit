@@ -32,7 +32,7 @@ termcap_target_install: $(TERMCAP_TARGET_BUILD_DIR)/.installed
 $(TERMCAP_TARGET_BUILD_DIR)/.installed: termcap_download \
 $(TERMCAP_TARGET_BUILD_DIR)/.decompressed \
 $(TERMCAP_TARGET_BUILD_DIR)/.configured
-	@cd $(TERMCAP_TARGET_BUILD_DIR); make; make install
+	@cd $(TERMCAP_TARGET_BUILD_DIR); make $(J) ; make install
 
 $(TERMCAP_TARGET_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring termcap-$(TERMCAP_VERSION) \

@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         gmphost.mk
 # \brief	gmphost.mk of Embtoolkit. To build mpfr, we need gmp.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 GMP_HOST_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GMP_HOST_VERSION_STRING)))
 GMP_HOST_SITE := ftp://ftp.gmplib.org/pub/gmp-$(GMP_HOST_VERSION)
@@ -32,9 +32,9 @@ export GMP_HOST_DIR
 
 gmphost_install: $(GMP_HOST_BUILD_DIR)/.built
 
-$(GMP_HOST_BUILD_DIR)/.built: download_gmp_host $(GMP_HOST_BUILD_DIR)/.decompressed \
-	$(GMP_HOST_BUILD_DIR)/.configured
-	@cd $(GMP_HOST_BUILD_DIR) && $(MAKE) && $(MAKE) install
+$(GMP_HOST_BUILD_DIR)/.built: download_gmp_host \
+	$(GMP_HOST_BUILD_DIR)/.decompressed $(GMP_HOST_BUILD_DIR)/.configured
+	@cd $(GMP_HOST_BUILD_DIR) && $(MAKE) $(J) && $(MAKE) install
 	@touch $@
 
 download_gmp_host:

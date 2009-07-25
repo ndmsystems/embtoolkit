@@ -36,7 +36,7 @@ gdbserver_target_install: $(GDBSERVER_TARGET_BUILD_DIR)/.installed
 #gdb for target
 $(GDB_TARGET_BUILD_DIR)/.installed: termcap_target_install download_gdb \
 decompress_gdb $(GDB_TARGET_BUILD_DIR)/.configured
-	cd $(GDB_TARGET_BUILD_DIR); make; make install
+	cd $(GDB_TARGET_BUILD_DIR); make $(J); make install
 
 $(GDBSERVER_TARGET_BUILD_DIR)/.installed: termcap_target_install download_gdb \
 decompress_gdb $(GDB_TARGET_BUILD_DIR)/.configured
@@ -58,7 +58,7 @@ $(GDB_TARGET_BUILD_DIR)/.configured:
 #gdb for host
 $(GDB_HOST_BUILD_DIR)/.installed: download_gdb decompress_gdb \
 $(GDB_HOST_BUILD_DIR)/.configured
-	@cd $(GDB_HOST_BUILD_DIR); make; make install
+	@cd $(GDB_HOST_BUILD_DIR); make $(J); make install
 	@touch $@
 
 $(GDB_HOST_BUILD_DIR)/.configured:

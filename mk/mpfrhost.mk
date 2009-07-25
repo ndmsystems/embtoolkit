@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         mpfrhost.mk
 # \brief	mpfrhost.mk of Embtoolkit. To build gcc, we need mpfr.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 MPFR_HOST_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_MPFR_HOST_VERSION_STRING)))
 MPFR_HOST_SITE := http://www.mpfr.org/mpfr-$(MPFR_HOST_VERSION)
@@ -34,7 +34,7 @@ mpfrhost_install: $(MPFR_HOST_BUILD_DIR)/.built
 
 $(MPFR_HOST_BUILD_DIR)/.built: download_mpfr_host $(MPFR_HOST_BUILD_DIR)/.decompressed \
 	$(MPFR_HOST_BUILD_DIR)/.configured
-	@cd $(MPFR_HOST_BUILD_DIR) && $(MAKE) && $(MAKE) install
+	@cd $(MPFR_HOST_BUILD_DIR) && $(MAKE) $(J) && $(MAKE) install
 	@touch $@
 
 $(MPFR_HOST_BUILD_DIR)/.decompressed:

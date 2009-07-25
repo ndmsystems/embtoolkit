@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         zlib.mk
 # \brief	zlib.mk of Embtoolkit.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         June 2009
-#########################################################################################
+################################################################################
 
 ZLIB_VERSION := 1.2.3
 ZLIB_SITE := http://www.gzip.org/zlib
@@ -32,8 +32,9 @@ zlib_host_install: $(ZLIB_HOST_BUILD_DIR)/.installed
 zlib_target_install: $(ZLIB_TARGET_BUILD_DIR)/.installed
 
 #zlib on host machine
-$(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib $(ZLIB_HOST_BUILD_DIR)/.decompressed
-	@$(MAKE) -C $(TOOLS_BUILD)/zlib-$(ZLIB_VERSION)-host
+$(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib \
+	$(ZLIB_HOST_BUILD_DIR)/.decompressed
+	@$(MAKE) -C $(TOOLS_BUILD)/zlib-$(ZLIB_VERSION)-host $(J)
 	@$(MAKE) -C $(TOOLS_BUILD)/zlib-$(ZLIB_VERSION)-host \
 	prefix=$(HOSTTOOLS)/usr/local install
 	@touch $@

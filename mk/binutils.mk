@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         binutils.mk
 # \brief	binutils.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 BINUTILS_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_BINUTILS_VERSION_STRING)))
 BINUTILS_SITE := http://ftp.gnu.org/gnu/binutils
@@ -29,9 +29,10 @@ BINUTILS_BUILD_DIR := $(TOOLS_BUILD)/binutils
 
 binutils_install: $(BINUTILS_BUILD_DIR)/.built
 
-$(BINUTILS_BUILD_DIR)/.built: download_binutils $(BINUTILS_BUILD_DIR)/.decompressed \
-	$(BINUTILS_BUILD_DIR)/.configured
-	@$(MAKE) -C $(BINUTILS_BUILD_DIR) && $(MAKE) -C $(BINUTILS_BUILD_DIR) install
+$(BINUTILS_BUILD_DIR)/.built: download_binutils \
+	$(BINUTILS_BUILD_DIR)/.decompressed $(BINUTILS_BUILD_DIR)/.configured
+	@$(MAKE) -C $(BINUTILS_BUILD_DIR) $(J)
+	$(MAKE) -C $(BINUTILS_BUILD_DIR) install
 	@touch $@
 
 download_binutils:

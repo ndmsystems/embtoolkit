@@ -77,7 +77,7 @@ endif
 #GCC first stage
 $(GCC1_BUILD_DIR)/.built: download_gcc $(GCC1_BUILD_DIR)/.decompressed \
 	$(GCC1_BUILD_DIR)/.configured
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC1_BUILD_DIR) && \
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC1_BUILD_DIR) $(J)
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC1_BUILD_DIR) install
 	@touch $@
 download_gcc:
@@ -106,7 +106,7 @@ $(GCC1_BUILD_DIR)/.configured:
 
 #GCC second stage
 $(GCC2_BUILD_DIR)/.built: $(GCC2_BUILD_DIR)/.configured
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC2_BUILD_DIR) && \
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC2_BUILD_DIR) $(J)
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC2_BUILD_DIR) install
 	@touch $@
 
@@ -126,7 +126,7 @@ $(GCC2_BUILD_DIR)/.configured:
 
 #GCC last stage
 $(GCC3_BUILD_DIR)/.installed: $(GCC3_BUILD_DIR)/.configured
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) && \
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) $(J)
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) install
 ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib64/*.so* $(SYSROOT)/lib64

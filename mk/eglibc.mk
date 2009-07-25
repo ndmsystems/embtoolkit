@@ -98,7 +98,7 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.configured:
 
 $(EGLIBC_BUILD_DIR)/.installed: $(EGLIBC_BUILD_DIR)/.configured
 	$(call INSTALL_MESSAGE,eglibc-$(EGLIBC_VERSION))
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) && \
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) $(J)
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) install \
 	install_root=$(SYSROOT)
 	@touch $@

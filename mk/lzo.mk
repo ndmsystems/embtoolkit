@@ -35,7 +35,7 @@ lzo_target_install: $(LZO_TARGET_BUILD_DIR)/.installed
 $(LZO_HOST_BUILD_DIR)/.installed: download_lzo \
 $(LZO_HOST_BUILD_DIR)/.decompressed \
 	$(LZO_HOST_BUILD_DIR)/.configured
-	$(MAKE) -C $(LZO_HOST_BUILD_DIR)
+	$(MAKE) -C $(LZO_HOST_BUILD_DIR) $(J)
 	$(MAKE) -C $(LZO_HOST_BUILD_DIR) install
 	@touch $@
 
@@ -57,7 +57,7 @@ $(LZO_HOST_BUILD_DIR)/.configured:
 $(LZO_TARGET_BUILD_DIR)/.installed: download_lzo \
 $(LZO_TARGET_BUILD_DIR)/.decompressed \
 	$(LZO_TARGET_BUILD_DIR)/.configured
-	$(MAKE) -C $(LZO_TARGET_BUILD_DIR)
+	$(MAKE) -C $(LZO_TARGET_BUILD_DIR) $(J)
 	$(MAKE) -C $(LZO_TARGET_BUILD_DIR) install
 	@touch $@
 

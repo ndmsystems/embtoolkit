@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,14 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         ccache.mk
-# \brief	ccache.mk of Embtoolkit. Here we install ccache to speed up recompilation
+# \brief	ccache.mk of Embtoolkit. Here we install ccache to speed up
+# \brief	recompilation.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 CCACHE_VERSION := 2.4
 CCACHE_SITE := http://samba.org/ftp/ccache
@@ -41,7 +42,7 @@ ccachehost_install: $(CCACHE_HOST_BUILD_DIR)/.installed
 $(CCACHE_HOST_BUILD_DIR)/.installed: ccache_download \
 	$(CCACHE_HOST_BUILD_DIR)/.decompressed \
 	$(CCACHE_HOST_BUILD_DIR)/.configured
-	$(MAKE) -C $(CCACHE_HOST_BUILD_DIR) && \
+	$(MAKE) -C $(CCACHE_HOST_BUILD_DIR) $(J)
 	$(MAKE) -C $(CCACHE_HOST_BUILD_DIR) install
 	@touch $@
 
