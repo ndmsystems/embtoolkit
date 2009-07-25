@@ -1,8 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
-# For Copyrright from linux kernel's build/configure system, see their source
-#code.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -18,52 +16,32 @@
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
 ################################################################################
 #
-# \file         Kconfig
-# \brief	Kconfig of Embtoolkit
+# \file         toolchain.kconfig
+# \brief	toolchain.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# \date         May 2009
+# \date         July 2009
 ################################################################################
-mainmenu "Embedded toolkit configuration"
 
-config EMBTK_DOTCONFIG
-	bool
-	default y
-
-menu "Architecture Selection"
-source "kconfig/arch.kconfig"
+menu "EGLIBC C library"
+source "kconfig/eglibc.kconfig"
 endmenu
 
-menu "Architecture Variant and options"
-source "kconfig/arch-variant.kconfig"
+menu "GCC compiler"
+source "kconfig/gcc.kconfig"
 endmenu
 
-menu "Toolchain configuration"
-source "kconfig/toolchain.kconfig"
+menu "Binutils"
+source "kconfig/binutils.kconfig"
 endmenu
 
-menu "Target build options"
-config EMBTK_TARGET_COMPILER_CFLAGS
-	string "Additional compiler flags for your target"
-	help
-	 Here you can change default flags passed to gcc when components of your
-	 embedded system target are built: C library, packages, ...
-	 By default we optimize for size.
-	default "-Os"
+menu "MPFR"
+source "kconfig/mpfrhost.kconfig"
 endmenu
 
-menu "Debugging system"
-source "kconfig/gdb.kconfig"
+menu "GMP"
+source "kconfig/gmphost.kconfig"
 endmenu
 
-menu "Root filesystem components and build options"
-config EMBTK_HAVE_ROOTFS
-	help
-	 If you want to build a root filesystem, you must say yes here
-	 for your target, you must yes here.
-	bool "Build a root filesystem"
-
-if EMBTK_HAVE_ROOTFS
-source "kconfig/packages.kconfig"
-endif
+menu "Linux kernel headers"
+source "kconfig/linux.kconfig"
 endmenu
-
