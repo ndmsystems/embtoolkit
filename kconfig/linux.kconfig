@@ -31,12 +31,24 @@ choice
 
 	config EMBTK_LINUX_VERSION_2_6_30_X
 		bool "linux-2.6.30.x"
+		help
+		 Will download linux-2.6.30.2 as it is the latest version of
+		 2.6.30.x series.
 	config EMBTK_LINUX_VERSION_2_6_29_X
 		bool "linux-2.6.29.x"
+		help
+		 Will download linux-2.6.29.6 as it is the latest version of
+		 2.6.29.x series.
 	config EMBTK_LINUX_VERSION_2_6_28_X
 		bool "linux-2.6.28.x"
+		help
+		 Will download linux-2.6.28.10 as it is the latest version of
+		 2.6.28.x series.
 	config EMBTK_LINUX_VERSION_2_6_27_X
 		bool "linux-2.6.27.x"
+		help
+		 Will download linux-2.6.27.19 as it is the latest version of
+		 2.6.27.x series.
 endchoice
 
 config EMBTK_LINUX_HAVE_MIRROR
