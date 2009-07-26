@@ -2,7 +2,7 @@
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 # For Copyrright from linux kernel's build/configure system, see their source
-#code.
+# code.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 ################################################################################
-mainmenu "Embedded toolkit configuration"
+mainmenu "Embedded systems toolkit configuration"
 
 config EMBTK_DOTCONFIG
 	bool
@@ -58,8 +58,8 @@ endmenu
 menu "Root filesystem components and build options"
 config EMBTK_HAVE_ROOTFS
 	help
-	 If you want to build a root filesystem, you must say yes here
-	 for your target, you must yes here.
+	 If you want to build a root filesystem for your target, you must say
+	 yes here.
 	bool "Build a root filesystem"
 
 if EMBTK_HAVE_ROOTFS
