@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,16 +14,17 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         eglibc-2.9-options.mk
-# \brief	eglibc-2.9-options.mk. Here we define options supported by eglibc-2.9
+# \brief	eglibc-2.9-options.mk. Here we define options supported by
+# \brief	eglibc-2.9
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
-EGLIBC_OPTIONS := OPTION_EGLIBC_ADVANCED_INET6 OPTION_EGLIBC_BACKTRACE OPTION_EGLIBC_BSD \
-		OPTION_EGLIBC_BSD OPTION_EGLIBC_CXX_TESTS\
+EGLIBC_OPTIONS := OPTION_EGLIBC_ADVANCED_INET6 OPTION_EGLIBC_BACKTRACE \
+		OPTION_EGLIBC_BSD OPTION_EGLIBC_BSD OPTION_EGLIBC_CXX_TESTS\
 		OPTION_EGLIBC_CHARSETS OPTION_EGLIBC_DB_ALIASES OPTION_EGLIBC_ENVZ \
 		OPTION_EGLIBC_FSTAB OPTION_EGLIBC_GETLOGIN OPTION_EGLIBC_INET \
 		OPTION_EGLIBC_LIBM OPTION_EGLIBC_LOCALES \
