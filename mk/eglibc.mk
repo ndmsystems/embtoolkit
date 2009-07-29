@@ -23,7 +23,7 @@
 ################################################################################
 EGLIBC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_VERSION_STRING)))
 EGLIBC_BRANCH := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_BRANCH_STRING)))
-EGLIBC_SVN_REVISION := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_SVN_REVISION)))
+EGLIBC_SVN_REVISION := $(CONFIG_EMBTK_EGLIBC_SVN_REVISION)
 EGLIBC_SITE := http://www.eglibc.org
 EGLIBC_SVN_SITE := svn://svn.eglibc.org
 EGLIBC_PATCHES_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/eglibc/patches

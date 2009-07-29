@@ -1,7 +1,8 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
-# For Copyrright from linux kernel's build/configure system, see their source code
+# For Copyrright from linux kernel's build/configure system, see their source
+# code
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -15,13 +16,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         eglibc_version.kconfig
 # \brief	eglibc_version.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 choice
 	prompt "EGLIBC branch to checkout"
 	default EMBTK_EGLIBC_VERSION_2_10
@@ -35,10 +36,10 @@ choice
 endchoice
 
 config EMBTK_EGLIBC_SVN_REVISION
-	string "EGLIBC SVN revision to checkout"
+	int "EGLIBC SVN revision to checkout"
 	help
-	 EGLIBC revision to use.
-	default "8544"
+	 EGLIBC svn revision to use.
+	default 8724
 
 config EMBTK_EGLIBC_BRANCH_STRING
 	string
