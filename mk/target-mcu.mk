@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         target_mcu.mk
-# \brief	target_mcu.mk of Embtoolkit. Here we define LINUX_ARCH, GNU_ARCH and
-# \brief	GNU_TARGET.
+# \brief	target_mcu.mk of Embtoolkit. Here we define LINUX_ARCH,
+# \brief	GNU_ARCH and GNU_TARGET.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 #ARM
 include $(EMBTK_ROOT)/mk/arm-arch.mk
