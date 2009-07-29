@@ -37,7 +37,8 @@ $(BINUTILS_BUILD_DIR)/.built: download_binutils \
 
 download_binutils:
 	@test -e $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE) $(BINUTILS_SITE)/$(BINUTILS_PACKAGE)
+	wget -O $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE) \
+	$(BINUTILS_SITE)/$(BINUTILS_PACKAGE)
 
 $(BINUTILS_BUILD_DIR)/.decompressed:
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE)
@@ -45,10 +46,11 @@ $(BINUTILS_BUILD_DIR)/.decompressed:
 	@touch $@
 
 $(BINUTILS_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MESSAGE,"binutils: Configuring binutils-$(BINUTILS_VERSION) ...")
+	$(call EMBTK_GENERIC_MESSAGE,"binutils: Configuring \
+	binutils-$(BINUTILS_VERSION) ...")
 	cd $(BINUTILS_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)/configure \
-	 --prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --disable-werror --disable-nls \
-	 --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) --target=$(STRICT_GNU_TARGET) \
-	 --build=$(HOST_BUILD) --host=$(HOST_ARCH)
+	 --prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --disable-werror \
+	 --disable-nls --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
+	 --target=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) --host=$(HOST_ARCH)
 	@touch $@
