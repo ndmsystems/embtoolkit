@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         toolchain.mk
 # \brief	toolchain.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 TARGETCC := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc
 TARGETCXX := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-g++
@@ -59,7 +59,8 @@ buildtoolchain: mkinitialpath kernel-headers_install ccachehost_install \
 		gmphost_install mpfrhost_install binutils_install \
 		gcc1_install eglibc-headers_install gcc2_install \
 		eglibc_install gcc3_install symlink_tools
-	$(call EMBTK_GENERIC_MESSAGE,"You successfully build a toolchain for $(STRICT_GNU_TARGET) !!!")
+	$(call EMBTK_GENERIC_MESSAGE,"You successfully build a toolchain for \
+	$(STRICT_GNU_TARGET) !!!")
 symlink_tools:
 	@cd $(TOOLS)/bin/; export TOOLS_LIST="`ls`"; \
 	for i in $$TOOLS_LIST;do \
