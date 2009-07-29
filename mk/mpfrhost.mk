@@ -22,7 +22,7 @@
 # \date         May 2009
 ################################################################################
 
-MPFR_HOST_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_MPFR_HOST_VERSION_STRING)))
+MPFR_HOST_VERSION:=$(subst ",,$(strip $(CONFIG_EMBTK_MPFR_HOST_VERSION_STRING)))
 MPFR_HOST_SITE := http://www.mpfr.org/mpfr-$(MPFR_HOST_VERSION)
 MPFR_HOST_PACKAGE := mpfr-$(MPFR_HOST_VERSION).tar.bz2
 MPFR_HOST_BUILD_DIR := $(TOOLS_BUILD)/mpfr
@@ -32,15 +32,16 @@ export MPFR_HOST_DIR
 
 mpfrhost_install: $(MPFR_HOST_BUILD_DIR)/.built
 
-$(MPFR_HOST_BUILD_DIR)/.built: download_mpfr_host $(MPFR_HOST_BUILD_DIR)/.decompressed \
-	$(MPFR_HOST_BUILD_DIR)/.configured
+$(MPFR_HOST_BUILD_DIR)/.built: download_mpfr_host \
+	$(MPFR_HOST_BUILD_DIR)/.decompressed $(MPFR_HOST_BUILD_DIR)/.configured
 	@cd $(MPFR_HOST_BUILD_DIR) && $(MAKE) $(J) && $(MAKE) install
 	@touch $@
 
 $(MPFR_HOST_BUILD_DIR)/.decompressed:
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(MPFR_HOST_PACKAGE)
 ifeq ($(CONFIG_EMBTK_MPFR_HOST_VERSION_PATCH),y)
-	cd $(TOOLS_BUILD)/mpfr-$(MPFR_HOST_VERSION); patch -p1 < $(DOWNLOAD_DIR)/mpfr-$(MPFR_HOST_VERSION).patch
+	cd $(TOOLS_BUILD)/mpfr-$(MPFR_HOST_VERSION); \
+	patch -p1 < $(DOWNLOAD_DIR)/mpfr-$(MPFR_HOST_VERSION).patch
 endif
 	@mkdir -p $(MPFR_HOST_BUILD_DIR)
 	@touch $@
@@ -56,10 +57,11 @@ ifeq ($(CONFIG_EMBTK_MPFR_HOST_VERSION_PATCH),y)
 endif
 
 $(MPFR_HOST_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MESSAGE,"mpfrhost: Configuring mpfr-$(MPFR_HOST_VERSION) ...")
+	$(call EMBTK_GENERIC_MESSAGE,"mpfrhost: Configuring \
+	mpfr-$(MPFR_HOST_VERSION) ...")
 	@mkdir -p $(MPFR_HOST_DIR)
 	cd $(MPFR_HOST_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/mpfr-$(MPFR_HOST_VERSION)/configure \
-	--prefix=$(MPFR_HOST_DIR) --disable-shared --enable-static --with-gmp=$(GMP_HOST_DIR) \
-	--build=$(HOST_BUILD) --host=$(HOST_ARCH)
+	--prefix=$(MPFR_HOST_DIR) --disable-shared --enable-static \
+	--with-gmp=$(GMP_HOST_DIR) --build=$(HOST_BUILD) --host=$(HOST_ARCH)
 	@touch $@
