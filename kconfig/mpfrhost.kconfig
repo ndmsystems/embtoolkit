@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,20 +14,20 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         mpfrhost.kconfig
 # \brief	mpfrhost.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 choice
 	prompt "Version of mpfr you wish"
 	default EMBTK_MPFR_HOST_VERSION_2_4_1
 	help
-		The MPFR library is a C library for multiple-precision floating-point
-		computations with correct rounding.
+		The MPFR library is a C library for multiple-precision
+		floating-point computations with correct rounding.
 		MPFR is mandatory to build GCC
 
 	config EMBTK_MPFR_HOST_VERSION_2_4_1
@@ -44,7 +44,8 @@ default "2.4.0" if EMBTK_MPFR_HOST_VERSION_2_4_0
 
 #Does we need patches?
 config EMBTK_MPFR_HOST_VERSION_PATCH
-	depends on EMBTK_MPFR_HOST_VERSION_2_4_1 || EMBTK_MPFR_HOST_VERSION_2_4_0
+	depends on EMBTK_MPFR_HOST_VERSION_2_4_1 || \
+	EMBTK_MPFR_HOST_VERSION_2_4_0
 	bool
 	default y
 
