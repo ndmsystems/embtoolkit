@@ -39,7 +39,7 @@ config EMBTK_EGLIBC_SVN_REVISION
 	int "EGLIBC SVN revision to checkout"
 	help
 	 EGLIBC svn revision to use.
-	default 8724
+	default 8737
 
 config EMBTK_EGLIBC_BRANCH_STRING
 	string
