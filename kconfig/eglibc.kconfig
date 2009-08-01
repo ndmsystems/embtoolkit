@@ -18,8 +18,8 @@
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
 ################################################################################
 #
-# \file         eglibc_version.kconfig
-# \brief	eglibc_version.kconfig of Embtoolkit
+# \file         eglibc.kconfig
+# \brief	eglibc.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 ################################################################################
