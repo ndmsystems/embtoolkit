@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         initialpath.mk
-# \brief	initialpath of Embtoolkit. Here we define SYSROOT, TOOLS, TOOLS_BUILD
-# \brief	PACKAGES_BUILD and ROOTFS.
+# \brief	initialpath of Embtoolkit. Here we define SYSROOT, TOOLS,
+# \brief	TOOLS_BUILD PACKAGES_BUILD and ROOTFS.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 SYSROOT:=$(EMBTK_ROOT)/sysroot-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 TOOLS:=$(EMBTK_ROOT)/tools-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
