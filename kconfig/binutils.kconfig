@@ -30,8 +30,6 @@ choice
 		will use.
 	config EMBTK_BINUTILS_VERSION_2_19_1
 		bool "binutils-2.19.1"
-	config EMBTK_BINUTILS_VERSION_2_19
-		bool "binutils-2.19"
 	config EMBTK_BINUTILS_VERSION_2_18
 		bool "binutils-2.18"
 	config EMBTK_BINUTILS_VERSION_2_17
@@ -41,7 +39,6 @@ endchoice
 config EMBTK_BINUTILS_VERSION_STRING
 	string
 	default "2.19.1"	if EMBTK_BINUTILS_VERSION_2_19_1
-	default "2.19"		if EMBTK_BINUTILS_VERSION_2_19
 	default "2.18"		if EMBTK_BINUTILS_VERSION_2_18
 	default "2.17"		if EMBTK_BINUTILS_VERSION_2_17
 
