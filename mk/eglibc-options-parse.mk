@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         eglibc-options-parse.mk
-# \brief	eglibc-options-parse.mk. Here we define a target which parses eglibc
-# \brief	options from .config.
+# \brief	eglibc-options-parse.mk. Here we define a target which parses
+# \brief	eglibc options from .config.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 ifeq ($(CONFIG_EMBTK_EGLIBC_VERSION_2_10),y)
 include $(EMBTK_ROOT)/mk/eglibc-2.10-options.mk
@@ -31,10 +31,17 @@ ifeq ($(CONFIG_EMBTK_EGLIBC_VERSION_2_9),y)
 include $(EMBTK_ROOT)/mk/eglibc-2.9-options.mk
 endif
 
+ifeq ($(CONFIG_EMBTK_EGLIBC_VERSION_TRUNK),y)
+include $(EMBTK_ROOT)/mk/eglibc-trunk-options.mk
+endif
+
 EGLIBC_OPTIONS_PARSE:
-	@echo "####################################### EmbToolkit ######################################"
-	@echo "# Parsing eglibc options ...                                                            #"
-	@echo "#########################################################################################"
+	@echo "####################################### EmbToolkit #############\
+	#########################"
+	@echo "# Parsing eglibc options ...                                    \
+	                        #"
+	@echo "################################################################\
+	#########################"
 	@for i in $(EGLIBC_OPTIONS); \
 	do \
 	echo "Does eglibc will support $$i?"; \

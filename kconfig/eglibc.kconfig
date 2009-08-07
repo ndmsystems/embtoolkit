@@ -33,6 +33,8 @@ choice
 		bool "eglibc-2.10"
 	config EMBTK_EGLIBC_VERSION_2_9
 		bool "eglibc-2.9"
+	config EMBTK_EGLIBC_VERSION_TRUNK
+		bool "trunk (development version)"
 endchoice
 
 config EMBTK_EGLIBC_SVN_REVISION
@@ -50,6 +52,7 @@ config EMBTK_EGLIBC_VERSION_STRING
 	string
 	default "2.10"		if EMBTK_EGLIBC_VERSION_2_10
 	default "2.9"		if EMBTK_EGLIBC_VERSION_2_9
+	default "trunk"		if EMBTK_EGLIBC_VERSION_TRUNK
 
 #Does we need patches?
 config EMBTK_EGLIBC_NEED_PATCH
@@ -63,5 +66,9 @@ endif
 
 if EMBTK_EGLIBC_VERSION_2_9
 source "kconfig/option-groups.def-2.9"
+endif
+
+if EMBTK_EGLIBC_VERSION_TRUNK
+source "kconfig/option-groups.def-trunk"
 endif
 

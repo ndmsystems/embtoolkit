@@ -49,5 +49,5 @@ ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 endif
 
 rmallpath:
-	@rm -Rf build rootfs-* sysroot-* tools-*
+	@rm -Rf build rootfs-* sysroot-* tools-* $(DOWNLOAD_DIR)/eglibc*
 

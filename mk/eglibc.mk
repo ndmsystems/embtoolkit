@@ -54,9 +54,16 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download \
 eglibc_download:
 	$(call EMBTK_GENERIC_MESSAGE,"downloading eglibc-$(EGLIBC_VERSION) \
 	if necessary ...")
+ifeq ($(CONFIG_EMBTK_EGLIBC_VERSION_STRING),"trunk")
+	@cd $(EMBTK_ROOT)/src; \
+	svn co $(EGLIBC_SVN_SITE)/trunk \
+	-r$(EGLIBC_SVN_REVISION) eglibc-$(EGLIBC_VERSION)
+else
 	@cd $(EMBTK_ROOT)/src; \
 	svn co $(EGLIBC_SVN_SITE)/branches/eglibc-$(EGLIBC_BRANCH) \
-	-r$(EGLIBC_SVN_REVISION) eglibc-$(EGLIBC_VERSION); \
+	-r$(EGLIBC_SVN_REVISION) eglibc-$(EGLIBC_VERSION)
+endif
+	@cd $(EMBTK_ROOT)/src; \
 	cd eglibc-$(EGLIBC_VERSION); touch `find . -name configure`; cd ../;\
 	test -e $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE) || \
 	tar cjvf $(EGLIBC_PACKAGE) eglibc-$(EGLIBC_VERSION); \
