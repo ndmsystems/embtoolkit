@@ -37,6 +37,12 @@ menu "Architecture Variant and options"
 source "kconfig/arch-variant.kconfig"
 endmenu
 
+#Give ability to build (hide) old packages, instead of remove them in Embtk.
+config EMBTK_OLDPACKAGES
+	bool "Show old revision of some packages"
+	help
+	 This will allow you to build old revisions of some packages.
+
 menu "Toolchain configuration"
 source "kconfig/toolchain.kconfig"
 endmenu
