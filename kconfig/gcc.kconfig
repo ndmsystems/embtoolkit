@@ -98,6 +98,7 @@ config EMBTK_GCC_LANGUAGE_FORTRAN
 config EMBTK_GCC_VERSION_STRING
 	string
 	default "4.4.1"		if EMBTK_GCC_VERSION_4_4_1
+	default "4.3.4"		if EMBTK_GCC_VERSION_4_3_4
 	default "4.3.3"		if EMBTK_GCC_VERSION_4_3_3
 	default "4.3.2"		if EMBTK_GCC_VERSION_4_3_2
 	default "4.2.4"		if EMBTK_GCC_VERSION_4_2_4
