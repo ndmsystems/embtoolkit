@@ -44,15 +44,6 @@ ROOTFS_COMPONENTS += mtd-utils_target_install
 ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
 endif
 
-#Packages for host
-
-#fakeroot
-ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-include $(EMBTK_ROOT)/mk/fakeroot.mk
-include $(EMBTK_ROOT)/mk/makedevs.mk
-HOSTTOOLS_COMPONENTS := makedevs_install fakeroot_install
-endif
-
 #gdb
 ifeq ($(CONFIG_EMBTK_HAVE_GDB),y)
 include $(EMBTK_ROOT)/mk/termcap.mk
@@ -61,15 +52,4 @@ ifeq ($(CONFIG_EMBTK_HAVE_GDB_ON_HOST),y)
 HOSTTOOLS_COMPONENTS += gdb_host_install
 endif
 endif
-
-#lzo
-include $(EMBTK_ROOT)/mk/lzo.mk
-
-#mtd-utils
-ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-include $(EMBTK_ROOT)/mk/mtd-utils.mk
-endif
-
-#zlib
-include $(EMBTK_ROOT)/mk/zlib.mk
 

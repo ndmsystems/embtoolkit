@@ -1,8 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
-# For Copyrright from linux kernel's build/configure system, see their source
-# code.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -18,25 +16,33 @@
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
 ################################################################################
 #
-# \file         fs.kconfig
-# \brief	fs.kconfig of Embtoolkit
+# \file         fs.mk
+# \brief	fs.mk of Embtoolkit, targets for sereval filesystems build.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         August 2009
 ################################################################################
 
-menu "Type of root filesystem to build"
+ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
 
-#JFFS2 root filesystem image build
-config EMBTK_ROOTFS_HAVE_JFFS2
-	bool "Build a JFFS2 root filesystem image"
-	help
-	 Build a JFFS2 root filesystem image for your target
+endif
 
-config EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE
-	depends on EMBTK_ROOTFS_HAVE_JFFS2
-	help
-	 Erase block size to use in KB
-	int "Erase block size to use in KB"
-	default 512
+build_tarbz2_rootfs:
+	$(FAKEROOT_BIN) -s $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(MAKEDEVS_DIR)/makedevs \
+	-d $(EMBTK_ROOT)/src/devices_table.txt $(ROOTFS)
+	cd $(ROOTFS) ; $(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	tar cjf rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).tar.bz2 * ; \
+	mv rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).tar.bz2 $(EMBTK_ROOT)
 
-endmenu
+build_jffs2_rootfs:
+	$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(HOSTTOOLS)/usr/sbin/mkfs.jffs2 \
+	-n -e $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE) -r $(ROOTFS) \
+	-o $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp
+	$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(HOSTTOOLS)/usr/sbin/sumtool \
+	-n -e $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE) \
+	-i $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp \
+	-o $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2
+	@rm -rf $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp
+

@@ -24,13 +24,27 @@
 
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 
+#include various filesystems targets
+include $(EMBTK_ROOT)/mk/fs.mk
+
+#host tools in order to build root filesystems: fakeroot and makedevs.
+include $(EMBTK_ROOT)/mk/fakeroot.mk
+include $(EMBTK_ROOT)/mk/makedevs.mk
+HOSTTOOLS_COMPONENTS += makedevs_install fakeroot_install
+
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
+include $(EMBTK_ROOT)/mk/lzo.mk
+include $(EMBTK_ROOT)/mk/mtd-utils.mk
+include $(EMBTK_ROOT)/mk/zlib.mk
 HOSTTOOLS_COMPONENTS += mtd-utils_host_install
 HOSTTOOLS_COMPONENTS_CLEAN += mtd-utils_host_clean
+FILESYSTEMS += build_jffs2_rootfs
 endif
 
 rootfs_build: rootfs_clean mkinitialpath $(HOSTTOOLS_COMPONENTS) \
-$(ROOTFS_COMPONENTS)
+$(ROOTFS_COMPONENTS) rootfs_fill build_tarbz2_rootfs $(FILESYSTEMS)
+
+rootfs_fill:
 ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	@mkdir -p $(ROOTFS)/lib64
 	@mkdir -p $(ROOTFS)/usr/lib64
@@ -50,28 +64,16 @@ else
 	@cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
 	@-$(TARGETSTRIP)  $(ROOTFS)/usr/sbin/*
 endif
-	$(FAKEROOT_BIN) -s $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(MAKEDEVS_DIR)/makedevs \
-	-d $(EMBTK_ROOT)/src/devices_table.txt $(ROOTFS)
-	cd $(ROOTFS) ; $(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	tar cjf rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).tar.bz2 * ; \
-	mv rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).tar.bz2 $(EMBTK_ROOT)
-ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
-	$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(HOSTTOOLS)/usr/sbin/mkfs.jffs2 -n -e 128 -r $(ROOTFS) \
-	-o $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp
-	$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(HOSTTOOLS)/usr/sbin/sumtool -n -e 128 \
-	-i $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp \
-	-o $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2
-	rm -rf $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp
-endif
 
 rootfs_clean: $(HOSTTOOLS_COMPONENTS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)
 	@rm -rf rootfs-*
 
 else
-rootfs_build: $(HOSTTOOLS_COMPONENTS)
+rootfs_build:
+	@echo "############### Root filesystem build not selected #############"
+	@echo "# Root filesystem build not selected in the configuration      #"
+	@echo "# interface. If you want to build one please select it.        #"
+	@echo "################################################################"
 rootfs_clean: $(HOSTTOOLS_COMPONENTS_CLEAN)
 
 endif
