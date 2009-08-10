@@ -24,25 +24,14 @@
 # \date         May 2009
 ################################################################################
 
+menu "Packages to include in your root filesystem"
+
 #Busybox
 config EMBTK_ROOTFS_HAVE_BB
 	bool "Have Busybox in your root filesystem"
 if EMBTK_ROOTFS_HAVE_BB
 source packages/busybox/busybox.kconfig
 endif
-
-#JFFS2 root filesystem image build
-config EMBTK_ROOTFS_HAVE_JFFS2
-	bool "Build a JFFS2 root filesystem image"
-	help
-	 Build a JFFS2 root filesystem image for your target
-
-config EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE
-	depends on EMBTK_ROOTFS_HAVE_JFFS2
-	help
-	 Erase block size to use in KB
-	string "Erase block size to use in KB"
-	default "128"
 
 #mtd-utils on target
 config EMBTK_ROOTFS_HAVE_MTDUTILS
@@ -63,3 +52,5 @@ config EMBTK_ROOTFS_HAVE_MTDUTILS
 	   NAND Flash device
 	 These utilities are often used to write file system images to the Flash
 	 device on an embedded system.
+
+endmenu

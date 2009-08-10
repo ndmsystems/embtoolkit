@@ -1,0 +1,42 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# For Copyrright from linux kernel's build/configure system, see their source
+# code.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         fs.kconfig
+# \brief	fs.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         August 2009
+################################################################################
+
+menu "Type of root filesystem to build"
+
+#JFFS2 root filesystem image build
+config EMBTK_ROOTFS_HAVE_JFFS2
+	bool "Build a JFFS2 root filesystem image"
+	help
+	 Build a JFFS2 root filesystem image for your target
+
+config EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE
+	depends on EMBTK_ROOTFS_HAVE_JFFS2
+	help
+	 Erase block size to use in KB
+	string "Erase block size to use in KB"
+	default "512"
+
+endmenu
