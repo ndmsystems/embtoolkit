@@ -22,10 +22,6 @@
 # \date         August 2009
 ################################################################################
 
-ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
-
-endif
-
 build_tarbz2_rootfs:
 	$(FAKEROOT_BIN) -s $(EMBTK_ROOT)/.fakeroot.001 -- \
 	$(MAKEDEVS_DIR)/makedevs \
