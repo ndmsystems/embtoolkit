@@ -31,12 +31,30 @@ config EMBTK_ROOTFS_HAVE_JFFS2
 	bool "Build a JFFS2 root filesystem image"
 	help
 	 Build a JFFS2 root filesystem image for your target
-
 config EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE
 	depends on EMBTK_ROOTFS_HAVE_JFFS2
 	help
 	 Erase block size to use in KB
 	int "Erase block size to use in KB"
 	default 512
+
+#INITRAMFS cpio archive
+config EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO
+	bool "Build cpio archive for initramfs"
+	help
+	 Build a cpio archive, in order to use it later as source file for
+	 initramfs in the linux kernel.
+choice
+	depends on EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO
+	prompt "Compression program to use"
+	config EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO_GZIPED
+		bool "gzip"
+		help
+		 Use gzip compression algorithm.
+	config EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO_BZIPED
+		bool "bzip2"
+		help
+		 Use bzip2 compression algorithm.
+endchoice
 
 endmenu

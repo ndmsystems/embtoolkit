@@ -42,3 +42,14 @@ build_jffs2_rootfs:
 	-o $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2
 	@rm -rf $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp
 
+build_initramfs_archive:
+	$(call EMBTK_GENERIC_MESSAGE,"Generating cpio archive for initramfs...")
+ifeq ($(EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO_GZIPED),y)
+	@$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(EMBTK_ROOT)/scripts/mkinitramfs $(ROOTFS) gzip \
+	$(EMBTK_ROOT)/initramfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+else
+	@$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(EMBTK_ROOT)/scripts/mkinitramfs $(ROOTFS) bzip2 \
+	$(EMBTK_ROOT)/initramfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+endif

@@ -32,6 +32,12 @@ include $(EMBTK_ROOT)/mk/fakeroot.mk
 include $(EMBTK_ROOT)/mk/makedevs.mk
 HOSTTOOLS_COMPONENTS += makedevs_install fakeroot_install
 
+#Does CPIO archive for initramfs selected?
+ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),y)
+FILESYSTEMS += build_initramfs_archive
+endif
+
+#Does jffs2 filesystem selected?
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
 include $(EMBTK_ROOT)/mk/lzo.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
@@ -66,7 +72,7 @@ else
 endif
 
 rootfs_clean: $(HOSTTOOLS_COMPONENTS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)
-	@rm -rf rootfs-*
+	@rm -rf rootfs-* initramfs-*
 
 else
 rootfs_build:
