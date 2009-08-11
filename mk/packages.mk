@@ -22,7 +22,16 @@
 # \date         May 2009
 ################################################################################
 
-#Packages for target
+
+#################### Common include for target and host ########################
+
+#gdb
+ifeq ($(CONFIG_EMBTK_HAVE_GDB),y)
+include $(EMBTK_ROOT)/mk/termcap.mk
+include $(EMBTK_ROOT)/mk/gdb.mk
+endif
+
+############################# Packages for TARGET ##############################
 
 #Busybox
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),y)
@@ -30,10 +39,12 @@ include $(EMBTK_ROOT)/packages/busybox/busybox.mk
 ROOTFS_COMPONENTS += busybox_install
 endif
 
+#gdb
 ifeq ($(CONFIG_EMBTK_HAVE_GDB_ON_TARGET),y)
 ROOTFS_COMPONENTS += gdb_target_install
 endif
 
+#gdbserver
 ifeq ($(CONFIG_EMBTK_HAVE_GDBSERVER_ON_TARGET),y)
 ROOTFS_COMPONENTS += gdbserver_target_install
 endif
@@ -44,12 +55,16 @@ ROOTFS_COMPONENTS += mtd-utils_target_install
 ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
 endif
 
+########################## Packages for HOST MACHINE ###########################
+
 #gdb
-ifeq ($(CONFIG_EMBTK_HAVE_GDB),y)
-include $(EMBTK_ROOT)/mk/termcap.mk
-include $(EMBTK_ROOT)/mk/gdb.mk
 ifeq ($(CONFIG_EMBTK_HAVE_GDB_ON_HOST),y)
 HOSTTOOLS_COMPONENTS += gdb_host_install
 endif
-endif
+
+########################### Targets for HOST MACHINE ###########################
+host_packages_build:
+	$(call EMBTK_GENERIC_MESSAGE,"Building extra packages intended to run \
+	on your host machine ...")
+	@$(MAKE) $(HOSTTOOLS_COMPONENTS)
 

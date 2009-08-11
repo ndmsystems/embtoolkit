@@ -93,7 +93,7 @@ clean: rmallpath
 	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/basic
 	$(Q)rm -rf .config kbuild.log .fakeroot*
 
-startbuild: buildtoolchain rootfs_build successful_build
+startbuild: buildtoolchain host_packages_build rootfs_build successful_build
 
 include mk/macros.mk
 include mk/target-mcu.mk
