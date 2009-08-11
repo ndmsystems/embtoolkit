@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         busybox.mk
 # \brief	busybox.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 BB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_BB_VERSION_STRING)))
 BB_DOT_CONFIG := $(subst ",,$(strip $(CONFIG_EMBTK_BB_DOT_CONFIG)))
@@ -32,8 +32,11 @@ busybox_install: $(BB_BUILD_DIR)/.installed
 
 $(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed \
 	$(BB_BUILD_DIR)/.Config.in.renewed
-	CFLAGS="-Os -pipe -fno-strict-aliasing" \
-	$(MAKE) -C $(BB_BUILD_DIR) CROSS_COMPILE=$(TOOLS)/bin/$(STRICT_GNU_TARGET)- \
+	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	busybox-$(BB_VERSION) in your root filesystem...")
+	@CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing" \
+	$(MAKE) -C $(BB_BUILD_DIR) \
+	CROSS_COMPILE=$(TOOLS)/bin/$(STRICT_GNU_TARGET)- \
 	CONFIG_PREFIX=$(ROOTFS) install
 	@touch $@
 
@@ -45,7 +48,8 @@ $(BB_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(BB_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(BB_PACKAGE)
 	@test -e $(BB_BUILD_DIR)/.config || \
-	cp $(EMBTK_ROOT)/packages/busybox/$(BB_DOT_CONFIG) $(BB_BUILD_DIR)/.config
+	cp $(EMBTK_ROOT)/packages/busybox/$(BB_DOT_CONFIG) \
+	$(BB_BUILD_DIR)/.config
 	@touch $@
 
 $(BB_BUILD_DIR)/.Config.in.renewed:
@@ -53,6 +57,7 @@ $(BB_BUILD_DIR)/.Config.in.renewed:
 	sed 's|source |source $(BB_BUILD_DIR)/|' < Config.in >Config.in.tmp; \
 	sed 's/networking\/Config.in/&.new/' <Config.in.tmp >Config.in.new; \
 	cd networking; \
-	sed 's|source networking|source $(BB_BUILD_DIR)/networking|' < Config.in >Config.in.new
+	sed 's|source networking|source $(BB_BUILD_DIR)/networking|' \
+	< Config.in >Config.in.new
 	touch $@
 
