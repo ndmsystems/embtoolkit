@@ -63,7 +63,7 @@ $(GDB_HOST_BUILD_DIR)/.configured
 
 $(GDB_HOST_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring gdb-$(GDB_VERSION) for \
-	for your host development machine ...")
+	your host development machine ...")
 	@cd $(GDB_HOST_BUILD_DIR); \
 	CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	CC_FOR_TARGET=$(TARGETCC_CACHED) CXX_FOR_TARGET=$(TARGETCXX_CACHED) \
@@ -72,7 +72,7 @@ $(GDB_HOST_BUILD_DIR)/.configured:
 	STRIP_FOR_TARGET=$(TARGETSTRIP) OBJDUMP_FOR_TARGET=$(TARGETOBJDUMP) \
 	$(TOOLS_BUILD)/gdb-$(GDB_VERSION)/configure \
 	--host=$(HOST_ARCH) --build=$(HOST_ARCH) --target=$(STRICT_GNU_TARGET) \
-	--prefix=$(HOSTTOOLS)/usr --disable-werror
+	--prefix=$(TOOLS) --disable-werror
 	@touch $@
 
 download_gdb:
