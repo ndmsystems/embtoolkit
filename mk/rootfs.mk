@@ -30,7 +30,7 @@ include $(EMBTK_ROOT)/mk/fs.mk
 #host tools in order to build root filesystems: fakeroot and makedevs.
 include $(EMBTK_ROOT)/mk/fakeroot.mk
 include $(EMBTK_ROOT)/mk/makedevs.mk
-HOSTTOOLS_COMPONENTS += makedevs_install fakeroot_install
+ROOTFS_HOSTTOOLS += makedevs_install fakeroot_install
 
 #Does CPIO archive for initramfs selected?
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),y)
@@ -42,13 +42,15 @@ ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
 include $(EMBTK_ROOT)/mk/lzo.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
 include $(EMBTK_ROOT)/mk/zlib.mk
-HOSTTOOLS_COMPONENTS += mtd-utils_host_install
-HOSTTOOLS_COMPONENTS_CLEAN += mtd-utils_host_clean
+ROOTFS_HOSTTOOLS += mtd-utils_host_install
+ROOTFS_HOSTTOOLS_CLEAN += mtd-utils_host_clean
 FILESYSTEMS += build_jffs2_rootfs
 endif
 
-rootfs_build: rootfs_clean mkinitialpath $(HOSTTOOLS_COMPONENTS) \
-$(ROOTFS_COMPONENTS) rootfs_fill build_tarbz2_rootfs $(FILESYSTEMS)
+rootfs_build:
+	$(call EMBTK_GENERIC_MESSAGE,"Building selected root filesystems...")
+	@$(MAKE) rootfs_clean mkinitialpath $(ROOTFS_HOSTTOOLS) \
+	$(ROOTFS_COMPONENTS) rootfs_fill build_tarbz2_rootfs $(FILESYSTEMS)
 
 rootfs_fill:
 ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
@@ -71,7 +73,7 @@ else
 	@-$(TARGETSTRIP)  $(ROOTFS)/usr/sbin/*
 endif
 
-rootfs_clean: $(HOSTTOOLS_COMPONENTS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)
+rootfs_clean: $(ROOTFS_HOSTTOOLS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)
 	@rm -rf rootfs-* initramfs-*
 
 else
@@ -80,6 +82,6 @@ rootfs_build:
 	@echo "# Root filesystem build not selected in the configuration      #"
 	@echo "# interface. If you want to build one please select it.        #"
 	@echo "################################################################"
-rootfs_clean: $(HOSTTOOLS_COMPONENTS_CLEAN)
+rootfs_clean: $(ROOTFS_HOSTTOOLS_CLEAN)
 
 endif
