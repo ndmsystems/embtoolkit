@@ -45,6 +45,12 @@ build_jffs2_rootfs:
 	-o $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2
 	@rm -rf $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp
 
+build_squashfs_rootfs:
+	$(call EMBTK_GENERIC_MESSAGE,"Generating squashfs root filesystem...")
+	$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(HOSTTOOLS)/usr/bin/mksquashfs $(ROOTFS) \
+	rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).squashfs
+
 build_initramfs_archive:
 	$(call EMBTK_GENERIC_MESSAGE,"Generating cpio archive for initramfs...")
 ifeq ($(EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO_GZIPED),y)

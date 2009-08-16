@@ -26,18 +26,6 @@
 
 menu "Type of root filesystem to build"
 
-#JFFS2 root filesystem image build
-config EMBTK_ROOTFS_HAVE_JFFS2
-	bool "Build a JFFS2 root filesystem image"
-	help
-	 Build a JFFS2 root filesystem image for your target
-config EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE
-	depends on EMBTK_ROOTFS_HAVE_JFFS2
-	help
-	 Erase block size to use in KB
-	int "Erase block size to use in KB"
-	default 512
-
 #INITRAMFS cpio archive
 config EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO
 	bool "Build cpio archive for initramfs"
@@ -56,5 +44,23 @@ choice
 		help
 		 Use bzip2 compression algorithm.
 endchoice
+
+#JFFS2 root filesystem image build
+config EMBTK_ROOTFS_HAVE_JFFS2
+	bool "Build a JFFS2 root filesystem image"
+	help
+	 Build a JFFS2 root filesystem image for your target
+config EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE
+	depends on EMBTK_ROOTFS_HAVE_JFFS2
+	help
+	 Erase block size to use in KB
+	int "Erase block size to use in KB"
+	default 512
+
+#SQUASHFS root filesystem
+config EMBTK_ROOTFS_HAVE_SQUASHFS
+	bool "Build a squashfs root filesystem image"
+	help
+	 Build a squashfs root filesystem image for your target
 
 endmenu

@@ -47,6 +47,13 @@ ROOTFS_HOSTTOOLS_CLEAN += mtd-utils_host_clean
 FILESYSTEMS += build_jffs2_rootfs
 endif
 
+#Does squashfs filesystem selected?
+ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),y)
+include $(EMBTK_ROOT)/mk/squashfs.mk
+ROOTFS_HOSTTOOLS += squashfs_host_install
+FILESYSTEMS += build_squashfs_rootfs
+endif
+
 rootfs_build:
 	$(call EMBTK_GENERIC_MESSAGE,"Building selected root filesystems...")
 	@$(MAKE) rootfs_clean mkinitialpath $(ROOTFS_HOSTTOOLS) \
