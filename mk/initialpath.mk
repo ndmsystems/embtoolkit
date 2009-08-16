@@ -35,6 +35,7 @@ export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD ROOTFS HOSTTOOLS
 mkinitialpath:
 	@mkdir -p $(SYSROOT)
 	@mkdir -p $(SYSROOT)/usr
+	@mkdir -p $(SYSROOT)/root
 	@mkdir -p $(SYSROOT)/usr/lib
 	@mkdir -p $(TOOLS)
 	@mkdir -p $(TOOLS_BUILD)

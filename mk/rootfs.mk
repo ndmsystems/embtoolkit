@@ -67,20 +67,33 @@ ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	@mkdir -p $(ROOTFS)/usr/lib64
 	@rm -rf $(ROOTFS)/lib $(ROOTFS)/usr/lib
 	@cp -R $(SYSROOT)/lib64/* $(ROOTFS)/lib64/
-	@-$(TARGETSTRIP)  $(ROOTFS)/lib64/*.so
 	@cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
-	@-$(TARGETSTRIP)  $(ROOTFS)/usr/bin/*
 	@cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
+	@cp -R $(SYSROOT)/root  $(ROOTFS)/root
+ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
+	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")
+	@-$(TARGETSTRIP)  $(ROOTFS)/lib64/*.so
+	@-$(TARGETSTRIP)  $(ROOTFS)/bin/*
+	@-$(TARGETSTRIP)  $(ROOTFS)/usr/bin/*
 	@$(TARGETSTRIP)  $(ROOTFS)/usr/sbin/*
+endif
+
 else
 	@mkdir -p $(ROOTFS)/lib
 	@cp -R $(SYSROOT)/lib/* $(ROOTFS)/lib/
-	@-$(TARGETSTRIP)  $(ROOTFS)/lib/*.so
 	@cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
-	@-$(TARGETSTRIP)  $(ROOTFS)/usr/bin/*
 	@cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
+	@cp -R $(SYSROOT)/root  $(ROOTFS)/root
+ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
+	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")
+	@-$(TARGETSTRIP)  $(ROOTFS)/lib/*.so
+	@-$(TARGETSTRIP)  $(ROOTFS)/bin/*
+	@-$(TARGETSTRIP)  $(ROOTFS)/usr/bin/*
 	@-$(TARGETSTRIP)  $(ROOTFS)/usr/sbin/*
 endif
+
+endif
+
 
 rootfs_clean: $(ROOTFS_HOSTTOOLS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)
 	@rm -rf rootfs-* initramfs-*

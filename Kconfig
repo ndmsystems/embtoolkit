@@ -55,6 +55,15 @@ config EMBTK_TARGET_COMPILER_CFLAGS
 	 embedded system target are built: C library, packages, ...
 	 By default we optimize for size.
 	default "-Os"
+config EMBTK_TARGET_STRIPPED
+	bool "Strip target's binaries"
+	help
+	 Say yes if you want to strip binaries (including libraries) generated
+	 for your target embedded system. This will reduce the size of these
+	 binaries.
+	 Note: These binaries are only stripped if you choose to build a root
+	 filesystem.
+
 endmenu
 
 menu "Debugging system"
