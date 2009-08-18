@@ -27,6 +27,12 @@ BINUTILS_SITE := http://ftp.gnu.org/gnu/binutils
 BINUTILS_PACKAGE := binutils-$(BINUTILS_VERSION).tar.bz2
 BINUTILS_BUILD_DIR := $(TOOLS_BUILD)/binutils
 
+ifeq ($(CONFIG_EMBTK_TOOLCHAIN_MULTILIB),)
+BINUTILS_MULTILIB := --disable-multilib
+else
+BINUTILS_MULTILIB := --enable-multilib
+endif
+
 binutils_install: $(BINUTILS_BUILD_DIR)/.built
 
 $(BINUTILS_BUILD_DIR)/.built: download_binutils \
@@ -51,6 +57,7 @@ $(BINUTILS_BUILD_DIR)/.configured:
 	cd $(BINUTILS_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)/configure \
 	 --prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --disable-werror \
-	 --disable-nls --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
+	 --disable-nls $(BINUTILS_MULTILIB) \
+	 --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
 	 --target=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) --host=$(HOST_ARCH)
 	@touch $@
