@@ -36,15 +36,15 @@ GCC3_BUILD_DIR := $(TOOLS_BUILD)/gcc3
 #Multilib or not?
 ifeq ($(CONFIG_EMBTK_TOOLCHAIN_MULTILIB),y)
 GCC_MULTILIB :=
+GCC_WITH_FLOAT :=
 else
 GCC_MULTILIB := --disable-multilib
-endif
-
 #Hard or soft floating point for GCC?
 ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
 GCC_WITH_FLOAT := --with-float=soft
 else
 GCC_WITH_FLOAT := --with-float=hard
+endif
 endif
 
 GCC_LANGUAGES =c

@@ -27,6 +27,10 @@ LINUX_ARCH := arm
 GNU_TARGET_ARCH := arm
 EMBTK_MCU_FLAG := $(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
 
+ifeq ($(CONFIG_EMBTK_TOOLCHAIN_MULTILIB),y)
+GNU_TARGET := arm-linux
+STRICT_GNU_TARGET := arm-unknown-linux-gnueabi
+else
 ifeq ($(CONFIG_EMBTK_ARCH_ARM_BIG_ENDIAN),y)
 GNU_TARGET := armeb-linux
 STRICT_GNU_TARGET := armeb-unknown-linux-gnueabi
@@ -34,20 +38,31 @@ else
 GNU_TARGET := armel-linux
 STRICT_GNU_TARGET := armel-unknown-linux-gnueabi
 endif
+endif
 
 #GCC configure options
+ifeq ($(CONFIG_EMBTK_TOOLCHAIN_MULTILIB),y)
+GCC_WITH_CPU :=
+else
 GCC_WITH_CPU := --with-cpu=$(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
+endif
 
 #GCC extra configure options for arm
 ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),y)
 GCC3_CONFIGURE_EXTRA_OPTIONS += --enable-sjlj-exceptions
 endif
 
-#Hard or soft floating point
+
+#Does multilib selected?
+ifeq ($(CONFIG_EMBTK_TOOLCHAIN_MULTILIB),y)
+EMBTK_TARGET_FLOAT_CFLAGS :=
+else
+#Hard or soft floating point?
 ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
 EMBTK_TARGET_FLOAT_CFLAGS := -mfloat-abi=soft
 else
 EMBTK_TARGET_FLOAT_CFLAGS := -mfloat-abi=hard
+endif
 endif
 
 endif

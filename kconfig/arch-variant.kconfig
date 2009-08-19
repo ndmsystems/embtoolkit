@@ -353,17 +353,28 @@ config EMBTK_ARM_MCU_STRING
 
 config EMBTK_TOOLCHAIN_MULTILIB
 	default n
-	bool "Build multilib toolchain"
+	bool "Build multilib toolchain (not supported yet)"
 	help
-		You can say yes here, to specify that multiple target libraries to support
-		different target variants, calling conventions, etc. should be built.
-		It is safe to say no here.
+	 You can say yes here, to specify that multiple target libraries to
+	 support different target variants, calling conventions, etc. should be
+	 built. It is safe to say no here.
+
+choice
+	prompt "Floating point type"
+	help
+	 Select the floating point type you want to use.
 
 config EMBTK_SOFTFLOAT
-	default y
 	bool "Soft floating point"
 	help
-		Select if your CPU has a hardware floating point unit.
-		If you say no here, your toolchain will be built without
-		software floating point.
+	 Select if your CPU has a hardware floating point unit.
+	 If you say no here, your toolchain will be built without
+	 software floating point.
+config EMBTK_HARDFLOAT
+	bool "Hard floating point"
+	help
+	 Select if your CPU has a hardware floating point unit.
+	 If you say no here, your toolchain will be built without
+	 hardware floating point.
+endchoice
 
