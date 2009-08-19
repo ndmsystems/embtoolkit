@@ -33,29 +33,37 @@ GCC1_BUILD_DIR := $(TOOLS_BUILD)/gcc1
 GCC2_BUILD_DIR := $(TOOLS_BUILD)/gcc2
 GCC3_BUILD_DIR := $(TOOLS_BUILD)/gcc3
 
-GCC_LANGUAGES =c
+#Multilib or not?
+ifeq ($(CONFIG_EMBTK_TOOLCHAIN_MULTILIB),y)
+GCC_MULTILIB :=
+else
+GCC_MULTILIB := --disable-multilib
+endif
 
+#Hard or soft floating point for GCC?
+ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
+GCC_WITH_FLOAT := --with-float=soft
+else
+GCC_WITH_FLOAT := --with-float=hard
+endif
+
+GCC_LANGUAGES =c
 ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_CPP),y)
 GCC_LANGUAGES +=,c++
 endif
-
 ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),y)
 GCC_LANGUAGES +=,java
 GCC3_CONFIGURE_EXTRA_OPTIONS += --enable-java-home
 endif
-
 ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC),y)
 GCC_LANGUAGES +=,objc
 endif
-
 ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP),y)
 GCC_LANGUAGES +=,obj-c++
 endif
-
 ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_FORTRAN),y)
 GCC_LANGUAGES +=,fortran
 endif
-
 ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_ADA),y)
 GCC_LANGUAGES +=,ada
 endif
@@ -66,13 +74,6 @@ gcc1_install: $(GCC1_BUILD_DIR)/.built
 gcc2_install: $(GCC2_BUILD_DIR)/.built
 
 gcc3_install: $(GCC3_BUILD_DIR)/.installed
-
-#Multilib or not?
-ifeq ($(CONFIG_EMBTK_TOOLCHAIN_MULTILIB),y)
-GCC_MULTILIB :=
-else
-GCC_MULTILIB := --disable-multilib
-endif
 
 #GCC first stage
 $(GCC1_BUILD_DIR)/.built: download_gcc $(GCC1_BUILD_DIR)/.decompressed \
