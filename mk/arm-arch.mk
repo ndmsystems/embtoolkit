@@ -37,11 +37,6 @@ endif
 
 #GCC configure options
 GCC_WITH_CPU := --with-cpu=$(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
-ifeq ($(CONFIG_EMBTK_TOOLCHAIN_MULTILIB),)
-GCC_MULTILIB := --disable-multilib
-else
-GCC_MULTILIB :=
-endif
 
 #GCC extra configure options for arm
 ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),y)
