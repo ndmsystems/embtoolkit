@@ -68,6 +68,7 @@ endmenu
 
 menu "Debugging system"
 source "kconfig/gdb.kconfig"
+source "kconfig/strace.kconfig"
 endmenu
 
 config EMBTK_HAVE_ROOTFS

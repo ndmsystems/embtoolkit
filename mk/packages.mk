@@ -55,6 +55,12 @@ ROOTFS_COMPONENTS += mtd-utils_target_install
 ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
 endif
 
+#strace
+ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_STRACE),y)
+include $(EMBTK_ROOT)/mk/strace.mk
+ROOTFS_COMPONENTS += strace_install
+endif
+
 ########################## Packages for HOST MACHINE ###########################
 
 #gdb
