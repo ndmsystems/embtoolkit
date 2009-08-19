@@ -36,9 +36,10 @@ $(SQUASHFS_HOST_BUILD_DIR)/.installed: download_squashfs \
 	$(SQUASHFS_HOST_BUILD_DIR)/.decompressed
 	@CC=$(HOSTCC_CACHED) \
 	$(MAKE) -C $(TOOLS_BUILD)/squashfs$(SQUASHFS_VERSION)/squashfs-tools
-	@cp $(TOOLS_BUILD)/squashfs$(SQUASHFS_VERSION)/squashfs-tools/\
+	test -z $(HOSTTOOLS)/usr/bin || mkdir -p $(HOSTTOOLS)/usr/bin
+	@install $(TOOLS_BUILD)/squashfs$(SQUASHFS_VERSION)/squashfs-tools/\
 	mksquashfs $(HOSTTOOLS)/usr/bin/
-	@cp $(TOOLS_BUILD)/squashfs$(SQUASHFS_VERSION)/squashfs-tools/\
+	@install $(TOOLS_BUILD)/squashfs$(SQUASHFS_VERSION)/squashfs-tools/\
 	unsquashfs $(HOSTTOOLS)/usr/bin/
 	@touch $@
 
