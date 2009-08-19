@@ -31,6 +31,13 @@ EGLIBC_PACKAGE := eglibc-$(EGLIBC_VERSION).tar.bz2
 EGLIBC_HEADERS_BUILD_DIR := $(TOOLS_BUILD)/eglibc-headers
 EGLIBC_BUILD_DIR := $(TOOLS_BUILD)/eglibc
 
+#Hard or soft floating point in eglibc
+ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
+EGLIBC_FLOAT_TYPE := --with-fp=no
+else
+EGLIBC_FLOAT_TYPE := --with-fp=yes
+endif
+
 #EGLIBC options
 include $(EMBTK_ROOT)/mk/eglibc-options-parse.mk
 

@@ -145,19 +145,5 @@ EMBTK_TARGET_ABI := -mabi=64
 export GCC_WITH_ABI EMBTK_TARGET_ABI
 endif
 
-#Hard or soft floating point
-ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
-GCC_WITH_FLOAT := --with-float=soft
-else
-GCC_WITH_FLOAT := --with-float=hard
-endif
-
-#Hard or soft floating point
-ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
-EGLIBC_FLOAT_TYPE := --with-fp=no
-else
-EGLIBC_FLOAT_TYPE := --with-fp=yes
-endif
-
 endif
 
