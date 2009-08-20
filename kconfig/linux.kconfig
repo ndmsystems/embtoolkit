@@ -24,7 +24,7 @@
 
 choice
 	prompt "Linux kernel headers you wish to use"
-	default EMBTK_LINUX_VERSION_2_6_29_X
+	default EMBTK_LINUX_VERSION_2_6_30_X
 	help
 		Here you can choose which Linux kernel headers you
 		you want to use.

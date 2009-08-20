@@ -55,7 +55,7 @@ config EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE
 	help
 	 Erase block size to use in KB
 	int "Erase block size to use in KB"
-	default 512
+	default 128
 
 #SQUASHFS root filesystem
 config EMBTK_ROOTFS_HAVE_SQUASHFS
