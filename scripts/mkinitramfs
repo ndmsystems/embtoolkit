@@ -1,0 +1,58 @@
+#!/bin/sh
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# For Copyrright from linux kernel's build/configure system, see their source
+# code.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         mkinitramfs
+# \brief	mkinitramfs of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         August 2009
+################################################################################
+
+usage()
+{
+	echo "usage: mkinitramfs directory compression_mode imagename"
+	echo "where:"
+	echo "directory: directory containing files to include in the archive."
+	echo "compression_mode: gzip or bzip2."
+	echo "imagename: output file name prefix"
+	echo ""
+}
+
+if [ $# -ne 3 ]
+then
+	echo "3 inputs arguments are required."
+	usage
+	exit 1
+fi
+
+if [ "$2" = "gzip" ]
+then
+	echo "creating $3.cpio.gz from $1"
+	(cd "$1"; find . | cpio -o -H newc | gzip) > "$3.cpio.gz"
+elif [ "$2" = "bzip2" ]
+then
+	echo "creating $3.cpio.bz2 from $1"
+	(cd "$1"; find . | cpio -o -H newc | bzip2) > "$3.cpio.bz2"	
+else
+	echo "Error while using mkinitramfs!!!"
+	usage
+	exit 1
+fi
+
