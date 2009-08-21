@@ -70,7 +70,10 @@ endif
 
 ########################### Targets for HOST MACHINE ###########################
 host_packages_build:
+ifeq ($(HOSTTOOLS_COMPONENTS),)
+else
 	$(call EMBTK_GENERIC_MESSAGE,"Building extra packages intended to run \
 	on your host machine ...")
 	@$(MAKE) $(HOSTTOOLS_COMPONENTS)
+endif
 
