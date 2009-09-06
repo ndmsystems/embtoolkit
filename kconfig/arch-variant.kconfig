@@ -17,8 +17,8 @@
 ################################################################################
 #
 # \file         arch-variant.kconfig
-# \brief	arch-variant.kconfig of EmbToolkit, here we give users the ability to
-# \brief	choose which variant of CPU to use.
+# \brief	arch-variant.kconfig of EmbToolkit, here we give users the
+# \brief	ability to choose which variant of CPU to use.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
 ################################################################################
@@ -350,14 +350,6 @@ config EMBTK_ARM_MCU_STRING
 	default "iwmmxt2"	if EMBTK_ARCH_ARM_FAMILY_IWMMXT_IWMMXT2
 
 ################################## End ARM ARCH ################################
-
-config EMBTK_TOOLCHAIN_MULTILIB
-	default n
-	bool "Build multilib toolchain (not supported yet)"
-	help
-	 You can say yes here, to specify that multiple target libraries to
-	 support different target variants, calling conventions, etc. should be
-	 built. It is safe to say no here.
 
 choice
 	prompt "Floating point type"

@@ -27,11 +27,7 @@ BINUTILS_SITE := http://ftp.gnu.org/gnu/binutils
 BINUTILS_PACKAGE := binutils-$(BINUTILS_VERSION).tar.bz2
 BINUTILS_BUILD_DIR := $(TOOLS_BUILD)/binutils
 
-ifeq ($(CONFIG_EMBTK_TOOLCHAIN_MULTILIB),)
 BINUTILS_MULTILIB := --disable-multilib
-else
-BINUTILS_MULTILIB := --enable-multilib
-endif
 
 binutils_install: $(BINUTILS_BUILD_DIR)/.built
 
