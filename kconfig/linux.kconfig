@@ -32,7 +32,7 @@ choice
 	config EMBTK_LINUX_VERSION_2_6_30_X
 		bool "linux-2.6.30.x"
 		help
-		 Will download linux-2.6.30.4 as it was the latest version of
+		 Will download linux-2.6.30.5 as it was the latest version of
 		 2.6.30.x series at this version of Embtk.
 	config EMBTK_LINUX_VERSION_2_6_29_X
 		bool "linux-2.6.29.x"
@@ -64,7 +64,7 @@ config EMBTK_LINUX_HAVE_MIRROR_SITE
 
 config EMBTK_LINUX_VERSION_STRING
 	string
-	default "2.6.30.4"		if EMBTK_LINUX_VERSION_2_6_30_X
+	default "2.6.30.5"		if EMBTK_LINUX_VERSION_2_6_30_X
 	default "2.6.29.6"		if EMBTK_LINUX_VERSION_2_6_29_X
 	default "2.6.28.10"		if EMBTK_LINUX_VERSION_2_6_28_X
 	default "2.6.27.20"		if EMBTK_LINUX_VERSION_2_6_27_X
