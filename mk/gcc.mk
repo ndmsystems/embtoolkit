@@ -96,8 +96,8 @@ $(GCC1_BUILD_DIR)/.configured:
 	cd $(GCC1_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
 	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) \
-	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ARCH) $(GCC_WITH_CPU) \
-	$(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_ABI) \
+	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH) \
+	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--without-headers --with-newlib --disable-shared --disable-threads \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
@@ -117,8 +117,8 @@ $(GCC2_BUILD_DIR)/.configured:
 	cd $(GCC2_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
 	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) \
-	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ARCH) $(GCC_WITH_CPU) \
-	$(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_ABI) \
+	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH) \
+	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
 	--enable-languages=c \
@@ -142,8 +142,8 @@ $(GCC3_BUILD_DIR)/.configured:
 	cd $(GCC3_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
 	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) \
-	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ARCH) $(GCC_WITH_CPU) \
-	$(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_ABI) \
+	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH) \
+	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) --enable-__cxa_atexit \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
 	--enable-threads --enable-shared \
