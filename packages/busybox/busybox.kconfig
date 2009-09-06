@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,19 +14,21 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         busybox.kconfig
 # \brief	busybox.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 choice
 	prompt "Busybox you wish"
 	default EMBTK_BB_VERSION_1_14_3
 	help
 		Here you can choose which version of busybox
 		you want to use
+	config  EMBTK_BB_VERSION_1_15_0
+		bool "busybox-1.15.0"
 	config  EMBTK_BB_VERSION_1_14_3
 		bool "busybox-1.14.3"
 	config  EMBTK_BB_VERSION_1_14_2
@@ -39,6 +41,7 @@ endchoice
 
 config EMBTK_BB_VERSION_STRING
 	string
+	default "1.15.0"	if EMBTK_BB_VERSION_1_15_0
 	default "1.14.3"	if EMBTK_BB_VERSION_1_14_3
 	default "1.14.2"	if EMBTK_BB_VERSION_1_14_2
 	default "1.14.1"	if EMBTK_BB_VERSION_1_14_1
@@ -46,7 +49,9 @@ config EMBTK_BB_VERSION_STRING
 
 config EMBTK_BB_DOT_CONFIG
 	string
+	default "busybox-1.15.config"	if EMBTK_BB_VERSION_1_15_0
 	default "busybox-1.14.config"	if EMBTK_BB_VERSION_1_14_3
 	default "busybox-1.14.config"	if EMBTK_BB_VERSION_1_14_2
 	default "busybox-1.14.config"	if EMBTK_BB_VERSION_1_14_1
 	default "busybox-1.13.config"	if EMBTK_BB_VERSION_1_13_4
+
