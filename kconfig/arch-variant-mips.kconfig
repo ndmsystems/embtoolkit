@@ -1,0 +1,104 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         arch-variant.kconfig
+# \brief	MIPS architecture kconfig options.
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         August 2009
+################################################################################
+
+choice
+	prompt "Architecture variant"
+	depends on EMBTK_ARCH_MIPS
+	default EMBTK_ARCH_MIPS_MIPS32_LITTLE
+	help
+	 Select architecture variant.
+	config EMBTK_ARCH_MIPS_MIPS1_LITTLE
+		bool "MIPS I little endian"
+		select EMBTK_TARGET_ARCH_32BITS
+	config EMBTK_ARCH_MIPS_MIPS1_BIG
+		bool "MIPS I big endian"
+		select EMBTK_TARGET_ARCH_32BITS
+	config EMBTK_ARCH_MIPS_MIPS2_LITTLE
+		bool "MIPS II little endian"
+		select EMBTK_TARGET_ARCH_32BITS
+	config EMBTK_ARCH_MIPS_MIPS2_BIG
+		bool "MIPS II big endian"
+		select EMBTK_TARGET_ARCH_32BITS
+	config EMBTK_ARCH_MIPS_MIPS3_LITTLE
+		bool "MIPS III little endian"
+		select EMBTK_TARGET_ARCH_64BITS
+	config EMBTK_ARCH_MIPS_MIPS3_BIG
+		bool "MIPS III big endian"
+		select EMBTK_TARGET_ARCH_64BITS
+	config EMBTK_ARCH_MIPS_MIPS4_LITTLE
+		bool "MIPS IV little endian"
+		select EMBTK_TARGET_ARCH_64BITS
+	config EMBTK_ARCH_MIPS_MIPS4_BIG
+		bool "MIPS IV big endian"
+		select EMBTK_TARGET_ARCH_64BITS
+	config EMBTK_ARCH_MIPS_MIPS32_LITTLE
+		bool "MIPS32 little endian"
+		select EMBTK_TARGET_ARCH_32BITS
+	config EMBTK_ARCH_MIPS_MIPS32_BIG
+		bool "MIPS32 big endian"
+		select EMBTK_TARGET_ARCH_32BITS
+	config EMBTK_ARCH_MIPS_MIPS32R2_LITTLE
+		bool "MIPS32 release 2 little endian"
+		select EMBTK_TARGET_ARCH_32BITS
+	config EMBTK_ARCH_MIPS_MIPS32R2_BIG
+		bool "MIPS32 release 2 big endian"
+		select EMBTK_TARGET_ARCH_32BITS
+
+	config EMBTK_ARCH_MIPS_MIPS64_LITTLE
+		bool "MIPS64 little endian"
+		select EMBTK_TARGET_ARCH_64BITS
+	config EMBTK_ARCH_MIPS_MIPS64_BIG
+		bool "MIPS64 big endian"
+		select EMBTK_TARGET_ARCH_64BITS
+	config EMBTK_ARCH_MIPS_MIPS64R2_LITTLE
+		bool "MIPS64 release 2 little endian"
+		select EMBTK_TARGET_ARCH_64BITS
+	config EMBTK_ARCH_MIPS_MIPS64R2_BIG
+		bool "MIPS64 release 2 big endian"
+		select EMBTK_TARGET_ARCH_64BITS
+
+endchoice
+
+choice
+	prompt "ABI"
+	depends on EMBTK_ARCH_MIPS
+	default EMBTK_ARCH_MIPS_ABI_O32
+	help
+	 Here you can select which abi you want to use.
+	config EMBTK_ARCH_MIPS_ABI_O32
+		bool "o32" if !EMBTK_TARGET_ARCH_64BITS
+
+	config EMBTK_ARCH_MIPS_ABI_N32
+		bool "n32" if EMBTK_TARGET_ARCH_64BITS
+
+#	config EMBTK_ARCH_MIPS_ABI_EABI
+#		bool "eabi (BROKEN)" if EMBTK_TARGET_ARCH_64BITS
+
+#	config EMBTK_ARCH_MIPS_ABI_O64
+#		bool "o64 (BROKEN)" if EMBTK_TARGET_ARCH_64BITS
+
+	config EMBTK_ARCH_MIPS_ABI_N64
+		bool "n64" if EMBTK_TARGET_ARCH_64BITS
+endchoice
+
