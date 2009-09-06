@@ -96,7 +96,8 @@ endif
 
 
 rootfs_clean: $(ROOTFS_HOSTTOOLS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)
-	@rm -rf rootfs-* initramfs-*
+	@rm -rf $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
+	@rm -rf $(EMBTK_ROOT)/initramfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
 
 else
 rootfs_build:
