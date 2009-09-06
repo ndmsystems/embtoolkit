@@ -24,12 +24,15 @@
 ################################################################################
 
 #ARM
+ifeq ($(CONFIG_EMBTK_ARCH_ARM),y)
 include $(EMBTK_ROOT)/mk/arm-arch.mk
+endif
 
 #M68K
 
 #MIPS
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS),y)
 include $(EMBTK_ROOT)/mk/mips-arch.mk
-
+endif
 
 

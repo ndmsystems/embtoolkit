@@ -22,7 +22,6 @@
 # \date         June 2009
 ################################################################################
 
-ifeq ($(CONFIG_EMBTK_ARCH_ARM),y)
 LINUX_ARCH := arm
 GNU_TARGET_ARCH := arm
 EMBTK_MCU_FLAG := $(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
@@ -48,7 +47,5 @@ ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
 EMBTK_TARGET_FLOAT_CFLAGS := -mfloat-abi=soft
 else
 EMBTK_TARGET_FLOAT_CFLAGS := -mfloat-abi=hard
-endif
-
 endif
 

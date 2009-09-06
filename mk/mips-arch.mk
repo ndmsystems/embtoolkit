@@ -22,7 +22,6 @@
 # \date         May 2009
 ################################################################################
 
-ifeq ($(CONFIG_EMBTK_ARCH_MIPS),y)
 LINUX_ARCH := mips
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1_LITTLE),y)
@@ -143,7 +142,5 @@ else
 GCC_WITH_ABI := --with-abi=64
 EMBTK_TARGET_ABI := -mabi=64
 export GCC_WITH_ABI EMBTK_TARGET_ABI
-endif
-
 endif
 
