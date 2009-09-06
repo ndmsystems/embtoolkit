@@ -26,7 +26,6 @@ STRACE_VERSION:= 4.5.18
 STRACE_SITE:=http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
 STRACE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/strace
 STRACE_PACKAGE := strace-$(STRACE_VERSION).tar.bz2
-STRACE_PATCH := strace.patch
 STRACE_BUILD_DIR := $(PACKAGES_BUILD)/strace
 
 strace_install: $(STRACE_BUILD_DIR)/.installed
@@ -44,7 +43,7 @@ $(STRACE_BUILD_DIR)/.installed: download_starce \
 $(STRACE_BUILD_DIR)/.decompressed:
 	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(STRACE_PACKAGE)
 	@cd $(PACKAGES_BUILD)/strace-$(STRACE_VERSION); \
-	patch -p1 < $(DOWNLOAD_DIR)/$(STRACE_PATCH)
+	patch -p1 < $(DOWNLOAD_DIR)/strace-$(STRACE_VERSION).patch
 	@mkdir -p $(STRACE_BUILD_DIR)
 	@touch $@
 download_starce:
@@ -53,9 +52,9 @@ download_starce:
 	@test -e $(DOWNLOAD_DIR)/$(STRACE_PACKAGE) || \
 	wget $(STRACE_SITE)/$(STRACE_PACKAGE) \
 	-O $(DOWNLOAD_DIR)/$(STRACE_PACKAGE)
-	@test -e $(DOWNLOAD_DIR)/$(STRACE_PATCH) || \
-	wget -O $(DOWNLOAD_DIR)/$(STRACE_PATCH) \
-	$(STRACE_PATCH_SITE)/$(STRACE_PATCH)
+	@test -e $(DOWNLOAD_DIR)/strace-$(STRACE_VERSION).patch || \
+	wget -O $(DOWNLOAD_DIR)/strace-$(STRACE_VERSION).patch \
+	$(STRACE_PATCH_SITE)/strace-$(STRACE_VERSION)-*.patch
 
 $(STRACE_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring \
