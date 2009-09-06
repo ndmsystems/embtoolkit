@@ -48,9 +48,9 @@ HOSTCXXFLAGS = -O2
 export HOSTCC HOSTCXX HOSTCFLAGS HOSTCXXFLAGS
 
 ifeq ($(Q),)
-Q:=
-else
 Q:=@
+else
+Q:=
 endif
 export Q
 
@@ -72,30 +72,30 @@ All: $(EMBTK_BUILD)
 
 xconfig: basic
 ifeq ($(CONFIG_EMBTK_DOTCONFIG),y)
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig
+	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig xconfig
 else
 	@if [ -e $(EMBTK_ROOT)/.config.old ]; then \
 	cp  $(EMBTK_ROOT)/.config.old  $(EMBTK_ROOT)/.config; \
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
+	make -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
 	else \
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
+	make -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
 	fi
 endif
 
 menuconfig: basic
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig menuconfig
+	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig menuconfig
 
 basic:
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/basic
+	$(Q)make -f scripts/Makefile.build obj=scripts/basic
 
 clean: rmallpath
-	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/kconfig
-	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/basic
+	$(Q)make -f scripts/Makefile.clean obj=scripts/kconfig
+	$(Q)make -f scripts/Makefile.clean obj=scripts/basic
 	$(Q)rm -rf .config kbuild.log .fakeroot*
 
 startbuild:
 	$(call EMBTK_GENERIC_MESSAGE,"Starting build of selected features ...")
-	@$(MAKE) buildtoolchain host_packages_build symlink_tools \
+	$(Q)make buildtoolchain host_packages_build symlink_tools \
 	rootfs_build successful_build
 
 include mk/macros.mk
@@ -122,8 +122,8 @@ else ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),)
 	@echo
 	@echo
 else
-	$(MAKE) mkinitialpath
-	$(MAKE) download_busybox $(BB_BUILD_DIR)/.decompressed \
+	$(Q)make mkinitialpath
+	$(Q)make download_busybox $(BB_BUILD_DIR)/.decompressed \
 	$(BB_BUILD_DIR)/.Config.in.renewed
 	KCONFIG_CONFIG=$(BB_BUILD_DIR)/.config \
 	scripts/kconfig/qconf $(BB_BUILD_DIR)/Config.in.new
