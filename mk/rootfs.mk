@@ -67,8 +67,8 @@ ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
 	@mkdir -p $(ROOTFS)/usr/lib64
 	@rm -rf $(ROOTFS)/lib $(ROOTFS)/usr/lib
 	@cp -R $(SYSROOT)/lib64/* $(ROOTFS)/lib64/
-	@cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
-	@cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
+	@-cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
+	@-cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
 	@cp -R $(SYSROOT)/root  $(ROOTFS)/
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
 	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")
@@ -81,8 +81,8 @@ endif
 else
 	@mkdir -p $(ROOTFS)/lib
 	@cp -R $(SYSROOT)/lib/* $(ROOTFS)/lib/
-	@cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
-	@cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
+	@-cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
+	@-cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
 	@cp -R $(SYSROOT)/root  $(ROOTFS)/
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
 	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")
