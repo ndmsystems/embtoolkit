@@ -31,6 +31,7 @@ choice
 	config EMBTK_ARCH_ARM
 		bool "ARM"
 		select EMBTK_TARGET_ARCH_32BITS
+		select EMBTK_32BITS_FS
 	config EMBTK_ARCH_MIPS
 		bool "MIPS"
 	config EMBTK_ARCH_M68k
