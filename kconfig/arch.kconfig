@@ -46,7 +46,32 @@ choice
 endchoice
 
 config EMBTK_TARGET_ARCH_64BITS
+	depends on !EMBTK_TARGET_ARCH_32BITS
 	bool
+	help
+	 Processor is 64bits
+
 config EMBTK_TARGET_ARCH_32BITS
+	depends on !EMBTK_TARGET_ARCH_64BITS
 	bool
+	help
+	 Processor is 32bits
+
+config EMBTK_32BITS_FS
+	depends on !EMBTK_64BITS_FS
+	bool
+	help
+	 we will build 32bits filesystem layout
+
+config EMBTK_64BITS_FS
+	depends on !EMBTK_32BITS_FS
+	bool
+	help
+	 we will build 64bits filesystem layout
+
+config EMBTK_64BITS_FS_COMPAT32
+	depends on !EMBTK_32BITS_FS
+	bool
+	help
+	 we will build 64bits filesystem layout, with 32 compatibility
 
