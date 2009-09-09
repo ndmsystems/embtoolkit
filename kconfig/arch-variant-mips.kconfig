@@ -88,9 +88,11 @@ choice
 	 Here you can select which abi you want to use.
 	config EMBTK_ARCH_MIPS_ABI_O32
 		bool "o32"
+		select EMBTK_32BITS_FS
 
 	config EMBTK_ARCH_MIPS_ABI_N32
 		bool "n32" if !EMBTK_TARGET_ARCH_32BITS
+		select EMBTK_64BITS_FS_COMPAT32
 
 #	config EMBTK_ARCH_MIPS_ABI_EABI
 #		bool "eabi (BROKEN)" if !EMBTK_TARGET_ARCH_32BITS
@@ -100,5 +102,6 @@ choice
 
 	config EMBTK_ARCH_MIPS_ABI_N64
 		bool "n64" if !EMBTK_TARGET_ARCH_32BITS
+		select EMBTK_64BITS_FS
 endchoice
 
