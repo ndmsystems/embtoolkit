@@ -34,9 +34,24 @@ export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD ROOTFS HOSTTOOLS
 
 mkinitialpath:
 	@mkdir -p $(SYSROOT)
+	@mkdir -p $(SYSROOT)/lib
 	@mkdir -p $(SYSROOT)/usr
 	@mkdir -p $(SYSROOT)/root
 	@mkdir -p $(SYSROOT)/usr/lib
+ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
+	@cd $(SYSROOT); \
+	ln -s lib lib64
+	@cd $(SYSROOT)/usr; \
+	ln -s lib lib64
+endif
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	@cd $(SYSROOT); \
+	ln -s lib lib64; \
+	mkdir -p lib32
+	@cd $(SYSROOT)/usr; \
+	ln -s lib lib64; \
+	mkdir -p lib32
+endif
 	@mkdir -p $(TOOLS)
 	@mkdir -p $(TOOLS_BUILD)
 	@mkdir -p $(HOSTTOOLS)

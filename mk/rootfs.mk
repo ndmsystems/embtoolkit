@@ -56,44 +56,45 @@ endif
 
 rootfs_build:
 	$(call EMBTK_GENERIC_MESSAGE,"Building selected root filesystems...")
-	@$(MAKE) rootfs_clean mkinitialpath $(ROOTFS_HOSTTOOLS) \
+	@$(MAKE) rootfs_clean mkinitialrootfs $(ROOTFS_HOSTTOOLS) \
 	$(ROOTFS_COMPONENTS) rootfs_fill build_tarbz2_rootfs $(FILESYSTEMS)
 	$(call EMBTK_GENERIC_MESSAGE,"Build of selected root filesystems \
 	ended successfully!")
 
 rootfs_fill:
-ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
-	@mkdir -p $(ROOTFS)/lib64
-	@mkdir -p $(ROOTFS)/usr/lib64
-	@rm -rf $(ROOTFS)/lib $(ROOTFS)/usr/lib
-	@cp -R $(SYSROOT)/lib64/* $(ROOTFS)/lib64/
-	@-cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
-	@-cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
-	@cp -R $(SYSROOT)/root  $(ROOTFS)/
-ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
-	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")
-	@-$(TARGETSTRIP)  $(ROOTFS)/lib64/*.so
-	@-$(TARGETSTRIP)  $(ROOTFS)/bin/*
-	@-$(TARGETSTRIP)  $(ROOTFS)/usr/bin/*
-	@$(TARGETSTRIP)  $(ROOTFS)/usr/sbin/*
-endif
-
-else
 	@mkdir -p $(ROOTFS)/lib
-	@cp -R $(SYSROOT)/lib/* $(ROOTFS)/lib/
+ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
+	@cd $(ROOTFS); \
+	ln -s lib lib64
+endif
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	@cd $(ROOTFS); \
+	ln -s lib lib64; \
+	mkdir -p lib32
+endif
+	@-cp -R $(SYSROOT)/lib/* $(ROOTFS)/lib/
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	@cp -R $(SYSROOT)/lib32/* $(ROOTFS)/lib32/
+endif
 	@-cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
 	@-cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
 	@cp -R $(SYSROOT)/root  $(ROOTFS)/
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
 	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")
 	@-$(TARGETSTRIP)  $(ROOTFS)/lib/*.so
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	@-$(TARGETSTRIP)  $(ROOTFS)/lib32/*.so
+endif
 	@-$(TARGETSTRIP)  $(ROOTFS)/bin/*
+	@-$(TARGETSTRIP)  $(ROOTFS)/sbin/*
 	@-$(TARGETSTRIP)  $(ROOTFS)/usr/bin/*
 	@-$(TARGETSTRIP)  $(ROOTFS)/usr/sbin/*
 endif
 
-endif
-
+mkinitialrootfs:
+	@mkdir -p $(ROOTFS)
+	@cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(ROOTFS)/
+	@mkdir -p $(PACKAGES_BUILD)
 
 rootfs_clean: $(ROOTFS_HOSTTOOLS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)
 	@rm -rf $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*

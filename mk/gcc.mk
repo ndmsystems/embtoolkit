@@ -123,12 +123,14 @@ $(GCC2_BUILD_DIR)/.configured:
 $(GCC3_BUILD_DIR)/.installed: $(GCC3_BUILD_DIR)/.configured
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) $(J)
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) install
-ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
-	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib64/*.so* $(SYSROOT)/lib64
-else
-	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/*.so* $(SYSROOT)/lib
-	@touch $@
+ifeq ($(CONFIG_EMBTK_32BITS_FS),y)
+	-cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/*.so* $(SYSROOT)/lib/
+else ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
+	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib64/*.so* $(SYSROOT)/lib/
+else ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib32/*.so* $(SYSROOT)/lib32/
 endif
+	@touch $@
 
 $(GCC3_BUILD_DIR)/.configured:
 	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
