@@ -23,33 +23,53 @@
 ################################################################################
 
 choice
-	prompt "Linux kernel headers you wish to use"
+	prompt "Linux series to use"
 	default EMBTK_LINUX_VERSION_2_6_30_X
 	help
 		Here you can choose which Linux kernel headers you
 		you want to use.
 
+	config EMBTK_LINUX_VERSION_2_6_31_X
+		bool "linux-2.6.31.x"
+		help
+		 Use a linux-2.6.31.x version.
 	config EMBTK_LINUX_VERSION_2_6_30_X
 		bool "linux-2.6.30.x"
 		help
-		 Will download linux-2.6.30.6 as it was the latest version of
-		 2.6.30.x series at this version of Embtk.
+		 Use a linux-2.6.30.x version.
 	config EMBTK_LINUX_VERSION_2_6_29_X
 		bool "linux-2.6.29.x"
 		help
-		 Will download linux-2.6.29.6 as it was the latest version of
-		 2.6.29.x series at this version of Embtk.
+		 Use a linux-2.6.29.x version.
 	config EMBTK_LINUX_VERSION_2_6_28_X
 		bool "linux-2.6.28.x"
 		help
-		 Will download linux-2.6.28.10 as it was the latest version of
-		 2.6.28.x series at this version of Embtk.
+		 Use a linux-2.6.28.x version.
 	config EMBTK_LINUX_VERSION_2_6_27_X
 		bool "linux-2.6.27.x"
 		help
-		 Will download linux-2.6.27.19 as it was the latest version of
-		 2.6.27.x series at this version of Embtk.
+		 Use a linux-2.6.27.x version.
 endchoice
+
+if EMBTK_LINUX_VERSION_2_6_31_X
+source kconfig/linux-kconfigs/linux-2.6.31.kconfig
+endif
+
+if EMBTK_LINUX_VERSION_2_6_30_X
+source kconfig/linux-kconfigs/linux-2.6.30.kconfig
+endif
+
+if EMBTK_LINUX_VERSION_2_6_29_X
+source kconfig/linux-kconfigs/linux-2.6.29.kconfig
+endif
+
+if EMBTK_LINUX_VERSION_2_6_28_X
+source kconfig/linux-kconfigs/linux-2.6.28.kconfig
+endif
+
+if EMBTK_LINUX_VERSION_2_6_27_X
+source kconfig/linux-kconfigs/linux-2.6.27.kconfig
+endif
 
 config EMBTK_LINUX_HAVE_MIRROR
 	bool "Use a linux mirror"
@@ -61,11 +81,4 @@ config EMBTK_LINUX_HAVE_MIRROR_SITE
 	default "ftp://ftp.free.fr/pub/linux/kernel/v2.6"
 	help
 	 specify an alternate location where to download linux sources
-
-config EMBTK_LINUX_VERSION_STRING
-	string
-	default "2.6.30.6"		if EMBTK_LINUX_VERSION_2_6_30_X
-	default "2.6.29.6"		if EMBTK_LINUX_VERSION_2_6_29_X
-	default "2.6.28.10"		if EMBTK_LINUX_VERSION_2_6_28_X
-	default "2.6.27.20"		if EMBTK_LINUX_VERSION_2_6_27_X
 

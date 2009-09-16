@@ -1,0 +1,98 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         linux-2.6.27.kconfig
+# \brief	linux v2.6.27.x series
+# \author       GAYE Abdoulaye Walsimou <walsimou@walsimou.com>
+# \date         Sept 2009
+################################################################################
+
+choice
+	prompt "Linux v2.6.27.x series exact version to use."
+	default EMBTK_LINUX_VERSION_2_6_27_20
+	help
+	 Linux v2.6.27.x series exact version to use.
+
+	config EMBTK_LINUX_VERSION_2_6_27_20
+		bool "linux-2.6.27.20"
+	config EMBTK_LINUX_VERSION_2_6_27_19
+		bool "linux-2.6.27.19"
+	config EMBTK_LINUX_VERSION_2_6_27_18
+		bool "linux-2.6.27.18"
+	config EMBTK_LINUX_VERSION_2_6_27_17
+		bool "linux-2.6.27.17"
+	config EMBTK_LINUX_VERSION_2_6_27_16
+		bool "linux-2.6.27.16"
+	config EMBTK_LINUX_VERSION_2_6_27_15
+		bool "linux-2.6.27.15"
+	config EMBTK_LINUX_VERSION_2_6_27_14
+		bool "linux-2.6.27.14"
+	config EMBTK_LINUX_VERSION_2_6_27_13
+		bool "linux-2.6.27.13"
+	config EMBTK_LINUX_VERSION_2_6_27_12
+		bool "linux-2.6.27.12"
+	config EMBTK_LINUX_VERSION_2_6_27_11
+		bool "linux-2.6.27.11"
+	config EMBTK_LINUX_VERSION_2_6_27_10
+		bool "linux-2.6.27.10"
+	config EMBTK_LINUX_VERSION_2_6_27_9
+		bool "linux-2.6.27.9"
+	config EMBTK_LINUX_VERSION_2_6_27_8
+		bool "linux-2.6.27.8"
+	config EMBTK_LINUX_VERSION_2_6_27_7
+		bool "linux-2.6.27.7"
+	config EMBTK_LINUX_VERSION_2_6_27_6
+		bool "linux-2.6.27.6"
+	config EMBTK_LINUX_VERSION_2_6_27_5
+		bool "linux-2.6.27.5"
+	config EMBTK_LINUX_VERSION_2_6_27_4
+		bool "linux-2.6.27.4"
+	config EMBTK_LINUX_VERSION_2_6_27_3
+		bool "linux-2.6.27.3"
+	config EMBTK_LINUX_VERSION_2_6_27_2
+		bool "linux-2.6.27.2"
+	config EMBTK_LINUX_VERSION_2_6_27_1
+		bool "linux-2.6.27.1"
+	config EMBTK_LINUX_VERSION_2_6_27
+		bool "linux-2.6.27"
+endchoice
+
+config EMBTK_LINUX_VERSION_STRING
+	string
+	default "2.6.27.20"		if EMBTK_LINUX_VERSION_2_6_27_20
+	default "2.6.27.19"		if EMBTK_LINUX_VERSION_2_6_27_19
+	default "2.6.27.18"		if EMBTK_LINUX_VERSION_2_6_27_18
+	default "2.6.27.17"		if EMBTK_LINUX_VERSION_2_6_27_17
+	default "2.6.27.16"		if EMBTK_LINUX_VERSION_2_6_27_16
+	default "2.6.27.15"		if EMBTK_LINUX_VERSION_2_6_27_15
+	default "2.6.27.14"		if EMBTK_LINUX_VERSION_2_6_27_14
+	default "2.6.27.13"		if EMBTK_LINUX_VERSION_2_6_27_13
+	default "2.6.27.12"		if EMBTK_LINUX_VERSION_2_6_27_12
+	default "2.6.27.11"		if EMBTK_LINUX_VERSION_2_6_27_11
+	default "2.6.27.10"		if EMBTK_LINUX_VERSION_2_6_27_10
+	default "2.6.27.9"		if EMBTK_LINUX_VERSION_2_6_27_9
+	default "2.6.27.8"		if EMBTK_LINUX_VERSION_2_6_27_8
+	default "2.6.27.7"		if EMBTK_LINUX_VERSION_2_6_27_7
+	default "2.6.27.6"		if EMBTK_LINUX_VERSION_2_6_27_6
+	default "2.6.27.5"		if EMBTK_LINUX_VERSION_2_6_27_5
+	default "2.6.27.4"		if EMBTK_LINUX_VERSION_2_6_27_4
+	default "2.6.27.3"		if EMBTK_LINUX_VERSION_2_6_27_3
+	default "2.6.27.2"		if EMBTK_LINUX_VERSION_2_6_27_2
+	default "2.6.27.1"		if EMBTK_LINUX_VERSION_2_6_27_1
+	default "2.6.27"		if EMBTK_LINUX_VERSION_2_6_27
+
