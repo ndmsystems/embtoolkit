@@ -22,8 +22,30 @@
 # \date         July 2009
 ################################################################################
 
-menu "EGLIBC C library"
+menu "C library to use"
+choice
+	prompt "Choose which C library to use"
+	help
+	 Choose here which C library your toolchain will use.
+	config EMBTK_CLIB_EGLIBC
+		bool "eglibc"
+		help
+		 EGLIBC is suitable for source and binary compatibility with
+		 glibc, but care is also taken to satisfy embedded systems
+		 constraints.
+		 see http://www.eglibc.org for more information about eglibc.
+	config EMBTK_CLIB_UCLIBC
+		bool "uClibc"
+		help
+		 uClibc is suitable for high memory constraints and MMU-less
+		 embedded systems. But compatibility with glibc is not guaranted
+		 and even between different uClibc versions.
+		 see http://www.uclibc.org for more information about uclibc.
+endchoice
+
+if EMBTK_CLIB_EGLIBC
 source "kconfig/eglibc.kconfig"
+endif
 endmenu
 
 menu "GCC compiler"

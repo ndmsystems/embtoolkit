@@ -26,12 +26,26 @@ LINUX_ARCH := arm
 GNU_TARGET_ARCH := arm
 EMBTK_MCU_FLAG := $(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
 
+ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
+#EGLIBC C library
 ifeq ($(CONFIG_EMBTK_ARCH_ARM_BIG_ENDIAN),y)
 GNU_TARGET := armeb-linux
 STRICT_GNU_TARGET := armeb-unknown-linux-gnueabi
 else
 GNU_TARGET := armel-linux
 STRICT_GNU_TARGET := armel-unknown-linux-gnueabi
+endif
+
+else
+#uClibc C library
+ifeq ($(CONFIG_EMBTK_ARCH_ARM_BIG_ENDIAN),y)
+GNU_TARGET := armeb-linux
+STRICT_GNU_TARGET := armeb-unknown-linux-uclibceabi
+else
+GNU_TARGET := armel-linux
+STRICT_GNU_TARGET := armel-unknown-linux-uclibceabi
+endif
+
 endif
 
 #GCC configure options
