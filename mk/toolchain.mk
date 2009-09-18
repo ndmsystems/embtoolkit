@@ -54,8 +54,13 @@ include $(EMBTK_ROOT)/mk/gcc.mk
 #linux kernel headers
 include $(EMBTK_ROOT)/mk/kernel-headers.mk
 
+ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 #EGLIBC
 include $(EMBTK_ROOT)/mk/eglibc.mk
+else
+#uClibc
+include $(EMBTK_ROOT)/mk/uclibc.mk
+endif
 
 #targets
 buildtoolchain: mkinitialpath kernel-headers_install ccachehost_install \
