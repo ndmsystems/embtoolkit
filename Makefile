@@ -94,9 +94,21 @@ clean: rmallpath
 	$(Q)rm -rf .config kbuild.log .fakeroot*
 
 startbuild:
-	$(call EMBTK_GENERIC_MESSAGE,"Starting build of selected features ...")
-	$(Q)make buildtoolchain host_packages_build symlink_tools \
-	rootfs_build successful_build
+	@if [ -e $(GCC3_BUILD_DIR)/.installed ]; then \
+	echo "#################### Embtoolkit Warning ######################"; \
+	echo "# Warning trying to restart all the build while it is already"; \
+	echo "# done. Please use the correct make target !!!"; \
+	echo "##############################################################"; \
+	echo; \
+	make -s help; \
+	else \
+	echo "################## Embtoolkit build start ####################"; \
+	echo "# Starting build of selected features.."; \
+	echo "##############################################################"; \
+	echo; \
+	make buildtoolchain host_packages_build symlink_tools; \
+	make rootfs_build successful_build; \
+	fi
 
 include mk/macros.mk
 include mk/target-mcu.mk
