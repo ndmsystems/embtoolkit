@@ -29,8 +29,9 @@ TOOLS_BUILD:=$(EMBTK_ROOT)/build/tools_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 PACKAGES_BUILD:=$(EMBTK_ROOT)/build/packages_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 ROOTFS:=$(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 HOSTTOOLS :=$(EMBTK_ROOT)/host-tools-$(EMBTK_MCU_FLAG)
+DOWNLOAD_DIR := $(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR)))
 
-export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD ROOTFS HOSTTOOLS
+export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD ROOTFS HOSTTOOLS DOWNLOAD_DIR
 
 mkinitialpath:
 	@mkdir -p $(SYSROOT)
@@ -65,6 +66,6 @@ ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 endif
 
 rmallpath:
-	@rm -Rf build rootfs-* sysroot-* tools-* $(DOWNLOAD_DIR)/eglibc* \
-	initramfs-*
+	@rm -Rf build rootfs-* sysroot-* tools-* initramfs-*
+	@rm -Rf $(EMBTK_ROOT)/dl/*
 

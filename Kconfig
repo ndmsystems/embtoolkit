@@ -88,5 +88,23 @@ menu "Embtoolkit build options"
 config EMBTK_NUMBER_BUILD_JOBS
 	int "Number of parallel build jobs"
 	default 1
+
+config EMBTK_DOWNLOAD_DIR
+	string "Download directory"
+	default "$(EMBTK_ROOT)/dl"
+	help
+	 Directory where downloaded packages are stored.
+
+	 You must specify here an absolute directory location, if you choose to
+	 use an alternate location.
+
+	 Note:
+	 If you want to preserve downloaded packages from being removed when
+	 you do make distclean, you must specify an alternate location.
+	 If you leave this option in the default location under Embtoolkit,
+	 $(EMBTK_ROOT)/dl, then make distclean will remove downloaded packages.
+	 But keep in mind that only a make distclean command will remove
+	 downloaded packages in the default location under EmbToolkit,
+	 not make clean.
 endmenu
 
