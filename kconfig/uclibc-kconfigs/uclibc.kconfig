@@ -290,9 +290,10 @@ config KEMBTK_UCLIBC_UCLIBC_HAS_FLOATS
 	  Most people will answer Y.
 
 config KEMBTK_UCLIBC_UCLIBC_HAS_FPU
-	bool "Target CPU has a floating point unit (FPU)"
+	bool
 	depends on KEMBTK_UCLIBC_UCLIBC_HAS_FLOATS
-	default y
+	default y if EMBTK_HARDFLOAT
+	default n if EMBTK_SOFTFLOAT
 	help
 	  If your target CPU does not have a Floating Point Unit (FPU) or a
 	  kernel FPU emulator, but you still wish to support floating point
