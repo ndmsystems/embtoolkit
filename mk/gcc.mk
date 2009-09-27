@@ -130,6 +130,12 @@ else ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
 else ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib32/*.so* $(SYSROOT)/lib32/
 endif
+ifeq ($(CONFIG_EMBTK_TARGET_ARCH_64BITS),y)
+ifeq ($(CONFIG_EMBTK_CLIB_UCLIBC),y)
+	$(Q)cd $(SYSROOT)/lib/; \
+	ln -s ld-uClibc.so.0 ld64-uClibc.so.0
+endif
+endif
 	@touch $@
 
 $(GCC3_BUILD_DIR)/.configured:
