@@ -43,9 +43,14 @@ choice
 		 see http://www.uclibc.org for more information about uclibc.
 endchoice
 
+
 if EMBTK_CLIB_EGLIBC
 source "kconfig/eglibc.kconfig"
 endif
+if EMBTK_CLIB_UCLIBC
+source "kconfig/uclibc-kconfigs/uclibc.kconfig"
+endif
+
 endmenu
 
 menu "GCC compiler"
