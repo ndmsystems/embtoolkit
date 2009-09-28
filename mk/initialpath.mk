@@ -66,6 +66,7 @@ ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 endif
 
 rmallpath:
-	@rm -Rf build rootfs-* sysroot-* tools-* initramfs-*
-	@rm -Rf $(EMBTK_ROOT)/dl/*
+	@rm -Rf $(PACKAGES_BUILD) $(ROOTFS) $(TOOLS) $(TOOLS_BUILD) $(SYSROOT)
+	@rm -Rf rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
+	@rm -Rf initramfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
 
