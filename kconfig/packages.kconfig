@@ -24,15 +24,18 @@
 # \date         May 2009
 ################################################################################
 
-menu "Packages to include in your root filesystem"
-
 #Busybox
 config EMBTK_ROOTFS_HAVE_BB
 	bool "Have Busybox in your root filesystem"
 if EMBTK_ROOTFS_HAVE_BB
+menu "Busybox configuration"
 source packages/busybox/busybox.kconfig
+endmenu
 endif
 
+menu "Packages to include in your root filesystem"
+
+menu "Flash manipulation tools"
 #mtd-utils on target
 config EMBTK_ROOTFS_HAVE_MTDUTILS
 	bool "Have mtd-utils in your target root filesystem"
@@ -52,5 +55,17 @@ config EMBTK_ROOTFS_HAVE_MTDUTILS
 	   NAND Flash device
 	 These utilities are often used to write file system images to the Flash
 	 device on an embedded system.
+endmenu
 
+menu "Networking packages"
+endmenu
+
+menu "Graphics packages"
+endmenu
+
+menu "System packages"
+endmenu
+
+menu "Miscellaneous packages"
+endmenu
 endmenu

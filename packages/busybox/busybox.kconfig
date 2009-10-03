@@ -22,7 +22,7 @@
 # \date         May 2009
 ################################################################################
 choice
-	prompt "Busybox you wish"
+	prompt "Busybox version you wish"
 	default EMBTK_BB_VERSION_1_14_3
 	help
 		Here you can choose which version of busybox
