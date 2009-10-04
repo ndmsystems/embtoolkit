@@ -66,11 +66,18 @@ rootfs_fill:
 ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
 	@cd $(ROOTFS); \
 	ln -s lib lib64
+	@mkdir -p $(ROOTFS)/usr
+	@cd $(ROOTFS)/usr; \
+	ln -s lib lib64	
 endif
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	@cd $(ROOTFS); \
 	ln -s lib lib64; \
 	mkdir -p lib32
+	mkdir -p $(ROOTFS)/usr
+	@cd $(ROOTFS)/usr; \
+	ln -s lib lib64
+	mkdir -p $(ROOTFS)/usr/lib32
 endif
 	@-cp -R $(SYSROOT)/lib/* $(ROOTFS)/lib/
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
