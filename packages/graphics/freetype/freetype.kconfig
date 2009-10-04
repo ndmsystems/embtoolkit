@@ -1,0 +1,53 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         freetype.kconfig
+# \brief	freetype.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         October 2009
+################################################################################
+
+config EMBTK_HAVE_FREETYPE
+	bool "Have FreeType"
+	help
+	 FreeType 2 is a software font engine that is designed to be small,
+	 efficient, highly customizable, and portable while capable of producing
+	 high-quality output (glyph images). It can be used in graphics
+	 libraries, display servers, font conversion tools, text image
+	 generation tools, and many other products as well.
+	 Note that FreeType 2 is a font service and doesn't provide APIs to
+	 perform higher-level features like text layout or graphics processing
+	 (e.g., colored text rendering, ‘hollowing’, etc.). However, it greatly
+	 simplifies these tasks by providing a simple, easy to use, and uniform
+	 interface to access the content of font files.
+
+choice
+	prompt "FreeType version you wish"
+	default EMBTK_FREETYPE_VERSION_2_3_9
+	depends on EMBTK_HAVE_FREETYPE
+	help
+	 Here you can choose which version of libpng you want to use.
+
+	config  EMBTK_FREETYPE_VERSION_2_3_9
+		bool "FreeType-2.3.9"
+endchoice
+
+config EMBTK_FREETYPE_VERSION_STRING
+	string
+	default "2.3.9"	if EMBTK_FREETYPE_VERSION_2_3_9
+

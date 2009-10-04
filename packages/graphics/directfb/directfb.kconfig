@@ -1,0 +1,53 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         directfb.kconfig
+# \brief	directfb.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         October 2009
+################################################################################
+
+config EMBTK_HAVE_DIRECTFB
+	bool "Have DirectFB"
+	select EMBTK_HAVE_LIBPNG
+	select EMBTK_HAVE_LIBJPEG
+	select EMBTK_HAVE_FREETYPE
+	help
+	 DirectFB is a graphics library which was designed with embedded
+	 systems in mind. It offers maximum hardware accelerated performance
+	 at a minimum of resource usage and overhead.
+	 Check http://www.directfb.org/ for more and up to date infos.
+
+choice
+	prompt "DirectFB version you wish"
+	default EMBTK_DIRECTFB_VERSION_1_4_2
+	depends on EMBTK_HAVE_DIRECTFB
+	help
+	 Here you can choose which version of DirectFB you want to use.
+
+	config  EMBTK_DIRECTFB_VERSION_1_4_2
+		bool "DirectFB-1.4.2"
+endchoice
+
+config EMBTK_DIRECTFB_VERSION_STRING
+	string
+	default "1.4.2"	if EMBTK_DIRECTFB_VERSION_1_4_2
+config EMBTK_DIRECTFB_BRANCH_STRING
+	string
+	default "DirectFB-1.4"	if EMBTK_DIRECTFB_VERSION_1_4_2
+

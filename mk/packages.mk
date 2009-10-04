@@ -22,8 +22,12 @@
 # \date         May 2009
 ################################################################################
 
-
+################################################################################
 #################### Common include for target and host ########################
+################################################################################
+
+include $(EMBTK_ROOT)/mk/zlib.mk
+include $(EMBTK_ROOT)/mk/lzo.mk
 
 #gdb
 ifeq ($(CONFIG_EMBTK_HAVE_GDB),y)
@@ -31,7 +35,9 @@ include $(EMBTK_ROOT)/mk/termcap.mk
 include $(EMBTK_ROOT)/mk/gdb.mk
 endif
 
+################################################################################
 ############################# Packages for TARGET ##############################
+################################################################################
 
 #Busybox
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),y)
@@ -49,26 +55,65 @@ ifeq ($(CONFIG_EMBTK_HAVE_GDBSERVER_ON_TARGET),y)
 ROOTFS_COMPONENTS += gdbserver_target_install
 endif
 
-#mtd-utils
-ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS),y)
-ROOTFS_COMPONENTS += mtd-utils_target_install
-ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
-endif
-
 #strace
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_STRACE),y)
 include $(EMBTK_ROOT)/mk/strace.mk
 ROOTFS_COMPONENTS += strace_install
 endif
 
+######################## Flash manipulation tools ##############################
+
+#mtd-utils
+ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS),y)
+ROOTFS_COMPONENTS += mtd-utils_target_install
+ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
+endif
+
+######################## Compression packages ##################################
+
+########################### Graphics packages ##################################
+
+#DirectFB
+ifeq ($(CONFIG_EMBTK_HAVE_DIRECTFB),y)
+include $(EMBTK_ROOT)/packages/graphics/directfb/directfb.mk
+ROOTFS_COMPONENTS += directfb_install
+endif
+
+#FreeType
+ifeq ($(CONFIG_EMBTK_HAVE_FREETYPE),y)
+include $(EMBTK_ROOT)/packages/graphics/freetype/freetype.mk
+ROOTFS_COMPONENTS += freetype_install
+endif
+
+#libjpeg
+ifeq ($(CONFIG_EMBTK_HAVE_LIBJPEG),y)
+include $(EMBTK_ROOT)/packages/graphics/libjpeg/libjpeg.mk
+ROOTFS_COMPONENTS += libjpeg_install
+endif
+
+#libpng
+ifeq ($(CONFIG_EMBTK_HAVE_LIBPNG),y)
+include $(EMBTK_ROOT)/packages/graphics/libpng/libpng.mk
+ROOTFS_COMPONENTS += libpng_install
+endif
+########################## Networking packages #################################
+
+############################ System packages ###################################
+
+########################## Miscellaneous packages ##############################
+
+################################################################################
 ########################## Packages for HOST MACHINE ###########################
+################################################################################
 
 #gdb
 ifeq ($(CONFIG_EMBTK_HAVE_GDB_ON_HOST),y)
 HOSTTOOLS_COMPONENTS += gdb_host_install
 endif
 
+################################################################################
 ########################### Targets for HOST MACHINE ###########################
+################################################################################
 host_packages_build:
 ifeq ($(HOSTTOOLS_COMPONENTS),)
 else

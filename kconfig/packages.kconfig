@@ -57,10 +57,17 @@ config EMBTK_ROOTFS_HAVE_MTDUTILS
 	 device on an embedded system.
 endmenu
 
-menu "Networking packages"
+menu "Compression packages"
 endmenu
 
 menu "Graphics packages"
+source packages/graphics/directfb/directfb.kconfig
+source packages/graphics/freetype/freetype.kconfig
+source packages/graphics/libjpeg/libjpeg.kconfig
+source packages/graphics/libpng/libpng.kconfig
+endmenu
+
+menu "Networking packages"
 endmenu
 
 menu "System packages"
@@ -69,3 +76,4 @@ endmenu
 menu "Miscellaneous packages"
 endmenu
 endmenu
+

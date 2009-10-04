@@ -30,7 +30,8 @@ include $(EMBTK_ROOT)/mk/fs.mk
 #host tools in order to build root filesystems: fakeroot and makedevs.
 include $(EMBTK_ROOT)/mk/fakeroot.mk
 include $(EMBTK_ROOT)/mk/makedevs.mk
-ROOTFS_HOSTTOOLS += makedevs_install fakeroot_install
+include $(EMBTK_ROOT)/mk/pkgconfig.mk
+ROOTFS_HOSTTOOLS += makedevs_install fakeroot_install pkgconfig_install
 
 #Does CPIO archive for initramfs selected?
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),y)
@@ -39,9 +40,7 @@ endif
 
 #Does jffs2 filesystem selected?
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
-include $(EMBTK_ROOT)/mk/lzo.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
-include $(EMBTK_ROOT)/mk/zlib.mk
 ROOTFS_HOSTTOOLS += mtd-utils_host_install
 ROOTFS_HOSTTOOLS_CLEAN += mtd-utils_host_clean
 FILESYSTEMS += build_jffs2_rootfs
