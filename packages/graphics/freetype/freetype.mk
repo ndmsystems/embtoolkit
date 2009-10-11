@@ -33,12 +33,11 @@ $(FREETYPE_BUILD_DIR)/.installed: zlib_target_install download_freetype \
 	$(FREETYPE_BUILD_DIR)/.decompressed $(FREETYPE_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	freetype-$(FREETYPE_VERSION) in your root filesystem...")
-	$(Q)cd $(FREETYPE_BUILD_DIR); $(MAKE) $(J) ; $(MAKE) install
-	$(Q)mkdir -p $(SYSROOT)/usr/lib/pkgconfig
-	$(Q)cp $(ROOTFS)/usr/lib/pkgconfig/* $(SYSROOT)/usr/lib/pkgconfig
-	$(Q)-cp $(ROOTFS)/usr/lib32/pkgconfig/* $(SYSROOT)/usr/lib32/pkgconfig
-	$(Q)rm -rf $(ROOTFS)/usr/lib/pkgconfig
-	$(Q)-rm -rf $(ROOTFS)/usr/lib32/pkgconfig
+	$(Q)$(MAKE) -C $(FREETYPE_BUILD_DIR) $(J)
+	$(Q)$(MAKE) -C $(FREETYPE_BUILD_DIR) DESTDIR=$(ROOTFS) install
+	$(Q)$(MAKE) $(FREETYPE_BUILD_DIR)/.libtoolpatched
+	$(Q)$(MAKE) $(FREETYPE_BUILD_DIR)/.pkgconfigpatched
+	$(Q)$(MAKE) $(FREETYPE_BUILD_DIR)/.freetype-configpatched
 	@touch $@
 
 download_freetype:
@@ -55,9 +54,45 @@ $(FREETYPE_BUILD_DIR)/.decompressed:
 
 $(FREETYPE_BUILD_DIR)/.configured:
 	$(Q)cd $(FREETYPE_BUILD_DIR); \
+	PKG_CONFIG=$(PKGCONFIG_BIN) \
+	PKG_CONFIG_PATH=$(ROOTFS)/usr/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$(ROOTFS) \
 	CC=$(TARGETCC_CACHED) CFLAGS=$(TARGET_CFLAGS) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--prefix=$(ROOTFS)/usr --includedir=$(SYSROOT)/usr/include \
+	--prefix=/usr --includedir=$(SYSROOT)/usr/include \
 	--datarootdir=$(SYSROOT)/usr --enable-static=no
 	@touch $@
+
+$(FREETYPE_BUILD_DIR)/.freetype-configpatched:
+	$(Q)cd $(ROOTFS)/usr/bin; \
+	cat freetype-config | \
+	sed -e 's;prefix=/usr;prefix=$(ROOTFS)/usr;' \
+	> freetype-config.new;\
+	cp freetype-config.new freetype-config; rm freetype-config.new
+
+$(FREETYPE_BUILD_DIR)/.libtoolpatched:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)cd $(ROOTFS)/usr/lib32; \
+	cat libfreetype.la | sed -e 's;\/usr\/lib;$(ROOTFS)\/usr\/lib32;' \
+	> libfreetype.la.new;\
+	cp libfreetype.la.new libfreetype.la; rm  libfreetype.la.new
+else
+	$(Q)cd $(ROOTFS)/usr/lib; \
+	cat libfreetype.la | sed -e 's;\/usr\/lib;$(ROOTFS)\/usr\/lib;' \
+	> libfreetype.la.new;\
+	cp libfreetype.la.new libfreetype.la; rm  libfreetype.la.new
+endif
+
+$(FREETYPE_BUILD_DIR)/.pkgconfigpatched:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)cd $(ROOTFS)/usr/lib32/pkgconfig; \
+	cat freetype2.pc | sed -e 's;prefix=\/usr;prefix=$(ROOTFS)\/usr;' \
+	> freetype2.pc.new;\
+	cp freetype2.pc.new freetype2.pc; rm  freetype2.pc.new
+else
+	$(Q)cd $(ROOTFS)/usr/lib/pkgconfig; \
+	cat freetype2.pc | sed -e 's;prefix=\/usr;prefix=$(ROOTFS)\/usr;' \
+	> freetype2.pc.new;\
+	cp freetype2.pc.new freetype2.pc; rm  freetype2.pc.new
+endif
 
