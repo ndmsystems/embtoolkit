@@ -38,6 +38,8 @@ $(LIBPNG_BUILD_DIR)/.installed: zlib_target_install download_libpng \
 	$(Q)$(MAKE) $(LIBPNG_BUILD_DIR)/.libtoolpatched
 	$(Q)$(MAKE) $(LIBPNG_BUILD_DIR)/.pkgconfigpatched
 	$(Q)$(MAKE) $(LIBPNG_BUILD_DIR)/.libpng-configpatched
+	$(Q)-mv $(ROOTFS)/usr/include/* $(SYSROOT)/usr/include/
+	$(Q)rm -rf $(ROOTFS)/usr/include
 	@touch $@
 
 download_libpng:
@@ -59,7 +61,7 @@ $(LIBPNG_BUILD_DIR)/.configured:
 	PKG_CONFIG_SYSROOT_DIR=$(ROOTFS) \
 	CC=$(TARGETCC_CACHED) CFLAGS=$(TARGET_CFLAGS) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --includedir=$(SYSROOT)/usr/include \
+	--prefix=/usr \
 	--datarootdir=$(SYSROOT)/usr \
 	--enable-static=no --with-libpng-compat=no
 	@touch $@
@@ -68,6 +70,7 @@ $(LIBPNG_BUILD_DIR)/.libpng-configpatched:
 	$(Q)cd $(ROOTFS)/usr/bin; \
 	cat libpng-config | \
 	sed -e 's;prefix="/usr";prefix="$(ROOTFS)/usr";' \
+	-e 's;includedir="$${prefix}/include/libpng12";includedir="$(SYSROOT)/usr/include/libpng12";' \
 	> libpng-config.new;\
 	cp libpng-config.new libpng-config; rm libpng-config.new
 
@@ -88,11 +91,13 @@ $(LIBPNG_BUILD_DIR)/.pkgconfigpatched:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	$(Q)cd $(ROOTFS)/usr/lib32/pkgconfig; \
 	cat libpng.pc | sed -e 's;prefix=\/usr;prefix=$(ROOTFS)\/usr;' \
+	-e 's;includedir=$${prefix}/include/libpng12;includedir=$(SYSROOT)/usr/include/libpng12;' \
 	> libpng.pc.new;\
 	cp libpng.pc.new libpng.pc; rm  libpng.pc.new
 else
 	$(Q)cd $(ROOTFS)/usr/lib/pkgconfig; \
 	cat libpng.pc | sed -e 's;prefix=\/usr;prefix=$(ROOTFS)\/usr;' \
+	-e 's;includedir=$${prefix}/include/libpng12;includedir=$(SYSROOT)/usr/include/libpng12;' \
 	> libpng.pc.new;\
 	cp libpng.pc.new libpng.pc; rm  libpng.pc.new
 endif

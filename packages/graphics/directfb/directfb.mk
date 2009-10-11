@@ -33,6 +33,7 @@ FREETYPE_LIBS_FLAGS := "-L$(ROOTFS)/usr/lib32 -lfreetype"
 else
 FREETYPE_LIBS_FLAGS := "-L$(ROOTFS)/usr/lib -lfreetype"
 endif
+FREETYPE_CFLAGS_FLAGS := "-I$(SYSROOT)/usr/include/freetype2"
 
 directfb_install: $(DIRECTFB_BUILD_DIR)/.installed
 
@@ -43,6 +44,8 @@ $(DIRECTFB_BUILD_DIR)/.installed: libpng_install freetype_install \
 	DirectFB-$(DIRECTFB_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) DESTDIR=$(ROOTFS) install
+	$(Q)-mv $(ROOTFS)/usr/include/* $(SYSROOT)/usr/include/
+	$(Q)rm -rf $(ROOTFS)/usr/include
 	@touch $@
 
 download_directfb:
@@ -70,9 +73,10 @@ $(DIRECTFB_BUILD_DIR)/.configured:
 	-L$(SYSROOT)/lib -L$(SYSROOT)/lib32" \
 	CPPFLAGS="-I$(SYSROOT)/usr/include" \
 	FREETYPE_LIBS=$(FREETYPE_LIBS_FLAGS) \
+	FREETYPE_CFLAGS=$(FREETYPE_CFLAGS_FLAGS) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --prefix=/usr \
-	--includedir=$(SYSROOT)/usr/include --datarootdir=$(SYSROOT)/usr \
+	--datarootdir=$(SYSROOT)/usr \
 	--enable-static=no  --program-suffix=""
 	@touch $@
 

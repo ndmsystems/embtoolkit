@@ -38,6 +38,8 @@ $(FREETYPE_BUILD_DIR)/.installed: zlib_target_install download_freetype \
 	$(Q)$(MAKE) $(FREETYPE_BUILD_DIR)/.libtoolpatched
 	$(Q)$(MAKE) $(FREETYPE_BUILD_DIR)/.pkgconfigpatched
 	$(Q)$(MAKE) $(FREETYPE_BUILD_DIR)/.freetype-configpatched
+	$(Q)-mv $(ROOTFS)/usr/include/* $(SYSROOT)/usr/include/
+	$(Q)rm -rf $(ROOTFS)/usr/include
 	@touch $@
 
 download_freetype:
@@ -59,7 +61,7 @@ $(FREETYPE_BUILD_DIR)/.configured:
 	PKG_CONFIG_SYSROOT_DIR=$(ROOTFS) \
 	CC=$(TARGETCC_CACHED) CFLAGS=$(TARGET_CFLAGS) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --includedir=$(SYSROOT)/usr/include \
+	--prefix=/usr \
 	--datarootdir=$(SYSROOT)/usr --enable-static=no
 	@touch $@
 
@@ -67,6 +69,7 @@ $(FREETYPE_BUILD_DIR)/.freetype-configpatched:
 	$(Q)cd $(ROOTFS)/usr/bin; \
 	cat freetype-config | \
 	sed -e 's;prefix=/usr;prefix=$(ROOTFS)/usr;' \
+	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
 	> freetype-config.new;\
 	cp freetype-config.new freetype-config; rm freetype-config.new
 
@@ -85,14 +88,16 @@ endif
 
 $(FREETYPE_BUILD_DIR)/.pkgconfigpatched:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cd $(ROOTFS)/usr/lib32/pkgconfig; \
-	cat freetype2.pc | sed -e 's;prefix=\/usr;prefix=$(ROOTFS)\/usr;' \
+	$(Q)cd $(ROOTFS)/usr/lib32/pkgconfig;\
+	cat freetype2.pc | sed -e 's;prefix=/usr;prefix=$(ROOTFS)/usr;' \
+	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
 	> freetype2.pc.new;\
-	cp freetype2.pc.new freetype2.pc; rm  freetype2.pc.new
+	cp freetype2.pc.new freetype2.pc; rm freetype2.pc.new freetype2.pc.tmp
 else
 	$(Q)cd $(ROOTFS)/usr/lib/pkgconfig; \
-	cat freetype2.pc | sed -e 's;prefix=\/usr;prefix=$(ROOTFS)\/usr;' \
+	cat freetype2.pc | sed -e 's;prefix=/usr;prefix=$(ROOTFS)/usr;' \
+	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
 	> freetype2.pc.new;\
-	cp freetype2.pc.new freetype2.pc; rm  freetype2.pc.new
+	cp freetype2.pc.new freetype2.pc; rm freetype2.pc.new
 endif
 

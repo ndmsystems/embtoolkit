@@ -36,6 +36,8 @@ $(LIBJPEG_BUILD_DIR)/.installed: download_libjpeg \
 	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) DESTDIR=$(ROOTFS) install
 	$(Q)$(MAKE) $(LIBJPEG_BUILD_DIR)/.libtoolpatched
+	$(Q)-mv $(ROOTFS)/usr/include/* $(SYSROOT)/usr/include/
+	$(Q)rm -rf $(ROOTFS)/usr/include
 	@touch $@
 
 download_libjpeg:
@@ -58,7 +60,7 @@ $(LIBJPEG_BUILD_DIR)/.configured:
 	CC=$(TARGETCC_CACHED) CFLAGS=$(TARGET_CFLAGS) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --includedir=$(SYSROOT)/usr/include \
+	--prefix=/usr \
 	--datarootdir=$(SYSROOT)/usr --enable-static=no --program-suffix=""
 	@touch $@
 
