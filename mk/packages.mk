@@ -39,12 +39,6 @@ endif
 ############################# Packages for TARGET ##############################
 ################################################################################
 
-#Busybox
-ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),y)
-include $(EMBTK_ROOT)/packages/busybox/busybox.mk
-ROOTFS_COMPONENTS += busybox_install
-endif
-
 #gdb
 ifeq ($(CONFIG_EMBTK_HAVE_GDB_ON_TARGET),y)
 ROOTFS_COMPONENTS += gdb_target_install
@@ -101,6 +95,13 @@ endif
 ############################ System packages ###################################
 
 ########################## Miscellaneous packages ##############################
+
+################################### BUSYBOX ####################################
+#Busybox
+ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),y)
+include $(EMBTK_ROOT)/packages/busybox/busybox.mk
+ROOTFS_COMPONENTS += busybox_install
+endif
 
 ################################################################################
 ########################## Packages for HOST MACHINE ###########################
