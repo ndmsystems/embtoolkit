@@ -33,7 +33,9 @@ $(LIBJPEG_BUILD_DIR)/.installed: download_libjpeg \
 	$(LIBJPEG_BUILD_DIR)/.decompressed $(LIBJPEG_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	jpeg-$(LIBJPEG_VERSION) in your root filesystem...")
-	$(Q)cd $(LIBJPEG_BUILD_DIR); $(MAKE) $(J) ; $(MAKE) install
+	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) $(J)
+	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) DESTDIR=$(ROOTFS) install
+	$(Q)$(MAKE) $(LIBJPEG_BUILD_DIR)/.libtoolpatched
 	@touch $@
 
 download_libjpeg:
@@ -50,10 +52,26 @@ $(LIBJPEG_BUILD_DIR)/.decompressed:
 
 $(LIBJPEG_BUILD_DIR)/.configured:
 	cd $(LIBJPEG_BUILD_DIR); \
+	PKG_CONFIG=$(PKGCONFIG_BIN) \
+	PKG_CONFIG_PATH=$(ROOTFS)/usr/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$(ROOTFS) \
 	CC=$(TARGETCC_CACHED) CFLAGS=$(TARGET_CFLAGS) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) \
-	--prefix=$(ROOTFS)/usr --includedir=$(SYSROOT)/usr/include \
-	--datarootdir=$(SYSROOT)/usr --enable-static=no
+	--prefix=/usr --includedir=$(SYSROOT)/usr/include \
+	--datarootdir=$(SYSROOT)/usr --enable-static=no --program-suffix=""
 	@touch $@
+
+$(LIBJPEG_BUILD_DIR)/.libtoolpatched:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)cd $(ROOTFS)/usr/lib32; \
+	cat libjpeg.la | sed -e 's;\/usr\/lib;$(ROOTFS)\/usr\/lib32;' \
+	> libjpeg.la.new;\
+	cp libjpeg.la.new libjpeg.la; rm  libjpeg.la.new
+else
+	$(Q)cd $(ROOTFS)/usr/lib; \
+	cat libjpeg.la | sed -e 's;\/usr\/lib;$(ROOTFS)\/usr\/lib;' \
+	> libjpeg.la.new;\
+	cp libjpeg.la.new libjpeg.la; rm  libjpeg.la.new
+endif
 
