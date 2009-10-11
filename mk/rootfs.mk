@@ -100,6 +100,10 @@ endif
 mkinitialrootfs:
 	@mkdir -p $(ROOTFS)
 	@cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(ROOTFS)/
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	@mkdir -p  $(ROOTFS)/lib32
+	@mkdir -p  $(ROOTFS)/usr/lib32
+endif
 	@mkdir -p $(PACKAGES_BUILD)
 
 rootfs_clean: $(ROOTFS_HOSTTOOLS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)
