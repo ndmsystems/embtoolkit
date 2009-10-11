@@ -28,19 +28,21 @@ DIRECTFB_SITE := http://www.directfb.org/downloads/Core/$(DIRECTFB_BRANCH)
 DIRECTFB_PACKAGE := DirectFB-$(DIRECTFB_VERSION).tar.gz
 DIRECTFB_BUILD_DIR := $(PACKAGES_BUILD)/DirectFB-$(DIRECTFB_VERSION)
 
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+FREETYPE_LIBS_FLAGS := "-L$(ROOTFS)/usr/lib32 -lfreetype"
+else
+FREETYPE_LIBS_FLAGS := "-L$(ROOTFS)/usr/lib -lfreetype"
+endif
+
 directfb_install: $(DIRECTFB_BUILD_DIR)/.installed
 
-$(DIRECTFB_BUILD_DIR)/.installed: libpng_install libjpeg_install \
-	freetype_install download_directfb \
+$(DIRECTFB_BUILD_DIR)/.installed: libpng_install freetype_install \
+	libjpeg_install download_directfb \
 	$(DIRECTFB_BUILD_DIR)/.decompressed $(DIRECTFB_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	DirectFB-$(DIRECTFB_VERSION) in your root filesystem...")
-	$(Q)cd $(DIRECTFB_BUILD_DIR); $(MAKE) $(J) ; $(MAKE) install
-	$(Q)mkdir -p $(SYSROOT)/usr/lib/pkgconfig
-	$(Q)cp $(ROOTFS)/usr/lib/pkgconfig/* $(SYSROOT)/usr/lib/pkgconfig/
-	$(Q)-cp $(ROOTFS)/usr/lib32/pkgconfig/* $(SYSROOT)/usr/lib32/pkgconfig/
-	$(Q)rm -rf $(ROOTFS)/usr/lib/pkgconfig
-	$(Q)-rm -rf $(ROOTFS)/usr/lib32/pkgconfig
+	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) $(J)
+	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) DESTDIR=$(ROOTFS) install
 	@touch $@
 
 download_directfb:
@@ -57,18 +59,20 @@ $(DIRECTFB_BUILD_DIR)/.decompressed:
 
 $(DIRECTFB_BUILD_DIR)/.configured:
 	cd $(DIRECTFB_BUILD_DIR); \
+	PATH="$(ROOTFS)/usr/bin:$$PATH" \
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH="$(SYSROOT)/usr/lib/pkgconfig \
-	$(SYSROOT)/usr/lib32/pkgconfig" \
+	PKG_CONFIG_PATH=$(ROOTFS)/usr/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$(ROOTFS) \
 	CC=$(TARGETCC_CACHED) CFLAGS=$(TARGET_CFLAGS) \
 	LDFLAGS="-L$(ROOTFS)/usr/lib -L$(ROOTFS)/usr/lib32 \
 	-L$(ROOTFS)/lib -L$(ROOTFS)/lib32 \
 	-L$(SYSROOT)/usr/lib -L$(SYSROOT)/usr/lib32 \
 	-L$(SYSROOT)/lib -L$(SYSROOT)/lib32" \
 	CPPFLAGS="-I$(SYSROOT)/usr/include" \
+	FREETYPE_LIBS=$(FREETYPE_LIBS_FLAGS) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --prefix=$(ROOTFS)/usr \
+	--target=$(STRICT_GNU_TARGET) --prefix=/usr \
 	--includedir=$(SYSROOT)/usr/include --datarootdir=$(SYSROOT)/usr \
-	--enable-static=no
+	--enable-static=no  --program-suffix=""
 	@touch $@
 
