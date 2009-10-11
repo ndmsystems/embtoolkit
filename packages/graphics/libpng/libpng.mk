@@ -33,7 +33,11 @@ $(LIBPNG_BUILD_DIR)/.installed: zlib_target_install download_libpng \
 	$(LIBPNG_BUILD_DIR)/.decompressed $(LIBPNG_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libpng-$(LIBPNG_VERSION) in your root filesystem...")
-	$(Q)cd $(LIBPNG_BUILD_DIR); $(MAKE) $(J) ; $(MAKE) install
+	$(Q)$(MAKE) -C $(LIBPNG_BUILD_DIR) $(J)
+	$(Q)$(MAKE) -C $(LIBPNG_BUILD_DIR) DESTDIR=$(ROOTFS) install
+	$(Q)$(MAKE) $(LIBPNG_BUILD_DIR)/.libtoolpatched
+	$(Q)$(MAKE) $(LIBPNG_BUILD_DIR)/.pkgconfigpatched
+	$(Q)$(MAKE) $(LIBPNG_BUILD_DIR)/.libpng-configpatched
 	@touch $@
 
 download_libpng:
@@ -50,11 +54,46 @@ $(LIBPNG_BUILD_DIR)/.decompressed:
 
 $(LIBPNG_BUILD_DIR)/.configured:
 	cd $(LIBPNG_BUILD_DIR); \
+	PKG_CONFIG=$(PKGCONFIG_BIN) \
+	PKG_CONFIG_PATH=$(ROOTFS)/usr/lib/pkgconfig \
+	PKG_CONFIG_SYSROOT_DIR=$(ROOTFS) \
 	CC=$(TARGETCC_CACHED) CFLAGS=$(TARGET_CFLAGS) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--prefix=$(ROOTFS)/usr --includedir=$(SYSROOT)/usr/include \
+	--prefix=/usr --includedir=$(SYSROOT)/usr/include \
 	--datarootdir=$(SYSROOT)/usr \
-	--with-pkgconfigdir=$(SYSROOT)/usr/lib/pkgconfig \
-	--enable-static=no
+	--enable-static=no --with-libpng-compat=no
 	@touch $@
+
+$(LIBPNG_BUILD_DIR)/.libpng-configpatched:
+	$(Q)cd $(ROOTFS)/usr/bin; \
+	cat libpng-config | \
+	sed -e 's;prefix="/usr";prefix="$(ROOTFS)/usr";' \
+	> libpng-config.new;\
+	cp libpng-config.new libpng-config; rm libpng-config.new
+
+$(LIBPNG_BUILD_DIR)/.libtoolpatched:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)cd $(ROOTFS)/usr/lib32; \
+	cat libpng.la | sed -e 's;\/usr\/lib;$(ROOTFS)\/usr\/lib32;' \
+	> libpng.la.new;\
+	cp libpng.la.new libpng.la; rm  libpng.la.new
+else
+	$(Q)cd $(ROOTFS)/usr/lib; \
+	cat libpng.la | sed -e 's;\/usr\/lib;$(ROOTFS)\/usr\/lib;' \
+	> libpng.la.new;\
+	cp libpng.la.new libpng.la; rm  libpng.la.new
+endif
+
+$(LIBPNG_BUILD_DIR)/.pkgconfigpatched:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)cd $(ROOTFS)/usr/lib32/pkgconfig; \
+	cat libpng.pc | sed -e 's;prefix=\/usr;prefix=$(ROOTFS)\/usr;' \
+	> libpng.pc.new;\
+	cp libpng.pc.new libpng.pc; rm  libpng.pc.new
+else
+	$(Q)cd $(ROOTFS)/usr/lib/pkgconfig; \
+	cat libpng.pc | sed -e 's;prefix=\/usr;prefix=$(ROOTFS)\/usr;' \
+	> libpng.pc.new;\
+	cp libpng.pc.new libpng.pc; rm  libpng.pc.new
+endif
 
