@@ -28,6 +28,8 @@ choice
 	help
 	 Linux v2.6.27.x series exact version to use.
 
+	config EMBTK_LINUX_VERSION_2_6_27_38
+		bool "linux-2.6.27.38"
 	config EMBTK_LINUX_VERSION_2_6_27_37
 		bool "linux-2.6.27.37"
 	config EMBTK_LINUX_VERSION_2_6_27_36
@@ -108,6 +110,7 @@ endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "2.6.27.38"		if EMBTK_LINUX_VERSION_2_6_27_38
 	default "2.6.27.37"		if EMBTK_LINUX_VERSION_2_6_27_37
 	default "2.6.27.36"		if EMBTK_LINUX_VERSION_2_6_27_36
 	default "2.6.27.35"		if EMBTK_LINUX_VERSION_2_6_27_35
