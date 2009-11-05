@@ -24,6 +24,7 @@
 
 UCLIBC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_VERSION_STRING)))
 UCLIBC_SITE := http://www.uclibc.org/downloads
+UCLIBC_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/uclibc
 UCLIBC_PACKAGE := uClibc-$(UCLIBC_VERSION).tar.bz2
 UCLIBC_BUILD_DIR := $(TOOLS_BUILD)/uClibc-$(UCLIBC_VERSION)
 
@@ -53,14 +54,20 @@ uclibc_download:
 	@test -e $(DOWNLOAD_DIR)/$(UCLIBC_PACKAGE) || \
 	wget $(UCLIBC_SITE)/$(UCLIBC_PACKAGE) \
 	-O $(DOWNLOAD_DIR)/$(UCLIBC_PACKAGE)
+ifeq ($(CONFIG_EMBTK_UCLIBC_NEED_PATCH),y)
+	@test -e $(DOWNLOAD_DIR)/uClibc-$(UCLIBC_VERSION).patch || \
+	wget -O $(DOWNLOAD_DIR)/uClibc-$(UCLIBC_VERSION).patch \
+	$(UCLIBC_PATCH_SITE)/uClibc-$(UCLIBC_VERSION)-*.patch
+endif
 
 $(UCLIBC_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing \
 	uClibc-$(UCLIBC_VERSION) ...")
 	$(Q)tar -C $(TOOLS_BUILD) -xjvf $(DOWNLOAD_DIR)/$(UCLIBC_PACKAGE)
+ifeq ($(CONFIG_EMBTK_UCLIBC_NEED_PATCH),y)
 	$(Q)cd $(UCLIBC_BUILD_DIR); \
-	cat $(DOWNLOAD_DIR)/uClibc-$(UCLIBC_VERSION)-*.patch | \
-	patch -p1
+	patch -p1 < $(DOWNLOAD_DIR)/uClibc-$(UCLIBC_VERSION).patch
+endif
 
 $(UCLIBC_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring \

@@ -36,9 +36,14 @@ choice
 
 	config EMBTK_UCLIBC_VERSION_0_9_30_1
 		bool "uClibc-0.9.30.1"
+		select EMBTK_UCLIBC_NEED_PATCH
 	config EMBTK_UCLIBC_VERSION_0_9_30
 		bool "uClibc-0.9.30"
+		select EMBTK_UCLIBC_NEED_PATCH
 endchoice
+
+config EMBTK_UCLIBC_NEED_PATCH
+	bool
 
 config KEMBTK_UCLIBC_TARGET_alpha
 	bool
