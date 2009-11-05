@@ -106,8 +106,8 @@ startbuild:
 	echo "# Starting build of selected features.."; \
 	echo "##############################################################"; \
 	echo; \
-	make buildtoolchain host_packages_build symlink_tools; \
-	make rootfs_build successful_build; \
+	make buildtoolchain host_packages_build symlink_tools rootfs_build \
+	successful_build; \
 	fi
 
 include mk/macros.mk
