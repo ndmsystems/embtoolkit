@@ -59,6 +59,7 @@ endif
 
 #mtd-utils
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS),y)
+include $(EMBTK_ROOT)/mk/mtd-utils.mk
 ROOTFS_COMPONENTS += mtd-utils_target_install
 ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
 endif
