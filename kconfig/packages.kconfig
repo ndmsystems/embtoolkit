@@ -39,6 +39,7 @@ menu "Flash manipulation tools"
 #mtd-utils on target
 config EMBTK_ROOTFS_HAVE_MTDUTILS
 	bool "Have mtd-utils in your target root filesystem"
+	select KEMBTK_UCLIBC_UCLIBC_SUSV3_LEGACY_MACROS if EMBTK_CLIB_UCLIBC
 	help
 	 The MTD Utilities are a collection of tools that allow the user to
 	 interact with the MTD subsystem in the kernel to perform operations on
