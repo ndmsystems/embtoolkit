@@ -77,7 +77,7 @@ choice
 endchoice
 
 choice
-	prompt "ARM MCU"
+	prompt "ARM core"
 	depends on EMBTK_ARCH_ARM
 
 #### arm7tdmi MCU Family ####
