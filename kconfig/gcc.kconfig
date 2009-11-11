@@ -64,6 +64,8 @@ config EMBTK_GCC_MORE_LANGUAGES
 config EMBTK_GCC_LANGUAGE_CPP
 	bool "Support C++"
 	depends on EMBTK_GCC_MORE_LANGUAGES
+	select KEMBTK_UCLIBC_UCLIBC_HAS_FLOATS if EMBTK_CLIB_UCLIBC
+	select OPTION_EGLIBC_LIBM if EMBTK_CLIB_EGLIBC
 	help
 	 Your toolchain will be able to build C++ source code
 
