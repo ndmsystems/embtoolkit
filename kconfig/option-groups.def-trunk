@@ -460,6 +460,26 @@ config OPTION_EGLIBC_LOCALES
 		that for the "C" locale.  If this option group is omitted, then
 		only the "C" locale is supported.
 
+config OPTION_EGLIBC_MEMUSAGE
+	bool "Memory profiling library"
+	default y
+	help
+		This option group includes the `libmemusage' library and
+		the `memusage' and `memusagestat' utilities.
+		These components provide memory profiling functions.
+
+		config OPTION_EGLIBC_MEMUSAGE_DEFAULT_BUFFER_SIZE
+
+		Libmemusage library buffers the profiling data in memory
+		before writing it out to disk.  By default, the library
+		allocates 1.5M buffer, which can be substantial for some
+		systems.  OPTION_EGLIBC_MEMUSAGE_DEFAULT_BUFFER_SIZE option
+		allows to change the default buffer size.  It specifies
+		the number of entries the buffer should have.
+		On most architectures one buffer entry amounts to 48 bytes,
+		so setting this option to the value of 512 will reduce the size
+		of the memory buffer to 24K.
+
 config OPTION_EGLIBC_NSSWITCH
 	bool "Name service switch (nsswitch) support"
 	default y
