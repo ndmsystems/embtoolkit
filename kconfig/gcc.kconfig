@@ -81,12 +81,14 @@ config EMBTK_GCC_LANGUAGE_CPP
 config EMBTK_GCC_LANGUAGE_OBJECTIVEC
 	bool "Support Objective-C"
 	depends on EMBTK_GCC_MORE_LANGUAGES
+	depends on !EMBTK_CLIB_UCLIBC
 	help
 	 Your toolchain will be able to build Objective-C source code
 
 config EMBTK_GCC_LANGUAGE_OBJECTIVECPP
 	bool "Support Objective-C++"
 	depends on EMBTK_GCC_MORE_LANGUAGES
+	depends on !EMBTK_CLIB_UCLIBC
 	help
 	 Your toolchain will be able to build Objective-C source code
 
