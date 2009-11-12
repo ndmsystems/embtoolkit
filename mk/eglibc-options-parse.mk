@@ -23,6 +23,10 @@
 # \date         May 2009
 ################################################################################
 
+ifeq ($(CONFIG_EMBTK_EGLIBC_VERSION_2_11),y)
+include $(EMBTK_ROOT)/mk/eglibc-2.11-options.mk
+endif
+
 ifeq ($(CONFIG_EMBTK_EGLIBC_VERSION_2_10),y)
 include $(EMBTK_ROOT)/mk/eglibc-2.10-options.mk
 endif

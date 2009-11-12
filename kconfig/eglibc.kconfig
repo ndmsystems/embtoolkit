@@ -25,10 +25,12 @@
 ################################################################################
 choice
 	prompt "EGLIBC branch to checkout"
-	default EMBTK_EGLIBC_VERSION_2_10
+	default EMBTK_EGLIBC_VERSION_2_11
 	help
 	 EGLIBC branch to use.
 
+	config EMBTK_EGLIBC_VERSION_2_11
+		bool "eglibc-2.11"
 	config EMBTK_EGLIBC_VERSION_2_10
 		bool "eglibc-2.10"
 	config EMBTK_EGLIBC_VERSION_2_9
@@ -41,15 +43,17 @@ config EMBTK_EGLIBC_SVN_REVISION
 	int "EGLIBC SVN revision to checkout"
 	help
 	 EGLIBC svn revision to use.
-	default 9224
+	default 9241
 
 config EMBTK_EGLIBC_BRANCH_STRING
 	string
+	default "2_11"		if EMBTK_EGLIBC_VERSION_2_11
 	default "2_10"		if EMBTK_EGLIBC_VERSION_2_10
 	default "2_9"		if EMBTK_EGLIBC_VERSION_2_9
 
 config EMBTK_EGLIBC_VERSION_STRING
 	string
+	default "2.11"		if EMBTK_EGLIBC_VERSION_2_11
 	default "2.10"		if EMBTK_EGLIBC_VERSION_2_10
 	default "2.9"		if EMBTK_EGLIBC_VERSION_2_9
 	default "trunk"		if EMBTK_EGLIBC_VERSION_TRUNK
@@ -59,6 +63,10 @@ config EMBTK_EGLIBC_NEED_PATCH
 	depends on EMBTK_EGLIBC_VERSION_2_9
 	bool
 	default y
+
+if EMBTK_EGLIBC_VERSION_2_11
+source "kconfig/option-groups.def-2.11"
+endif
 
 if EMBTK_EGLIBC_VERSION_2_10
 source "kconfig/option-groups.def-2.10"
