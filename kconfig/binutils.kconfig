@@ -32,11 +32,15 @@ choice
 		bool "binutils-2.20"
 	config EMBTK_BINUTILS_VERSION_2_19_1
 		bool "binutils-2.19.1"
+		select EMBTK_BINUTILS_NEED_PATCH
 	config EMBTK_BINUTILS_VERSION_2_18
 		bool "binutils-2.18"
 	config EMBTK_BINUTILS_VERSION_2_17
 		bool "binutils-2.17"
 endchoice
+
+config EMBTK_BINUTILS_NEED_PATCH
+	bool
 
 config EMBTK_BINUTILS_VERSION_STRING
 	string

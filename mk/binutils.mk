@@ -24,6 +24,7 @@
 
 BINUTILS_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_BINUTILS_VERSION_STRING)))
 BINUTILS_SITE := http://ftp.gnu.org/gnu/binutils
+BINUTILS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/binutils
 BINUTILS_PACKAGE := binutils-$(BINUTILS_VERSION).tar.bz2
 BINUTILS_BUILD_DIR := $(TOOLS_BUILD)/binutils
 
@@ -41,9 +42,18 @@ download_binutils:
 	@test -e $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE) \
 	$(BINUTILS_SITE)/$(BINUTILS_PACKAGE)
+ifeq ($(CONFIG_EMBTK_BINUTILS_NEED_PATCH),y)
+	@test -e $(DOWNLOAD_DIR)/binutils-$(BINUTILS_VERSION).patch || \
+	wget -O $(DOWNLOAD_DIR)/binutils-$(BINUTILS_VERSION).patch \
+	$(BINUTILS_PATCH_SITE)/binutils-$(BINUTILS_VERSION)-*.patch
+endif
 
 $(BINUTILS_BUILD_DIR)/.decompressed:
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE)
+ifeq ($(CONFIG_EMBTK_BINUTILS_NEED_PATCH),y)
+	cd $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION); \
+	patch -p1 < (DOWNLOAD_DIR)/binutils-$(BINUTILS_VERSION).patch
+endif
 	@mkdir -p $(BINUTILS_BUILD_DIR)
 	@touch $@
 
