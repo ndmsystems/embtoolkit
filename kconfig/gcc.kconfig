@@ -33,8 +33,10 @@ choice
 	config EMBTK_GCC_VERSION_4_4_1
 		depends on EMBTK_OLDPACKAGES
 		bool "gcc-4.4.1"
+		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_3_4
 		bool "gcc-4.3.4"
+		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_3_3
 		depends on EMBTK_OLDPACKAGES
 		bool "gcc-4.3.3"
