@@ -28,6 +28,7 @@ GCC_SITE := $(subst ",,$(strip $(CONFIG_EMBTK_GCC_HAVE_MIRROR_SITE)))
 else
 GCC_SITE := ftp://ftp.gnu.org/gnu/gcc/gcc-$(GCC_VERSION)
 endif
+GCC_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/gcc
 GCC_PACKAGE := gcc-$(GCC_VERSION).tar.bz2
 GCC1_BUILD_DIR := $(TOOLS_BUILD)/gcc1
 GCC2_BUILD_DIR := $(TOOLS_BUILD)/gcc2
@@ -78,10 +79,19 @@ $(GCC1_BUILD_DIR)/.built: download_gcc $(GCC1_BUILD_DIR)/.decompressed \
 download_gcc:
 	@test -e $(DOWNLOAD_DIR)/$(GCC_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(GCC_PACKAGE) $(GCC_SITE)/$(GCC_PACKAGE)
+ifeq ($(CONFIG_EMBTK_GCC_NEED_PATCH),y)
+	@test -e $(DOWNLOAD_DIR)/gcc-$(GCC_VERSION).patch || \
+	wget -O $(DOWNLOAD_DIR)/gcc-$(GCC_VERSION).patch \
+	$(GCC_PATCH_SITE)/gcc-$(GCC_VERSION)-*.patch
+endif
 
 $(GCC1_BUILD_DIR)/.decompressed:
 	$(call DECOMPRESS_MESSAGE,$(GCC_PACKAGE))
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(GCC_PACKAGE)
+ifeq ($(CONFIG_EMBTK_GCC_NEED_PATCH),y)
+	cd $(TOOLS_BUILD)/gcc-$(GCC_VERSION); \
+	patch -p1 < $(DOWNLOAD_DIR)/gcc-$(GCC_VERSION).patch
+endif
 	@mkdir -p $(GCC1_BUILD_DIR)
 	@touch $@
 
