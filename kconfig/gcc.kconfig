@@ -44,6 +44,7 @@ choice
 		bool "gcc-4.2.4"
 	config EMBTK_GCC_VERSION_4_1_2
 		bool "gcc-4.1.2"
+		select EMBTK_GCC_NEED_PATCH
 endchoice
 
 config EMBTK_GCC_NEED_PATCH
