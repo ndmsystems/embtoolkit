@@ -30,6 +30,7 @@ choice
 	config EMBTK_GCC_VERSION_4_4_2
 		bool "gcc-4.4.2"
 	config EMBTK_GCC_VERSION_4_4_1
+		depends on EMBTK_OLDPACKAGES
 		bool "gcc-4.4.1"
 	config EMBTK_GCC_VERSION_4_3_4
 		bool "gcc-4.3.4"
