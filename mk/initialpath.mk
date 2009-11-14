@@ -69,4 +69,6 @@ rmallpath:
 	@rm -Rf $(PACKAGES_BUILD) $(ROOTFS) $(TOOLS) $(TOOLS_BUILD) $(SYSROOT)
 	@rm -Rf rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
 	@rm -Rf initramfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
+	@rm -rf $(DOWNLOAD_DIR)/*.patch
+	@rm -rf $(DOWNLOAD_DIR)/eglibc-*
 
