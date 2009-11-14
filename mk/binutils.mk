@@ -52,7 +52,7 @@ $(BINUTILS_BUILD_DIR)/.decompressed:
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE)
 ifeq ($(CONFIG_EMBTK_BINUTILS_NEED_PATCH),y)
 	cd $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION); \
-	patch -p1 < (DOWNLOAD_DIR)/binutils-$(BINUTILS_VERSION).patch
+	patch -p1 < $(DOWNLOAD_DIR)/binutils-$(BINUTILS_VERSION).patch
 endif
 	@mkdir -p $(BINUTILS_BUILD_DIR)
 	@touch $@
