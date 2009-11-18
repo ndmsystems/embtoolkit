@@ -86,7 +86,7 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.decompressed:
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE)
 ifeq	($(CONFIG_EMBTK_EGLIBC_NEED_PATCH),y)
 	cd $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION); \
-	patch -p0 < $(DOWNLOAD_DIR)/eglibc-$(EGLIBC_VERSION).patch
+	patch -p1 < $(DOWNLOAD_DIR)/eglibc-$(EGLIBC_VERSION).patch
 endif
 	@cp -R $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/ports \
 	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/
