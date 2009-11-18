@@ -52,7 +52,7 @@ $(GDB_TARGET_BUILD_DIR)/.configured:
 	NM=$(TARGETNM) STRIP=$(TARGETSTRIP) \
 	$(TOOLS_BUILD)/gdb-$(GDB_VERSION)/configure \
 	--host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --prefix=$(SYSROOT)/usr
+	--target=$(STRICT_GNU_TARGET) --prefix=$(SYSROOT)/usr --disable-werror
 	@touch $@
 
 #gdb for host
