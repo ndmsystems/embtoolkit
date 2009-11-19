@@ -43,7 +43,7 @@ $(MTD-UTILS_HOST_BUILD_DIR)/.installed: zlib_host_install lzo_host_install \
 download_mtd-utils $(MTD-UTILS_HOST_BUILD_DIR)/.decompressed
 	LDFLAGS="-L$(HOSTTOOLS)/usr/local/lib" \
 	CFLAGS="-I. -I./include -I$(HOSTTOOLS)/usr/local/include \
-	-I$(HOSTTOOLS)/usr/include" DESTDIR=$(HOSTTOOLS) \
+	-I$(HOSTTOOLS)/usr/include" DESTDIR=$(HOSTTOOLS) CROSS= \
 	$(MAKE) -C $(TOOLS_BUILD)/mtd-utils-$(MTD-UTILS_VERSION) install
 	@touch $@
 

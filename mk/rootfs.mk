@@ -40,7 +40,6 @@ endif
 
 #Does jffs2 filesystem selected?
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
-include $(EMBTK_ROOT)/mk/mtd-utils.mk
 ROOTFS_HOSTTOOLS += mtd-utils_host_install
 ROOTFS_HOSTTOOLS_CLEAN += mtd-utils_host_clean
 FILESYSTEMS += build_jffs2_rootfs
