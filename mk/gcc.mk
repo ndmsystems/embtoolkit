@@ -105,7 +105,7 @@ $(GCC1_BUILD_DIR)/.configured:
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--without-headers --with-newlib --disable-shared --disable-threads \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
-	--enable-languages=c \
+	--enable-languages=c --enable-target-optspace \
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
 	@touch $@
 
@@ -125,7 +125,7 @@ $(GCC2_BUILD_DIR)/.configured:
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
-	--enable-languages=c \
+	--enable-languages=c --enable-target-optspace \
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
 	@touch $@
 
@@ -158,7 +158,7 @@ $(GCC3_BUILD_DIR)/.configured:
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE) \
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) --enable-__cxa_atexit \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
-	--enable-threads --enable-shared \
+	--enable-threads --enable-shared --enable-target-optspace \
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
 	--enable-languages=`echo $(GCC_LANGUAGES) | sed 's/ //g'` \
 	$(GCC3_CONFIGURE_EXTRA_OPTIONS)
