@@ -67,7 +67,7 @@ lzo_target_install download_mtd-utils $(MTD-UTILS_TARGET_BUILD_DIR)/.decompresse
 	LDFLAGS="-L$(SYSROOT)/usr/local/lib" \
 	CFLAGS="-I. -I./include -I$(SYSROOT)/usr/local/include \
 	-I$(SYSROOT)/usr/include" DESTDIR=$(SYSROOT) \
-	PATH=$(PATH):$(TOOLS)/bin CROSS=$(CROSS) \
+	PATH=$(PATH):$(TOOLS)/bin CROSS=$(CROSS_COMPILE) \
 	$(MAKE) -C $(PACKAGES_BUILD)/mtd-utils-$(MTD-UTILS_VERSION) install
 	@touch $@
 
