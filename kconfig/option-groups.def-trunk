@@ -673,6 +673,12 @@ config OPTION_EGLIBC_UTMPX
 		updwtmpx
 		utmpxname
 
+config OPTION_EGLIBC_IDN
+	bool "International domain names support"
+	help
+		This option group includes the `libcidn' library which
+		provides support for international domain names.
+
 config OPTION_EGLIBC_WORDEXP
 	bool "Shell-style word expansion"
 	default y
