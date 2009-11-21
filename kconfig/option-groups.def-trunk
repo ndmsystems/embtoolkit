@@ -416,6 +416,13 @@ config OPTION_EGLIBC_ADVANCED_INET6
 		inet6_rth_segments
 		inet6_rth_space
 
+config OPTION_EGLIBC_INET_ANL
+	bool "Asynchronous name lookup"
+	depends on OPTION_EGLIBC_INET
+	help
+		This option group includes the `libanl' library which
+		provides support for asynchronous name lookup.
+
 config OPTION_EGLIBC_RCMD
 	bool "Support for 'rcmd' and related library functions"
 	depends on OPTION_EGLIBC_INET
