@@ -214,6 +214,13 @@ EMBTK_MCU_FLAG := $(GNU_TARGET_ARCH)
 GCC_WITH_ARCH := --with-arch=$(GNU_TARGET_ARCH)
 export GCC_WITH_ARCH
 
+#Hard or soft floating point for GCC?
+ifeq ($(CONFIG_EMBTK_HARDFLOAT),y)
+GCC_WITH_FLOAT := --with-float=hard
+else
+GCC_WITH_FLOAT := --with-float=soft
+endif
+
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_O32),y)
 GCC_WITH_ABI := --with-abi=32
 EMBTK_TARGET_ABI := -mabi=32

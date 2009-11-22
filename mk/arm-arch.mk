@@ -56,6 +56,13 @@ ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),y)
 GCC3_CONFIGURE_EXTRA_OPTIONS += --enable-sjlj-exceptions
 endif
 
+#Hard or soft floating point for GCC?
+ifeq ($(CONFIG_EMBTK_HARDFLOAT),y)
+GCC_WITH_FLOAT := --with-float=hard
+else
+GCC_WITH_FLOAT := --with-float=soft
+endif
+
 #Hard or soft floating point?
 ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
 EMBTK_TARGET_FLOAT_CFLAGS := -mfloat-abi=soft

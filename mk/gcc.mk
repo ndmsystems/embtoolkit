@@ -35,12 +35,6 @@ GCC2_BUILD_DIR := $(TOOLS_BUILD)/gcc2
 GCC3_BUILD_DIR := $(TOOLS_BUILD)/gcc3
 
 GCC_MULTILIB := --disable-multilib
-#Hard or soft floating point for GCC?
-ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
-GCC_WITH_FLOAT := --with-float=soft
-else
-GCC_WITH_FLOAT := --with-float=hard
-endif
 
 GCC_LANGUAGES =c
 ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_CPP),y)
