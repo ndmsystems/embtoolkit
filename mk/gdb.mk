@@ -22,7 +22,7 @@
 # \date         July 2009
 ################################################################################
 
-GDB_VERSION := 6.8
+GDB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GDB_VERSION_STRING)))
 GDB_SITE := http://ftp.gnu.org/gnu/gdb
 GDB_PACKAGE := gdb-$(GDB_VERSION).tar.bz2
 GDB_HOST_BUILD_DIR :=$(TOOLS_BUILD)/gdb
