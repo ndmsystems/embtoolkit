@@ -29,11 +29,8 @@ config EMBTK_DOTCONFIG
 	bool
 	default y
 
-menu "Architecture Selection"
+menu "Architecture/variants/options Selection"
 source "kconfig/arch.kconfig"
-endmenu
-
-menu "Architecture Variant and options"
 source "kconfig/arch-variant.kconfig"
 endmenu
 

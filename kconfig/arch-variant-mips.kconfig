@@ -23,7 +23,7 @@
 ################################################################################
 
 choice
-	prompt "Architecture variant"
+	prompt "MIPS architecture variant"
 	depends on EMBTK_ARCH_MIPS
 	default EMBTK_ARCH_MIPS_MIPS32_LITTLE
 	help
