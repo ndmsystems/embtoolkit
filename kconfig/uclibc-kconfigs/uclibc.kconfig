@@ -40,7 +40,25 @@ choice
 	config EMBTK_UCLIBC_VERSION_0_9_30
 		bool "uClibc-0.9.30"
 		select EMBTK_UCLIBC_NEED_PATCH
+	config EMBTK_UCLIBC_VERSION_GIT
+		bool "Use a branch of uClibc git repository"
+		help
+			see http://git.uclibc.org/uClibc
 endchoice
+
+config	 EMBTK_UCLIBC_GIT_BRANCH
+	string "Branch to use"
+	default "master"
+	depends on EMBTK_UCLIBC_VERSION_GIT
+	help
+		The branch of the git repository to use.
+
+config	 EMBTK_UCLIBC_GIT_REVISION
+	string "Revision to checkout"
+	default "HEAD"
+	depends on EMBTK_UCLIBC_VERSION_GIT
+	help
+		The revision of the git repository to checkout.
 
 config EMBTK_UCLIBC_NEED_PATCH
 	bool
@@ -154,6 +172,7 @@ config EMBTK_UCLIBC_VERSION_STRING
 	string
 	default "0.9.30.1"	if EMBTK_UCLIBC_VERSION_0_9_30_1
 	default "0.9.30"	if EMBTK_UCLIBC_VERSION_0_9_30
+	default "git"		if EMBTK_UCLIBC_VERSION_GIT
 
 if KEMBTK_UCLIBC_TARGET_arm
 source kconfig/uclibc-kconfigs/uclibc-arm.kconfig

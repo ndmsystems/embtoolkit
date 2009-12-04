@@ -25,6 +25,9 @@
 UCLIBC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_VERSION_STRING)))
 UCLIBC_SITE := http://www.uclibc.org/downloads
 UCLIBC_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/uclibc
+UCLIBC_GIT_SITE := git://git.busybox.net/uClibc
+UCLIBC_GIT_BRANCH := $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_GIT_BRANCH)))
+UCLIBC_GIT_REVISION := $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_GIT_REVISION)))
 UCLIBC_PACKAGE := uClibc-$(UCLIBC_VERSION).tar.bz2
 UCLIBC_BUILD_DIR := $(TOOLS_BUILD)/uClibc-$(UCLIBC_VERSION)
 
@@ -51,9 +54,26 @@ $(UCLIBC_BUILD_DIR)/.decompressed $(UCLIBC_BUILD_DIR)/.configured
 uclibc_download:
 	$(call EMBTK_GENERIC_MESSAGE,"downloading uClibc-$(UCLIBC_VERSION) \
 	if necessary ...")
+ifeq ($(CONFIG_EMBTK_UCLIBC_VERSION_GIT),y)
+	@test -e $(EMBTK)/src/uClibc-git || \
+	git clone $(UCLIBC_GIT_SITE) $(EMBTK)/src/uClibc-git
+ifneq ($(UCLIBC_GIT_BRANCH),master)
+	@-cd $(EMBTK)/src/uClibc-git; \
+	git checkout master; \
+	git pull; \
+	git branch -D $(UCLIBC_GIT_BRANCH); \
+	git checkout -b $(UCLIBC_GIT_BRANCH) origin/$(UCLIBC_GIT_BRANCH)
+endif
+	@cd $(EMBTK)/src/uClibc-git; \
+	git checkout $(UCLIBC_GIT_REVISION); \
+	cd ..; \
+	tar cjvf $(UCLIBC_PACKAGE) uClibc-$(UCLIBC_VERSION); \
+	mv $(UCLIBC_PACKAGE) $(DOWNLOAD_DIR)
+else
 	@test -e $(DOWNLOAD_DIR)/$(UCLIBC_PACKAGE) || \
 	wget $(UCLIBC_SITE)/$(UCLIBC_PACKAGE) \
 	-O $(DOWNLOAD_DIR)/$(UCLIBC_PACKAGE)
+endif
 ifeq ($(CONFIG_EMBTK_UCLIBC_NEED_PATCH),y)
 	@test -e $(DOWNLOAD_DIR)/uClibc-$(UCLIBC_VERSION).patch || \
 	wget -O $(DOWNLOAD_DIR)/uClibc-$(UCLIBC_VERSION).patch \
