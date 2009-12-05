@@ -24,6 +24,7 @@
 
 MPFR_HOST_VERSION:=$(subst ",,$(strip $(CONFIG_EMBTK_MPFR_HOST_VERSION_STRING)))
 MPFR_HOST_SITE := http://www.mpfr.org/mpfr-$(MPFR_HOST_VERSION)
+MPFR_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/mpfr
 MPFR_HOST_PACKAGE := mpfr-$(MPFR_HOST_VERSION).tar.bz2
 MPFR_HOST_BUILD_DIR := $(TOOLS_BUILD)/mpfr
 MPFR_HOST_DIR := $(HOSTTOOLS)/usr/local/mpfr-host
@@ -52,7 +53,7 @@ download_mpfr_host:
 	-O $(DOWNLOAD_DIR)/$(MPFR_HOST_PACKAGE)
 ifeq ($(CONFIG_EMBTK_MPFR_HOST_VERSION_PATCH),y)
 	@test -e $(DOWNLOAD_DIR)/mpfr-$(MPFR_HOST_VERSION).patch || \
-	wget $(MPFR_HOST_SITE)/patches \
+	wget $(MPFR_PATCH_SITE)/mpfr-$(MPFR_HOST_VERSION)-*.patch \
 	-O $(DOWNLOAD_DIR)/mpfr-$(MPFR_HOST_VERSION).patch
 endif
 

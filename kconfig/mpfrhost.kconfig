@@ -24,29 +24,30 @@
 
 choice
 	prompt "Version of mpfr you wish"
-	default EMBTK_MPFR_HOST_VERSION_2_4_1
+	default EMBTK_MPFR_HOST_VERSION_2_4_2
 	help
 		The MPFR library is a C library for multiple-precision
 		floating-point computations with correct rounding.
 		MPFR is mandatory to build GCC
 
+	config EMBTK_MPFR_HOST_VERSION_2_4_2
+		bool "mpfr-2.4.2"
 	config EMBTK_MPFR_HOST_VERSION_2_4_1
 		bool "mpfr-2.4.1"
+		select EMBTK_MPFR_HOST_VERSION_PATCH
 	config EMBTK_MPFR_HOST_VERSION_2_4_0
 		bool "mpfr-2.4.0"
+		select EMBTK_MPFR_HOST_VERSION_PATCH
 endchoice
 
 #Version string
 config EMBTK_MPFR_HOST_VERSION_STRING
-string
-default "2.4.1" if EMBTK_MPFR_HOST_VERSION_2_4_1
-default "2.4.0" if EMBTK_MPFR_HOST_VERSION_2_4_0
+	string
+	default "2.4.2" if EMBTK_MPFR_HOST_VERSION_2_4_2
+	default "2.4.1" if EMBTK_MPFR_HOST_VERSION_2_4_1
+	default "2.4.0" if EMBTK_MPFR_HOST_VERSION_2_4_0
 
 #Does we need patches?
 config EMBTK_MPFR_HOST_VERSION_PATCH
-	depends on EMBTK_MPFR_HOST_VERSION_2_4_1 || \
-	EMBTK_MPFR_HOST_VERSION_2_4_0
 	bool
-	default y
-
 
