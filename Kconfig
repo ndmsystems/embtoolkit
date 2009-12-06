@@ -103,5 +103,12 @@ config EMBTK_DOWNLOAD_DIR
 	 But keep in mind that only a make distclean command will remove
 	 downloaded packages in the default location under EmbToolkit,
 	 not make clean.
+
+config EMBTK_CACHE_PATCHES
+	bool "Preserve first downloaded patches and do not download new one"
+	default y
+	help
+	 When this option is enable, new patches for packages will not be
+	 downloaded the second time you run the build process.
 endmenu
 
