@@ -93,6 +93,12 @@ ROOTFS_COMPONENTS += libpng_install
 endif
 ########################## Networking packages #################################
 
+############################ Scripting languages ###############################
+
+ifeq ($(CONFIG_EMBTK_HAVE_MICROPERL),y)
+include $(EMBTK_ROOT)/packages/scripting-languages/perl/perl.mk
+ROOTFS_COMPONENTS += microperl_install
+endif
 ############################ System packages ###################################
 
 ########################## Miscellaneous packages ##############################

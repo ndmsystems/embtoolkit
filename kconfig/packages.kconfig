@@ -71,6 +71,10 @@ endmenu
 menu "Networking packages"
 endmenu
 
+menu "Scripting languages"
+source packages/scripting-languages/perl/perl.kconfig
+endmenu
+
 menu "System packages"
 endmenu
 
