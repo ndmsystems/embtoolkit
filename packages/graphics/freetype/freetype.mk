@@ -59,7 +59,7 @@ $(FREETYPE_BUILD_DIR)/.configured:
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
 	PKG_CONFIG_PATH=$(ROOTFS)/usr/lib/pkgconfig \
 	PKG_CONFIG_SYSROOT_DIR=$(ROOTFS) \
-	CC=$(TARGETCC_CACHED) CFLAGS=$(TARGET_CFLAGS) \
+	CC=$(TARGETCC_CACHED) CFLAGS="$(TARGET_CFLAGS)" \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--prefix=/usr \
 	--datarootdir=$(SYSROOT)/usr --enable-static=no
