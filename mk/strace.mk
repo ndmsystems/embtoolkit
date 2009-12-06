@@ -59,12 +59,12 @@ download_starce:
 $(STRACE_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring \
 	strace-$(STRACE_VERSION) for target...")
-	@cd $(STRACE_BUILD_DIR); \
+	cd $(STRACE_BUILD_DIR); \
 	$(PACKAGES_BUILD)/strace-$(STRACE_VERSION)/configure \
 	--prefix=$(ROOTFS)/usr \
 	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	CC=$(TARGETCC_CACHED) \
-	CFLAGS=$(TARGET_CFLAGS) \
+	CFLAGS="$(TARGET_CFLAGS)" \
 	LDFLAGS="-L$(SYSROOT)/lib" \
 	CPPFLAGS="-I$(SYSROOT)/usr/include"
 	@touch $@
