@@ -205,6 +205,7 @@ config OPTION_EGLIBC_FCVT
 
 config OPTION_EGLIBC_FMTMSG
 	bool "Functions for formatting messages"
+	default y
 	help
 		This option group includes the following functions:
 
@@ -369,6 +370,7 @@ config OPTION_EGLIBC_INET
 config OPTION_EGLIBC_SUNRPC
 	bool "Support for the Sun 'RPC' protocol."
 		depends on OPTION_EGLIBC_INET
+		default y
 		help
 		This option group includes support for the Sun RPC protocols,
 		including the 'rpcgen' and 'rpcinfo' programs.
