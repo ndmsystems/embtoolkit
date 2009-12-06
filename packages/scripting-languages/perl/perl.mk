@@ -49,6 +49,7 @@ download_perl:
 	wget -O $(DOWNLOAD_DIR)/$(PERL_PACKAGE) \
 	$(PERL_SITE)/$(PERL_PACKAGE)
 ifeq ($(CONFIG_EMBTK_PERL_NEED_PATCH),y)
+	@test -e $(DOWNLOAD_DIR)/perl-$(PERL_VERSION).patch || \
 	wget $(PERL_PATCH_SITE)/perl-$(PERL_VERSION)-*.patch \
 	-O $(DOWNLOAD_DIR)/perl-$(PERL_VERSION).patch
 endif
