@@ -76,10 +76,11 @@ endif
 ROOTFS_COMPONENTS_CLEAN += directfb_clean
 
 #FreeType
-ifeq ($(CONFIG_EMBTK_HAVE_FREETYPE),y)
 include $(EMBTK_ROOT)/packages/graphics/freetype/freetype.mk
+ifeq ($(CONFIG_EMBTK_HAVE_FREETYPE),y)
 ROOTFS_COMPONENTS += freetype_install
 endif
+ROOTFS_COMPONENTS_CLEAN += freetype_clean
 
 #libjpeg
 ifeq ($(CONFIG_EMBTK_HAVE_LIBJPEG),y)
