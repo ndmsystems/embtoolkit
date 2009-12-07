@@ -77,18 +77,24 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	ln -s lib lib64
 	mkdir -p $(ROOTFS)/usr/lib32
 endif
-	@-cp -R $(SYSROOT)/lib/* $(ROOTFS)/lib/
+	@-cp -d $(SYSROOT)/lib/*.so* $(ROOTFS)/lib/
+	@-cp -d $(SYSROOT)/usr/lib/*.so* $(ROOTFS)/usr/lib/
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	@cp -R $(SYSROOT)/lib32/* $(ROOTFS)/lib32/
+	@-cp -d $(SYSROOT)/lib32/*.so* $(ROOTFS)/lib32/
+	@-cp -d $(SYSROOT)/usr/lib32/*.so* $(ROOTFS)/usr/lib32/
 endif
+	@-cp -R $(SYSROOT)/bin/* $(ROOTFS)/bin/
 	@-cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
+	@-cp -R $(SYSROOT)/sbin/* $(ROOTFS)/sbin/
 	@-cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
 	@cp -R $(SYSROOT)/root  $(ROOTFS)/
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
 	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")
-	@-$(TARGETSTRIP)  $(ROOTFS)/lib/*.so
+	@-$(TARGETSTRIP)  $(ROOTFS)/lib/*.so*
+	@-$(TARGETSTRIP)  $(ROOTFS)/usr/lib/*.so*
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	@-$(TARGETSTRIP)  $(ROOTFS)/lib32/*.so
+	@-$(TARGETSTRIP)  $(ROOTFS)/lib32/*.so*
+	@-$(TARGETSTRIP)  $(ROOTFS)/usr/lib32/*.so*
 endif
 	@-$(TARGETSTRIP)  $(ROOTFS)/bin/*
 	@-$(TARGETSTRIP)  $(ROOTFS)/sbin/*
