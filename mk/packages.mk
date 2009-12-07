@@ -61,18 +61,19 @@ endif
 #mtd-utils
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS),y)
 ROOTFS_COMPONENTS += mtd-utils_target_install
-ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
 endif
+ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
 
 ######################## Compression packages ##################################
 
 ########################### Graphics packages ##################################
 
 #DirectFB
-ifeq ($(CONFIG_EMBTK_HAVE_DIRECTFB),y)
 include $(EMBTK_ROOT)/packages/graphics/directfb/directfb.mk
+ifeq ($(CONFIG_EMBTK_HAVE_DIRECTFB),y)
 ROOTFS_COMPONENTS += directfb_install
 endif
+ROOTFS_COMPONENTS_CLEAN += directfb_clean
 
 #FreeType
 ifeq ($(CONFIG_EMBTK_HAVE_FREETYPE),y)

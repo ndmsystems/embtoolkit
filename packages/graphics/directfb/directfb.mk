@@ -28,6 +28,13 @@ DIRECTFB_SITE := http://www.directfb.org/downloads/Core/$(DIRECTFB_BRANCH)
 DIRECTFB_PACKAGE := DirectFB-$(DIRECTFB_VERSION).tar.gz
 DIRECTFB_BUILD_DIR := $(PACKAGES_BUILD)/DirectFB-$(DIRECTFB_VERSION)
 
+DIRECTFB_BINS = c64xdump dfbfx dfbinfo dfbinspector dfbmaster dfbscreen \
+	directfb-csource mkdgiff dfbdump dfbg dfbinput dfblayer dfbpenmount \
+	directfb-config mkdfiff pxa3xx_dump
+DIRECTFB_SBINS =
+DIRECTFB_LIBS = directfb* libdavinci_c64x* libdirect* libdirectfb* libfusion*
+DIRECTFB_INCLUDES = directfb*
+
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 FREETYPE_LIBS_FLAGS := "-L$(ROOTFS)/usr/lib32 -lfreetype"
 else
@@ -43,9 +50,7 @@ $(DIRECTFB_BUILD_DIR)/.installed: libpng_install freetype_install \
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	DirectFB-$(DIRECTFB_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) DESTDIR=$(ROOTFS) install
-	$(Q)-mv $(ROOTFS)/usr/include/* $(SYSROOT)/usr/include/
-	$(Q)rm -rf $(ROOTFS)/usr/include
+	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	@touch $@
 
 download_directfb:
@@ -76,7 +81,16 @@ $(DIRECTFB_BUILD_DIR)/.configured:
 	FREETYPE_CFLAGS=$(FREETYPE_CFLAGS_FLAGS) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --prefix=/usr \
-	--datarootdir=$(SYSROOT)/usr \
 	--enable-static=no  --program-suffix=""
 	@touch $@
+
+directfb_clean:
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup directfb-$(DIRECTFB_VERSION)...")
+	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(DIRECTFB_BINS)
+	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(DIRECTFB_SBINS)
+	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(DIRECTFB_LIBS)
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(DIRECTFB_LIBS)
+endif
+	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(DIRECTFB_INCLUDES)
 
