@@ -83,16 +83,18 @@ endif
 ROOTFS_COMPONENTS_CLEAN += freetype_clean
 
 #libjpeg
-ifeq ($(CONFIG_EMBTK_HAVE_LIBJPEG),y)
 include $(EMBTK_ROOT)/packages/graphics/libjpeg/libjpeg.mk
+ifeq ($(CONFIG_EMBTK_HAVE_LIBJPEG),y)
 ROOTFS_COMPONENTS += libjpeg_install
 endif
+ROOTFS_COMPONENTS_CLEAN += libjpeg_clean
 
 #libpng
-ifeq ($(CONFIG_EMBTK_HAVE_LIBPNG),y)
 include $(EMBTK_ROOT)/packages/graphics/libpng/libpng.mk
+ifeq ($(CONFIG_EMBTK_HAVE_LIBPNG),y)
 ROOTFS_COMPONENTS += libpng_install
 endif
+ROOTFS_COMPONENTS_CLEAN += libpng_clean
 ########################## Networking packages #################################
 
 ############################ Scripting languages ###############################

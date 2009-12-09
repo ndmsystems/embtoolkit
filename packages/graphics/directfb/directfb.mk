@@ -73,10 +73,6 @@ $(DIRECTFB_BUILD_DIR)/.decompressed:
 
 $(DIRECTFB_BUILD_DIR)/.configured:
 	cd $(DIRECTFB_BUILD_DIR); \
-	PATH="$(ROOTFS)/usr/bin:$$PATH" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(ROOTFS)/usr/lib/pkgconfig \
-	PKG_CONFIG_SYSROOT_DIR=$(ROOTFS) \
 	CC=$(TARGETCC_CACHED) CFLAGS="$(TARGET_CFLAGS)" \
 	LDFLAGS="-L$(ROOTFS)/usr/lib -L$(ROOTFS)/usr/lib32 \
 	-L$(ROOTFS)/lib -L$(ROOTFS)/lib32 \

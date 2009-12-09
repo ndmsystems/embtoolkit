@@ -27,6 +27,11 @@ LIBJPEG_SITE := http://www.ijg.org/files
 LIBJPEG_PACKAGE := jpegsrc.$(LIBJPEG_VERSION).tar.gz
 LIBJPEG_BUILD_DIR := $(PACKAGES_BUILD)/jpeg-7
 
+LIBJPEG_BINS := cjpeg djpeg jpegtran rdjpgcom wrjpgcom
+LIBJPEG_SBINS :=
+LIBJPEG_LIBS := libjpeg*
+LIBJEPG_INCLUDES := jconfig.h jerror.h jmorecfg.h jpeglib.h
+
 libjpeg_install: $(LIBJPEG_BUILD_DIR)/.installed
 
 $(LIBJPEG_BUILD_DIR)/.installed: download_libjpeg \
@@ -34,10 +39,9 @@ $(LIBJPEG_BUILD_DIR)/.installed: download_libjpeg \
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	jpeg-$(LIBJPEG_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) DESTDIR=$(ROOTFS) install
+	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) $(LIBJPEG_BUILD_DIR)/.libtoolpatched
-	$(Q)-mv $(ROOTFS)/usr/include/* $(SYSROOT)/usr/include/
-	$(Q)rm -rf $(ROOTFS)/usr/include
+
 	@touch $@
 
 download_libjpeg:
@@ -54,26 +58,33 @@ $(LIBJPEG_BUILD_DIR)/.decompressed:
 
 $(LIBJPEG_BUILD_DIR)/.configured:
 	cd $(LIBJPEG_BUILD_DIR); \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(ROOTFS)/usr/lib/pkgconfig \
-	PKG_CONFIG_SYSROOT_DIR=$(ROOTFS) \
 	CC=$(TARGETCC_CACHED) CFLAGS="$(TARGET_CFLAGS)" \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) \
-	--prefix=/usr \
-	--datarootdir=$(SYSROOT)/usr --enable-static=no --program-suffix=""
+	--prefix=/usr --enable-static=no --program-suffix=""
 	@touch $@
 
 $(LIBJPEG_BUILD_DIR)/.libtoolpatched:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cd $(ROOTFS)/usr/lib32; \
-	cat libjpeg.la | sed -e 's;\/usr\/lib;$(ROOTFS)\/usr\/lib32;' \
+	$(Q)cd $(SYSROOT)/usr/lib32; \
+	cat libjpeg.la | sed -e 's;\/usr\/lib;$(SYSROOT)\/usr\/lib32;' \
 	> libjpeg.la.new;\
 	cp libjpeg.la.new libjpeg.la; rm  libjpeg.la.new
 else
-	$(Q)cd $(ROOTFS)/usr/lib; \
-	cat libjpeg.la | sed -e 's;\/usr\/lib;$(ROOTFS)\/usr\/lib;' \
+	$(Q)cd $(SYSROOT)/usr/lib; \
+	cat libjpeg.la | sed -e 's;\/usr\/lib;$(SYSROOT)\/usr\/lib;' \
 	> libjpeg.la.new;\
 	cp libjpeg.la.new libjpeg.la; rm  libjpeg.la.new
 endif
+
+libjpeg_clean:
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup jpeg-$(LIBJPEG_VERSION)...")
+	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBJPEG_BINS)
+	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBJPEG_SBINS)
+	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBJPEG_INCLUDES)
+	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(LIBJPEG_LIBS)
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(LIBJPEG_LIBS)
+endif
+
 

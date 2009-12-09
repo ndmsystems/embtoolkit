@@ -31,7 +31,7 @@ FREETYPE_BINS = freetype*
 FREETYPE_SBINS =
 FREETYPE_INCLUDES = ft*build.h freetype*
 FREETYPE_LIBS = libfreetype*
-FREETYPE_PKGCONFIG = freetype*.pc
+FREETYPE_PKGCONFIGS = freetype*.pc
 
 freetype_install: $(FREETYPE_BUILD_DIR)/.installed
 
@@ -60,9 +60,6 @@ $(FREETYPE_BUILD_DIR)/.decompressed:
 
 $(FREETYPE_BUILD_DIR)/.configured:
 	$(Q)cd $(FREETYPE_BUILD_DIR); \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(ROOTFS)/usr/lib/pkgconfig \
-	PKG_CONFIG_SYSROOT_DIR=$(ROOTFS) \
 	CC=$(TARGETCC_CACHED) CFLAGS="$(TARGET_CFLAGS)" \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--prefix=/usr --enable-static=no
