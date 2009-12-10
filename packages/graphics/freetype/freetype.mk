@@ -94,7 +94,7 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	> freetype2.pc.new;\
 	cp freetype2.pc.new freetype2.pc; rm freetype2.pc.new freetype2.pc.tmp
 else
-	$(Q)cd $(ROOTFS)/usr/lib/pkgconfig; \
+	$(Q)cd $(SYSROOT)/usr/lib/pkgconfig; \
 	cat freetype2.pc | sed -e 's;prefix=/usr;prefix=$(SYSROOT)/usr;' \
 	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
 	> freetype2.pc.new;\
