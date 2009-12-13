@@ -24,6 +24,7 @@
 
 ZLIB_VERSION := 1.2.3
 ZLIB_SITE := http://www.gzip.org/zlib
+ZLIB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/zlib/patches
 ZLIB_PACKAGE := zlib-$(ZLIB_VERSION).tar.bz2
 ZLIB_HOST_BUILD_DIR := $(TOOLS_BUILD)/zlib-host-build
 ZLIB_TARGET_BUILD_DIR := $(PACKAGES_BUILD)/zlib-target-build
@@ -52,7 +53,7 @@ $(ZLIB_TARGET_BUILD_DIR)/.installed: download_zlib \
 $(ZLIB_TARGET_BUILD_DIR)/.decompressed
 	@$(MAKE) -C $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)-target \
 	CC=$(TARGETCC_CACHED) AR="$(TOOLS)/bin/$(GNU_TARGET)-ar rc" \
-	RANLIB=$(TOOLS)/bin/$(GNU_TARGET)-ranlib
+	RANLIB=$(TOOLS)/bin/$(GNU_TARGET)-ranlib CFLAGS=-fPIC
 	@$(MAKE) -C $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)-target \
 	CC=$(TARGETCC_CACHED) AR="$(TOOLS)/bin/$(GNU_TARGET)-ar rc" \
 	RANLIB=$(TOOLS)/bin/$(GNU_TARGET)-ranlib \
