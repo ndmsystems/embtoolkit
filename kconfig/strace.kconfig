@@ -28,3 +28,18 @@ config EMBTK_ROOTFS_HAVE_STRACE
 	help
 	 strace is a system call tracer, i.e. a debugging tool which prints out
 	 a trace of all the system calls made by a another process/program.
+
+choice
+	prompt "starce version to use"
+	depends on EMBTK_ROOTFS_HAVE_STRACE
+	config EMBTK_STRACE_VERSION_4_5_19
+		bool "strace-4.5.19"
+	config EMBTK_STRACE_VERSION_4_5_18
+		bool "strace-4.5.18"
+endchoice
+
+config EMBTK_STRACE_VERSION_STRING
+	string
+	default "4.5.19"	if EMBTK_STRACE_VERSION_4_5_19
+	default "4.5.18"	if EMBTK_STRACE_VERSION_4_5_18
+

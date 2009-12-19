@@ -22,7 +22,7 @@
 # \date         August 2009
 ################################################################################
 
-STRACE_VERSION:= 4.5.18
+STRACE_VERSION:= $(subst ",,$(strip $(CONFIG_EMBTK_STRACE_VERSION_STRING)))
 STRACE_SITE:=http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
 STRACE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/strace
 STRACE_PACKAGE := strace-$(STRACE_VERSION).tar.bz2
