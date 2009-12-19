@@ -56,6 +56,7 @@ rootfs_build:
 	$(call EMBTK_GENERIC_MESSAGE,"Building selected root filesystems...")
 	@$(MAKE) rootfs_clean mkinitialrootfs $(ROOTFS_HOSTTOOLS) \
 	$(ROOTFS_COMPONENTS) rootfs_fill build_tarbz2_rootfs $(FILESYSTEMS)
+	$(Q)rm -rf $(ROOTFS)
 	$(call EMBTK_GENERIC_MESSAGE,"Build of selected root filesystems \
 	ended successfully!")
 
