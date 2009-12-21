@@ -29,10 +29,10 @@
 include $(EMBTK_ROOT)/mk/zlib.mk
 include $(EMBTK_ROOT)/mk/lzo.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
+include $(EMBTK_ROOT)/mk/termcap.mk
 
 #gdb
 ifeq ($(CONFIG_EMBTK_HAVE_GDB),y)
-include $(EMBTK_ROOT)/mk/termcap.mk
 include $(EMBTK_ROOT)/mk/gdb.mk
 endif
 
