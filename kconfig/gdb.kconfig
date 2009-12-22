@@ -31,6 +31,9 @@ config EMBTK_HAVE_GDB
 choice
 	prompt "GDB version to use"
 	depends on EMBTK_HAVE_GDB
+	config EMBTK_GDB_VERSION_7_0_1
+		depends on !EMBTK_CLIB_UCLIBC
+		bool "gdb-7.0.1"
 	config EMBTK_GDB_VERSION_7_0
 		depends on !EMBTK_CLIB_UCLIBC
 		bool "gdb-7.0"
@@ -40,8 +43,9 @@ endchoice
 
 config EMBTK_GDB_VERSION_STRING
 	string
-	default "6.8" if EMBTK_GDB_VERSION_6_8
+	default "7.0.1" if EMBTK_GDB_VERSION_7_0_1
 	default "7.0" if EMBTK_GDB_VERSION_7_0
+	default "6.8" if EMBTK_GDB_VERSION_6_8
 
 choice
 	prompt "GDB on your target embedded system"
