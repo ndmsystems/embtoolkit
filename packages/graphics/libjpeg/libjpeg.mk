@@ -40,8 +40,7 @@ $(LIBJPEG_BUILD_DIR)/.installed: download_libjpeg \
 	jpeg-$(LIBJPEG_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) $(LIBJPEG_BUILD_DIR)/.libtoolpatched
-
+	$(Q)$(MAKE) libtool_files_adapt
 	@touch $@
 
 download_libjpeg:
@@ -63,19 +62,6 @@ $(LIBJPEG_BUILD_DIR)/.configured:
 	--target=$(STRICT_GNU_TARGET) \
 	--prefix=/usr --enable-static=no --program-suffix=""
 	@touch $@
-
-$(LIBJPEG_BUILD_DIR)/.libtoolpatched:
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cd $(SYSROOT)/usr/lib32; \
-	cat libjpeg.la | sed -e 's;\/usr\/lib;$(SYSROOT)\/usr\/lib32;' \
-	> libjpeg.la.new;\
-	cp libjpeg.la.new libjpeg.la; rm  libjpeg.la.new
-else
-	$(Q)cd $(SYSROOT)/usr/lib; \
-	cat libjpeg.la | sed -e 's;\/usr\/lib;$(SYSROOT)\/usr\/lib;' \
-	> libjpeg.la.new;\
-	cp libjpeg.la.new libjpeg.la; rm  libjpeg.la.new
-endif
 
 libjpeg_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup jpeg-$(LIBJPEG_VERSION)...")
