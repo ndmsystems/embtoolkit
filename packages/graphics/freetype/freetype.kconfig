@@ -41,7 +41,7 @@ choice
 	default EMBTK_FREETYPE_VERSION_2_3_9
 	depends on EMBTK_HAVE_FREETYPE
 	help
-	 Here you can choose which version of libpng you want to use.
+	 Here you can choose which version of freetype you want to use.
 
 	config  EMBTK_FREETYPE_VERSION_2_3_9
 		bool "FreeType-2.3.9"
