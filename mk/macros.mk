@@ -93,3 +93,43 @@ endif
 	@echo
 	@echo "#########################################################################################"
 
+#Macro to adapt libtool files (*.la) for cross compiling
+libtool_files_adapt:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib32 -name *.la`; \
+	for i in $$LIBTOOLS_LA_FILES; \
+	do \
+	sed -e "s;libdir='\/usr\/lib32';libdir='$(SYSROOT)\/usr\/lib32';" $$i \
+	> $$i.new; \
+	mv $$i.new $$i; \
+	done
+else
+	$(Q)LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib -name *.la`; \
+	for i in $$LIBTOOLS_LA_FILES; \
+	do \
+	sed -e "s;libdir='\/usr\/lib';libdir='$(SYSROOT)\/usr\/lib';" < $$i \
+	> $$i.new; \
+	mv $$i.new $$i; \
+	done
+endif
+
+#Macro to restore libtool files (*.la)
+libtool_files_restore:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib32 -name *.la`; \
+	for i in $$LIBTOOLS_LA_FILES; \
+	do \
+	sed -e "s;libdir='$(SYSROOT)\/usr\/lib32';libdir='\/usr\/lib32';" $$i \
+	> $$i.new; \
+	mv $$i.new $$i; \
+	done
+else
+	$(Q)LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib -name *.la`; \
+	for i in $$LIBTOOLS_LA_FILES; \
+	do \
+	sed -e "s;libdir='$(SYSROOT)\/usr\/lib';libdir='\/usr\/lib';" < $$i \
+	> $$i.new; \
+	mv $$i.new $$i; \
+	done
+endif
+
