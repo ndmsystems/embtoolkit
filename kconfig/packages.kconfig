@@ -79,6 +79,7 @@ menu "System packages"
 endmenu
 
 menu "Miscellaneous packages"
+source packages/misc/gettext/gettext.kconfig
 endmenu
 endmenu
 

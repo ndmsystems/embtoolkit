@@ -1,0 +1,63 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         gettext.kconfig
+# \brief	gettext.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         December 2009
+################################################################################
+
+config EMBTK_HAVE_GETTEXT
+	bool "Have gettext"
+	help
+		GNU `gettext' is an important step for the GNU Translation
+		Project, as it is an asset on which we may build many other
+		steps. This package offers to programmers, translators, and even
+		users, a well integrated set of tools and documentation.
+		Specifically, the GNU `gettext' utilities are a set of tools
+		that provides a framework to help other GNU packages produce
+		multi-lingual messages. These tools include a set of conventions
+		about how programs should be written to support message
+		catalogs, a directory and file naming organization for the
+		message catalogs themselves, a runtime library supporting the
+		retrieval of translated messages, and a few stand-alone programs
+		to massage in various ways the sets of translatable strings, or
+		already translated strings. A special GNU Emacs mode also helps
+		interested parties in preparing these sets, or bringing them up
+		to date.
+		Online Manual is available at:
+		www.gnu.org/software/gettext/manual/gettext.html
+		The Frequently Asked Questions and their answers are at:
+		www.gnu.org/software/gettext/FAQ.html
+choice
+	prompt "gettext version you wish"
+	depends on EMBTK_HAVE_GETTEXT
+	help
+	 Here you can choose which version of gettext you want to use.
+
+	config  EMBTK_GETTEXT_VERSION_0_17
+		bool "gettext-0.17"
+	config  EMBTK_GETTEXT_VERSION_0_16_1
+		bool "gettext-0.16.1"
+endchoice
+
+config EMBTK_GETTEXT_VERSION_STRING
+	string
+	default "0.17"		if EMBTK_GETTEXT_VERSION_0_17
+	default "0.16.1"	if EMBTK_GETTEXT_VERSION_0_16_1
+

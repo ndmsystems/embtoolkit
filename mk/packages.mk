@@ -107,6 +107,12 @@ endif
 
 ########################## Miscellaneous packages ##############################
 
+#gettext
+include $(EMBTK_ROOT)/packages/misc/gettext/gettext.mk
+ifeq ($(CONFIG_EMBTK_HAVE_GETTEXT),y)
+ROOTFS_COMPONENTS += gettext_install
+endif
+ROOTFS_COMPONENTS_CLEAN += gettext_clean
 ################################### BUSYBOX ####################################
 #Busybox
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),y)
