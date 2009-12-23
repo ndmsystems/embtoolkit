@@ -113,6 +113,13 @@ ifeq ($(CONFIG_EMBTK_HAVE_GETTEXT),y)
 ROOTFS_COMPONENTS += gettext_install
 endif
 ROOTFS_COMPONENTS_CLEAN += gettext_clean
+
+#GLib
+include $(EMBTK_ROOT)/packages/misc/glib/glib.mk
+ifeq ($(CONFIG_EMBTK_HAVE_GLIB),y)
+ROOTFS_COMPONENTS += glib_install
+endif
+ROOTFS_COMPONENTS_CLEAN += glib_clean
 ################################### BUSYBOX ####################################
 #Busybox
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),y)

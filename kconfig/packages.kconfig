@@ -80,6 +80,7 @@ endmenu
 
 menu "Miscellaneous packages"
 source packages/misc/gettext/gettext.kconfig
+source packages/misc/glib/glib.kconfig
 endmenu
 endmenu
 

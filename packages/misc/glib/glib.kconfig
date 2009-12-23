@@ -1,0 +1,58 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         glib.kconfig
+# \brief	glib.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         December 2009
+################################################################################
+
+config EMBTK_HAVE_GLIB
+	bool "Have GLib"
+	select EMBTK_HAVE_GETTEXT
+	help
+		GLib is a general-purpose utility library, which provides many
+		useful data types, macros, type conversions, string utilities,
+		file utilities, a main loop abstraction, and so on. It works on
+		many UNIX-like platforms, Windows, OS/2 and BeOS. GLib is
+		released under the GNU Library General Public License
+		(GNU LGPL).
+		The general policy of GLib is that all functions are invisibly
+		threadsafe with the exception of data structure manipulation
+		functions, where, if you have two threads manipulating the same
+		data structure, they must use a lock to synchronize their
+		operation.
+choice
+	prompt "GLib version you wish"
+	default EMBTK_GLIB_VERSION_2_23_1
+	depends on EMBTK_HAVE_GLIB
+	help
+	 Here you can choose which version of GLib you want to use.
+
+	config  EMBTK_GLIB_VERSION_2_23_1
+		bool "GLib-2.23.1"
+endchoice
+
+config EMBTK_GLIB_MAJOR_VERSION_STRING
+	string
+	default "2.23"	if EMBTK_GLIB_VERSION_2_23_1
+
+config EMBTK_GLIB_VERSION_STRING
+	string
+	default "2.23.1"	if EMBTK_GLIB_VERSION_2_23_1
+
