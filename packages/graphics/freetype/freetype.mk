@@ -41,7 +41,7 @@ $(FREETYPE_BUILD_DIR)/.installed: zlib_target_install download_freetype \
 	freetype-$(FREETYPE_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(FREETYPE_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(FREETYPE_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) $(FREETYPE_BUILD_DIR)/.libtoolpatched
+	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) $(FREETYPE_BUILD_DIR)/.pkgconfigpatched
 	$(Q)$(MAKE) $(FREETYPE_BUILD_DIR)/.freetype-configpatched
 	@touch $@
@@ -72,19 +72,6 @@ $(FREETYPE_BUILD_DIR)/.freetype-configpatched:
 	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
 	> freetype-config.new;\
 	cp freetype-config.new freetype-config; rm freetype-config.new
-
-$(FREETYPE_BUILD_DIR)/.libtoolpatched:
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cd $(SYSROOT)/usr/lib32; \
-	cat libfreetype.la | sed -e 's;\/usr\/lib;$(SYSROOT)\/usr\/lib32;' \
-	> libfreetype.la.new;\
-	cp libfreetype.la.new libfreetype.la; rm  libfreetype.la.new
-else
-	$(Q)cd $(SYSROOT)/usr/lib; \
-	cat libfreetype.la | sed -e 's;\/usr\/lib;$(SYSROOT)\/usr\/lib;' \
-	> libfreetype.la.new;\
-	cp libfreetype.la.new libfreetype.la; rm  libfreetype.la.new
-endif
 
 $(FREETYPE_BUILD_DIR)/.pkgconfigpatched:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
