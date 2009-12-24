@@ -1,4 +1,4 @@
-#########################################################################################
+################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-#########################################################################################
+################################################################################
 #
 # \file         macros.mk
 # \brief	macros.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2009
-#########################################################################################
+################################################################################
 
 #Decompress message
 #unsage $(call DECOMPRESS_MESSAGE,$(NAME_PACKAGE))
@@ -133,3 +133,24 @@ else
 	done
 endif
 
+#Macro to adapt pkg-config files for cross compiling
+pkgconfig_files_adapt:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)PKGCONF_FILES=`find $(SYSROOT)/usr/lib32/pkgconfig -name *.pc`; \
+	for i in $$PKGCONF_FILES; \
+	do \
+	sed -e 's;prefix=/usr;prefix=$(SYSROOT)/usr;' \
+	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
+	< $$i > $$i.new; \
+	mv $$i.new $$i; \
+	done
+else
+	$(Q)PKGCONF_FILES=`find $(SYSROOT)/usr/lib/pkgconfig -name *.pc`; \
+	for i in $$PKGCONF_FILES; \
+	do \
+	sed -e 's;prefix=/usr;prefix=$(SYSROOT)/usr;' \
+	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
+	< $$i > $$i.new; \
+	mv $$i.new $$i; \
+	done
+endif
