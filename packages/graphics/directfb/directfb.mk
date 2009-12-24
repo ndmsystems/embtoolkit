@@ -52,6 +52,7 @@ $(DIRECTFB_BUILD_DIR)/.installed: libpng_install freetype_install \
 	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
+	$(Q)$(MAKE) pkgconfig_files_adapt
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	$(Q)cp -R $(SYSROOT)/usr/lib32/directfb-*-* $(ROOTFS)/usr/lib32
 	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/lib
