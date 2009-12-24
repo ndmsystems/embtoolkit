@@ -42,7 +42,7 @@ $(LIBPNG_BUILD_DIR)/.installed: zlib_target_install download_libpng \
 	$(Q)$(MAKE) -C $(LIBPNG_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBPNG_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) $(LIBPNG_BUILD_DIR)/.pkgconfigpatched
+	$(Q)$(MAKE) pkgconfig_files_adapt
 	$(Q)$(MAKE) $(LIBPNG_BUILD_DIR)/.libpng-configpatched
 	@touch $@
 
@@ -72,21 +72,6 @@ $(LIBPNG_BUILD_DIR)/.libpng-configpatched:
 	-e 's;includedir="$${prefix}/include/libpng12";includedir="$(SYSROOT)/usr/include/libpng12";' \
 	> libpng-config.new;\
 	cp libpng-config.new libpng-config; rm libpng-config.new
-
-$(LIBPNG_BUILD_DIR)/.pkgconfigpatched:
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cd $(SYSROOT)/usr/lib32/pkgconfig; \
-	cat libpng.pc | sed -e 's;prefix=\/usr;prefix=$(SYSROOT)\/usr;' \
-	-e 's;includedir=$${prefix}/include/libpng12;includedir=$(SYSROOT)/usr/include/libpng12;' \
-	> libpng.pc.new;\
-	cp libpng.pc.new libpng.pc; rm  libpng.pc.new
-else
-	$(Q)cd $(SYSROOT)/usr/lib/pkgconfig; \
-	cat libpng.pc | sed -e 's;prefix=\/usr;prefix=$(SYSROOT)\/usr;' \
-	-e 's;includedir=$${prefix}/include/libpng12;includedir=$(SYSROOT)/usr/include/libpng12;' \
-	> libpng.pc.new;\
-	cp libpng.pc.new libpng.pc; rm  libpng.pc.new
-endif
 
 libpng_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup libpng-$(LIBPNG_VERSION)...")
