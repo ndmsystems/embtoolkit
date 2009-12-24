@@ -43,6 +43,8 @@ $(GLIB_BUILD_DIR)/.installed: gettext_install download_glib \
 	glib-$(GLIB_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(GLIB_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(GLIB_BUILD_DIR) DESTDIR=$(SYSROOT) install
+	$(Q)$(MAKE) libtool_files_adapt
+	$(Q)$(MAKE) pkgconfig_files_adapt
 	@touch $@
 
 download_glib:
