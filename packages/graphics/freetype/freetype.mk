@@ -42,7 +42,7 @@ $(FREETYPE_BUILD_DIR)/.installed: zlib_target_install download_freetype \
 	$(Q)$(MAKE) -C $(FREETYPE_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(FREETYPE_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) $(FREETYPE_BUILD_DIR)/.pkgconfigpatched
+	$(Q)$(MAKE) pkgconfig_files_adapt
 	$(Q)$(MAKE) $(FREETYPE_BUILD_DIR)/.freetype-configpatched
 	@touch $@
 
@@ -72,21 +72,6 @@ $(FREETYPE_BUILD_DIR)/.freetype-configpatched:
 	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
 	> freetype-config.new;\
 	cp freetype-config.new freetype-config; rm freetype-config.new
-
-$(FREETYPE_BUILD_DIR)/.pkgconfigpatched:
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cd $(SYSROOT)/usr/lib32/pkgconfig;\
-	cat freetype2.pc | sed -e 's;prefix=/usr;prefix=$(SYSROOT)/usr;' \
-	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
-	> freetype2.pc.new;\
-	cp freetype2.pc.new freetype2.pc; rm freetype2.pc.new freetype2.pc.tmp
-else
-	$(Q)cd $(SYSROOT)/usr/lib/pkgconfig; \
-	cat freetype2.pc | sed -e 's;prefix=/usr;prefix=$(SYSROOT)/usr;' \
-	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
-	> freetype2.pc.new;\
-	cp freetype2.pc.new freetype2.pc; rm freetype2.pc.new
-endif
 
 freetype_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup freetype-$(FREETYPE_VERSION)...")
