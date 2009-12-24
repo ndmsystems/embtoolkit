@@ -63,6 +63,7 @@ endmenu
 
 menu "Graphics packages"
 source packages/graphics/directfb/directfb.kconfig
+source packages/graphics/fontconfig/fontconfig.kconfig
 source packages/graphics/freetype/freetype.kconfig
 source packages/graphics/libjpeg/libjpeg.kconfig
 source packages/graphics/libpng/libpng.kconfig

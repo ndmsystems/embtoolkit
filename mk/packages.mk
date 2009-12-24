@@ -75,6 +75,13 @@ ROOTFS_COMPONENTS += directfb_install
 endif
 ROOTFS_COMPONENTS_CLEAN += directfb_clean
 
+#fontconfig
+include $(EMBTK_ROOT)/packages/graphics/fontconfig/fontconfig.mk
+ifeq ($(CONFIG_EMBTK_HAVE_FONTCONFIG),y)
+ROOTFS_COMPONENTS += fontconfig_install
+endif
+ROOTFS_COMPONENTS_CLEAN += fontconfig_clean
+
 #FreeType
 include $(EMBTK_ROOT)/packages/graphics/freetype/freetype.mk
 ifeq ($(CONFIG_EMBTK_HAVE_FREETYPE),y)
