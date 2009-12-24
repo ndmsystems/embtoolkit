@@ -41,7 +41,7 @@ $(LIBPNG_BUILD_DIR)/.installed: zlib_target_install download_libpng \
 	libpng-$(LIBPNG_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBPNG_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBPNG_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) $(LIBPNG_BUILD_DIR)/.libtoolpatched
+	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) $(LIBPNG_BUILD_DIR)/.pkgconfigpatched
 	$(Q)$(MAKE) $(LIBPNG_BUILD_DIR)/.libpng-configpatched
 	@touch $@
@@ -72,19 +72,6 @@ $(LIBPNG_BUILD_DIR)/.libpng-configpatched:
 	-e 's;includedir="$${prefix}/include/libpng12";includedir="$(SYSROOT)/usr/include/libpng12";' \
 	> libpng-config.new;\
 	cp libpng-config.new libpng-config; rm libpng-config.new
-
-$(LIBPNG_BUILD_DIR)/.libtoolpatched:
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cd $(SYSROOT)/usr/lib32; \
-	cat libpng.la | sed -e 's;\/usr\/lib;$(SYSROOT)\/usr\/lib32;' \
-	> libpng.la.new;\
-	cp libpng.la.new libpng.la; rm  libpng.la.new
-else
-	$(Q)cd $(SYSROOT)/usr/lib; \
-	cat libpng.la | sed -e 's;\/usr\/lib;$(SYSROOT)\/usr\/lib;' \
-	> libpng.la.new;\
-	cp libpng.la.new libpng.la; rm  libpng.la.new
-endif
 
 $(LIBPNG_BUILD_DIR)/.pkgconfigpatched:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
