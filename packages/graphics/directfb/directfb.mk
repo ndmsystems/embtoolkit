@@ -53,11 +53,12 @@ $(DIRECTFB_BUILD_DIR)/.installed: libpng_install freetype_install \
 	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
+	$(Q)$(MAKE) $(DIRECTFB_BUILD_DIR)/.patchlibtool
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cp -R $(SYSROOT)/usr/lib32/directfb-*-* $(ROOTFS)/usr/lib32
+	$(Q)-cp -R $(SYSROOT)/usr/lib32/directfb-*-* $(ROOTFS)/usr/lib32
 	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/lib
 else
-	$(Q)cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/lib
+	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/lib
 endif
 	@touch $@
 
@@ -87,6 +88,55 @@ $(DIRECTFB_BUILD_DIR)/.configured:
 	--target=$(STRICT_GNU_TARGET) --prefix=/usr \
 	--enable-static=no  --program-suffix=""
 	@touch $@
+
+$(DIRECTFB_BUILD_DIR)/.patchlibtool:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	DIRECTFB_LT_FILES=`find $(SYSROOT)/usr/lib32/directfb-* -type f -name *.la`; \
+	for i in $$DIRECTFB_LT_FILES; \
+	do \
+	$(Q)sed \
+	-e "s; \/usr\/lib32\/libfusion.la ; $(SYSROOT)\/usr\/lib32\/libfusion.la ;" \
+	-e "s; \/usr\/lib32\/libdirect.la ; $(SYSROOT)\/usr\/lib32\/libdirect.la ;" \
+	-e "s; \/usr\/lib32\/libdirectfb.la ; $(SYSROOT)\/usr\/lib32\/libdirectfb.la ;" \
+	< $$i > $$i.new; \
+	mv $$i.new $$i; \
+	done
+	$(Q)sed \
+	-e "s; \/usr\/lib32\/libfusion.la ; $(SYSROOT)\/usr\/lib32\/libfusion.la ;" \
+	-e "s; \/usr\/lib32\/libdirect.la ; $(SYSROOT)\/usr\/lib32\/libdirect.la ;" \
+	-e "s; \/usr\/lib32\/libdirectfb.la ; $(SYSROOT)\/usr\/lib32\/libdirectfb.la ;" \
+	< $(SYSROOT)/usr/lib32/libfusion.la > libfusion.la.new; \
+	mv libfusion.la.new $(SYSROOT)/usr/lib32/libfusion.la
+	$(Q)sed \
+	-e "s; \/usr\/lib32\/libfusion.la ; $(SYSROOT)\/usr\/lib32\/libfusion.la ;" \
+	-e "s; \/usr\/lib32\/libdirect.la ; $(SYSROOT)\/usr\/lib32\/libdirect.la ;" \
+	-e "s; \/usr\/lib32\/libdirectfb.la ; $(SYSROOT)\/usr\/lib32\/libdirectfb.la ;" \
+	< $(SYSROOT)/usr/lib32/libdirectfb.la > libdirectfb.la.new; \
+	mv libdirectfb.la.new $(SYSROOT)/usr/lib32/libdirectfb.la
+else
+	DIRECTFB_LT_FILES=`find $(SYSROOT)/usr/lib/directfb-* -type f -name *.la`; \
+	for i in $$DIRECTFB_LT_FILES; \
+	do \
+	$(Q)sed \
+	-e "s; \/usr\/lib\/libfusion.la ; $(SYSROOT)\/usr\/lib\/libfusion.la ;" \
+	-e "s; \/usr\/lib\/libdirect.la ; $(SYSROOT)\/usr\/lib\/libdirect.la ;" \
+	-e "s; \/usr\/lib\/libdirectfb.la ; $(SYSROOT)\/usr\/lib\/libdirectfb.la ;" \
+	< $$i > $$i.new; \
+	mv $$i.new $$i; \
+	done
+	$(Q)sed \
+	-e "s; \/usr\/lib\/libfusion.la ; $(SYSROOT)\/usr\/lib\/libfusion.la ;" \
+	-e "s; \/usr\/lib\/libdirect.la ; $(SYSROOT)\/usr\/lib\/libdirect.la ;" \
+	-e "s; \/usr\/lib\/libdirectfb.la ; $(SYSROOT)\/usr\/lib\/libdirectfb.la ;" \
+	< $(SYSROOT)/usr/lib/libfusion.la > libfusion.la.new; \
+	mv libfusion.la.new $(SYSROOT)/usr/lib/libfusion.la
+	$(Q)sed \
+	-e "s; \/usr\/lib\/libfusion.la ; $(SYSROOT)\/usr\/lib\/libfusion.la ;" \
+	-e "s; \/usr\/lib\/libdirect.la ; $(SYSROOT)\/usr\/lib\/libdirect.la ;" \
+	-e "s; \/usr\/lib\/libdirectfb.la ; $(SYSROOT)\/usr\/lib\/libdirectfb.la ;" \
+	< $(SYSROOT)/usr/lib/libdirectfb.la > libdirectfb.la.new; \
+	mv libdirectfb.la.new $(SYSROOT)/usr/lib/libdirectfb.la
+endif
 
 directfb_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup directfb-$(DIRECTFB_VERSION)...")
