@@ -69,6 +69,7 @@ source packages/graphics/freetype/freetype.kconfig
 source packages/graphics/libjpeg/libjpeg.kconfig
 source packages/graphics/libpng/libpng.kconfig
 source packages/graphics/pixman/pixman.kconfig
+source packages/graphics/libtiff/libtiff.kconfig
 endmenu
 
 menu "Networking packages"

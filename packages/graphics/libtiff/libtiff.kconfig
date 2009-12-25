@@ -1,0 +1,48 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         libtiff.kconfig
+# \brief	libtiff.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         December 2009
+################################################################################
+
+config EMBTK_HAVE_LIBTIFF
+	bool "Have libtiff"
+	help
+		libtiff provides support for the Tag Image File Format (TIFF), a
+		widely used format for storing image data.
+		The library, along with associated tool programs, should handle
+		most of your needs for reading and writing TIFF images on 32-
+		and 64-bit machines. This software can also be used on older
+		16-bit systems though it may require some effort and you may
+		need to leave out some of the compression support.
+choice
+	prompt "libtiff version you wish"
+	depends on EMBTK_HAVE_LIBTIFF
+	help
+	 Here you can choose which version of libtiff you want to use.
+
+	config  EMBTK_LIBTIFF_VERSION_3_9_2
+		bool "libtiff-3.9.2"
+endchoice
+
+config EMBTK_LIBTIFF_VERSION_STRING
+	string
+	default "3.9.2"		if EMBTK_LIBTIFF_VERSION_3_9_2
+

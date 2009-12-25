@@ -116,6 +116,13 @@ ifeq ($(CONFIG_EMBTK_HAVE_PIXMAN),y)
 ROOTFS_COMPONENTS += pixman_install
 endif
 ROOTFS_COMPONENTS_CLEAN += pixman_clean
+
+#libtiff
+include $(EMBTK_ROOT)/packages/graphics/libtiff/libtiff.mk
+ifeq ($(CONFIG_EMBTK_HAVE_LIBTIFF),y)
+ROOTFS_COMPONENTS += libtiff_install
+endif
+ROOTFS_COMPONENTS_CLEAN += libtiff_clean
 ########################## Networking packages #################################
 
 ############################ Scripting languages ###############################
