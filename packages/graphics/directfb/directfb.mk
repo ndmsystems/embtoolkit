@@ -54,6 +54,7 @@ $(DIRECTFB_BUILD_DIR)/.installed: libpng_install freetype_install \
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	$(Q)$(MAKE) $(DIRECTFB_BUILD_DIR)/.patchlibtool
+	$(Q)-cp $(DIRECTFB_BUILD_DIR)/fb.modes $(ROOTFS)/etc/
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	$(Q)-cp -R $(SYSROOT)/usr/lib32/directfb-*-* $(ROOTFS)/usr/lib32
 	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/lib
@@ -91,10 +92,10 @@ $(DIRECTFB_BUILD_DIR)/.configured:
 
 $(DIRECTFB_BUILD_DIR)/.patchlibtool:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	DIRECTFB_LT_FILES=`find $(SYSROOT)/usr/lib32/directfb-* -type f -name *.la`; \
+	$(Q)DIRECTFB_LT_FILES=`find $(SYSROOT)/usr/lib32/directfb-* -type f -name *.la`; \
 	for i in $$DIRECTFB_LT_FILES; \
 	do \
-	$(Q)sed \
+	sed \
 	-e "s; \/usr\/lib32\/libfusion.la ; $(SYSROOT)\/usr\/lib32\/libfusion.la ;" \
 	-e "s; \/usr\/lib32\/libdirect.la ; $(SYSROOT)\/usr\/lib32\/libdirect.la ;" \
 	-e "s; \/usr\/lib32\/libdirectfb.la ; $(SYSROOT)\/usr\/lib32\/libdirectfb.la ;" \
@@ -114,10 +115,10 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	< $(SYSROOT)/usr/lib32/libdirectfb.la > libdirectfb.la.new; \
 	mv libdirectfb.la.new $(SYSROOT)/usr/lib32/libdirectfb.la
 else
-	DIRECTFB_LT_FILES=`find $(SYSROOT)/usr/lib/directfb-* -type f -name *.la`; \
+	$(Q)DIRECTFB_LT_FILES=`find $(SYSROOT)/usr/lib/directfb-* -type f -name *.la`; \
 	for i in $$DIRECTFB_LT_FILES; \
 	do \
-	$(Q)sed \
+	sed \
 	-e "s; \/usr\/lib\/libfusion.la ; $(SYSROOT)\/usr\/lib\/libfusion.la ;" \
 	-e "s; \/usr\/lib\/libdirect.la ; $(SYSROOT)\/usr\/lib\/libdirect.la ;" \
 	-e "s; \/usr\/lib\/libdirectfb.la ; $(SYSROOT)\/usr\/lib\/libdirectfb.la ;" \
