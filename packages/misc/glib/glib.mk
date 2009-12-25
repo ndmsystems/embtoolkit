@@ -45,6 +45,7 @@ $(GLIB_BUILD_DIR)/.installed: gettext_install download_glib \
 	$(Q)$(MAKE) -C $(GLIB_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
+	$(Q)$(MAKE) $(GLIB_BUILD_DIR)/.patchlibtool
 	@touch $@
 
 download_glib:
@@ -76,6 +77,48 @@ $(GLIB_BUILD_DIR)/.configured:
 	--target=$(STRICT_GNU_TARGET) \
 	--prefix=/usr --disable-fam
 	@touch $@
+
+#FIXME: this should be fixed in glib2 project
+$(GLIB_BUILD_DIR)/.patchlibtool:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)sed \
+	-e "s;\/usr\/lib32\/libgobject-2.0.la;$(SYSROOT)\/usr\/lib32\/libgobject-2.0.la;" \
+	-e "s;\/usr\/lib32\/libgmodule-2.0.la;$(SYSROOT)\/usr\/lib32\/libgmodule-2.0.la;" \
+	-e "s;\/usr\/lib32\/libglib-2.0.la;$(SYSROOT)\/usr\/lib32\/libglib-2.0.la;" \
+	< $(SYSROOT)/usr/lib32/libgio-2.0.la > libgio-2.0.la.new; \
+	mv libgio-2.0.la.new $(SYSROOT)/usr/lib32/libgio-2.0.la
+	$(Q)sed \
+	-e "s;\/usr\/lib32\/libglib-2.0.la;$(SYSROOT)\/usr\/lib32\/libglib-2.0.la;" \
+	< $(SYSROOT)/usr/lib32/libgmodule-2.0.la > libgmodule-2.0.la.new; \
+	mv libgmodule-2.0.la.new $(SYSROOT)/usr/lib32/libgmodule-2.0.la
+	$(Q)sed \
+	-e "s;\/usr\/lib32\/libglib-2.0.la;$(SYSROOT)\/usr\/lib32\/libglib-2.0.la;" \
+	< $(SYSROOT)/usr/lib32/libgobject-2.0.la > libgobject-2.0.la.new; \
+	mv libgobject-2.0.la.new $(SYSROOT)/usr/lib32/libgobject-2.0.la
+	$(Q)sed \
+	-e "s;\/usr\/lib32\/libglib-2.0.la;$(SYSROOT)\/usr\/lib32\/libglib-2.0.la;" \
+	< $(SYSROOT)/usr/lib32/libgthread-2.0.la > libgthread-2.0.la.new; \
+	mv libgthread-2.0.la.new $(SYSROOT)/usr/lib32/libgthread-2.0.la
+else
+	$(Q)sed \
+	-e "s;\/usr\/lib\/libgobject-2.0.la;$(SYSROOT)\/usr\/lib\/libgobject-2.0.la;" \
+	-e "s;\/usr\/lib\/libgmodule-2.0.la;$(SYSROOT)\/usr\/lib\/libgmodule-2.0.la;" \
+	-e "s;\/usr\/lib\/libglib-2.0.la;$(SYSROOT)\/usr\/lib\/libglib-2.0.la;" \
+	< $(SYSROOT)/usr/lib/libgio-2.0.la > libgio-2.0.la.new; \
+	mv libgio-2.0.la.new $(SYSROOT)/usr/lib/libgio-2.0.la
+	$(Q)sed \
+	-e "s;\/usr\/lib\/libglib-2.0.la;$(SYSROOT)\/usr\/lib\/libglib-2.0.la;" \
+	< $(SYSROOT)/usr/lib/libgmodule-2.0.la > libgmodule-2.0.la.new; \
+	mv libgmodule-2.0.la.new $(SYSROOT)/usr/lib/libgmodule-2.0.la
+	$(Q)sed \
+	-e "s;\/usr\/lib\/libglib-2.0.la;$(SYSROOT)\/usr\/lib\/libglib-2.0.la;" \
+	< $(SYSROOT)/usr/lib/libgobject-2.0.la > libgobject-2.0.la.new; \
+	mv libgobject-2.0.la.new $(SYSROOT)/usr/lib/libgobject-2.0.la
+	$(Q)sed \
+	-e "s;\/usr\/lib\/libglib-2.0.la;$(SYSROOT)\/usr\/lib\/libglib-2.0.la;" \
+	< $(SYSROOT)/usr/lib/libgthread-2.0.la > libgthread-2.0.la.new; \
+	mv libgthread-2.0.la.new $(SYSROOT)/usr/lib/libgthread-2.0.la
+endif
 
 glib_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup glib-$(GLIB_VERSION)...")
