@@ -1,0 +1,48 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         atk.kconfig
+# \brief	atk.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         December 2009
+################################################################################
+
+config EMBTK_HAVE_ATK
+	bool "Have atk"
+	help
+		GNOME Accessibility is the suite of software services and
+		support in GNOME that allows people with disabilities to utilize
+		all of the functionality of the GNOME user environment.
+choice
+	prompt "atk version you wish"
+	depends on EMBTK_HAVE_ATK
+	help
+	 Here you can choose which version of atk you want to use.
+
+	config  EMBTK_ATK_VERSION_1_28_0
+		bool "atk-1.28.0"
+endchoice
+
+config EMBTK_ATK_MAJOR_VERSION_STRING
+	string
+	default "1.28"		if EMBTK_ATK_VERSION_1_28_0
+
+config EMBTK_ATK_VERSION_STRING
+	string
+	default "1.28.0"	if EMBTK_ATK_VERSION_1_28_0
+

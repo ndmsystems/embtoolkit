@@ -68,6 +68,13 @@ ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
 
 ########################### Graphics packages ##################################
 
+#atk
+include $(EMBTK_ROOT)/packages/graphics/atk/atk.mk
+ifeq ($(CONFIG_EMBTK_HAVE_ATK),y)
+ROOTFS_COMPONENTS += atk_install
+endif
+ROOTFS_COMPONENTS_CLEAN += atk_clean
+
 #Cairo
 include $(EMBTK_ROOT)/packages/graphics/cairo/cairo.mk
 ifeq ($(CONFIG_EMBTK_HAVE_CAIRO),y)
