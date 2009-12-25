@@ -1,0 +1,109 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         pango.mk
+# \brief	pango.mk of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         December 2009
+################################################################################
+
+PANGO_MAJOR_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_PANGO_MAJOR_VERSION_STRING)))
+PANGO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_PANGO_VERSION_STRING)))
+PANGO_SITE := http://ftp.gnome.org/pub/gnome/sources/pango/$(PANGO_MAJOR_VERSION)
+PANGO_PACKAGE := pango-$(PANGO_VERSION).tar.bz2
+PANGO_BUILD_DIR := $(PACKAGES_BUILD)/pango-$(PANGO_VERSION)
+
+PANGO_BINS = pango*
+PANGO_SBINS =
+PANGO_INCLUDES = pango-* pango* libpango*
+PANGO_LIBS =
+PANGO_PKGCONFIGS = pango*.pc
+
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
+else
+PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
+endif
+
+pango_install: $(PANGO_BUILD_DIR)/.installed
+
+$(PANGO_BUILD_DIR)/.installed: glib_install fontconfig_install cairo_install \
+	download_pango $(PANGO_BUILD_DIR)/.decompressed \
+	$(PANGO_BUILD_DIR)/.configured
+	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	pango-$(PANGO_VERSION) in your root filesystem...")
+	$(Q)$(MAKE) -C $(PANGO_BUILD_DIR) $(J) V=1
+	$(Q)$(MAKE) -C $(PANGO_BUILD_DIR) DESTDIR=$(SYSROOT) install
+	$(Q)$(MAKE) libtool_files_adapt
+	$(Q)$(MAKE) pkgconfig_files_adapt
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)cp -R $(SYSROOT)/usr/lib32/pango $(ROOTFS)/usr/lib32/
+else
+	$(Q)cp -R $(SYSROOT)/usr/lib/pango $(ROOTFS)/usr/lib/
+endif
+	@touch $@
+
+download_pango:
+	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(PANGO_PACKAGE) \
+	if necessary...")
+	@test -e $(DOWNLOAD_DIR)/$(PANGO_PACKAGE) || \
+	wget -O $(DOWNLOAD_DIR)/$(PANGO_PACKAGE) \
+	$(PANGO_SITE)/$(PANGO_PACKAGE)
+
+$(PANGO_BUILD_DIR)/.decompressed:
+	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(PANGO_PACKAGE) ...")
+	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(PANGO_PACKAGE)
+	@touch $@
+
+$(PANGO_BUILD_DIR)/.configured:
+	$(Q)cd $(PANGO_BUILD_DIR); \
+	CC=$(TARGETCC_CACHED) \
+	CXX=$(TARGETCXX_CACHED) \
+	AR=$(TARGETAR) \
+	RANLIB=$(TARGETRANLIB) \
+	AS=$(CROSS_COMPILE)as \
+	LD=$(TARGETLD) \
+	NM=$(TARGETNM) \
+	STRIP=$(TARGETSTRIP) \
+	OBJDUMP=$(TARGETOBJDUMP) \
+	OBJCOPY=$(TARGETOBJCOPY) \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	CXXFLAGS="$(TARGET_CFLAGS)" \
+	LDFLAGS="-L$(SYSROOT)/lib -L$(SYSROOT)/usr/lib \
+	-L$(SYSROOT)/lib32 -L$(SYSROOT)/usr/lib32" \
+	CPPFLGAS="-I$(SYSROOT)/usr/include" \
+	PKG_CONFIG=$(PKGCONFIG_BIN) \
+	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
+	PKG_CONFIG_LIBDIR=$(SYSROOT)/usr/lib \
+	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
+	--target=$(STRICT_GNU_TARGET) \
+	--prefix=/usr --without-x
+	@touch $@
+
+pango_clean:
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup pango-$(PANGO_VERSION)...")
+	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(PANGO_BINS)
+	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(PANGO_SBINS)
+	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(PANGO_INCLUDES)
+	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(PANGO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(PANGO_PKGCONFIGS)
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(PANGO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(PANGO_PKGCONFIGS)
+endif
+

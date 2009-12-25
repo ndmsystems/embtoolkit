@@ -148,6 +148,13 @@ ifeq ($(CONFIG_EMBTK_HAVE_LIBXML2),y)
 ROOTFS_COMPONENTS += libxml2_install
 endif
 ROOTFS_COMPONENTS_CLEAN += libxml2_clean
+
+#Pango
+include $(EMBTK_ROOT)/packages/misc/pango/pango.mk
+ifeq ($(CONFIG_EMBTK_HAVE_PANGO),y)
+ROOTFS_COMPONENTS += pango_install
+endif
+ROOTFS_COMPONENTS_CLEAN += pango_clean
 ################################### BUSYBOX ####################################
 #Busybox
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),y)

@@ -1,0 +1,53 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         pango.kconfig
+# \brief	pango.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         December 2009
+################################################################################
+
+config EMBTK_HAVE_PANGO
+	bool "Have Pango"
+	select EMBTK_HAVE_GLIB
+	select EMBTK_HAVE_FONTCONFIG
+	select EMBTK_HAVE_CAIRO
+	help
+		Pango is a library for laying out and rendering of text, with an
+		emphasis on internationalization. Pango can be used anywhere
+		that text layout is needed, though most of the work on Pango so
+		far has been done in the context of the GTK+ widget toolkit.
+		Pango forms the core of text and font handling for GTK+-2.x.
+choice
+	prompt "Pango version you wish"
+	depends on EMBTK_HAVE_PANGO
+	help
+	 Here you can choose which version of Pango you want to use.
+
+	config  EMBTK_PANGO_VERSION_1_26_2
+		bool "Pango-1.26.2"
+endchoice
+
+config EMBTK_PANGO_MAJOR_VERSION_STRING
+	string
+	default "1.26"	if EMBTK_PANGO_VERSION_1_26_2
+
+config EMBTK_PANGO_VERSION_STRING
+	string
+	default "1.26.2"	if EMBTK_PANGO_VERSION_1_26_2
+
