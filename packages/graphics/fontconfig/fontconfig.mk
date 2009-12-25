@@ -41,8 +41,8 @@ endif
 
 fontconfig_install: $(FONTCONFIG_BUILD_DIR)/.installed
 
-$(FONTCONFIG_BUILD_DIR)/.installed: libxml2_install download_fontconfig \
-	$(FONTCONFIG_BUILD_DIR)/.decompressed \
+$(FONTCONFIG_BUILD_DIR)/.installed: $(LIBXML2_BUILD_DIR)/.installed \
+	download_fontconfig $(FONTCONFIG_BUILD_DIR)/.decompressed \
 	$(FONTCONFIG_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	fontconfig-$(FONTCONFIG_VERSION) in your root filesystem...")
@@ -50,7 +50,7 @@ $(FONTCONFIG_BUILD_DIR)/.installed: libxml2_install download_fontconfig \
 	$(Q)$(MAKE) -C $(FONTCONFIG_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
-	$(Q)mv $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc
+	$(Q)-mv $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc
 	@touch $@
 
 download_fontconfig:
