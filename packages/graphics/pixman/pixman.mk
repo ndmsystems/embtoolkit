@@ -1,0 +1,101 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         pixman.mk
+# \brief	pixman.mk of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         December 2009
+################################################################################
+
+PIXMAN_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_PIXMAN_VERSION_STRING)))
+PIXMAN_SITE := http://www.cairographics.org/releases
+PIXMAN_PACKAGE := pixman-$(PIXMAN_VERSION).tar.gz
+PIXMAN_BUILD_DIR := $(PACKAGES_BUILD)/pixman-$(PIXMAN_VERSION)
+
+PIXMAN_BINS =
+PIXMAN_SBINS =
+PIXMAN_INCLUDES = pixman-*
+PIXMAN_LIBS = libpixman-*
+PIXMAN_PKGCONFIGS = pixman-*.pc
+
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
+else
+PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
+endif
+
+pixman_install: $(PIXMAN_BUILD_DIR)/.installed
+
+$(PIXMAN_BUILD_DIR)/.installed: download_pixman \
+	$(PIXMAN_BUILD_DIR)/.decompressed $(PIXMAN_BUILD_DIR)/.configured
+	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	pixman-$(PIXMAN_VERSION) in your root filesystem...")
+	$(Q)$(MAKE) -C $(PIXMAN_BUILD_DIR) $(J)
+	$(Q)$(MAKE) -C $(PIXMAN_BUILD_DIR) DESTDIR=$(SYSROOT) install
+	$(Q)$(MAKE) libtool_files_adapt
+	$(Q)$(MAKE) pkgconfig_files_adapt
+	@touch $@
+
+download_pixman:
+	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(PIXMAN_PACKAGE) \
+	if necessary...")
+	@test -e $(DOWNLOAD_DIR)/$(PIXMAN_PACKAGE) || \
+	wget -O $(DOWNLOAD_DIR)/$(PIXMAN_PACKAGE) \
+	$(PIXMAN_SITE)/$(PIXMAN_PACKAGE)
+
+$(PIXMAN_BUILD_DIR)/.decompressed:
+	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(PIXMAN_PACKAGE) ...")
+	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(PIXMAN_PACKAGE)
+	@touch $@
+
+$(PIXMAN_BUILD_DIR)/.configured:
+	$(Q)cd $(PIXMAN_BUILD_DIR); \
+	CC=$(TARGETCC_CACHED) \
+	CXX=$(TARGETCXX_CACHED) \
+	AR=$(TARGETAR) \
+	RANLIB=$(TARGETRANLIB) \
+	AS=$(CROSS_COMPILE)as \
+	LD=$(TARGETLD) \
+	NM=$(TARGETNM) \
+	STRIP=$(TARGETSTRIP) \
+	OBJDUMP=$(TARGETOBJDUMP) \
+	OBJCOPY=$(TARGETOBJCOPY) \
+	CFLAGS="$(TARGET_CFLAGS)" \
+	CXXFLAGS="$(TARGET_CFLAGS)" \
+	LDFLAGS="-L$(SYSROOT)/lib -L$(SYSROOT)/usr/lib \
+	-L$(SYSROOT)/lib32 -L$(SYSROOT)/usr/lib32" \
+	CPPFLGAS="-I$(SYSROOT)/usr/include" \
+	PKG_CONFIG=$(PKGCONFIG_BIN) \
+	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
+	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
+	--target=$(STRICT_GNU_TARGET) \
+	--prefix=/usr
+	@touch $@
+
+pixman_clean:
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup pixman-$(PIXMAN_VERSION)...")
+	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(PIXMAN_BINS)
+	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(PIXMAN_SBINS)
+	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(PIXMAN_INCLUDES)
+	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(PIXMAN_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(PIXMAN_PKGCONFIGS)
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(PIXMAN_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(PIXMAN_PKGCONFIGS)
+endif
+

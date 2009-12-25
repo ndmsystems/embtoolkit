@@ -102,6 +102,13 @@ ifeq ($(CONFIG_EMBTK_HAVE_LIBPNG),y)
 ROOTFS_COMPONENTS += libpng_install
 endif
 ROOTFS_COMPONENTS_CLEAN += libpng_clean
+
+#pixman
+include $(EMBTK_ROOT)/packages/graphics/pixman/pixman.mk
+ifeq ($(CONFIG_EMBTK_HAVE_PIXMAN),y)
+ROOTFS_COMPONENTS += pixman_install
+endif
+ROOTFS_COMPONENTS_CLEAN += pixman_clean
 ########################## Networking packages #################################
 
 ############################ Scripting languages ###############################
