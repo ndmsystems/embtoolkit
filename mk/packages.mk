@@ -103,6 +103,13 @@ ROOTFS_COMPONENTS += freetype_install
 endif
 ROOTFS_COMPONENTS_CLEAN += freetype_clean
 
+#gtk+
+include $(EMBTK_ROOT)/packages/graphics/gtk/gtk.mk
+ifeq ($(CONFIG_EMBTK_HAVE_GTK),y)
+ROOTFS_COMPONENTS += gtk_install
+endif
+ROOTFS_COMPONENTS_CLEAN += gtk_clean
+
 #libjpeg
 include $(EMBTK_ROOT)/packages/graphics/libjpeg/libjpeg.mk
 ifeq ($(CONFIG_EMBTK_HAVE_LIBJPEG),y)

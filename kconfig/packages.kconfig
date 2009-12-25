@@ -67,6 +67,7 @@ source packages/graphics/cairo/cairo.kconfig
 source packages/graphics/directfb/directfb.kconfig
 source packages/graphics/fontconfig/fontconfig.kconfig
 source packages/graphics/freetype/freetype.kconfig
+source packages/graphics/gtk/gtk.kconfig
 source packages/graphics/libjpeg/libjpeg.kconfig
 source packages/graphics/libpng/libpng.kconfig
 source packages/graphics/pixman/pixman.kconfig

@@ -1,0 +1,62 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         gtk.kconfig
+# \brief	gtk.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         December 2009
+################################################################################
+
+config EMBTK_HAVE_GTK
+	bool "Have gtk+"
+	select EMBTK_HAVE_GLIB
+	select EMBTK_HAVE_PANGO
+	select EMBTK_HAVE_ATK
+	select EMBTK_HAVE_LIBJEPG
+	select EMBTK_HAVE_LIBPNG
+	select EMBTK_HAVE_LIBTIFF
+	select EMBTK_HAVE_FONTCONFIG
+	select EMBTK_HAVE_CAIRO
+	select EMBTK_HAVE_DIRECTFB
+	help
+		GTK+ is a highly usable, feature rich toolkit for creating
+		graphical user interfaces which boasts cross platform
+		compatibility and an easy to use API. GTK+ it is written in C,
+		but has bindings to many other popular programming languages
+		such as C++, Python and C# among others. GTK+ is licensed under
+		the GNU LGPL 2.1 allowing development of both free and
+		proprietary software with GTK+ without any license fees or
+		royalties.
+choice
+	prompt "gtk+ version you wish"
+	depends on EMBTK_HAVE_GTK
+	help
+	 Here you can choose which version of gtk you want to use.
+
+	config  EMBTK_GTK_VERSION_2_18_5
+		bool "gtk+-2.18.5"
+endchoice
+
+config EMBTK_GTK_MAJOR_VERSION_STRING
+	string
+	default "2.18"		if EMBTK_GTK_VERSION_2_18_5
+
+config EMBTK_GTK_VERSION_STRING
+	string
+	default "2.18.5"	if EMBTK_GTK_VERSION_2_18_5
+
