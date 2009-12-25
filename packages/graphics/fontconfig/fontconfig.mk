@@ -41,7 +41,7 @@ endif
 
 fontconfig_install: $(FONTCONFIG_BUILD_DIR)/.installed
 
-$(FONTCONFIG_BUILD_DIR)/.installed: $(LIBXML2_BUILD_DIR)/.installed \
+$(FONTCONFIG_BUILD_DIR)/.installed: libxml2_install \
 	download_fontconfig $(FONTCONFIG_BUILD_DIR)/.decompressed \
 	$(FONTCONFIG_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
