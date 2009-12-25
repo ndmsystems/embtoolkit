@@ -99,20 +99,20 @@ $(PANGO_BUILD_DIR)/.configured:
 
 $(PANGO_BUILD_DIR)/.patchlibtool:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	PANGO_LT_FILES=`find $(SYSROOT)/usr/lib32/pango/* -type f -name *.la`; \
+	$(Q)PANGO_LT_FILES=`find $(SYSROOT)/usr/lib32/pango/* -type f -name *.la`; \
 	for i in $$PANGO_LT_FILES; \
 	do \
-	$(Q)sed \
+	sed \
 	-e "s; \/usr\/lib32\/libpangoft2-1.0.la ; $(SYSROOT)\/usr\/lib32\/libpangoft2-1.0.la ;" \
 	-e "s; \/usr\/lib32\/libpango-1.0.la ; $(SYSROOT)\/usr\/lib32\/libpango-1.0.la ;" \
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done
 else
-	PANGO_LT_FILES=`find $(SYSROOT)/usr/lib/* -type f -name *.la`; \
+	$(Q)PANGO_LT_FILES=`find $(SYSROOT)/usr/lib/* -type f -name *.la`; \
 	for i in $$PANGO_LT_FILES; \
 	do \
-	$(Q)sed \
+	sed \
 	-e "s; \/usr\/lib\/libpangoft2-1.0.la ; $(SYSROOT)\/usr\/lib\/libpangoft2-1.0.la ;" \
 	-e "s; \/usr\/lib\/libpango-1.0.la ; $(SYSROOT)\/usr\/lib\/libpango-1.0.la ;" \
 	< $$i > $$i.new; \
