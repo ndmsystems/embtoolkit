@@ -36,7 +36,7 @@ CAIRO_PKGCONFIGS = cairo*.pc
 cairo_install: $(CAIRO_BUILD_DIR)/.installed
 
 $(CAIRO_BUILD_DIR)/.installed: pixman_install libpng_install freetype_install \
-	fontconfig_install download_cairo \
+	directfb_install fontconfig_install download_cairo \
 	$(CAIRO_BUILD_DIR)/.decompressed $(CAIRO_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	cairo-$(CAIRO_VERSION) in your root filesystem...")
@@ -80,7 +80,7 @@ $(CAIRO_BUILD_DIR)/.configured:
 	PKG_CONFIG_LIBDIR=$(SYSROOT)/usr/lib \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --without-x
+	--prefix=/usr --without-x --enable-directfb
 	@touch $@
 
 cairo_clean:
