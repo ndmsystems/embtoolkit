@@ -42,7 +42,8 @@ endif
 
 pango_install: $(PANGO_BUILD_DIR)/.installed
 
-$(PANGO_BUILD_DIR)/.installed: glib_install fontconfig_install cairo_install \
+$(PANGO_BUILD_DIR)/.installed: $(GLIB_BUILD_DIR)/.installed \
+	$(FONTCONFIG_BUILD_DIR)/.installed $(CAIRO_BUILD_DIR)/.installed \
 	download_pango $(PANGO_BUILD_DIR)/.decompressed \
 	$(PANGO_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
@@ -51,10 +52,11 @@ $(PANGO_BUILD_DIR)/.installed: glib_install fontconfig_install cairo_install \
 	$(Q)$(MAKE) -C $(PANGO_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
+	$(Q)$(MAKE) $(PANGO_BUILD_DIR)/.patchlibtool
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cp -R $(SYSROOT)/usr/lib32/pango $(ROOTFS)/usr/lib32/
+	$(Q)-cp -R $(SYSROOT)/usr/lib32/pango $(ROOTFS)/usr/lib32/
 else
-	$(Q)cp -R $(SYSROOT)/usr/lib/pango $(ROOTFS)/usr/lib/
+	$(Q)-cp -R $(SYSROOT)/usr/lib/pango $(ROOTFS)/usr/lib/
 endif
 	@touch $@
 
@@ -95,6 +97,28 @@ $(PANGO_BUILD_DIR)/.configured:
 	--prefix=/usr --without-x
 	@touch $@
 
+$(PANGO_BUILD_DIR)/.patchlibtool:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	PANGO_LT_FILES=`find $(SYSROOT)/usr/lib32/pango/* -type f -name *.la`; \
+	for i in $$PANGO_LT_FILES; \
+	do \
+	$(Q)sed \
+	-e "s; \/usr\/lib32\/libpangoft2-1.0.la ; $(SYSROOT)\/usr\/lib32\/libpangoft2-1.0.la ;" \
+	-e "s; \/usr\/lib32\/libpango-1.0.la ; $(SYSROOT)\/usr\/lib32\/libpango-1.0.la ;" \
+	< $$i > $$i.new; \
+	mv $$i.new $$i; \
+	done
+else
+	PANGO_LT_FILES=`find $(SYSROOT)/usr/lib/* -type f -name *.la`; \
+	for i in $$PANGO_LT_FILES; \
+	do \
+	$(Q)sed \
+	-e "s; \/usr\/lib\/libpangoft2-1.0.la ; $(SYSROOT)\/usr\/lib\/libpangoft2-1.0.la ;" \
+	-e "s; \/usr\/lib\/libpango-1.0.la ; $(SYSROOT)\/usr\/lib\/libpango-1.0.la ;" \
+	< $$i > $$i.new; \
+	mv $$i.new $$i; \
+	done
+endif
 pango_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup pango-$(PANGO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(PANGO_BINS)
