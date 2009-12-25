@@ -68,6 +68,13 @@ ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
 
 ########################### Graphics packages ##################################
 
+#Cairo
+include $(EMBTK_ROOT)/packages/graphics/cairo/cairo.mk
+ifeq ($(CONFIG_EMBTK_HAVE_CAIRO),y)
+ROOTFS_COMPONENTS += cairo_install
+endif
+ROOTFS_COMPONENTS_CLEAN += cairo_clean
+
 #DirectFB
 include $(EMBTK_ROOT)/packages/graphics/directfb/directfb.mk
 ifeq ($(CONFIG_EMBTK_HAVE_DIRECTFB),y)

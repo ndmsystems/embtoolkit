@@ -62,6 +62,7 @@ menu "Compression packages"
 endmenu
 
 menu "Graphics packages"
+source packages/graphics/cairo/cairo.kconfig
 source packages/graphics/directfb/directfb.kconfig
 source packages/graphics/fontconfig/fontconfig.kconfig
 source packages/graphics/freetype/freetype.kconfig
