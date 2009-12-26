@@ -52,6 +52,7 @@ $(GTK_BUILD_DIR)/.installed: directfb_install libtiff_install \
 	$(Q)$(MAKE) -C $(GTK_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
+	$(Q)$(MAKE) $(GTK_BUILD_DIR)/.patchlibtool
 	@touch $@
 
 download_gtk:
@@ -94,7 +95,7 @@ $(GTK_BUILD_DIR)/.configured:
 
 $(GTK_BUILD_DIR)/.patchlibtool:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)GTK_LT_FILES=`find $(SYSROOT)/usr/lib32/ -type f -name *.la`; \
+	GTK_LT_FILES=`find $(SYSROOT)/usr/lib32/ -type f -name *.la`; \
 	for i in $$GTK_LT_FILES; \
 	do \
 	sed \
@@ -105,7 +106,7 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	mv $$i.new $$i; \
 	done
 else
-	$(Q)GTK_LT_FILES=`find $(SYSROOT)/usr/lib/ -type f -name *.la`; \
+	GTK_LT_FILES=`find $(SYSROOT)/usr/lib/ -type f -name *.la`; \
 	for i in $$GTK_LT_FILES; \
 	do \
 	sed \
