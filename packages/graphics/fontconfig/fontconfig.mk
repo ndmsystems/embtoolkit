@@ -39,7 +39,8 @@ else
 LIBXML2_CFLAGS="-I$(SYSROOT)/usr/include/libxml2 -L$(SYSROOT)/usr/lib"
 endif
 
-fontconfig_install: $(FONTCONFIG_BUILD_DIR)/.installed
+fontconfig_install:	$(FONTCONFIG_BUILD_DIR)/.installed \
+			$(FONTCONFIG_BUILD_DIR)/.special	
 
 $(FONTCONFIG_BUILD_DIR)/.installed: libxml2_install \
 	download_fontconfig $(FONTCONFIG_BUILD_DIR)/.decompressed \
@@ -50,7 +51,6 @@ $(FONTCONFIG_BUILD_DIR)/.installed: libxml2_install \
 	$(Q)$(MAKE) -C $(FONTCONFIG_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
-	$(Q)-mv $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc
 	@touch $@
 
 download_fontconfig:
@@ -80,6 +80,8 @@ $(FONTCONFIG_BUILD_DIR)/.configured:
 	--prefix=/usr --disable-docs
 	@touch $@
 
+.PHONY: $(FONTCONFIG_BUILD_DIR)/.special fontconfig_clean
+
 fontconfig_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup fontconfig-$(FONTCONFIG_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(FONTCONFIG_BINS)
@@ -91,4 +93,8 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(FONTCONFIG_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(FONTCONFIG_PKGCONFIGS)
 endif
+
+$(FONTCONFIG_BUILD_DIR)/.special:
+	$(Q)-cp $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc/
+	@touch $@
 
