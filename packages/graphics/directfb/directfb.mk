@@ -42,7 +42,8 @@ FREETYPE_LIBS_FLAGS := "-L$(ROOTFS)/usr/lib -lfreetype"
 endif
 FREETYPE_CFLAGS_FLAGS := "-I$(SYSROOT)/usr/include/freetype2"
 
-directfb_install: $(DIRECTFB_BUILD_DIR)/.installed
+directfb_install:	$(DIRECTFB_BUILD_DIR)/.installed \
+			$(DIRECTFB_BUILD_DIR)/.special
 
 $(DIRECTFB_BUILD_DIR)/.installed: libpng_install freetype_install \
 	libjpeg_install download_directfb \
@@ -54,13 +55,6 @@ $(DIRECTFB_BUILD_DIR)/.installed: libpng_install freetype_install \
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	$(Q)$(MAKE) $(DIRECTFB_BUILD_DIR)/.patchlibtool
-	$(Q)-cp $(DIRECTFB_BUILD_DIR)/fb.modes $(ROOTFS)/etc/
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cp -R $(SYSROOT)/usr/lib32/directfb-*-* $(ROOTFS)/usr/lib32
-	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/lib
-else
-	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/lib
-endif
 	@touch $@
 
 download_directfb:
@@ -138,6 +132,18 @@ else
 	< $(SYSROOT)/usr/lib/libdirectfb.la > libdirectfb.la.new; \
 	mv libdirectfb.la.new $(SYSROOT)/usr/lib/libdirectfb.la
 endif
+
+.PHONY: $(DIRECTFB_BUILD_DIR)/.special directfb_clean
+
+$(DIRECTFB_BUILD_DIR)/.special:
+	$(Q)-cp $(DIRECTFB_BUILD_DIR)/fb.modes $(ROOTFS)/etc/
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)-cp -R $(SYSROOT)/usr/lib32/directfb-*-* $(ROOTFS)/usr/lib32
+	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/lib
+else
+	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/lib
+endif
+	@touch $@
 
 directfb_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup directfb-$(DIRECTFB_VERSION)...")
