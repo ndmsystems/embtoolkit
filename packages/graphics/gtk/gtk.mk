@@ -40,7 +40,7 @@ else
 PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
 endif
 
-gtk_install: $(GTK_BUILD_DIR)/.installed
+gtk_install: $(GTK_BUILD_DIR)/.installed $(GTK_BUILD_DIR)/.special
 
 $(GTK_BUILD_DIR)/.installed: directfb_install libtiff_install \
 	fontconfig_install download_gtk glib_install atk_install cairo_install \
@@ -52,12 +52,6 @@ $(GTK_BUILD_DIR)/.installed: directfb_install libtiff_install \
 	$(Q)$(MAKE) -C $(GTK_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
-	$(Q)-cp $(SYSROOT)/usr/etc/gtk-* $(ROOTFS)/etc/
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cp $(SYSROOT)/usr/lib32/gtk-* $(ROOTFS)/usr/lib32/
-else
-	$(Q)-cp $(SYSROOT)/usr/lib/gtk-* $(ROOTFS)/usr/lib/
-endif
 	@touch $@
 
 download_gtk:
@@ -122,6 +116,18 @@ else
 	mv $$i.new $$i; \
 	done
 endif
+
+
+.PHONY: gtk_clean $(GTK_BUILD_DIR)/.special
+
+$(GTK_BUILD_DIR)/.special:
+	$(Q)-cp $(SYSROOT)/usr/etc/gtk-* $(ROOTFS)/etc/
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)-cp $(SYSROOT)/usr/lib32/gtk-* $(ROOTFS)/usr/lib32/
+else
+	$(Q)-cp $(SYSROOT)/usr/lib/gtk-* $(ROOTFS)/usr/lib/
+endif
+	@touch $@
 
 gtk_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup gtk-$(GTK_VERSION)...")
