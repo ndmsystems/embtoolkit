@@ -40,7 +40,7 @@ else
 PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
 endif
 
-pango_install: $(PANGO_BUILD_DIR)/.installed
+pango_install: $(PANGO_BUILD_DIR)/.installed $(PANGO_BUILD_DIR)/.special
 
 $(PANGO_BUILD_DIR)/.installed: $(GLIB_BUILD_DIR)/.installed \
 	$(FONTCONFIG_BUILD_DIR)/.installed $(CAIRO_BUILD_DIR)/.installed \
@@ -53,11 +53,6 @@ $(PANGO_BUILD_DIR)/.installed: $(GLIB_BUILD_DIR)/.installed \
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	$(Q)$(MAKE) $(PANGO_BUILD_DIR)/.patchlibtool
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cp -R $(SYSROOT)/usr/lib32/pango $(ROOTFS)/usr/lib32/
-else
-	$(Q)-cp -R $(SYSROOT)/usr/lib/pango $(ROOTFS)/usr/lib/
-endif
 	@touch $@
 
 download_pango:
@@ -119,6 +114,17 @@ else
 	mv $$i.new $$i; \
 	done
 endif
+
+.PHONY: pango_clean $(PANGO_BUILD_DIR)/.special
+
+$(PANGO_BUILD_DIR)/.special:
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+	$(Q)-cp -R $(SYSROOT)/usr/lib32/pango $(ROOTFS)/usr/lib32/
+else
+	$(Q)-cp -R $(SYSROOT)/usr/lib/pango $(ROOTFS)/usr/lib/
+endif
+	@touch $@
+
 pango_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup pango-$(PANGO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(PANGO_BINS)
