@@ -32,7 +32,7 @@ GLIB_BINS = 	glib-genmarshal glib-gettextize glib-mkenums gobject-query \
 		gtester gtester-report
 GLIB_SBINS =
 GLIB_INCLUDES = gio-unix-* glib-*
-GLIB_LIBS = gio* libgio-* libglib-* libgmodule-* libgobject-* libgthread-*
+GLIB_LIBS = gio* libgio-* libglib-* libgmodule-* libgobject-* libgthread-* glib-*
 GLIB_PKGCONFIGS = gio-*.pc glib-*.pc gmodule-*.pc gobject-*.pc gthread-*.pc
 
 glib_install: $(GLIB_BUILD_DIR)/.installed
