@@ -30,8 +30,8 @@ PANGO_BUILD_DIR := $(PACKAGES_BUILD)/pango-$(PANGO_VERSION)
 
 PANGO_BINS = pango*
 PANGO_SBINS =
-PANGO_INCLUDES = pango-* pango* libpango*
-PANGO_LIBS =
+PANGO_INCLUDES = pango*
+PANGO_LIBS = pango-* pango* libpango*
 PANGO_PKGCONFIGS = pango*.pc
 
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
