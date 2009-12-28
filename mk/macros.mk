@@ -154,3 +154,14 @@ else
 	mv $$i.new $$i; \
 	done
 endif
+
+#A macro to remove rpath in packages that use libtool -rpath
+define KILL_LT_RPATH
+	$(Q)cd $(1); \
+	LOCAL_LT_FILES=`find -type f -name libtool`; \
+	for i in $$LOCAL_LT_FILES; \
+	do \
+	sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $$i; \
+	sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $$i; \
+	done
+endef
