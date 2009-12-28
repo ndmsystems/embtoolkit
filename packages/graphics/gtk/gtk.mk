@@ -48,6 +48,7 @@ $(GTK_BUILD_DIR)/.installed: directfb_install libtiff_install \
 	$(GTK_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	gtk-$(GTK_VERSION) in your root filesystem...")
+	$(call KILL_LT_RPATH, $(GTK_BUILD_DIR))
 	$(Q)$(MAKE) -C $(GTK_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(GTK_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -122,11 +123,11 @@ endif
 .PHONY: gtk_clean $(GTK_BUILD_DIR)/.special
 
 $(GTK_BUILD_DIR)/.special:
-	$(Q)-cp $(SYSROOT)/usr/etc/gtk-* $(ROOTFS)/etc/
+	$(Q)-cp -R $(SYSROOT)/usr/etc/gtk-* $(ROOTFS)/etc/
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cp $(SYSROOT)/usr/lib32/gtk-* $(ROOTFS)/usr/lib32/
+	$(Q)-cp -R $(SYSROOT)/usr/lib32/gtk-* $(ROOTFS)/usr/lib32/
 else
-	$(Q)-cp $(SYSROOT)/usr/lib/gtk-* $(ROOTFS)/usr/lib/
+	$(Q)-cp -R $(SYSROOT)/usr/lib/gtk-* $(ROOTFS)/usr/lib/
 endif
 	@touch $@
 

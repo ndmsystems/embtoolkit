@@ -46,6 +46,7 @@ $(ATK_BUILD_DIR)/.installed: glib_install download_atk \
 	$(ATK_BUILD_DIR)/.decompressed $(ATK_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	atk-$(ATK_VERSION) in your root filesystem...")
+	$(call KILL_LT_RPATH, $(ATK_BUILD_DIR))
 	$(Q)$(MAKE) -C $(ATK_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(ATK_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt

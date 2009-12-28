@@ -47,6 +47,7 @@ $(FONTCONFIG_BUILD_DIR)/.installed: libxml2_install \
 	$(FONTCONFIG_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	fontconfig-$(FONTCONFIG_VERSION) in your root filesystem...")
+	$(call KILL_LT_RPATH, $(FONTCONFIG_BUILD_DIR))
 	$(Q)$(MAKE) -C $(FONTCONFIG_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(FONTCONFIG_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -95,6 +96,6 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 endif
 
 $(FONTCONFIG_BUILD_DIR)/.special:
-	$(Q)-cp $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc/
+	$(Q)-cp -R $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc/
 	@touch $@
 

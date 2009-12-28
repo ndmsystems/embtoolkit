@@ -50,6 +50,7 @@ $(DIRECTFB_BUILD_DIR)/.installed: libpng_install freetype_install \
 	$(DIRECTFB_BUILD_DIR)/.decompressed $(DIRECTFB_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	DirectFB-$(DIRECTFB_VERSION) in your root filesystem...")
+	$(call KILL_LT_RPATH, $(DIRECTFB_BUILD_DIR))
 	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt

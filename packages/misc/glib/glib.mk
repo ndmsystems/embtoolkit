@@ -41,6 +41,7 @@ $(GLIB_BUILD_DIR)/.installed: gettext_install download_glib \
 	$(GLIB_BUILD_DIR)/.decompressed $(GLIB_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	glib-$(GLIB_VERSION) in your root filesystem...")
+	$(call KILL_LT_RPATH, $(GLIB_BUILD_DIR))
 	$(Q)$(MAKE) -C $(GLIB_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(GLIB_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -62,12 +63,23 @@ $(GLIB_BUILD_DIR)/.decompressed:
 
 $(GLIB_BUILD_DIR)/.configured:
 	$(Q)cd $(GLIB_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) CXX=$(TARGETCXX_CACHED) \
+	CC=$(TARGETCC_CACHED) \
+	CXX=$(TARGETCXX_CACHED) \
+	AR=$(TARGETAR) \
+	RANLIB=$(TARGETRANLIB) \
+	AS=$(CROSS_COMPILE)as \
+	LD=$(TARGETLD) \
+	NM=$(TARGETNM) \
+	STRIP=$(TARGETSTRIP) \
+	OBJDUMP=$(TARGETOBJDUMP) \
+	OBJCOPY=$(TARGETOBJCOPY) \
 	CFLAGS="$(TARGET_CFLAGS)" \
+	CXXFLAGS="$(TARGET_CFLAGS)" \
 	LDFLAGS="-L$(SYSROOT)/lib -L$(SYSROOT)/usr/lib \
 	-L$(SYSROOT)/lib32 -L$(SYSROOT)/usr/lib32" \
 	CPPFLGAS="-I$(SYSROOT)/usr/include" \
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
+	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
 	glib_cv_stack_grows=no \
 	glib_cv_uscore=yes \
 	ac_cv_func_posix_getpwuid_r=yes \

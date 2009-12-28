@@ -39,6 +39,7 @@ $(LIBPNG_BUILD_DIR)/.installed: zlib_target_install download_libpng \
 	$(LIBPNG_BUILD_DIR)/.decompressed $(LIBPNG_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libpng-$(LIBPNG_VERSION) in your root filesystem...")
+	$(call KILL_LT_RPATH, $(LIBPNG_BUILD_DIR))
 	$(Q)$(MAKE) -C $(LIBPNG_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBPNG_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt

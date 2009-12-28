@@ -40,6 +40,7 @@ $(CAIRO_BUILD_DIR)/.installed: pixman_install libpng_install freetype_install \
 	$(CAIRO_BUILD_DIR)/.decompressed $(CAIRO_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	cairo-$(CAIRO_VERSION) in your root filesystem...")
+	$(call KILL_LT_RPATH, $(CAIRO_BUILD_DIR))
 	$(Q)$(MAKE) -C $(CAIRO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(CAIRO_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt

@@ -39,6 +39,7 @@ $(FREETYPE_BUILD_DIR)/.installed: zlib_target_install download_freetype \
 	$(FREETYPE_BUILD_DIR)/.decompressed $(FREETYPE_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	freetype-$(FREETYPE_VERSION) in your root filesystem...")
+	$(call KILL_LT_RPATH, $(FREETYPE_BUILD_DIR))
 	$(Q)$(MAKE) -C $(FREETYPE_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(FREETYPE_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -62,7 +63,7 @@ $(FREETYPE_BUILD_DIR)/.configured:
 	$(Q)cd $(FREETYPE_BUILD_DIR); \
 	CC=$(TARGETCC_CACHED) CFLAGS="$(TARGET_CFLAGS)" \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --enable-static=no
+	--prefix=/usr --enable-static=no --disable-rpath
 	@touch $@
 
 $(FREETYPE_BUILD_DIR)/.freetype-configpatched:

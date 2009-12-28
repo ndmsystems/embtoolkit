@@ -40,6 +40,7 @@ $(LIBXML2_BUILD_DIR)/.installed: download_libxml2 \
 	$(LIBXML2_BUILD_DIR)/.decompressed $(LIBXML2_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libxml2-$(LIBXML2_VERSION) in your root filesystem...")
+	$(call KILL_LT_RPATH, $(LIBXML2_BUILD_DIR))
 	$(Q)$(MAKE) -C $(LIBXML2_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBXML2_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -69,7 +70,7 @@ $(LIBXML2_BUILD_DIR)/.configured:
 	PKG_CONFIG_PATH=$(SYSROOT)/usr \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) \
-	--prefix=/usr
+	--prefix=/usr --disable-rpath
 	@touch $@
 
 libxml2_clean:

@@ -42,6 +42,7 @@ $(GETTEXT_BUILD_DIR)/.installed: termcap_target_install download_gettext \
 	$(GETTEXT_BUILD_DIR)/.decompressed $(GETTEXT_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	gettext-$(GETTEXT_VERSION) in your root filesystem...")
+	$(call KILL_LT_RPATH, $(GETTEXT_BUILD_DIR))
 	$(Q)$(MAKE) -C $(GETTEXT_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(GETTEXT_BUILD_DIR) install
 	@touch $@
@@ -67,9 +68,8 @@ $(GETTEXT_BUILD_DIR)/.configured:
 	CPPFLGAS="-I$(SYSROOT)/usr/include" \
 	gl_cv_func_wcwidth_works=yes \
 	am_cv_func_iconv_works=yes \
-	gl_cv_func_wcwidth_works=yes \
 	gt_cv_func_printf_posix=yes \
-	gt_cv_int_divbyzero_sigfpe=yes \
+	gt_cv_int_divbyzero_sigfpe=no \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) \
 	--prefix=$(SYSROOT)/usr --with-included-gettext --disable-rpath
