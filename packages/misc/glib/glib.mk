@@ -41,7 +41,7 @@ $(GLIB_BUILD_DIR)/.installed: gettext_install download_glib \
 	$(GLIB_BUILD_DIR)/.decompressed $(GLIB_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	glib-$(GLIB_VERSION) in your root filesystem...")
-	$(call KILL_LT_RPATH, $(GLIB_BUILD_DIR))
+	$(call EMBTK_KILL_LT_RPATH, $(GLIB_BUILD_DIR))
 	$(Q)$(MAKE) -C $(GLIB_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(GLIB_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt

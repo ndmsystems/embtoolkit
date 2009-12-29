@@ -40,7 +40,7 @@ $(LIBXML2_BUILD_DIR)/.installed: download_libxml2 \
 	$(LIBXML2_BUILD_DIR)/.decompressed $(LIBXML2_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libxml2-$(LIBXML2_VERSION) in your root filesystem...")
-	$(call KILL_LT_RPATH, $(LIBXML2_BUILD_DIR))
+	$(call EMBTK_KILL_LT_RPATH, $(LIBXML2_BUILD_DIR))
 	$(Q)$(MAKE) -C $(LIBXML2_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBXML2_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt

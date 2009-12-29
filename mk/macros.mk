@@ -156,7 +156,7 @@ else
 endif
 
 #A macro to remove rpath in packages that use libtool -rpath
-define KILL_LT_RPATH
+define EMBTK_KILL_LT_RPATH
 	$(Q)cd $(1); \
 	LOCAL_LT_FILES=`find -type f -name libtool`; \
 	for i in $$LOCAL_LT_FILES; \

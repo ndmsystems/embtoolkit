@@ -42,7 +42,7 @@ $(GETTEXT_BUILD_DIR)/.installed: termcap_target_install download_gettext \
 	$(GETTEXT_BUILD_DIR)/.decompressed $(GETTEXT_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	gettext-$(GETTEXT_VERSION) in your root filesystem...")
-	$(call KILL_LT_RPATH, $(GETTEXT_BUILD_DIR))
+	$(call EMBTK_KILL_LT_RPATH, $(GETTEXT_BUILD_DIR))
 	$(Q)$(MAKE) -C $(GETTEXT_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(GETTEXT_BUILD_DIR) install
 	@touch $@

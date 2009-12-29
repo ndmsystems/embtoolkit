@@ -38,7 +38,7 @@ $(LIBJPEG_BUILD_DIR)/.installed: download_libjpeg \
 	$(LIBJPEG_BUILD_DIR)/.decompressed $(LIBJPEG_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	jpeg-$(LIBJPEG_VERSION) in your root filesystem...")
-	$(call KILL_LT_RPATH, $(LIBJPEG_BUILD_DIR))
+	$(call EMBTK_KILL_LT_RPATH, $(LIBJPEG_BUILD_DIR))
 	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
