@@ -35,13 +35,6 @@ DIRECTFB_SBINS =
 DIRECTFB_LIBS = directfb* libdavinci_c64x* libdirect* libdirectfb* libfusion*
 DIRECTFB_INCLUDES = directfb*
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-FREETYPE_LIBS_FLAGS := "-L$(ROOTFS)/usr/lib32 -lfreetype"
-else
-FREETYPE_LIBS_FLAGS := "-L$(ROOTFS)/usr/lib -lfreetype"
-endif
-FREETYPE_CFLAGS_FLAGS := "-I$(SYSROOT)/usr/include/freetype2"
-
 directfb_install:	$(DIRECTFB_BUILD_DIR)/.installed \
 			$(DIRECTFB_BUILD_DIR)/.special
 
