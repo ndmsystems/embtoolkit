@@ -67,18 +67,28 @@ $(FONTCONFIG_BUILD_DIR)/.decompressed:
 	@touch $@
 
 $(FONTCONFIG_BUILD_DIR)/.configured:
-	$(Q)cd $(FONTCONFIG_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) CXX=$(TARGETCXX_CACHED) \
+	cd $(FONTCONFIG_BUILD_DIR); \
+	CC=$(TARGETCC_CACHED) \
+	CXX=$(TARGETCXX_CACHED) \
+	AR=$(TARGETAR) \
+	RANLIB=$(TARGETRANLIB) \
+	AS=$(CROSS_COMPILE)as \
+	LD=$(TARGETLD) \
+	NM=$(TARGETNM) \
+	STRIP=$(TARGETSTRIP) \
+	OBJDUMP=$(TARGETOBJDUMP) \
+	OBJCOPY=$(TARGETOBJCOPY) \
 	CFLAGS="$(TARGET_CFLAGS)" \
+	CXXFLAGS="$(TARGET_CFLAGS)" \
 	LDFLAGS="-L$(SYSROOT)/lib -L$(SYSROOT)/usr/lib \
 	-L$(SYSROOT)/lib32 -L$(SYSROOT)/usr/lib32" \
 	CPPFLGAS="-I$(SYSROOT)/usr/include" \
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	LIBXML2_CFLAGS=$(LIBXML2_CFLAGS) \
-	LIBXML2_LIBS="-lxml2" \
+	PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig \
+	PKG_CONFIG_LIBDIR=$(SYSROOT)/usr/lib \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --with-arch=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --disable-docs
+	--prefix=/usr --disable-docs --program-prefix=""
 	@touch $@
 
 .PHONY: $(FONTCONFIG_BUILD_DIR)/.special fontconfig_clean
