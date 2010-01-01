@@ -81,7 +81,7 @@ $(GLIB_BUILD_DIR)/.configured:
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
 	glib_cv_stack_grows=no \
-	glib_cv_uscore=yes \
+	glib_cv_uscore=no \
 	ac_cv_func_posix_getpwuid_r=yes \
 	ac_cv_func_nonposix_getpwuid_r=no \
 	ac_cv_func_posix_getgrgid_r=yes \
