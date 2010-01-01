@@ -46,6 +46,9 @@ include $(EMBTK_ROOT)/mk/gmphost.mk
 #MPFR
 include $(EMBTK_ROOT)/mk/mpfrhost.mk
 
+#MPC
+include $(EMBTK_ROOT)/mk/mpchost.mk
+
 #binutils
 include $(EMBTK_ROOT)/mk/binutils.mk
 
@@ -59,15 +62,15 @@ ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 #EGLIBC
 include $(EMBTK_ROOT)/mk/eglibc.mk
 TOOLCHAINBUILD := mkinitialpath kernel-headers_install ccachehost_install \
-		gmphost_install mpfrhost_install binutils_install \
-		gcc1_install eglibc-headers_install gcc2_install \
-		eglibc_install gcc3_install
+		gmphost_install mpfrhost_install mpchost_install \
+		binutils_install gcc1_install eglibc-headers_install \
+		gcc2_install eglibc_install gcc3_install
 else
 #uClibc
 include $(EMBTK_ROOT)/mk/uclibc.mk
 TOOLCHAINBUILD := mkinitialpath kernel-headers_install ccachehost_install \
-		gmphost_install mpfrhost_install binutils_install gcc1_install \
-		uclibc_install gcc3_install
+		gmphost_install mpfrhost_install mpchost_install \
+		binutils_install gcc1_install uclibc_install gcc3_install
 endif
 
 #targets

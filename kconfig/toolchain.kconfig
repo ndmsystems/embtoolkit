@@ -61,14 +61,19 @@ menu "Binutils"
 source "kconfig/binutils.kconfig"
 endmenu
 
-menu "MPFR"
-source "kconfig/mpfrhost.kconfig"
+menu "Linux kernel headers"
+source "kconfig/linux.kconfig"
 endmenu
 
 menu "GMP"
 source "kconfig/gmphost.kconfig"
 endmenu
 
-menu "Linux kernel headers"
-source "kconfig/linux.kconfig"
+menu "MPFR"
+source "kconfig/mpfrhost.kconfig"
 endmenu
+
+menu "MPC"
+source "kconfig/mpchost.kconfig"
+endmenu
+

@@ -65,5 +65,6 @@ $(BINUTILS_BUILD_DIR)/.configured:
 	 --prefix=$(TOOLS) --with-sysroot=$(SYSROOT) --disable-werror \
 	 --disable-nls $(BINUTILS_MULTILIB) \
 	 --with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
+	 --with-mpc=$(MPC_HOST_DIR) \
 	 --target=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) --host=$(HOST_ARCH)
 	@touch $@

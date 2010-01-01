@@ -100,7 +100,8 @@ $(GCC1_BUILD_DIR)/.configured:
 	--without-headers --with-newlib --disable-shared --disable-threads \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
 	--enable-languages=c --enable-target-optspace \
-	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
+	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
+	--with-mpc=$(MPC_HOST_DIR)
 	@touch $@
 
 #GCC second stage
@@ -120,7 +121,8 @@ $(GCC2_BUILD_DIR)/.configured:
 	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
 	--enable-languages=c --enable-target-optspace \
-	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)
+	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
+	--with-mpc=$(MPC_HOST_DIR)
 	@touch $@
 
 #GCC last stage
@@ -154,6 +156,7 @@ $(GCC3_BUILD_DIR)/.configured:
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
 	--enable-threads --enable-shared --enable-target-optspace \
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
+	--with-mpc=$(MPC_HOST_DIR) \
 	--enable-languages=`echo $(GCC_LANGUAGES) | sed 's/ //g'` \
 	$(GCC3_CONFIGURE_EXTRA_OPTIONS) \
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)
