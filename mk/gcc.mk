@@ -155,6 +155,7 @@ $(GCC3_BUILD_DIR)/.configured:
 	--enable-threads --enable-shared --enable-target-optspace \
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
 	--enable-languages=`echo $(GCC_LANGUAGES) | sed 's/ //g'` \
-	$(GCC3_CONFIGURE_EXTRA_OPTIONS)
+	$(GCC3_CONFIGURE_EXTRA_OPTIONS) \
+	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)
 	@touch $@
 
