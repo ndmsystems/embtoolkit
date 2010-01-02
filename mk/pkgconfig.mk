@@ -31,6 +31,14 @@ PKGCONFIG_BIN := $(PKGCONFIG_DIR)/bin/pkg-config
 
 export PKGCONFIG_BIN
 
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
+else
+PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
+endif
+
+export PKG_CONFIG_PATH
+
 pkgconfig_install: $(PKGCONFIG_BUILD_DIR)/.installed
 
 $(PKGCONFIG_BUILD_DIR)/.installed: download_pkgconfig \
