@@ -30,7 +30,7 @@ LIBTIFF_BUILD_DIR := $(PACKAGES_BUILD)/tiff-$(LIBTIFF_VERSION)
 LIBTIFF_BINS =	vbmp2tiff fax2tiff pal2rgb  ras2tiff rgb2ycbcr tiff2bw tiff2ps \
 		tiffcmp tiffcrop tiffdump tiffmedian tiffsplit fax2ps gif2tiff \
 		ppm2tiff raw2tiff thumbnail tiff2pdf tiff2rgba tiffcp \
-		tiffdither tiffinfo tiffset
+		tiffdither tiffinfo tiffset bmp2tiff
 LIBTIFF_SBINS =
 LIBTIFF_INCLUDES = tiffconf.h tiff.h tiffio.h tiffio.hxx tiffvers.h
 LIBTIFF_LIBS = libtiff*
