@@ -28,7 +28,7 @@ GTK_SITE := http://ftp.gnome.org/pub/gnome/sources/gtk+/$(GTK_MAJOR_VERSION)
 GTK_PACKAGE := gtk+-$(GTK_VERSION).tar.bz2
 GTK_BUILD_DIR := $(PACKAGES_BUILD)/gtk+-$(GTK_VERSION)
 
-GTK_BINS = gtk-*
+GTK_BINS = gtk-* gdk-*
 GTK_SBINS =
 GTK_INCLUDES = gail-* gtk-*
 GTK_LIBS = gtk-* libgail* libgdk-* libgdk_* libgtk-*
