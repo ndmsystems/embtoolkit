@@ -96,6 +96,13 @@ ROOTFS_COMPONENTS += fontconfig_install
 endif
 ROOTFS_COMPONENTS_CLEAN += fontconfig_clean
 
+#FreeFont
+include $(EMBTK_ROOT)/packages/graphics/freefont/freefont.mk
+ifeq ($(CONFIG_EMBTK_HAVE_FREEFONT_TTF),y)
+ROOTFS_COMPONENTS += freefont_ttf_install
+endif
+ROOTFS_COMPONENTS_CLEAN += ttmkfdir_clean
+
 #FreeType
 include $(EMBTK_ROOT)/packages/graphics/freetype/freetype.mk
 ifeq ($(CONFIG_EMBTK_HAVE_FREETYPE),y)

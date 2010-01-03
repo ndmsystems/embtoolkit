@@ -72,6 +72,9 @@ source packages/graphics/libjpeg/libjpeg.kconfig
 source packages/graphics/libpng/libpng.kconfig
 source packages/graphics/pixman/pixman.kconfig
 source packages/graphics/libtiff/libtiff.kconfig
+
+comment "Include fonts in the target root filesystem"
+source packages/graphics/freefont/freefont.kconfig
 endmenu
 
 menu "Networking packages"
