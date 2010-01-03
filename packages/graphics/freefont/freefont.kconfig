@@ -32,7 +32,7 @@ config EMBTK_HAVE_FREEFONT_TTF
 		GNU FreeFont is a free family of scalable outline fonts,
 		suitable for general use on computers and for desktop
 		publishing. It is Unicode-encoded for compatability with all
-		modern operating systems. 
+		modern operating systems.
 choice
 	prompt "FreeFont version you wish: TrueType format"
 	depends on EMBTK_HAVE_FREEFONT_TTF
@@ -57,7 +57,7 @@ config EMBTK_FREEFONT_TTF_VERSION_STRING
 #		GNU FreeFont is a free family of scalable outline fonts,
 #		suitable for general use on computers and for desktop
 #		publishing. It is Unicode-encoded for compatability with all
-#		modern operating systems. 
+#		modern operating systems.
 #choice
 #	prompt "FreeFont version you wish: OpenType format"
 #	depends on EMBTK_HAVE_FREEFONT_OTF
