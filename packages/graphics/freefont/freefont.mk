@@ -81,9 +81,9 @@ $(FREEFONT_TTF_BUILD_DIR)/.installed: freetype_install ttmkfdir_install \
 download_freefont_ttf:
 	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(FREEFONT_TTF_PACKAGE) \
 	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(FREEFONT_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(FREEFONT_PACKAGE) \
-	$(FREEFONT_SITE)/$(FREEFONT_PACKAGE)
+	@test -e $(DOWNLOAD_DIR)/$(FREEFONT_TTF_PACKAGE) || \
+	wget -O $(DOWNLOAD_DIR)/$(FREEFONT_TTF_PACKAGE) \
+	$(FREEFONT_SITE)/$(FREEFONT_TTF_PACKAGE)
 
 $(FREEFONT_TTF_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(FREEFONT_TTF_PACKAGE)...")
