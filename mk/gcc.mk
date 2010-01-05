@@ -101,7 +101,8 @@ $(GCC1_BUILD_DIR)/.configured:
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
 	--enable-languages=c --enable-target-optspace \
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
-	--with-mpc=$(MPC_HOST_DIR)
+	--with-mpc=$(MPC_HOST_DIR) \
+	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)
 	@touch $@
 
 #GCC second stage
@@ -122,7 +123,8 @@ $(GCC2_BUILD_DIR)/.configured:
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
 	--enable-languages=c --enable-target-optspace \
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
-	--with-mpc=$(MPC_HOST_DIR)
+	--with-mpc=$(MPC_HOST_DIR) \
+	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)
 	@touch $@
 
 #GCC last stage
