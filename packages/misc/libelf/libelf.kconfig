@@ -29,7 +29,7 @@ config EMBTK_HAVE_LIBELF
 		libelf lets you read, modify or create ELF files in an
 		architecture-independent way. The library takes care of size and
 		endian issues, e.g. you can process a file for SPARC processors
-		on an Intel-based system. 
+		on an Intel-based system.
 choice
 	prompt "libelf version you wish"
 	depends on EMBTK_HAVE_LIBELF
