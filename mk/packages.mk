@@ -170,6 +170,13 @@ ROOTFS_COMPONENTS += glib_install
 endif
 ROOTFS_COMPONENTS_CLEAN += glib_clean
 
+#libelf
+include $(EMBTK_ROOT)/packages/misc/libelf/libelf.mk
+ifeq ($(CONFIG_EMBTK_HAVE_LIBELF),y)
+ROOTFS_COMPONENTS += libelf_install
+endif
+ROOTFS_COMPONENTS_CLEAN += libelf_clean
+
 #libxml2
 include $(EMBTK_ROOT)/packages/misc/libxml/libxml.mk
 ifeq ($(CONFIG_EMBTK_HAVE_LIBXML2),y)
