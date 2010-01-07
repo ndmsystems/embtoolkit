@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 # \file         libelf.mk
 # \brief	libelf.mk of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# \date         December 2009
+# \date         January 2010
 ################################################################################
 
 LIBELF_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBELF_VERSION_STRING)))
