@@ -28,6 +28,8 @@ choice
 	help
 	 Linux v2.6.32.x series exact version to use.
 
+	config EMBTK_LINUX_VERSION_2_6_32_3
+		bool "linux-2.6.32.3"
 	config EMBTK_LINUX_VERSION_2_6_32_2
 		bool "linux-2.6.32.2"
 	config EMBTK_LINUX_VERSION_2_6_32_1
@@ -38,6 +40,7 @@ endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "2.6.32.3"		if EMBTK_LINUX_VERSION_2_6_32_3
 	default "2.6.32.2"		if EMBTK_LINUX_VERSION_2_6_32_2
 	default "2.6.32.1"		if EMBTK_LINUX_VERSION_2_6_32_1
 	default "2.6.32"		if EMBTK_LINUX_VERSION_2_6_32
