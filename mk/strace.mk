@@ -30,7 +30,7 @@ STRACE_BUILD_DIR := $(PACKAGES_BUILD)/strace
 
 strace_install: $(STRACE_BUILD_DIR)/.installed
 
-$(STRACE_BUILD_DIR)/.installed: download_starce \
+$(STRACE_BUILD_DIR)/.installed: download_strace \
 	$(STRACE_BUILD_DIR)/.decompressed $(STRACE_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	strace-$(STRACE_VERSION) in target...")
@@ -46,7 +46,7 @@ $(STRACE_BUILD_DIR)/.decompressed:
 	patch -p1 < $(DOWNLOAD_DIR)/strace-$(STRACE_VERSION).patch
 	@mkdir -p $(STRACE_BUILD_DIR)
 	@touch $@
-download_starce:
+download_strace:
 	$(call EMBTK_GENERIC_MESSAGE,"Downloading strace-$(STRACE_VERSION) if \
 	necessary ...")
 	@test -e $(DOWNLOAD_DIR)/$(STRACE_PACKAGE) || \
