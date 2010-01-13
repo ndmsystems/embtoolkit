@@ -30,15 +30,17 @@ comment "##############################"
 
 choice
 	prompt "uClibc version to use"
-	default EMBTK_UCLIBC_VERSION_0_9_30_1
 	help
 	 Which uClibc version to use.
 
+	config EMBTK_UCLIBC_VERSION_0_9_30_2
+		bool "uClibc-0.9.30.2"
 	config EMBTK_UCLIBC_VERSION_0_9_30_1
 		bool "uClibc-0.9.30.1"
 		select EMBTK_UCLIBC_NEED_PATCH
 	config EMBTK_UCLIBC_VERSION_0_9_30
 		bool "uClibc-0.9.30"
+		depends on EMBTK_OLDPACKAGES
 		select EMBTK_UCLIBC_NEED_PATCH
 	config EMBTK_UCLIBC_VERSION_GIT
 		bool "Use a branch of uClibc git repository"
@@ -170,6 +172,7 @@ comment "Target Architecture Features and Options"
 comment "----------------"
 config EMBTK_UCLIBC_VERSION_STRING
 	string
+	default "0.9.30.2"	if EMBTK_UCLIBC_VERSION_0_9_30_2
 	default "0.9.30.1"	if EMBTK_UCLIBC_VERSION_0_9_30_1
 	default "0.9.30"	if EMBTK_UCLIBC_VERSION_0_9_30
 	default "git"		if EMBTK_UCLIBC_VERSION_GIT
