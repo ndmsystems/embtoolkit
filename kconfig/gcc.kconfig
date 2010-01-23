@@ -23,11 +23,13 @@
 ################################################################################
 choice
 	prompt "Version of gcc you wish"
-	default EMBTK_GCC_VERSION_4_3_4
 	help
 		Here you can choose which version of gcc
 		you want to use
+	config EMBTK_GCC_VERSION_4_4_3
+		bool "gcc-4.4.3"
 	config EMBTK_GCC_VERSION_4_4_2
+		depends on EMBTK_OLDPACKAGES
 		bool "gcc-4.4.2"
 		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_4_1
@@ -118,6 +120,7 @@ config EMBTK_GCC_LANGUAGE_FORTRAN
 
 config EMBTK_GCC_VERSION_STRING
 	string
+	default "4.4.3"		if EMBTK_GCC_VERSION_4_4_3
 	default "4.4.2"		if EMBTK_GCC_VERSION_4_4_2
 	default "4.4.1"		if EMBTK_GCC_VERSION_4_4_1
 	default "4.3.4"		if EMBTK_GCC_VERSION_4_3_4
