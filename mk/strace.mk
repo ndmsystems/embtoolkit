@@ -24,7 +24,7 @@
 
 STRACE_VERSION:= $(subst ",,$(strip $(CONFIG_EMBTK_STRACE_VERSION_STRING)))
 STRACE_SITE:=http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
-STRACE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/strace
+STRACE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/strace/$(STRACE_VERSION)
 STRACE_PACKAGE := strace-$(STRACE_VERSION).tar.bz2
 STRACE_BUILD_DIR := $(PACKAGES_BUILD)/strace
 
