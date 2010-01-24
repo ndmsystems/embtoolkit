@@ -32,6 +32,7 @@ choice
 
 	config EMBTK_MPFR_HOST_VERSION_2_4_2
 		bool "mpfr-2.4.2"
+		select EMBTK_MPFR_HOST_VERSION_PATCH
 	config EMBTK_MPFR_HOST_VERSION_2_4_1
 		bool "mpfr-2.4.1"
 		select EMBTK_MPFR_HOST_VERSION_PATCH
