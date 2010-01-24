@@ -23,8 +23,8 @@
 ################################################################################
 
 TTMKFDIR_SITE := http://ftp.de.debian.org/debian/pool/main/t/ttmkfdir
-TTMKFDIR_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/ttmkfdir
 TTMKFDIR_VERSION := 3.0.9
+TTMKFDIR_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/ttmkfdir/$(TTMKFDIR_VERSION)
 TTMKFDIR_PACKAGE := ttmkfdir_$(TTMKFDIR_VERSION).orig.tar.gz
 TTMKFDIR_BUILD_DIR := $(PACKAGES_BUILD)/ttmkfdir-$(TTMKFDIR_VERSION)
 
