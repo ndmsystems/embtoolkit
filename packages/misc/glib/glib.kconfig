@@ -25,6 +25,9 @@
 config EMBTK_HAVE_GLIB
 	bool "Have GLib"
 	select EMBTK_HAVE_GETTEXT
+	select KEMBTK_UCLIBC_DO_C99_MATH if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_HAS_IPV4 if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_HAS_IPV6 if EMBTK_CLIB_UCLIBC
 	help
 		GLib is a general-purpose utility library, which provides many
 		useful data types, macros, type conversions, string utilities,
@@ -39,7 +42,6 @@ config EMBTK_HAVE_GLIB
 		operation.
 choice
 	prompt "GLib version you wish"
-	default EMBTK_GLIB_VERSION_2_23_1
 	depends on EMBTK_HAVE_GLIB
 	help
 	 Here you can choose which version of GLib you want to use.
