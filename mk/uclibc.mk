@@ -24,7 +24,7 @@
 
 UCLIBC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_VERSION_STRING)))
 UCLIBC_SITE := http://www.uclibc.org/downloads
-UCLIBC_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/uclibc
+UCLIBC_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/uclibc/$(UCLIBC_VERSION)
 UCLIBC_GIT_SITE := git://git.busybox.net/uClibc
 UCLIBC_GIT_BRANCH := $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_GIT_BRANCH)))
 UCLIBC_GIT_REVISION := $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_GIT_REVISION)))
