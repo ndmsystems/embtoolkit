@@ -24,7 +24,7 @@
 
 PERL_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_PERL_VERSION_STRING)))
 PERL_SITE := http://www.cpan.org/src
-PERL_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/perl
+PERL_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/perl/$(PERL_VERSION)
 PERL_PACKAGE := perl-$(PERL_VERSION).tar.gz
 PERL_BUILD_DIR := $(PACKAGES_BUILD)/perl-$(PERL_VERSION)
 MICROPERL_BUILD_DIR := $(PACKAGES_BUILD)/perl-$(PERL_VERSION)-micro
