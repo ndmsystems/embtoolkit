@@ -24,7 +24,7 @@
 
 BINUTILS_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_BINUTILS_VERSION_STRING)))
 BINUTILS_SITE := http://ftp.gnu.org/gnu/binutils
-BINUTILS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/binutils
+BINUTILS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/binutils/$(BINUTILS_VERSION)
 BINUTILS_PACKAGE := binutils-$(BINUTILS_VERSION).tar.bz2
 BINUTILS_BUILD_DIR := $(TOOLS_BUILD)/binutils
 
