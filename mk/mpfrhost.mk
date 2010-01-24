@@ -24,7 +24,7 @@
 
 MPFR_HOST_VERSION:=$(subst ",,$(strip $(CONFIG_EMBTK_MPFR_HOST_VERSION_STRING)))
 MPFR_HOST_SITE := http://www.mpfr.org/mpfr-$(MPFR_HOST_VERSION)
-MPFR_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/mpfr
+MPFR_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/mpfr/$(MPFR_HOST_VERSION)
 MPFR_HOST_PACKAGE := mpfr-$(MPFR_HOST_VERSION).tar.bz2
 MPFR_HOST_BUILD_DIR := $(TOOLS_BUILD)/mpfr
 MPFR_HOST_DIR := $(HOSTTOOLS)/usr/local/mpfr-host
