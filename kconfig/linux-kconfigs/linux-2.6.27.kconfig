@@ -26,7 +26,8 @@ choice
 	prompt "Linux v2.6.27.x series exact version to use."
 	help
 	 Linux v2.6.27.x series exact version to use.
-
+	config EMBTK_LINUX_VERSION_2_6_27_44
+		bool "linux-2.6.27.44"
 	config EMBTK_LINUX_VERSION_2_6_27_43
 		bool "linux-2.6.27.43"
 	config EMBTK_LINUX_VERSION_2_6_27_42
@@ -117,6 +118,7 @@ endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "2.6.27.44"		if EMBTK_LINUX_VERSION_2_6_27_44
 	default "2.6.27.43"		if EMBTK_LINUX_VERSION_2_6_27_43
 	default "2.6.27.42"		if EMBTK_LINUX_VERSION_2_6_27_42
 	default "2.6.27.41"		if EMBTK_LINUX_VERSION_2_6_27_41
