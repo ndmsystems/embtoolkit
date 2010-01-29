@@ -92,6 +92,7 @@ source packages/misc/gettext/gettext.kconfig
 source packages/misc/glib/glib.kconfig
 source packages/misc/libelf/libelf.kconfig
 source packages/misc/libxml/libxml.kconfig
+source packages/misc/ncurses/ncurses.kconfig
 source packages/misc/pango/pango.kconfig
 endmenu
 endmenu

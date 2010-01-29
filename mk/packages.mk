@@ -184,6 +184,13 @@ ROOTFS_COMPONENTS += libxml2_install
 endif
 ROOTFS_COMPONENTS_CLEAN += libxml2_clean
 
+#ncurses
+include $(EMBTK_ROOT)/packages/misc/ncurses/ncurses.mk
+ifeq ($(CONFIG_EMBTK_HAVE_NCURSES),y)
+ROOTFS_COMPONENTS += ncurses_install
+endif
+ROOTFS_COMPONENTS_CLEAN += ncurses_clean
+
 #Pango
 include $(EMBTK_ROOT)/packages/misc/pango/pango.mk
 ifeq ($(CONFIG_EMBTK_HAVE_PANGO),y)
