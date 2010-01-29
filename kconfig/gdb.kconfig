@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 
 config EMBTK_HAVE_GDB
 	bool "Have GDB: Gnu debugging system"
+	select EMBTK_HAVE_NCURSES
 	help
 	 Have GNU debugger components on your embedded target and/or on your
 	 development machine.

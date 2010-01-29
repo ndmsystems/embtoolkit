@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -34,12 +34,13 @@ gdb_target_install: $(GDB_TARGET_BUILD_DIR)/.installed
 gdbserver_target_install: $(GDBSERVER_TARGET_BUILD_DIR)/.installed
 
 #gdb for target
-$(GDB_TARGET_BUILD_DIR)/.installed: termcap_target_install download_gdb \
-decompress_gdb $(GDB_TARGET_BUILD_DIR)/.configured
-	cd $(GDB_TARGET_BUILD_DIR); make $(J); make install
+$(GDB_TARGET_BUILD_DIR)/.installed: ncurses_install download_gdb \
+	decompress_gdb $(GDB_TARGET_BUILD_DIR)/.configured
+	$(Q)$(MAKE) -C $(GDB_TARGET_BUILD_DIR) $(J)
+	$(Q)$(MAKE) -C $(GDB_TARGET_BUILD_DIR) install
 
-$(GDBSERVER_TARGET_BUILD_DIR)/.installed: termcap_target_install download_gdb \
-decompress_gdb $(GDB_TARGET_BUILD_DIR)/.configured
+$(GDBSERVER_TARGET_BUILD_DIR)/.installed: ncurses_install download_gdb \
+	decompress_gdb $(GDB_TARGET_BUILD_DIR)/.configured
 	cd $(GDB_TARGET_BUILD_DIR); make; cd gdb/gdbserver; make install
 	@touch $@
 
