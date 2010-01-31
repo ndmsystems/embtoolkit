@@ -38,7 +38,7 @@ GETTEXT_PKGCONFIGS =
 
 gettext_install: $(GETTEXT_BUILD_DIR)/.installed
 
-$(GETTEXT_BUILD_DIR)/.installed: termcap_target_install download_gettext \
+$(GETTEXT_BUILD_DIR)/.installed: ncurses_install download_gettext \
 	$(GETTEXT_BUILD_DIR)/.decompressed $(GETTEXT_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	gettext-$(GETTEXT_VERSION) in your root filesystem...")
