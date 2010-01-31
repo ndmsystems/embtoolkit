@@ -35,6 +35,8 @@ DIRECTFB_SBINS =
 DIRECTFB_LIBS = directfb* libdavinci_c64x* libdirect* libdirectfb* libfusion*
 DIRECTFB_INCLUDES = directfb*
 
+DIRECTFB_X11_SUPPORT := --disable-x11
+
 directfb_install:	$(DIRECTFB_BUILD_DIR)/.installed \
 			$(DIRECTFB_BUILD_DIR)/.special
 
@@ -75,7 +77,8 @@ $(DIRECTFB_BUILD_DIR)/.configured:
 	FREETYPE_CFLAGS=$(FREETYPE_CFLAGS_FLAGS) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --prefix=/usr \
-	--enable-static=no  --program-suffix=""
+	--enable-static=no  --program-suffix=""	\
+	$(DIRECTFB_X11_SUPPORT)
 	@touch $@
 
 $(DIRECTFB_BUILD_DIR)/.patchlibtool:
