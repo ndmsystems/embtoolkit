@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -28,11 +28,10 @@ config EMBTK_HAVE_DIRECTFB
 	select EMBTK_HAVE_LIBJPEG
 	select EMBTK_HAVE_FREETYPE
 	help
-	 DirectFB is a graphics library which was designed with embedded
-	 systems in mind. It offers maximum hardware accelerated performance
-	 at a minimum of resource usage and overhead.
-	 Check http://www.directfb.org/ for more and up to date infos.
-
+		DirectFB is a graphics library which was designed with embedded
+		systems in mind. It offers maximum hardware accelerated
+		performance at a minimum of resource usage and overhead.
+		Check http://www.directfb.org/ for more and up to date infos.
 choice
 	prompt "DirectFB version you wish"
 	depends on EMBTK_HAVE_DIRECTFB
@@ -45,6 +44,75 @@ choice
 		bool "DirectFB-1.4.2"
 endchoice
 
+menu "DirectFB Configuration"
+depends on EMBTK_HAVE_DIRECTFB
+
+	config EMBTK_DIRECTFB_GRAPHIC_ATI128
+		bool "Build DirectFB ATI Rage 128 graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_CLE266
+		bool "Build DirectFB VIA CLE266 graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_CYBER5K
+		bool "Build DirectFB TVIA CyberPro graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_DAVINCI
+		bool "Build DirectFB TI Davinci graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_EP9X
+		bool "Build DirectFB Cirrus EP9X graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_GL
+		bool "Build DirectFB gl graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_I810
+		bool "Build DirectFB Intel i810 graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_I830
+		bool "Build DirectFB Intel i830 graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_MACH64
+		bool "Build DirectFB ATI Mach64 graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_MATROX
+		bool "Build DirectFB matrox graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_NEOMAGIC
+		bool "Build DirectFB NeoMagic graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_NSC
+		bool "Build DirectFB nsc graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_NVIDIA
+		bool "Build DirectFB nVidia graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_OMAP
+		bool "Build DirectFB TI OMAP graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_PXA3XX
+		bool "Build DirectFB PXA 3xx graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_RADEON
+		bool "Build DirectFB ATI Radeon graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_SAVAGE
+		bool "Build DirectFB S3 Savage graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_SH772X
+		bool "Build DirectFB Renesas SH7722/SH772 graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_SIS315
+		bool "Build DirectFB sis315 graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_TDFX
+		bool "Build DirectFB 3Dfx Voodoo graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_UNICHROME
+		bool "Build DirectFB VIA UniChrome graphic driver"
+
+	config EMBTK_DIRECTFB_GRAPHIC_VMWARE
+		bool "Build DirectFB vmware graphic driver"
+endmenu
 config EMBTK_DIRECTFB_VERSION_STRING
 	string
 	default "1.4.3"	if EMBTK_DIRECTFB_VERSION_1_4_3
