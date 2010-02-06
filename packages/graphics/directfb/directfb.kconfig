@@ -47,6 +47,9 @@ endchoice
 menu "DirectFB Configuration"
 depends on EMBTK_HAVE_DIRECTFB
 
+comment "----------------------"
+comment "DirectFB Graphic drivers"
+comment "----------------------"
 	config EMBTK_DIRECTFB_GRAPHIC_ATI128
 		bool "Build DirectFB ATI Rage 128 graphic driver"
 
@@ -112,6 +115,47 @@ depends on EMBTK_HAVE_DIRECTFB
 
 	config EMBTK_DIRECTFB_GRAPHIC_VMWARE
 		bool "Build DirectFB vmware graphic driver"
+comment "----------------------"
+comment "DirectFB Input drivers"
+comment "----------------------"
+	config EMBTK_DIRECTFB_INPUT_DBOX2REMOTE
+		bool "DBox2 Remote"
+	config EMBTK_DIRECTFB_INPUT_DBOXREMOTE
+		bool "DreamBox Remote"
+	config EMBTK_DIRECTFB_INPUT_DYNAPRO
+		bool "Dynapro Touchscreen"
+	config EMBTK_DIRECTFB_INPUT_ELOINPUT
+		bool "ELO Touchscreen"
+	config EMBTK_DIRECTFB_INPUT_GUNZE
+		bool "Gunze Touchscreen"
+	config EMBTK_DIRECTFB_INPUT_H3600TS
+		bool "H3600 Touchscreen"
+	config EMBTK_DIRECTFB_INPUT_JOYSTICK
+		bool "Joystick"
+	config EMBTK_DIRECTFB_INPUT_KEYBOARD
+		bool "Keyboard"
+	config EMBTK_DIRECTFB_INPUT_LINUXINPUT
+		bool "Linux Input"
+	config EMBTK_DIRECTFB_INPUT_LIRC
+		bool "LiRC"
+	config EMBTK_DIRECTFB_INPUT_MUTOUCH
+		bool "MuTouch touchscreen"
+	config EMBTK_DIRECTFB_INPUT_PENMOUNT
+		bool "penmount"
+	config EMBTK_DIRECTFB_INPUT_PS2MOUSE
+		bool "PS/2 Mouse"
+	config EMBTK_DIRECTFB_INPUT_SERIALMOUSE
+		bool "Serial Mouse"
+	config EMBTK_DIRECTFB_INPUT_SONYPIJOGDIAL
+		bool "SonyPI Jogdial"
+	config EMBTK_DIRECTFB_INPUT_TSLIB
+		bool "tslib"
+	config EMBTK_DIRECTFB_INPUT_UC1X00
+		bool "ucb1x00 Touchscreen"
+	config EMBTK_DIRECTFB_INPUT_WM97XX
+		bool "WM97xx Touchscreen"
+	config EMBTK_DIRECTFB_INPUT_ZYTRONIC
+		bool "Zytronic touchscreen"
 endmenu
 config EMBTK_DIRECTFB_VERSION_STRING
 	string
