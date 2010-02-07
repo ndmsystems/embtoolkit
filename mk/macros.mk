@@ -139,7 +139,7 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	$(Q)PKGCONF_FILES=`find $(SYSROOT)/usr/lib32/pkgconfig -name *.pc`; \
 	for i in $$PKGCONF_FILES; \
 	do \
-	sed -e 's;prefix=/usr;prefix=$(SYSROOT)/usr;' \
+	sed -e 's;prefix=.*;prefix=$(SYSROOT)/usr;' \
 	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
@@ -148,7 +148,7 @@ else
 	$(Q)PKGCONF_FILES=`find $(SYSROOT)/usr/lib/pkgconfig -name *.pc`; \
 	for i in $$PKGCONF_FILES; \
 	do \
-	sed -e 's;prefix=/usr;prefix=$(SYSROOT)/usr;' \
+	sed -e 's;prefix=.*;prefix=$(SYSROOT)/usr;' \
 	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
