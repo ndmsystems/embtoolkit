@@ -24,6 +24,7 @@
 
 LIBELF_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBELF_VERSION_STRING)))
 LIBELF_SITE := http://www.mr511.de/software
+LIBELF_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libelf/$(LIBELF_VERSION)
 LIBELF_PACKAGE := libelf-$(LIBELF_VERSION).tar.gz
 LIBELF_BUILD_DIR := $(PACKAGES_BUILD)/libelf-$(LIBELF_VERSION)
 
@@ -56,10 +57,19 @@ download_libelf:
 	@test -e $(DOWNLOAD_DIR)/$(LIBELF_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(LIBELF_PACKAGE) \
 	$(LIBELF_SITE)/$(LIBELF_PACKAGE)
+ifeq ($(CONFIG_EMBTK_LIBELF_NEED_PATCH),y)
+	$(Q)test -e $(DOWNLOAD_DIR)/libelf-$(LIBELF_VERSION).patch || \
+	wget -O $(DOWNLOAD_DIR)/libelf-$(LIBELF_VERSION).patch \
+	$(LIBELF_PATCH_SITE)/libelf-$(LIBELF_VERSION)-*.patch
+endif
 
 $(LIBELF_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LIBELF_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(LIBELF_PACKAGE)
+ifeq ($(CONFIG_EMBTK_LIBELF_NEED_PATCH),y)
+	cd $(PACKAGES_BUILD)/libelf-$(LIBELF_VERSION); \
+	patch -p1 < $(DOWNLOAD_DIR)/libelf-$(LIBELF_VERSION).patch
+endif
 	@touch $@
 
 $(LIBELF_BUILD_DIR)/.configured:
@@ -84,7 +94,7 @@ $(LIBELF_BUILD_DIR)/.configured:
 	./configure --build=$(HOST_BUILD) \
 	--host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) \
-	--prefix=$(SYSROOT)/usr
+	--prefix=$(SYSROOT)/usr --enable-elf64
 	@touch $@
 
 libelf_clean:
