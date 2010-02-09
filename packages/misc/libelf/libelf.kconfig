@@ -25,7 +25,6 @@
 config EMBTK_HAVE_LIBELF
 	bool "Have libelf"
 	select EMBTK_HAVE_GETTEXT
-	select EMBTK_LIBELF_NEED_PATCH
 	help
 		libelf lets you read, modify or create ELF files in an
 		architecture-independent way. The library takes care of size and
@@ -39,6 +38,7 @@ choice
 
 	config  EMBTK_LIBELF_VERSION_0_8_13
 		bool "libelf-0.8.13"
+		select EMBTK_LIBELF_NEED_PATCH
 endchoice
 
 config EMBTK_LIBELF_VERSION_STRING
