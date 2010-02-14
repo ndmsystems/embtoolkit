@@ -38,6 +38,14 @@ OPENSSL_LIBS = engines/lib4758cca.so engines/libaep.so engines/libatalla.so \
 		engines/libubsec.so libcrypto.* libssl.*
 OPENSSL_PKGCONFIGS = libcrypto.pc libssl.pc openssl.pc
 
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+OPENSSL_LINUX_TARGET := linux-generic32
+else ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
+OPENSSL_LINUX_TARGET := linux-generic64
+else
+OPENSSL_LINUX_TARGET := linux-generic32
+endif
+
 openssl_install: $(OPENSSL_BUILD_DIR)/.installed
 
 $(OPENSSL_BUILD_DIR)/.installed: download_openssl \
@@ -81,7 +89,8 @@ endif
 
 $(OPENSSL_BUILD_DIR)/.configured:
 	$(Q)cd $(OPENSSL_BUILD_DIR); \
-	./Configure linux-generic32 --openssldir=/etc/ssl --prefix=/usr shared
+	./Configure $(OPENSSL_LINUX_TARGET) \
+	--openssldir=/etc/ssl --prefix=/usr shared
 	@touch $@
 
 openssl_clean:
