@@ -84,6 +84,10 @@ menu "Scripting languages"
 source packages/scripting-languages/perl/perl.kconfig
 endmenu
 
+menu "Security packages"
+source packages/security/openssl/openssl.kconfig
+endmenu
+
 menu "System packages"
 endmenu
 

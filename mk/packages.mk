@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -152,6 +152,14 @@ ifeq ($(CONFIG_EMBTK_HAVE_MICROPERL),y)
 include $(EMBTK_ROOT)/packages/scripting-languages/perl/perl.mk
 ROOTFS_COMPONENTS += microperl_install
 endif
+############################ Security packages #################################
+
+#OpenSSL
+include $(EMBTK_ROOT)/packages/security/openssl/openssl.mk
+ifeq ($(CONFIG_EMBTK_HAVE_OPENSSL),y)
+ROOTFS_COMPONENTS += openssl_install
+endif
+ROOTFS_COMPONENTS_CLEAN += openssl_clean
 ############################ System packages ###################################
 
 ########################## Miscellaneous packages ##############################
