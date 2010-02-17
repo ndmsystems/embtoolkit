@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -24,6 +24,10 @@
 
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 
+ROOTFS_HOSTTOOLS-y :=
+ROOTFS_HOSTTOOLS_CLEAN-y :=
+FILESYSTEMS-y :=
+
 #include various filesystems targets
 include $(EMBTK_ROOT)/mk/fs.mk
 
@@ -31,31 +35,28 @@ include $(EMBTK_ROOT)/mk/fs.mk
 include $(EMBTK_ROOT)/mk/fakeroot.mk
 include $(EMBTK_ROOT)/mk/makedevs.mk
 include $(EMBTK_ROOT)/mk/pkgconfig.mk
+ROOTFS_HOSTTOOLS-y += makedevs_install fakeroot_install pkgconfig_install
 ROOTFS_HOSTTOOLS += makedevs_install fakeroot_install pkgconfig_install
 
 #Does CPIO archive for initramfs selected?
-ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),y)
-FILESYSTEMS += build_initramfs_archive
-endif
+FILESYSTEMS-$(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO) += build_initramfs_archive
 
 #Does jffs2 filesystem selected?
-ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),y)
-ROOTFS_HOSTTOOLS += mtd-utils_host_install
-ROOTFS_HOSTTOOLS_CLEAN += mtd-utils_host_clean
-FILESYSTEMS += build_jffs2_rootfs
-endif
+ROOTFS_HOSTTOOLS-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += mtd-utils_host_install
+ROOTFS_HOSTTOOLS_CLEAN-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += mtd-utils_host_clean
+FILESYSTEMS-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += build_jffs2_rootfs
 
 #Does squashfs filesystem selected?
+ROOTFS_HOSTTOOLS-$(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS) += squashfs_host_install
+FILESYSTEMS-$(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS) += build_squashfs_rootfs
 ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),y)
 include $(EMBTK_ROOT)/mk/squashfs.mk
-ROOTFS_HOSTTOOLS += squashfs_host_install
-FILESYSTEMS += build_squashfs_rootfs
 endif
 
 rootfs_build:
 	$(call EMBTK_GENERIC_MESSAGE,"Building selected root filesystems...")
-	@$(MAKE) rootfs_clean mkinitialrootfs $(ROOTFS_HOSTTOOLS) \
-	$(ROOTFS_COMPONENTS) rootfs_fill build_tarbz2_rootfs $(FILESYSTEMS)
+	@$(MAKE) rootfs_clean mkinitialrootfs $(ROOTFS_HOSTTOOLS-y) \
+	$(ROOTFS_COMPONENTS-y) rootfs_fill build_tarbz2_rootfs $(FILESYSTEMS-y)
 	$(Q)rm -rf $(ROOTFS)
 	$(call EMBTK_GENERIC_MESSAGE,"Build of selected root filesystems \
 	ended successfully!")

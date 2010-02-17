@@ -22,6 +22,8 @@
 # \date         May 2009
 ################################################################################
 
+ROOTFS_COMPONENTS-y :=
+HOSTTOOLS_COMPONENTS-y :=
 ################################################################################
 #################### Common include for target and host ########################
 ################################################################################
@@ -41,194 +43,57 @@ endif
 ################################################################################
 
 #gdb
-ifeq ($(CONFIG_EMBTK_HAVE_GDB_ON_TARGET),y)
-ROOTFS_COMPONENTS += gdb_target_install
-endif
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GDB_ON_TARGET) += gdb_target_install
 
 #gdbserver
-ifeq ($(CONFIG_EMBTK_HAVE_GDBSERVER_ON_TARGET),y)
-ROOTFS_COMPONENTS += gdbserver_target_install
-endif
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GDBSERVER_ON_TARGET) += gdbserver_target_install
 
 #strace
-ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_STRACE),y)
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_STRACE) += strace_install
 include $(EMBTK_ROOT)/mk/strace.mk
-ROOTFS_COMPONENTS += strace_install
-endif
 
-######################## Flash manipulation tools ##############################
-
-#mtd-utils
-ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS),y)
-ROOTFS_COMPONENTS += mtd-utils_target_install
-endif
+# Flash manipulation tools: mtd-utils
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS) += mtd-utils_target_install
 ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
 
-######################## Compression packages ##################################
+#Compression packages
 
-########################### Graphics packages ##################################
+# Graphics packages
+include $(EMBTK_ROOT)/packages/graphics/graphics.mk
 
-#atk
-include $(EMBTK_ROOT)/packages/graphics/atk/atk.mk
-ifeq ($(CONFIG_EMBTK_HAVE_ATK),y)
-ROOTFS_COMPONENTS += atk_install
-endif
-ROOTFS_COMPONENTS_CLEAN += atk_clean
+# Networking packages
 
-#Cairo
-include $(EMBTK_ROOT)/packages/graphics/cairo/cairo.mk
-ifeq ($(CONFIG_EMBTK_HAVE_CAIRO),y)
-ROOTFS_COMPONENTS += cairo_install
-endif
-ROOTFS_COMPONENTS_CLEAN += cairo_clean
+# Scripting languages
+include $(EMBTK_ROOT)/packages/scripting-languages/scripting-languages.mk
 
-#DirectFB
-include $(EMBTK_ROOT)/packages/graphics/directfb/directfb.mk
-ifeq ($(CONFIG_EMBTK_HAVE_DIRECTFB),y)
-ROOTFS_COMPONENTS += directfb_install
-endif
-ROOTFS_COMPONENTS_CLEAN += directfb_clean
+# Security packages
+include $(EMBTK_ROOT)/packages/security/security.mk
 
-#fontconfig
-include $(EMBTK_ROOT)/packages/graphics/fontconfig/fontconfig.mk
-ifeq ($(CONFIG_EMBTK_HAVE_FONTCONFIG),y)
-ROOTFS_COMPONENTS += fontconfig_install
-endif
-ROOTFS_COMPONENTS_CLEAN += fontconfig_clean
+# System packages
 
-#FreeFont
-include $(EMBTK_ROOT)/packages/graphics/freefont/freefont.mk
-ifeq ($(CONFIG_EMBTK_HAVE_FREEFONT_TTF),y)
-ROOTFS_COMPONENTS += freefont_ttf_install
-endif
-ROOTFS_COMPONENTS_CLEAN += ttmkfdir_clean
+# Miscellaneous packages
+include $(EMBTK_ROOT)/packages/misc/misc.mk
 
-#FreeType
-include $(EMBTK_ROOT)/packages/graphics/freetype/freetype.mk
-ifeq ($(CONFIG_EMBTK_HAVE_FREETYPE),y)
-ROOTFS_COMPONENTS += freetype_install
-endif
-ROOTFS_COMPONENTS_CLEAN += freetype_clean
-
-#gtk+
-include $(EMBTK_ROOT)/packages/graphics/gtk/gtk.mk
-ifeq ($(CONFIG_EMBTK_HAVE_GTK),y)
-ROOTFS_COMPONENTS += gtk_install
-endif
-ROOTFS_COMPONENTS_CLEAN += gtk_clean
-
-#libjpeg
-include $(EMBTK_ROOT)/packages/graphics/libjpeg/libjpeg.mk
-ifeq ($(CONFIG_EMBTK_HAVE_LIBJPEG),y)
-ROOTFS_COMPONENTS += libjpeg_install
-endif
-ROOTFS_COMPONENTS_CLEAN += libjpeg_clean
-
-#libpng
-include $(EMBTK_ROOT)/packages/graphics/libpng/libpng.mk
-ifeq ($(CONFIG_EMBTK_HAVE_LIBPNG),y)
-ROOTFS_COMPONENTS += libpng_install
-endif
-ROOTFS_COMPONENTS_CLEAN += libpng_clean
-
-#pixman
-include $(EMBTK_ROOT)/packages/graphics/pixman/pixman.mk
-ifeq ($(CONFIG_EMBTK_HAVE_PIXMAN),y)
-ROOTFS_COMPONENTS += pixman_install
-endif
-ROOTFS_COMPONENTS_CLEAN += pixman_clean
-
-#libtiff
-include $(EMBTK_ROOT)/packages/graphics/libtiff/libtiff.mk
-ifeq ($(CONFIG_EMBTK_HAVE_LIBTIFF),y)
-ROOTFS_COMPONENTS += libtiff_install
-endif
-ROOTFS_COMPONENTS_CLEAN += libtiff_clean
-########################## Networking packages #################################
-
-############################ Scripting languages ###############################
-
-ifeq ($(CONFIG_EMBTK_HAVE_MICROPERL),y)
-include $(EMBTK_ROOT)/packages/scripting-languages/perl/perl.mk
-ROOTFS_COMPONENTS += microperl_install
-endif
-############################ Security packages #################################
-
-#OpenSSL
-include $(EMBTK_ROOT)/packages/security/openssl/openssl.mk
-ifeq ($(CONFIG_EMBTK_HAVE_OPENSSL),y)
-ROOTFS_COMPONENTS += openssl_install
-endif
-ROOTFS_COMPONENTS_CLEAN += openssl_clean
-############################ System packages ###################################
-
-########################## Miscellaneous packages ##############################
-
-#gettext
-include $(EMBTK_ROOT)/packages/misc/gettext/gettext.mk
-ifeq ($(CONFIG_EMBTK_HAVE_GETTEXT),y)
-ROOTFS_COMPONENTS += gettext_install
-endif
-ROOTFS_COMPONENTS_CLEAN += gettext_clean
-
-#GLib
-include $(EMBTK_ROOT)/packages/misc/glib/glib.mk
-ifeq ($(CONFIG_EMBTK_HAVE_GLIB),y)
-ROOTFS_COMPONENTS += glib_install
-endif
-ROOTFS_COMPONENTS_CLEAN += glib_clean
-
-#libelf
-include $(EMBTK_ROOT)/packages/misc/libelf/libelf.mk
-ifeq ($(CONFIG_EMBTK_HAVE_LIBELF),y)
-ROOTFS_COMPONENTS += libelf_install
-endif
-ROOTFS_COMPONENTS_CLEAN += libelf_clean
-
-#libxml2
-include $(EMBTK_ROOT)/packages/misc/libxml/libxml.mk
-ifeq ($(CONFIG_EMBTK_HAVE_LIBXML2),y)
-ROOTFS_COMPONENTS += libxml2_install
-endif
-ROOTFS_COMPONENTS_CLEAN += libxml2_clean
-
-#ncurses
-include $(EMBTK_ROOT)/packages/misc/ncurses/ncurses.mk
-ifeq ($(CONFIG_EMBTK_HAVE_NCURSES),y)
-ROOTFS_COMPONENTS += ncurses_install
-endif
-ROOTFS_COMPONENTS_CLEAN += ncurses_clean
-
-#Pango
-include $(EMBTK_ROOT)/packages/misc/pango/pango.mk
-ifeq ($(CONFIG_EMBTK_HAVE_PANGO),y)
-ROOTFS_COMPONENTS += pango_install
-endif
-ROOTFS_COMPONENTS_CLEAN += pango_clean
-################################### BUSYBOX ####################################
 #Busybox
-ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),y)
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_BB) += busybox_install
 include $(EMBTK_ROOT)/packages/busybox/busybox.mk
 ROOTFS_COMPONENTS += busybox_install
-endif
 
 ################################################################################
 ########################## Packages for HOST MACHINE ###########################
 ################################################################################
 
 #gdb
-ifeq ($(CONFIG_EMBTK_HAVE_GDB_ON_HOST),y)
-HOSTTOOLS_COMPONENTS += gdb_host_install
-endif
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GDB_ON_HOST) += gdb_host_install
 
 ################################################################################
 ########################### Targets for HOST MACHINE ###########################
 ################################################################################
 host_packages_build:
-ifeq ($(HOSTTOOLS_COMPONENTS),)
+ifeq ($(HOSTTOOLS_COMPONENTS-y),)
 else
 	$(call EMBTK_GENERIC_MESSAGE,"Building extra packages intended to run \
 	on your host machine ...")
-	@$(MAKE) $(HOSTTOOLS_COMPONENTS)
+	@$(MAKE) $(HOSTTOOLS_COMPONENTS-y)
 endif
 
