@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 # For Copyrright from linux kernel's build/configure system, see their source
 # code.
 #
@@ -62,19 +62,7 @@ menu "Compression packages"
 endmenu
 
 menu "Graphics packages"
-source packages/graphics/atk/atk.kconfig
-source packages/graphics/cairo/cairo.kconfig
-source packages/graphics/directfb/directfb.kconfig
-source packages/graphics/fontconfig/fontconfig.kconfig
-source packages/graphics/freetype/freetype.kconfig
-source packages/graphics/gtk/gtk.kconfig
-source packages/graphics/libjpeg/libjpeg.kconfig
-source packages/graphics/libpng/libpng.kconfig
-source packages/graphics/pixman/pixman.kconfig
-source packages/graphics/libtiff/libtiff.kconfig
-
-comment "Include fonts in the target root filesystem"
-source packages/graphics/freefont/freefont.kconfig
+source packages/graphics/graphics.kconfig
 endmenu
 
 menu "Networking packages"
@@ -85,19 +73,14 @@ source packages/scripting-languages/perl/perl.kconfig
 endmenu
 
 menu "Security packages"
-source packages/security/openssl/openssl.kconfig
+source packages/security/security.kconfig
 endmenu
 
 menu "System packages"
 endmenu
 
 menu "Miscellaneous packages"
-source packages/misc/gettext/gettext.kconfig
-source packages/misc/glib/glib.kconfig
-source packages/misc/libelf/libelf.kconfig
-source packages/misc/libxml/libxml.kconfig
-source packages/misc/ncurses/ncurses.kconfig
-source packages/misc/pango/pango.kconfig
+source packages/misc/misc.kconfig
 endmenu
 endmenu
 
