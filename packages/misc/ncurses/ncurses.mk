@@ -89,7 +89,7 @@ $(NCURSES_BUILD_DIR)/.configured:
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --program-prefix="" \
-	--prefix=/usr
+	--prefix=/usr --disable-rpath --without-cxx-binding --without-ada
 	@touch $@
 
 ncurses_clean:
