@@ -23,52 +23,52 @@
 ################################################################################
 
 #atk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_ATK) += atk_install
+include $(EMBTK_ROOT)/packages/graphics/atk/atk.mk
 ROOTFS_COMPONENTS_CLEAN += atk_clean
 ifeq ($(CONFIG_EMBTK_HAVE_ATK),y)
-include $(EMBTK_ROOT)/packages/graphics/atk/atk.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_ATK) += atk_install
 endif
 
 #Cairo
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_CAIRO) += cairo_install
+include $(EMBTK_ROOT)/packages/graphics/cairo/cairo.mk
 ROOTFS_COMPONENTS_CLEAN += cairo_clean
 ifeq ($(CONFIG_EMBTK_HAVE_CAIRO),y)
-include $(EMBTK_ROOT)/packages/graphics/cairo/cairo.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_CAIRO) += cairo_install
 endif
 
 #DirectFB
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_DIRECTFB) += directfb_install
+include $(EMBTK_ROOT)/packages/graphics/directfb/directfb.mk
 ROOTFS_COMPONENTS_CLEAN += directfb_clean
 ifeq ($(CONFIG_EMBTK_HAVE_DIRECTFB),y)
-include $(EMBTK_ROOT)/packages/graphics/directfb/directfb.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_DIRECTFB) += directfb_install
 endif
 
 #fontconfig
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FONTCONFIG) += fontconfig_install
+include $(EMBTK_ROOT)/packages/graphics/fontconfig/fontconfig.mk
 ROOTFS_COMPONENTS_CLEAN += fontconfig_clean
 ifeq ($(CONFIG_EMBTK_HAVE_FONTCONFIG),y)
-include $(EMBTK_ROOT)/packages/graphics/fontconfig/fontconfig.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FONTCONFIG) += fontconfig_install
 endif
 
 #FreeFont
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FREEFONT_TTF) += freefont_ttf_install
+include $(EMBTK_ROOT)/packages/graphics/freefont/freefont.mk
 ROOTFS_COMPONENTS_CLEAN += ttmkfdir_clean
 ifeq ($(CONFIG_EMBTK_HAVE_FREEFONT_TTF),y)
-include $(EMBTK_ROOT)/packages/graphics/freefont/freefont.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FREEFONT_TTF) += freefont_ttf_install
 endif
 
 #FreeType
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FREETYPE) += freetype_install
+include $(EMBTK_ROOT)/packages/graphics/freetype/freetype.mk
 ROOTFS_COMPONENTS_CLEAN += freetype_clean
 ifeq ($(CONFIG_EMBTK_HAVE_FREETYPE),y)
-include $(EMBTK_ROOT)/packages/graphics/freetype/freetype.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FREETYPE) += freetype_install
 endif
 
 #gtk+
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GTK) += gtk_install
+include $(EMBTK_ROOT)/packages/graphics/gtk/gtk.mk
 ROOTFS_COMPONENTS_CLEAN += gtk_clean
 ifeq ($(CONFIG_EMBTK_HAVE_GTK),y)
-include $(EMBTK_ROOT)/packages/graphics/gtk/gtk.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GTK) += gtk_install
 endif
 
 #libjpeg
@@ -79,23 +79,23 @@ include $(EMBTK_ROOT)/packages/graphics/libjpeg/libjpeg.mk
 endif
 
 #libpng
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPNG) += libpng_clean
+include $(EMBTK_ROOT)/packages/graphics/libpng/libpng.mk
 ROOTFS_COMPONENTS_CLEAN += libpng_clean
 ifeq ($(CONFIG_EMBTK_HAVE_LIBPNG),y)
-include $(EMBTK_ROOT)/packages/graphics/libpng/libpng.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPNG) += libpng_clean
 endif
 
 #libtiff
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIFF) += libtiff_install
+include $(EMBTK_ROOT)/packages/graphics/libtiff/libtiff.mk
 ROOTFS_COMPONENTS_CLEAN += libtiff_clean
 ifeq ($(CONFIG_EMBTK_HAVE_LIBTIFF),y)
-include $(EMBTK_ROOT)/packages/graphics/libtiff/libtiff.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIFF) += libtiff_install
 endif
 
 #pixman
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_PIXMAN) += pixman_install
+include $(EMBTK_ROOT)/packages/graphics/pixman/pixman.mk
 ROOTFS_COMPONENTS_CLEAN += pixman_clean
 ifeq ($(CONFIG_EMBTK_HAVE_PIXMAN),y)
-include $(EMBTK_ROOT)/packages/graphics/pixman/pixman.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_PIXMAN) += pixman_install
 endif
 

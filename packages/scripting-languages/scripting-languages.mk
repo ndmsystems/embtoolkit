@@ -23,8 +23,8 @@
 ################################################################################
 
 #microperl
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MICROPERL) += microperl_install
-ifeq ($(CONFIG_EMBTK_HAVE_MICROPERL),y)
 include $(EMBTK_ROOT)/packages/scripting-languages/perl/perl.mk
+ifeq ($(CONFIG_EMBTK_HAVE_MICROPERL),y)
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MICROPERL) += microperl_install
 endif
 
