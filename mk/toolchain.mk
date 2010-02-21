@@ -58,17 +58,25 @@ include $(EMBTK_ROOT)/mk/gcc.mk
 #linux kernel headers
 include $(EMBTK_ROOT)/mk/kernel-headers.mk
 
+#Autotools
+include $(EMBTK_ROOT)/mk/autoconf.mk
+include $(EMBTK_ROOT)/mk/automake.mk
+include $(EMBTK_ROOT)/mk/m4.mk
+
+
 ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 #EGLIBC
 include $(EMBTK_ROOT)/mk/eglibc.mk
-TOOLCHAINBUILD := mkinitialpath kernel-headers_install ccachehost_install \
+TOOLCHAINBUILD := mkinitialpath m4_install autoconf_install automake_install \
+		kernel-headers_install ccachehost_install \
 		gmphost_install mpfrhost_install mpchost_install \
 		binutils_install gcc1_install eglibc-headers_install \
 		gcc2_install eglibc_install gcc3_install
 else
 #uClibc
 include $(EMBTK_ROOT)/mk/uclibc.mk
-TOOLCHAINBUILD := mkinitialpath kernel-headers_install ccachehost_install \
+TOOLCHAINBUILD := mkinitialpath m4_install autoconf_install automake_install \
+		kernel-headers_install ccachehost_install \
 		gmphost_install mpfrhost_install mpchost_install \
 		binutils_install gcc1_install uclibc_install gcc3_install
 endif
