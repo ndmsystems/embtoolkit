@@ -72,10 +72,10 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GTK) += gtk_install
 endif
 
 #libjpeg
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBJPEG) += libjpeg_install
+include $(EMBTK_ROOT)/packages/graphics/libjpeg/libjpeg.mk
 ROOTFS_COMPONENTS_CLEAN += libjpeg_clean
 ifeq ($(CONFIG_EMBTK_HAVE_LIBJPEG),y)
-include $(EMBTK_ROOT)/packages/graphics/libjpeg/libjpeg.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBJPEG) += libjpeg_install
 endif
 
 #libpng
