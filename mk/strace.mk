@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -42,8 +42,11 @@ $(STRACE_BUILD_DIR)/.installed: download_strace \
 
 $(STRACE_BUILD_DIR)/.decompressed:
 	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(STRACE_PACKAGE)
+ifeq ($(CONFIG_EMBTK_STRACE_NEED_PATCH),y)
 	@cd $(PACKAGES_BUILD)/strace-$(STRACE_VERSION); \
-	patch -p1 < $(DOWNLOAD_DIR)/strace-$(STRACE_VERSION).patch
+	patch -p1 < $(DOWNLOAD_DIR)/strace-$(STRACE_VERSION).patch; \
+	$(AUTORECONF)
+endif
 	@mkdir -p $(STRACE_BUILD_DIR)
 	@touch $@
 download_strace:
@@ -52,9 +55,11 @@ download_strace:
 	@test -e $(DOWNLOAD_DIR)/$(STRACE_PACKAGE) || \
 	wget $(STRACE_SITE)/$(STRACE_PACKAGE) \
 	-O $(DOWNLOAD_DIR)/$(STRACE_PACKAGE)
+ifeq ($(CONFIG_EMBTK_STRACE_NEED_PATCH),y)
 	@test -e $(DOWNLOAD_DIR)/strace-$(STRACE_VERSION).patch || \
 	wget -O $(DOWNLOAD_DIR)/strace-$(STRACE_VERSION).patch \
 	$(STRACE_PATCH_SITE)/strace-$(STRACE_VERSION)-*.patch
+endif
 
 $(STRACE_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring \

@@ -34,12 +34,17 @@ choice
 	depends on EMBTK_ROOTFS_HAVE_STRACE
 	config EMBTK_STRACE_VERSION_4_5_19
 		bool "strace-4.5.19"
+		select EMBTK_STRACE_NEED_PATCH
 	config EMBTK_STRACE_VERSION_4_5_18
 		bool "strace-4.5.18"
+		select EMBTK_STRACE_NEED_PATCH
 endchoice
 
 config EMBTK_STRACE_VERSION_STRING
 	string
 	default "4.5.19"	if EMBTK_STRACE_VERSION_4_5_19
 	default "4.5.18"	if EMBTK_STRACE_VERSION_4_5_18
+
+config EMBTK_STRACE_NEED_PATCH
+	bool
 
