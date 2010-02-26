@@ -37,8 +37,9 @@ GLIB_PKGCONFIGS = gio-*.pc glib-*.pc gmodule-*.pc gobject-*.pc gthread-*.pc
 
 glib_install: $(GLIB_BUILD_DIR)/.installed
 
-$(GLIB_BUILD_DIR)/.installed: gettext_install download_glib \
-	$(GLIB_BUILD_DIR)/.decompressed $(GLIB_BUILD_DIR)/.configured
+$(GLIB_BUILD_DIR)/.installed: zlib_target_install \
+	gettext_install download_glib $(GLIB_BUILD_DIR)/.decompressed \
+	$(GLIB_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	glib-$(GLIB_VERSION) in your root filesystem...")
 	$(call EMBTK_KILL_LT_RPATH, $(GLIB_BUILD_DIR))
