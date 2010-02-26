@@ -70,18 +70,18 @@ config EMBTK_EGLIBC_NEED_PATCH
 	default y
 
 if EMBTK_EGLIBC_VERSION_2_11
-source "kconfig/option-groups.def-2.11"
+source "kconfig/eglibc-2.11.kconfig"
 endif
 
 if EMBTK_EGLIBC_VERSION_2_10
-source "kconfig/option-groups.def-2.10"
+source "kconfig/eglibc-2.10.kconfig"
 endif
 
 if EMBTK_EGLIBC_VERSION_2_9
-source "kconfig/option-groups.def-2.9"
+source "kconfig/eglibc-2.9.kconfig"
 endif
 
 if EMBTK_EGLIBC_VERSION_TRUNK
-source "kconfig/option-groups.def-trunk"
+source "kconfig/eglibc-trunk.kconfig"
 endif
 

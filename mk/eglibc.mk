@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -38,8 +38,7 @@ else
 EGLIBC_FLOAT_TYPE := --with-fp=yes
 endif
 
-#EGLIBC options
-include $(EMBTK_ROOT)/mk/eglibc-options-parse.mk
+OPTION_GROUPS_FILE = $(EMBTK_ROOT)/mk/eglibc-$(EGLIBC_VERSION)-options.mk
 
 eglibc-headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
 eglibc_install: $(EGLIBC_BUILD_DIR)/.installed
@@ -132,3 +131,18 @@ $(EGLIBC_BUILD_DIR)/.configured:
 	--disable-profile --without-gd --without-cvs --enable-add-ons \
 	--enable-kernel="2.6.0"
 	@touch $@
+
+EGLIBC_OPTIONS_PARSE:
+	$(call EMBTK_GENERIC_MESSAGE,"Parsing \
+	eglibc-$(EGLIBC_VERSION) option groups...")
+	@cat $(OPTION_GROUPS_FILE) > $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
+	@echo "#######################################################" >> $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
+	@echo "# From embtoolkit-$(EMBTK_VERSION) configuration menu #" >> $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
+	@echo "#######################################################" >> $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
+	@grep "CONFIG_KEMBTK_EGLIBC_" $(EMBTK_ROOT)/.config | \
+	sed -e 's/CONFIG_KEMBTK_EGLIBC_*//g' \
+	>> $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
+	@sed -i 's/"//g' $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
+	@cp $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config \
+	$(EGLIBC_BUILD_DIR)/option-groups.config
+

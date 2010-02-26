@@ -19,7 +19,7 @@
 # An option may have a 'depends' line, indicating which other options
 # must also be enabled if this option is.  At present, EGLIBC doesn't
 # check that these dependencies are satisfied.
-# 
+#
 # Option group variables get their default values from the file
 # 'option-groups.defaults', in the top directory of the EGLIBC source
 # tree.  By default, all EGLIBC option groups are enabled --- their
@@ -37,12 +37,12 @@
 # explicitly enable an option group, you may also write:
 #
 #    OPTION_GROUP_NAME = y
-# 
+#
 # although this simply reestablishes the value already set by
 # 'option-groups.defaults'.
 
 
-config OPTION_EGLIBC_BACKTRACE
+config KEMBTK_EGLIBC_OPTION_EGLIBC_BACKTRACE
 	default y
 	bool "Functions for producing backtraces"
 	help
@@ -57,7 +57,7 @@ config OPTION_EGLIBC_BACKTRACE
 		backtrace_symbols
 		backtrace_symbols_fd
 
-config OPTION_EGLIBC_BSD
+config KEMBTK_EGLIBC_OPTION_EGLIBC_BSD
 	bool "BSD-specific functions, and their compatibility stubs"
 	help
 		This option group includes functions specific to BSD kernels.
@@ -73,9 +73,10 @@ config OPTION_EGLIBC_BSD
 		 revoke
 		 setlogin
 
-config OPTION_EGLIBC_CXX_TESTS
+config KEMBTK_EGLIBC_OPTION_EGLIBC_CXX_TESTS
 	bool "Tests that link against the standard C++ library."
-	depends on OPTION_POSIX_WIDE_CHAR_DEVICE_IO && OPTION_EGLIBC_LIBM
+	depends on KEMBTK_EGLIBC_OPTION_POSIX_WIDE_CHAR_DEVICE_IO
+	depends on KEMBTK_EGLIBC_OPTION_EGLIBC_LIBM
 	help
 		This option group does not include any C library functions;
 		instead, it controls which EGLIBC tests an ordinary 'make
@@ -87,7 +88,7 @@ config OPTION_EGLIBC_CXX_TESTS
 		the wide character I/O functions included in EGLIBC.  If those
 		option groups are disabled, this test must also be disabled.
 
-config OPTION_EGLIBC_LIBM
+config KEMBTK_EGLIBC_OPTION_EGLIBC_LIBM
 	default y
 	bool "libm (math library)"
 	help
@@ -106,7 +107,7 @@ config OPTION_EGLIBC_LIBM
 		group, you will not be able to build 'libstdc++' against the
 		resulting EGLIBC installation.
 
-config OPTION_EGLIBC_CHARSETS
+config KEMBTK_EGLIBC_OPTION_EGLIBC_CHARSETS
 	bool "iconv/gconv character set conversion libraries"
 	help
 		This option group includes support for character sets other
@@ -168,7 +169,7 @@ config OPTION_EGLIBC_CHARSETS
 
 		WCHAR_T           - EGLIBC's internal form (target-endian,32-bit ISO 10646)
 
-config OPTION_EGLIBC_DB_ALIASES
+config KEMBTK_EGLIBC_OPTION_EGLIBC_DB_ALIASES
 	bool "Functions for accessing the mail aliases database"
 	help
 		This option group includues functions for looking up mail
@@ -185,7 +186,7 @@ config OPTION_EGLIBC_DB_ALIASES
 		When this option group is disabled, the NSS service libraries
 		also lack support for querying their mail alias tables.
 
-config OPTION_EGLIBC_ENVZ
+config KEMBTK_EGLIBC_OPTION_EGLIBC_ENVZ
 	bool "Functions for handling envz-style environment vectors."
 	help
 		This option group contains functions for creating and operating
@@ -196,11 +197,11 @@ config OPTION_EGLIBC_ENVZ
 
 		This option group includes the following functions:
 
-		envz_add        envz_merge 
+		envz_add        envz_merge
 		envz_entry      envz_remove
-		envz_get        envz_strip 
+		envz_get        envz_strip
 
-config OPTION_EGLIBC_FCVT
+config KEMBTK_EGLIBC_OPTION_EGLIBC_FCVT
 	bool "Functions for converting floating-point numbers to strings"
 	help
 		This option group includes functions for converting
@@ -214,14 +215,14 @@ config OPTION_EGLIBC_FCVT
 		fcvt_r		qfcvt_r
 		gcvt		qgcvt
 
-config OPTION_EGLIBC_FMTMSG
+config KEMBTK_EGLIBC_OPTION_EGLIBC_FMTMSG
 	bool "Functions for formatting messages"
 	default y
 	help
 		This option group includes the following functions:
 		addseverity    fmtmsg
 
-config OPTION_EGLIBC_FSTAB
+config KEMBTK_EGLIBC_OPTION_EGLIBC_FSTAB
 	default y
 	bool "Access functions for 'fstab'"
 	help
@@ -236,7 +237,7 @@ config OPTION_EGLIBC_FSTAB
 		getfsent       setfsent
 		getfsfile
 
-config OPTION_EGLIBC_FTRAVERSE
+config KEMBTK_EGLIBC_OPTION_EGLIBC_FTRAVERSE
 	default y
 	bool "Functions for traversing file hierarchies"
 	help
@@ -251,7 +252,7 @@ config OPTION_EGLIBC_FTRAVERSE
 		fts_set	nftw64
 		fts_close
 
-config OPTION_EGLIBC_INET
+config KEMBTK_EGLIBC_OPTION_EGLIBC_INET
 	default y
 	bool "Networking support"
 	help
@@ -377,9 +378,9 @@ config OPTION_EGLIBC_INET
 		use Unix-domain sockets to communicate with the syslog daemon;
 		syslog is valuable in non-networked contexts.
 
-config OPTION_EGLIBC_ADVANCED_INET6
+config KEMBTK_EGLIBC_OPTION_EGLIBC_ADVANCED_INET6
 	bool "IPv6 Advanced Sockets API support (RFC3542)"
-	depends on OPTION_EGLIBC_INET
+	depends on KEMBTK_EGLIBC_OPTION_EGLIBC_INET
 	help
 		This option group includes the functions specified by RFC 3542,
 		"Advanced Sockets Application Program Interface (API) for
@@ -407,17 +408,17 @@ config OPTION_EGLIBC_ADVANCED_INET6
 		inet6_rth_segments
 		inet6_rth_space
 
-config OPTION_EGLIBC_SUNRPC
+config KEMBTK_EGLIBC_OPTION_EGLIBC_SUNRPC
 	bool "Support for the Sun 'RPC' protocol."
-	depends on OPTION_EGLIBC_INET
+	depends on KEMBTK_EGLIBC_OPTION_EGLIBC_INET
 	default y
 	help
 		This option group includes support for the Sun RPC protocols,
 		including the 'rpcgen' and 'rpcinfo' programs.
 
-config OPTION_EGLIBC_NIS
+config KEMBTK_EGLIBC_OPTION_EGLIBC_NIS
 	bool "Support for NIS, NIS+, and the special 'compat' services."
-	depends on OPTION_EGLIBC_SUNRPC
+	depends on KEMBTK_EGLIBC_OPTION_EGLIBC_INET
 	help
 		This option group includes the NIS, NIS+, and 'compat' Name
 		Service Switch service libraries.  When it is disabled, those
@@ -427,9 +428,9 @@ config OPTION_EGLIBC_NIS
 		This option group depends on the OPTION_EGLIBC_INET option
 		group; you must enable that to enable this option group.
 
-config OPTION_EGLIBC_RCMD
+config KEMBTK_EGLIBC_OPTION_EGLIBC_RCMD
 	bool "Support for 'rcmd' and related library functions"
-	depends on OPTION_EGLIBC_INET
+	depends on KEMBTK_EGLIBC_OPTION_EGLIBC_INET
 	help
 		This option group includes functions for running commands on
 		remote machines via the 'rsh' protocol, and doing authentication
@@ -445,14 +446,14 @@ config OPTION_EGLIBC_RCMD
 		rresvport       ruserpass
 		rresvport_af
 
-config OPTION_EGLIBC_LOCALES
+config KEMBTK_EGLIBC_OPTION_EGLIBC_LOCALES
 	bool "Locale definitions"
 	help
 		This option group includes all locale definitions other than
 		that for the "C" locale.  If this option group is omitted, then
 		only the "C" locale is supported.
 
-config OPTION_EGLIBC_NSSWITCH
+config KEMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH
 	default y
 	bool "Name service switch (nsswitch) support"
 	help
@@ -469,9 +470,9 @@ config OPTION_EGLIBC_NSSWITCH
 		'option-groups.config' file must set the following two
 		variables:
 
-config OPTION_EGLIBC_NSSWITCH_FIXED_CONFIG
-	depends on OPTION_EGLIBC_NSSWITCH
-	string "Alternate file for nsswitch.conf"
+config KEMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH_FIXED_CONFIG
+	depends on !KEMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH
+	string "Alternate file for nsswitch.conf (see below help please)"
 	help
 		Set this to the name of a file whose contents observe the
 		same syntax as an ordinary '/etc/nsswitch.conf' file.  The
@@ -494,9 +495,9 @@ config OPTION_EGLIBC_NSSWITCH_FIXED_CONFIG
 		you will probably want to delete references to databases not
 		needed on your system.
 
-config OPTION_EGLIBC_NSSWITCH_FIXED_FUNCTIONS
-	depends on OPTION_EGLIBC_NSSWITCH
-	string "Alternate nss/fixed-nsswitch.functions file"
+config KEMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH_FIXED_FUNCTIONS
+	depends on !KEMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH
+	string "Alternate nss/fixed-nsswitch.functions file (see below help please)"
 	help
 		The EGLIBC build process uses this file to decide which
 		functions to make available from which service libraries.
@@ -532,8 +533,8 @@ config OPTION_EGLIBC_NSSWITCH_FIXED_FUNCTIONS
 		option group must be enabled to use the 'libnss_dns.so.2'
 		service library, which uses the Domain Name System network
 		protocol to answer queries.
-        
-config OPTION_EGLIBC_SPAWN
+
+config KEMBTK_EGLIBC_OPTION_EGLIBC_SPAWN
 	bool "Support for POSIX posix_spawn functions"
 	help
 		This option group includes the POSIX functions for executing
@@ -569,7 +570,7 @@ config OPTION_EGLIBC_SPAWN
 		disabled, those programs will only operate on uncompressed
 		charmap files.
 
-config OPTION_EGLIBC_STREAMS
+config KEMBTK_EGLIBC_OPTION_EGLIBC_STREAMS
 	bool "Support for accessing STREAMS."
 		help
 		This option group includes functions for reading and writing
@@ -585,7 +586,7 @@ config OPTION_EGLIBC_STREAMS
 		isastream       fdetach
 		putmsg
 
-config OPTION_EGLIBC_UTMP
+config KEMBTK_EGLIBC_OPTION_EGLIBC_UTMP
 	bool "Older access functions for 'utmp' login records"
 	default y
 	help
@@ -612,10 +613,10 @@ config OPTION_EGLIBC_UTMP
 		This option group includes the following libraries:
 
 		libutil.so (and libutil.a)
- 
-config OPTION_EGLIBC_GETLOGIN
+
+config KEMBTK_EGLIBC_OPTION_EGLIBC_GETLOGIN
 	bool "The getlogin function"
-	depends on OPTION_EGLIBC_UTMP
+	depends on KEMBTK_EGLIBC_OPTION_EGLIBC_UTMP
 	default y
 	help
 		This function group includes the 'getlogin' and 'getlogin_r'
@@ -626,9 +627,9 @@ config OPTION_EGLIBC_GETLOGIN
 		fall back on 'getlogin' to find the user's login name for tilde
 		expansion when the 'HOME' environment variable is not set.
 
-config OPTION_EGLIBC_UTMPX
+config KEMBTK_EGLIBC_OPTION_EGLIBC_UTMPX
 	bool "POSIX access functions for 'utmp' login records"
-	depends on OPTION_EGLIBC_UTMP    
+	depends on KEMBTK_EGLIBC_OPTION_EGLIBC_UTMP
 	help
 		This option group includes the POSIX functions for reading and
 		writing user login records in the 'utmp' file (usually
@@ -649,7 +650,7 @@ config OPTION_EGLIBC_UTMPX
 		updwtmpx
 		utmpxname
 
-config OPTION_EGLIBC_WORDEXP
+config KEMBTK_EGLIBC_OPTION_EGLIBC_WORDEXP
 	default y
 	bool "Shell-style word expansion"
 	help
@@ -657,7 +658,7 @@ config OPTION_EGLIBC_WORDEXP
 		performing word expansion in the manner of the shell, and the
 		accompanying 'wordfree' function.
 
-config OPTION_POSIX_C_LANG_WIDE_CHAR
+config KEMBTK_EGLIBC_OPTION_POSIX_C_LANG_WIDE_CHAR
 	bool "ISO C library wide character functions, excluding I/O"
 	help
 		This option group includes the functions defined by the ISO C
@@ -686,9 +687,9 @@ config OPTION_POSIX_C_LANG_WIDE_CHAR
 		mbrlen        wcscoll       wcstol
 		mbrtowc       wcscpy        wcstold
 
-config OPTION_EGLIBC_LOCALE_CODE
+config KEMBTK_EGLIBC_OPTION_EGLIBC_LOCALE_CODE
 	bool "Locale functions"
-	depends on OPTION_POSIX_C_LANG_WIDE_CHAR
+	depends on KEMBTK_EGLIBC_OPTION_POSIX_C_LANG_WIDE_CHAR
 	help
 		This option group includes locale support functions, programs,
 		and libraries.  With OPTION_EGLIBC_LOCALE_FUNCTIONS disabled,
@@ -709,9 +710,9 @@ config OPTION_EGLIBC_LOCALE_CODE
 		group; if you disable OPTION_EGLIBC_LOCALE_CODE, you must also
 		disable OPTION_EGLIBC_CATGETS.
 
-config OPTION_EGLIBC_CATGETS
+config KEMBTK_EGLIBC_OPTION_EGLIBC_CATGETS
 	bool "Functions for accessing message catalogs"
-	depends on OPTION_EGLIBC_LOCALE_CODE
+	depends on KEMBTK_EGLIBC_OPTION_EGLIBC_LOCALE_CODE
 	help
 		This option group includes functions for accessing message
 		catalogs: catopen, catclose, and catgets.
@@ -719,9 +720,9 @@ config OPTION_EGLIBC_CATGETS
 		This option group depends on the OPTION_EGLIBC_LOCALE_CODE
 		option group; if you disable that, you must also disable this.
 
-config OPTION_POSIX_WIDE_CHAR_DEVICE_IO
+config KEMBTK_EGLIBC_OPTION_POSIX_WIDE_CHAR_DEVICE_IO
 	bool "Input and output functions for wide characters"
-	depends on OPTION_POSIX_C_LANG_WIDE_CHAR
+	depends on KEMBTK_EGLIBC_OPTION_POSIX_C_LANG_WIDE_CHAR
 	help
 		This option group includes functions for reading and writing
 		wide characters to and from <stdio.h> streams.
@@ -741,7 +742,7 @@ config OPTION_POSIX_WIDE_CHAR_DEVICE_IO
 		fgetws_unlocked           getwchar_unlocked
 		fputwc_unlocked           putwc_unlocked
 		fputws_unlocked           putwchar_unlocked
-		    
+
 		Note that the GNU standard C++ library, 'libstdc++.so', uses
 		some of these functions; you will not be able to link or run
 		C++ programs if you disable this option group.
@@ -765,7 +766,7 @@ config OPTION_POSIX_WIDE_CHAR_DEVICE_IO
 		option group disabled, the function returns NULL, and sets
 		errno to EINVAL.
 
-config OPTION_POSIX_REGEXP
+config KEMBTK_EGLIBC_OPTION_POSIX_REGEXP
 	default y
 	bool "Regular expressions"
 	help
@@ -787,9 +788,9 @@ config OPTION_POSIX_REGEXP
 		<regexp.h> header file, 'compile', 'step', and 'advance', is
 		omitted.
 
-config OPTION_POSIX_REGEXP_GLIBC
+config KEMBTK_EGLIBC_OPTION_POSIX_REGEXP_GLIBC
 	bool "Regular expressions from GLIBC"
-	depends on OPTION_POSIX_REGEXP
+	depends on KEMBTK_EGLIBC_OPTION_POSIX_REGEXP
 	help
 		This option group specifies which regular expression
 		library to use.  The choice is between regex
