@@ -57,7 +57,7 @@ $(ZLIB_TARGET_BUILD_DIR)/.decompressed
 	@$(MAKE) -C $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)-target \
 	CC=$(TARGETCC_CACHED) AR="$(TOOLS)/bin/$(GNU_TARGET)-ar rc" \
 	RANLIB=$(TOOLS)/bin/$(GNU_TARGET)-ranlib \
-	prefix=$(SYSROOT)/usr/ install
+	prefix=$(SYSROOT)/usr/ libdir=$(SYSROOT)/usr/$(LIBDIR) install
 	@touch $@
 
 $(ZLIB_TARGET_BUILD_DIR)/.decompressed:
