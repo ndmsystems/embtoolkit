@@ -63,8 +63,7 @@ $(GETTEXT_BUILD_DIR)/.configured:
 	$(Q)cd $(GETTEXT_BUILD_DIR); \
 	CC=$(TARGETCC_CACHED) CXX=$(TARGETCXX_CACHED) \
 	CFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/lib -L$(SYSROOT)/usr/lib \
-	-L$(SYSROOT)/lib32 -L$(SYSROOT)/usr/lib32" \
+	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
 	CPPFLGAS="-I$(SYSROOT)/usr/include" \
 	gl_cv_func_wcwidth_works=yes \
 	am_cv_func_iconv_works=yes \

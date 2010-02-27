@@ -120,10 +120,7 @@ $(DIRECTFB_BUILD_DIR)/.decompressed:
 $(DIRECTFB_BUILD_DIR)/.configured:
 	cd $(DIRECTFB_BUILD_DIR); \
 	CC=$(TARGETCC_CACHED) CFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(ROOTFS)/usr/lib -L$(ROOTFS)/usr/lib32 \
-	-L$(ROOTFS)/lib -L$(ROOTFS)/lib32 \
-	-L$(SYSROOT)/usr/lib -L$(SYSROOT)/usr/lib32 \
-	-L$(SYSROOT)/lib -L$(SYSROOT)/lib32" \
+	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
 	CPPFLAGS="-I$(SYSROOT)/usr/include" \
 	./configure $(CONFIG_DIRECTFB_OPTS) $(CONFIG_DIRECTFB_GRAPHICS-y) \
 	$(CONFIG_DIRECTFB_INPUTS-y)

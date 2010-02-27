@@ -70,7 +70,7 @@ $(STRACE_BUILD_DIR)/.configured:
 	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	CC=$(TARGETCC_CACHED) \
 	CFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/lib" \
+	LDFLAGS="-L$(LIBDIR1) -L$(LIBDIR2)" \
 	CPPFLAGS="-I$(SYSROOT)/usr/include"
 	@touch $@
 
