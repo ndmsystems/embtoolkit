@@ -33,12 +33,6 @@ FOO_INCLUDES =
 FOO_LIBS =
 FOO_PKGCONFIGS =
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
 foo_install: $(FOO_BUILD_DIR)/.installed
 
 $(FOO_BUILD_DIR)/.installed: download_foo \

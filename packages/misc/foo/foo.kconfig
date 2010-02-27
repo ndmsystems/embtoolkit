@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -19,15 +19,15 @@
 # \file         foo.kconfig
 # \brief	foo.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# \date         December 2009
+# \date         February 2010
 ################################################################################
 
 config EMBTK_HAVE_FOO
 	bool "Have foo"
 	help
-		Foo description
+		foo description
 choice
-	prompt "Foo version you wish"
+	prompt "foo version you wish"
 	depends on EMBTK_HAVE_FOO
 	help
 	 Here you can choose which version of foo you want to use.
