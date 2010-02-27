@@ -18,7 +18,7 @@
 #
 # \file         eglibc-2.11-options.mk
 # \brief	eglibc-2.11-options.mk. Here we define options supported by
-# \brief	eglibc-trunk.
+# \brief	eglibc-2.11.
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         Nov 2009
 ################################################################################
