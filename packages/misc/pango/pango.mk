@@ -34,12 +34,6 @@ PANGO_INCLUDES = pango*
 PANGO_LIBS = pango-* pango* libpango*
 PANGO_PKGCONFIGS = pango*.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
 pango_install: $(PANGO_BUILD_DIR)/.installed $(PANGO_BUILD_DIR)/.special
 
 $(PANGO_BUILD_DIR)/.installed: $(GLIB_BUILD_DIR)/.installed \
@@ -88,41 +82,25 @@ $(PANGO_BUILD_DIR)/.configured:
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
 	PKG_CONFIG_LIBDIR=$(SYSROOT)/usr/lib \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) \
+	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
 	--prefix=/usr --without-x
 	@touch $@
 
 $(PANGO_BUILD_DIR)/.patchlibtool:
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)PANGO_LT_FILES=`find $(SYSROOT)/usr/lib32/pango/* -type f -name *.la`; \
+	$(Q)PANGO_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/* -type f -name *.la`; \
 	for i in $$PANGO_LT_FILES; \
 	do \
 	sed \
-	-e "s; \/usr\/lib32\/libpangoft2-1.0.la ; $(SYSROOT)\/usr\/lib32\/libpangoft2-1.0.la ;" \
-	-e "s; \/usr\/lib32\/libpango-1.0.la ; $(SYSROOT)\/usr\/lib32\/libpango-1.0.la ;" \
+	-e "s;\/usr\/$(LIBDIR)\/libpangoft2-1.0.la ; $(SYSROOT)\/usr\/$(LIBDIR)\/libpangoft2-1.0.la ;" \
+	-e "s;\/usr\/$(LIBDIR)\/libpango-1.0.la ; $(SYSROOT)\/usr\/$(LIBDIR)\/libpango-1.0.la ;" \
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done
-else
-	$(Q)PANGO_LT_FILES=`find $(SYSROOT)/usr/lib/* -type f -name *.la`; \
-	for i in $$PANGO_LT_FILES; \
-	do \
-	sed \
-	-e "s; \/usr\/lib\/libpangoft2-1.0.la ; $(SYSROOT)\/usr\/lib\/libpangoft2-1.0.la ;" \
-	-e "s; \/usr\/lib\/libpango-1.0.la ; $(SYSROOT)\/usr\/lib\/libpango-1.0.la ;" \
-	< $$i > $$i.new; \
-	mv $$i.new $$i; \
-	done
-endif
 
 .PHONY: pango_clean $(PANGO_BUILD_DIR)/.special
 
 $(PANGO_BUILD_DIR)/.special:
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cp -R $(SYSROOT)/usr/lib32/pango $(ROOTFS)/usr/lib32/
-else
-	$(Q)-cp -R $(SYSROOT)/usr/lib/pango $(ROOTFS)/usr/lib/
-endif
+	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/pango $(ROOTFS)/usr/$(LIBDIR)/
 	@touch $@
 
 pango_clean:
@@ -130,10 +108,6 @@ pango_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(PANGO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(PANGO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(PANGO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(PANGO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(PANGO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(PANGO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(PANGO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(PANGO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(PANGO_PKGCONFIGS)
 

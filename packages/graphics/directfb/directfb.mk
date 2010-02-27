@@ -123,7 +123,7 @@ $(DIRECTFB_BUILD_DIR)/.configured:
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
 	CPPFLAGS="-I$(SYSROOT)/usr/include" \
 	./configure $(CONFIG_DIRECTFB_OPTS) $(CONFIG_DIRECTFB_GRAPHICS-y) \
-	$(CONFIG_DIRECTFB_INPUTS-y)
+	$(CONFIG_DIRECTFB_INPUTS-y) --libdir=/usr/$(LIBDIR)
 	@touch $@
 
 $(DIRECTFB_BUILD_DIR)/.patchlibtool:

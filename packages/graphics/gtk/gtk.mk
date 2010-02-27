@@ -90,7 +90,7 @@ $(GTK_BUILD_DIR)/.configured:
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) \
 	--prefix=/usr --disable-cups --disable-gtk-doc --disable-glibtest \
-	--with-gdktarget=directfb
+	--with-gdktarget=directfb --libdir=/usr/$(LIBDIR)
 	@touch $@
 
 $(GTK_BUILD_DIR)/.patchlibtool:

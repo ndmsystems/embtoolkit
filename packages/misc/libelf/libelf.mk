@@ -93,7 +93,7 @@ $(LIBELF_BUILD_DIR)/.configured:
 	./configure --build=$(HOST_BUILD) \
 	--host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) \
-	--prefix=$(SYSROOT)/usr --enable-elf64
+	--prefix=$(SYSROOT)/usr --enable-elf64 --libdir=$(SYSROOT)/usr/$(LIBDIR)
 	@touch $@
 
 libelf_clean:

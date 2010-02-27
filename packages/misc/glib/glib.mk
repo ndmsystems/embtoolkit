@@ -86,7 +86,7 @@ $(GLIB_BUILD_DIR)/.configured:
 	ac_cv_func_nonposix_getpwuid_r=no \
 	ac_cv_func_posix_getgrgid_r=yes \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) \
+	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
 	--prefix=/usr --disable-fam
 	@touch $@
 

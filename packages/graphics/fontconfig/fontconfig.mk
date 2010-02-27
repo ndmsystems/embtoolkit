@@ -82,11 +82,9 @@ $(FONTCONFIG_BUILD_DIR)/.configured:
 	CXXFLAGS="$(TARGET_CFLAGS)" \
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig \
-	PKG_CONFIG_LIBDIR=$(SYSROOT)/usr/lib \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --with-arch=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --disable-docs --program-prefix=""
+	--prefix=/usr --disable-docs --program-prefix="" --libdir=/usr/$(LIBDIR)
 	@touch $@
 
 .PHONY: $(FONTCONFIG_BUILD_DIR)/.special fontconfig_clean

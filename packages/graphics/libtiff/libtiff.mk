@@ -86,8 +86,8 @@ $(LIBTIFF_BUILD_DIR)/.configured:
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --program-prefix=""
+	--target=$(STRICT_GNU_TARGET) --disable-cxx \
+	--prefix=/usr --program-prefix="" --libdir=/usr/$(LIBDIR)
 	@touch $@
 
 libtiff_clean:

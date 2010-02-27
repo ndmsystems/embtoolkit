@@ -63,7 +63,7 @@ $(FREETYPE_BUILD_DIR)/.configured:
 	$(Q)cd $(FREETYPE_BUILD_DIR); \
 	CC=$(TARGETCC_CACHED) CFLAGS="$(TARGET_CFLAGS)" \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --enable-static=no --disable-rpath
+	--prefix=/usr --enable-static=no --disable-rpath --libdir=/usr/$(LIBDIR)
 	@touch $@
 
 $(FREETYPE_BUILD_DIR)/.freetype-configpatched:

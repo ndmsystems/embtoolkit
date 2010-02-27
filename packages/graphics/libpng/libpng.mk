@@ -63,7 +63,8 @@ $(LIBPNG_BUILD_DIR)/.configured:
 	cd $(LIBPNG_BUILD_DIR); \
 	CC=$(TARGETCC_CACHED) CFLAGS="$(TARGET_CFLAGS)" \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --enable-static=no --with-libpng-compat=no
+	--prefix=/usr --enable-static=no --with-libpng-compat=no \
+	--libdir=/usr/$(LIBDIR)
 	@touch $@
 
 $(LIBPNG_BUILD_DIR)/.libpng-configpatched:

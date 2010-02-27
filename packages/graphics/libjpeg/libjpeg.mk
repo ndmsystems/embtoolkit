@@ -60,7 +60,7 @@ $(LIBJPEG_BUILD_DIR)/.configured:
 	cd $(LIBJPEG_BUILD_DIR); \
 	CC=$(TARGETCC_CACHED) CFLAGS="$(TARGET_CFLAGS)" \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) \
+	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
 	--prefix=/usr --enable-static=no --program-suffix=""
 	@touch $@
 

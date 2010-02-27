@@ -76,10 +76,8 @@ $(CAIRO_BUILD_DIR)/.configured:
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
 	CPPFLGAS="-I$(SYSROOT)/usr/include" \
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig \
-	PKG_CONFIG_LIBDIR=$(SYSROOT)/usr/lib \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) \
+	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
 	--prefix=/usr --without-x --enable-directfb
 	@touch $@
 
