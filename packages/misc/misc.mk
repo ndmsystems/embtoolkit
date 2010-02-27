@@ -25,42 +25,30 @@
 #gettext
 include $(EMBTK_ROOT)/packages/misc/gettext/gettext.mk
 ROOTFS_COMPONENTS_CLEAN += gettext_clean
-ifeq ($(CONFIG_EMBTK_HAVE_GETTEXT),y)
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GETTEXT) += gettext_install
-endif
 
 #GLib
 include $(EMBTK_ROOT)/packages/misc/glib/glib.mk
 ROOTFS_COMPONENTS_CLEAN += glib_clean
-ifeq ($(CONFIG_EMBTK_HAVE_GLIB),y)
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GLIB) += glib_install
-endif
 
 #libelf
 include $(EMBTK_ROOT)/packages/misc/libelf/libelf.mk
 ROOTFS_COMPONENTS_CLEAN += libelf_clean
-ifeq ($(CONFIG_EMBTK_HAVE_LIBELF),y)
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBELF) += libelf_install
-endif
 
 #libxml2
 include $(EMBTK_ROOT)/packages/misc/libxml/libxml.mk
 ROOTFS_COMPONENTS_CLEAN += libxml2_clean
-ifeq ($(CONFIG_EMBTK_HAVE_LIBXML2),y)
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXML2) += libxml2_install
-endif
 
 #ncurses
 include $(EMBTK_ROOT)/packages/misc/ncurses/ncurses.mk
 ROOTFS_COMPONENTS_CLEAN += ncurses_clean
-ifeq ($(CONFIG_EMBTK_HAVE_NCURSES),y)
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_NCURSES) += ncurses_install
-endif
 
 #Pango
 include $(EMBTK_ROOT)/packages/misc/pango/pango.mk
 ROOTFS_COMPONENTS_CLEAN += pango_clean
-ifeq ($(CONFIG_EMBTK_HAVE_PANGO),y)
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_PANGO) += pango_install
-endif
 

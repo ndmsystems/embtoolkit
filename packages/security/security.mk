@@ -25,7 +25,5 @@
 #OpenSSL
 include $(EMBTK_ROOT)/packages/security/openssl/openssl.mk
 ROOTFS_COMPONENTS_CLEAN += openssl_clean
-ifeq ($(CONFIG_EMBTK_HAVE_OPENSSL),y)
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_OPENSSL) += openssl_install
-endif
 
