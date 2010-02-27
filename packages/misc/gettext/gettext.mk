@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -44,7 +44,9 @@ $(GETTEXT_BUILD_DIR)/.installed: ncurses_install download_gettext \
 	gettext-$(GETTEXT_VERSION) in your root filesystem...")
 	$(call EMBTK_KILL_LT_RPATH, $(GETTEXT_BUILD_DIR))
 	$(Q)$(MAKE) -C $(GETTEXT_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(GETTEXT_BUILD_DIR) install
+	$(Q)$(MAKE) -C $(GETTEXT_BUILD_DIR) DESTDIR=$(SYSROOT) install
+	$(Q)$(MAKE) libtool_files_adapt
+	$(Q)$(MAKE) $(GETTEXT_BUILD_DIR)/.patchlibtool
 	@touch $@
 
 download_gettext:
@@ -70,8 +72,8 @@ $(GETTEXT_BUILD_DIR)/.configured:
 	gt_cv_func_printf_posix=yes \
 	gt_cv_int_divbyzero_sigfpe=no \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) \
-	--prefix=$(SYSROOT)/usr --with-included-gettext --disable-rpath
+	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
+	--prefix=/usr --with-included-gettext --disable-rpath
 	@touch $@
 
 gettext_clean:
@@ -85,4 +87,15 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(GETTEXT_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(GETTEXT_PKGCONFIGS)
 endif
+
+#FIXME: this should be fixed in gettext project
+$(GETTEXT_BUILD_DIR)/.patchlibtool:
+	$(Q)sed \
+	-i "s;/usr/$(LIBDIR)/libintl.la;$(SYSROOT)/$(LIBDIR)/libintl.la;" \
+	$(SYSROOT)/usr/$(LIBDIR)/libgettextlib.la \
+	$(SYSROOT)/usr/$(LIBDIR)/libgettextpo.la \
+	$(SYSROOT)/usr/$(LIBDIR)/libgettextsrc.la
+	$(Q)sed \
+	-i "s;/usr/lib32/libgettextlib.la;$(SYSROOT)/$(LIBDIR)/libgettextlib.la;" \
+	$(SYSROOT)/usr/$(LIBDIR)/libgettextsrc.la
 
