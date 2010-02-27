@@ -141,7 +141,7 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	do \
 	sed -e 's;prefix=.*;prefix=$(SYSROOT)/usr;' \
 	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
-	< $$i > $$i.new; \
+	-e 's;libdir=.*;libdir=$(SYSROOT)/usr/lib32;' < $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done
 else
@@ -150,7 +150,7 @@ else
 	do \
 	sed -e 's;prefix=.*;prefix=$(SYSROOT)/usr;' \
 	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
-	< $$i > $$i.new; \
+	-e 's;libdir=.*;libdir=$(SYSROOT)/usr/lib;' < $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done
 endif
