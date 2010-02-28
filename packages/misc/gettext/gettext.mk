@@ -96,6 +96,6 @@ $(GETTEXT_BUILD_DIR)/.patchlibtool:
 	$(SYSROOT)/usr/$(LIBDIR)/libgettextpo.la \
 	$(SYSROOT)/usr/$(LIBDIR)/libgettextsrc.la
 	$(Q)sed \
-	-i "s;/usr/lib32/libgettextlib.la;$(SYSROOT)/$(LIBDIR)/libgettextlib.la;" \
+	-i "s;/usr/$(LIBDIR)/libgettextlib.la;$(SYSROOT)/$(LIBDIR)/libgettextlib.la;" \
 	$(SYSROOT)/usr/$(LIBDIR)/libgettextsrc.la
 
