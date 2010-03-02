@@ -96,7 +96,7 @@ endif
 #Macro to adapt libtool files (*.la) for cross compiling
 libtool_files_adapt:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib32 -name *.la`; \
+	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib32 -name *.la`; \
 	for i in $$LIBTOOLS_LA_FILES; \
 	do \
 	sed -e "s;libdir='\/usr\/lib32';libdir='$(SYSROOT)\/usr\/lib32';" $$i \
@@ -104,7 +104,7 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	mv $$i.new $$i; \
 	done
 else
-	$(Q)LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib -name *.la`; \
+	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib -name *.la`; \
 	for i in $$LIBTOOLS_LA_FILES; \
 	do \
 	sed -e "s;libdir='\/usr\/lib';libdir='$(SYSROOT)\/usr\/lib';" < $$i \
@@ -116,7 +116,7 @@ endif
 #Macro to restore libtool files (*.la)
 libtool_files_restore:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib32 -name *.la`; \
+	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib32 -name *.la`; \
 	for i in $$LIBTOOLS_LA_FILES; \
 	do \
 	sed -e "s;libdir='$(SYSROOT)\/usr\/lib32';libdir='\/usr\/lib32';" $$i \
@@ -124,7 +124,7 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	mv $$i.new $$i; \
 	done
 else
-	$(Q)LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib -name *.la`; \
+	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib -name *.la`; \
 	for i in $$LIBTOOLS_LA_FILES; \
 	do \
 	sed -e "s;libdir='$(SYSROOT)\/usr\/lib';libdir='\/usr\/lib';" < $$i \
@@ -136,7 +136,7 @@ endif
 #Macro to adapt pkg-config files for cross compiling
 pkgconfig_files_adapt:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)PKGCONF_FILES=`find $(SYSROOT)/usr/lib32/pkgconfig -name *.pc`; \
+	@PKGCONF_FILES=`find $(SYSROOT)/usr/lib32/pkgconfig -name *.pc`; \
 	for i in $$PKGCONF_FILES; \
 	do \
 	sed -e 's;prefix=.*;prefix=$(SYSROOT)/usr;' \
@@ -145,7 +145,7 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	mv $$i.new $$i; \
 	done
 else
-	$(Q)PKGCONF_FILES=`find $(SYSROOT)/usr/lib/pkgconfig -name *.pc`; \
+	@PKGCONF_FILES=`find $(SYSROOT)/usr/lib/pkgconfig -name *.pc`; \
 	for i in $$PKGCONF_FILES; \
 	do \
 	sed -e 's;prefix=.*;prefix=$(SYSROOT)/usr;' \
@@ -157,7 +157,7 @@ endif
 
 #A macro to remove rpath in packages that use libtool -rpath
 define EMBTK_KILL_LT_RPATH
-	$(Q)cd $(1); \
+	@cd $(1); \
 	LOCAL_LT_FILES=`find -type f -name libtool`; \
 	for i in $$LOCAL_LT_FILES; \
 	do \
