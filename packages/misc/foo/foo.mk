@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -85,10 +85,6 @@ foo_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(FOO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(FOO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FOO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(FOO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(FOO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(FOO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(FOO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FOO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FOO_PKGCONFIGS)
 
