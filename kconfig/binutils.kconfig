@@ -28,6 +28,8 @@ choice
 	help
 		Here you can choose which version on binutils your toochain
 		will use.
+	config EMBTK_BINUTILS_VERSION_2_20_1
+		bool "binutils-2.20.1"
 	config EMBTK_BINUTILS_VERSION_2_20
 		bool "binutils-2.20"
 	config EMBTK_BINUTILS_VERSION_2_19_1
@@ -41,6 +43,7 @@ config EMBTK_BINUTILS_NEED_PATCH
 
 config EMBTK_BINUTILS_VERSION_STRING
 	string
+	default "2.20.1"	if EMBTK_BINUTILS_VERSION_2_20_1
 	default "2.20"		if EMBTK_BINUTILS_VERSION_2_20
 	default "2.19.1"	if EMBTK_BINUTILS_VERSION_2_19_1
 
