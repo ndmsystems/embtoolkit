@@ -33,10 +33,28 @@ CAIRO_INCLUDES = cairo
 CAIRO_LIBS = libcairo*
 CAIRO_PKGCONFIGS = cairo*.pc
 
+CAIRO_CONFIG_OPTS-y :=
+CAIRO_CONFIG_OPTS-n :=
+CAIRO_DEPS := pixman_install libpng_install freetype_install fontconfig_install
+
+ifeq ($(CONFIG_EMBTK_HAVE_CAIRO_WITH_DIRECTFB),y)
+CAIRO_DEPS += directfb_install
+CAIRO_CONFIG_OPTS-y += --enable-directfb=yes
+else
+CAIRO_CONFIG_OPTS-n += --enable-directfb=no
+endif
+
+ifeq ($(CONFIG_EMBTK_HAVE_CAIRO_WITH_LIBXCB),y)
+CAIRO_DEPS += xcbutil_install libx11_install
+CAIRO_CONFIG_OPTS-y += --enable-xcb=yes
+else
+CAIRO_CONFIG_OPTS-n += --enable-xcb=no
+CAIRO_CONFIG_OPTS-n += --without-x
+endif
+
 cairo_install: $(CAIRO_BUILD_DIR)/.installed
 
-$(CAIRO_BUILD_DIR)/.installed: pixman_install libpng_install freetype_install \
-	directfb_install fontconfig_install download_cairo \
+$(CAIRO_BUILD_DIR)/.installed: $(CAIRO_DEPS) download_cairo \
 	$(CAIRO_BUILD_DIR)/.decompressed $(CAIRO_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	cairo-$(CAIRO_VERSION) in your root filesystem...")
@@ -71,14 +89,14 @@ $(CAIRO_BUILD_DIR)/.configured:
 	STRIP=$(TARGETSTRIP) \
 	OBJDUMP=$(TARGETOBJDUMP) \
 	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
+	CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include" \
+	CXXFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include" \
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
 	CPPFLGAS="-I$(SYSROOT)/usr/include" \
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --without-x --enable-directfb
+	--prefix=/usr $(CAIRO_CONFIG_OPTS-y)  $(CAIRO_CONFIG_OPTS-n)
 	@touch $@
 
 cairo_clean:

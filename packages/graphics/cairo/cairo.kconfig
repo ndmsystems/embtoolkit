@@ -25,7 +25,7 @@
 config EMBTK_HAVE_CAIRO
 	bool "Have cairo"
 	select EMBTK_HAVE_PIXMAN
-	select EMBTK_HAVE_DIRECTFB
+
 	help
 		Cairo is a 2D graphics library with support for multiple output
 		devices. Currently supported output targets include the X Window
@@ -34,6 +34,17 @@ config EMBTK_HAVE_CAIRO
 		Cairo is designed to produce consistent output on all output
 		media while taking advantage of display hardware acceleration
 		when available (eg. through the X Render Extension).
+
+config EMBTK_HAVE_CAIRO_WITH_DIRECTFB
+	bool "Build cairo with DirectFB support"
+	depends on EMBTK_HAVE_CAIRO
+	select EMBTK_HAVE_DIRECTFB
+
+config EMBTK_HAVE_CAIRO_WITH_LIBXCB
+	bool "Build cairo with XCB support"
+	depends on EMBTK_HAVE_CAIRO
+	select EMBTK_HAVE_LIBXCB
+
 choice
 	prompt "Cairo version you wish"
 	depends on EMBTK_HAVE_CAIRO

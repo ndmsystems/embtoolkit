@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -27,12 +27,11 @@ config EMBTK_HAVE_GTK
 	select EMBTK_HAVE_GLIB
 	select EMBTK_HAVE_PANGO
 	select EMBTK_HAVE_ATK
-	select EMBTK_HAVE_LIBJEPG
+	select EMBTK_HAVE_LIBJPEG
 	select EMBTK_HAVE_LIBPNG
 	select EMBTK_HAVE_LIBTIFF
 	select EMBTK_HAVE_FONTCONFIG
 	select EMBTK_HAVE_CAIRO
-	select EMBTK_HAVE_DIRECTFB
 	help
 		GTK+ is a highly usable, feature rich toolkit for creating
 		graphical user interfaces which boasts cross platform
@@ -42,6 +41,24 @@ config EMBTK_HAVE_GTK
 		the GNU LGPL 2.1 allowing development of both free and
 		proprietary software with GTK+ without any license fees or
 		royalties.
+choice
+	prompt "gtk+ backend"
+	depends on EMBTK_HAVE_GTK
+	help
+		Which gtk+ backend to use
+	config  EMBTK_GTK_BACKEND_DIRECTFB
+		bool "DirectFB"
+		select EMBTK_HAVE_DIRECTFB
+		select EMBTK_HAVE_CAIRO_WITH_DIRECTFB
+	config  EMBTK_GTK_BACKEND_XSERVER
+		bool "X windowing system"
+		select EMBTK_HAVE_XSERVER
+		select EMBTK_HAVE_CAIRO_WITH_LIBXCB
+		select EMBTK_HAVE_LIBX11
+		select EMBTK_HAVE_LIBXEXT
+		select EMBTK_HAVE_LIBXRENDER
+endchoice
+
 choice
 	prompt "gtk+ version you wish"
 	depends on EMBTK_HAVE_GTK

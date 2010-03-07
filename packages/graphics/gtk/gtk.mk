@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -34,18 +34,23 @@ GTK_INCLUDES = gail-* gtk-*
 GTK_LIBS = gtk-* libgail* libgdk-* libgdk_* libgtk-*
 GTK_PKGCONFIGS = gail*.pc gdk*.pc gtk*.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
+GTK_DEPS :=
+
+ifeq ($(CONFIG_EMBTK_GTK_BACKEND_DIRECTFB),y)
+GTK_BACKEND := --with-gdktarget=directfb --without-x
+GTK_DEPS += directfb_install
 else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
+GTK_BACKEND := --with-gdktarget=x11 --with-x
+GTK_DEPS += xserver_install libxext_install libxrender_install
 endif
+
+GTK_DEPS += libjpeg_install libpng_install libtiff_install fontconfig_install \
+		glib_install atk_install cairo_install pango_install
 
 gtk_install: $(GTK_BUILD_DIR)/.installed $(GTK_BUILD_DIR)/.special
 
-$(GTK_BUILD_DIR)/.installed: directfb_install libtiff_install \
-	fontconfig_install download_gtk glib_install atk_install cairo_install \
-	pango_install $(GTK_BUILD_DIR)/.decompressed \
-	$(GTK_BUILD_DIR)/.configured
+$(GTK_BUILD_DIR)/.installed: $(GTK_DEPS) download_gtk \
+	$(GTK_BUILD_DIR)/.decompressed $(GTK_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	gtk-$(GTK_VERSION) in your root filesystem...")
 	$(call EMBTK_KILL_LT_RPATH, $(GTK_BUILD_DIR))
@@ -90,7 +95,7 @@ $(GTK_BUILD_DIR)/.configured:
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) \
 	--prefix=/usr --disable-cups --disable-gtk-doc --disable-glibtest \
-	--with-gdktarget=directfb --libdir=/usr/$(LIBDIR)
+	$(GTK_BACKEND) --libdir=/usr/$(LIBDIR)
 	@touch $@
 
 $(GTK_BUILD_DIR)/.patchlibtool:
@@ -135,10 +140,6 @@ gtk_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(GTK_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(GTK_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(GTK_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(GTK_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(GTK_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(GTK_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(GTK_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(GTK_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(GTK_PKGCONFIGS)
 
