@@ -79,8 +79,13 @@ endmenu
 menu "System packages"
 endmenu
 
+menu "X window system"
+source packages/x11/x11.kconfig
+endmenu
+
 menu "Miscellaneous packages"
 source packages/misc/misc.kconfig
 endmenu
+
 endmenu
 

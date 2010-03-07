@@ -1,0 +1,49 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         libx11.kconfig
+# \brief	libx11.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         March 2010
+################################################################################
+
+config EMBTK_HAVE_LIBX11
+	bool "Have libx11"
+	select EMBTK_HAVE_UTILMACROS
+	select EMBTK_HAVE_INPUTPROTO
+	select EMBTK_HAVE_KBPROTO
+	select EMBTK_HAVE_XEXTPROTO
+	select EMBTK_HAVE_XPROTO
+	select EMBTK_HAVE_LIBXCB
+	select EMBTK_HAVE_XTRANS
+	help
+		libx11 for X windowing system
+choice
+	prompt "libx11 version you wish"
+	depends on EMBTK_HAVE_LIBX11
+	help
+	 Here you can choose which version of libx11 you want to use.
+
+	config  EMBTK_LIBX11_VERSION_1_3_3
+		bool "libx11-1.3.3"
+endchoice
+
+config EMBTK_LIBX11_VERSION_STRING
+	string
+	default "1.3.3"	if EMBTK_LIBX11_VERSION_1_3_3
+

@@ -1,0 +1,63 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software; you can distribute it and/or modify it
+# under the terms of the GNU General Public License
+# (Version 2 or later) published by the Free Software Foundation.
+#
+# This program is distributed in the hope it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+################################################################################
+#
+# \file         xserver.kconfig
+# \brief	xserver.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         March 2010
+################################################################################
+
+config EMBTK_HAVE_XSERVER
+	bool "Have xserver (kdrive)"
+	select EMBTK_HAVE_UTILMACROS
+	select EMBTK_HAVE_BIGREQSPROTO
+	select EMBTK_HAVE_COMPOSITEPROTO
+	select EMBTK_HAVE_DAMAGEPROTO
+	select EMBTK_HAVE_FIXESPROTO
+	select EMBTK_HAVE_FONTSPROTO
+	select EMBTK_HAVE_INPUTPROTO
+	select EMBTK_HAVE_KBPROTO
+	select EMBTK_HAVE_RANDRPROTO
+	select EMBTK_HAVE_RENDERPROTO
+	select EMBTK_HAVE_RESOURCEPROTO
+	select EMBTK_HAVE_VIDEOPROTO
+	select EMBTK_HAVE_XCBPROTO
+	select EMBTK_HAVE_XCMISCPROTO
+	select EMBTK_HAVE_XEXTPROTO
+	select EMBTK_HAVE_XPROTO
+	select EMBTK_HAVE_LIBXFONT
+	select EMBTK_HAVE_LIBXKBFILE
+	select EMBTK_HAVE_XTRANS
+	select EMBTK_HAVE_OPENSSL
+	select EMBTK_HAVE_PIXMAN
+	help
+		xserver (actually kdrive)
+choice
+	prompt "xserver version you wish"
+	depends on EMBTK_HAVE_XSERVER
+	help
+	 Here you can choose which version of xserver you want to use.
+
+	config  EMBTK_XSERVER_VERSION_1_7_99_901
+		bool "xserver-1.7.99.901"
+endchoice
+
+config EMBTK_XSERVER_VERSION_STRING
+	string
+	default "1.7.99.901"	if EMBTK_XSERVER_VERSION_1_7_99_901
+

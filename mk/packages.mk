@@ -71,6 +71,9 @@ include $(EMBTK_ROOT)/packages/security/security.mk
 
 # System packages
 
+#X window system packages
+include $(EMBTK_ROOT)/packages/x11/x11.mk
+
 # Miscellaneous packages
 include $(EMBTK_ROOT)/packages/misc/misc.mk
 
