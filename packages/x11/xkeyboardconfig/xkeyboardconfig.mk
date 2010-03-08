@@ -33,10 +33,13 @@ XKEYBOARDCONFIG_INCLUDES =
 XKEYBOARDCONFIG_LIBS =
 XKEYBOARDCONFIG_PKGCONFIGS =
 
+XKEYBOARDCONFIG_DEPS = xkbcomp_install
+
 xkeyboardconfig_install: $(XKEYBOARDCONFIG_BUILD_DIR)/.installed
 
-$(XKEYBOARDCONFIG_BUILD_DIR)/.installed: download_xkeyboardconfig \
-	$(XKEYBOARDCONFIG_BUILD_DIR)/.decompressed $(XKEYBOARDCONFIG_BUILD_DIR)/.configured
+$(XKEYBOARDCONFIG_BUILD_DIR)/.installed: $(XKEYBOARDCONFIG_DEPS) \
+	download_xkeyboardconfig $(XKEYBOARDCONFIG_BUILD_DIR)/.decompressed \
+	$(XKEYBOARDCONFIG_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	xkeyboardconfig-$(XKEYBOARDCONFIG_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(XKEYBOARDCONFIG_BUILD_DIR) $(J)

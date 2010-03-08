@@ -24,6 +24,7 @@
 
 config EMBTK_HAVE_XKEYBOARDCONFIG
 	bool "Have xkeyboard-config"
+	select EMBTK_HAVE_XKBCOMP
 	help
 		xkeyboard-config for X windowing system
 choice
