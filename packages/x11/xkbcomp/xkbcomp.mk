@@ -33,9 +33,10 @@ XKBCOMP_INCLUDES =
 XKBCOMP_LIBS =
 XKBCOMP_PKGCONFIGS =
 
+XKBCOMP_DEPS = libxkbfile_install
 xkbcomp_install: $(XKBCOMP_BUILD_DIR)/.installed
 
-$(XKBCOMP_BUILD_DIR)/.installed: download_xkbcomp \
+$(XKBCOMP_BUILD_DIR)/.installed: $(XKBCOMP_DEPS) download_xkbcomp \
 	$(XKBCOMP_BUILD_DIR)/.decompressed $(XKBCOMP_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	xkbcomp-$(XKBCOMP_VERSION) in your root filesystem...")

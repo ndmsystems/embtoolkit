@@ -24,6 +24,7 @@
 
 config EMBTK_HAVE_XKBCOMP
 	bool "Have xkbcomp"
+	select EMBTK_HAVE_LIBXKBFILE
 	help
 		xkbcomp for X windowing system
 choice
