@@ -164,11 +164,6 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXRENDER) += libxrender_install
 #########################################
 # X windowing system application packages
 #########################################
-#xcbdemo
-include $(EMBTK_ROOT)/packages/x11/xcbdemo/xcbdemo.mk
-ROOTFS_COMPONENTS_CLEAN += xcbdemo_clean
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XCBDEMO) += xcbdemo_install
-
 #xkbcomp
 include $(EMBTK_ROOT)/packages/x11/xkbcomp/xkbcomp.mk
 ROOTFS_COMPONENTS_CLEAN += xkbcomp_clean
