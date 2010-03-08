@@ -43,7 +43,7 @@ config EMBTK_HAVE_CAIRO_WITH_DIRECTFB
 config EMBTK_HAVE_CAIRO_WITH_LIBXCB
 	bool "Build cairo with XCB support"
 	depends on EMBTK_HAVE_CAIRO
-	select EMBTK_HAVE_LIBXCB
+	select EMBTK_HAVE_XCBUTIL
 
 choice
 	prompt "Cairo version you wish"
