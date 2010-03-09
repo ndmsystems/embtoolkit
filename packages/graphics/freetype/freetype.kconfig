@@ -1,6 +1,6 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -38,16 +38,24 @@ config EMBTK_HAVE_FREETYPE
 
 choice
 	prompt "FreeType version you wish"
-	default EMBTK_FREETYPE_VERSION_2_3_9
 	depends on EMBTK_HAVE_FREETYPE
 	help
-	 Here you can choose which version of freetype you want to use.
+		Here you can choose which version of freetype you want to use.
 
+	config  EMBTK_FREETYPE_VERSION_2_3_12
+		bool "FreeType-2.3.12"
+	config  EMBTK_FREETYPE_VERSION_2_3_11
+		bool "FreeType-2.3.11"
+	config  EMBTK_FREETYPE_VERSION_2_3_10
+		bool "FreeType-2.3.10"
 	config  EMBTK_FREETYPE_VERSION_2_3_9
 		bool "FreeType-2.3.9"
 endchoice
 
 config EMBTK_FREETYPE_VERSION_STRING
 	string
+	default "2.3.12"	if EMBTK_FREETYPE_VERSION_2_3_12
+	default "2.3.11"	if EMBTK_FREETYPE_VERSION_2_3_11
+	default "2.3.10"	if EMBTK_FREETYPE_VERSION_2_3_10
 	default "2.3.9"	if EMBTK_FREETYPE_VERSION_2_3_9
 
