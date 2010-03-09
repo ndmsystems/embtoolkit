@@ -88,6 +88,7 @@ endif
 	@-cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
 	@-cp -R $(SYSROOT)/sbin/* $(ROOTFS)/sbin/
 	@-cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
+	@-cp -R $(SYSROOT)/usr/etc/* $(ROOTFS)/usr/etc/
 	@cp -R $(SYSROOT)/root  $(ROOTFS)/
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
 	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")

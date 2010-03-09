@@ -37,6 +37,7 @@ mkinitialpath:
 	@mkdir -p $(SYSROOT)
 	@mkdir -p $(SYSROOT)/lib
 	@mkdir -p $(SYSROOT)/usr
+	@mkdir -p $(SYSROOT)/usr/etc
 	@mkdir -p $(SYSROOT)/root
 	@mkdir -p $(SYSROOT)/usr/lib
 ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
