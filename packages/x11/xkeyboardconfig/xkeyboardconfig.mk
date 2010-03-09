@@ -46,6 +46,8 @@ $(XKEYBOARDCONFIG_BUILD_DIR)/.installed: $(XKEYBOARDCONFIG_DEPS) \
 	$(Q)$(MAKE) -C $(XKEYBOARDCONFIG_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
+	$(Q)-mkdir -p $(ROOTFS)/usr/share/X11
+	$(Q)-cp -R $(SYSROOT)/usr/share/X11/xkb $(ROOTFS)/usr/share/X11/
 	@touch $@
 
 download_xkeyboardconfig:
