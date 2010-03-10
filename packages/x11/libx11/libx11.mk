@@ -50,6 +50,10 @@ $(LIBX11_BUILD_DIR)/.installed: $(LIBX11_DEPS) download_libx11 \
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	$(Q)$(MAKE) $(LIBX11_BUILD_DIR)/.patchlibtool
+	$(Q)-mkdir -p $(ROOTFS)/usr/share
+	$(Q)-mkdir -p $(ROOTFS)/usr/share/X11
+	$(Q)-cp $(SYSROOT)/usr/share/X11/XErrorDB $(ROOTFS)/usr/share/X11/
+	$(Q)-cp $(SYSROOT)/usr/share/X11/XKeysymDB $(ROOTFS)/usr/share/X11/
 	@touch $@
 
 download_libx11:
