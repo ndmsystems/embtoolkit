@@ -67,15 +67,15 @@ download_ttmkfdir:
 	wget -O $(DOWNLOAD_DIR)/ttmkfdir-$(TTMKFDIR_VERSION).patch \
 	$(TTMKFDIR_PATCH_SITE)/ttmkfdir-$(TTMKFDIR_VERSION)-*.patch
 
-$(FREEFONT_TTF_BUILD_DIR)/.installed: freetype_install ttmkfdir_install \
+$(FREEFONT_TTF_BUILD_DIR)/.installed: freetype_install \
 	download_freefont_ttf $(FREEFONT_TTF_BUILD_DIR)/.decompressed
 	$(call EMBTK_GENERIC_MESSAGE,"Installing \
 	freefont-$(FREEFONT_TTF_VERSION) in your root filesystem...")
 	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts
-	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts/trutype
-	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts/trutype/freefont
+	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts/truetype
+	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts/truetype/freefont
 	$(Q)cp $(FREEFONT_TTF_BUILD_DIR)/*.ttf \
-	$(ROOTFS)/usr/share/fonts/trutype/freefont/
+	$(ROOTFS)/usr/share/fonts/truetype/freefont/
 	@touch $@
 
 download_freefont_ttf:
