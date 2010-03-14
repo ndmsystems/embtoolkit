@@ -89,7 +89,7 @@ endmenu
 
 endmenu
 
-menu " Support native languages in root filesystem"
+menu "Support native languages in root filesystem"
 source kconfig/nls.kconfig
 endmenu
 
