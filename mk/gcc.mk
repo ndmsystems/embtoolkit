@@ -107,7 +107,8 @@ $(GCC1_BUILD_DIR)/.configured:
 	--enable-languages=c --enable-target-optspace \
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
 	--with-mpc=$(MPC_HOST_DIR) \
-	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)
+	--with-pkgversion=embtoolkit-$(EMBTK_VERSION) \
+	--with-bugurl="http://www.embtoolkit.org/issues/projects/show/embtoolkit"
 	@touch $@
 
 #GCC second stage
@@ -129,7 +130,8 @@ $(GCC2_BUILD_DIR)/.configured:
 	--enable-languages=c --enable-target-optspace \
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
 	--with-mpc=$(MPC_HOST_DIR) \
-	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)
+	--with-pkgversion=embtoolkit-$(EMBTK_VERSION) \
+	--with-bugurl="http://www.embtoolkit.org/issues/projects/show/embtoolkit"
 	@touch $@
 
 #GCC last stage
@@ -166,6 +168,7 @@ $(GCC3_BUILD_DIR)/.configured:
 	--with-mpc=$(MPC_HOST_DIR) \
 	--enable-languages=`echo $(GCC_LANGUAGES) | sed 's/ //g'` \
 	$(GCC3_CONFIGURE_EXTRA_OPTIONS) \
-	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)
+	--with-pkgversion=embtoolkit-$(EMBTK_VERSION) \
+	--with-bugurl="http://www.embtoolkit.org/issues/projects/show/embtoolkit"
 	@touch $@
 
