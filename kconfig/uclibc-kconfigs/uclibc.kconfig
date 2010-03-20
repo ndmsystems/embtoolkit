@@ -627,15 +627,9 @@ choice
 		locking to critical data structures, and adding extra code to
 		ensure that functions are properly reentrant.
 
-config KEMBTK_UCLIBC_HAS_NO_THREADS
-	bool "none"
-	help
-		Disable thread support.
-
 config KEMBTK_UCLIBC_LINUXTHREADS_OLD
 	bool "Use the older (stable) version of linuxthreads"
 	select KEMBTK_UCLIBC_UCLIBC_HAS_THREADS
-	default y
 	help
 		There are two versions of linuxthreads.  The older (stable)
 		version has been in uClibc for quite a long time but hasn't seen
@@ -645,7 +639,22 @@ config KEMBTK_UCLIBC_LINUXTHREADS_OLD
 		is based on the latest code from glibc, so it may be the only
 		choice for the newer ports (like alpha/amd64/64bit arches and
 		hppa).
+config KEMBTK_UCLIBC_HAS_NO_THREADS
+	bool "none"
+	help
+		Disable thread support.
+
 endchoice
+
+config KEMBTK_UCLIBC_UCLIBC_HAS_THREADS
+	bool
+	help
+		If you want to compile uClibc with pthread support,
+		then answer Y.
+		This will increase the size of uClibc by adding a bunch of
+		locking to critical data structures, and adding extra code to
+		ensure that functions are properly reentrant.
+		If your applications require pthreads, answer Y.
 
 config KEMBTK_UCLIBC_LINUXTHREADS_NEW
 	bool
@@ -672,16 +681,6 @@ config KEMBTK_UCLIBC_PTHREADS_DEBUG_SUPPORT
 		debugging to work properly.
 		If you are doing development and want to debug applications
 		using uClibc's pthread library, answer Y.  Otherwise, answer N.
-
-config KEMBTK_UCLIBC_UCLIBC_HAS_THREADS
-	bool
-	help
-		If you want to compile uClibc with pthread support,
-		then answer Y.
-		This will increase the size of uClibc by adding a bunch of
-		locking to critical data structures, and adding extra code to
-		ensure that functions are properly reentrant.
-		If your applications require pthreads, answer Y.
 
 config KEMBTK_UCLIBC_UCLIBC_HAS_SYSLOG
 	bool "Syslog support"
