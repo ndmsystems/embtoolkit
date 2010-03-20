@@ -41,16 +41,16 @@ mkinitialpath:
 	@mkdir -p $(SYSROOT)/root
 	@mkdir -p $(SYSROOT)/usr/lib
 ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
-	@cd $(SYSROOT); \
+	@-cd $(SYSROOT); \
 	ln -s lib lib64
-	@cd $(SYSROOT)/usr; \
+	@-cd $(SYSROOT)/usr; \
 	ln -s lib lib64
 endif
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	@cd $(SYSROOT); \
+	@-cd $(SYSROOT); \
 	ln -s lib lib64; \
 	mkdir -p lib32
-	@cd $(SYSROOT)/usr; \
+	@-cd $(SYSROOT)/usr; \
 	ln -s lib lib64; \
 	mkdir -p lib32
 endif
