@@ -29,6 +29,7 @@ M4_BUILD_DIR := $(TOOLS_BUILD)/m4-$(M4_VERSION)
 M4_DIR := $(HOSTTOOLS)/usr/local/m4
 M4_BIN := $(M4_DIR)/bin/m4
 
+M4 := $(M4_BIN)
 export M4
 
 m4_install: $(M4_BUILD_DIR)/.installed
