@@ -36,9 +36,11 @@ GETTEXT_INCLUDES = autosprintf.h gettext-po.h libintl.h
 GETTEXT_LIBS = gettext libgettext* libasprintf* libintl*
 GETTEXT_PKGCONFIGS =
 
+GETTEXT_DEPS = ncurses_install libxml2_install
+
 gettext_install: $(GETTEXT_BUILD_DIR)/.installed
 
-$(GETTEXT_BUILD_DIR)/.installed: ncurses_install download_gettext \
+$(GETTEXT_BUILD_DIR)/.installed: $(GETTEXT_DEPS) download_gettext \
 	$(GETTEXT_BUILD_DIR)/.decompressed $(GETTEXT_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	gettext-$(GETTEXT_VERSION) in your root filesystem...")
@@ -73,7 +75,9 @@ $(GETTEXT_BUILD_DIR)/.configured:
 	gt_cv_int_divbyzero_sigfpe=no \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --with-included-gettext --disable-rpath
+	--prefix=/usr --enable-relocatable --with-included-gettext \
+	--disable-rpath --disable-openmp --disable-java \
+	--with-libxml2-prefix=$(SYSROOT)/usr
 	@touch $@
 
 gettext_clean:
