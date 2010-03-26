@@ -33,9 +33,11 @@ FOO_INCLUDES =
 FOO_LIBS =
 FOO_PKGCONFIGS =
 
+FOO_DEPS =
+
 foo_install: $(FOO_BUILD_DIR)/.installed
 
-$(FOO_BUILD_DIR)/.installed: download_foo \
+$(FOO_BUILD_DIR)/.installed: $(FOO_DEPS) download_foo \
 	$(FOO_BUILD_DIR)/.decompressed $(FOO_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	foo-$(FOO_VERSION) in your root filesystem...")
