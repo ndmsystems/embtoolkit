@@ -25,6 +25,7 @@
 
 FOO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_FOO_VERSION_STRING)))
 FOO_SITE := http://www.foo.org/download
+FOO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/foo/$(FOO_VERSION)
 FOO_PACKAGE := foo-$(FOO_VERSION).tar.gz
 FOO_BUILD_DIR := $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
 
@@ -54,10 +55,19 @@ download_foo:
 	@test -e $(DOWNLOAD_DIR)/$(FOO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(FOO_PACKAGE) \
 	$(FOO_SITE)/$(FOO_PACKAGE)
+ifeq ($(CONFIG_EMBTK_FOO_NEED_PATCH),y)
+	@test -e $(DOWNLOAD_DIR)/foo-$(FOO_VERSION).patch || \
+	wget -O $(DOWNLOAD_DIR)/foo-$(FOO_VERSION).patch \
+	$(FOO_PATCH_SITE)/foo-$(FOO_VERSION)-*.patch
+endif
 
 $(FOO_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(FOO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(FOO_PACKAGE)
+ifeq ($(CONFIG_EMBTK_FOO_NEED_PATCH),y)
+	@cd $(PACKAGES_BUILD)/foo-$(FOO_VERSION); \
+	patch -p1 < $(DOWNLOAD_DIR)/foo-$(FOO_VERSION).patch
+endif
 	@touch $@
 
 $(FOO_BUILD_DIR)/.configured:

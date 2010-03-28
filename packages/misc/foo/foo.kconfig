@@ -41,3 +41,7 @@ config EMBTK_FOO_VERSION_STRING
 	string
 	default "0.16.4"	if EMBTK_FOO_VERSION_0_16_4
 
+config EMBTK_FOO_NEED_PATCH
+	bool
+
+
