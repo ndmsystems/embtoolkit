@@ -744,8 +744,8 @@ config KEMBTK_UCLIBC_MALLOC_STANDARD
 endchoice
 
 config KEMBTK_UCLIBC_MALLOC_GLIBC_COMPAT
-	bool "Malloc returns live pointer for malloc(0)"
-	default n
+	bool
+	default y
 	help
 	  The behavior of malloc(0) is listed as implementation-defined by
 	  SuSv3.  Glibc returns a valid pointer to something, while uClibc
