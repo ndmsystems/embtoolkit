@@ -22,7 +22,7 @@
 # \date         February 2010
 ################################################################################
 
-M4_VERSION := 1.4.13
+M4_VERSION := 1.4.14
 M4_SITE := http://ftp.gnu.org/gnu/m4
 M4_PACKAGE := m4-$(M4_VERSION).tar.bz2
 M4_BUILD_DIR := $(TOOLS_BUILD)/m4-$(M4_VERSION)
