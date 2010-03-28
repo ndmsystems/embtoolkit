@@ -35,7 +35,9 @@ choice
 	depends on EMBTK_HAVE_OPENSSL
 	help
 		Here you can choose which version of openssl you want to use.
-
+	config  EMBTK_OPENSSL_VERSION_0_9_8N
+		bool "openssl-0.9.8n"
+		select EMBTK_OPENSSL_NEED_PATCH
 	config  EMBTK_OPENSSL_VERSION_0_9_8L
 		bool "openssl-0.9.8l"
 		select EMBTK_OPENSSL_NEED_PATCH
@@ -43,6 +45,7 @@ endchoice
 
 config EMBTK_OPENSSL_VERSION_STRING
 	string
+	default "0.9.8n"	if EMBTK_OPENSSL_VERSION_0_9_8N
 	default "0.9.8l"	if EMBTK_OPENSSL_VERSION_0_9_8L
 
 config EMBTK_OPENSSL_NEED_PATCH
