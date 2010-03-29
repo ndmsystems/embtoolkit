@@ -25,6 +25,7 @@
 
 TSLIB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_TSLIB_VERSION_STRING)))
 TSLIB_SITE := http://download.berlios.de/tslib
+TSLIB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/tslib/$(TSLIB_VERSION)
 TSLIB_PACKAGE := tslib-$(TSLIB_VERSION).tar.bz2
 TSLIB_BUILD_DIR := $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION)
 
