@@ -26,7 +26,7 @@
 config EMBTK_HAVE_TSLIB
 	bool "Have tslib"
 	help
-		tslib description
+		Touch screen library.
 choice
 	prompt "tslib version you wish"
 	depends on EMBTK_HAVE_TSLIB
