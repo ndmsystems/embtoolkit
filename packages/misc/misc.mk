@@ -52,3 +52,8 @@ include $(EMBTK_ROOT)/packages/misc/pango/pango.mk
 ROOTFS_COMPONENTS_CLEAN += pango_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_PANGO) += pango_install
 
+#tslib
+include $(EMBTK_ROOT)/packages/misc/tslib/tslib.mk
+ROOTFS_COMPONENTS_CLEAN += tslib_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_TSLIB) += tslib_install
+

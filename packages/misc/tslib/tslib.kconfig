@@ -1,0 +1,47 @@
+################################################################################
+# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         tslib.kconfig
+# \brief	tslib.kconfig of Embtoolkit
+# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \date         March 2010
+################################################################################
+
+config EMBTK_HAVE_TSLIB
+	bool "Have tslib"
+	help
+		tslib description
+choice
+	prompt "tslib version you wish"
+	depends on EMBTK_HAVE_TSLIB
+	help
+	 Here you can choose which version of tslib you want to use.
+
+	config  EMBTK_TSLIB_VERSION_1_0
+		bool "tslib-1.0"
+		select EMBTK_TSLIB_NEED_PATCH
+endchoice
+
+config EMBTK_TSLIB_VERSION_STRING
+	string
+	default "1.0"	if EMBTK_TSLIB_VERSION_1_0
+
+config EMBTK_TSLIB_NEED_PATCH
+	bool
+
