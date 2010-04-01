@@ -51,6 +51,11 @@ XSERVER_CONFIGURE_OPTS := --enable-kdrive --with-sha1=libcrypto \
 		--disable-screensaver --disable-dri --disable-tcp-transport \
 		--disable-ipv6
 
+ifeq ($(CONFIG_EMBTK_HAVE_XSERVER_WITH_TSLIB),y)
+XSERVER_DEPS += tslib_install
+XSERVER_CONFIGURE_OPTS += --enable-tslib
+endif
+
 xserver_install: $(XSERVER_BUILD_DIR)/.installed
 
 $(XSERVER_BUILD_DIR)/.installed: $(XSERVER_DEPS) download_xserver \
