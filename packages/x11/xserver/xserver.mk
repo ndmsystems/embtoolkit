@@ -33,13 +33,23 @@ XSERVER_INCLUDES =
 XSERVER_LIBS = xorg/protocol.txt
 XSERVER_PKGCONFIGS =
 
-XSERVER_DEPS = utilmacros_install bigreqsproto_install compositeproto_install \
+XSERVER_DEPS := utilmacros_install bigreqsproto_install compositeproto_install \
 		damageproto_install fixesproto_install fontsproto_install \
 		inputproto_install kbproto_install randrproto_install \
 		renderproto_install resourceproto_install videoproto_install \
 		xcbproto_install xcmiscproto_install xextproto_install \
 		xproto_install libxfont_install libxkbfile_install \
 		xtrans_install openssl_install
+
+XSERVER_CONFIGURE_OPTS := --enable-kdrive --with-sha1=libcrypto \
+		--disable-xorg --disable-aiglx --disable-glx-tls --disable-dga \
+		--disable-xdmcp --disable-xdm-auth-1 --disable-config-hal \
+		--disable-xf86vidmode --disable-xf86bigfont --disable-xnest \
+		--disable-xquartz --disable-xwin --disable-xfake \
+		--disable-install-setuid --disable-xvfb --disable-dmx \
+		--disable-glx --disable-xinerama --disable-xfree86-utils \
+		--disable-screensaver --disable-dri --disable-tcp-transport \
+		--disable-ipv6
 
 xserver_install: $(XSERVER_BUILD_DIR)/.installed
 
@@ -89,15 +99,13 @@ $(XSERVER_BUILD_DIR)/.configured:
 	XLIB_LIBS=`$(PKGCONFIG_BIN) xcb --libs` \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --enable-kdrive --with-sha1=libcrypto \
-	--disable-xorg --disable-aiglx --disable-glx-tls --disable-dga \
-	--disable-xdmcp --disable-xdm-auth-1 --disable-config-hal \
-	--disable-xf86vidmode --disable-xf86bigfont --disable-xnest \
-	--disable-xquartz --disable-xwin --disable-xfake \
-	--disable-install-setuid --disable-xvfb --disable-dmx \
-	--disable-glx --disable-xinerama --disable-xfree86-utils \
-	--disable-screensaver --disable-dri --disable-tcp-transport \
-	--disable-ipv6
+	--prefix=/usr $(XSERVER_CONFIGURE_OPTS) \
+	--with-vendor-name="Embedded Systems Toolkit" \
+	--with-vendor-name-short="EmbToolkit" \
+	--with-vendor-web="http://www.embtoolkit.org" \
+	--with-builderstring="embtoolkit-$(EMBTK_VERSION)" \
+	--with-builder-addr="embtk-devel@embtoolkit.org" \
+	--with-os-name=$(STRICT_GNU_TARGET) --with-os-vendor="embtoolkit.org"
 	@touch $@
 
 xserver_clean:
