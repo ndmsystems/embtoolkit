@@ -77,7 +77,7 @@ $(GETTEXT_BUILD_DIR)/.configured:
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
 	--prefix=/usr --enable-relocatable --with-included-gettext \
 	--disable-rpath --disable-openmp --disable-java \
-	--with-libxml2-prefix=$(SYSROOT)/usr
+	--with-libxml2-prefix=$(SYSROOT)/usr --disable-openmp
 	@touch $@
 
 gettext_clean:
