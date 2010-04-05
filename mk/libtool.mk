@@ -59,7 +59,6 @@ $(LIBTOOL_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring \
 	libtool_$(LIBTOOL_VERSION)...")
 	@cd $(LIBTOOL_BUILD_DIR); \
-	M4=$(M4_BIN) \
 	$(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)/configure \
 	--prefix=$(LIBTOOL_DIR) --build=$(HOST_BUILD) --host=$(HOST_ARCH)
 	@touch $@
