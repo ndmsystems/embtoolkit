@@ -2,18 +2,19 @@
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         toolchain.mk
@@ -74,7 +75,7 @@ include $(EMBTK_ROOT)/mk/m4.mk
 ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 #EGLIBC
 include $(EMBTK_ROOT)/mk/eglibc.mk
-TOOLCHAINBUILD := mkinitialpath libtool_install m4_install autoconf_install \
+TOOLCHAINBUILD := mkinitialpath m4_install libtool_install autoconf_install \
 		automake_install kernel-headers_install ccachehost_install \
 		gmphost_install mpfrhost_install mpchost_install \
 		binutils_install gcc1_install eglibc-headers_install \
@@ -82,7 +83,7 @@ TOOLCHAINBUILD := mkinitialpath libtool_install m4_install autoconf_install \
 else
 #uClibc
 include $(EMBTK_ROOT)/mk/uclibc.mk
-TOOLCHAINBUILD := mkinitialpath libtool_install m4_install autoconf_install \
+TOOLCHAINBUILD := mkinitialpath m4_install libtool_install autoconf_install \
 		automake_install kernel-headers_install ccachehost_install \
 		gmphost_install mpfrhost_install mpchost_install \
 		binutils_install gcc1_install uclibc_install gcc3_install
