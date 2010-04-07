@@ -73,6 +73,7 @@ endif
 
 $(TSLIB_BUILD_DIR)/.configured:
 	$(Q)cd $(TSLIB_BUILD_DIR); \
+	$(AUTORECONF); \
 	chmod a+x configure; \
 	CC=$(TARGETCC_CACHED) \
 	CXX=$(TARGETCXX_CACHED) \
