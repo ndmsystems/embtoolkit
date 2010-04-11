@@ -107,7 +107,7 @@ $(XSERVER_BUILD_DIR)/.configured:
 	--prefix=/usr $(XSERVER_CONFIGURE_OPTS) \
 	--with-vendor-name="Embedded Systems Toolkit" \
 	--with-vendor-name-short="EmbToolkit" \
-	--with-vendor-web="http://www.embtoolkit.org" \
+	--with-vendor-web=$(EMBTK_HOMEURL) \
 	--with-builderstring="embtoolkit-$(EMBTK_VERSION)" \
 	--with-builder-addr="embtk-devel@embtoolkit.org" \
 	--with-os-name=$(STRICT_GNU_TARGET) --with-os-vendor="embtoolkit.org"
