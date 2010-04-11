@@ -106,7 +106,8 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.configured:
 	--with-headers=$(SYSROOT)/usr/include \
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) \
 	--disable-profile --without-gd --without-cvs --enable-add-ons \
-	--enable-kernel="2.6.0" --disable-versioning
+	--enable-kernel="2.6.0" --disable-versioning \
+	--with-bugurl="http://www.embtoolkit.org/issues/projects/embtoolkit"
 	@touch $@
 
 $(EGLIBC_BUILD_DIR)/.installed: $(EGLIBC_BUILD_DIR)/.configured
@@ -129,7 +130,8 @@ $(EGLIBC_BUILD_DIR)/.configured:
 	--with-headers=$(SYSROOT)/usr/include \
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) \
 	--disable-profile --without-gd --without-cvs --enable-add-ons \
-	--enable-kernel="2.6.0"
+	--enable-kernel="2.6.0" \
+	--with-bugurl="http://www.embtoolkit.org/issues/projects/embtoolkit"
 	@touch $@
 
 EGLIBC_OPTIONS_PARSE:
