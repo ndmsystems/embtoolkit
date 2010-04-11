@@ -108,7 +108,7 @@ $(GCC1_BUILD_DIR)/.configured:
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
 	--with-mpc=$(MPC_HOST_DIR) \
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION) \
-	--with-bugurl="http://www.embtoolkit.org/issues/projects/show/embtoolkit"
+	--with-bugurl=$(EMBTK_BUGURL)
 	@touch $@
 
 #GCC second stage
@@ -131,7 +131,7 @@ $(GCC2_BUILD_DIR)/.configured:
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
 	--with-mpc=$(MPC_HOST_DIR) \
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION) \
-	--with-bugurl="http://www.embtoolkit.org/issues/projects/show/embtoolkit"
+	--with-bugurl=$(EMBTK_BUGURL)
 	@touch $@
 
 #GCC last stage
@@ -169,6 +169,6 @@ $(GCC3_BUILD_DIR)/.configured:
 	--enable-languages=`echo $(GCC_LANGUAGES) | sed 's/ //g'` \
 	$(GCC3_CONFIGURE_EXTRA_OPTIONS) \
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION) \
-	--with-bugurl="http://www.embtoolkit.org/issues/projects/show/embtoolkit"
+	--with-bugurl=$(EMBTK_BUGURL)
 	@touch $@
 
