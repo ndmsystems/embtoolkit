@@ -35,11 +35,14 @@ choice
 	help
 	 Here you can choose which version of libxcb you want to use.
 
+	config  EMBTK_LIBXCB_VERSION_1_6
+		bool "libxcb-1.6"
 	config  EMBTK_LIBXCB_VERSION_1_5
 		bool "libxcb-1.5"
 endchoice
 
 config EMBTK_LIBXCB_VERSION_STRING
 	string
+	default "1.6"	if EMBTK_LIBXCB_VERSION_1_6
 	default "1.5"	if EMBTK_LIBXCB_VERSION_1_5
 
