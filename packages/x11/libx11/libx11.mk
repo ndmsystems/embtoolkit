@@ -88,6 +88,7 @@ $(LIBX11_BUILD_DIR)/.configured:
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) \
+	--disable-malloc0returnsnull \
 	--prefix=/usr --libdir=/usr/$(LIBDIR) --with-xcb
 	@touch $@
 
