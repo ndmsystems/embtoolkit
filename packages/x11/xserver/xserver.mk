@@ -102,6 +102,8 @@ $(XSERVER_BUILD_DIR)/.configured:
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
 	XLIB_CFLAGS=`$(PKGCONFIG_BIN) xcb --cflags` \
 	XLIB_LIBS=`$(PKGCONFIG_BIN) xcb --libs` \
+	TSLIB_CFLAGS=`$(PKGCONFIG_BIN) tslib --cflags` \
+	TSLIB_LIBS=`$(PKGCONFIG_BIN) tslib --libs` \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
 	--prefix=/usr $(XSERVER_CONFIGURE_OPTS) \
