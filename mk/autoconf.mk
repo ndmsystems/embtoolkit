@@ -26,7 +26,7 @@ AUTOCONF_VERSION := 2.65
 AUTOCONF_SITE := http://ftp.gnu.org/gnu/autoconf
 AUTOCONF_PACKAGE := autoconf-$(AUTOCONF_VERSION).tar.bz2
 AUTOCONF_BUILD_DIR := $(TOOLS_BUILD)/autoconf-$(AUTOCONF_VERSION)
-AUTOCONF_DIR := $(HOSTTOOLS)/usr/local/autoconf
+AUTOCONF_DIR := $(HOSTTOOLS)/usr
 
 AUTOCONF := $(AUTOCONF_DIR)/bin/autoconf
 AUTOHEADER := $(AUTOCONF_DIR)/bin/autoheader

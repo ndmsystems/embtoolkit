@@ -26,7 +26,7 @@ M4_VERSION := 1.4.14
 M4_SITE := http://ftp.gnu.org/gnu/m4
 M4_PACKAGE := m4-$(M4_VERSION).tar.bz2
 M4_BUILD_DIR := $(TOOLS_BUILD)/m4-$(M4_VERSION)
-M4_DIR := $(HOSTTOOLS)/usr/local/m4
+M4_DIR := $(HOSTTOOLS)/usr
 M4_BIN := $(M4_DIR)/bin/m4
 
 M4 := $(M4_BIN)

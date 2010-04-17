@@ -26,7 +26,7 @@ LIBTOOL_VERSION := 2.2.6b
 LIBTOOL_SITE := http://ftp.gnu.org/gnu/libtool
 LIBTOOL_PACKAGE := libtool-$(LIBTOOL_VERSION).tar.gz
 LIBTOOL_BUILD_DIR := $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
-LIBTOOL_DIR := $(HOSTTOOLS)/usr/local/libtool
+LIBTOOL_DIR := $(HOSTTOOLS)/usr
 
 LIBTOOL := $(LIBTOOL_DIR)/bin/libtool
 LIBTOOLIZE := $(LIBTOOL_DIR)/bin/libtoolize
