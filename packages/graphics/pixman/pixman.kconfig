@@ -1,19 +1,20 @@
 ################################################################################
 # GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         pixman.kconfig
@@ -32,11 +33,20 @@ choice
 	help
 	 Here you can choose which version of pixman you want to use.
 
+	config  EMBTK_PIXMAN_VERSION_0_18_0
+		bool "pixman-0.18.0"
+	config  EMBTK_PIXMAN_VERSION_0_16_6
+		bool "pixman-0.16.6"
+	config  EMBTK_PIXMAN_VERSION_0_16_5
+		bool "pixman-0.16.5"
 	config  EMBTK_PIXMAN_VERSION_0_16_4
 		bool "pixman-0.16.4"
 endchoice
 
 config EMBTK_PIXMAN_VERSION_STRING
 	string
+	default "0.18.0"	if EMBTK_PIXMAN_VERSION_0_18_0
+	default "0.16.6"	if EMBTK_PIXMAN_VERSION_0_16_6
+	default "0.16.5"	if EMBTK_PIXMAN_VERSION_0_16_5
 	default "0.16.4"	if EMBTK_PIXMAN_VERSION_0_16_4
 
