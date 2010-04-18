@@ -54,6 +54,8 @@ XSERVER_CONFIGURE_OPTS := --enable-kdrive --with-sha1=libcrypto \
 ifeq ($(CONFIG_EMBTK_HAVE_XSERVER_WITH_TSLIB),y)
 XSERVER_DEPS += tslib_install
 XSERVER_CONFIGURE_OPTS += --enable-tslib
+else
+XSERVER_CONFIGURE_OPTS += --disable-tslib
 endif
 
 xserver_install: $(XSERVER_BUILD_DIR)/.installed
