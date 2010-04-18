@@ -63,22 +63,22 @@ rootfs_build:
 	ended successfully!")
 
 rootfs_fill:
+	@mkdir -p $(ROOTFS)/$(LIBDIR)
 	@mkdir -p $(ROOTFS)/lib
+	@mkdir -p $(ROOTFS)/usr
+	@mkdir -p $(ROOTFS)/usr/$(LIBDIR)
+	@mkdir -p $(ROOTFS)/usr/lib
 ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
 	@cd $(ROOTFS); \
 	ln -s lib lib64
-	@mkdir -p $(ROOTFS)/usr
 	@cd $(ROOTFS)/usr; \
 	ln -s lib lib64	
 endif
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	@cd $(ROOTFS); \
-	ln -s lib lib64; \
-	mkdir -p lib32
-	mkdir -p $(ROOTFS)/usr
+	ln -s lib lib64
 	@cd $(ROOTFS)/usr; \
 	ln -s lib lib64
-	mkdir -p $(ROOTFS)/usr/lib32
 endif
 	@-cp -d $(SYSROOT)/lib/*.so* $(ROOTFS)/lib/
 	@-cp -d $(SYSROOT)/usr/lib/*.so* $(ROOTFS)/usr/lib/
