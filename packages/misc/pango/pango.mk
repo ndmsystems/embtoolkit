@@ -101,7 +101,6 @@ $(PANGO_BUILD_DIR)/.patchlibtool:
 
 $(PANGO_BUILD_DIR)/.special:
 	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/pango $(ROOTFS)/usr/$(LIBDIR)/
-	@touch $@
 
 pango_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup pango-$(PANGO_VERSION)...")
