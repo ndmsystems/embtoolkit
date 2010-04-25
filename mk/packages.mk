@@ -57,6 +57,7 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS) += mtd-utils_target_insta
 ROOTFS_COMPONENTS_CLEAN += mtd-utils_target_clean
 
 #Compression packages
+ROOTFS_COMPONENTS_CLEAN += zlib_target_clean
 
 # Graphics packages
 include $(EMBTK_ROOT)/packages/graphics/graphics.mk
