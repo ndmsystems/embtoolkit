@@ -81,7 +81,6 @@ include $(EMBTK_ROOT)/packages/misc/misc.mk
 #Busybox
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_BB) += busybox_install
 include $(EMBTK_ROOT)/packages/busybox/busybox.mk
-ROOTFS_COMPONENTS += busybox_install
 
 ################################################################################
 ########################## Packages for HOST MACHINE ###########################
