@@ -96,7 +96,7 @@ $(ZLIB_TARGET_BUILD_DIR)/.configured:
 	CPPFLGAS="-I$(SYSROOT)/usr/include" \
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure $(ZLIB_TARGET_LINUX_ARCH) \
+	./configure \
 	--libdir=/usr/$(LIBDIR) --prefix=/usr
 	@touch $@
 
