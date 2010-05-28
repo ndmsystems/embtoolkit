@@ -32,6 +32,10 @@ choice
 	help
 	 Here you can choose which version of utilmacros you want to use.
 
+	config  EMBTK_UTILMACROS_VERSION_1_8_0
+		bool "util-macros-1.8.0"
+	config  EMBTK_UTILMACROS_VERSION_1_7_0
+		bool "util-macros-1.7.0"
 	config  EMBTK_UTILMACROS_VERSION_1_6_1
 		bool "util-macros-1.6.1"
 	config  EMBTK_UTILMACROS_VERSION_1_6_0
@@ -40,6 +44,8 @@ endchoice
 
 config EMBTK_UTILMACROS_VERSION_STRING
 	string
+	default "1.8.0"	if EMBTK_UTILMACROS_VERSION_1_8_0
+	default "1.7.0"	if EMBTK_UTILMACROS_VERSION_1_7_0
 	default "1.6.1"	if EMBTK_UTILMACROS_VERSION_1_6_1
 	default "1.6.0"	if EMBTK_UTILMACROS_VERSION_1_6_0
 
