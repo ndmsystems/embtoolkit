@@ -45,7 +45,7 @@ config EMBTK_EGLIBC_SVN_REVISION
 		This revision is the latest at EmbToolkit release. If at the
 		moment you build your toolchain new revision is available,
 		you can increase this value.
-	default 10151	if EMBTK_EGLIBC_VERSION_2_11
+	default 10454	if EMBTK_EGLIBC_VERSION_2_11
 	default 10152	if EMBTK_EGLIBC_VERSION_2_10
 	default 10153	if EMBTK_EGLIBC_VERSION_2_9
 	default 10203	if EMBTK_EGLIBC_VERSION_TRUNK
