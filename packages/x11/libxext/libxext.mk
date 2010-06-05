@@ -88,7 +88,7 @@ $(LIBXEXT_BUILD_DIR)/.configured:
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --enable-malloc0returnsnull
+	--prefix=/usr --disable-malloc0returnsnull
 	@touch $@
 
 libxext_clean:
