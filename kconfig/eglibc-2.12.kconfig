@@ -526,7 +526,7 @@ config EMBTK_EGLIBC_OPTION_EGLIBC_MEMUSAGE_DEFAULT_BUFFER_SIZE
 		so setting this option to the value of 512 will reduce the size
 		of the memory buffer to 24K.
 
-config EMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH
+config KEMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH
 	bool "Name service switch (nsswitch) support"
 	default y
 	help
