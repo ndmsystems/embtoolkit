@@ -90,6 +90,8 @@ endif
 
 menuconfig: basic
 	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig menuconfig
+randconfig: basic
+	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig randconfig
 
 basic:
 	$(Q)make -f scripts/Makefile.build obj=scripts/basic
