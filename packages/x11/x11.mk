@@ -78,6 +78,11 @@ include $(EMBTK_ROOT)/packages/x11/randrproto/randrproto.mk
 ROOTFS_COMPONENTS_CLEAN += randrproto_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_RANDRPROTO) += randrproto_install
 
+#recordproto
+include $(EMBTK_ROOT)/packages/x11/recordproto/recordproto.mk
+ROOTFS_COMPONENTS_CLEAN += recordproto_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_RECORDPROTO) += recordproto_install
+
 #renderproto
 include $(EMBTK_ROOT)/packages/x11/renderproto/renderproto.mk
 ROOTFS_COMPONENTS_CLEAN += renderproto_clean

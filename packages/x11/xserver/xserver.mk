@@ -37,10 +37,10 @@ XSERVER_PKGCONFIGS =
 XSERVER_DEPS := utilmacros_install bigreqsproto_install compositeproto_install \
 		damageproto_install fixesproto_install fontsproto_install \
 		inputproto_install kbproto_install randrproto_install \
-		renderproto_install resourceproto_install videoproto_install \
-		xcbproto_install xcmiscproto_install xextproto_install \
-		xproto_install libxfont_install libxkbfile_install \
-		xtrans_install openssl_install
+		recordproto_install renderproto_install resourceproto_install \
+		videoproto_install xcbproto_install xcmiscproto_install \
+		xextproto_install xproto_install libxfont_install \
+		libxkbfile_install xtrans_install openssl_install
 
 XSERVER_CONFIGURE_OPTS := --enable-kdrive --with-sha1=libcrypto \
 		--disable-xorg --disable-aiglx --disable-glx-tls --disable-dga \

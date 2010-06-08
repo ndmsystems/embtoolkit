@@ -38,6 +38,7 @@ source packages/x11/fontsproto/fontsproto.kconfig
 source packages/x11/inputproto/inputproto.kconfig
 source packages/x11/kbproto/kbproto.kconfig
 source packages/x11/randrproto/randrproto.kconfig
+source packages/x11/recordproto/recordproto.kconfig
 source packages/x11/renderproto/renderproto.kconfig
 source packages/x11/resourceproto/resourceproto.kconfig
 source packages/x11/videoproto/videoproto.kconfig
