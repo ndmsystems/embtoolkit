@@ -33,11 +33,14 @@ choice
 	help
 		Here you can choose which version of libxext you want to use.
 
+	config  EMBTK_LIBXEXT_VERSION_1_1_2
+		bool "libXext-1.1.2"
 	config  EMBTK_LIBXEXT_VERSION_1_1_1
 		bool "libXext-1.1.1"
 endchoice
 
 config EMBTK_LIBXEXT_VERSION_STRING
 	string
+	default "1.1.2"	if EMBTK_LIBXEXT_VERSION_1_1_2
 	default "1.1.1"	if EMBTK_LIBXEXT_VERSION_1_1_1
 
