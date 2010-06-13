@@ -67,6 +67,7 @@ ifneq ($(UCLIBC_GIT_BRANCH),master)
 	git checkout -b $(UCLIBC_GIT_BRANCH) origin/$(UCLIBC_GIT_BRANCH)
 endif
 	@cd $(EMBTK_ROOT)/src/uClibc-git; \
+	git pull; \
 	git checkout $(UCLIBC_GIT_REVISION); \
 	cd ..; \
 	tar cjvf $(UCLIBC_PACKAGE) uClibc-$(UCLIBC_VERSION); \
@@ -94,7 +95,7 @@ endif
 $(UCLIBC_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring \
 	uClibc-$(UCLIBC_VERSION) ...")
-	grep "CONFIG_KEMBTK_UCLIBC_" $(EMBTK_ROOT)/.config | \
+	$(Q)grep "CONFIG_KEMBTK_UCLIBC_" $(EMBTK_ROOT)/.config | \
 	sed -e 's/CONFIG_KEMBTK_UCLIBC_*//g' \
 	> $(UCLIBC_BUILD_DIR)/.config
 
