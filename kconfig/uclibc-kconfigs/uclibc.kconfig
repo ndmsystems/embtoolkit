@@ -699,24 +699,6 @@ config KEMBTK_UCLIBC_UCLIBC_HAS_TLS
 	  which is not on stack. It needs __thread support enabled in
 	  gcc.
 
-config KEMBTK_UCLIBC_PTHREADS_DEBUG_SUPPORT
-	bool "Build pthreads debugging support"
-	default n
-	depends on KEMBTK_UCLIBC_UCLIBC_HAS_THREADS
-	depends on EMBTK_UCLIBC_VERSION_SERIES_1_0_X
-	help
-	  Say Y here if you wish to be able to debug applications that use
-	  uClibc's pthreads library.  By enabling this option, a library
-	  named libthread_db will be built.  This library will be dlopen()'d
-	  by gdb and will allow gdb to debug the threads in your application.
-
-	  IMPORTANT NOTE!  Because gdb must dlopen() the libthread_db library,
-	  you must compile gdb with uClibc in order for pthread debugging to
-	  work properly.
-
-	  If you are doing development and want to debug applications using
-	  uClibc's pthread library, answer Y.  Otherwise, answer N.
-
 config KEMBTK_UCLIBC_LINUXTHREADS_NEW
 	bool
 	default n
