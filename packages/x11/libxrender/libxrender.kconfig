@@ -33,11 +33,14 @@ choice
 	help
 	 Here you can choose which version of libxrender you want to use.
 
+	config  EMBTK_LIBXRENDER_VERSION_0_9_6
+		bool "libXrender-0.9.6"
 	config  EMBTK_LIBXRENDER_VERSION_0_9_5
 		bool "libXrender-0.9.5"
 endchoice
 
 config EMBTK_LIBXRENDER_VERSION_STRING
 	string
+	default "0.9.6"	if EMBTK_LIBXRENDER_VERSION_0_9_6
 	default "0.9.5"	if EMBTK_LIBXRENDER_VERSION_0_9_5
 
