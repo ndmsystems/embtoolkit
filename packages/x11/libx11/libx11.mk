@@ -46,6 +46,8 @@ $(LIBX11_BUILD_DIR)/.installed: $(LIBX11_DEPS) download_libx11 \
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libx11-$(LIBX11_VERSION) in your root filesystem...")
 	$(call EMBTK_KILL_LT_RPATH,$(LIBX11_BUILD_DIR))
+	@cd $(LIBX11_BUILD_DIR)/src/util; \
+	gcc makekeys.c -c -o makekeys-makekeys.o; gcc makekeys.c -o makekeys
 	$(Q)$(MAKE) -C $(LIBX11_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBX11_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
