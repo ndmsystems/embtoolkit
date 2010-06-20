@@ -27,7 +27,7 @@ PKGCONFIG_VERSION := 0.25
 PKGCONFIG_SITE := http://pkgconfig.freedesktop.org/releases
 PKGCONFIG_PACKAGE := pkg-config-$(PKGCONFIG_VERSION).tar.gz
 PKGCONFIG_BUILD_DIR := $(TOOLS_BUILD)/pkg-config-$(PKGCONFIG_VERSION)
-PKGCONFIG_DIR := $(HOSTTOOLS)/usr
+PKGCONFIG_DIR := $(HOSTTOOLS)/usr/local/pkg-config
 PKGCONFIG_BIN := $(PKGCONFIG_DIR)/bin/pkg-config
 
 export PKGCONFIG_BIN
