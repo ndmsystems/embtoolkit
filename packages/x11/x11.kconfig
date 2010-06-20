@@ -53,9 +53,10 @@ source packages/x11/libfontenc/libfontenc.kconfig
 source packages/x11/libpthreadstubs/libpthreadstubs.kconfig
 source packages/x11/libx11/libx11.kconfig
 source packages/x11/libxau/libxau.kconfig
+source packages/x11/libxcb/libxcb.kconfig
 source packages/x11/libxext/libxext.kconfig
 source packages/x11/libxfont/libxfont.kconfig
-source packages/x11/libxcb/libxcb.kconfig
+source packages/x11/libxft/libxft.kconfig
 source packages/x11/libxkbfile/libxkbfile.kconfig
 source packages/x11/libxrender/libxrender.kconfig
 endmenu

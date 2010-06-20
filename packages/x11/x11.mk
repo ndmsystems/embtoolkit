@@ -141,6 +141,11 @@ include $(EMBTK_ROOT)/packages/x11/libxau/libxau.mk
 ROOTFS_COMPONENTS_CLEAN += libxau_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXAU) += libxau_install
 
+#libxcb
+include $(EMBTK_ROOT)/packages/x11/libxcb/libxcb.mk
+ROOTFS_COMPONENTS_CLEAN += libxcb_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXCB) += libxcb_install
+
 #libXext
 include $(EMBTK_ROOT)/packages/x11/libxext/libxext.mk
 ROOTFS_COMPONENTS_CLEAN += libxext_clean
@@ -151,10 +156,10 @@ include $(EMBTK_ROOT)/packages/x11/libxfont/libxfont.mk
 ROOTFS_COMPONENTS_CLEAN += libxfont_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXFONT) += libxfont_install
 
-#libxcb
-include $(EMBTK_ROOT)/packages/x11/libxcb/libxcb.mk
-ROOTFS_COMPONENTS_CLEAN += libxcb_clean
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXCB) += libxcb_install
+#libXft
+include $(EMBTK_ROOT)/packages/x11/libxft/libxft.mk
+ROOTFS_COMPONENTS_CLEAN += libxft_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXFT) += libxft_install
 
 #libxkbfile
 include $(EMBTK_ROOT)/packages/x11/libxkbfile/libxkbfile.mk
