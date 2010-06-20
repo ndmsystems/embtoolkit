@@ -60,6 +60,7 @@ source packages/x11/libxinerama/libxinerama.kconfig
 source packages/x11/libxfont/libxfont.kconfig
 source packages/x11/libxft/libxft.kconfig
 source packages/x11/libxkbfile/libxkbfile.kconfig
+source packages/x11/libxrandr/libxrandr.kconfig
 source packages/x11/libxrender/libxrender.kconfig
 endmenu
 

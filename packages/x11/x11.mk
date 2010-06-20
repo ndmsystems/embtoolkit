@@ -176,6 +176,11 @@ include $(EMBTK_ROOT)/packages/x11/libxkbfile/libxkbfile.mk
 ROOTFS_COMPONENTS_CLEAN += libxkbfile_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXKBFILE) += libxkbfile_install
 
+#libxrandr
+include $(EMBTK_ROOT)/packages/x11/libxrandr/libxrandr.mk
+ROOTFS_COMPONENTS_CLEAN += libxrandr_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXRANDR) += libxrandr_install
+
 #libxrender
 include $(EMBTK_ROOT)/packages/x11/libxrender/libxrender.mk
 ROOTFS_COMPONENTS_CLEAN += libxrender_clean
