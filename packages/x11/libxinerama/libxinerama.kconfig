@@ -35,7 +35,7 @@ choice
 	 Here you can choose which version of libxinerama you want to use.
 
 	config  EMBTK_LIBXINERAMA_VERSION_1_1
-		bool "libXinerama-1.1""
+		bool "libXinerama-1.1"
 endchoice
 
 config EMBTK_LIBXINERAMA_VERSION_STRING
