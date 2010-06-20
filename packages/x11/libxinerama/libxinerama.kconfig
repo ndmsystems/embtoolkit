@@ -1,0 +1,44 @@
+################################################################################
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         libxinerama.kconfig
+# \brief	libxinerama.kconfig of Embtoolkit
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         June 2010
+################################################################################
+
+config EMBTK_HAVE_LIBXINERAMA
+	bool "Have libXinerama"
+	select EMBTK_HAVE_XINERAMAPROTO
+	help
+		libXinerama for X windowing system
+choice
+	prompt "libxinerama version you wish"
+	depends on EMBTK_HAVE_LIBXINERAMA
+	help
+	 Here you can choose which version of libxinerama you want to use.
+
+	config  EMBTK_LIBXINERAMA_VERSION_1_1
+		bool "libXinerama-1.1""
+endchoice
+
+config EMBTK_LIBXINERAMA_VERSION_STRING
+	string
+	default "1.1"	if EMBTK_LIBXINERAMA_VERSION_1_1
+

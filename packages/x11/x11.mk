@@ -146,6 +146,11 @@ include $(EMBTK_ROOT)/packages/x11/libxau/libxau.mk
 ROOTFS_COMPONENTS_CLEAN += libxau_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXAU) += libxau_install
 
+#libxinerama
+include $(EMBTK_ROOT)/packages/x11/libxinerama/libxinerama.mk
+ROOTFS_COMPONENTS_CLEAN += libxinerama_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXINERAMA) += libxinerama_install
+
 #libxcb
 include $(EMBTK_ROOT)/packages/x11/libxcb/libxcb.mk
 ROOTFS_COMPONENTS_CLEAN += libxcb_clean
