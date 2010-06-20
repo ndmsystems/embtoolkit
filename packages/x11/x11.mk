@@ -113,6 +113,11 @@ include $(EMBTK_ROOT)/packages/x11/xextproto/xextproto.mk
 ROOTFS_COMPONENTS_CLEAN += xextproto_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XEXTPROTO) += xextproto_install
 
+#xineramaproto
+include $(EMBTK_ROOT)/packages/x11/xineramaproto/xineramaproto.mk
+ROOTFS_COMPONENTS_CLEAN += xineramaproto_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XINERAMAPROTO) += xineramaproto_install
+
 #xproto
 include $(EMBTK_ROOT)/packages/x11/xproto/xproto.mk
 ROOTFS_COMPONENTS_CLEAN += xproto_clean

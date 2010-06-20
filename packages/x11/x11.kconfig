@@ -45,6 +45,7 @@ source packages/x11/videoproto/videoproto.kconfig
 source packages/x11/xcbproto/xcbproto.kconfig
 source packages/x11/xcmiscproto/xcmiscproto.kconfig
 source packages/x11/xextproto/xextproto.kconfig
+source packages/x11/xineramaproto/xineramaproto.kconfig
 source packages/x11/xproto/xproto.kconfig
 endmenu
 
