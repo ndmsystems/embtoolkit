@@ -1,6 +1,6 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
+# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         toolchain.mk
 # \brief	toolchain.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
 
@@ -77,20 +77,24 @@ include $(EMBTK_ROOT)/mk/libtool.mk
 include $(EMBTK_ROOT)/mk/autoconf.mk
 include $(EMBTK_ROOT)/mk/automake.mk
 include $(EMBTK_ROOT)/mk/m4.mk
+AUTOTOOLS_INSTALL := m4_install libtool_install autoconf_install \
+			automake_install
+#cmake
+include $(EMBTK_ROOT)/mk/cmake.mk
 
 ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 #EGLIBC
 include $(EMBTK_ROOT)/mk/eglibc.mk
-TOOLCHAINBUILD := mkinitialpath m4_install libtool_install autoconf_install \
-		automake_install kernel-headers_install ccachehost_install \
+TOOLCHAINBUILD := mkinitialpath $(AUTOTOOLS_INSTALL) cmake_install \
+		kernel-headers_install ccachehost_install \
 		gmphost_install mpfrhost_install mpchost_install \
 		binutils_install gcc1_install eglibc-headers_install \
 		gcc2_install eglibc_install gcc3_install
 else
 #uClibc
 include $(EMBTK_ROOT)/mk/uclibc.mk
-TOOLCHAINBUILD := mkinitialpath m4_install libtool_install autoconf_install \
-		automake_install kernel-headers_install ccachehost_install \
+TOOLCHAINBUILD := mkinitialpath $(AUTOTOOLS_INSTALL) cmake_install \
+		kernel-headers_install ccachehost_install \
 		gmphost_install mpfrhost_install mpchost_install \
 		binutils_install gcc1_install uclibc_install gcc3_install
 endif
