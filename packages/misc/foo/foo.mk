@@ -1,5 +1,5 @@
 ################################################################################
-# Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 #
 # \file         foo.mk
 # \brief	foo.mk of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
