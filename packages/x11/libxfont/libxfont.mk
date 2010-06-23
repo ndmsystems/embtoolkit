@@ -1,5 +1,5 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 #
 # \file         libxfont.mk
 # \brief	libxfont.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
