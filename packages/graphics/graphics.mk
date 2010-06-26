@@ -1,24 +1,25 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         graphics.mk
 # \brief	graphics.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         February 2010
 ################################################################################
 
@@ -56,6 +57,11 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FREETYPE) += freetype_install
 include $(EMBTK_ROOT)/packages/graphics/gtk/gtk.mk
 ROOTFS_COMPONENTS_CLEAN += gtk_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GTK) += gtk_install
+
+#imlib2
+include $(EMBTK_ROOT)/packages/graphics/imlib2/imlib2.mk
+ROOTFS_COMPONENTS_CLEAN += imlib2_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_IMLIB2) += imlib2_install
 
 #libjpeg
 include $(EMBTK_ROOT)/packages/graphics/libjpeg/libjpeg.mk
