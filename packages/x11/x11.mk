@@ -151,6 +151,11 @@ include $(EMBTK_ROOT)/packages/x11/libxext/libxext.mk
 ROOTFS_COMPONENTS_CLEAN += libxext_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXEXT) += libxext_install
 
+#libxfixes
+include $(EMBTK_ROOT)/packages/x11/libxfixes/libxfixes.mk
+ROOTFS_COMPONENTS_CLEAN += libxfixes_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXFIXES) += libxfixes_install
+
 #libxfont
 include $(EMBTK_ROOT)/packages/x11/libxfont/libxfont.mk
 ROOTFS_COMPONENTS_CLEAN += libxfont_clean
