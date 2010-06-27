@@ -146,6 +146,11 @@ include $(EMBTK_ROOT)/packages/x11/libxcb/libxcb.mk
 ROOTFS_COMPONENTS_CLEAN += libxcb_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXCB) += libxcb_install
 
+#libxcomposite
+include $(EMBTK_ROOT)/packages/x11/libxcomposite/libxcomposite.mk
+ROOTFS_COMPONENTS_CLEAN += libxcomposite_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXCOMPOSITE) += libxcomposite_install
+
 #libXext
 include $(EMBTK_ROOT)/packages/x11/libxext/libxext.mk
 ROOTFS_COMPONENTS_CLEAN += libxext_clean
