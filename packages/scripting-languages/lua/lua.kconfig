@@ -1,0 +1,49 @@
+################################################################################
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2010-2010 Abdoulaye Walsimou GAYE. All rights reserved.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         lua.kconfig
+# \brief	lua.kconfig of Embtoolkit
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         December 2010
+################################################################################
+
+config EMBTK_HAVE_LUA
+	bool "Have lua"
+	help
+		Lua is a powerful, light-weight programming language designed
+		for extending applications. Lua is also frequently used as a
+		general-purpose, stand-alone language. Lua is free software.
+choice
+	prompt "lua version you wish"
+	depends on EMBTK_HAVE_LUA
+	help
+	 Here you can choose which version of lua you want to use.
+
+	config  EMBTK_LUA_VERSION_5_1
+		bool "lua-5.1"
+endchoice
+
+config EMBTK_LUA_VERSION_STRING
+	string
+	default "5.1"		if EMBTK_LUA_VERSION_5_1
+
+config EMBTK_LUA_NEED_PATCH
+	bool
+
+
