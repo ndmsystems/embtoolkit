@@ -108,6 +108,8 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	-e "s; \/usr\/lib32\/libgtk-directfb-2.0.la ; $(SYSROOT)\/usr\/lib32\/libgtk-directfb-2.0.la ;" \
 	-e "s; \/usr\/lib32\/libgdk-directfb-2.0.la ; $(SYSROOT)\/usr\/lib32\/libgdk-directfb-2.0.la ;" \
 	-e "s; \/usr\/lib32\/libgdk_pixbuf-2.0.la ; $(SYSROOT)\/usr\/lib32\/libgdk_pixbuf-2.0.la ;" \
+	-e "s; \/usr\/lib\/libgtk-x11-2.0.la ; $(SYSROOT)\/usr\/lib\/libgtk-x11-2.0.la ;" \
+	-e "s; \/usr\/lib\/libgdk-x11-2.0.la ; $(SYSROOT)\/usr\/lib\/libgdk-x11-2.0.la ;" \
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done
@@ -119,6 +121,8 @@ else
 	-e "s; \/usr\/lib\/libgtk-directfb-2.0.la ; $(SYSROOT)\/usr\/lib\/libgtk-directfb-2.0.la ;" \
 	-e "s; \/usr\/lib\/libgdk-directfb-2.0.la ; $(SYSROOT)\/usr\/lib\/libgdk-directfb-2.0.la ;" \
 	-e "s; \/usr\/lib\/libgdk_pixbuf-2.0.la ; $(SYSROOT)\/usr\/lib\/libgdk_pixbuf-2.0.la ;" \
+	-e "s; \/usr\/lib\/libgtk-x11-2.0.la ; $(SYSROOT)\/usr\/lib\/libgtk-x11-2.0.la ;" \
+	-e "s; \/usr\/lib\/libgdk-x11-2.0.la ; $(SYSROOT)\/usr\/lib\/libgdk-x11-2.0.la ;" \
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done
