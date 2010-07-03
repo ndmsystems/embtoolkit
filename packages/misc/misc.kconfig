@@ -24,6 +24,7 @@
 # \date         February 2010
 ################################################################################
 
+source packages/misc/expat/expat.kconfig
 source packages/misc/gettext/gettext.kconfig
 source packages/misc/glib/glib.kconfig
 source packages/misc/libelf/libelf.kconfig

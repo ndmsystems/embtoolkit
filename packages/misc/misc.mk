@@ -22,6 +22,11 @@
 # \date         February 2010
 ################################################################################
 
+#expat
+include $(EMBTK_ROOT)/packages/misc/expat/expat.mk
+ROOTFS_COMPONENTS_CLEAN += expat_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_EXPAT) += expat_install
+
 #gettext
 include $(EMBTK_ROOT)/packages/misc/gettext/gettext.mk
 ROOTFS_COMPONENTS_CLEAN += gettext_clean
