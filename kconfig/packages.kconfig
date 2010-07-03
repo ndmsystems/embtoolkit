@@ -76,6 +76,7 @@ source packages/security/security.kconfig
 endmenu
 
 menu "System packages"
+source packages/system/system.kconfig
 endmenu
 
 menu "X window system"
