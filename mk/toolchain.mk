@@ -40,6 +40,8 @@ export TARGETSTRIP TARGETOBJDUMP TARGETOBJCOPY TARGET_CFLAGS CROSS_COMPILE
 
 ac_cv_func_malloc_0_nonnull=yes
 export ac_cv_func_malloc_0_nonnull
+ac_cv_func_realloc_0_nonnull=yes
+export ac_cv_func_realloc_0_nonnull
 
 PATH:=$(HOSTTOOLS)/usr/bin:$(HOSTTOOLS)/usr/sbin:$(PATH)
 export PATH
