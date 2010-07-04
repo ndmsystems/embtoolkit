@@ -40,17 +40,25 @@ choice
 endchoice
 
 config EMBTK_EGLIBC_SVN_REVISION
-	int "EGLIBC SVN revision to checkout"
+	int "EGLIBC SVN revision to checkout (Please read the help below)"
 	help
 		EGLIBC svn revision to use.
 		This revision is the latest at EmbToolkit release. If at the
 		moment you build your toolchain new revision is available,
 		you can increase this value.
-	default 10689	if EMBTK_EGLIBC_VERSION_2_12
+
+		At EmbToolkit release, eglibc svn revisions are:
+		10809	for eglibc-2.12
+		10690	for eglibc-2.11
+		10152	for eglibc-2.10
+		10153	for eglibc-2.9
+		10850	for eglibc-trunk (development version)
+
+	default 10809	if EMBTK_EGLIBC_VERSION_2_12
 	default 10690	if EMBTK_EGLIBC_VERSION_2_11
 	default 10152	if EMBTK_EGLIBC_VERSION_2_10
 	default 10153	if EMBTK_EGLIBC_VERSION_2_9
-	default 10688	if EMBTK_EGLIBC_VERSION_TRUNK
+	default 10850	if EMBTK_EGLIBC_VERSION_TRUNK
 
 config EMBTK_EGLIBC_BRANCH_STRING
 	string
