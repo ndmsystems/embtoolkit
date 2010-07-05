@@ -31,6 +31,7 @@ config EMBTK_HAVE_GETTEXT
 	select KEMBTK_EGLIBC_OPTION_EGLIBC_LOCALE_CODE if EMBTK_CLIB_EGLIBC
 	select KEMBTK_UCLIBC_UCLIBC_HAS_WCHAR if EMBTK_CLIB_UCLIBC
 	select KEMBTK_UCLIBC_UCLIBC_HAS_LOCALE if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_SUSV4_LEGACY if EMBTK_CLIB_UCLIBC
 	help
 		GNU `gettext' is an important step for the GNU Translation
 		Project, as it is an asset on which we may build many other
