@@ -1,5 +1,5 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 #
 # \file         gtk.mk
 # \brief	gtk.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
@@ -35,18 +35,16 @@ GTK_INCLUDES = gail-* gtk-*
 GTK_LIBS = gtk-* libgail* libgdk-* libgdk_* libgtk-*
 GTK_PKGCONFIGS = gail*.pc gdk*.pc gtk*.pc
 
-GTK_DEPS :=
+GTK_DEPS := libjpeg_install libpng_install libtiff_install fontconfig_install \
+		glib_install atk_install cairo_install pango_install
 
 ifeq ($(CONFIG_EMBTK_GTK_BACKEND_DIRECTFB),y)
 GTK_BACKEND := --with-gdktarget=directfb --without-x
 GTK_DEPS += directfb_install
 else
 GTK_BACKEND := --with-gdktarget=x11 --with-x
-GTK_DEPS += xserver_install libxext_install libxrender_install
+GTK_DEPS += libx11_install libxext_install libxrender_install
 endif
-
-GTK_DEPS += libjpeg_install libpng_install libtiff_install fontconfig_install \
-		glib_install atk_install cairo_install pango_install
 
 gtk_install: $(GTK_BUILD_DIR)/.installed $(GTK_BUILD_DIR)/.special
 
