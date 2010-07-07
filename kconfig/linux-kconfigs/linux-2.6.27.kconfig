@@ -1,24 +1,25 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         linux-2.6.27.kconfig
 # \brief	linux v2.6.27.x series
-# \author       GAYE Abdoulaye Walsimou <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         Sept 2009
 ################################################################################
 
@@ -27,6 +28,10 @@ choice
 	help
 		Linux v2.6.27.x series exact version to use.
 
+	config EMBTK_LINUX_VERSION_2_6_27_48
+		bool "linux-2.6.27.48"
+	config EMBTK_LINUX_VERSION_2_6_27_47
+		bool "linux-2.6.27.47"
 	config EMBTK_LINUX_VERSION_2_6_27_46
 		bool "linux-2.6.27.46"
 	config EMBTK_LINUX_VERSION_2_6_27_45
@@ -123,6 +128,8 @@ endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "2.6.27.48"		if EMBTK_LINUX_VERSION_2_6_27_48
+	default "2.6.27.47"		if EMBTK_LINUX_VERSION_2_6_27_47
 	default "2.6.27.46"		if EMBTK_LINUX_VERSION_2_6_27_46
 	default "2.6.27.45"		if EMBTK_LINUX_VERSION_2_6_27_45
 	default "2.6.27.44"		if EMBTK_LINUX_VERSION_2_6_27_44

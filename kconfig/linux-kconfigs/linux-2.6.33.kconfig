@@ -1,6 +1,6 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         linux-2.6.33.kconfig
 # \brief	linux v2.6.33.x series
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -28,6 +28,8 @@ choice
 	help
 		Linux v2.6.33.x series exact version to use.
 
+	config EMBTK_LINUX_VERSION_2_6_33_6
+		bool "linux-2.6.33.6"
 	config EMBTK_LINUX_VERSION_2_6_33_5
 		bool "linux-2.6.33.5"
 	config EMBTK_LINUX_VERSION_2_6_33_4
@@ -44,6 +46,7 @@ endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "2.6.33.6"		if EMBTK_LINUX_VERSION_2_6_33_6
 	default "2.6.33.5"		if EMBTK_LINUX_VERSION_2_6_33_5
 	default "2.6.33.4"		if EMBTK_LINUX_VERSION_2_6_33_4
 	default "2.6.33.3"		if EMBTK_LINUX_VERSION_2_6_33_3
