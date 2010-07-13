@@ -1,5 +1,5 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 #
 # \file         libxrender.mk
 # \brief	libxrender.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -34,7 +34,7 @@ LIBXRENDER_INCLUDES = X11/extensions/Xrender.h
 LIBXRENDER_LIBS = libXrender.*
 LIBXRENDER_PKGCONFIGS = xrender.pc
 
-LIBXRENDER_DEPS = libx11_install
+LIBXRENDER_DEPS = renderproto_install libx11_install
 
 libxrender_install: $(LIBXRENDER_BUILD_DIR)/.installed
 
