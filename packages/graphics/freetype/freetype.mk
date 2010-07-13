@@ -1,6 +1,6 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         freetype.mk
 # \brief	freetype.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         October 2009
 ################################################################################
 
@@ -96,10 +96,6 @@ freetype_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(FREETYPE_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(FREETYPE_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FREETYPE_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(FREETYPE_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(FREETYPE_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(FREETYPE_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(FREETYPE_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FREETYPE_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FREETYPE_PKGCONFIGS)
 
