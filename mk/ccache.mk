@@ -1,31 +1,34 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+##
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         ccache.mk
 # \brief	ccache.mk of Embtoolkit. Here we install ccache to speed up
 # \brief	recompilation.
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
 
-CCACHE_VERSION := 2.4
+CCACHE_VERSION := 3.0.1
 CCACHE_SITE := http://samba.org/ftp/ccache
-CCACHE_PACKAGE := ccache-$(CCACHE_VERSION).tar.gz
+CCACHE_PACKAGE := ccache-$(CCACHE_VERSION).tar.bz2
 CCACHE_HOST_BUILD_DIR := $(TOOLS_BUILD)/ccachehost-build
 CCACHE_HOST_DIR := $(HOSTTOOLS)/usr/local/ccachehost
 
@@ -53,7 +56,7 @@ ccache_download:
 
 $(CCACHE_HOST_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(CCACHE_PACKAGE) ...")
-	@tar -C $(TOOLS_BUILD) -xzf $(DOWNLOAD_DIR)/$(CCACHE_PACKAGE)
+	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(CCACHE_PACKAGE)
 	@mkdir -p $(CCACHE_HOST_BUILD_DIR)
 	@touch $@
 
