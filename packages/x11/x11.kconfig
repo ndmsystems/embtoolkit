@@ -50,6 +50,7 @@ endmenu
 
 menu "X windowing system library packages"
 source packages/x11/libfontenc/libfontenc.kconfig
+source packages/x11/libpciaccess/libpciaccess.kconfig
 source packages/x11/libpthreadstubs/libpthreadstubs.kconfig
 source packages/x11/libx11/libx11.kconfig
 source packages/x11/libxau/libxau.kconfig

@@ -126,15 +126,20 @@ include $(EMBTK_ROOT)/packages/x11/libfontenc/libfontenc.mk
 ROOTFS_COMPONENTS_CLEAN += libfontenc_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBFONTENC) += libfontenc_install
 
-#libx11
-include $(EMBTK_ROOT)/packages/x11/libx11/libx11.mk
-ROOTFS_COMPONENTS_CLEAN += libx11_clean
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBX11) += libx11_install
-
 #libpthreadstubs
 include $(EMBTK_ROOT)/packages/x11/libpthreadstubs/libpthreadstubs.mk
 ROOTFS_COMPONENTS_CLEAN += libpthreadstubs_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPTHREADSTUBS) += libpthreadstubs_install
+
+#libpciaccess
+include $(EMBTK_ROOT)/packages/x11/libpciaccess/libpciaccess.mk
+ROOTFS_COMPONENTS_CLEAN += libpciaccess_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPCIACCESS) += libpciaccess_install
+
+#libx11
+include $(EMBTK_ROOT)/packages/x11/libx11/libx11.mk
+ROOTFS_COMPONENTS_CLEAN += libx11_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBX11) += libx11_install
 
 #libxau
 include $(EMBTK_ROOT)/packages/x11/libxau/libxau.mk
