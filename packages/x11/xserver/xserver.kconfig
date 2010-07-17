@@ -24,7 +24,7 @@
 ################################################################################
 
 config EMBTK_HAVE_XSERVER
-	bool "Have xserver (kdrive)"
+	bool "Have X window system server"
 	select EMBTK_HAVE_UTILMACROS
 	select EMBTK_HAVE_BIGREQSPROTO
 	select EMBTK_HAVE_COMPOSITEPROTO
@@ -48,7 +48,28 @@ config EMBTK_HAVE_XSERVER
 	select EMBTK_HAVE_OPENSSL
 	select EMBTK_HAVE_PIXMAN
 	help
-		xserver (actually kdrive)
+		Have a X server in your root file system
+choice
+	prompt "X server variant to install"
+	depends on EMBTK_HAVE_XSERVER
+	help
+		Choose which variant of X server to install
+	config EMBTK_HAVE_XSERVER_KDRIVE
+		bool "kdrive X server: Xfbdev"
+		help
+			KDrive is a small X Window System server implementation.
+			It is commonly used in embedded systems with the need
+			for a very thin X server.
+			Kdriver is almost unmaintained now days, despite the
+			fact it is integrated in the official xorg-server
+			package.
+	config EMBTK_HAVE_XSERVER_XORG
+		bool "xorg-server X server"
+		select KEMBTK_EGLIBC_OPTION_EGLIBC_STREAMS if EMBTK_CLIB_EGLIBC
+		select EMBTK_HAVE_LIBPCIACCESS
+		help
+			Traditional X server found on most Linux distributions.
+endchoice
 choice
 	prompt "xserver version you wish"
 	depends on EMBTK_HAVE_XSERVER

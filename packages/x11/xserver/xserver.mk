@@ -28,11 +28,17 @@ XSERVER_SITE := http://ftp.x.org/pub/individual/xserver
 XSERVER_PACKAGE := xorg-server-$(XSERVER_VERSION).tar.bz2
 XSERVER_BUILD_DIR := $(PACKAGES_BUILD)/xorg-server-$(XSERVER_VERSION)
 
-XSERVER_BINS = Xfbdev
+XSERVER_BINS = Xfbdev X Xorg
 XSERVER_SBINS =
-XSERVER_INCLUDES =
-XSERVER_LIBS = xorg/protocol.txt
-XSERVER_PKGCONFIGS =
+XSERVER_INCLUDES = xorg
+XSERVER_LIBS = xorg
+XSERVER_PKGCONFIGS = xorg-server.pc
+
+ifeq ($(CONFIG_EMBTK_HAVE_XSERVER_KDRIVE),y)
+XSERVER_VARIANT := --enable-kdrive --disable-xorg
+else
+XSERVER_VARIANT := --disable-kdrive --enable-xorg
+endif
 
 XSERVER_DEPS := utilmacros_install bigreqsproto_install compositeproto_install \
 		damageproto_install fixesproto_install fontsproto_install \
@@ -42,15 +48,21 @@ XSERVER_DEPS := utilmacros_install bigreqsproto_install compositeproto_install \
 		xextproto_install xproto_install libxfont_install \
 		libxkbfile_install xtrans_install openssl_install
 
-XSERVER_CONFIGURE_OPTS := --enable-kdrive --with-sha1=libcrypto \
-		--disable-xorg --disable-aiglx --disable-glx-tls --disable-dga \
+ifeq ($(CONFIG_EMBTK_HAVE_XSERVER_XORG),y)
+XSERVER_DEPS += libpciaccess_install
+endif
+
+XSERVER_CONFIGURE_OPTS := $(XSERVER_VARIANT) --with-sha1=libcrypto \
+		--disable-dga --disable-dri --disable-xvmc --disable-fontserver \
 		--disable-xdmcp --disable-xdm-auth-1 --disable-config-hal \
 		--disable-xf86vidmode --disable-xf86bigfont --disable-xnest \
 		--disable-xquartz --disable-xwin --disable-xfake \
 		--disable-install-setuid --disable-xvfb --disable-dmx \
-		--disable-glx --disable-xinerama --disable-xfree86-utils \
-		--disable-screensaver --disable-dri --disable-tcp-transport \
-		--disable-ipv6
+		--disable-glx --disable-aiglx --disable-glx-tls --disable-libdrm \
+		--disable-xinerama --disable-xace --disable-dbe --disable-dpms \
+		--disable-vgahw --disable-xfree86-utils --disable-vbe \
+		--disable-int10-module --disable-xaa --disable-screensaver \
+		--disable-tcp-transport --disable-ipv6 --disable-secure-rpc
 
 ifeq ($(CONFIG_EMBTK_HAVE_XSERVER_WITH_TSLIB),y)
 XSERVER_DEPS += tslib_install
