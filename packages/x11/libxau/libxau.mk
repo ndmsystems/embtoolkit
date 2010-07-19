@@ -1,6 +1,6 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,8 +19,8 @@
 #
 # \file         libxau.mk
 # \brief	libxau.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# \date         March 2010
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         February 2010
 ################################################################################
 
 LIBXAU_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBXAU_VERSION_STRING)))
