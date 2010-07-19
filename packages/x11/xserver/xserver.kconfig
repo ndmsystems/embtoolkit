@@ -91,6 +91,14 @@ config EMBTK_HAVE_XSERVER_WITH_TSLIB
 	depends on EMBTK_HAVE_XSERVER
 	select EMBTK_HAVE_TSLIB
 
+if EMBTK_HAVE_XSERVER_XORG
+comment "Xorg server input drivers"
+source packages/x11/xf86inputevdev/xf86inputevdev.kconfig
+
+comment "Xorg server video drivers"
+source packages/x11/xf86videofbdev/xf86videofbdev.kconfig
+endif
+
 config EMBTK_XSERVER_VERSION_STRING
 	string
 	default "1.8.2"	if EMBTK_XSERVER_VERSION_1_8_2

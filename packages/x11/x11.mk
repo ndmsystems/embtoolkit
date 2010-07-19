@@ -212,7 +212,21 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XTRANS) += xtrans_install
 ##########
 # X server
 ##########
-#kdrive
+#kdrive and Xorg
 include $(EMBTK_ROOT)/packages/x11/xserver/xserver.mk
 ROOTFS_COMPONENTS_CLEAN += xserver_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XSERVER) += xserver_install
+
+# X server input drivers
+########################
+#xf86inputevdev
+include $(EMBTK_ROOT)/packages/x11/xf86inputevdev/xf86inputevdev.mk
+ROOTFS_COMPONENTS_CLEAN += xf86inputevdev_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XF86INPUTEVDEV) += xf86inputevdev_install
+
+# X server video drivers
+########################
+#xf86videofbdev
+include $(EMBTK_ROOT)/packages/x11/xf86videofbdev/xf86videofbdev.mk
+ROOTFS_COMPONENTS_CLEAN += xf86videofbdev_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XF86VIDEOFBDEV) += xf86videofbdev_install
