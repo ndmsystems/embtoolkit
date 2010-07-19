@@ -1,6 +1,6 @@
 ################################################################################
 # Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 # \file         xf86inputevdev.kconfig
 # \brief	xf86inputevdev.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         December 2009
+# \date         July 2010
 ################################################################################
 
 config EMBTK_HAVE_XF86INPUTEVDEV
