@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBXAU_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBXAU_VERSION_STRING)))
-LIBXAU_SITE := http://ftp.x.org/pub/individual/lib
+LIBXAU_SITE := http://xorg.freedesktop.org/archive/individual/lib
 LIBXAU_PACKAGE := libXau-$(LIBXAU_VERSION).tar.bz2
 LIBXAU_BUILD_DIR := $(PACKAGES_BUILD)/libXau-$(LIBXAU_VERSION)
 
