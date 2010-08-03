@@ -29,6 +29,10 @@ choice
 		Here you can choose which Linux kernel headers you
 		you want to use.
 
+	config EMBTK_LINUX_VERSION_2_6_35_X
+		bool "linux-2.6.35.x"
+		help
+		 Use a linux-2.6.35.x version.
 	config EMBTK_LINUX_VERSION_2_6_34_X
 		bool "linux-2.6.34.x"
 		help
@@ -62,6 +66,10 @@ choice
 		help
 		 Use a linux-2.6.27.x version.
 endchoice
+
+if EMBTK_LINUX_VERSION_2_6_35_X
+source kconfig/linux-kconfigs/linux-2.6.35.kconfig
+endif
 
 if EMBTK_LINUX_VERSION_2_6_34_X
 source kconfig/linux-kconfigs/linux-2.6.34.kconfig
