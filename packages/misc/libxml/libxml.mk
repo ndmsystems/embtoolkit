@@ -1,19 +1,20 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         libxml.mk
@@ -61,14 +62,25 @@ $(LIBXML2_BUILD_DIR)/.decompressed:
 
 $(LIBXML2_BUILD_DIR)/.configured:
 	$(Q)cd $(LIBXML2_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) CXX=$(TARGETCXX_CACHED) \
+	CC=$(TARGETCC_CACHED) \
+	CXX=$(TARGETCXX_CACHED) \
+	AR=$(TARGETAR) \
+	RANLIB=$(TARGETRANLIB) \
+	AS=$(CROSS_COMPILE)as \
+	LD=$(TARGETLD) \
+	NM=$(TARGETNM) \
+	STRIP=$(TARGETSTRIP) \
+	OBJDUMP=$(TARGETOBJDUMP) \
+	OBJCOPY=$(TARGETOBJCOPY) \
 	CFLAGS="$(TARGET_CFLAGS)" \
+	CXXFLAGS="$(TARGET_CFLAGS)" \
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
 	CPPFLGAS="-I$(SYSROOT)/usr/include" \
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
+	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --disable-rpath
+	--prefix=/usr --disable-rpath --without-python
 	@touch $@
 
 libxml2_clean:
@@ -76,12 +88,7 @@ libxml2_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBXML2_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBXML2_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXML2_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(LIBXML2_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(LIBXML2_PKGCONFIGS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(LIBXML2_LIBTOOLS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(LIBXML2_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(LIBXML2_PKGCONFIGS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(LIBXML2_LIBTOOLS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXML2_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXML2_PKGCONFIGS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXML2_LIBTOOLS)
 
