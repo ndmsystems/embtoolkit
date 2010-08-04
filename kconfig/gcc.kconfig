@@ -1,34 +1,66 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         gcc.kconfig
 # \brief	gcc.kconfig of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
-choice
-	prompt "Version of gcc you wish"
-	help
-		Here you can choose which version of gcc
-		you want to use
 
+choice
+	prompt "GCC series to use"
+	help
+		Here you can choose which GCC series you want to use.
+
+	config EMBTK_GCC_VERSION_4_5_X
+		bool "gcc-4.5.x"
+	config EMBTK_GCC_VERSION_4_4_X
+		bool "gcc-4.4.x"
+	config EMBTK_GCC_VERSION_4_3_X
+		bool "gcc-4.3.x"
+	config EMBTK_GCC_VERSION_4_2_X
+		bool "gcc-4.2.x"
+	config EMBTK_GCC_VERSION_4_1_X
+		bool "gcc-4.1.x"
+endchoice
+
+# GCC-4.5.x
+choice
+	prompt "Version of gcc-4.5.x you wish"
+	depends on EMBTK_GCC_VERSION_4_5_X
+	help
+		Here you can choose which version of gcc-4.5.x you want to use
+
+	config EMBTK_GCC_VERSION_4_5_1
+		bool "gcc-4.5.1"
 	config EMBTK_GCC_VERSION_4_5_0
 		bool "gcc-4.5.0"
+		depends on EMBTK_OLDPACKAGES
+endchoice
+
+# GCC-4.4.x
+choice
+	prompt "Version of gcc-4.4.x you wish"
+	depends on EMBTK_GCC_VERSION_4_4_X
+	help
+		Here you can choose which version of gcc-4.4.x you want to use
+
 	config EMBTK_GCC_VERSION_4_4_4
 		bool "gcc-4.4.4"
 	config EMBTK_GCC_VERSION_4_4_3
@@ -43,6 +75,15 @@ choice
 		depends on EMBTK_OLDPACKAGES
 		bool "gcc-4.4.1"
 		select EMBTK_GCC_NEED_PATCH
+endchoice
+
+# GCC-4.3.x
+choice
+	prompt "Version of gcc-4.3.x you wish"
+	depends on EMBTK_GCC_VERSION_4_3_X
+	help
+		Here you can choose which version of gcc-4.3.x you want to use
+
 	config EMBTK_GCC_VERSION_4_3_5
 		bool "gcc-4.3.5"
 	config EMBTK_GCC_VERSION_4_3_4
@@ -57,8 +98,26 @@ choice
 		depends on EMBTK_OLDPACKAGES
 		bool "gcc-4.3.2"
 		select EMBTK_GCC_NEED_PATCH
+endchoice
+
+# GCC-4.2.x
+choice
+	prompt "Version of gcc-4.2.x you wish"
+	depends on EMBTK_GCC_VERSION_4_2_X
+	help
+		Here you can choose which version of gcc-4.2.x you want to use
+
 	config EMBTK_GCC_VERSION_4_2_4
 		bool "gcc-4.2.4"
+endchoice
+
+# GCC-4.1.x
+choice
+	prompt "Version of gcc-4.1.x you wish"
+	depends on EMBTK_GCC_VERSION_4_1_X
+	help
+		Here you can choose which version of gcc-4.1.x you want to use
+
 	config EMBTK_GCC_VERSION_4_1_2
 		bool "gcc-4.1.2"
 		select EMBTK_GCC_NEED_PATCH
@@ -130,6 +189,7 @@ config EMBTK_GCC_LANGUAGE_FORTRAN
 
 config EMBTK_GCC_VERSION_STRING
 	string
+	default "4.5.1"		if EMBTK_GCC_VERSION_4_5_1
 	default "4.5.0"		if EMBTK_GCC_VERSION_4_5_0
 	default "4.4.4"		if EMBTK_GCC_VERSION_4_4_4
 	default "4.4.3"		if EMBTK_GCC_VERSION_4_4_3
