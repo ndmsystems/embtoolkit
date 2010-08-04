@@ -19,7 +19,7 @@
 #
 # \file         libxml.mk
 # \brief	libxml.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
