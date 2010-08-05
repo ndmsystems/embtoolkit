@@ -1,24 +1,25 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         glib.mk
 # \brief	glib.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
@@ -92,55 +93,32 @@ $(GLIB_BUILD_DIR)/.configured:
 
 #FIXME: this should be fixed in glib2 project
 $(GLIB_BUILD_DIR)/.patchlibtool:
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	$(Q)sed \
-	-e "s;\/usr\/lib32\/libgobject-2.0.la;$(SYSROOT)\/usr\/lib32\/libgobject-2.0.la;" \
-	-e "s;\/usr\/lib32\/libgmodule-2.0.la;$(SYSROOT)\/usr\/lib32\/libgmodule-2.0.la;" \
-	-e "s;\/usr\/lib32\/libglib-2.0.la;$(SYSROOT)\/usr\/lib32\/libglib-2.0.la;" \
-	< $(SYSROOT)/usr/lib32/libgio-2.0.la > libgio-2.0.la.new; \
-	mv libgio-2.0.la.new $(SYSROOT)/usr/lib32/libgio-2.0.la
+	-e "s;\/usr\/$(LIBDIR)\/libgobject-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libgobject-2.0.la;" \
+	-e "s;\/usr\/$(LIBDIR)\/libgmodule-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libgmodule-2.0.la;" \
+	-e "s;\/usr\/$(LIBDIR)\/libglib-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libglib-2.0.la;" \
+	-e "s;\/usr\/$(LIBDIR)\/libgthread-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libgthread-2.0.la;" \
+	< $(SYSROOT)/usr/$(LIBDIR)/libgio-2.0.la > libgio-2.0.la.new; \
+	mv libgio-2.0.la.new $(SYSROOT)/usr/$(LIBDIR)/libgio-2.0.la
 	$(Q)sed \
-	-e "s;\/usr\/lib32\/libglib-2.0.la;$(SYSROOT)\/usr\/lib32\/libglib-2.0.la;" \
-	< $(SYSROOT)/usr/lib32/libgmodule-2.0.la > libgmodule-2.0.la.new; \
-	mv libgmodule-2.0.la.new $(SYSROOT)/usr/lib32/libgmodule-2.0.la
+	-e "s;\/usr\/$(LIBDIR)\/libglib-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libglib-2.0.la;" \
+	< $(SYSROOT)/usr/$(LIBDIR)/libgmodule-2.0.la > libgmodule-2.0.la.new; \
+	mv libgmodule-2.0.la.new $(SYSROOT)/usr/$(LIBDIR)/libgmodule-2.0.la
 	$(Q)sed \
-	-e "s;\/usr\/lib32\/libglib-2.0.la;$(SYSROOT)\/usr\/lib32\/libglib-2.0.la;" \
-	< $(SYSROOT)/usr/lib32/libgobject-2.0.la > libgobject-2.0.la.new; \
-	mv libgobject-2.0.la.new $(SYSROOT)/usr/lib32/libgobject-2.0.la
+	-e "s;\/usr\/$(LIBDIR)\/libglib-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libglib-2.0.la;" \
+	-e "s;\/usr\/$(LIBDIR)\/libgthread-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libgthread-2.0.la;" \
+	< $(SYSROOT)/usr/$(LIBDIR)/libgobject-2.0.la > libgobject-2.0.la.new; \
+	mv libgobject-2.0.la.new $(SYSROOT)/usr/$(LIBDIR)/libgobject-2.0.la
 	$(Q)sed \
-	-e "s;\/usr\/lib32\/libglib-2.0.la;$(SYSROOT)\/usr\/lib32\/libglib-2.0.la;" \
-	< $(SYSROOT)/usr/lib32/libgthread-2.0.la > libgthread-2.0.la.new; \
-	mv libgthread-2.0.la.new $(SYSROOT)/usr/lib32/libgthread-2.0.la
-else
-	$(Q)sed \
-	-e "s;\/usr\/lib\/libgobject-2.0.la;$(SYSROOT)\/usr\/lib\/libgobject-2.0.la;" \
-	-e "s;\/usr\/lib\/libgmodule-2.0.la;$(SYSROOT)\/usr\/lib\/libgmodule-2.0.la;" \
-	-e "s;\/usr\/lib\/libglib-2.0.la;$(SYSROOT)\/usr\/lib\/libglib-2.0.la;" \
-	< $(SYSROOT)/usr/lib/libgio-2.0.la > libgio-2.0.la.new; \
-	mv libgio-2.0.la.new $(SYSROOT)/usr/lib/libgio-2.0.la
-	$(Q)sed \
-	-e "s;\/usr\/lib\/libglib-2.0.la;$(SYSROOT)\/usr\/lib\/libglib-2.0.la;" \
-	< $(SYSROOT)/usr/lib/libgmodule-2.0.la > libgmodule-2.0.la.new; \
-	mv libgmodule-2.0.la.new $(SYSROOT)/usr/lib/libgmodule-2.0.la
-	$(Q)sed \
-	-e "s;\/usr\/lib\/libglib-2.0.la;$(SYSROOT)\/usr\/lib\/libglib-2.0.la;" \
-	< $(SYSROOT)/usr/lib/libgobject-2.0.la > libgobject-2.0.la.new; \
-	mv libgobject-2.0.la.new $(SYSROOT)/usr/lib/libgobject-2.0.la
-	$(Q)sed \
-	-e "s;\/usr\/lib\/libglib-2.0.la;$(SYSROOT)\/usr\/lib\/libglib-2.0.la;" \
-	< $(SYSROOT)/usr/lib/libgthread-2.0.la > libgthread-2.0.la.new; \
-	mv libgthread-2.0.la.new $(SYSROOT)/usr/lib/libgthread-2.0.la
-endif
+	-e "s;\/usr\/$(LIBDIR)\/libglib-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libglib-2.0.la;" \
+	< $(SYSROOT)/usr/$(LIBDIR)/libgthread-2.0.la > libgthread-2.0.la.new; \
+	mv libgthread-2.0.la.new $(SYSROOT)/usr/$(LIBDIR)/libgthread-2.0.la
 
 glib_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup glib-$(GLIB_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(GLIB_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(GLIB_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(GLIB_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(GLIB_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(GLIB_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(GLIB_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(GLIB_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(GLIB_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(GLIB_PKGCONFIGS)
 
