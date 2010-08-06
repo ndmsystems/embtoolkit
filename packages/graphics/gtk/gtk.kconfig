@@ -65,6 +65,9 @@ choice
 	help
 	 Here you can choose which version of gtk you want to use.
 
+	config  EMBTK_GTK_VERSION_2_20_1
+		bool "gtk+-2.20.1"
+		select EMBTK_ATK_VERSION_1_30_X_AND_GREATER
 	config  EMBTK_GTK_VERSION_2_18_9
 		bool "gtk+-2.18.9"
 	config  EMBTK_GTK_VERSION_2_18_8
@@ -79,6 +82,7 @@ endchoice
 
 config EMBTK_GTK_MAJOR_VERSION_STRING
 	string
+	default "2.20"		if EMBTK_GTK_VERSION_2_20_1
 	default "2.18"		if EMBTK_GTK_VERSION_2_18_9
 	default "2.18"		if EMBTK_GTK_VERSION_2_18_8
 	default "2.18"		if EMBTK_GTK_VERSION_2_18_7
@@ -87,6 +91,7 @@ config EMBTK_GTK_MAJOR_VERSION_STRING
 
 config EMBTK_GTK_VERSION_STRING
 	string
+	default "2.20.1"	if EMBTK_GTK_VERSION_2_20_1
 	default "2.18.9"	if EMBTK_GTK_VERSION_2_18_9
 	default "2.18.8"	if EMBTK_GTK_VERSION_2_18_8
 	default "2.18.7"	if EMBTK_GTK_VERSION_2_18_7
