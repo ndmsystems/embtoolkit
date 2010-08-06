@@ -43,6 +43,7 @@ $(LIBXCOMPOSITE_BUILD_DIR)/.installed: $(LIBXCOMPOSITE_DEPS) download_libxcompos
 	$(LIBXCOMPOSITE_BUILD_DIR)/.decompressed $(LIBXCOMPOSITE_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libxcomposite-$(LIBXCOMPOSITE_VERSION) in your root filesystem...")
+	$(call EMBTK_KILL_LT_RPATH,$(LIBXCOMPOSITE_BUILD_DIR))
 	$(Q)$(MAKE) -C $(LIBXCOMPOSITE_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBXCOMPOSITE_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
