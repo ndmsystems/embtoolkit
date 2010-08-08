@@ -48,17 +48,17 @@ config EMBTK_EGLIBC_SVN_REVISION
 		you can increase this value.
 
 		At EmbToolkit release, eglibc svn revisions are:
-		11028	for eglibc-2.12
+		11187	for eglibc-2.12
 		10690	for eglibc-2.11
 		10152	for eglibc-2.10
 		10153	for eglibc-2.9
-		10850	for eglibc-trunk (development version)
+		11186	for eglibc-trunk (development version)
 
-	default 11028	if EMBTK_EGLIBC_VERSION_2_12
+	default 11187	if EMBTK_EGLIBC_VERSION_2_12
 	default 10690	if EMBTK_EGLIBC_VERSION_2_11
 	default 10152	if EMBTK_EGLIBC_VERSION_2_10
 	default 10153	if EMBTK_EGLIBC_VERSION_2_9
-	default 10850	if EMBTK_EGLIBC_VERSION_TRUNK
+	default 11186	if EMBTK_EGLIBC_VERSION_TRUNK
 
 config EMBTK_EGLIBC_BRANCH_STRING
 	string
