@@ -1,23 +1,62 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         README
-# \brief	README of project
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \brief	README of Embtoolkit
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
+
+ ---------------------------
+| Building and configuring: |
+ ---------------------------
+make xconfig:    Show EmbToolkit configure GUI and let you to
+                 configure your toolchain and your root
+                 filesystem (if selected).
+
+make menuconfig: Same as xconfig but using this time ncurse GUI.
+
+make:            Start building your toolchain and your root
+                 filesystem (if selected) or start xconfig if
+                 you did not configure before.
+
+ -----------
+| Cleaning: |
+ -----------
+make clean:      Remove all built files, but keep downloaded
+                 packages and host tools.
+
+make distclean:  Same as clean, but remove all downloaded
+                 packages, host tools and .config.old files.
+
+ -------------------
+| Packages: Busybox |
+ -------------------
+make busybox_config:
+                 Download busybox (if necessary) and show you a
+                 GUI in order to configure busybox.
+
+ -----------------
+| Root filesystem |
+ -----------------
+make rootfs_build:
+                 if after a first build of your toolchain and
+                 your root filesystem, you change the contents
+                 of the root filesystem, use this target to
+                 rebuild it.
