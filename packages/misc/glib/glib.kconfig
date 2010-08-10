@@ -48,17 +48,20 @@ choice
 	prompt "GLib version you wish"
 	depends on EMBTK_HAVE_GLIB
 	help
-	 Here you can choose which version of GLib you want to use.
+		Here you can choose which version of GLib you want to use.
 
+	config  EMBTK_GLIB_VERSION_2_24_2
+		bool "GLib-2.24.2"
 	config  EMBTK_GLIB_VERSION_2_24_1
 		bool "GLib-2.24.1"
 endchoice
 
 config EMBTK_GLIB_MAJOR_VERSION_STRING
 	string
+	default "2.24"		if EMBTK_GLIB_VERSION_2_24_2
 	default "2.24"		if EMBTK_GLIB_VERSION_2_24_1
 
 config EMBTK_GLIB_VERSION_STRING
 	string
+	default "2.24.2"	if EMBTK_GLIB_VERSION_2_24_2
 	default "2.24.1"	if EMBTK_GLIB_VERSION_2_24_1
-
