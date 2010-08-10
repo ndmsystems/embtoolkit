@@ -81,22 +81,22 @@ config EMBTK_EGLIBC_NEED_PATCH
 	default y
 
 if EMBTK_EGLIBC_VERSION_2_12
-source "kconfig/eglibc-2.12.kconfig"
+source "kconfig/eglibc-kconfigs/eglibc-2.12.kconfig"
 endif
 
 if EMBTK_EGLIBC_VERSION_2_11
-source "kconfig/eglibc-2.11.kconfig"
+source "kconfig/eglibc-kconfigs/eglibc-2.11.kconfig"
 endif
 
 if EMBTK_EGLIBC_VERSION_2_10
-source "kconfig/eglibc-2.10.kconfig"
+source "kconfig/eglibc-kconfigs/eglibc-2.10.kconfig"
 endif
 
 if EMBTK_EGLIBC_VERSION_2_9
-source "kconfig/eglibc-2.9.kconfig"
+source "kconfig/eglibc-kconfigs/eglibc-2.9.kconfig"
 endif
 
 if EMBTK_EGLIBC_VERSION_TRUNK
-source "kconfig/eglibc-trunk.kconfig"
+source "kconfig/eglibc-kconfigs/eglibc-trunk.kconfig"
 endif
 
