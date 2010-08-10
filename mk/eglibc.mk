@@ -39,7 +39,7 @@ else
 EGLIBC_FLOAT_TYPE := --with-fp=yes
 endif
 
-OPTION_GROUPS_FILE = $(EMBTK_ROOT)/mk/eglibc-$(EGLIBC_VERSION)-options.mk
+OPTION_GROUPS_FILE = $(EMBTK_ROOT)/mk/eglibc/eglibc-$(EGLIBC_VERSION)-options.mk
 
 eglibc-headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
 eglibc_install: $(EGLIBC_BUILD_DIR)/.installed
