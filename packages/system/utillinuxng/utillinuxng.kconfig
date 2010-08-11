@@ -17,14 +17,40 @@
 #
 ################################################################################
 #
-# \file         system.mk
-# \brief	system.mk of Embtoolkit
+# \file         utillinuxng.kconfig
+# \brief	utillinuxng.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         July 2010
+# \date         August 2010
 ################################################################################
 
-#DBUS
-source packages/system/dbus/dbus.kconfig
+config EMBTK_HAVE_UTILLINUXNG
+	bool "Have util-linux-ng"
+	help
+		The util-linux-ng is a fork of the original util-linux project.
+		The goal of the util-linux-ng is a transparent and reliable
+		development that follows the Linux kernel and Linux
+		distributions.
+		NOTE:
+		util-linux-ng is only used to have its libuuid, as many of its
+		features are already in busybox.
+choice
+	prompt "util-linux-ng version you wish"
+	depends on EMBTK_HAVE_UTILLINUXNG
+	help
+		Here you can choose which version of util-linux-ng you want to
+		use.
 
-#util-linux-ng
-source packages/system/utillinuxng/utillinuxng.kconfig
+	config  EMBTK_UTILLINUXNG_VERSION_2_18
+		bool "util-linux-ng-2.18"
+endchoice
+
+config EMBTK_UTILLINUXNG_MAJOR_VERSION_STRING
+	string
+	default "v2.18"		if EMBTK_UTILLINUXNG_VERSION_2_18
+
+config EMBTK_UTILLINUXNG_VERSION_STRING
+	string
+	default "2.18"		if EMBTK_UTILLINUXNG_VERSION_2_18
+
+config EMBTK_UTILLINUXNG_NEED_PATCH
+	bool
