@@ -41,11 +41,21 @@ build_jffs2_rootfs:
 	$(call EMBTK_GENERIC_MESSAGE,"Generating JFFS2 root filesystem...")
 	@$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	$(HOSTTOOLS)/usr/sbin/mkfs.jffs2 \
-	-n -e $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE) -r $(ROOTFS) \
+	--eraseblock=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE) \
+	--pad=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE) \
+	--pagesize=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_PAGESIZE) \
+	--cleanmarker=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_CLEANMARKERSIZE) \
+	$(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN), \
+		--little-endian, --big-endian) \
+	-n --root=$(ROOTFS) \
 	-o $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp
 	@$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	$(HOSTTOOLS)/usr/sbin/sumtool \
-	-n -e $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE) \
+	--eraseblock=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE) \
+	--cleanmarker=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_CLEANMARKERSIZE) \
+	$(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN), \
+		--littleendian, --bigendian) \
+	-n -p \
 	-i $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp \
 	-o $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2
 	@rm -rf $(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2.temp

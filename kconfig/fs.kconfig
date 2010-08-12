@@ -45,19 +45,38 @@ choice
 		 Use bzip2 compression algorithm.
 endchoice
 
-#JFFS2 root filesystem image build
+#####################################
+# JFFS2 root filesystem image build #
+#####################################
 config EMBTK_ROOTFS_HAVE_JFFS2
 	bool "Build a JFFS2 root filesystem image"
+	select EMBTK_HOST_HAVE_MTDUTILS
 	help
-	 Build a JFFS2 root filesystem image for your target
-config EMBTK_ROOTFS_HAVE_JFFS2_BLOCKSIZE
+		Build a JFFS2 root filesystem image for your target.
+config EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE
 	depends on EMBTK_ROOTFS_HAVE_JFFS2
 	help
-	 Erase block size to use in KB
-	int "Erase block size to use in KB"
-	default 128
+		Erase block size to use in bytes
+		NOTE: If erase block size is below 4096 the unit is assumed
+		to be KiB
+	int "Erase block size to use in bytes"
+	default 16384
+config EMBTK_ROOTFS_HAVE_JFFS2_PAGESIZE
+	depends on EMBTK_ROOTFS_HAVE_JFFS2
+	help
+		Page size to use in bytes
+	int "Page size to use in bytes"
+	default 4096
+config EMBTK_ROOTFS_HAVE_JFFS2_CLEANMARKERSIZE
+	depends on EMBTK_ROOTFS_HAVE_JFFS2
+	help
+		Size of cleanmarker in bytes (almost always 12)
+	int "Size of cleanmarker in bytes (almost always 12)"
+	default 12
 
-#SQUASHFS root filesystem
+############################
+# SQUASHFS root filesystem #
+############################
 config EMBTK_ROOTFS_HAVE_SQUASHFS
 	bool "Build a squashfs root filesystem image"
 	help

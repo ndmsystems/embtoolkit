@@ -1,97 +1,117 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         mtd-utils.mk
 # \brief	mtd-utils.mk of Embtoolkit.
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         June 2009
 ################################################################################
 
-MTD-UTILS_VERSION := 1.2.0
-MTD-UTILS_SITE := ftp://ftp.infradead.org/pub/mtd-utils
-MTD-UTILS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/mtd-utils
-MTD-UTILS_PACKAGE := mtd-utils-$(MTD-UTILS_VERSION).tar.bz2
-MTD-UTILS_PATCH := mtd-utils.patch
-MTD-UTILS_HOST_BUILD_DIR := $(TOOLS_BUILD)/mtd-utils-build
-MTD-UTILS_TARGET_BUILD_DIR := $(PACKAGES_BUILD)/mtd-utils-build
+MTDUTILS_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_MTDUTILS_VERSION_STRING)))
+MTDUTILS_SITE := ftp://ftp.infradead.org/pub/mtd-utils
+MTDUTILS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/mtd-utils/$(MTDUTILS_VERSION)
+MTDUTILS_PACKAGE := mtd-utils-$(MTDUTILS_VERSION).tar.bz2
+MTDUTILS_HOST_BUILD_DIR := $(TOOLS_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
+MTDUTILS_TARGET_BUILD_DIR := $(PACKAGES_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
 
-MTD-UTILS_BINS := docfdisk flash_erase flash_lock flash_unlock jffs2dump \
-nanddump nftldump rfddump sumtool doc_loadbios flash_eraseall flash_otp_dump \
-ftl_check mkfs.jffs2 nandtest nftl_format rfdformat flashcp flash_info \
-flash_otp_info ftl_format mtd_debug nandwrite recv_image serve_image
+MTDUTILS_SBINS := bin2nand flash_eraseall flash_unlock mkfs.jffs2 nand2bin \
+		nftl_format rfddump ubicrc32 ubimirror ubirmvol docfdisk \
+		flash_info ftl_check mkfs.ubifs nanddump pddcustomize \
+		rfdformat ubicrc32.pl ubimkvol ubirsvol doc_loadbios \
+		flash_lock ftl_format mkpfi nandtest pfi2bin serve_image \
+		ubidetach ubinfo ubiupdatevol flashcp flash_otp_dump \
+		jffs2dump mtd_debug nandwrite pfiflash sumtool ubiformat \
+		ubinize unubi flash_erase flash_otp_info mkbootenv mtdinfo \
+		nftldump recv_image ubiattach ubigen ubirename
 
-mtd-utils_host_install: $(MTD-UTILS_HOST_BUILD_DIR)/.installed
-mtd-utils_target_install: $(MTD-UTILS_TARGET_BUILD_DIR)/.installed
+##############################################
+# mtd-utils for the host development machine #
+##############################################
 
-#mtd-utils for host
-$(MTD-UTILS_HOST_BUILD_DIR)/.installed: zlib_host_install lzo_host_install \
-download_mtd-utils $(MTD-UTILS_HOST_BUILD_DIR)/.decompressed
+MTDUTILS_HOST_DEPS := zlib_host_install lzo_host_install \
+		utillinuxng_host_install
+
+mtdutils_host_install: $(MTDUTILS_HOST_BUILD_DIR)/.installed
+
+$(MTDUTILS_HOST_BUILD_DIR)/.installed:  $(MTDUTILS_HOST_DEPS) \
+	download_mtdutils $(MTDUTILS_HOST_BUILD_DIR)/.decompressed
 	LDFLAGS="-L$(HOSTTOOLS)/usr/local/lib" \
-	CFLAGS="-I. -I./include -I$(HOSTTOOLS)/usr/local/include \
-	-I$(HOSTTOOLS)/usr/include" DESTDIR=$(HOSTTOOLS) CROSS= \
-	$(MAKE) -C $(TOOLS_BUILD)/mtd-utils-$(MTD-UTILS_VERSION) install
+	CPPFLAGS="-I. -I$(HOSTTOOLS)/usr/local/include -I$(HOSTTOOLS)/usr/include" \
+	DESTDIR=$(HOSTTOOLS) \
+	BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR) \
+	$(MAKE) -C $(TOOLS_BUILD)/mtd-utils-$(MTDUTILS_VERSION) install
 	@touch $@
 
-$(MTD-UTILS_HOST_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(MTD-UTILS_PACKAGE)...")
-	@tar -C $(TOOLS_BUILD) -xjvf $(DOWNLOAD_DIR)/$(MTD-UTILS_PACKAGE)
-	cd  $(TOOLS_BUILD)/mtd-utils-$(MTD-UTILS_VERSION); \
-	patch -p1 < $(DOWNLOAD_DIR)/mtd-utils.patch
-	@mkdir -p $(MTD-UTILS_HOST_BUILD_DIR)
+$(MTDUTILS_HOST_BUILD_DIR)/.decompressed:
+	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(MTDUTILS_PACKAGE)...")
+	@tar -C $(TOOLS_BUILD) -xvf $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE)
+ifeq ($(CONFIG_EMBTK_MTDUTILS_NEED_PATCH),y)
+	cd $(MTDUTILS_HOST_BUILD_DIR); \
+	patch -p1 < $(DOWNLOAD_DIR)/mtd-utils-$(MTDUTILS_VERSION).patch
+endif
 	@touch $@
 
-mtd-utils_host_clean:
+mtdutils_host_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"Cleaning mtd-utils in host ...")
-	@if [ -e $(MTD-UTILS_HOST_BUILD_DIR)/.installed ]; then \
-		cd $(HOSTTOOLS)/usr/sbin; rm -rf $(MTD-UTILS_BINS); \
-	fi
 
-#mtd-utils for target
-$(MTD-UTILS_TARGET_BUILD_DIR)/.installed: zlib_target_install \
-lzo_target_install download_mtd-utils $(MTD-UTILS_TARGET_BUILD_DIR)/.decompressed
+########################
+# mtd-utils for target #
+########################
+
+MTDUTILS_DEPS := zlib_target_install lzo_target_install utillinuxng_install
+
+mtdutils_target_install: $(MTDUTILS_TARGET_BUILD_DIR)/.installed
+
+$(MTDUTILS_TARGET_BUILD_DIR)/.installed: $(MTDUTILS_DEPS) download_mtdutils \
+	$(MTDUTILS_TARGET_BUILD_DIR)/.decompressed
 	LDFLAGS="-L$(SYSROOT)/usr/local/lib" \
-	CFLAGS="-I. -I./include -I$(SYSROOT)/usr/local/include \
-	-I$(SYSROOT)/usr/include" DESTDIR=$(SYSROOT) \
+	CPPFLAGS="-I. -I./include -I$(SYSROOT)/usr/local/include -I$(SYSROOT)/usr/include" \
+	BUILDDIR=$(MTDUTILS_TARGET_BUILD_DIR) DESTDIR=$(SYSROOT) \
 	PATH=$(PATH):$(TOOLS)/bin CROSS=$(CROSS_COMPILE) \
-	$(MAKE) -C $(PACKAGES_BUILD)/mtd-utils-$(MTD-UTILS_VERSION) install
+	$(MAKE) -C $(PACKAGES_BUILD)/mtd-utils-$(MTDUTILS_VERSION) install
 	@touch $@
 
-$(MTD-UTILS_TARGET_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(MTD-UTILS_PACKAGE)...")
-	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(MTD-UTILS_PACKAGE)
-	cd  $(PACKAGES_BUILD)/mtd-utils-$(MTD-UTILS_VERSION); \
-	patch -p1 < $(DOWNLOAD_DIR)/mtd-utils.patch
-	@mkdir -p $(MTD-UTILS_TARGET_BUILD_DIR)
+$(MTDUTILS_TARGET_BUILD_DIR)/.decompressed:
+	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(MTDUTILS_PACKAGE)...")
+	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE)
+ifeq ($(CONFIG_EMBTK_MTDUTILS_NEED_PATCH),y)
+	@cd $(MTDUTILS_TARGET_BUILD_DIR); \
+	patch -p1 < $(DOWNLOAD_DIR)/mtd-utils-$(MTDUTILS_VERSION).patch
+endif
 	@touch $@
 
-mtd-utils_target_clean:
+mtdutils_target_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"Cleaning mtd-utils in target ...")
-	@if [ -e $(MTD-UTILS_TARGET_BUILD_DIR)/.installed ]; then \
-		cd $(SYSROOT)/usr/sbin; rm -rf $(MTD-UTILS_BINS); \
-	fi
+	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(MTDUTILS_BINS)
+	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(MTDUTILS_SBINS)
+	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(MTDUTILS_INCLUDES)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(MTDUTILS_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(MTDUTILS_PKGCONFIGS)
 
-download_mtd-utils:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(MTD-UTILS_PACKAGE) \
+download_mtdutils:
+	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(MTDUTILS_PACKAGE) \
 	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(MTD-UTILS_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(MTD-UTILS_PACKAGE) \
-	$(MTD-UTILS_SITE)/$(MTD-UTILS_PACKAGE)
-	@test -e $(DOWNLOAD_DIR)/$(MTD-UTILS_PATCH) || \
-	wget -O $(DOWNLOAD_DIR)/$(MTD-UTILS_PATCH) \
-	$(MTD-UTILS_PATCH_SITE)/$(MTD-UTILS_PATCH)
-
+	@test -e $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE) || \
+	wget -O $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE) \
+	$(MTDUTILS_SITE)/$(MTDUTILS_PACKAGE)
+ifeq ($(CONFIG_EMBTK_MTDUTILS_NEED_PATCH),y)
+	@test -e $(DOWNLOAD_DIR)/mtd-utils-$(MTDUTILS_VERSION).patch || \
+	wget -O $(DOWNLOAD_DIR)/mtd-utils-$(MTDUTILS_VERSION).patch \
+	$(MTDUTILS_PATCH_SITE)/mtd-utils-$(MTDUTILS_VERSION)-*.patch
+endif

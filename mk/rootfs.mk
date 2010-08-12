@@ -42,8 +42,7 @@ ROOTFS_HOSTTOOLS-y += makedevs_install fakeroot_install pkgconfig_install
 FILESYSTEMS-$(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO) += build_initramfs_archive
 
 #Does jffs2 filesystem selected?
-ROOTFS_HOSTTOOLS-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += mtd-utils_host_install
-ROOTFS_HOSTTOOLS_CLEAN-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += mtd-utils_host_clean
+ROOTFS_HOSTTOOLS-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += mtdutils_host_install
 FILESYSTEMS-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += build_jffs2_rootfs
 
 #Does squashfs filesystem selected?
