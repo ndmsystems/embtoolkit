@@ -1,5 +1,5 @@
 ################################################################################
-# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Embtoolkit
 # Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
