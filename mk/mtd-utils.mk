@@ -82,6 +82,7 @@ $(MTDUTILS_TARGET_BUILD_DIR)/.installed: $(MTDUTILS_DEPS) download_mtdutils \
 	$(MTDUTILS_TARGET_BUILD_DIR)/.decompressed
 	LDFLAGS="-L$(SYSROOT)/usr/local/lib" \
 	CPPFLAGS="-I. -I./include -I$(SYSROOT)/usr/local/include -I$(SYSROOT)/usr/include" \
+	CFLAGS="$(TARGET_CFLAGS)" \
 	BUILDDIR=$(MTDUTILS_TARGET_BUILD_DIR) DESTDIR=$(SYSROOT) \
 	PATH=$(PATH):$(TOOLS)/bin CROSS=$(CROSS_COMPILE) \
 	$(MAKE) -C $(PACKAGES_BUILD)/mtd-utils-$(MTDUTILS_VERSION) install
