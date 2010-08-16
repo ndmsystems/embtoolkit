@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         pixman.kconfig
 # \brief	pixman.kconfig of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
@@ -33,6 +33,8 @@ choice
 	help
 	 Here you can choose which version of pixman you want to use.
 
+	config  EMBTK_PIXMAN_VERSION_0_18_4
+		bool "pixman-0.18.4"
 	config  EMBTK_PIXMAN_VERSION_0_18_2
 		bool "pixman-0.18.2"
 	config  EMBTK_PIXMAN_VERSION_0_18_1
@@ -49,6 +51,7 @@ endchoice
 
 config EMBTK_PIXMAN_VERSION_STRING
 	string
+	default "0.18.4"	if EMBTK_PIXMAN_VERSION_0_18_4
 	default "0.18.2"	if EMBTK_PIXMAN_VERSION_0_18_2
 	default "0.18.1"	if EMBTK_PIXMAN_VERSION_0_18_1
 	default "0.18.0"	if EMBTK_PIXMAN_VERSION_0_18_0
