@@ -25,6 +25,9 @@
 
 config EMBTK_HAVE_UTILLINUXNG
 	bool "Have util-linux-ng"
+	select KEMBTK_UCLIBC_UCLIBC_HAS_PROGRAM_INVOCATION_NAME \
+		if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_HAS___PROGNAME if EMBTK_CLIB_UCLIBC
 	help
 		The util-linux-ng is a fork of the original util-linux project.
 		The goal of the util-linux-ng is a transparent and reliable
