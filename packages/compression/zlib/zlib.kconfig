@@ -17,37 +17,34 @@
 #
 ################################################################################
 #
-# \file         mtdutils.kconfig
-# \brief	mtdutils.kconfig of Embtoolkit.
+# \file         zlib.kconfig
+# \brief	zlib.kconfig of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         August 2010
 ################################################################################
 
-config EMBTK_HOST_HAVE_MTDUTILS
-	bool
-	select EMBTK_HAVE_UTILLINUXNG
-	select EMBTK_HOST_HAVE_ZLIB
+config EMBTK_HAVE_ZLIB
+	bool "Have zlib in target"
 	help
-		mtd-utils intented to run on the host development machine.
-choice
-	prompt "mtd-utils version used"
-	depends on EMBTK_HOST_HAVE_MTDUTILS || EMBTK_ROOTFS_HAVE_MTDUTILS
-	help
-		mtd-utils version used
-		NOTE: This version of mtd-utils is patched to fix various issue,
-		these patches come from mtd-utils git repository.
+		zlib is a compression library.
 
-	config EMBTK_MTDUTILS_VERSION_1_3_1
-		bool "mtd-utils-1.3.1"
-		select EMBTK_MTDUTILS_NEED_PATCH
-		help
-			mtd-utils-1.3.1
+config EMBTK_HOST_HAVE_ZLIB
+	bool
+	help
+		build zlib for the host development machine.
+choice
+	prompt "zlib version used"
+	depends on EMBTK_HAVE_ZLIB || EMBTK_HOST_HAVE_ZLIB
+	help
+		zlib version used
+
+	config EMBTK_ZLIB_VERSION_1_2_5
+		bool "zlib-1.2.5"
 endchoice
 
-config EMBTK_MTDUTILS_VERSION_STRING
-	string
-	default "1.3.1"		if EMBTK_MTDUTILS_VERSION_1_3_1
-
-config EMBTK_MTDUTILS_NEED_PATCH
+config EMBTK_ZLIB_NEED_PATCH
 	bool
 
+config EMBTK_ZLIB_VERSION_STRING
+	string
+	default "1.2.5"		if EMBTK_ZLIB_VERSION_1_2_5

@@ -28,8 +28,6 @@ HOSTTOOLS_COMPONENTS-y :=
 ################################################################################
 #################### Common include for target and host ########################
 ################################################################################
-
-include $(EMBTK_ROOT)/mk/zlib.mk
 include $(EMBTK_ROOT)/mk/lzo.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
 include $(EMBTK_ROOT)/mk/termcap.mk
@@ -55,10 +53,9 @@ include $(EMBTK_ROOT)/mk/strace.mk
 
 # Flash manipulation tools: mtd-utils
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS) += mtdutils_target_install
-ROOTFS_COMPONENTS_CLEAN += mtdutils_target_clean
 
 #Compression packages
-ROOTFS_COMPONENTS_CLEAN += zlib_target_clean
+include $(EMBTK_ROOT)/packages/compression/compression.mk
 
 # Graphics packages
 include $(EMBTK_ROOT)/packages/graphics/graphics.mk
@@ -83,6 +80,9 @@ include $(EMBTK_ROOT)/packages/misc/misc.mk
 #Busybox
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_BB) += busybox_install
 include $(EMBTK_ROOT)/packages/busybox/busybox.mk
+
+#Clean for all unselected packages
+ROOTFS_COMPONENTS_CLEAN := $(subst install,clean,$(ROOTFS_COMPONENTS-))
 
 ################################################################################
 ########################## Packages for HOST MACHINE ###########################

@@ -25,7 +25,6 @@
 
 #lua
 include $(EMBTK_ROOT)/packages/scripting-languages/lua/lua.mk
-ROOTFS_COMPONENTS_CLEAN += lua_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LUA) += lua_install
 
 #microperl

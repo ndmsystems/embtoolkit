@@ -57,6 +57,9 @@ $(GDB_TARGET_BUILD_DIR)/.configured:
 	--target=$(STRICT_GNU_TARGET) --prefix=$(SYSROOT)/usr --disable-werror
 	@touch $@
 
+gdb_target_clean:
+	$(call EMBTK_GENERIC_MESSAGE,"Clean gdb for target if necessary...")
+
 #gdb for host
 $(GDB_HOST_BUILD_DIR)/.installed: download_gdb decompress_gdb \
 $(GDB_HOST_BUILD_DIR)/.configured

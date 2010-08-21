@@ -24,41 +24,33 @@
 
 #expat
 include $(EMBTK_ROOT)/packages/misc/expat/expat.mk
-ROOTFS_COMPONENTS_CLEAN += expat_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_EXPAT) += expat_install
 
 #gettext
 include $(EMBTK_ROOT)/packages/misc/gettext/gettext.mk
-ROOTFS_COMPONENTS_CLEAN += gettext_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GETTEXT) += gettext_install
 
 #GLib
 include $(EMBTK_ROOT)/packages/misc/glib/glib.mk
-ROOTFS_COMPONENTS_CLEAN += glib_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GLIB) += glib_install
 
 #libelf
 include $(EMBTK_ROOT)/packages/misc/libelf/libelf.mk
-ROOTFS_COMPONENTS_CLEAN += libelf_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBELF) += libelf_install
 
 #libxml2
 include $(EMBTK_ROOT)/packages/misc/libxml/libxml.mk
-ROOTFS_COMPONENTS_CLEAN += libxml2_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXML2) += libxml2_install
 
 #ncurses
 include $(EMBTK_ROOT)/packages/misc/ncurses/ncurses.mk
-ROOTFS_COMPONENTS_CLEAN += ncurses_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_NCURSES) += ncurses_install
 
 #Pango
 include $(EMBTK_ROOT)/packages/misc/pango/pango.mk
-ROOTFS_COMPONENTS_CLEAN += pango_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_PANGO) += pango_install
 
 #tslib
 include $(EMBTK_ROOT)/packages/misc/tslib/tslib.mk
-ROOTFS_COMPONENTS_CLEAN += tslib_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_TSLIB) += tslib_install
 

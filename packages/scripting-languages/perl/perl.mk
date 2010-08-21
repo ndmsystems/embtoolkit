@@ -66,3 +66,5 @@ ifeq ($(CONFIG_EMBTK_HAVE_MICROPERL),y)
 endif
 	@touch $@
 
+microperl_clean:
+	$(call EMBTK_GENERIC_MESSAGE,"Clean microperl for target...")

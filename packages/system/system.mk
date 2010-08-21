@@ -25,9 +25,8 @@
 
 #dbus
 include $(EMBTK_ROOT)/packages/system/dbus/dbus.mk
-ROOTFS_COMPONENTS_CLEAN += dbus_clean
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_DBUS) += dbus_install
 
 #util-linux-ng
 include $(EMBTK_ROOT)/packages/system/utillinuxng/utillinuxng.mk
-ROOTFS_COMPONENTS_CLEAN += utillinuxng_clean
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_UTILLINUXNG) += utillinuxng_install

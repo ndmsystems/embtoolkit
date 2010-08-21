@@ -25,7 +25,7 @@
 
 config EMBTK_HAVE_LIBPNG
 	bool "Have libpng"
-	select EMBTK_HAVE_ZLIB_TARGET
+	select EMBTK_HAVE_ZLIB
 	help
 	 libpng is the reference library for use in applications that read,
 	 create, and manipulate PNG (Portable Network Graphics) raster image

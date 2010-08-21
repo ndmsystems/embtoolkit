@@ -1,48 +1,40 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         zlib.mk
 # \brief	zlib.mk of Embtoolkit.
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         June 2009
 ################################################################################
 
-ZLIB_VERSION := 1.2.5
+ZLIB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_ZLIB_VERSION_STRING)))
 ZLIB_SITE := http://www.gzip.org/zlib
-ZLIB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/zlib/patches
+ZLIB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/zlib/$(ZLIB_VERSION)
 ZLIB_PACKAGE := zlib-$(ZLIB_VERSION).tar.bz2
 ZLIB_HOST_BUILD_DIR := $(TOOLS_BUILD)/zlib-$(ZLIB_VERSION)
 ZLIB_TARGET_BUILD_DIR := $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)
 
+########################
+# zlib on host machine #
+########################
 zlib_host_install: $(ZLIB_HOST_BUILD_DIR)/.installed
 
-ZLIB_TARGET_BINS =
-ZLIB_TARGET_SBINS =
-ZLIB_TARGET_INCLUDES = zconf.h zlib.h
-ZLIB_TARGET_LIBS = libz.*
-ZLIB_TARGET_PKGCONFIGS = zlib.pc
-
-ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
-ZLIB_TARGET_LINUX_ARCH := --64
-endif
-zlib_target_install: $(ZLIB_TARGET_BUILD_DIR)/.installed
-
-#zlib on host machine
 $(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib \
 	$(ZLIB_HOST_BUILD_DIR)/.decompressed $(ZLIB_HOST_BUILD_DIR)/.configured
 	@$(MAKE) -C $(ZLIB_HOST_BUILD_DIR)
@@ -61,7 +53,23 @@ $(ZLIB_HOST_BUILD_DIR)/.configured:
 	./configure --prefix=$(HOSTTOOLS)/usr
 	@touch $@
 
-#zlib on target machine
+zlib_host_clean:
+
+##########################
+# zlib on target machine #
+##########################
+ZLIB_TARGET_BINS =
+ZLIB_TARGET_SBINS =
+ZLIB_TARGET_INCLUDES = zconf.h zlib.h
+ZLIB_TARGET_LIBS = libz.*
+ZLIB_TARGET_PKGCONFIGS = zlib.pc
+
+ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
+ZLIB_TARGET_LINUX_ARCH := --64
+endif
+
+zlib_target_install: $(ZLIB_TARGET_BUILD_DIR)/.installed
+
 $(ZLIB_TARGET_BUILD_DIR)/.installed: download_zlib \
 	$(ZLIB_TARGET_BUILD_DIR)/.decompressed \
 	$(ZLIB_TARGET_BUILD_DIR)/.configured
@@ -76,6 +84,10 @@ $(ZLIB_TARGET_BUILD_DIR)/.installed: download_zlib \
 $(ZLIB_TARGET_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(ZLIB_PACKAGE)...")
 	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(ZLIB_PACKAGE)
+ifeq ($(CONFIG_EMBTK_ZLIB_NEED_PATCH),y)
+	@cd $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION); \
+	patch -p1 < $(DOWNLOAD_DIR)/zlib-$(ZLIB_VERSION).patch
+endif
 	@touch $@
 
 $(ZLIB_TARGET_BUILD_DIR)/.configured:
@@ -108,10 +120,16 @@ zlib_target_clean:
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(ZLIB_TARGET_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(ZLIB_TARGET_PKGCONFIGS)
 
+##########
+# Common #
+##########
 
 #zlib download
 download_zlib:
 	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(ZLIB_PACKAGE) if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(ZLIB_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(ZLIB_PACKAGE) $(ZLIB_SITE)/$(ZLIB_PACKAGE)
-
+ifeq ($(CONFIG_EMBTK_ZLIB_NEED_PATCH),y)
+	@cd $(PACKAGES_BUILD)/foo-$(ZLIB_VERSION); \
+	patch -p1 < $(DOWNLOAD_DIR)/zlib-$(ZLIB_VERSION).patch
+endif
