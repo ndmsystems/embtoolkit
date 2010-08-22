@@ -48,7 +48,9 @@ XEXTPROTO_INCLUDES = X11/extensions/ag.h X11/extensions/cupproto.h \
 XEXTPROTO_LIBS =
 XEXTPROTO_PKGCONFIGS = xextproto.pc
 
-xextproto_install: $(XEXTPROTO_BUILD_DIR)/.installed
+xextproto_install:
+	@test -e $(XEXTPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(XEXTPROTO_BUILD_DIR)/.installed
 
 $(XEXTPROTO_BUILD_DIR)/.installed: download_xextproto \
 	$(XEXTPROTO_BUILD_DIR)/.decompressed $(XEXTPROTO_BUILD_DIR)/.configured
@@ -100,10 +102,7 @@ xextproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XEXTPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XEXTPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XEXTPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(XEXTPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(XEXTPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(XEXTPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(XEXTPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XEXTPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XEXTPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(XEXTPROTO_BUILD_DIR)
 

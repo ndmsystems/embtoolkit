@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         xtrans.mk
 # \brief	xtrans.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -34,13 +34,9 @@ XTRANS_INCLUDES = X11/xtrans
 XTRANS_LIBS =
 XTRANS_PKGCONFIGS =
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-xtrans_install: $(XTRANS_BUILD_DIR)/.installed
+xtrans_install:
+	@test -e $(XTRANS_BUILD_DIR)/.installed || \
+	$(MAKE) $(XTRANS_BUILD_DIR)/.installed
 
 $(XTRANS_BUILD_DIR)/.installed: download_xtrans \
 	$(XTRANS_BUILD_DIR)/.decompressed $(XTRANS_BUILD_DIR)/.configured
@@ -89,14 +85,11 @@ $(XTRANS_BUILD_DIR)/.configured:
 	@touch $@
 
 xtrans_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xtrans-$(XTRANS_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup xtrans...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XTRANS_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XTRANS_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XTRANS_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(XTRANS_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(XTRANS_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(XTRANS_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(XTRANS_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XTRANS_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XTRANS_PKGCONFIGS)
+	$(Q)-rm -rf $(XTRANS_BUILD_DIR)
 

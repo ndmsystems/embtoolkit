@@ -1,24 +1,25 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         xkeyboardconfig.mk
 # \brief	xkeyboardconfig.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -35,7 +36,10 @@ XKEYBOARDCONFIG_PKGCONFIGS =
 
 XKEYBOARDCONFIG_DEPS = xkbcomp_install
 
-xkeyboardconfig_install: $(XKEYBOARDCONFIG_BUILD_DIR)/.installed
+xkeyboardconfig_install:
+	@test -e $(XKEYBOARDCONFIG_BUILD_DIR)/.installed || \
+	$(MAKE) $(XKEYBOARDCONFIG_BUILD_DIR)/.installed
+	$(MAKE) $(XKEYBOARDCONFIG_BUILD_DIR)/.special
 
 $(XKEYBOARDCONFIG_BUILD_DIR)/.installed: $(XKEYBOARDCONFIG_DEPS) \
 	download_xkeyboardconfig $(XKEYBOARDCONFIG_BUILD_DIR)/.decompressed \
@@ -46,8 +50,6 @@ $(XKEYBOARDCONFIG_BUILD_DIR)/.installed: $(XKEYBOARDCONFIG_DEPS) \
 	$(Q)$(MAKE) -C $(XKEYBOARDCONFIG_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
-	$(Q)-mkdir -p $(ROOTFS)/usr/share/X11
-	$(Q)-cp -R $(SYSROOT)/usr/share/X11/xkb $(ROOTFS)/usr/share/X11/
 	@touch $@
 
 download_xkeyboardconfig:
@@ -86,10 +88,18 @@ $(XKEYBOARDCONFIG_BUILD_DIR)/.configured:
 	@touch $@
 
 xkeyboardconfig_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xkeyboardconfig-$(XKEYBOARDCONFIG_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup xkeyboardconfig...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XKEYBOARDCONFIG_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XKEYBOARDCONFIG_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XKEYBOARDCONFIG_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XKEYBOARDCONFIG_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XKEYBOARDCONFIG_PKGCONFIGS)
+	$(Q)-rm -rf $(XKEYBOARDCONFIG_BUILD_DIR)
 
+.PHONY: $(XKEYBOARDCONFIG_BUILD_DIR)/.special
+
+$(XKEYBOARDCONFIG_BUILD_DIR)/.special:
+	$(Q)-mkdir -p $(ROOTFS)/usr/share
+	$(Q)-mkdir -p $(ROOTFS)/usr/share/X11
+	$(Q)-cp -R $(SYSROOT)/usr/share/X11/xkb $(ROOTFS)/usr/share/X11/
+	@touch $@

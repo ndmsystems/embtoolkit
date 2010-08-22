@@ -36,7 +36,9 @@ VIDEOPROTO_INCLUDES =	X11/extensions/vldXvMC.h X11/extensions/Xv.h \
 VIDEOPROTO_LIBS =
 VIDEOPROTO_PKGCONFIGS = videoproto.pc
 
-videoproto_install: $(VIDEOPROTO_BUILD_DIR)/.installed
+videoproto_install:
+	@test -e $(VIDEOPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(VIDEOPROTO_BUILD_DIR)/.installed
 
 $(VIDEOPROTO_BUILD_DIR)/.installed: download_videoproto \
 	$(VIDEOPROTO_BUILD_DIR)/.decompressed $(VIDEOPROTO_BUILD_DIR)/.configured
@@ -88,10 +90,7 @@ videoproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(VIDEOPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(VIDEOPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(VIDEOPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(VIDEOPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(VIDEOPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(VIDEOPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(VIDEOPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(VIDEOPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(VIDEOPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(VIDEOPROTO_BUILD_DIR)
 

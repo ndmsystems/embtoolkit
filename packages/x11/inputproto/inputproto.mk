@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         inputproto.mk
 # \brief	inputproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
@@ -35,13 +35,9 @@ INPUTPROTO_INCLUDES = X11/extensions/XI2.h X11/extensions/XI2proto.h \
 INPUTPROTO_LIBS =
 INPUTPROTO_PKGCONFIGS = inputproto.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-inputproto_install: $(INPUTPROTO_BUILD_DIR)/.installed
+inputproto_install:
+	@test -e $(INPUTPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(INPUTPROTO_BUILD_DIR)/.installed
 
 $(INPUTPROTO_BUILD_DIR)/.installed: download_inputproto \
 	$(INPUTPROTO_BUILD_DIR)/.decompressed $(INPUTPROTO_BUILD_DIR)/.configured
@@ -93,10 +89,7 @@ inputproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(INPUTPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(INPUTPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(INPUTPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(INPUTPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(INPUTPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(INPUTPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(INPUTPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(INPUTPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(INPUTPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(INPUTPROTO_BUILD_DIR)
 

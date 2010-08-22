@@ -35,7 +35,9 @@ LIBXML2_LIBS = libxml2* xml2Conf.sh
 LIBXML2_PKGCONFIGS = libxml*.pc
 LIBXML2_LIBTOOLS = libxml2.la
 
-libxml2_install: $(LIBXML2_BUILD_DIR)/.installed
+libxml2_install:
+	@test -e $(LIBXML2_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBXML2_BUILD_DIR)/.installed
 
 $(LIBXML2_BUILD_DIR)/.installed: download_libxml2 \
 	$(LIBXML2_BUILD_DIR)/.decompressed $(LIBXML2_BUILD_DIR)/.configured
@@ -91,4 +93,5 @@ libxml2_clean:
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXML2_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXML2_PKGCONFIGS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXML2_LIBTOOLS)
+	$(Q)-rm -rf $(LIBXML2_BUILD_DIR)
 

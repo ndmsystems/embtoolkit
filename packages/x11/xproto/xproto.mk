@@ -37,13 +37,9 @@ XPROTO_INCLUDES = X11/keysymdef.h X11/Xalloca.h X11/Xatom.h X11/XF86keysym.h \
 XPROTO_LIBS =
 XPROTO_PKGCONFIGS = xproto.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-xproto_install: $(XPROTO_BUILD_DIR)/.installed
+xproto_install:
+	@test -e $(XPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(XPROTO_BUILD_DIR)/.installed
 
 $(XPROTO_BUILD_DIR)/.installed: download_xproto \
 	$(XPROTO_BUILD_DIR)/.decompressed $(XPROTO_BUILD_DIR)/.configured
@@ -91,14 +87,11 @@ $(XPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 xproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xproto-$(XPROTO_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup xproto...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(XPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(XPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(XPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(XPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(XPROTO_BUILD_DIR)
 

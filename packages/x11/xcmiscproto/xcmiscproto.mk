@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         xcmiscproto.mk
 # \brief	xcmiscproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -34,13 +34,9 @@ XCMISCPROTO_INCLUDES = X11/extensions/xcmiscproto.h X11/extensions/xcmiscstr.h
 XCMISCPROTO_LIBS =
 XCMISCPROTO_PKGCONFIGS = xcmiscproto.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-xcmiscproto_install: $(XCMISCPROTO_BUILD_DIR)/.installed
+xcmiscproto_install:
+	@test -e $(XCMISCPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(XCMISCPROTO_BUILD_DIR)/.installed
 
 $(XCMISCPROTO_BUILD_DIR)/.installed: download_xcmiscproto \
 	$(XCMISCPROTO_BUILD_DIR)/.decompressed $(XCMISCPROTO_BUILD_DIR)/.configured
@@ -92,10 +88,7 @@ xcmiscproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XCMISCPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XCMISCPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XCMISCPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(XCMISCPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(XCMISCPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(XCMISCPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(XCMISCPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XCMISCPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XCMISCPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(XCMISCPROTO_BUILD_DIR)
 

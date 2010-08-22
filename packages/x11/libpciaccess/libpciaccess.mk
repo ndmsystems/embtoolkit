@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 # \file         libpciaccess.mk
 # \brief	libpciaccess.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         December 2009
+# \date         March 2010
 ################################################################################
 
 LIBPCIACCESS_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBPCIACCESS_VERSION_STRING)))
@@ -37,7 +37,9 @@ LIBPCIACCESS_PKGCONFIGS = pciaccess.pc
 
 LIBPCIACCESS_DEPS =
 
-libpciaccess_install: $(LIBPCIACCESS_BUILD_DIR)/.installed
+libpciaccess_install:
+	@test -e $(LIBPCIACCESS_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBPCIACCESS_BUILD_DIR)/.installed
 
 $(LIBPCIACCESS_BUILD_DIR)/.installed: $(LIBPCIACCESS_DEPS) \
 	download_libpciaccess $(LIBPCIACCESS_BUILD_DIR)/.decompressed \
@@ -96,10 +98,11 @@ $(LIBPCIACCESS_BUILD_DIR)/.configured:
 	@touch $@
 
 libpciaccess_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libpciaccess-$(LIBPCIACCESS_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup libpciaccess...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBPCIACCESS_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBPCIACCESS_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBPCIACCESS_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBPCIACCESS_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBPCIACCESS_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBPCIACCESS_BUILD_DIR)
 

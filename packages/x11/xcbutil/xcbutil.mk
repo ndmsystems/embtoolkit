@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 #
 # \file         xcbutil.mk
 # \brief	xcbutil.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2009
 ################################################################################
 
@@ -42,7 +42,9 @@ XCBUTIL_PKGCONFIGS = xcb-atom.pc xcb-aux.pc xcb-event.pc xcb-icccm.pc \
 
 XCBUTIL_DEPS = libxcb_install
 
-xcbutil_install: $(XCBUTIL_BUILD_DIR)/.installed
+xcbutil_install:
+	@test -e $(XCBUTIL_BUILD_DIR)/.installed || \
+	$(MAKE) $(XCBUTIL_BUILD_DIR)/.installed
 
 $(XCBUTIL_BUILD_DIR)/.installed: $(XCBUTIL_DEPS) download_xcbutil \
 	$(XCBUTIL_BUILD_DIR)/.decompressed $(XCBUTIL_BUILD_DIR)/.configured
@@ -97,6 +99,7 @@ xcbutil_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XCBUTIL_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XCBUTIL_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XCBUTIL_PKGCONFIGS)
+	$(Q)-rm -rf $(XCBUTIL_BUILD_DIR)
 
 $(XCBUTIL_BUILD_DIR)/.patchlibtool:
 	@XCBUTIL_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \

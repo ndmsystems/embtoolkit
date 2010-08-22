@@ -35,12 +35,15 @@ PANGO_INCLUDES = pango*
 PANGO_LIBS = pango-* pango* libpango*
 PANGO_PKGCONFIGS = pango*.pc
 
-pango_install: $(PANGO_BUILD_DIR)/.installed $(PANGO_BUILD_DIR)/.special
+PANGO_DEPS := glib_install fontconfig_install cairo_install
 
-$(PANGO_BUILD_DIR)/.installed: $(GLIB_BUILD_DIR)/.installed \
-	$(FONTCONFIG_BUILD_DIR)/.installed $(CAIRO_BUILD_DIR)/.installed \
-	download_pango $(PANGO_BUILD_DIR)/.decompressed \
-	$(PANGO_BUILD_DIR)/.configured
+pango_install:
+	@test -e $(PANGO_BUILD_DIR)/.installed || \
+	$(MAKE) $(PANGO_BUILD_DIR)/.installed
+	$(MAKE) $(PANGO_BUILD_DIR)/.special
+
+$(PANGO_BUILD_DIR)/.installed: $(PANGO_DEPS) download_pango \
+	$(PANGO_BUILD_DIR)/.decompressed $(PANGO_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	pango-$(PANGO_VERSION) in your root filesystem...")
 	$(call EMBTK_KILL_LT_RPATH, $(PANGO_BUILD_DIR))
@@ -110,4 +113,5 @@ pango_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(PANGO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(PANGO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(PANGO_PKGCONFIGS)
+	$(Q)-rm -rf $(PANGO_BUILD_DIR)
 

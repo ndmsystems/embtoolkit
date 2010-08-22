@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,7 +47,10 @@ else
 OPENSSL_LINUX_TARGET := linux-generic32
 endif
 
-openssl_install: $(OPENSSL_BUILD_DIR)/.installed
+openssl_install:
+	@test -e $(OPENSSL_BUILD_DIR)/.installed || \
+	$(MAKE) $(OPENSSL_BUILD_DIR)/.installed
+	$(MAKE) $(OPENSSL_BUILD_DIR)/.special
 
 $(OPENSSL_BUILD_DIR)/.installed: download_openssl \
 	$(OPENSSL_BUILD_DIR)/.decompressed $(OPENSSL_BUILD_DIR)/.configured
@@ -61,7 +64,6 @@ else
 	$(Q)$(MAKE) -C $(OPENSSL_BUILD_DIR) \
 	INSTALL_PREFIX=$(SYSROOT)/ LIBDIR=lib MANDIR=/usr/share/man install
 endif
-	$(Q)-cp -R $(SYSROOT)/etc/ssl $(ROOTFS)/etc/
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	@touch $@
@@ -99,11 +101,13 @@ openssl_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(OPENSSL_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(OPENSSL_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(OPENSSL_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(OPENSSL_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(OPENSSL_PKGCONFIGS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(OPENSSL_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(OPENSSL_PKGCONFIGS)
 	$(Q)-cd $(SYSROOT)/etc; rm -rf $(OPENSSL_ETC)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(OPENSSL_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(OPENSSL_PKGCONFIGS)
-endif
+	$(Q)-rm -rf $(OPENSSL_BUILD_DIR)
 
+.PHONY: $(OPENSSL_BUILD_DIR)/.special
+
+$(OPENSSL_BUILD_DIR)/.special:
+	$(Q)-cp -R $(SYSROOT)/etc/ssl $(ROOTFS)/etc/
+	@touch $@

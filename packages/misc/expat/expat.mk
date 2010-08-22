@@ -37,7 +37,9 @@ EXPAT_PKGCONFIGS =
 
 EXPAT_DEPS =
 
-expat_install: $(EXPAT_BUILD_DIR)/.installed
+expat_install:
+	@test -e $(EXPAT_BUILD_DIR)/.installed || \
+	$(MAKE) $(EXPAT_BUILD_DIR)/.installed
 
 $(EXPAT_BUILD_DIR)/.installed: $(EXPAT_DEPS) download_expat \
 	$(EXPAT_BUILD_DIR)/.decompressed $(EXPAT_BUILD_DIR)/.configured
@@ -94,10 +96,11 @@ $(EXPAT_BUILD_DIR)/.configured:
 	@touch $@
 
 expat_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup expat-$(EXPAT_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup expat...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(EXPAT_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(EXPAT_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(EXPAT_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(EXPAT_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(EXPAT_PKGCONFIGS)
+	$(Q)-rm -rf $(EXPAT_BUILD_DIR)
 

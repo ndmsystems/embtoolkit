@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         randrproto.mk
 # \brief	randrproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         February 2010
 ################################################################################
 
@@ -34,13 +34,9 @@ RANDRPROTO_INCLUDES = X11/extensions/randr.h X11/extensions/randrproto.h
 RANDRPROTO_LIBS =
 RANDRPROTO_PKGCONFIGS = randrproto.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-randrproto_install: $(RANDRPROTO_BUILD_DIR)/.installed
+randrproto_install:
+	@test -e $(RANDRPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(RANDRPROTO_BUILD_DIR)/.installed
 
 $(RANDRPROTO_BUILD_DIR)/.installed: download_randrproto \
 	$(RANDRPROTO_BUILD_DIR)/.decompressed $(RANDRPROTO_BUILD_DIR)/.configured
@@ -92,10 +88,7 @@ randrproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RANDRPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RANDRPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RANDRPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(RANDRPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(RANDRPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(RANDRPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(RANDRPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RANDRPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RANDRPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(RANDRPROTO_BUILD_DIR)
 

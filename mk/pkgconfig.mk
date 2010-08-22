@@ -40,7 +40,9 @@ endif
 
 export PKG_CONFIG_PATH
 
-pkgconfig_install: $(PKGCONFIG_BUILD_DIR)/.installed
+pkgconfig_install:
+	@test -e $(PKGCONFIG_BUILD_DIR)/.installed || \
+	$(MAKE) $(PKGCONFIG_BUILD_DIR)/.installed
 
 $(PKGCONFIG_BUILD_DIR)/.installed: download_pkgconfig \
 	$(PKGCONFIG_BUILD_DIR)/.decompressed $(PKGCONFIG_BUILD_DIR)/.configured

@@ -33,7 +33,9 @@ LIBJPEG_SBINS :=
 LIBJPEG_LIBS := libjpeg*
 LIBJEPG_INCLUDES := jconfig.h jerror.h jmorecfg.h jpeglib.h
 
-libjpeg_install: $(LIBJPEG_BUILD_DIR)/.installed
+libjpeg_install:
+	@test -e $(LIBJPEG_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBJPEG_BUILD_DIR)/.installed
 
 $(LIBJPEG_BUILD_DIR)/.installed: download_libjpeg \
 	$(LIBJPEG_BUILD_DIR)/.decompressed $(LIBJPEG_BUILD_DIR)/.configured
@@ -86,4 +88,5 @@ libjpeg_clean:
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBJPEG_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBJPEG_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBJPEG_LIBS)
+	$(Q)-rm -rf $(LIBJPEG_BUILD_DIR)
 

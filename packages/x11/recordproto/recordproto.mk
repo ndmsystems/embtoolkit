@@ -1,6 +1,6 @@
 ################################################################################
-# GAYE Abdoulaye Walsimou, <awg@embtoolkit.org>
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         recordproto.mk
 # \brief	recordproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <awg@embtoolkit.org>
+# \author       Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
 # \date         June 2010
 ################################################################################
 
@@ -35,13 +35,9 @@ RECORDPROTO_INCLUDES = X11/extensions/recordconst.h \
 RECORDPROTO_LIBS =
 RECORDPROTO_PKGCONFIGS = recordproto.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-recordproto_install: $(RECORDPROTO_BUILD_DIR)/.installed
+recordproto_install:
+	@test -e $(RECORDPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(RECORDPROTO_BUILD_DIR)/.installed
 
 $(RECORDPROTO_BUILD_DIR)/.installed: download_recordproto \
 	$(RECORDPROTO_BUILD_DIR)/.decompressed $(RECORDPROTO_BUILD_DIR)/.configured
@@ -92,10 +88,7 @@ recordproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RECORDPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RECORDPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RECORDPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(RECORDPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(RECORDPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(RECORDPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(RECORDPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RECORDPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RECORDPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(RECORDPROTO_BUILD_DIR)
 

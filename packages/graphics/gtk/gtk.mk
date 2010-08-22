@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,7 +46,10 @@ GTK_BACKEND := --with-gdktarget=x11 --with-x
 GTK_DEPS += libx11_install libxext_install libxrender_install
 endif
 
-gtk_install: $(GTK_BUILD_DIR)/.installed $(GTK_BUILD_DIR)/.special
+gtk_install:
+	@test -e $(GTK_BUILD_DIR)/.installed || \
+	$(MAKE) $(GTK_BUILD_DIR)/.installed
+	$(MAKE) $(GTK_BUILD_DIR)/.special
 
 $(GTK_BUILD_DIR)/.installed: $(GTK_DEPS) download_gtk \
 	$(GTK_BUILD_DIR)/.decompressed $(GTK_BUILD_DIR)/.configured
@@ -130,12 +133,7 @@ endif
 .PHONY: gtk_clean $(GTK_BUILD_DIR)/.special
 
 $(GTK_BUILD_DIR)/.special:
-	$(Q)-cp -R $(SYSROOT)/usr/etc/gtk-* $(ROOTFS)/etc/
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cp -R $(SYSROOT)/usr/lib32/gtk-* $(ROOTFS)/usr/lib32/
-else
-	$(Q)-cp -R $(SYSROOT)/usr/lib/gtk-* $(ROOTFS)/usr/lib/
-endif
+	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/gtk-* $(ROOTFS)/usr/$(LIBDIR)/
 	@touch $@
 
 gtk_clean:
@@ -145,4 +143,5 @@ gtk_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(GTK_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(GTK_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(GTK_PKGCONFIGS)
+	$(Q)-rm -rf $(GTK_BUILD_DIR)
 

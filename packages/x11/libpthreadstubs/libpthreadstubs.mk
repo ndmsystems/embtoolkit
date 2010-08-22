@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 #
 # \file         libpthreadstubs.mk
 # \brief	libpthreadstubs.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -33,7 +33,9 @@ LIBPTHREADSTUBS_INCLUDES =
 LIBPTHREADSTUBS_LIBS =
 LIBPTHREADSTUBS_PKGCONFIGS = pthread-stubs.pc
 
-libpthreadstubs_install: $(LIBPTHREADSTUBS_BUILD_DIR)/.installed
+libpthreadstubs_install:
+	@test -e $(LIBPTHREADSTUBS_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBPTHREADSTUBS_BUILD_DIR)/.installed
 
 $(LIBPTHREADSTUBS_BUILD_DIR)/.installed: download_libpthreadstubs \
 	$(LIBPTHREADSTUBS_BUILD_DIR)/.decompressed $(LIBPTHREADSTUBS_BUILD_DIR)/.configured
@@ -87,4 +89,5 @@ libpthreadstubs_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBPTHREADSTUBS_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBPTHREADSTUBS_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBPTHREADSTUBS_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBPTHREADSTUBS_BUILD_DIR)
 

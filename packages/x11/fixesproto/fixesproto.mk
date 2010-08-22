@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         fixesproto.mk
 # \brief	fixesproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         February 2010
 ################################################################################
 
@@ -34,13 +34,9 @@ FIXESPROTO_INCLUDES = X11/extensions/xfixesproto.h X11/extensions/xfixeswire.h
 FIXESPROTO_LIBS =
 FIXESPROTO_PKGCONFIGS = fixesproto.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-fixesproto_install: $(FIXESPROTO_BUILD_DIR)/.installed
+fixesproto_install:
+	@test -e $(FIXESPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(FIXESPROTO_BUILD_DIR)/.installed
 
 $(FIXESPROTO_BUILD_DIR)/.installed: download_fixesproto \
 	$(FIXESPROTO_BUILD_DIR)/.decompressed $(FIXESPROTO_BUILD_DIR)/.configured
@@ -92,10 +88,7 @@ fixesproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(FIXESPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(FIXESPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FIXESPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(FIXESPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(FIXESPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(FIXESPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(FIXESPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FIXESPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FIXESPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(FIXESPROTO_BUILD_DIR)
 

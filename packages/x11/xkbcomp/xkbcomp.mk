@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 #
 # \file         xkbcomp.mk
 # \brief	xkbcomp.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -34,7 +34,10 @@ XKBCOMP_LIBS =
 XKBCOMP_PKGCONFIGS =
 
 XKBCOMP_DEPS = libxkbfile_install
-xkbcomp_install: $(XKBCOMP_BUILD_DIR)/.installed
+
+xkbcomp_install:
+	@test -e $(XKBCOMP_BUILD_DIR)/.installed || \
+	$(MAKE) $(XKBCOMP_BUILD_DIR)/.installed
 
 $(XKBCOMP_BUILD_DIR)/.installed: $(XKBCOMP_DEPS) download_xkbcomp \
 	$(XKBCOMP_BUILD_DIR)/.decompressed $(XKBCOMP_BUILD_DIR)/.configured
@@ -82,10 +85,11 @@ $(XKBCOMP_BUILD_DIR)/.configured:
 	@touch $@
 
 xkbcomp_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xkbcomp-$(XKBCOMP_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup xkbcomp...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XKBCOMP_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XKBCOMP_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XKBCOMP_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XKBCOMP_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XKBCOMP_PKGCONFIGS)
+	$(Q)-rm -rf $(XKBCOMP_BUILD_DIR)
 

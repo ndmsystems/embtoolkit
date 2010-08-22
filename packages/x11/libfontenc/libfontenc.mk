@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         libfontenc.mk
 # \brief	libfontenc.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -34,7 +34,9 @@ LIBFONTENC_INCLUDES = X11/fonts/fontenc.h
 LIBFONTENC_LIBS = libfontenc.*
 LIBFONTENC_PKGCONFIGS = libfontenc.pc
 
-libfontenc_install: $(LIBFONTENC_BUILD_DIR)/.installed
+libfontenc_install:
+	@test -e $(LIBFONTENC_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBFONTENC_BUILD_DIR)/.installed
 
 $(LIBFONTENC_BUILD_DIR)/.installed: download_libfontenc \
 	$(LIBFONTENC_BUILD_DIR)/.decompressed $(LIBFONTENC_BUILD_DIR)/.configured
@@ -88,4 +90,5 @@ libfontenc_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBFONTENC_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBFONTENC_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBFONTENC_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBFONTENC_BUILD_DIR)
 

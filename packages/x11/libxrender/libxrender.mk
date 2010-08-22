@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,9 @@ LIBXRENDER_PKGCONFIGS = xrender.pc
 
 LIBXRENDER_DEPS = renderproto_install libx11_install
 
-libxrender_install: $(LIBXRENDER_BUILD_DIR)/.installed
+libxrender_install:
+	@test -e $(LIBXRENDER_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBXRENDER_BUILD_DIR)/.installed
 
 $(LIBXRENDER_BUILD_DIR)/.installed: $(LIBXRENDER_DEPS) download_libxrender \
 	$(LIBXRENDER_BUILD_DIR)/.decompressed $(LIBXRENDER_BUILD_DIR)/.configured
@@ -91,4 +93,5 @@ libxrender_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXRENDER_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXRENDER_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXRENDER_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBXRENDER_BUILD_DIR)
 

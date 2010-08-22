@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 #
 # \file         strace.mk
 # \brief	strace.mk of Embtoolkit.
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         August 2009
 ################################################################################
 
@@ -74,3 +74,5 @@ $(STRACE_BUILD_DIR)/.configured:
 	CPPFLAGS="-I$(SYSROOT)/usr/include"
 	@touch $@
 
+strace_clean:
+	$(call EMBTK_GENERIC_MESSAGE,"Cleanup strace...")

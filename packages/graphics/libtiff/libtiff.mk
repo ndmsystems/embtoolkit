@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 #
 # \file         libtiff.mk
 # \brief	libtiff.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
@@ -36,13 +36,9 @@ LIBTIFF_INCLUDES = tiffconf.h tiff.h tiffio.h tiffio.hxx tiffvers.h
 LIBTIFF_LIBS = libtiff*
 LIBTIFF_PKGCONFIGS =
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-libtiff_install: $(LIBTIFF_BUILD_DIR)/.installed
+libtiff_install:
+	@test -e $(LIBTIFF_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBTIFF_BUILD_DIR)/.installed
 
 $(LIBTIFF_BUILD_DIR)/.installed: download_libtiff \
 	$(LIBTIFF_BUILD_DIR)/.decompressed $(LIBTIFF_BUILD_DIR)/.configured
@@ -91,14 +87,11 @@ $(LIBTIFF_BUILD_DIR)/.configured:
 	@touch $@
 
 libtiff_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libtiff-$(LIBTIFF_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup libtiff...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBTIFF_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBTIFF_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBTIFF_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(LIBTIFF_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(LIBTIFF_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(LIBTIFF_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(LIBTIFF_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBTIFF_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBTIFF_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBTIFF_BUILD_DIR)
 

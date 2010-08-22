@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         pixman.mk
 # \brief	pixman.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
@@ -34,13 +34,9 @@ PIXMAN_INCLUDES = pixman-*
 PIXMAN_LIBS = libpixman-*
 PIXMAN_PKGCONFIGS = pixman-*.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-pixman_install: $(PIXMAN_BUILD_DIR)/.installed
+pixman_install:
+	@test -e $(PIXMAN_BUILD_DIR)/.installed || \
+	$(MAKE) $(PIXMAN_BUILD_DIR)/.installed
 
 $(PIXMAN_BUILD_DIR)/.installed: download_pixman \
 	$(PIXMAN_BUILD_DIR)/.decompressed $(PIXMAN_BUILD_DIR)/.configured
@@ -93,10 +89,7 @@ pixman_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(PIXMAN_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(PIXMAN_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(PIXMAN_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(PIXMAN_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(PIXMAN_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(PIXMAN_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(PIXMAN_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(PIXMAN_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(PIXMAN_PKGCONFIGS)
+	$(Q)-rm -rf $(PIXMAN_BUILD_DIR)
 

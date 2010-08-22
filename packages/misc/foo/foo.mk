@@ -35,9 +35,11 @@ FOO_INCLUDES =
 FOO_LIBS =
 FOO_PKGCONFIGS =
 
-FOO_DEPS =
+FOO_DEPS :=
 
-foo_install: $(FOO_BUILD_DIR)/.installed
+foo_install:
+	@test -e $(FOO_BUILD_DIR)/.installed || \
+	$(MAKE) $(FOO_BUILD_DIR)/.installed
 
 $(FOO_BUILD_DIR)/.installed: $(FOO_DEPS) download_foo \
 	$(FOO_BUILD_DIR)/.decompressed $(FOO_BUILD_DIR)/.configured
@@ -66,7 +68,7 @@ $(FOO_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(FOO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(FOO_PACKAGE)
 ifeq ($(CONFIG_EMBTK_FOO_NEED_PATCH),y)
-	@cd $(PACKAGES_BUILD)/foo-$(FOO_VERSION); \
+	@cd $(FOO_BUILD_DIR); \
 	patch -p1 < $(DOWNLOAD_DIR)/foo-$(FOO_VERSION).patch
 endif
 	@touch $@
@@ -95,10 +97,11 @@ $(FOO_BUILD_DIR)/.configured:
 	@touch $@
 
 foo_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup foo-$(FOO_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup foo...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(FOO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(FOO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FOO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FOO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FOO_PKGCONFIGS)
+	$(Q)-rm -rf $(FOO_BUILD_DIR)
 

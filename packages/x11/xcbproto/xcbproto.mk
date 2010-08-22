@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 #
 # \file         xcbproto.mk
 # \brief	xcbproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -33,13 +33,9 @@ XCBPROTO_INCLUDES =
 XCBPROTO_LIBS = python2.6/dist-packages/xcbgen
 XCBPROTO_PKGCONFIGS = xcb-proto.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-xcbproto_install: $(XCBPROTO_BUILD_DIR)/.installed
+xcbproto_install:
+	@test -e $(XCBPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(XCBPROTO_BUILD_DIR)/.installed
 
 $(XCBPROTO_BUILD_DIR)/.installed: download_xcbproto \
 	$(XCBPROTO_BUILD_DIR)/.decompressed $(XCBPROTO_BUILD_DIR)/.configured
@@ -91,10 +87,7 @@ xcbproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XCBPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XCBPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XCBPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(XCBPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(XCBPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(XCBPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(XCBPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XCBPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XCBPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(XCBPROTO_BUILD_DIR)
 

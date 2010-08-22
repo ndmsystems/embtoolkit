@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         compositeproto.mk
 # \brief	compositeproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@wembtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -35,7 +35,9 @@ COMPOSITEPROTO_INCLUDES = X11/extensions/compositeproto.h \
 COMPOSITEPROTO_LIBS =
 COMPOSITEPROTO_PKGCONFIGS = compositeproto.pc
 
-compositeproto_install: $(COMPOSITEPROTO_BUILD_DIR)/.installed
+compositeproto_install:
+	@test -e $(COMPOSITEPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(COMPOSITEPROTO_BUILD_DIR)/.installed
 
 $(COMPOSITEPROTO_BUILD_DIR)/.installed: download_compositeproto \
 	$(COMPOSITEPROTO_BUILD_DIR)/.decompressed $(COMPOSITEPROTO_BUILD_DIR)/.configured
@@ -89,4 +91,5 @@ compositeproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(COMPOSITEPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(COMPOSITEPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(COMPOSITEPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(COMPOSITEPROTO_BUILD_DIR)
 

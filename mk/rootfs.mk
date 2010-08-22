@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         rootfs.mk
 # \brief	rootfs.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         June 2009
 ################################################################################
 
@@ -93,16 +93,24 @@ endif
 	@cp -R $(SYSROOT)/root  $(ROOTFS)/
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
 	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")
-	@-$(TARGETSTRIP)  $(ROOTFS)/lib/*.so*
-	@-$(TARGETSTRIP)  $(ROOTFS)/usr/lib/*.so*
+	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(TARGETSTRIP)  $(ROOTFS)/lib/*.so*
+	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(TARGETSTRIP)  $(ROOTFS)/usr/lib/*.so*
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	@-$(TARGETSTRIP)  $(ROOTFS)/lib32/*.so*
-	@-$(TARGETSTRIP)  $(ROOTFS)/usr/lib32/*.so*
+	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(TARGETSTRIP)  $(ROOTFS)/lib32/*.so*
+	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(TARGETSTRIP)  $(ROOTFS)/usr/lib32/*.so*
 endif
-	@-$(TARGETSTRIP)  $(ROOTFS)/bin/*
-	@-$(TARGETSTRIP)  $(ROOTFS)/sbin/*
-	@-$(TARGETSTRIP)  $(ROOTFS)/usr/bin/*
-	@-$(TARGETSTRIP)  $(ROOTFS)/usr/sbin/*
+	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(TARGETSTRIP)  $(ROOTFS)/bin/*
+	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(TARGETSTRIP)  $(ROOTFS)/sbin/*
+	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(TARGETSTRIP)  $(ROOTFS)/usr/bin/*
+	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(TARGETSTRIP)  $(ROOTFS)/usr/sbin/*
 endif
 
 mkinitialrootfs:

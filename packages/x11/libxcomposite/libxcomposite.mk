@@ -37,7 +37,9 @@ LIBXCOMPOSITE_PKGCONFIGS = xcomposite.pc
 
 LIBXCOMPOSITE_DEPS = xproto_install libxfixes_install compositeproto_install
 
-libxcomposite_install: $(LIBXCOMPOSITE_BUILD_DIR)/.installed
+libxcomposite_install:
+	@test -e $(LIBXCOMPOSITE_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBXCOMPOSITE_BUILD_DIR)/.installed
 
 $(LIBXCOMPOSITE_BUILD_DIR)/.installed: $(LIBXCOMPOSITE_DEPS) download_libxcomposite \
 	$(LIBXCOMPOSITE_BUILD_DIR)/.decompressed $(LIBXCOMPOSITE_BUILD_DIR)/.configured
@@ -95,10 +97,11 @@ $(LIBXCOMPOSITE_BUILD_DIR)/.configured:
 	@touch $@
 
 libxcomposite_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxcomposite-$(LIBXCOMPOSITE_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxcomposite...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBXCOMPOSITE_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBXCOMPOSITE_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXCOMPOSITE_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXCOMPOSITE_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXCOMPOSITE_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBXCOMPOSITE_BUILD_DIR)
 

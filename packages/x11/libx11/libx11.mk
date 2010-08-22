@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         libx11.mk
 # \brief	libx11.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -39,7 +39,10 @@ LIBX11_PKGCONFIGS = x11.pc x11-xcb.pc
 LIBX11_DEPS = utilmacros_install inputproto_install kbproto_install \
 		xextproto_install xproto_install libxcb_install xtrans_install
 
-libx11_install: $(LIBX11_BUILD_DIR)/.installed
+libx11_install:
+	@test -e $(LIBX11_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBX11_BUILD_DIR)/.installed
+	$(MAKE) $(LIBX11_BUILD_DIR)/.special
 
 $(LIBX11_BUILD_DIR)/.installed: $(LIBX11_DEPS) download_libx11 \
 	$(LIBX11_BUILD_DIR)/.decompressed $(LIBX11_BUILD_DIR)/.configured
@@ -53,10 +56,6 @@ $(LIBX11_BUILD_DIR)/.installed: $(LIBX11_DEPS) download_libx11 \
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	$(Q)$(MAKE) $(LIBX11_BUILD_DIR)/.patchlibtool
-	$(Q)-mkdir -p $(ROOTFS)/usr/share
-	$(Q)-mkdir -p $(ROOTFS)/usr/share/X11
-	$(Q)-cp $(SYSROOT)/usr/share/X11/XErrorDB $(ROOTFS)/usr/share/X11/
-	$(Q)-cp $(SYSROOT)/usr/share/X11/XKeysymDB $(ROOTFS)/usr/share/X11/
 	@touch $@
 
 download_libx11:
@@ -101,6 +100,7 @@ libx11_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBX11_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBX11_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBX11_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBX11_BUILD_DIR)
 
 $(LIBX11_BUILD_DIR)/.patchlibtool:
 	@LIBX11_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libX11-* -type f -name *.la`; \
@@ -109,3 +109,12 @@ $(LIBX11_BUILD_DIR)/.patchlibtool:
 	sed \
 	-i "s; /usr/$(LIBDIR)/libX11.la ; $(SYSROOT)/usr/$(LIBDIR)/libX11.la ;" $$i; \
 	done
+
+.PHONY: $(LIBX11_BUILD_DIR)/.special
+
+$(LIBX11_BUILD_DIR)/.special:
+	$(Q)-mkdir -p $(ROOTFS)/usr/share
+	$(Q)-mkdir -p $(ROOTFS)/usr/share/X11
+	$(Q)-cp $(SYSROOT)/usr/share/X11/XErrorDB $(ROOTFS)/usr/share/X11/
+	$(Q)-cp $(SYSROOT)/usr/share/X11/XKeysymDB $(ROOTFS)/usr/share/X11/
+	@touch $@

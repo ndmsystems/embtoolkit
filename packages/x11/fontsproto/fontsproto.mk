@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         fontsproto.mk
 # \brief	fontsproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         February 2010
 ################################################################################
 
@@ -36,13 +36,9 @@ FONTSPROTO_INCLUDES = X11/fonts/font.h X11/fonts/fontproto.h \
 FONTSPROTO_LIBS =
 FONTSPROTO_PKGCONFIGS = fontsproto.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-fontsproto_install: $(FONTSPROTO_BUILD_DIR)/.installed
+fontsproto_install:
+	@test -e $(FONTSPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(FONTSPROTO_BUILD_DIR)/.installed
 
 $(FONTSPROTO_BUILD_DIR)/.installed: download_fontsproto \
 	$(FONTSPROTO_BUILD_DIR)/.decompressed $(FONTSPROTO_BUILD_DIR)/.configured
@@ -90,14 +86,11 @@ $(FONTSPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 fontsproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup fontsproto-$(FONTSPROTO_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup fontsproto...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(FONTSPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(FONTSPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FONTSPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(FONTSPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(FONTSPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(FONTSPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(FONTSPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FONTSPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FONTSPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(FONTSPROTO_BUILD_DIR)
 

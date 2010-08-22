@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         bigreqsproto.mk
 # \brief	bigreqsproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         February 2010
 ################################################################################
 
@@ -34,7 +34,9 @@ BIGREQSPROTO_INCLUDES = X11/extensions/bigreqsproto.h X11/extensions/bigreqstr.h
 BIGREQSPROTO_LIBS =
 BIGREQSPROTO_PKGCONFIGS = bigreqsproto.pc
 
-bigreqsproto_install: $(BIGREQSPROTO_BUILD_DIR)/.installed
+bigreqsproto_install:
+	@test -e $(BIGREQSPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(BIGREQSPROTO_BUILD_DIR)/.installed
 
 $(BIGREQSPROTO_BUILD_DIR)/.installed: download_bigreqsproto \
 	$(BIGREQSPROTO_BUILD_DIR)/.decompressed $(BIGREQSPROTO_BUILD_DIR)/.configured
@@ -86,10 +88,7 @@ bigreqsproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(BIGREQSPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(BIGREQSPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(BIGREQSPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(BIGREQSPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(BIGREQSPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(BIGREQSPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(BIGREQSPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(BIGREQSPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(BIGREQSPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(BIGREQSPROTO_BUILD_DIR)
 

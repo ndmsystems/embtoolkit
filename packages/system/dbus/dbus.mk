@@ -40,7 +40,9 @@ DBUS_DEPS = libxml2_install expat_install
 
 DBUS_CONFIGURE_OPTS := --enable-abstract-sockets
 
-dbus_install: $(DBUS_BUILD_DIR)/.installed
+dbus_install:
+	test -e $(DBUS_BUILD_DIR)/.installed || \
+	$(MAKE) $(DBUS_BUILD_DIR)/.installed
 
 $(DBUS_BUILD_DIR)/.installed: $(DBUS_DEPS) download_dbus \
 	$(DBUS_BUILD_DIR)/.decompressed $(DBUS_BUILD_DIR)/.configured
@@ -99,12 +101,13 @@ $(DBUS_BUILD_DIR)/.configured:
 	@touch $@
 
 dbus_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup dbus-$(DBUS_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup dbus...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(DBUS_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(DBUS_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(DBUS_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(DBUS_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(DBUS_PKGCONFIGS)
+	$(Q)-rm -rf $(DBUS_BUILD_DIR)
 
 .PHONY: $(DBUS_BUILD_DIR)/.special
 

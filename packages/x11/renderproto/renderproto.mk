@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,13 +34,9 @@ RENDERPROTO_INCLUDES = X11/extensions/render.h X11/extensions/renderproto.h
 RENDERPROTO_LIBS =
 RENDERPROTO_PKGCONFIGS = renderproto.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-renderproto_install: $(RENDERPROTO_BUILD_DIR)/.installed
+renderproto_install:
+	@test -e $(RENDERPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(RENDERPROTO_BUILD_DIR)/.installed
 
 $(RENDERPROTO_BUILD_DIR)/.installed: download_renderproto \
 	$(RENDERPROTO_BUILD_DIR)/.decompressed $(RENDERPROTO_BUILD_DIR)/.configured
@@ -92,10 +88,7 @@ renderproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RENDERPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RENDERPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RENDERPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(RENDERPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(RENDERPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(RENDERPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(RENDERPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RENDERPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RENDERPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(RENDERPROTO_BUILD_DIR)
 

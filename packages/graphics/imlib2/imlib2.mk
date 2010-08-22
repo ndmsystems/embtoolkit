@@ -36,9 +36,12 @@ IMLIB2_INCLUDES = Imlib2.h
 IMLIB2_LIBS = imlib2 libImlib2.*
 IMLIB2_PKGCONFIGS = imlib2.pc
 
-IMLIB2_DEPS = libpng_install freetype_install libjpeg_install
+IMLIB2_DEPS := libpng_install freetype_install libjpeg_install
 
-imlib2_install: $(IMLIB2_BUILD_DIR)/.installed
+imlib2_install:
+	test -e $(IMLIB2_BUILD_DIR)/.installed || \
+	$(MAKE) $(IMLIB2_BUILD_DIR)/.installed
+	$(MAKE) $(IMLIB2_BUILD_DIR)/.special
 
 $(IMLIB2_BUILD_DIR)/.installed: $(IMLIB2_DEPS) download_imlib2 \
 	$(IMLIB2_BUILD_DIR)/.decompressed $(IMLIB2_BUILD_DIR)/.configured
@@ -47,9 +50,6 @@ $(IMLIB2_BUILD_DIR)/.installed: $(IMLIB2_DEPS) download_imlib2 \
 	$(call EMBTK_KILL_LT_RPATH,$(IMLIB2_BUILD_DIR))
 	$(Q)$(MAKE) -C $(IMLIB2_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(IMLIB2_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/imlib2 $(ROOTFS)/usr/$(LIBDIR)
-	$(Q)-mkdir -p $(ROOTFS)/usr/share
-	$(Q)-cp -R $(SYSROOT)/usr/share/imlib2 $(ROOTFS)/usr/share
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	@touch $@
@@ -99,10 +99,19 @@ $(IMLIB2_BUILD_DIR)/.configured:
 	@touch $@
 
 imlib2_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup imlib2-$(IMLIB2_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup imlib2...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(IMLIB2_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(IMLIB2_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(IMLIB2_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(IMLIB2_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(IMLIB2_PKGCONFIGS)
+	$(Q)-rm -rf $(IMLIB2_BUILD_DIR)
 
+.PHONY: $(IMLIB2_BUILD_DIR)/.special
+
+$(IMLIB2_BUILD_DIR)/.special:
+	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
+	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/imlib2 $(ROOTFS)/usr/$(LIBDIR)
+	$(Q)-mkdir -p $(ROOTFS)/usr/share
+	$(Q)-cp -R $(SYSROOT)/usr/share/imlib2 $(ROOTFS)/usr/share
+	@touch $@

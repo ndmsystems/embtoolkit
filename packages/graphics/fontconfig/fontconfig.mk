@@ -1,24 +1,25 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         fontconfig.mk
 # \brief	fontconfig.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
@@ -39,8 +40,10 @@ else
 LIBXML2_CFLAGS="-I$(SYSROOT)/usr/include/libxml2 -L$(SYSROOT)/usr/lib"
 endif
 
-fontconfig_install:	$(FONTCONFIG_BUILD_DIR)/.installed \
-			$(FONTCONFIG_BUILD_DIR)/.special	
+fontconfig_install:
+	@test -e $(FONTCONFIG_BUILD_DIR)/.installed || \
+	$(MAKE) $(FONTCONFIG_BUILD_DIR)/.installed
+	$(MAKE) $(FONTCONFIG_BUILD_DIR)/.special
 
 $(FONTCONFIG_BUILD_DIR)/.installed: libxml2_install \
 	download_fontconfig $(FONTCONFIG_BUILD_DIR)/.decompressed \
@@ -90,16 +93,13 @@ $(FONTCONFIG_BUILD_DIR)/.configured:
 .PHONY: $(FONTCONFIG_BUILD_DIR)/.special fontconfig_clean
 
 fontconfig_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup fontconfig-$(FONTCONFIG_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup fontconfig...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(FONTCONFIG_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(FONTCONFIG_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FONTCONFIG_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(FONTCONFIG_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(FONTCONFIG_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(FONTCONFIG_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(FONTCONFIG_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FONTCONFIG_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FONTCONFIG_PKGCONFIGS)
+	$(Q)-rm -rf $(FONTCONFIG_BUILD_DIR)
 
 $(FONTCONFIG_BUILD_DIR)/.special:
 	$(Q)-cp -R $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc/

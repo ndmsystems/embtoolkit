@@ -58,7 +58,9 @@ $(GDB_TARGET_BUILD_DIR)/.configured:
 	@touch $@
 
 gdb_target_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"Clean gdb for target if necessary...")
+	$(call EMBTK_GENERIC_MESSAGE,"Cleanup gdb for target...")
+gdbserver_target_clean:
+	$(call EMBTK_GENERIC_MESSAGE,"Cleanup gdbserver for target...")
 
 #gdb for host
 $(GDB_HOST_BUILD_DIR)/.installed: download_gdb decompress_gdb \

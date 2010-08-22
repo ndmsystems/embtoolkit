@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 #
 # \file         libxkbfile.mk
 # \brief	libxkbfile.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         February 2010
 ################################################################################
 
@@ -37,7 +37,9 @@ LIBXKBFILE_PKGCONFIGS =
 
 LIBXKBFILE_DEPS = kbproto_install libx11_install
 
-libxkbfile_install: $(LIBXKBFILE_BUILD_DIR)/.installed
+libxkbfile_install:
+	@test -e $(LIBXKBFILE_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBXKBFILE_BUILD_DIR)/.installed
 
 $(LIBXKBFILE_BUILD_DIR)/.installed: $(LIBXKBFILE_DEPS) download_libxkbfile \
 	$(LIBXKBFILE_BUILD_DIR)/.decompressed $(LIBXKBFILE_BUILD_DIR)/.configured
@@ -92,4 +94,5 @@ libxkbfile_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXKBFILE_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXKBFILE_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXKBFILE_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBXKBFILE_BUILD_DIR)
 

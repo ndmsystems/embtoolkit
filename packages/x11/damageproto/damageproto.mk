@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         damageproto.mk
 # \brief	damageproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
@@ -34,7 +34,9 @@ DAMAGEPROTO_INCLUDES = X11/extnsions/damageproto.h damagewire.h
 DAMAGEPROTO_LIBS =
 DAMAGEPROTO_PKGCONFIGS = damageproto.pc
 
-damageproto_install: $(DAMAGEPROTO_BUILD_DIR)/.installed
+damageproto_install:
+	@test -e $(DAMAGEPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(DAMAGEPROTO_BUILD_DIR)/.installed
 
 $(DAMAGEPROTO_BUILD_DIR)/.installed: download_damageproto \
 	$(DAMAGEPROTO_BUILD_DIR)/.decompressed $(DAMAGEPROTO_BUILD_DIR)/.configured
@@ -86,10 +88,7 @@ damageproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(DAMAGEPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(DAMAGEPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(DAMAGEPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(DAMAGEPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(DAMAGEPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(DAMAGEPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(DAMAGEPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(DAMAGEPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(DAMAGEPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(DAMAGEPROTO_BUILD_DIR)
 

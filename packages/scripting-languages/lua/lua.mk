@@ -37,7 +37,9 @@ LUA_PKGCONFIGS =
 
 LUA_DEPS =
 
-lua_install: $(LUA_BUILD_DIR)/.installed
+lua_install:
+	@test -e $(LUA_BUILD_DIR)/.installed || \
+	$(MAKE) $(LUA_BUILD_DIR)/.installed
 
 $(LUA_BUILD_DIR)/.installed: $(LUA_DEPS) download_lua \
 	$(LUA_BUILD_DIR)/.decompressed
@@ -68,16 +70,17 @@ $(LUA_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LUA_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(LUA_PACKAGE)
 ifeq ($(CONFIG_EMBTK_LUA_NEED_PATCH),y)
-	@cd $(PACKAGES_BUILD)/lua-$(LUA_VERSION); \
+	@cd $(LUA_BUILD_DIR); \
 	patch -p1 < $(DOWNLOAD_DIR)/lua-$(LUA_VERSION).patch
 endif
 	@touch $@
 
 lua_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup lua-$(LUA_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup lua...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LUA_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LUA_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LUA_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LUA_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LUA_PKGCONFIGS)
+	$(Q)-rm -rf $(LUA_BUILD_DIR)
 

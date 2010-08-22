@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         tslib.mk
 # \brief	tslib.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -37,7 +37,10 @@ TSLIB_PKGCONFIGS = tslib-*.pc
 
 TSLIB_DEPS =
 
-tslib_install: $(TSLIB_BUILD_DIR)/.installed
+tslib_install:
+	@test -e $(TSLIB_BUILD_DIR)/.installed || \
+	$(MAKE) $(TSLIB_BUILD_DIR)/.installed
+	$(MAKE) $(TSLIB_BUILD_DIR)/.special
 
 $(TSLIB_BUILD_DIR)/.installed: $(TSLIB_DEPS) download_tslib \
 	$(TSLIB_BUILD_DIR)/.decompressed $(TSLIB_BUILD_DIR)/.configured
@@ -47,7 +50,6 @@ $(TSLIB_BUILD_DIR)/.installed: $(TSLIB_DEPS) download_tslib \
 	$(Q)$(MAKE) -C $(TSLIB_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
-	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/ts $(ROOTFS)/usr/$(LIBDIR)/
 	@touch $@
 
 download_tslib:
@@ -66,7 +68,7 @@ $(TSLIB_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(TSLIB_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(TSLIB_PACKAGE)
 ifeq ($(CONFIG_EMBTK_TSLIB_NEED_PATCH),y)
-	@cd $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION); \
+	@cd $(TSLIB_BUILD_DIR); \
 	patch -p1 < $(DOWNLOAD_DIR)/tslib-$(TSLIB_VERSION).patch
 endif
 	@touch $@
@@ -105,4 +107,11 @@ tslib_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(TSLIB_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(TSLIB_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(TSLIB_PKGCONFIGS)
+	$(Q)-rm -rf $(TSLIB_BUILD_DIR)
 
+
+.PHONY: $(TSLIB_BUILD_DIR)/.special
+
+$(TSLIB_BUILD_DIR)/.special:
+	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/ts $(ROOTFS)/usr/$(LIBDIR)/
+	@touch $@

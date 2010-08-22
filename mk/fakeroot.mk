@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 # \file         fakeroot.mk
 # \brief	fakeroot.mk of Embtoolkit. fakeroot helps building root
 # \brief	filesystem, without the need to be root.
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         June 2009
 ################################################################################
 
@@ -30,7 +30,9 @@ FAKEROOT_BUILD_DIR := $(TOOLS_BUILD)/fakeroot-build
 FAKEROOT_DIR := $(HOSTTOOLS)/usr/local/fakeroot
 FAKEROOT_BIN := $(FAKEROOT_DIR)/bin/fakeroot
 
-fakeroot_install: $(FAKEROOT_BUILD_DIR)/.installed
+fakeroot_install:
+	@test -e $(FAKEROOT_BUILD_DIR)/.installed || \
+	$(MAKE) $(FAKEROOT_BUILD_DIR)/.installed
 
 $(FAKEROOT_BUILD_DIR)/.installed: download_fakeroot \
 	$(FAKEROOT_BUILD_DIR)/.decompressed $(FAKEROOT_BUILD_DIR)/.configured

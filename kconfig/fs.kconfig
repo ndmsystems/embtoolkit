@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009 Abdoulaye Walsimou GAYE. All rights reserved.
 # For Copyrright from linux kernel's build/configure system, see their source
 # code.
 #
@@ -20,7 +20,7 @@
 #
 # \file         fs.kconfig
 # \brief	fs.kconfig of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         August 2009
 ################################################################################
 

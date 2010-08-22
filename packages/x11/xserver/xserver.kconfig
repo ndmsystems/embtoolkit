@@ -54,6 +54,13 @@ choice
 	depends on EMBTK_HAVE_XSERVER
 	help
 		Choose which variant of X server to install
+
+	config EMBTK_HAVE_XSERVER_XORG
+		bool "xorg-server X server"
+		select KEMBTK_EGLIBC_OPTION_EGLIBC_STREAMS if EMBTK_CLIB_EGLIBC
+		select EMBTK_HAVE_LIBPCIACCESS
+		help
+			Traditional X server found on most Linux distributions.
 	config EMBTK_HAVE_XSERVER_KDRIVE
 		bool "kdrive X server: Xfbdev"
 		help
@@ -63,12 +70,6 @@ choice
 			Kdriver is almost unmaintained now days, despite the
 			fact it is integrated in the official xorg-server
 			package.
-	config EMBTK_HAVE_XSERVER_XORG
-		bool "xorg-server X server"
-		select KEMBTK_EGLIBC_OPTION_EGLIBC_STREAMS if EMBTK_CLIB_EGLIBC
-		select EMBTK_HAVE_LIBPCIACCESS
-		help
-			Traditional X server found on most Linux distributions.
 endchoice
 choice
 	prompt "xserver version you wish"

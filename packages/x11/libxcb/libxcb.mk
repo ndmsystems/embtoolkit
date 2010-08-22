@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,9 @@ LIBXCB_PKGCONFIGS = xcb*
 
 LIBXCB_DEPS = xcbproto_install libpthreadstubs_install libxau_install
 
-libxcb_install: $(LIBXCB_BUILD_DIR)/.installed
+libxcb_install:
+	@test -e $(LIBXCB_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBXCB_BUILD_DIR)/.installed
 
 $(LIBXCB_BUILD_DIR)/.installed: $(LIBXCB_DEPS) download_libxcb \
 	$(LIBXCB_BUILD_DIR)/.decompressed $(LIBXCB_BUILD_DIR)/.configured
@@ -92,6 +94,7 @@ libxcb_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXCB_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXCB_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXCB_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBXCB_BUILD_DIR)
 
 $(LIBXCB_BUILD_DIR)/.patchlibtool:
 	@LIBXCB_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \

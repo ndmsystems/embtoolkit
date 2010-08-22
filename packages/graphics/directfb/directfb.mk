@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         directfb.mk
 # \brief	directfb.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         October 2009
 ################################################################################
 
@@ -96,8 +96,10 @@ ifeq ($(CONFIG_EMBTK_DIRECTFB_INPUT_TSLIB),y)
 DIRECTFB_DEPS += tslib_install
 endif
 
-directfb_install:	$(DIRECTFB_BUILD_DIR)/.installed \
-			$(DIRECTFB_BUILD_DIR)/.special
+directfb_install:
+	@test -e $(DIRECTFB_BUILD_DIR)/.installed || \
+	$(MAKE) $(DIRECTFB_BUILD_DIR)/.installed
+	$(MAKE) $(DIRECTFB_BUILD_DIR)/.special
 
 $(DIRECTFB_BUILD_DIR)/.installed:  $(DIRECTFB_DEPS) download_directfb \
 	$(DIRECTFB_BUILD_DIR)/.decompressed $(DIRECTFB_BUILD_DIR)/.configured
@@ -194,12 +196,10 @@ endif
 	@touch $@
 
 directfb_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup directfb-$(DIRECTFB_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup directfb...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(DIRECTFB_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(DIRECTFB_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(DIRECTFB_LIBS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(DIRECTFB_LIBS)
-endif
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(DIRECTFB_INCLUDES)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(DIRECTFB_LIBS)
+	$(Q)-rm -rf $(DIRECTFB_BUILD_DIR)
 

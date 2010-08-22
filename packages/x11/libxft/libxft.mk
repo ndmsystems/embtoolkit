@@ -1,5 +1,5 @@
 ################################################################################
-# Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
+# Embtoolkit
 # Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 #
 # \file         libxft.mk
 # \brief	libxft.mk of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         June 2010
 ################################################################################
 
@@ -36,7 +36,9 @@ LIBXFT_PKGCONFIGS = xft.pc
 
 LIBXFT_DEPS = freetype_install fontconfig_install libxrender_install
 
-libxft_install: $(LIBXFT_BUILD_DIR)/.installed
+libxft_install:
+	@test -e $(LIBXFT_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBXFT_BUILD_DIR)/.installed
 
 $(LIBXFT_BUILD_DIR)/.installed: $(LIBXFT_DEPS) download_libxft \
 	$(LIBXFT_BUILD_DIR)/.decompressed $(LIBXFT_BUILD_DIR)/.configured
@@ -85,10 +87,11 @@ $(LIBXFT_BUILD_DIR)/.configured:
 	@touch $@
 
 libxft_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxft-$(LIBXFT_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxft...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBXFT_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBXFT_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXFT_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXFT_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXFT_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBXFT_BUILD_DIR)
 

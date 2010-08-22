@@ -71,7 +71,10 @@ else
 XSERVER_CONFIGURE_OPTS += --disable-tslib
 endif
 
-xserver_install: $(XSERVER_BUILD_DIR)/.installed
+xserver_install:
+	@test -e $(XSERVER_BUILD_DIR)/.installed || \
+	$(MAKE) $(XSERVER_BUILD_DIR)/.installed
+	$(MAKE) $(XSERVER_BUILD_DIR)/.special
 
 $(XSERVER_BUILD_DIR)/.installed: $(XSERVER_DEPS) download_xserver \
 	$(XSERVER_BUILD_DIR)/.decompressed $(XSERVER_BUILD_DIR)/.configured
@@ -82,7 +85,6 @@ $(XSERVER_BUILD_DIR)/.installed: $(XSERVER_DEPS) download_xserver \
 	$(Q)$(MAKE) -C $(XSERVER_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
-	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/xorg $(ROOTFS)/usr/$(LIBDIR)/
 	@touch $@
 
 download_xserver:
@@ -131,10 +133,16 @@ $(XSERVER_BUILD_DIR)/.configured:
 	@touch $@
 
 xserver_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xserver-$(XSERVER_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup xserver...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XSERVER_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XSERVER_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XSERVER_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XSERVER_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XSERVER_PKGCONFIGS)
+	$(Q)-rm -rf $(XSERVER_BUILD_DIR)
 
+.PHONY: $(XSERVER_BUILD_DIR)/.special
+
+$(XSERVER_BUILD_DIR)/.special:
+	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/xorg $(ROOTFS)/usr/$(LIBDIR)/
+	@touch $@

@@ -35,13 +35,9 @@ ATK_INCLUDES = atk-*
 ATK_LIBS = libatk-*
 ATK_PKGCONFIGS = atk.pc
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-atk_install: $(ATK_BUILD_DIR)/.installed
+atk_install:
+	@test -e $(ATK_BUILD_DIR)/.installed || \
+	$(MAKE) $(ATK_BUILD_DIR)/.installed
 
 $(ATK_BUILD_DIR)/.installed: glib_install download_atk \
 	$(ATK_BUILD_DIR)/.decompressed $(ATK_BUILD_DIR)/.configured
@@ -90,10 +86,11 @@ $(ATK_BUILD_DIR)/.configured:
 	@touch $@
 
 atk_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup atk-$(ATK_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup atk...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(ATK_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(ATK_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(ATK_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(ATK_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(ATK_PKGCONFIGS)
+	$(Q)-rm -rf $(ATK_BUILD_DIR)
 

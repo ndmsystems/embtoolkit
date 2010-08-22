@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         libxext.mk
 # \brief	libxext.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -44,7 +44,9 @@ LIBXEXT_PKGCONFIGS =
 
 LIBXEXT_DEPS = libx11_install
 
-libxext_install: $(LIBXEXT_BUILD_DIR)/.installed
+libxext_install:
+	@test -e $(LIBXEXT_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBXEXT_BUILD_DIR)/.installed
 
 $(LIBXEXT_BUILD_DIR)/.installed: $(LIBXEXT_DEPS) download_libxext \
 	$(LIBXEXT_BUILD_DIR)/.decompressed $(LIBXEXT_BUILD_DIR)/.configured
@@ -99,4 +101,5 @@ libxext_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXEXT_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXEXT_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXEXT_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBXEXT_BUILD_DIR)
 

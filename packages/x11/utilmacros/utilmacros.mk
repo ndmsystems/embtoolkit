@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,7 +34,9 @@ UTILMACROS_INCLUDES =
 UTILMACROS_LIBS =
 UTILMACROS_PKGCONFIGS = xorg-macros.pc
 
-utilmacros_install: $(UTILMACROS_BUILD_DIR)/.installed
+utilmacros_install:
+	@test -e $(UTILMACROS_BUILD_DIR)/.installed || \
+	$(MAKE) $(UTILMACROS_BUILD_DIR)/.installed
 
 $(UTILMACROS_BUILD_DIR)/.installed: download_utilmacros \
 	$(UTILMACROS_BUILD_DIR)/.decompressed $(UTILMACROS_BUILD_DIR)/.configured
@@ -87,10 +89,7 @@ utilmacros_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(UTILMACROS_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(UTILMACROS_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(UTILMACROS_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(UTILMACROS_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(UTILMACROS_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(UTILMACROS_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(UTILMACROS_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(UTILMACROS_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(UTILMACROS_PKGCONFIGS)
+	$(Q)-rm -rf $(UTILMACROS_BUILD_DIR)
 

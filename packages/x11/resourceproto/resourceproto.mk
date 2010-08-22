@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         resourceproto.mk
 # \brief	resourceproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -34,7 +34,9 @@ RESOURCEPROTO_INCLUDES = X11/extensions/XResproto.h
 RESOURCEPROTO_LIBS =
 RESOURCEPROTO_PKGCONFIGS = resourceproto.pc
 
-resourceproto_install: $(RESOURCEPROTO_BUILD_DIR)/.installed
+resourceproto_install:
+	@test -e $(RESOURCEPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(RESOURCEPROTO_BUILD_DIR)/.installed
 
 $(RESOURCEPROTO_BUILD_DIR)/.installed: download_resourceproto \
 	$(RESOURCEPROTO_BUILD_DIR)/.decompressed $(RESOURCEPROTO_BUILD_DIR)/.configured
@@ -86,10 +88,7 @@ resourceproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RESOURCEPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RESOURCEPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RESOURCEPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(RESOURCEPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(RESOURCEPROTO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(RESOURCEPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(RESOURCEPROTO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RESOURCEPROTO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RESOURCEPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(RESOURCEPROTO_BUILD_DIR)
 

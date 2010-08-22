@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #
 # \file         cairo.mk
 # \brief	cairo.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
@@ -53,7 +53,9 @@ CAIRO_CONFIG_OPTS-n += --enable-xcb=no
 CAIRO_CONFIG_OPTS-n += --without-x
 endif
 
-cairo_install: $(CAIRO_BUILD_DIR)/.installed
+cairo_install:
+	@test -e $(CAIRO_BUILD_DIR)/.installed || \
+	$(MAKE) $(CAIRO_BUILD_DIR)/.installed
 
 $(CAIRO_BUILD_DIR)/.installed: $(CAIRO_DEPS) download_cairo \
 	$(CAIRO_BUILD_DIR)/.decompressed $(CAIRO_BUILD_DIR)/.configured
@@ -101,14 +103,11 @@ $(CAIRO_BUILD_DIR)/.configured:
 	@touch $@
 
 cairo_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup cairo-$(CAIRO_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup cairo...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(CAIRO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(CAIRO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(CAIRO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(CAIRO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(CAIRO_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(CAIRO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(CAIRO_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(CAIRO_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(CAIRO_PKGCONFIGS)
+	$(Q)-rm -rf $(CAIRO_BUILD_DIR)
 

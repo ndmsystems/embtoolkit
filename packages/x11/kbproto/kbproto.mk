@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -10,7 +10,7 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# GNU General Public License kbprotor more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
@@ -19,7 +19,7 @@
 #
 # \file         kbproto.mk
 # \brief	kbproto.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         February 2010
 ################################################################################
 
@@ -36,7 +36,9 @@ KBPROTO_INCLUDES = X11/extensions/XKBgeom.h X11/extensions/XKB.h \
 KBPROTO_LIBS =
 KBPROTO_PKGCONFIGS = kbproto.pc
 
-kbproto_install: $(KBPROTO_BUILD_DIR)/.installed
+kbproto_install:
+	@test -e $(KBPROTO_BUILD_DIR)/.installed || \
+	$(MAKE) $(KBPROTO_BUILD_DIR)/.installed
 
 $(KBPROTO_BUILD_DIR)/.installed: download_kbproto \
 	$(KBPROTO_BUILD_DIR)/.decompressed $(KBPROTO_BUILD_DIR)/.configured
@@ -84,10 +86,11 @@ $(KBPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 kbproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup kbproto-$(KBPROTO_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup kbproto...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(KBPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(KBPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(KBPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(KBPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(KBPROTO_PKGCONFIGS)
+	$(Q)-rm -rf $(KBPROTO_BUILD_DIR)
 

@@ -47,7 +47,9 @@ MTDUTILS_SBINS := bin2nand flash_eraseall flash_unlock mkfs.jffs2 nand2bin \
 MTDUTILS_HOST_DEPS := zlib_host_install lzo_host_install \
 		utillinuxng_host_install
 
-mtdutils_host_install: $(MTDUTILS_HOST_BUILD_DIR)/.installed
+mtdutils_host_install:
+	@test -e $(MTDUTILS_HOST_BUILD_DIR)/.installed || \
+	$(MAKE) $(MTDUTILS_HOST_BUILD_DIR)/.installed
 
 $(MTDUTILS_HOST_BUILD_DIR)/.installed:  $(MTDUTILS_HOST_DEPS) \
 	download_mtdutils $(MTDUTILS_HOST_BUILD_DIR)/.decompressed
@@ -76,7 +78,9 @@ mtdutils_host_clean:
 
 MTDUTILS_DEPS := zlib_target_install lzo_target_install utillinuxng_install
 
-mtdutils_target_install: $(MTDUTILS_TARGET_BUILD_DIR)/.installed
+mtdutils_target_install:
+	@test -e $(MTDUTILS_TARGET_BUILD_DIR)/.installed || \
+	$(MAKE) $(MTDUTILS_TARGET_BUILD_DIR)/.installed
 
 $(MTDUTILS_TARGET_BUILD_DIR)/.installed: $(MTDUTILS_DEPS) download_mtdutils \
 	$(MTDUTILS_TARGET_BUILD_DIR)/.decompressed
@@ -104,6 +108,7 @@ mtdutils_target_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(MTDUTILS_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(MTDUTILS_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(MTDUTILS_PKGCONFIGS)
+	$(Q)-rm -rf $(MTDUTILS_TARGET_BUILD_DIR)
 
 download_mtdutils:
 	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(MTDUTILS_PACKAGE) \

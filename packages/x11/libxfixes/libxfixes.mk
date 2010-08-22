@@ -37,7 +37,9 @@ LIBXFIXES_PKGCONFIGS =xfixes.pc
 
 LIBXFIXES_DEPS = xproto_install fixesproto_install
 
-libxfixes_install: $(LIBXFIXES_BUILD_DIR)/.installed
+libxfixes_install:
+	@test -e $(LIBXFIXES_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBXFIXES_BUILD_DIR)/.installed
 
 $(LIBXFIXES_BUILD_DIR)/.installed: $(LIBXFIXES_DEPS) download_libxfixes \
 	$(LIBXFIXES_BUILD_DIR)/.decompressed $(LIBXFIXES_BUILD_DIR)/.configured
@@ -95,10 +97,11 @@ $(LIBXFIXES_BUILD_DIR)/.configured:
 	@touch $@
 
 libxfixes_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxfixes-$(LIBXFIXES_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxfixes...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBXFIXES_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBXFIXES_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXFIXES_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXFIXES_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXFIXES_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBXFIXES_BUILD_DIR)
 

@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -40,7 +40,9 @@ LIBXFONT_PKGCONFIGS = xfont.pc
 
 LIBXFONT_DEPS = libfontenc_install freetype_install
 
-libxfont_install: $(LIBXFONT_BUILD_DIR)/.installed
+libxfont_install:
+	@test -e $(LIBXFONT_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBXFONT_BUILD_DIR)/.installed
 
 $(LIBXFONT_BUILD_DIR)/.installed: $(LIBXFONT_DEPS) download_libxfont \
 	$(LIBXFONT_BUILD_DIR)/.decompressed $(LIBXFONT_BUILD_DIR)/.configured
@@ -95,4 +97,5 @@ libxfont_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXFONT_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXFONT_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXFONT_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBXFONT_BUILD_DIR)
 

@@ -1,24 +1,25 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         ncurses.mk
 # \brief	ncurses.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         January 2010
 ################################################################################
 
@@ -39,13 +40,10 @@ NCURSES_LIBS = libcurses.a libform.a libform_g.a libmenu.a libmenu_g.a \
 		libpanel_g.a terminfo
 NCURSES_PKGCONFIGS =
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib32/pkgconfig
-else
-PKG_CONFIG_PATH=$(SYSROOT)/usr/lib/pkgconfig
-endif
-
-ncurses_install: $(NCURSES_BUILD_DIR)/.installed
+ncurses_install:
+	@test -e $(NCURSES_BUILD_DIR)/.installed || \
+	$(MAKE) $(NCURSES_BUILD_DIR)/.installed
+	$(MAKE) $(NCURSES_BUILD_DIR)/.special
 
 $(NCURSES_BUILD_DIR)/.installed: download_ncurses \
 	$(NCURSES_BUILD_DIR)/.decompressed $(NCURSES_BUILD_DIR)/.configured
@@ -53,7 +51,6 @@ $(NCURSES_BUILD_DIR)/.installed: download_ncurses \
 	ncurses-$(NCURSES_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(NCURSES_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(NCURSES_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)-cp -R $(SYSROOT)/usr/share/tabset $(ROOTFS)/usr/share/
 	@touch $@
 
 download_ncurses:
@@ -93,14 +90,17 @@ $(NCURSES_BUILD_DIR)/.configured:
 	@touch $@
 
 ncurses_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup ncurses-$(NCURSES_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup ncurses...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(NCURSES_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(NCURSES_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(NCURSES_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(NCURSES_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(NCURSES_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(NCURSES_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(NCURSES_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(NCURSES_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(NCURSES_PKGCONFIGS)
+	$(Q)-rm -rf $(NCURSES_BUILD_DIR)
 
+.PHONY: $(NCURSES_BUILD_DIR)/.special
+
+$(NCURSES_BUILD_DIR)/.special:
+	$(Q)mkdir -p $(ROOTFS)/usr/share
+	$(Q)-cp -R $(SYSROOT)/usr/share/tabset $(ROOTFS)/usr/share/
+	@touch $@

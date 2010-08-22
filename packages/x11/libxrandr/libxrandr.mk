@@ -36,7 +36,9 @@ LIBXRANDR_PKGCONFIGS = xrandr.pc
 
 LIBXRANDR_DEPS = xproto_install randrproto_install
 
-libxrandr_install: $(LIBXRANDR_BUILD_DIR)/.installed
+libxrandr_install:
+	@test -e $(LIBXRANDR_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBXRANDR_BUILD_DIR)/.installed
 
 $(LIBXRANDR_BUILD_DIR)/.installed: $(LIBXRANDR_DEPS) download_libxrandr \
 	$(LIBXRANDR_BUILD_DIR)/.decompressed $(LIBXRANDR_BUILD_DIR)/.configured
@@ -85,10 +87,11 @@ $(LIBXRANDR_BUILD_DIR)/.configured:
 	@touch $@
 
 libxrandr_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxrandr-$(LIBXRANDR_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxrandr...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBXRANDR_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBXRANDR_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXRANDR_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXRANDR_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXRANDR_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBXRANDR_BUILD_DIR)
 

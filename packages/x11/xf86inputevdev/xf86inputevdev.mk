@@ -37,7 +37,10 @@ XF86INPUTEVDEV_PKGCONFIGS = xorg-evdev.pc
 
 XF86INPUTEVDEV_DEPS = xserver_install
 
-xf86inputevdev_install: $(XF86INPUTEVDEV_BUILD_DIR)/.installed
+xf86inputevdev_install:
+	@test -e $(XF86INPUTEVDEV_BUILD_DIR)/.installed || \
+	$(MAKE) $(XF86INPUTEVDEV_BUILD_DIR)/.installed
+	$(MAKE) $(XF86INPUTEVDEV_BUILD_DIR)/.special
 
 $(XF86INPUTEVDEV_BUILD_DIR)/.installed: $(XF86INPUTEVDEV_DEPS) \
 	download_xf86inputevdev $(XF86INPUTEVDEV_BUILD_DIR)/.decompressed \
@@ -49,7 +52,6 @@ $(XF86INPUTEVDEV_BUILD_DIR)/.installed: $(XF86INPUTEVDEV_DEPS) \
 	$(Q)$(MAKE) -C $(XF86INPUTEVDEV_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
-	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/xorg $(ROOTFS)/usr/$(LIBDIR)/
 	@touch $@
 
 download_xf86inputevdev:
@@ -97,10 +99,16 @@ $(XF86INPUTEVDEV_BUILD_DIR)/.configured:
 	@touch $@
 
 xf86inputevdev_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xf86inputevdev-$(XF86INPUTEVDEV_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup xf86inputevdev...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XF86INPUTEVDEV_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XF86INPUTEVDEV_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XF86INPUTEVDEV_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XF86INPUTEVDEV_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XF86INPUTEVDEV_PKGCONFIGS)
+	$(Q)-rm -rf $(XF86INPUTEVDEV_BUILD_DIR)
 
+.PHONY: $(XF86INPUTEVDEV_BUILD_DIR)/.special
+
+$(XF86INPUTEVDEV_BUILD_DIR)/.special:
+	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/xorg $(ROOTFS)/usr/$(LIBDIR)/
+	@touch $@

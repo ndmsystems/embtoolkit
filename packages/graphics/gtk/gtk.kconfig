@@ -47,16 +47,17 @@ choice
 	depends on EMBTK_HAVE_GTK
 	help
 		Which gtk+ backend to use
-	config  EMBTK_GTK_BACKEND_DIRECTFB
-		bool "DirectFB"
-		select EMBTK_HAVE_DIRECTFB
-		select EMBTK_HAVE_CAIRO_WITH_DIRECTFB
+
 	config  EMBTK_GTK_BACKEND_XSERVER
 		bool "X windowing system"
 		select EMBTK_HAVE_CAIRO_WITH_LIBXCB
 		select EMBTK_HAVE_LIBX11
 		select EMBTK_HAVE_LIBXEXT
 		select EMBTK_HAVE_LIBXRENDER
+	config  EMBTK_GTK_BACKEND_DIRECTFB
+		bool "DirectFB"
+		select EMBTK_HAVE_DIRECTFB
+		select EMBTK_HAVE_CAIRO_WITH_DIRECTFB
 endchoice
 
 choice

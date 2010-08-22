@@ -58,7 +58,9 @@ UTILLINUXNG_CONFIGURE_OPTS := --without-audit --without-selinux \
 
 UTILLINUXNG_DEPS =
 
-utillinuxng_install: $(UTILLINUXNG_BUILD_DIR)/.installed
+utillinuxng_install:
+	@test -e $(UTILLINUXNG_BUILD_DIR)/.installed || \
+	$(MAKE) $(UTILLINUXNG_BUILD_DIR)/.installed
 
 $(UTILLINUXNG_BUILD_DIR)/.installed: $(UTILLINUXNG_DEPS) download_utillinuxng \
 	$(UTILLINUXNG_BUILD_DIR)/.decompressed \
@@ -76,7 +78,7 @@ $(UTILLINUXNG_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(UTILLINUXNG_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(UTILLINUXNG_PACKAGE)
 ifeq ($(CONFIG_EMBTK_UTILLINUXNG_NEED_PATCH),y)
-	@cd $(PACKAGES_BUILD)/util-linux-ng-$(UTILLINUXNG_VERSION); \
+	@cd $(UTILLINUXNG_BUILD_DIR); \
 	patch -p1 < $(DOWNLOAD_DIR)/util-linux-ng-$(UTILLINUXNG_VERSION).patch
 endif
 	@touch $@
@@ -105,12 +107,13 @@ $(UTILLINUXNG_BUILD_DIR)/.configured:
 	@touch $@
 
 utillinuxng_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup util-linux-ng-$(UTILLINUXNG_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup util-linux-ng...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(UTILLINUXNG_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(UTILLINUXNG_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(UTILLINUXNG_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(UTILLINUXNG_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(UTILLINUXNG_PKGCONFIGS)
+	$(Q)-rm -rf $(UTILLINUXNG_BUILD_DIR)
 
 ##################################################
 # util-linux-ng for the host development machine #
@@ -133,7 +136,9 @@ UTILLINUXNG_HOST_CONFIGURE_OPTS := --without-audit --without-selinux \
 
 UTILLINUXNG_HOST_DEPS =
 
-utillinuxng_host_install: $(UTILLINUXNG_HOST_BUILD_DIR)/.installed
+utillinuxng_host_install:
+	test -e $(UTILLINUXNG_HOST_BUILD_DIR)/.installed || \
+	$(MAKE) $(UTILLINUXNG_HOST_BUILD_DIR)/.installed
 
 $(UTILLINUXNG_HOST_BUILD_DIR)/.installed: $(UTILLINUXNG_HOST_DEPS) \
 	download_utillinuxng $(UTILLINUXNG_HOST_BUILD_DIR)/.decompressed \
@@ -161,7 +166,7 @@ $(UTILLINUXNG_HOST_BUILD_DIR)/.configured:
 	@touch $@
 
 utillinuxng_host_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"Cleanup util-linux-ng-$(UTILLINUXNG_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"Cleanup util-linux-ng...")
 
 ##############################
 # Common for host and target #

@@ -36,7 +36,9 @@ LIBXAU_PKGCONFIGS = xau.pc
 
 LIBXAU_DEPS = xproto_install
 
-libxau_install: $(LIBXAU_BUILD_DIR)/.installed
+libxau_install:
+	@test -e $(LIBXAU_BUILD_DIR)/.installed || \
+	$(MAKE) $(LIBXAU_BUILD_DIR)/.installed
 
 $(LIBXAU_BUILD_DIR)/.installed: $(LIBXAU_DEPS) download_libxau \
 	$(LIBXAU_BUILD_DIR)/.decompressed $(LIBXAU_BUILD_DIR)/.configured
@@ -90,4 +92,5 @@ libxau_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXAU_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXAU_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXAU_PKGCONFIGS)
+	$(Q)-rm -rf $(LIBXAU_BUILD_DIR)
 

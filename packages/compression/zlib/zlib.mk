@@ -33,7 +33,9 @@ ZLIB_TARGET_BUILD_DIR := $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)
 ########################
 # zlib on host machine #
 ########################
-zlib_host_install: $(ZLIB_HOST_BUILD_DIR)/.installed
+zlib_host_install:
+	@test -e $(ZLIB_HOST_BUILD_DIR)/.installed || \
+	$(MAKE) $(ZLIB_HOST_BUILD_DIR)/.installed
 
 $(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib \
 	$(ZLIB_HOST_BUILD_DIR)/.decompressed $(ZLIB_HOST_BUILD_DIR)/.configured
@@ -68,7 +70,9 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
 ZLIB_TARGET_LINUX_ARCH := --64
 endif
 
-zlib_target_install: $(ZLIB_TARGET_BUILD_DIR)/.installed
+zlib_target_install:
+	@test -e $(ZLIB_TARGET_BUILD_DIR)/.installed || \
+	$(MAKE) $(ZLIB_TARGET_BUILD_DIR)/.installed
 
 $(ZLIB_TARGET_BUILD_DIR)/.installed: download_zlib \
 	$(ZLIB_TARGET_BUILD_DIR)/.decompressed \
@@ -113,12 +117,13 @@ $(ZLIB_TARGET_BUILD_DIR)/.configured:
 	@touch $@
 
 zlib_target_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup zlib-$(ZLIB_VERSION)...")
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup zlib...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(ZLIB_TARGET_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(ZLIB_TARGET_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(ZLIB_TARGET_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(ZLIB_TARGET_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(ZLIB_TARGET_PKGCONFIGS)
+	$(Q)-rm -rf $(ZLIB_TARGET_BUILD_DIR)
 
 ##########
 # Common #

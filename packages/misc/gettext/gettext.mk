@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 #
 # \file         gettext.mk
 # \brief	gettext.mk of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         December 2009
 ################################################################################
 
@@ -38,7 +38,9 @@ GETTEXT_PKGCONFIGS =
 
 GETTEXT_DEPS = ncurses_install libxml2_install
 
-gettext_install: $(GETTEXT_BUILD_DIR)/.installed
+gettext_install:
+	@test -e $(GETTEXT_BUILD_DIR)/.installed || \
+	$(MAKE) $(GETTEXT_BUILD_DIR)/.installed
 
 $(GETTEXT_BUILD_DIR)/.installed: $(GETTEXT_DEPS) download_gettext \
 	$(GETTEXT_BUILD_DIR)/.decompressed $(GETTEXT_BUILD_DIR)/.configured
@@ -85,12 +87,9 @@ gettext_clean:
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(GETTEXT_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(GETTEXT_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(GETTEXT_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/lib; rm -rf $(GETTEXT_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib/pkgconfig; rm -rf $(GETTEXT_PKGCONFIGS)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cd $(SYSROOT)/usr/lib32; rm -rf $(GETTEXT_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/lib32/pkgconfig; rm -rf $(GETTEXT_PKGCONFIGS)
-endif
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(GETTEXT_LIBS)
+	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(GETTEXT_PKGCONFIGS)
+	$(Q)-rm -rf $(GETTEXT_BUILD_DIR)
 
 #FIXME: this should be fixed in gettext project
 $(GETTEXT_BUILD_DIR)/.patchlibtool:
