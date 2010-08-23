@@ -26,7 +26,7 @@ LINUX_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LINUX_VERSION_STRING)))
 ifeq ($(CONFIG_EMBTK_LINUX_HAVE_MIRROR),y)
 LINUX_SITE := $(subst ",,$(strip $(CONFIG_EMBTK_LINUX_HAVE_MIRROR_SITE)))
 else
-LINUX_SITE := ftp://ftp.kernel.org/pub/linux/kernel/v2.6
+LINUX_SITE := http://ftp.kernel.org/pub/linux/kernel/v2.6
 endif
 LINUX_PACKAGE := linux-$(LINUX_VERSION).tar.bz2
 LINUX_BUILD_DIR := $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
