@@ -24,7 +24,6 @@
 
 choice
 	prompt "Version of binutils you wish"
-	default EMBTK_BINUTILS_VERSION_2_20
 	help
 		Here you can choose which version on binutils your toochain
 		will use.
