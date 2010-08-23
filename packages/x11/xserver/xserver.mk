@@ -74,7 +74,7 @@ endif
 xserver_install:
 	@test -e $(XSERVER_BUILD_DIR)/.installed || \
 	$(MAKE) $(XSERVER_BUILD_DIR)/.installed
-	$(MAKE) $(XSERVER_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(XSERVER_BUILD_DIR)/.special
 
 $(XSERVER_BUILD_DIR)/.installed: $(XSERVER_DEPS) download_xserver \
 	$(XSERVER_BUILD_DIR)/.decompressed $(XSERVER_BUILD_DIR)/.configured
@@ -139,7 +139,7 @@ xserver_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XSERVER_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XSERVER_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XSERVER_PKGCONFIGS)
-	$(Q)-rm -rf $(XSERVER_BUILD_DIR)
+	$(Q)-rm -rf $(XSERVER_BUILD_DIR)*
 
 .PHONY: $(XSERVER_BUILD_DIR)/.special
 

@@ -91,5 +91,5 @@ xtrans_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XTRANS_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XTRANS_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XTRANS_PKGCONFIGS)
-	$(Q)-rm -rf $(XTRANS_BUILD_DIR)
+	$(Q)-rm -rf $(XTRANS_BUILD_DIR)*
 

@@ -40,7 +40,7 @@ PANGO_DEPS := glib_install fontconfig_install cairo_install
 pango_install:
 	@test -e $(PANGO_BUILD_DIR)/.installed || \
 	$(MAKE) $(PANGO_BUILD_DIR)/.installed
-	$(MAKE) $(PANGO_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(PANGO_BUILD_DIR)/.special
 
 $(PANGO_BUILD_DIR)/.installed: $(PANGO_DEPS) download_pango \
 	$(PANGO_BUILD_DIR)/.decompressed $(PANGO_BUILD_DIR)/.configured
@@ -113,5 +113,5 @@ pango_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(PANGO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(PANGO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(PANGO_PKGCONFIGS)
-	$(Q)-rm -rf $(PANGO_BUILD_DIR)
+	$(Q)-rm -rf $(PANGO_BUILD_DIR)*
 

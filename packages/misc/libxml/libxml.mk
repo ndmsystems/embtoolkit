@@ -93,5 +93,5 @@ libxml2_clean:
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXML2_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXML2_PKGCONFIGS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXML2_LIBTOOLS)
-	$(Q)-rm -rf $(LIBXML2_BUILD_DIR)
+	$(Q)-rm -rf $(LIBXML2_BUILD_DIR)*
 

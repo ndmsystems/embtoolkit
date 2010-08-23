@@ -99,7 +99,7 @@ xcbutil_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XCBUTIL_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XCBUTIL_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XCBUTIL_PKGCONFIGS)
-	$(Q)-rm -rf $(XCBUTIL_BUILD_DIR)
+	$(Q)-rm -rf $(XCBUTIL_BUILD_DIR)*
 
 $(XCBUTIL_BUILD_DIR)/.patchlibtool:
 	@XCBUTIL_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \

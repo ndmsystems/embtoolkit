@@ -92,5 +92,5 @@ kbproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(KBPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(KBPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(KBPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(KBPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(KBPROTO_BUILD_DIR)*
 

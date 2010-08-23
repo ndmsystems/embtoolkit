@@ -94,7 +94,7 @@ libxcb_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXCB_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXCB_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXCB_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXCB_BUILD_DIR)
+	$(Q)-rm -rf $(LIBXCB_BUILD_DIR)*
 
 $(LIBXCB_BUILD_DIR)/.patchlibtool:
 	@LIBXCB_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \

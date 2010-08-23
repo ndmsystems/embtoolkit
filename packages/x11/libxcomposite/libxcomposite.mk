@@ -103,5 +103,5 @@ libxcomposite_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXCOMPOSITE_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXCOMPOSITE_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXCOMPOSITE_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXCOMPOSITE_BUILD_DIR)
+	$(Q)-rm -rf $(LIBXCOMPOSITE_BUILD_DIR)*
 

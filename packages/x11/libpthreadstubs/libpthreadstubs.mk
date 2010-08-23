@@ -89,5 +89,5 @@ libpthreadstubs_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBPTHREADSTUBS_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBPTHREADSTUBS_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBPTHREADSTUBS_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBPTHREADSTUBS_BUILD_DIR)
+	$(Q)-rm -rf $(LIBPTHREADSTUBS_BUILD_DIR)*
 

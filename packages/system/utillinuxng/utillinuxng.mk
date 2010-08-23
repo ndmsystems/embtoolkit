@@ -113,7 +113,7 @@ utillinuxng_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(UTILLINUXNG_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(UTILLINUXNG_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(UTILLINUXNG_PKGCONFIGS)
-	$(Q)-rm -rf $(UTILLINUXNG_BUILD_DIR)
+	$(Q)-rm -rf $(UTILLINUXNG_BUILD_DIR)*
 
 ##################################################
 # util-linux-ng for the host development machine #

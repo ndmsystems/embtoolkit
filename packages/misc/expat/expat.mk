@@ -102,5 +102,5 @@ expat_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(EXPAT_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(EXPAT_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(EXPAT_PKGCONFIGS)
-	$(Q)-rm -rf $(EXPAT_BUILD_DIR)
+	$(Q)-rm -rf $(EXPAT_BUILD_DIR)*
 

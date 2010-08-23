@@ -91,5 +91,5 @@ pixman_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(PIXMAN_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(PIXMAN_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(PIXMAN_PKGCONFIGS)
-	$(Q)-rm -rf $(PIXMAN_BUILD_DIR)
+	$(Q)-rm -rf $(PIXMAN_BUILD_DIR)*
 

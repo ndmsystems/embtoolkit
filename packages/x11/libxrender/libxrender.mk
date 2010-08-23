@@ -93,5 +93,5 @@ libxrender_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXRENDER_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXRENDER_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXRENDER_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXRENDER_BUILD_DIR)
+	$(Q)-rm -rf $(LIBXRENDER_BUILD_DIR)*
 

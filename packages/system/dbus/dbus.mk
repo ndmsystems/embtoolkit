@@ -43,6 +43,7 @@ DBUS_CONFIGURE_OPTS := --enable-abstract-sockets
 dbus_install:
 	test -e $(DBUS_BUILD_DIR)/.installed || \
 	$(MAKE) $(DBUS_BUILD_DIR)/.installed
+	$(Q)$(MAKE) $(DBUS_BUILD_DIR)/.special
 
 $(DBUS_BUILD_DIR)/.installed: $(DBUS_DEPS) download_dbus \
 	$(DBUS_BUILD_DIR)/.decompressed $(DBUS_BUILD_DIR)/.configured
@@ -107,7 +108,7 @@ dbus_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(DBUS_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(DBUS_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(DBUS_PKGCONFIGS)
-	$(Q)-rm -rf $(DBUS_BUILD_DIR)
+	$(Q)-rm -rf $(DBUS_BUILD_DIR)*
 
 .PHONY: $(DBUS_BUILD_DIR)/.special
 

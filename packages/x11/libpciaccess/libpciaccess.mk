@@ -104,5 +104,5 @@ libpciaccess_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBPCIACCESS_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBPCIACCESS_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBPCIACCESS_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBPCIACCESS_BUILD_DIR)
+	$(Q)-rm -rf $(LIBPCIACCESS_BUILD_DIR)*
 

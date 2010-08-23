@@ -49,7 +49,7 @@ endif
 gtk_install:
 	@test -e $(GTK_BUILD_DIR)/.installed || \
 	$(MAKE) $(GTK_BUILD_DIR)/.installed
-	$(MAKE) $(GTK_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(GTK_BUILD_DIR)/.special
 
 $(GTK_BUILD_DIR)/.installed: $(GTK_DEPS) download_gtk \
 	$(GTK_BUILD_DIR)/.decompressed $(GTK_BUILD_DIR)/.configured
@@ -143,5 +143,5 @@ gtk_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(GTK_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(GTK_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(GTK_PKGCONFIGS)
-	$(Q)-rm -rf $(GTK_BUILD_DIR)
+	$(Q)-rm -rf $(GTK_BUILD_DIR)*
 

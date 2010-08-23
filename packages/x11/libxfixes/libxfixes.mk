@@ -103,5 +103,5 @@ libxfixes_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXFIXES_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXFIXES_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXFIXES_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXFIXES_BUILD_DIR)
+	$(Q)-rm -rf $(LIBXFIXES_BUILD_DIR)*
 

@@ -93,5 +93,5 @@ libxft_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXFT_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXFT_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXFT_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXFT_BUILD_DIR)
+	$(Q)-rm -rf $(LIBXFT_BUILD_DIR)*
 

@@ -93,5 +93,5 @@ xproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(XPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(XPROTO_BUILD_DIR)*
 

@@ -93,5 +93,5 @@ libxrandr_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXRANDR_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXRANDR_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXRANDR_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXRANDR_BUILD_DIR)
+	$(Q)-rm -rf $(LIBXRANDR_BUILD_DIR)*
 

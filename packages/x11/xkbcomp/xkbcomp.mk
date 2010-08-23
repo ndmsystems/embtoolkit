@@ -91,5 +91,5 @@ xkbcomp_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XKBCOMP_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XKBCOMP_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XKBCOMP_PKGCONFIGS)
-	$(Q)-rm -rf $(XKBCOMP_BUILD_DIR)
+	$(Q)-rm -rf $(XKBCOMP_BUILD_DIR)*
 

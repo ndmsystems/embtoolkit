@@ -90,5 +90,5 @@ renderproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RENDERPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RENDERPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RENDERPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(RENDERPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(RENDERPROTO_BUILD_DIR)*
 

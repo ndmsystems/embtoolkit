@@ -93,5 +93,5 @@ libpng_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBPNG_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBPNG_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBPNG_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBPNG_BUILD_DIR)
+	$(Q)-rm -rf $(LIBPNG_BUILD_DIR)*
 

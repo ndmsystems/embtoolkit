@@ -89,5 +89,5 @@ xcbproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XCBPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XCBPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XCBPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(XCBPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(XCBPROTO_BUILD_DIR)*
 

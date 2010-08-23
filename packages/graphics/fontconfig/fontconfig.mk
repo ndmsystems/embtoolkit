@@ -99,7 +99,7 @@ fontconfig_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FONTCONFIG_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FONTCONFIG_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FONTCONFIG_PKGCONFIGS)
-	$(Q)-rm -rf $(FONTCONFIG_BUILD_DIR)
+	$(Q)-rm -rf $(FONTCONFIG_BUILD_DIR)*
 
 $(FONTCONFIG_BUILD_DIR)/.special:
 	$(Q)-cp -R $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc/

@@ -40,7 +40,7 @@ XF86INPUTEVDEV_DEPS = xserver_install
 xf86inputevdev_install:
 	@test -e $(XF86INPUTEVDEV_BUILD_DIR)/.installed || \
 	$(MAKE) $(XF86INPUTEVDEV_BUILD_DIR)/.installed
-	$(MAKE) $(XF86INPUTEVDEV_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(XF86INPUTEVDEV_BUILD_DIR)/.special
 
 $(XF86INPUTEVDEV_BUILD_DIR)/.installed: $(XF86INPUTEVDEV_DEPS) \
 	download_xf86inputevdev $(XF86INPUTEVDEV_BUILD_DIR)/.decompressed \
@@ -105,7 +105,7 @@ xf86inputevdev_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XF86INPUTEVDEV_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XF86INPUTEVDEV_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XF86INPUTEVDEV_PKGCONFIGS)
-	$(Q)-rm -rf $(XF86INPUTEVDEV_BUILD_DIR)
+	$(Q)-rm -rf $(XF86INPUTEVDEV_BUILD_DIR)*
 
 .PHONY: $(XF86INPUTEVDEV_BUILD_DIR)/.special
 

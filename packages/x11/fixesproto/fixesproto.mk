@@ -90,5 +90,5 @@ fixesproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FIXESPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FIXESPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FIXESPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(FIXESPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(FIXESPROTO_BUILD_DIR)*
 

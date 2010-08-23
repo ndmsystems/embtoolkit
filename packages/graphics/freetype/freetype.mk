@@ -93,5 +93,5 @@ freetype_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FREETYPE_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FREETYPE_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FREETYPE_PKGCONFIGS)
-	$(Q)-rm -rf $(FREETYPE_BUILD_DIR)
+	$(Q)-rm -rf $(FREETYPE_BUILD_DIR)*
 

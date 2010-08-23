@@ -90,5 +90,5 @@ resourceproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RESOURCEPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RESOURCEPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RESOURCEPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(RESOURCEPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(RESOURCEPROTO_BUILD_DIR)*
 

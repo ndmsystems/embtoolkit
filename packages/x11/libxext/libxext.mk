@@ -101,5 +101,5 @@ libxext_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXEXT_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXEXT_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXEXT_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXEXT_BUILD_DIR)
+	$(Q)-rm -rf $(LIBXEXT_BUILD_DIR)*
 

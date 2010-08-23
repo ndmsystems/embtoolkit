@@ -103,5 +103,5 @@ foo_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FOO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FOO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FOO_PKGCONFIGS)
-	$(Q)-rm -rf $(FOO_BUILD_DIR)
+	$(Q)-rm -rf $(FOO_BUILD_DIR)*
 

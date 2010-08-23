@@ -90,5 +90,5 @@ bigreqsproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(BIGREQSPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(BIGREQSPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(BIGREQSPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(BIGREQSPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(BIGREQSPROTO_BUILD_DIR)*
 

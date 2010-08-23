@@ -99,7 +99,7 @@ endif
 directfb_install:
 	@test -e $(DIRECTFB_BUILD_DIR)/.installed || \
 	$(MAKE) $(DIRECTFB_BUILD_DIR)/.installed
-	$(MAKE) $(DIRECTFB_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(DIRECTFB_BUILD_DIR)/.special
 
 $(DIRECTFB_BUILD_DIR)/.installed:  $(DIRECTFB_DEPS) download_directfb \
 	$(DIRECTFB_BUILD_DIR)/.decompressed $(DIRECTFB_BUILD_DIR)/.configured

@@ -125,5 +125,5 @@ glib_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(GLIB_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(GLIB_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(GLIB_PKGCONFIGS)
-	$(Q)-rm -rf $(GLIB_BUILD_DIR)
+	$(Q)-rm -rf $(GLIB_BUILD_DIR)*
 

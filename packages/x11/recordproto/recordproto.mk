@@ -90,5 +90,5 @@ recordproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RECORDPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RECORDPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RECORDPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(RECORDPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(RECORDPROTO_BUILD_DIR)*
 

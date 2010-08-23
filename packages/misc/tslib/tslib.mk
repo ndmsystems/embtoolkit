@@ -40,7 +40,7 @@ TSLIB_DEPS =
 tslib_install:
 	@test -e $(TSLIB_BUILD_DIR)/.installed || \
 	$(MAKE) $(TSLIB_BUILD_DIR)/.installed
-	$(MAKE) $(TSLIB_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(TSLIB_BUILD_DIR)/.special
 
 $(TSLIB_BUILD_DIR)/.installed: $(TSLIB_DEPS) download_tslib \
 	$(TSLIB_BUILD_DIR)/.decompressed $(TSLIB_BUILD_DIR)/.configured
@@ -107,7 +107,7 @@ tslib_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(TSLIB_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(TSLIB_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(TSLIB_PKGCONFIGS)
-	$(Q)-rm -rf $(TSLIB_BUILD_DIR)
+	$(Q)-rm -rf $(TSLIB_BUILD_DIR)*
 
 
 .PHONY: $(TSLIB_BUILD_DIR)/.special

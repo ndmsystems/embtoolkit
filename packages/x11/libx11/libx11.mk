@@ -42,7 +42,7 @@ LIBX11_DEPS = utilmacros_install inputproto_install kbproto_install \
 libx11_install:
 	@test -e $(LIBX11_BUILD_DIR)/.installed || \
 	$(MAKE) $(LIBX11_BUILD_DIR)/.installed
-	$(MAKE) $(LIBX11_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(LIBX11_BUILD_DIR)/.special
 
 $(LIBX11_BUILD_DIR)/.installed: $(LIBX11_DEPS) download_libx11 \
 	$(LIBX11_BUILD_DIR)/.decompressed $(LIBX11_BUILD_DIR)/.configured
@@ -100,7 +100,7 @@ libx11_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBX11_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBX11_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBX11_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBX11_BUILD_DIR)
+	$(Q)-rm -rf $(LIBX11_BUILD_DIR)*
 
 $(LIBX11_BUILD_DIR)/.patchlibtool:
 	@LIBX11_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libX11-* -type f -name *.la`; \

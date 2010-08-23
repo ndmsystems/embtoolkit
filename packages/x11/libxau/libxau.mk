@@ -92,5 +92,5 @@ libxau_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXAU_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXAU_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXAU_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXAU_BUILD_DIR)
+	$(Q)-rm -rf $(LIBXAU_BUILD_DIR)*
 

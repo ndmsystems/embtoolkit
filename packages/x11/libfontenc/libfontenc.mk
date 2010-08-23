@@ -90,5 +90,5 @@ libfontenc_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBFONTENC_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBFONTENC_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBFONTENC_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBFONTENC_BUILD_DIR)
+	$(Q)-rm -rf $(LIBFONTENC_BUILD_DIR)*
 

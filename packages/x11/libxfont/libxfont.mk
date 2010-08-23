@@ -97,5 +97,5 @@ libxfont_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXFONT_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXFONT_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXFONT_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXFONT_BUILD_DIR)
+	$(Q)-rm -rf $(LIBXFONT_BUILD_DIR)*
 

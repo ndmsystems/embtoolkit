@@ -91,5 +91,5 @@ utilmacros_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(UTILMACROS_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(UTILMACROS_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(UTILMACROS_PKGCONFIGS)
-	$(Q)-rm -rf $(UTILMACROS_BUILD_DIR)
+	$(Q)-rm -rf $(UTILMACROS_BUILD_DIR)*
 

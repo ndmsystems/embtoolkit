@@ -43,7 +43,7 @@ NCURSES_PKGCONFIGS =
 ncurses_install:
 	@test -e $(NCURSES_BUILD_DIR)/.installed || \
 	$(MAKE) $(NCURSES_BUILD_DIR)/.installed
-	$(MAKE) $(NCURSES_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(NCURSES_BUILD_DIR)/.special
 
 $(NCURSES_BUILD_DIR)/.installed: download_ncurses \
 	$(NCURSES_BUILD_DIR)/.decompressed $(NCURSES_BUILD_DIR)/.configured
@@ -96,7 +96,7 @@ ncurses_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(NCURSES_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(NCURSES_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(NCURSES_PKGCONFIGS)
-	$(Q)-rm -rf $(NCURSES_BUILD_DIR)
+	$(Q)-rm -rf $(NCURSES_BUILD_DIR)*
 
 .PHONY: $(NCURSES_BUILD_DIR)/.special
 

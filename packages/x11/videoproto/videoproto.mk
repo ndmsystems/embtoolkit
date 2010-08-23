@@ -92,5 +92,5 @@ videoproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(VIDEOPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(VIDEOPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(VIDEOPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(VIDEOPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(VIDEOPROTO_BUILD_DIR)*
 

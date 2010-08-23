@@ -90,5 +90,5 @@ randrproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RANDRPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RANDRPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RANDRPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(RANDRPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(RANDRPROTO_BUILD_DIR)*
 

@@ -50,7 +50,7 @@ endif
 openssl_install:
 	@test -e $(OPENSSL_BUILD_DIR)/.installed || \
 	$(MAKE) $(OPENSSL_BUILD_DIR)/.installed
-	$(MAKE) $(OPENSSL_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(OPENSSL_BUILD_DIR)/.special
 
 $(OPENSSL_BUILD_DIR)/.installed: download_openssl \
 	$(OPENSSL_BUILD_DIR)/.decompressed $(OPENSSL_BUILD_DIR)/.configured
@@ -104,7 +104,7 @@ openssl_clean:
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(OPENSSL_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(OPENSSL_PKGCONFIGS)
 	$(Q)-cd $(SYSROOT)/etc; rm -rf $(OPENSSL_ETC)
-	$(Q)-rm -rf $(OPENSSL_BUILD_DIR)
+	$(Q)-rm -rf $(OPENSSL_BUILD_DIR)*
 
 .PHONY: $(OPENSSL_BUILD_DIR)/.special
 

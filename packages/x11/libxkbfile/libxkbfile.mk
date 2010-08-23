@@ -94,5 +94,5 @@ libxkbfile_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXKBFILE_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXKBFILE_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXKBFILE_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXKBFILE_BUILD_DIR)
+	$(Q)-rm -rf $(LIBXKBFILE_BUILD_DIR)*
 

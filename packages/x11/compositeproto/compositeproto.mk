@@ -91,5 +91,5 @@ compositeproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(COMPOSITEPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(COMPOSITEPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(COMPOSITEPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(COMPOSITEPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(COMPOSITEPROTO_BUILD_DIR)*
 

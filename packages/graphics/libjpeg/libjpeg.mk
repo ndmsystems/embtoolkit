@@ -88,5 +88,5 @@ libjpeg_clean:
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBJPEG_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBJPEG_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBJPEG_LIBS)
-	$(Q)-rm -rf $(LIBJPEG_BUILD_DIR)
+	$(Q)-rm -rf $(LIBJPEG_BUILD_DIR)*
 

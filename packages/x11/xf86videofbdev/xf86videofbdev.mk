@@ -40,7 +40,7 @@ XF86VIDEOFBDEV_DEPS = xserver_install
 xf86videofbdev_install:
 	@test -e $(XF86VIDEOFBDEV_BUILD_DIR)/.installed || \
 	$(MAKE) $(XF86VIDEOFBDEV_BUILD_DIR)/.installed
-	$(MAKE) $(XF86VIDEOFBDEV_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(XF86VIDEOFBDEV_BUILD_DIR)/.special
 
 $(XF86VIDEOFBDEV_BUILD_DIR)/.installed: $(XF86VIDEOFBDEV_DEPS) \
 	download_xf86videofbdev $(XF86VIDEOFBDEV_BUILD_DIR)/.decompressed \
@@ -105,7 +105,7 @@ xf86videofbdev_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XF86VIDEOFBDEV_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XF86VIDEOFBDEV_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XF86VIDEOFBDEV_PKGCONFIGS)
-	$(Q)-rm -rf $(XF86VIDEOFBDEV_BUILD_DIR)
+	$(Q)-rm -rf $(XF86VIDEOFBDEV_BUILD_DIR)*
 
 .PHONY: $(XF86VIDEOFBDEV_BUILD_DIR)/.special
 

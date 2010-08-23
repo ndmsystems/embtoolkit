@@ -90,5 +90,5 @@ damageproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(DAMAGEPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(DAMAGEPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(DAMAGEPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(DAMAGEPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(DAMAGEPROTO_BUILD_DIR)*
 

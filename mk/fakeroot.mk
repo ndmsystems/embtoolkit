@@ -29,6 +29,7 @@ FAKEROOT_PACKAGE := fakeroot_$(FAKEROOT_VERSION).tar.gz
 FAKEROOT_BUILD_DIR := $(TOOLS_BUILD)/fakeroot-build
 FAKEROOT_DIR := $(HOSTTOOLS)/usr/local/fakeroot
 FAKEROOT_BIN := $(FAKEROOT_DIR)/bin/fakeroot
+export FAKEROOT_BIN
 
 fakeroot_install:
 	@test -e $(FAKEROOT_BUILD_DIR)/.installed || \

@@ -93,5 +93,5 @@ libtiff_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBTIFF_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBTIFF_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBTIFF_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBTIFF_BUILD_DIR)
+	$(Q)-rm -rf $(LIBTIFF_BUILD_DIR)*
 

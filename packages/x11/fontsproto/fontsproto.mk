@@ -92,5 +92,5 @@ fontsproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FONTSPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FONTSPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FONTSPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(FONTSPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(FONTSPROTO_BUILD_DIR)*
 

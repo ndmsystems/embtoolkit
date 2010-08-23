@@ -89,7 +89,7 @@ gettext_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(GETTEXT_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(GETTEXT_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(GETTEXT_PKGCONFIGS)
-	$(Q)-rm -rf $(GETTEXT_BUILD_DIR)
+	$(Q)-rm -rf $(GETTEXT_BUILD_DIR)*
 
 #FIXME: this should be fixed in gettext project
 $(GETTEXT_BUILD_DIR)/.patchlibtool:

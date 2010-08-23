@@ -104,5 +104,5 @@ xextproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XEXTPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XEXTPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XEXTPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(XEXTPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(XEXTPROTO_BUILD_DIR)*
 

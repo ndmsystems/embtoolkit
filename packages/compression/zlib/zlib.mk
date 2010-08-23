@@ -123,7 +123,7 @@ zlib_target_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(ZLIB_TARGET_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(ZLIB_TARGET_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(ZLIB_TARGET_PKGCONFIGS)
-	$(Q)-rm -rf $(ZLIB_TARGET_BUILD_DIR)
+	$(Q)-rm -rf $(ZLIB_TARGET_BUILD_DIR)*
 
 ##########
 # Common #

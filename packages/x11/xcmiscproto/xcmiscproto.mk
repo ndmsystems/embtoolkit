@@ -90,5 +90,5 @@ xcmiscproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XCMISCPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XCMISCPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XCMISCPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(XCMISCPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(XCMISCPROTO_BUILD_DIR)*
 

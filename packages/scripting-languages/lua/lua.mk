@@ -82,5 +82,5 @@ lua_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LUA_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LUA_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LUA_PKGCONFIGS)
-	$(Q)-rm -rf $(LUA_BUILD_DIR)
+	$(Q)-rm -rf $(LUA_BUILD_DIR)*
 

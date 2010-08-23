@@ -108,7 +108,7 @@ mtdutils_target_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(MTDUTILS_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(MTDUTILS_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(MTDUTILS_PKGCONFIGS)
-	$(Q)-rm -rf $(MTDUTILS_TARGET_BUILD_DIR)
+	$(Q)-rm -rf $(MTDUTILS_TARGET_BUILD_DIR)*
 
 download_mtdutils:
 	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(MTDUTILS_PACKAGE) \

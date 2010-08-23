@@ -41,7 +41,7 @@ IMLIB2_DEPS := libpng_install freetype_install libjpeg_install
 imlib2_install:
 	test -e $(IMLIB2_BUILD_DIR)/.installed || \
 	$(MAKE) $(IMLIB2_BUILD_DIR)/.installed
-	$(MAKE) $(IMLIB2_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(IMLIB2_BUILD_DIR)/.special
 
 $(IMLIB2_BUILD_DIR)/.installed: $(IMLIB2_DEPS) download_imlib2 \
 	$(IMLIB2_BUILD_DIR)/.decompressed $(IMLIB2_BUILD_DIR)/.configured
@@ -105,7 +105,7 @@ imlib2_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(IMLIB2_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(IMLIB2_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(IMLIB2_PKGCONFIGS)
-	$(Q)-rm -rf $(IMLIB2_BUILD_DIR)
+	$(Q)-rm -rf $(IMLIB2_BUILD_DIR)*
 
 .PHONY: $(IMLIB2_BUILD_DIR)/.special
 

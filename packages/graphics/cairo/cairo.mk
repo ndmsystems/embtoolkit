@@ -109,5 +109,5 @@ cairo_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(CAIRO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(CAIRO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(CAIRO_PKGCONFIGS)
-	$(Q)-rm -rf $(CAIRO_BUILD_DIR)
+	$(Q)-rm -rf $(CAIRO_BUILD_DIR)*
 

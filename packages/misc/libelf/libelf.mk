@@ -102,5 +102,5 @@ libelf_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBELF_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBELF_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBELF_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBELF_BUILD_DIR)
+	$(Q)-rm -rf $(LIBELF_BUILD_DIR)*
 

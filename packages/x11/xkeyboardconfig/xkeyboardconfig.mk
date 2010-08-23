@@ -39,7 +39,7 @@ XKEYBOARDCONFIG_DEPS = xkbcomp_install
 xkeyboardconfig_install:
 	@test -e $(XKEYBOARDCONFIG_BUILD_DIR)/.installed || \
 	$(MAKE) $(XKEYBOARDCONFIG_BUILD_DIR)/.installed
-	$(MAKE) $(XKEYBOARDCONFIG_BUILD_DIR)/.special
+	$(Q)$(MAKE) $(XKEYBOARDCONFIG_BUILD_DIR)/.special
 
 $(XKEYBOARDCONFIG_BUILD_DIR)/.installed: $(XKEYBOARDCONFIG_DEPS) \
 	download_xkeyboardconfig $(XKEYBOARDCONFIG_BUILD_DIR)/.decompressed \
@@ -94,7 +94,7 @@ xkeyboardconfig_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XKEYBOARDCONFIG_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XKEYBOARDCONFIG_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XKEYBOARDCONFIG_PKGCONFIGS)
-	$(Q)-rm -rf $(XKEYBOARDCONFIG_BUILD_DIR)
+	$(Q)-rm -rf $(XKEYBOARDCONFIG_BUILD_DIR)*
 
 .PHONY: $(XKEYBOARDCONFIG_BUILD_DIR)/.special
 

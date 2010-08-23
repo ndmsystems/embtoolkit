@@ -91,5 +91,5 @@ inputproto_clean:
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(INPUTPROTO_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(INPUTPROTO_LIBS)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(INPUTPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(INPUTPROTO_BUILD_DIR)
+	$(Q)-rm -rf $(INPUTPROTO_BUILD_DIR)*
 
