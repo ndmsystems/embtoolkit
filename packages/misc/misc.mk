@@ -46,10 +46,6 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXML2) += libxml2_install
 include $(EMBTK_ROOT)/packages/misc/ncurses/ncurses.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_NCURSES) += ncurses_install
 
-#Pango
-include $(EMBTK_ROOT)/packages/misc/pango/pango.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_PANGO) += pango_install
-
 #tslib
 include $(EMBTK_ROOT)/packages/misc/tslib/tslib.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_TSLIB) += tslib_install

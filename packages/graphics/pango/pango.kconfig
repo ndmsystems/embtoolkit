@@ -36,6 +36,14 @@ config EMBTK_HAVE_PANGO
 		that text layout is needed, though most of the work on Pango so
 		far has been done in the context of the GTK+ widget toolkit.
 		Pango forms the core of text and font handling for GTK+-2.x.
+
+config EMBTK_HAVE_PANGO_WITH_X
+	bool "Build Pango with X library support"
+	depends on EMBTK_HAVE_PANGO
+	select EMBTK_HAVE_LIBX11
+	help
+		Build Pango with X library support
+
 choice
 	prompt "Pango version you wish"
 	depends on EMBTK_HAVE_PANGO

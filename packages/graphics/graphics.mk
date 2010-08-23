@@ -67,6 +67,10 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPNG) += libpng_install
 include $(EMBTK_ROOT)/packages/graphics/libtiff/libtiff.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIFF) += libtiff_install
 
+#Pango
+include $(EMBTK_ROOT)/packages/graphics/pango/pango.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_PANGO) += pango_install
+
 #pixman
 include $(EMBTK_ROOT)/packages/graphics/pixman/pixman.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_PIXMAN) += pixman_install

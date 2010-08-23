@@ -35,7 +35,14 @@ PANGO_INCLUDES = pango*
 PANGO_LIBS = pango-* pango* libpango*
 PANGO_PKGCONFIGS = pango*.pc
 
-PANGO_DEPS := glib_install fontconfig_install cairo_install
+ifeq ($(CONFIG_EMBTK_HAVE_PANGO_WITH_X),y)
+PANGO_CONFIGURE_OPTS := --with-x
+PANGO_DEPS := libx11_install
+else
+PANGO_CONFIGURE_OPTS := --without-x
+endif
+
+PANGO_DEPS += glib_install fontconfig_install cairo_install
 
 pango_install:
 	@test -e $(PANGO_BUILD_DIR)/.installed || \
@@ -87,7 +94,7 @@ $(PANGO_BUILD_DIR)/.configured:
 	PKG_CONFIG_LIBDIR=$(SYSROOT)/usr/lib \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --without-x
+	--prefix=/usr $(PANGO_CONFIGURE_OPTS)
 	@touch $@
 
 $(PANGO_BUILD_DIR)/.patchlibtool:
@@ -105,6 +112,10 @@ $(PANGO_BUILD_DIR)/.patchlibtool:
 
 $(PANGO_BUILD_DIR)/.special:
 	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/pango $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)-mkdir -p $(ROOTFS)/usr
+	$(Q)-mkdir -p $(ROOTFS)/usr/etc
+	$(Q)-cp -R $(SYSROOT)/usr/etc/pango $(ROOTFS)/usr/etc/
+	@touch $@
 
 pango_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup pango-$(PANGO_VERSION)...")
