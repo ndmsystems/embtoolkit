@@ -201,5 +201,5 @@ directfb_clean:
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(DIRECTFB_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(DIRECTFB_INCLUDES)
 	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(DIRECTFB_LIBS)
-	$(Q)-rm -rf $(DIRECTFB_BUILD_DIR)
+	$(Q)-rm -rf $(DIRECTFB_BUILD_DIR)*
 
