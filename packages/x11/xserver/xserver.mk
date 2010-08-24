@@ -128,7 +128,7 @@ $(XSERVER_BUILD_DIR)/.configured:
 	--with-vendor-name-short="EmbToolkit" \
 	--with-vendor-web=$(EMBTK_HOMEURL) \
 	--with-builderstring="embtoolkit-$(EMBTK_VERSION)" \
-	--with-builder-addr="embtk-devel@embtoolkit.org" \
+	--with-builder-addr="embtk-dev@embtoolkit.org" \
 	--with-os-name=$(STRICT_GNU_TARGET) --with-os-vendor="embtoolkit.org"
 	@touch $@
 
