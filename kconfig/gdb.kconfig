@@ -40,9 +40,11 @@ choice
 		bool "gdb-7.1"
 	config EMBTK_GDB_VERSION_7_0_1
 		depends on !EMBTK_CLIB_UCLIBC
+		depends on EMBTK_OLDPACKAGES
 		bool "gdb-7.0.1"
 	config EMBTK_GDB_VERSION_7_0
 		depends on !EMBTK_CLIB_UCLIBC
+		depends on EMBTK_OLDPACKAGES
 		bool "gdb-7.0"
 	config EMBTK_GDB_VERSION_6_8
 		bool "gdb-6.8"
