@@ -23,7 +23,7 @@
 # \date         May 2009
 ################################################################################
 
-OPTION_EGLIBC_ADVANCED_INET6
+OPTION_EGLIBC_ADVANCED_INET6=n
 OPTION_EGLIBC_BACKTRACE=n
 OPTION_EGLIBC_BSD=n
 OPTION_EGLIBC_CXX_TESTS=n
