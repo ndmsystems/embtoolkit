@@ -54,6 +54,7 @@ source packages/x11/libpciaccess/libpciaccess.kconfig
 source packages/x11/libpthreadstubs/libpthreadstubs.kconfig
 source packages/x11/libx11/libx11.kconfig
 source packages/x11/libxau/libxau.kconfig
+source packages/x11/libxi/libxi.kconfig
 source packages/x11/libxcb/libxcb.kconfig
 source packages/x11/libxcomposite/libxcomposite.kconfig
 source packages/x11/libxext/libxext.kconfig
@@ -66,6 +67,7 @@ source packages/x11/libxrender/libxrender.kconfig
 endmenu
 
 menu "X windowing system application packages"
+source packages/x11/xinput/xinput.kconfig
 source packages/x11/xkeyboardconfig/xkeyboardconfig.kconfig
 source packages/x11/xkbcomp/xkbcomp.kconfig
 source packages/x11/xtrans/xtrans.kconfig

@@ -123,6 +123,10 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBX11) += libx11_install
 include $(EMBTK_ROOT)/packages/x11/libxau/libxau.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXAU) += libxau_install
 
+#libxi
+include $(EMBTK_ROOT)/packages/x11/libxi/libxi.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXI) += libxi_install
+
 #libxcb
 include $(EMBTK_ROOT)/packages/x11/libxcb/libxcb.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXCB) += libxcb_install
@@ -162,6 +166,10 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXRENDER) += libxrender_install
 #########################################
 # X windowing system application packages
 #########################################
+#xinput
+include $(EMBTK_ROOT)/packages/x11/xinput/xinput.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XINPUT) += xinput_install
+
 #xkbcomp
 include $(EMBTK_ROOT)/packages/x11/xkbcomp/xkbcomp.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XKBCOMP) += xkbcomp_install
