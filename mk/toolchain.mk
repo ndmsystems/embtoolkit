@@ -113,6 +113,6 @@ symlink_tools:
 	done; \
 	export TOOLS_NAME; \
 	for i in $$TOOLS_NAME;do \
-	ln -s $(STRICT_GNU_TARGET)-$$i $(GNU_TARGET)-$$i; \
+	ln -sf $(STRICT_GNU_TARGET)-$$i $(GNU_TARGET)-$$i; \
 	done
 
