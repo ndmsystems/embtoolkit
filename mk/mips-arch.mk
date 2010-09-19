@@ -209,6 +209,7 @@ endif
 endif
 
 EMBTK_MCU_FLAG := $(GNU_TARGET_ARCH)
+TARGET_CFLAGS :=
 
 #GCC configure options
 GCC_WITH_ARCH := --with-arch=$(GNU_TARGET_ARCH)

@@ -25,6 +25,7 @@
 LINUX_ARCH := arm
 GNU_TARGET_ARCH := arm
 EMBTK_MCU_FLAG := $(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
+TARGET_CFLAGS :=
 
 ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 #EGLIBC C library
