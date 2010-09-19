@@ -32,7 +32,7 @@ TARGETNM := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-nm
 TARGETSTRIP := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip
 TARGETOBJDUMP := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-objdump
 TARGETOBJCOPY := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-objcopy
-TARGET_CFLAGS = $(subst ",,$(strip $(CONFIG_EMBTK_TARGET_COMPILER_CFLAGS)))
+TARGET_CFLAGS += $(subst ",,$(strip $(CONFIG_EMBTK_TARGET_COMPILER_CFLAGS)))
 CROSS_COMPILE := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-
 
 export TARGETCC TARGETCXX TARGETAR TARGETRANLIB TARGETLD TARGETNM
@@ -107,7 +107,7 @@ buildtoolchain: $(TOOLCHAINBUILD)
 	$(STRICT_GNU_TARGET) !!!")
 
 symlink_tools:
-	@cd $(TOOLS)/bin/; export TOOLS_LIST="`ls`"; \
+	@cd $(TOOLS)/bin/; export TOOLS_LIST="`ls $(STRICT_GNU_TARGET)-*`"; \
 	for i in $$TOOLS_LIST;do \
 	TOOLS_NAME=$$TOOLS_NAME" ""`echo $$i | sed 's/$(STRICT_GNU_TARGET)-*//'`" ; \
 	done; \
