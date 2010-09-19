@@ -42,8 +42,8 @@ ifeq ($(CONFIG_EMBTK_GTK_BACKEND_DIRECTFB),y)
 GTK_BACKEND := --with-gdktarget=directfb --without-x
 GTK_DEPS += directfb_install
 else
-GTK_BACKEND := --with-gdktarget=x11 --with-x
-GTK_DEPS += libx11_install libxext_install libxrender_install
+GTK_BACKEND := --with-gdktarget=x11 --with-x --with-xinput=yes
+GTK_DEPS += libx11_install libxext_install libxrender_install xinput_install
 endif
 
 gtk_install:

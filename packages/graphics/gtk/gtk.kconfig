@@ -54,6 +54,7 @@ choice
 		select EMBTK_HAVE_LIBX11
 		select EMBTK_HAVE_LIBXEXT
 		select EMBTK_HAVE_LIBXRENDER
+		select EMBTK_HAVE_XINPUT
 	config  EMBTK_GTK_BACKEND_DIRECTFB
 		bool "DirectFB"
 		select EMBTK_HAVE_DIRECTFB
