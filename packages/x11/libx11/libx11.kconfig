@@ -23,7 +23,7 @@
 ################################################################################
 
 config EMBTK_HAVE_LIBX11
-	bool "Have libx11"
+	bool "Have libX11"
 	select EMBTK_HAVE_UTILMACROS
 	select EMBTK_HAVE_INPUTPROTO
 	select EMBTK_HAVE_KBPROTO
@@ -32,21 +32,27 @@ config EMBTK_HAVE_LIBX11
 	select EMBTK_HAVE_LIBXCB
 	select EMBTK_HAVE_XTRANS
 	help
-		libx11 for X windowing system
+		libX11 for X windowing system
 choice
 	prompt "libx11 version you wish"
 	depends on EMBTK_HAVE_LIBX11
 	help
-	 Here you can choose which version of libx11 you want to use.
+		Here you can choose which version of libx11 you want to use.
 
+	config  EMBTK_LIBX11_VERSION_1_3_6
+		bool "libX11-1.3.6"
+	config  EMBTK_LIBX11_VERSION_1_3_5
+		bool "libX11-1.3.5"
 	config  EMBTK_LIBX11_VERSION_1_3_4
-		bool "libx11-1.3.4"
+		bool "libX11-1.3.4"
 	config  EMBTK_LIBX11_VERSION_1_3_3
-		bool "libx11-1.3.3"
+		bool "libX11-1.3.3"
 endchoice
 
 config EMBTK_LIBX11_VERSION_STRING
 	string
-	default "1.3.4"	if EMBTK_LIBX11_VERSION_1_3_4
-	default "1.3.3"	if EMBTK_LIBX11_VERSION_1_3_3
+	default "1.3.6"		if EMBTK_LIBX11_VERSION_1_3_6
+	default "1.3.5"		if EMBTK_LIBX11_VERSION_1_3_5
+	default "1.3.4"		if EMBTK_LIBX11_VERSION_1_3_4
+	default "1.3.3"		if EMBTK_LIBX11_VERSION_1_3_3
 
