@@ -83,11 +83,12 @@ AUTOTOOLS_INSTALL := m4_install libtool_install autoconf_install \
 			automake_install
 #cmake
 include $(EMBTK_ROOT)/mk/cmake.mk
+EMBTK_CMAKE_INSTALL := $(if $(CONFIG_EMBTK_HOST_HAVE_CMAKE),cmake_install,)
 
 ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 #EGLIBC
 include $(EMBTK_ROOT)/mk/eglibc.mk
-TOOLCHAINBUILD := mkinitialpath $(AUTOTOOLS_INSTALL) cmake_install \
+TOOLCHAINBUILD := mkinitialpath $(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL) \
 		kernel-headers_install ccachehost_install \
 		gmphost_install mpfrhost_install mpchost_install \
 		binutils_install gcc1_install eglibc-headers_install \

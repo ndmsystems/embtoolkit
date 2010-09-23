@@ -81,7 +81,18 @@ source kconfig/fs.kconfig
 source kconfig/packages.kconfig
 endif
 
-menu "Embtoolkit build options"
+menu "Embtoolkit build options and host tools"
+comment "-----------------------------"
+comment "Host tools"
+comment "-----------------------------"
+
+config EMBTK_HOST_HAVE_CMAKE
+	bool "Build cmake for the host development machine"
+
+comment "-----------------------------"
+comment "Build options"
+comment "-----------------------------"
+
 config EMBTK_NUMBER_BUILD_JOBS
 	int "Number of parallel build jobs"
 	default 1
