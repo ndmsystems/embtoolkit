@@ -96,7 +96,7 @@ TOOLCHAINBUILD := mkinitialpath $(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL) \
 else
 #uClibc
 include $(EMBTK_ROOT)/mk/uclibc.mk
-TOOLCHAINBUILD := mkinitialpath $(AUTOTOOLS_INSTALL) cmake_install \
+TOOLCHAINBUILD := mkinitialpath $(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL) \
 		kernel-headers_install ccachehost_install \
 		gmphost_install mpfrhost_install mpchost_install \
 		binutils_install gcc1_install uclibc_install gcc3_install
