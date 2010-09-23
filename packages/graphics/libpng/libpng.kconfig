@@ -27,16 +27,20 @@ config EMBTK_HAVE_LIBPNG
 	bool "Have libpng"
 	select EMBTK_HAVE_ZLIB
 	help
-	 libpng is the reference library for use in applications that read,
-	 create, and manipulate PNG (Portable Network Graphics) raster image
-	 files.
+		libpng is the reference library for use in applications that
+		read, create, and manipulate PNG (Portable Network Graphics)
+		raster image files.
 
 choice
 	prompt "libpng version you wish"
 	depends on EMBTK_HAVE_LIBPNG
 	help
-	 Here you can choose which version of libpng you want to use.
+		Here you can choose which version of libpng you want to use.
 
+	config  EMBTK_LIBPNG_VERSION_1_4_4
+		bool "libpng-1.4.4"
+	config  EMBTK_LIBPNG_VERSION_1_4_3
+		bool "libpng-1.4.3"
 	config  EMBTK_LIBPNG_VERSION_1_4_2
 		bool "libpng-1.4.2"
 	config  EMBTK_LIBPNG_VERSION_1_2_42
@@ -49,6 +53,8 @@ endchoice
 
 config EMBTK_LIBPNG_VERSION_STRING
 	string
+	default "1.4.4"		if EMBTK_LIBPNG_VERSION_1_4_4
+	default "1.4.3"		if EMBTK_LIBPNG_VERSION_1_4_3
 	default "1.4.2"		if EMBTK_LIBPNG_VERSION_1_4_2
 	default "1.2.42"	if EMBTK_LIBPNG_VERSION_1_2_42
 	default "1.2.41"	if EMBTK_LIBPNG_VERSION_1_2_41
