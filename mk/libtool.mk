@@ -23,7 +23,7 @@
 # \date         March 2010
 ################################################################################
 
-LIBTOOL_VERSION := 2.2.10
+LIBTOOL_VERSION := 2.4
 LIBTOOL_SITE := http://ftp.gnu.org/gnu/libtool
 LIBTOOL_PACKAGE := libtool-$(LIBTOOL_VERSION).tar.gz
 LIBTOOL_BUILD_DIR := $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
