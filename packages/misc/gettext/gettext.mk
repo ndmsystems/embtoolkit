@@ -24,6 +24,7 @@
 
 GETTEXT_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GETTEXT_VERSION_STRING)))
 GETTEXT_SITE := http://ftp.gnu.org/pub/gnu/gettext
+GETTEXT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/gettext/$(GETTEXT_VERSION)
 GETTEXT_PACKAGE := gettext-$(GETTEXT_VERSION).tar.gz
 GETTEXT_BUILD_DIR := $(PACKAGES_BUILD)/gettext-$(GETTEXT_VERSION)
 
@@ -59,10 +60,19 @@ download_gettext:
 	@test -e $(DOWNLOAD_DIR)/$(GETTEXT_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(GETTEXT_PACKAGE) \
 	$(GETTEXT_SITE)/$(GETTEXT_PACKAGE)
+ifeq ($(CONFIG_EMBTK_GETTEXT_NEED_PATCH),y)
+	@test -e $(DOWNLOAD_DIR)/gettext-$(GETTEXT_VERSION).patch || \
+	wget -O $(DOWNLOAD_DIR)/gettext-$(GETTEXT_VERSION).patch \
+	$(GETTEXT_PATCH_SITE)/gettext-$(GETTEXT_VERSION)-*.patch
+endif
 
 $(GETTEXT_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(GETTEXT_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(GETTEXT_PACKAGE)
+ifeq ($(CONFIG_EMBTK_GETTEXT_NEED_PATCH),y)
+	@cd $(GETTEXT_BUILD_DIR); \
+	patch -p1 < $(DOWNLOAD_DIR)/gettext-$(GETTEXT_VERSION).patch
+endif
 	@touch $@
 
 $(GETTEXT_BUILD_DIR)/.configured:
