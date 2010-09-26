@@ -2082,6 +2082,15 @@ config KEMBTK_UCLIBC_UCLIBC_HAS_GNU_GLOB
 
 	  Most people will answer N.
 
+config KEMBTK_UCLIBC_UCLIBC_HAS_UTMPX
+	bool "utmpx based support for tracking login/logouts to/from the system"
+	depends on EMBTK_UCLIBC_VERSION_SERIES_1_0_X
+	help
+		Answer y to enable support for accessing user accounting
+		database. It can be used to track all login/logout to the
+		system.
+		If unsure, just answer N.
+
 comment "----------------"
 comment "Library Installation Options"
 comment "----------------"
