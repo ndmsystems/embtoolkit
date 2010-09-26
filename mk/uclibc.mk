@@ -68,11 +68,9 @@ ifneq ($(UCLIBC_GIT_BRANCH),master)
 	git checkout -b $(UCLIBC_GIT_BRANCH) origin/$(UCLIBC_GIT_BRANCH)
 endif
 	@cd $(EMBTK_ROOT)/src/uClibc-git; \
-	git pull; \
-	git checkout $(UCLIBC_GIT_REVISION); \
-	cd ..; \
-	tar cjvf $(UCLIBC_PACKAGE) uClibc-$(UCLIBC_VERSION); \
-	mv $(UCLIBC_PACKAGE) $(DOWNLOAD_DIR)
+	git pull; git archive \
+	--prefix=uClibc-$(UCLIBC_VERSION)/ $(UCLIBC_GIT_REVISION) | \
+	bzip2 -9 > $(DOWNLOAD_DIR)/$(UCLIBC_PACKAGE)
 else
 	@test -e $(DOWNLOAD_DIR)/$(UCLIBC_PACKAGE) || \
 	wget $(UCLIBC_SITE)/$(UCLIBC_PACKAGE) \
