@@ -59,9 +59,10 @@ GCC_LANGUAGES +=,ada
 endif
 GCC_LANGUAGES :=$(patsubst "",,$(GCC_LANGUAGES))
 
-#Disable tls when creating uClibc toolchain
+#Disable tls when creating uClibc toolchain with linuxthreads
 ifeq ($(CONFIG_EMBTK_CLIB_UCLIBC),y)
-GCC3_CONFIGURE_EXTRA_OPTIONS += --disable-tls
+GCC3_CONFIGURE_EXTRA_OPTIONS += \
+	$(if $(CONFIG_KEMBTK_UCLIBC_UCLIBC_HAS_THREADS_NATIVE),,--disable-tls)
 endif
 
 gcc1_install: $(GCC1_BUILD_DIR)/.built
