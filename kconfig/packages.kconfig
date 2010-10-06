@@ -62,6 +62,10 @@ menu "Compression packages"
 source packages/compression/compression.kconfig
 endmenu
 
+menu "Development libraries/packages"
+source packages/development/development.kconfig
+endmenu
+
 menu "Graphics packages"
 source packages/graphics/graphics.kconfig
 endmenu
