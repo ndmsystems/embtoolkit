@@ -62,3 +62,5 @@ $(BB_BUILD_DIR)/.Config.in.renewed:
 	< Config.in >Config.in.new
 	touch $@
 
+busybox_clean:
+	$(call EMBTK_GENERIC_MESSAGE,"cleanup busybox...")
