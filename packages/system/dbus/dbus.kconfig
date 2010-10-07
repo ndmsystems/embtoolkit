@@ -26,7 +26,6 @@
 config EMBTK_HAVE_DBUS
 	bool "Have D-bus"
 	select EMBTK_HAVE_EXPAT
-	select EMBTK_HAVE_LIBXML2
 	help
 		D-Bus is a message bus system, a simple way for applications to
 		talk to one another. In addition to interprocess communication,
