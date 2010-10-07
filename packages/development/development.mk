@@ -26,3 +26,7 @@
 #libevent
 include $(EMBTK_ROOT)/packages/development/libevent/libevent.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBEVENT) += libevent_install
+
+#libnih
+include $(EMBTK_ROOT)/packages/development/libnih/libnih.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBNIH) += libnih_install

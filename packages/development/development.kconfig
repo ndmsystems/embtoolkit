@@ -23,4 +23,8 @@
 # \date         October 2010
 ################################################################################
 
+#libevent
 source packages/development/libevent/libevent.kconfig
+
+#libnih
+source packages/development/libnih/libnih.kconfig
