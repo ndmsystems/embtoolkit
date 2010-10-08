@@ -94,23 +94,23 @@ endif
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
 	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  $(ROOTFS)/lib/*.so*
+	$(TARGETSTRIP)  `find $$ROOTFS/lib -type f -name *.so*`
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  $(ROOTFS)/usr/lib/*.so*
+	$(TARGETSTRIP)  `find $$ROOTFS/usr/lib -type f -name *.so*`
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  $(ROOTFS)/lib32/*.so*
+	$(TARGETSTRIP)  `find $$ROOTFS/lib32 -type f -name *.so*`
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  $(ROOTFS)/usr/lib32/*.so*
+	$(TARGETSTRIP)  `find $$ROOTFS/usr/lib32 -type f -name *.so*`
 endif
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  $(ROOTFS)/bin/*
+	$(TARGETSTRIP)  `find $$ROOTFS/bin -type f`
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  $(ROOTFS)/sbin/*
+	$(TARGETSTRIP)  `find $$ROOTFS/sbin -type f`
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  $(ROOTFS)/usr/bin/*
+	$(TARGETSTRIP)  `find $$ROOTFS/usr/bin -type f`
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  $(ROOTFS)/usr/sbin/*
+	$(TARGETSTRIP)  `find $$ROOTFS/usr/sbin -type f`
 endif
 
 mkinitialrootfs:
