@@ -81,7 +81,7 @@ $(FREETYPE_BUILD_DIR)/.configured:
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CXXFLAGS="$(TARGET_CFLAGS)" \
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
+	CPPFLAGS="-I$(SYSROOT)/usr/include" \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--prefix=/usr --enable-static=no --libdir=/usr/$(LIBDIR)
 	@touch $@

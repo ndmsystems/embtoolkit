@@ -95,7 +95,7 @@ $(CAIRO_BUILD_DIR)/.configured:
 	CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include" \
 	CXXFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include" \
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
+	CPPFLAGS="-I$(SYSROOT)/usr/include" \
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \

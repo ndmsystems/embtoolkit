@@ -86,7 +86,7 @@ $(LIBELF_BUILD_DIR)/.configured:
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CXXFLAGS="$(TARGET_CFLAGS)" \
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
+	CPPFLAGS="-I$(SYSROOT)/usr/include" \
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
 	./configure --build=$(HOST_BUILD) \

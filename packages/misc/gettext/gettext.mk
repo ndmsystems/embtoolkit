@@ -80,7 +80,7 @@ $(GETTEXT_BUILD_DIR)/.configured:
 	CC=$(TARGETCC_CACHED) CXX=$(TARGETCXX_CACHED) \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
+	CPPFLAGS="-I$(SYSROOT)/usr/include" \
 	gl_cv_func_wcwidth_works=yes \
 	am_cv_func_iconv_works=yes \
 	gt_cv_func_printf_posix=yes \
