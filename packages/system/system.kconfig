@@ -28,3 +28,6 @@ source packages/system/dbus/dbus.kconfig
 
 #util-linux-ng
 source packages/system/utillinuxng/utillinuxng.kconfig
+
+#upstart
+source packages/system/upstart/upstart.kconfig
