@@ -24,7 +24,7 @@
 ################################################################################
 
 config EMBTK_HAVE_UPSTART
-	bool "Have upstart"
+	bool "Have upstart (please see the note aboput busybox)"
 	select KEMBTK_EGLIBC_OPTION_EGLIBC_UTMPX if EMBTK_CLIB_EGLIBC
 	select KEMBTK_UCLIBC_UCLIBC_HAS_UTMPX if EMBTK_CLIB_UCLIBC
 	select EMBTK_HAVE_LIBNIH
@@ -47,6 +47,10 @@ config EMBTK_HAVE_UPSTART
 		* Supervision and respawning of daemons which separate from
 		their parent process
 		* Communication with the init daemon over D-Bus
+
+		NOTE: WARNING!!!
+		If you use busybox beside upstart, you need to disable busybox
+		init facilities.
 
 choice
 	prompt "upstart version you wish"

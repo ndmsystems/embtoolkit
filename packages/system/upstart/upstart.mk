@@ -39,9 +39,6 @@ UPSTART_PKGCONFIGS =
 UPSTART_DEPS := libnih_install
 
 upstart_install: $(UPSTART_BUILD_DIR)/.installed
-	@test -e $(UPSTART_BUILD_DIR)/.installed || \
-	$(MAKE) $(UPSTART_BUILD_DIR)/.installed
-	$(MAKE) $(UPSTART_BUILD_DIR)/.special
 
 $(UPSTART_BUILD_DIR)/.installed: $(UPSTART_DEPS) download_upstart \
 	$(UPSTART_BUILD_DIR)/.decompressed $(UPSTART_BUILD_DIR)/.configured
@@ -49,9 +46,8 @@ $(UPSTART_BUILD_DIR)/.installed: $(UPSTART_DEPS) download_upstart \
 	upstart-$(UPSTART_VERSION) in your root filesystem...")
 	$(call EMBTK_KILL_LT_RPATH,$(UPSTART_BUILD_DIR))
 	$(Q)$(MAKE) -C $(UPSTART_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(UPSTART_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
+	$(Q)$(MAKE) -C $(UPSTART_BUILD_DIR) DESTDIR=$(ROOTFS)/ install
+	$(Q)-rm -rf $(ROOTFS)/share
 	@touch $@
 
 download_upstart:
