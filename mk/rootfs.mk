@@ -114,6 +114,8 @@ endif
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	$(TARGETSTRIP)  `find $$ROOTFS/usr/libexec -type f`
 endif
+	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	rm -rf  `find $$ROOTFS -type f -name *.la`
 
 mkinitialrootfs:
 	@mkdir -p $(ROOTFS)
