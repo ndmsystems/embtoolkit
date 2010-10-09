@@ -36,7 +36,8 @@ DBUS_INCLUDES = dbus-*
 DBUS_LIBS = dbus-* libdbus*
 DBUS_PKGCONFIGS = dbus*.pc
 
-DBUS_DEPS = expat_install
+DBUS_DEPS = expat_install \
+	$(if $(CONFIG_EMBTK_HAVE_LIBX11),libx11_install,)
 
 DBUS_CONFIGURE_OPTS := --enable-abstract-sockets \
 	$(if $(CONFIG_EMBTK_HAVE_LIBX11),--with-x,--without-x)
