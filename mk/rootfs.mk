@@ -111,6 +111,8 @@ endif
 	$(TARGETSTRIP)  `find $$ROOTFS/usr/bin -type f`
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	$(TARGETSTRIP)  `find $$ROOTFS/usr/sbin -type f`
+	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
+	$(TARGETSTRIP)  `find $$ROOTFS/usr/libexec -type f`
 endif
 
 mkinitialrootfs:
