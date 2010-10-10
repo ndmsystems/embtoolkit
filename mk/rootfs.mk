@@ -52,6 +52,22 @@ ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),y)
 include $(EMBTK_ROOT)/mk/squashfs.mk
 endif
 
+#Files to strip if requested
+ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
+ROOTFS_STRIPPED_FILES := `find $$ROOTFS/lib -type f -name *.so*`
+ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/lib -type f -name *.so*`
+ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/lib -type f -name *.so*`
+ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
+ROOTFS_STRIPPED_FILES += `find $$ROOTFS/lib32 -type f -name *.so*`
+ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/lib32 -type f -name *.so*`
+endif
+ROOTFS_STRIPPED_FILES += `find $$ROOTFS/bin -type f`
+ROOTFS_STRIPPED_FILES += `find $$ROOTFS/sbin -type f`
+ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/bin -type f`
+ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/sbin -type f`
+ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/libexec -type f`
+endif
+
 rootfs_build:
 	$(call EMBTK_GENERIC_MESSAGE,"Building selected root filesystems...")
 	@$(MAKE) rootfs_clean mkinitialrootfs $(ROOTFS_HOSTTOOLS-y) \
@@ -94,25 +110,7 @@ endif
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
 	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  `find $$ROOTFS/lib -type f -name *.so*`
-	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  `find $$ROOTFS/usr/lib -type f -name *.so*`
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  `find $$ROOTFS/lib32 -type f -name *.so*`
-	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  `find $$ROOTFS/usr/lib32 -type f -name *.so*`
-endif
-	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  `find $$ROOTFS/bin -type f`
-	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  `find $$ROOTFS/sbin -type f`
-	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  `find $$ROOTFS/usr/bin -type f`
-	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  `find $$ROOTFS/usr/sbin -type f`
-	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP)  `find $$ROOTFS/usr/libexec -type f`
+	$(TARGETSTRIP)  $(ROOTFS_STRIPPED_FILES)
 endif
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	rm -rf  `find $$ROOTFS -type f -name *.la`
