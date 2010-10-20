@@ -1,5 +1,5 @@
 ################################################################################
-# Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
+# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 #
 # \file         toolchain.mk
 # \brief	toolchain.mk of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
 
@@ -33,6 +33,9 @@ TARGETSTRIP := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip
 TARGETOBJDUMP := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-objdump
 TARGETOBJCOPY := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-objcopy
 TARGET_CFLAGS += $(subst ",,$(strip $(CONFIG_EMBTK_TARGET_COMPILER_CFLAGS)))
+TARGET_CFLAGS += $(if $(CONFIG_EMBTK_TARGET_SIZE_OPTIMIZED),-Os,)
+TARGET_CFLAGS += $(if $(CONFIG_EMBTK_TARGET_SPEED_OPTIMIZED),-O3,)
+TARGET_CFLAGS += $(if $(CONFIG_EMBTK_TARGET_WITH_DEBUG_DATA),-g,)
 CROSS_COMPILE := $(TOOLS)/bin/$(STRICT_GNU_TARGET)-
 
 export TARGETCC TARGETCXX TARGETAR TARGETRANLIB TARGETLD TARGETNM
