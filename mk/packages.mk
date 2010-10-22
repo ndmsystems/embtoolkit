@@ -56,6 +56,9 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS) += mtdutils_target_instal
 #Compression packages
 include $(EMBTK_ROOT)/packages/compression/compression.mk
 
+#Database packages/libraries
+include $(EMBTK_ROOT)/packages/database/database.mk
+
 #Development libraries/packages
 include $(EMBTK_ROOT)/packages/development/development.mk
 
