@@ -77,6 +77,8 @@ choice
 	help
 	 Here you can choose which version of xserver you want to use.
 
+	config  EMBTK_XSERVER_VERSION_1_9_1
+		bool "xserver-1.9.1"
 	config  EMBTK_XSERVER_VERSION_1_8_2
 		bool "xserver-1.8.2"
 	config  EMBTK_XSERVER_VERSION_1_8_1
@@ -102,6 +104,7 @@ endif
 
 config EMBTK_XSERVER_VERSION_STRING
 	string
+	default "1.9.1"	if EMBTK_XSERVER_VERSION_1_9_1
 	default "1.8.2"	if EMBTK_XSERVER_VERSION_1_8_2
 	default "1.8.1"	if EMBTK_XSERVER_VERSION_1_8_1
 	default "1.7.7"	if EMBTK_XSERVER_VERSION_1_7_7
