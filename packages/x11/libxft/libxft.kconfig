@@ -1,5 +1,5 @@
 ################################################################################
-# Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
+# EmbToolkit
 # Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 #
 # \file         libxft.mk
 # \brief	libxft.mk of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE, <awg@embtoolkit.org>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         June 2010
 ################################################################################
 
@@ -30,18 +30,25 @@ config EMBTK_HAVE_LIBXFT
 	select EMBTK_HAVE_XPROTO
 	select EMBTK_HAVE_LIBXRENDER
 	help
-		libXft for X windowing system
+		libXft for X windowing system.
+		libXft is the client side font rendering library, using
+		libfreetype, libX11, and the X Render extension to display
+		anti-aliased text.
+
 choice
 	prompt "libxft version you wish"
 	depends on EMBTK_HAVE_LIBXFT
 	help
 	 Here you can choose which version of libxft you want to use.
 
+	config  EMBTK_LIBXFT_VERSION_2_2_0
+		bool "libXft-2.2.0"
 	config  EMBTK_LIBXFT_VERSION_2_1_14
 		bool "libXft-2.1.14"
 endchoice
 
 config EMBTK_LIBXFT_VERSION_STRING
 	string
+	default "2.2.0"		if EMBTK_LIBXFT_VERSION_2_2_0
 	default "2.1.14"	if EMBTK_LIBXFT_VERSION_2_1_14
 
