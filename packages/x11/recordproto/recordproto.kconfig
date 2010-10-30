@@ -26,7 +26,10 @@
 config EMBTK_HAVE_RECORDPROTO
 	bool "Have recordproto"
 	help
-		recordproto for X windowing system
+		recordproto for X windowing system.
+		This extension defines a protocol for the recording and playback
+		of user actions in the X Window System.
+
 choice
 	prompt "recordproto version you wish"
 	depends on EMBTK_HAVE_RECORDPROTO
@@ -34,11 +37,14 @@ choice
 		Here you can choose which version of recordproto you want to
 		use.
 
+	config  EMBTK_RECORDPROTO_VERSION_1_14_1
+		bool "recordproto-1.14.1"
 	config  EMBTK_RECORDPROTO_VERSION_1_14
 		bool "recordproto-1.14"
 endchoice
 
 config EMBTK_RECORDPROTO_VERSION_STRING
 	string
-	default "1.14"	if EMBTK_RECORDPROTO_VERSION_1_14
+	default "1.14.1"	if EMBTK_RECORDPROTO_VERSION_1_14_1
+	default "1.14"		if EMBTK_RECORDPROTO_VERSION_1_14
 
