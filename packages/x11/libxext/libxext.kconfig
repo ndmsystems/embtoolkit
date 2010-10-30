@@ -1,24 +1,25 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         libxext.kconfig
 # \brief	libxext.kconfig of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2010
 ################################################################################
 
@@ -33,6 +34,8 @@ choice
 	help
 		Here you can choose which version of libxext you want to use.
 
+	config  EMBTK_LIBXEXT_VERSION_1_2_0
+		bool "libXext-1.2.0"
 	config  EMBTK_LIBXEXT_VERSION_1_1_2
 		bool "libXext-1.1.2"
 	config  EMBTK_LIBXEXT_VERSION_1_1_1
@@ -41,6 +44,7 @@ endchoice
 
 config EMBTK_LIBXEXT_VERSION_STRING
 	string
+	default "1.2.0"	if EMBTK_LIBXEXT_VERSION_1_2_0
 	default "1.1.2"	if EMBTK_LIBXEXT_VERSION_1_1_2
 	default "1.1.1"	if EMBTK_LIBXEXT_VERSION_1_1_1
 
