@@ -40,6 +40,7 @@ choice
 
 	config  EMBTK_XKBCOMP_VERSION_1_2_0
 		bool "xkbcomp-1.2.0"
+		select EMBTK_XKBCOMP_NEED_PATCH
 	config  EMBTK_XKBCOMP_VERSION_1_1_1
 		bool "xkbcomp-1.1.1"
 endchoice
@@ -49,3 +50,5 @@ config EMBTK_XKBCOMP_VERSION_STRING
 	default "1.2.0"		if EMBTK_XKBCOMP_VERSION_1_2_0
 	default "1.1.1"		if EMBTK_XKBCOMP_VERSION_1_1_1
 
+config EMBTK_XKBCOMP_NEED_PATCH
+	bool

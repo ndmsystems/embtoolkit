@@ -24,7 +24,8 @@
 ################################################################################
 
 XKBCOMP_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_XKBCOMP_VERSION_STRING)))
-XKBCOMP_SITE := http://xorg.freedesktop.org/archive/individual/app/
+XKBCOMP_SITE := http://xorg.freedesktop.org/archive/individual/app
+XKBCOMP_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/xkbcomp/$(XKBCOMP_VERSION)
 XKBCOMP_PACKAGE := xkbcomp-$(XKBCOMP_VERSION).tar.bz2
 XKBCOMP_BUILD_DIR := $(PACKAGES_BUILD)/xkbcomp-$(XKBCOMP_VERSION)
 
@@ -56,10 +57,19 @@ download_xkbcomp:
 	@test -e $(DOWNLOAD_DIR)/$(XKBCOMP_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(XKBCOMP_PACKAGE) \
 	$(XKBCOMP_SITE)/$(XKBCOMP_PACKAGE)
+ifeq ($(CONFIG_EMBTK_XKBCOMP_NEED_PATCH),y)
+	@test -e $(DOWNLOAD_DIR)/xkbcomp-$(XKBCOMP_VERSION).patch || \
+	wget -O $(DOWNLOAD_DIR)/xkbcomp-$(XKBCOMP_VERSION).patch \
+	$(XKBCOMP_PATCH_SITE)/xkbcomp-$(XKBCOMP_VERSION)-*.patch
+endif
 
 $(XKBCOMP_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(XKBCOMP_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(XKBCOMP_PACKAGE)
+ifeq ($(CONFIG_EMBTK_XKBCOMP_NEED_PATCH),y)
+	@cd $(XKBCOMP_BUILD_DIR); \
+	patch -p1 < $(DOWNLOAD_DIR)/xkbcomp-$(XKBCOMP_VERSION).patch
+endif
 	@touch $@
 
 $(XKBCOMP_BUILD_DIR)/.configured:
