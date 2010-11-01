@@ -184,3 +184,9 @@
 # I2C device nodes
 /dev/i2c-	c	666	0	0	89	0	0	1	4
 
+# SD/MMC card devices
+/dev/mmcblk	b	640	0	0	179	0	0	8	4
+/dev/mmcblk0p	b	640	0	0	179	1	1	1	8
+/dev/mmcblk1p	b	640	0	0	179	9	1	1	8
+/dev/mmcblk2p	b	640	0	0	179	17	1	1	8
+/dev/mmcblk3p	b	640	0	0	179	25	1	1	8
