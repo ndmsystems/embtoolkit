@@ -24,7 +24,7 @@
 ################################################################################
 
 ZLIB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_ZLIB_VERSION_STRING)))
-ZLIB_SITE := http://www.gzip.org/zlib
+ZLIB_SITE := http://zlib.net
 ZLIB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/zlib/$(ZLIB_VERSION)
 ZLIB_PACKAGE := zlib-$(ZLIB_VERSION).tar.bz2
 ZLIB_HOST_BUILD_DIR := $(TOOLS_BUILD)/zlib-$(ZLIB_VERSION)
