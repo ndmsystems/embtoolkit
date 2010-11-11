@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009 Abdoulaye Walsimou GAYE. All rights reserved.
+# Copyright(C) 2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 # \file         inputproto.mk
 # \brief	inputproto.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         December 2009
+# \date         February 2010
 ################################################################################
 
 INPUTPROTO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_INPUTPROTO_VERSION_STRING)))
