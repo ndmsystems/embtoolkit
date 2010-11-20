@@ -34,11 +34,13 @@ LIBFONTENC_INCLUDES = X11/fonts/fontenc.h
 LIBFONTENC_LIBS = libfontenc.*
 LIBFONTENC_PKGCONFIGS = libfontenc.pc
 
+LIBFONTENC_DEPS := zlib_target_install
+
 libfontenc_install:
 	@test -e $(LIBFONTENC_BUILD_DIR)/.installed || \
 	$(MAKE) $(LIBFONTENC_BUILD_DIR)/.installed
 
-$(LIBFONTENC_BUILD_DIR)/.installed: download_libfontenc \
+$(LIBFONTENC_BUILD_DIR)/.installed: $(LIBFONTENC_DEPS) download_libfontenc \
 	$(LIBFONTENC_BUILD_DIR)/.decompressed $(LIBFONTENC_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libfontenc-$(LIBFONTENC_VERSION) in your root filesystem...")

@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_LIBFONTENC
 	bool "Have libfontenc"
+	select EMBK_HAVE_ZLIB
 	help
 		libfontenc for X windowing system
 choice
