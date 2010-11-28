@@ -1,0 +1,24 @@
+#
+# For a description of the syntax of this configuration file,
+# see scripts/kbuild/config-language.txt.
+#
+
+comment "-------------------------------------------------"
+comment "Print Utilities"
+comment "-------------------------------------------------"
+
+config KEMBTK_BUSYB_LPD
+	bool "lpd"
+	help
+	  lpd is a print spooling daemon.
+
+config KEMBTK_BUSYB_LPR
+	bool "lpr"
+	help
+	  lpr sends files (or standard input) to a print spooling daemon.
+
+config KEMBTK_BUSYB_LPQ
+	bool "lpq"
+	help
+	  lpq is a print spool queue examination and manipulation program.
+

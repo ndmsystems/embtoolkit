@@ -126,30 +126,6 @@ include mk/toolchain.mk
 include mk/packages.mk
 include mk/rootfs.mk
 
-busybox_config:
-ifeq ($(CONFIG_EMBTK_DOTCONFIG),)
-	$(call EMBTK_GENERIC_MESSAGE,"Please run make xconfig and configure \
-	EmbToolkit first")
-	@echo
-	@echo
-else ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),)
-	$(call EMBTK_GENERIC_MESSAGE,"Please run make xconfig and enable build \
-	of root filesystem")
-	@echo
-	@echo
-else ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_BB),)
-	$(call EMBTK_GENERIC_MESSAGE,"Please run make xconfig and enable build \
-	of Busybox")
-	@echo
-	@echo
-else
-	$(Q)make mkinitialpath
-	$(Q)make download_busybox $(BB_BUILD_DIR)/.decompressed \
-	$(BB_BUILD_DIR)/.Config.in.renewed
-	KCONFIG_CONFIG=$(BB_BUILD_DIR)/.config \
-	scripts/kconfig/qconf $(BB_BUILD_DIR)/Config.in.new
-endif
-
 help:
 	$(call EMBTK_GENERIC_MESSAGE,"Embedded systems Toolkit help. Please \
 	visit - http://embtoolkit.org -for more details")
@@ -174,13 +150,6 @@ help:
 	@echo
 	@echo "make distclean:  Same as clean, but remove all downloaded"
 	@echo "                 packages, host tools and .config.old files."
-	@echo
-	@echo " -------------------"
-	@echo "| Packages: Busybox |"
-	@echo " -------------------"
-	@echo "make busybox_config:"
-	@echo "                 Download busybox (if necessary) and show you a"
-	@echo "                 GUI in order to configure busybox."
 	@echo
 	@echo " -----------------"
 	@echo "| Root filesystem |"

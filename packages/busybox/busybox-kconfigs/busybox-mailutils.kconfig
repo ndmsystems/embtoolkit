@@ -1,0 +1,65 @@
+comment "-------------------------------------------------"
+comment "Mail Utilities"
+comment "-------------------------------------------------"
+
+config KEMBTK_BUSYB_MAKEMIME
+	bool "makemime"
+	help
+	  Create MIME-formatted messages.
+
+config KEMBTK_BUSYB_FEATURE_MIME_CHARSET
+	string "Default charset"
+	default "us-ascii"
+	depends on KEMBTK_BUSYB_MAKEMIME || KEMBTK_BUSYB_REFORMIME || KEMBTK_BUSYB_SENDMAIL
+	help
+	  Default charset of the message.
+
+config KEMBTK_BUSYB_POPMAILDIR
+	bool "popmaildir"
+	help
+	  Simple yet powerful POP3 mail popper. Delivers content
+	  of remote mailboxes to local Maildir.
+
+config KEMBTK_BUSYB_FEATURE_POPMAILDIR_DELIVERY
+	bool "Allow message filters and custom delivery program"
+	depends on KEMBTK_BUSYB_POPMAILDIR
+	help
+	  Allow to use a custom program to filter the content
+	  of the message before actual delivery (-F "prog [args...]").
+	  Allow to use a custom program for message actual delivery
+	  (-M "prog [args...]").
+
+config KEMBTK_BUSYB_REFORMIME
+	bool "reformime"
+	help
+	  Parse MIME-formatted messages.
+
+config KEMBTK_BUSYB_FEATURE_REFORMIME_COMPAT
+	bool "Accept and ignore options other than -x and -X"
+	default y
+	depends on KEMBTK_BUSYB_REFORMIME
+	help
+	  Accept (for compatibility only) and ignore options
+	  other than -x and -X.
+
+config KEMBTK_BUSYB_SENDMAIL
+	bool "sendmail"
+	help
+	  Barebones sendmail.
+
+config KEMBTK_BUSYB_FEATURE_SENDMAIL_MAILX
+       bool "Allow to specify subject, attachments, their charset etc"
+       default y
+       depends on KEMBTK_BUSYB_SENDMAIL
+       depends on EMBTK_BB_VERSION_1_13_X
+       help
+               Allow to specify subject, attachments and their charset.
+               Allow to use custom connection helper.
+
+config KEMBTK_BUSYB_FEATURE_SENDMAIL_MAILXX
+       bool "Allow to specify Cc: addresses and some additional headers"
+       depends on KEMBTK_BUSYB_FEATURE_SENDMAIL_MAILX
+       depends on EMBTK_BB_VERSION_1_13_X
+       help
+               Allow to specify Cc: addresses and some additional headers:
+               Errors-To:

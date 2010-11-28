@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2010 GAYE Abdoulaye Walsimou. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,37 +19,67 @@
 #
 # \file         busybox.kconfig
 # \brief	busybox.kconfig of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
+
+choice
+	prompt "Busybox version series you wish"
+	help
+		Here you can choose which version series of busybox you want to
+		use.
+
+	config EMBTK_BB_VERSION_1_16_X
+		bool "busybox-1.16.x"
+	config EMBTK_BB_VERSION_1_15_X
+		bool "busybox-1.15.x"
+	config EMBTK_BB_VERSION_1_14_X
+		bool "busybox-1.14.x"
+	config EMBTK_BB_VERSION_1_13_X
+		bool "busybox-1.13.x"
+endchoice
+
 choice
 	prompt "Busybox version you wish"
 	help
-		Here you can choose which version of busybox
-		you want to use
+		Here you can choose which version of busybox you want to use.
 
 	config  EMBTK_BB_VERSION_1_16_2
 		bool "busybox-1.16.2"
+		depends on EMBTK_BB_VERSION_1_16_X
 	config  EMBTK_BB_VERSION_1_16_1
 		bool "busybox-1.16.1"
+		depends on EMBTK_BB_VERSION_1_16_X
+
 	config  EMBTK_BB_VERSION_1_15_3
 		bool "busybox-1.15.3"
+		depends on EMBTK_BB_VERSION_1_15_X
 	config  EMBTK_BB_VERSION_1_15_2
 		bool "busybox-1.15.2"
+		depends on EMBTK_BB_VERSION_1_15_X
 	config  EMBTK_BB_VERSION_1_15_1
 		bool "busybox-1.15.1"
+		depends on EMBTK_BB_VERSION_1_15_X
 	config  EMBTK_BB_VERSION_1_15_0
 		bool "busybox-1.15.0"
+		depends on EMBTK_BB_VERSION_1_15_X
+
 	config  EMBTK_BB_VERSION_1_14_4
 		bool "busybox-1.14.4"
+		depends on EMBTK_BB_VERSION_1_14_X
 	config  EMBTK_BB_VERSION_1_14_3
 		bool "busybox-1.14.3"
+		depends on EMBTK_BB_VERSION_1_14_X
 	config  EMBTK_BB_VERSION_1_14_2
 		bool "busybox-1.14.2"
+		depends on EMBTK_BB_VERSION_1_14_X
 	config  EMBTK_BB_VERSION_1_14_1
 		bool "busybox-1.14.1"
+		depends on EMBTK_BB_VERSION_1_14_X
+
 	config  EMBTK_BB_VERSION_1_13_4
 		bool "busybox-1.13.4"
+		depends on EMBTK_BB_VERSION_1_13_X
 endchoice
 
 config EMBTK_BB_VERSION_STRING
@@ -66,17 +96,4 @@ config EMBTK_BB_VERSION_STRING
 	default "1.14.1"	if EMBTK_BB_VERSION_1_14_1
 	default "1.13.4"	if EMBTK_BB_VERSION_1_13_4
 
-config EMBTK_BB_DOT_CONFIG
-	string
-	default "busybox-1.16.config"	if EMBTK_BB_VERSION_1_16_2
-	default "busybox-1.16.config"	if EMBTK_BB_VERSION_1_16_1
-	default "busybox-1.15.config"	if EMBTK_BB_VERSION_1_15_3
-	default "busybox-1.15.config"	if EMBTK_BB_VERSION_1_15_2
-	default "busybox-1.15.config"	if EMBTK_BB_VERSION_1_15_1
-	default "busybox-1.15.config"	if EMBTK_BB_VERSION_1_15_0
-	default "busybox-1.14.config"	if EMBTK_BB_VERSION_1_14_4
-	default "busybox-1.14.config"	if EMBTK_BB_VERSION_1_14_3
-	default "busybox-1.14.config"	if EMBTK_BB_VERSION_1_14_2
-	default "busybox-1.14.config"	if EMBTK_BB_VERSION_1_14_1
-	default "busybox-1.13.config"	if EMBTK_BB_VERSION_1_13_4
-
+source packages/busybox/busybox-kconfigs/busybox.kconfig

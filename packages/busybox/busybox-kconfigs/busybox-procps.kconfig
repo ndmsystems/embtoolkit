@@ -1,0 +1,190 @@
+#
+# For a description of the syntax of this configuration file,
+# see scripts/kbuild/config-language.txt.
+#
+
+comment "-------------------------------------------------"
+comment "Process Utilities"
+comment "-------------------------------------------------"
+
+config KEMBTK_BUSYB_FREE
+	bool "free"
+	help
+	  free displays the total amount of free and used physical and swap
+	  memory in the system, as well as the buffers used by the kernel.
+	  The shared memory column should be ignored; it is obsolete.
+
+config KEMBTK_BUSYB_FUSER
+	bool "fuser"
+	help
+	  fuser lists all PIDs (Process KEMBTK_BUSYB_IDs) that currently have a given
+	  file open. fuser can also list all PIDs that have a given network
+	  (TCP or UDP) port open.
+
+config KEMBTK_BUSYB_KILL
+	bool "kill"
+	help
+	  The command kill sends the specified signal to the specified
+	  process or process group. If no signal is specified, the TERM
+	  signal is sent.
+
+config KEMBTK_BUSYB_KILLALL
+	bool "killall"
+	depends on KEMBTK_BUSYB_KILL
+	help
+	  killall sends a signal to all processes running any of the
+	  specified commands. If no signal name is specified, SIGTERM is
+	  sent.
+
+config KEMBTK_BUSYB_KILLALL5
+	bool "killall5"
+	depends on KEMBTK_BUSYB_KILL
+
+config KEMBTK_BUSYB_NMETER
+	bool "nmeter"
+	help
+	  Prints selected system stats continuously, one line per update.
+
+config KEMBTK_BUSYB_PGREP
+	bool "pgrep"
+	help
+	  Look for processes by name.
+
+config KEMBTK_BUSYB_PIDOF
+	bool "pidof"
+	help
+	  Pidof finds the process id's (pids) of the named programs. It prints
+	  those id's on the standard output.
+
+config KEMBTK_BUSYB_FEATURE_PIDOF_SINGLE
+	bool "Enable argument for single shot (-s)"
+	depends on KEMBTK_BUSYB_PIDOF
+	help
+	  Support argument '-s' for returning only the first pid found.
+
+config KEMBTK_BUSYB_FEATURE_PIDOF_OMIT
+	bool "Enable argument for omitting pids (-o)"
+	depends on KEMBTK_BUSYB_PIDOF
+	help
+	  Support argument '-o' for omitting the given pids in output.
+	  The special pid %PPID can be used to name the parent process
+	  of the pidof, in other words the calling shell or shell script.
+
+config KEMBTK_BUSYB_PKILL
+	bool "pkill"
+	help
+	  Send signals to processes by name.
+
+config KEMBTK_BUSYB_PS
+	bool "ps"
+	help
+	  ps gives a snapshot of the current processes.
+
+config KEMBTK_BUSYB_FEATURE_PS_WIDE
+	bool "Enable wide output option (-w)"
+	depends on KEMBTK_BUSYB_PS
+	help
+	  Support argument 'w' for wide output.
+	  If given once, 132 chars are printed, and if given more
+	  than once, the length is unlimited.
+
+config KEMBTK_BUSYB_FEATURE_PS_TIME
+	bool "Enable time and elapsed time output"
+	depends on KEMBTK_BUSYB_PS && KEMBTK_BUSYB_DESKTOP
+	help
+	  Support -o time and -o etime output specifiers.
+
+config KEMBTK_BUSYB_FEATURE_PS_ADDITIONAL_COLUMNS
+	bool "Enable additional ps columns"
+	depends on KEMBTK_BUSYB_PS && KEMBTK_BUSYB_DESKTOP
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	help
+	  Support -o rgroup, -o ruser, -o nice output specifiers.
+
+config KEMBTK_BUSYB_FEATURE_PS_UNUSUAL_SYSTEMS
+	bool "Support Linux prior to 2.4.0 and non-ELF systems"
+	depends on KEMBTK_BUSYB_FEATURE_PS_TIME
+	help
+	  Include support for measuring HZ on old kernels and non-ELF systems
+	  (if you are on Linux 2.4.0+ and use ELF, you don't need this)
+
+config KEMBTK_BUSYB_RENICE
+	bool "renice"
+	help
+	  Renice alters the scheduling priority of one or more running
+	  processes.
+
+config KEMBTK_BUSYB_BB_SYSCTL
+	bool "sysctl"
+	help
+	  Configure kernel parameters at runtime.
+
+config KEMBTK_BUSYB_TOP
+	bool "top"
+	help
+	  The top program provides a dynamic real-time view of a running
+	  system.
+
+config KEMBTK_BUSYB_FEATURE_TOP_CPU_USAGE_PERCENTAGE
+	bool "Show KEMBTK_BUSYB_CPU per-process usage percentage"
+	default y
+	depends on KEMBTK_BUSYB_TOP
+	help
+	  Make top display KEMBTK_BUSYB_CPU usage for each process.
+	  This adds about 2k.
+
+config KEMBTK_BUSYB_FEATURE_TOP_CPU_GLOBAL_PERCENTS
+	bool "Show KEMBTK_BUSYB_CPU global usage percentage"
+	default y
+	depends on KEMBTK_BUSYB_FEATURE_TOP_CPU_USAGE_PERCENTAGE
+	help
+	  Makes top display "CPU: NN% usr NN% sys..." line.
+	  This adds about 0.5k.
+
+config KEMBTK_BUSYB_FEATURE_TOP_SMP_CPU
+	bool "SMP KEMBTK_BUSYB_CPU usage display ('c' key)"
+	depends on KEMBTK_BUSYB_FEATURE_TOP_CPU_GLOBAL_PERCENTS
+	help
+	  Allow 'c' key to switch between individual/cumulative KEMBTK_BUSYB_CPU stats
+	  This adds about 0.5k.
+
+config KEMBTK_BUSYB_FEATURE_TOP_DECIMALS
+	bool "Show 1/10th of a percent in KEMBTK_BUSYB_CPU/mem statistics"
+	depends on KEMBTK_BUSYB_FEATURE_TOP_CPU_USAGE_PERCENTAGE
+	help
+	  Show 1/10th of a percent in KEMBTK_BUSYB_CPU/mem statistics.
+	  This adds about 0.3k.
+
+config KEMBTK_BUSYB_FEATURE_TOP_SMP_PROCESS
+	bool "Show KEMBTK_BUSYB_CPU process runs on ('j' field)"
+	depends on KEMBTK_BUSYB_TOP
+	help
+	  Show KEMBTK_BUSYB_CPU where process was last found running on.
+	  This is the 'j' field.
+
+config KEMBTK_BUSYB_FEATURE_TOPMEM
+	bool "Topmem command ('s' key)"
+	depends on KEMBTK_BUSYB_TOP
+	help
+	  Enable 's' in top (gives lots of memory info).
+
+config KEMBTK_BUSYB_FEATURE_SHOW_THREADS
+	bool "Support for showing threads in ps/top"
+	depends on KEMBTK_BUSYB_PS || KEMBTK_BUSYB_TOP
+	depends on EMBTK_BB_VERSION_1_16_X
+	help
+	  Enables ps -T option and 'h' command in top
+
+config KEMBTK_BUSYB_UPTIME
+	bool "uptime"
+	help
+	  uptime gives a one line display of the current time, how long
+	  the system has been running, how many users are currently logged
+	  on, and the system load averages for the past 1, 5, and 15 minutes.
+
+config KEMBTK_BUSYB_WATCH
+	bool "watch"
+	help
+	  watch is used to execute a program periodically, showing
+	  output to the screen.
+
