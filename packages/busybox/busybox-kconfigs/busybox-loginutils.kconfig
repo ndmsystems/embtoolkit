@@ -7,8 +7,11 @@ comment "-------------------------------------------------"
 comment "Login/Password Management Utilities"
 comment "-------------------------------------------------"
 
+
+
 config KEMBTK_BUSYB_FEATURE_SHADOWPASSWDS
 	bool "Support for shadow passwords"
+	default y
 	help
 	  Build support for shadow password in /etc/shadow. This file is only
 	  readable by root and thus the encrypted passwords are no longer
@@ -16,6 +19,7 @@ config KEMBTK_BUSYB_FEATURE_SHADOWPASSWDS
 
 config KEMBTK_BUSYB_USE_BB_PWD_GRP
 	bool "Use internal password and group functions rather than system functions"
+	default y
 	help
 	  If you leave this disabled, busybox will use the system's password
 	  and group functions. And if you are using the GNU C library
@@ -81,8 +85,9 @@ config KEMBTK_BUSYB_USE_BB_CRYPT
 
 config KEMBTK_BUSYB_USE_BB_CRYPT_SHA
 	bool "Enable SHA256/512 crypt functions"
+	default y
 	depends on KEMBTK_BUSYB_USE_BB_CRYPT
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Enable this if you have passwords starting with "$5$" or "$6$"
 	  in your /etc/passwd or /etc/shadow files. These passwords
@@ -93,18 +98,21 @@ config KEMBTK_BUSYB_USE_BB_CRYPT_SHA
 
 config KEMBTK_BUSYB_ADDGROUP
 	bool "addgroup"
+	default y
 	help
 	  Utility for creating a new group account.
 
 config KEMBTK_BUSYB_FEATURE_ADDGROUP_LONG_OPTIONS
 	bool "Enable long options"
+	default y
 	depends on KEMBTK_BUSYB_ADDGROUP && KEMBTK_BUSYB_LONG_OPTS
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Support long options for the addgroup applet.
 
 config KEMBTK_BUSYB_FEATURE_ADDUSER_TO_GROUP
 	bool "Support for adding users to groups"
+	default y
 	depends on KEMBTK_BUSYB_ADDGROUP
 	help
 	  If  called  with two non-option arguments,
@@ -113,11 +121,13 @@ config KEMBTK_BUSYB_FEATURE_ADDUSER_TO_GROUP
 
 config KEMBTK_BUSYB_DELGROUP
 	bool "delgroup"
+	default y
 	help
 	  Utility for deleting a group account.
 
 config KEMBTK_BUSYB_FEATURE_DEL_USER_FROM_GROUP
 	bool "Support for removing users from groups"
+	default y
 	depends on KEMBTK_BUSYB_DELGROUP
 	help
 	  If called with two non-option arguments, deluser
@@ -136,11 +146,13 @@ config KEMBTK_BUSYB_FEATURE_CHECK_NAMES
 
 config KEMBTK_BUSYB_ADDUSER
 	bool "adduser"
+	default y
 	help
 	  Utility for creating a new user account.
 
 config KEMBTK_BUSYB_FEATURE_ADDUSER_LONG_OPTIONS
 	bool "Enable long options"
+	default y
 	depends on KEMBTK_BUSYB_ADDUSER && KEMBTK_BUSYB_LONG_OPTS
 	help
 	  Support long options for the adduser applet.
@@ -148,7 +160,7 @@ config KEMBTK_BUSYB_FEATURE_ADDUSER_LONG_OPTIONS
 config KEMBTK_BUSYB_FIRST_SYSTEM_ID
 	int "First valid system uid or gid for adduser and addgroup"
 	depends on KEMBTK_BUSYB_ADDUSER || KEMBTK_BUSYB_ADDGROUP
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	range 0 64900
 	default 100
 	help
@@ -157,7 +169,7 @@ config KEMBTK_BUSYB_FIRST_SYSTEM_ID
 config KEMBTK_BUSYB_LAST_SYSTEM_ID
 	int "Last valid system uid or gid for adduser and addgroup"
 	depends on KEMBTK_BUSYB_ADDUSER || KEMBTK_BUSYB_ADDGROUP
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	range 0 64900
 	default 999
 	help
@@ -165,31 +177,20 @@ config KEMBTK_BUSYB_LAST_SYSTEM_ID
 
 config KEMBTK_BUSYB_DELUSER
 	bool "deluser"
+	default y
 	help
 	  Utility for deleting a user account.
 
 config KEMBTK_BUSYB_GETTY
 	bool "getty"
+	default y
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
 	  getty lets you log in on a tty, it is normally invoked by init.
 
-config KEMBTK_BUSYB_FEATURE_UTMP
-	bool "Support utmp file"
-	depends on KEMBTK_BUSYB_GETTY || KEMBTK_BUSYB_LOGIN || KEMBTK_BUSYB_SU || KEMBTK_BUSYB_WHO
-	help
-	  The file /var/run/utmp is used to track who is currently logged in.
-
-config KEMBTK_BUSYB_FEATURE_WTMP
-	bool "Support wtmp file"
-	depends on KEMBTK_BUSYB_GETTY || KEMBTK_BUSYB_LOGIN || KEMBTK_BUSYB_SU || KEMBTK_BUSYB_LAST
-	select KEMBTK_BUSYB_FEATURE_UTMP
-	help
-	  The file /var/run/wtmp is used to track when user's have logged into
-	  and logged out of the system.
-
 config KEMBTK_BUSYB_LOGIN
 	bool "login"
+	default y
 	select KEMBTK_BUSYB_FEATURE_SUID
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
@@ -207,6 +208,7 @@ config KEMBTK_BUSYB_PAM
 config KEMBTK_BUSYB_LOGIN_SCRIPTS
 	bool "Support for login scripts"
 	depends on KEMBTK_BUSYB_LOGIN
+	default y
 	help
 	  Enable this if you want login to execute $LOGIN_PRE_SUID_SCRIPT
 	  just prior to switching from root to logged-in user.
@@ -230,6 +232,7 @@ config KEMBTK_BUSYB_FEATURE_SECURETTY
 
 config KEMBTK_BUSYB_PASSWD
 	bool "passwd"
+	default y
 	select KEMBTK_BUSYB_FEATURE_SUID
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
@@ -250,6 +253,7 @@ config KEMBTK_BUSYB_FEATURE_PASSWD_WEAK_CHECK
 
 config KEMBTK_BUSYB_CRYPTPW
 	bool "cryptpw"
+	default y
 	help
 	  Encrypts the given password with the crypt(3) libc function
 	  using the given salt. Debian has this utility under mkpasswd
@@ -257,12 +261,14 @@ config KEMBTK_BUSYB_CRYPTPW
 
 config KEMBTK_BUSYB_CHPASSWD
 	bool "chpasswd"
+	default y
 	help
 	  Reads a file of user name and password pairs from standard input
 	  and uses this information to update a group of existing users.
 
 config KEMBTK_BUSYB_SU
 	bool "su"
+	default y
 	select KEMBTK_BUSYB_FEATURE_SUID
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
@@ -284,6 +290,7 @@ config KEMBTK_BUSYB_FEATURE_SU_CHECKS_SHELLS
 
 config KEMBTK_BUSYB_SULOGIN
 	bool "sulogin"
+	default y
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
 	  sulogin is invoked when the system goes into single user
@@ -291,6 +298,7 @@ config KEMBTK_BUSYB_SULOGIN
 
 config KEMBTK_BUSYB_VLOCK
 	bool "vlock"
+	default y
 	select KEMBTK_BUSYB_FEATURE_SUID
 	help
 	  Build the "vlock" applet which allows you to lock (virtual) terminals.

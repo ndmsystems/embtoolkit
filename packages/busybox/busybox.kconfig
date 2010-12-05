@@ -29,6 +29,8 @@ choice
 		Here you can choose which version series of busybox you want to
 		use.
 
+	config EMBTK_BB_VERSION_1_17_X
+		bool "busybox-1.17.x"
 	config EMBTK_BB_VERSION_1_16_X
 		bool "busybox-1.16.x"
 	config EMBTK_BB_VERSION_1_15_X
@@ -43,6 +45,10 @@ choice
 	prompt "Busybox version you wish"
 	help
 		Here you can choose which version of busybox you want to use.
+
+	config  EMBTK_BB_VERSION_1_17_4
+		bool "busybox-1.17.4"
+		depends on EMBTK_BB_VERSION_1_17_X
 
 	config  EMBTK_BB_VERSION_1_16_2
 		bool "busybox-1.16.2"
@@ -84,6 +90,7 @@ endchoice
 
 config EMBTK_BB_VERSION_STRING
 	string
+	default "1.17.4"	if EMBTK_BB_VERSION_1_17_4
 	default "1.16.2"	if EMBTK_BB_VERSION_1_16_2
 	default "1.16.1"	if EMBTK_BB_VERSION_1_16_1
 	default "1.15.3"	if EMBTK_BB_VERSION_1_15_3

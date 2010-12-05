@@ -9,6 +9,7 @@ comment "-------------------------------------------------"
 
 config KEMBTK_BUSYB_FIND
 	bool "find"
+	default y
 	help
 	  find is used to search your system to find specified files.
 
@@ -144,6 +145,7 @@ config KEMBTK_BUSYB_FEATURE_FIND_PRUNE
 
 config KEMBTK_BUSYB_FEATURE_FIND_DELETE
 	bool "Enable -delete: delete files/dirs"
+	default y
 	depends on KEMBTK_BUSYB_FIND && KEMBTK_BUSYB_FEATURE_FIND_DEPTH
 	help
 	  Support the 'find -delete' option for deleting files and directories.
@@ -173,12 +175,13 @@ config KEMBTK_BUSYB_FEATURE_FIND_CONTEXT
 config KEMBTK_BUSYB_FEATURE_FIND_LINKS
 	bool "Enable -links: link count matching"
 	depends on KEMBTK_BUSYB_FIND
-	depends on EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  Support the 'find -links' option for matching number of links.
-
 config KEMBTK_BUSYB_GREP
 	bool "grep"
+	default y
 	help
 	  grep is used to search files for a specified pattern.
 
@@ -208,15 +211,16 @@ config KEMBTK_BUSYB_FEATURE_GREP_CONTEXT
 	  Print the specified number of leading (-B) and/or trailing (-A)
 	  context surrounding our matching lines.
 	  Print the specified number of context lines (-C).
-
 config KEMBTK_BUSYB_XARGS
 	bool "xargs"
+	default y
 	help
 	  xargs is used to execute a specified command for
 	  every item from standard input.
 
 config KEMBTK_BUSYB_FEATURE_XARGS_SUPPORT_CONFIRMATION
 	bool "Enable -p: prompt and confirmation"
+	default y
 	depends on KEMBTK_BUSYB_XARGS
 	help
 	  Support -p: prompt the user whether to run each command
@@ -224,12 +228,14 @@ config KEMBTK_BUSYB_FEATURE_XARGS_SUPPORT_CONFIRMATION
 
 config KEMBTK_BUSYB_FEATURE_XARGS_SUPPORT_QUOTES
 	bool "Enable single and double quotes and backslash"
+	default y
 	depends on KEMBTK_BUSYB_XARGS
 	help
 	  Support quoting in the input.
 
 config KEMBTK_BUSYB_FEATURE_XARGS_SUPPORT_TERMOPT
 	bool "Enable -x: exit if -s or -n is exceeded"
+	default y
 	depends on KEMBTK_BUSYB_XARGS
 	help
 	  Support -x: exit if the command size (see the -s or -n option)
@@ -237,6 +243,7 @@ config KEMBTK_BUSYB_FEATURE_XARGS_SUPPORT_TERMOPT
 
 config KEMBTK_BUSYB_FEATURE_XARGS_SUPPORT_ZERO_TERM
 	bool "Enable -0: NUL-terminated input"
+	default y
 	depends on KEMBTK_BUSYB_XARGS
 	help
 	  Support -0: input items are terminated by a NUL character

@@ -7,18 +7,30 @@ comment "-------------------------------------------------"
 comment "Archival Utilities"
 comment "-------------------------------------------------"
 
+
+
+config KEMBTK_BUSYB_FEATURE_SEAMLESS_XZ
+	bool "Make tar, rpm, modprobe etc understand .xz data"
+	depends on EMBTK_BB_VERSION_1_17_X
+	default y
+	help
+	  Make tar, rpm, modprobe etc understand .xz data.
+
 config KEMBTK_BUSYB_FEATURE_SEAMLESS_LZMA
 	bool "Make tar, rpm, modprobe etc understand .lzma data"
+	default y
 	help
 	  Make tar, rpm, modprobe etc understand .lzma data.
 
 config KEMBTK_BUSYB_FEATURE_SEAMLESS_BZ2
 	bool "Make tar, rpm, modprobe etc understand .bz2 data"
+	default y
 	help
 	  Make tar, rpm, modprobe etc understand .bz2 data.
 
 config KEMBTK_BUSYB_FEATURE_SEAMLESS_GZ
 	bool "Make tar, rpm, modprobe etc understand .gz data"
+	default y
 	help
 	  Make tar, rpm, modprobe etc understand .gz data.
 
@@ -51,6 +63,7 @@ config KEMBTK_BUSYB_AR
 
 config KEMBTK_BUSYB_FEATURE_AR_LONG_FILENAMES
 	bool "Support for long filenames (not needed for debs)"
+	default y
 	depends on KEMBTK_BUSYB_AR
 	help
 	  By default the ar format can only store the first 15 characters
@@ -58,8 +71,17 @@ config KEMBTK_BUSYB_FEATURE_AR_LONG_FILENAMES
 	  It supports the GNU ar long filename method which moves multiple long
 	  filenames into a the data section of a new ar entry.
 
+config KEMBTK_BUSYB_FEATURE_AR_CREATE
+	bool "Support archive creation"
+	depends on EMBTK_BB_VERSION_1_17_X
+	default y
+	depends on KEMBTK_BUSYB_AR
+	help
+	  This enables archive creation (-c and -r) with busybox ar.
+
 config KEMBTK_BUSYB_BUNZIP2
 	bool "bunzip2"
+	default y
 	help
 	  bunzip2 is a compression utility using the Burrows-Wheeler block
 	  sorting text compression algorithm, and Huffman coding. Compression
@@ -72,6 +94,7 @@ config KEMBTK_BUSYB_BUNZIP2
 
 config KEMBTK_BUSYB_BZIP2
 	bool "bzip2"
+	default y
 	help
 	  bzip2 is a compression utility using the Burrows-Wheeler block
 	  sorting text compression algorithm, and Huffman coding. Compression
@@ -84,6 +107,7 @@ config KEMBTK_BUSYB_BZIP2
 
 config KEMBTK_BUSYB_CPIO
 	bool "cpio"
+	default y
 	help
 	  cpio is an archival utility program used to create, modify, and
 	  extract contents from archives.
@@ -97,6 +121,7 @@ config KEMBTK_BUSYB_CPIO
 
 config KEMBTK_BUSYB_FEATURE_CPIO_O
 	bool "Support for archive creation"
+	default y
 	depends on KEMBTK_BUSYB_CPIO
 	help
 	  This implementation of cpio can create cpio archives in the "newc"
@@ -104,8 +129,9 @@ config KEMBTK_BUSYB_FEATURE_CPIO_O
 
 config KEMBTK_BUSYB_FEATURE_CPIO_P
 	bool "Support for passthrough mode"
+	default y
 	depends on KEMBTK_BUSYB_FEATURE_CPIO_O
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Passthrough mode. Rarely used.
 
@@ -141,6 +167,7 @@ config KEMBTK_BUSYB_FEATURE_DPKG_DEB_EXTRACT_ONLY
 
 config KEMBTK_BUSYB_GUNZIP
 	bool "gunzip"
+	default y
 	help
 	  gunzip is used to decompress archives created by gzip.
 	  You can use the `-t' option to test the integrity of
@@ -148,19 +175,22 @@ config KEMBTK_BUSYB_GUNZIP
 
 config KEMBTK_BUSYB_GZIP
 	bool "gzip"
+	default y
 	help
 	  gzip is used to compress files.
 	  It's probably the most widely used UNIX compression program.
 
 config KEMBTK_BUSYB_FEATURE_GZIP_LONG_OPTIONS
 	bool "Enable long options"
+	default y
 	depends on KEMBTK_BUSYB_GZIP && KEMBTK_BUSYB_LONG_OPTS
 	help
 	  Enable use of long options, increases size by about 106 Bytes
 
 config KEMBTK_BUSYB_LZOP
 	bool "lzop"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  Lzop compression/decompresion.
 
@@ -174,22 +204,23 @@ config KEMBTK_BUSYB_LZOP_COMPR_HIGH
 
 config KEMBTK_BUSYB_RPM2CPIO
 	bool "rpm2cpio"
+	default y
 	help
 	  Converts an KEMBTK_BUSYB_RPM file into a KEMBTK_BUSYB_CPIO archive.
 
 config KEMBTK_BUSYB_RPM
 	bool "rpm"
+	default y
 	help
 	  Mini KEMBTK_BUSYB_RPM applet - queries and extracts KEMBTK_BUSYB_RPM packages.
 
 config KEMBTK_BUSYB_TAR
 	bool "tar"
+	default y
 	help
 	  tar is an archiving program. It's commonly used with gzip to
 	  create compressed archives. It's probably the most widely used
 	  UNIX archive program.
-
-if KEMBTK_BUSYB_TAR
 
 config KEMBTK_BUSYB_FEATURE_TAR_CREATE
 	bool "Enable archive creation"
@@ -201,13 +232,15 @@ config KEMBTK_BUSYB_FEATURE_TAR_CREATE
 
 config KEMBTK_BUSYB_FEATURE_TAR_AUTODETECT
 	bool "Autodetect compressed tarballs"
-	depends on KEMBTK_BUSYB_FEATURE_SEAMLESS_Z || KEMBTK_BUSYB_FEATURE_SEAMLESS_GZ || KEMBTK_BUSYB_FEATURE_SEAMLESS_BZ2 || KEMBTK_BUSYB_FEATURE_SEAMLESS_LZMA
+	default y
+	depends on KEMBTK_BUSYB_TAR && (KEMBTK_BUSYB_FEATURE_SEAMLESS_Z || KEMBTK_BUSYB_FEATURE_SEAMLESS_GZ || KEMBTK_BUSYB_FEATURE_SEAMLESS_BZ2 || KEMBTK_BUSYB_FEATURE_SEAMLESS_LZMA || KEMBTK_BUSYB_FEATURE_SEAMLESS_XZ)
 	help
 	  With this option tar can automatically detect compressed
 	  tarballs. Currently it works only on files (not pipes etc).
 
 config KEMBTK_BUSYB_FEATURE_TAR_FROM
 	bool "Enable -X (exclude from) and -T (include from) options)"
+	default y
 	depends on KEMBTK_BUSYB_TAR
 	help
 	  If you enable this option you'll be able to specify
@@ -215,7 +248,8 @@ config KEMBTK_BUSYB_FEATURE_TAR_FROM
 
 config KEMBTK_BUSYB_FEATURE_TAR_OLDGNU_COMPATIBILITY
 	bool "Support for old tar header format"
-	depends on KEMBTK_BUSYB_TAR
+	default y
+	depends on KEMBTK_BUSYB_TAR || KEMBTK_BUSYB_DPKG
 	help
 	  This option is required to unpack archives created in
 	  the old GNU format; help to kill this old format by
@@ -223,7 +257,8 @@ config KEMBTK_BUSYB_FEATURE_TAR_OLDGNU_COMPATIBILITY
 
 config KEMBTK_BUSYB_FEATURE_TAR_OLDSUN_COMPATIBILITY
 	bool "Enable untarring of tarballs with checksums produced by buggy Sun tar"
-	depends on KEMBTK_BUSYB_TAR
+	default y
+	depends on KEMBTK_BUSYB_TAR || KEMBTK_BUSYB_DPKG
 	help
 	  This option is required to unpack archives created by some old
 	  version of Sun's tar (it was calculating checksum using signed
@@ -233,19 +268,31 @@ config KEMBTK_BUSYB_FEATURE_TAR_OLDSUN_COMPATIBILITY
 config KEMBTK_BUSYB_FEATURE_TAR_GNU_EXTENSIONS
 	bool "Support for GNU tar extensions (long filenames)"
 	default y
-	depends on KEMBTK_BUSYB_TAR
+	depends on KEMBTK_BUSYB_TAR || KEMBTK_BUSYB_DPKG
 	help
 	  With this option busybox supports GNU long filenames and
 	  linknames.
 
 config KEMBTK_BUSYB_FEATURE_TAR_LONG_OPTIONS
 	bool "Enable long options"
+	default y
 	depends on KEMBTK_BUSYB_TAR && KEMBTK_BUSYB_LONG_OPTS
 	help
 	  Enable use of long options, increases size by about 400 Bytes
 
+config KEMBTK_BUSYB_FEATURE_TAR_TO_COMMAND
+	bool "Support for writing to an external program"
+	depends on EMBTK_BB_VERSION_1_17_X
+	depends on KEMBTK_BUSYB_TAR && KEMBTK_BUSYB_FEATURE_TAR_LONG_OPTIONS
+	default y
+	help
+	  If you enable this option you'll be able to instruct tar to send
+	  the contents of each extracted file to the standard input of an
+	  external program.
+
 config KEMBTK_BUSYB_FEATURE_TAR_UNAME_GNAME
 	bool "Enable use of user and group names"
+	default y
 	depends on KEMBTK_BUSYB_TAR
 	help
 	  Enables use of user and group names in tar. This affects contents
@@ -254,13 +301,20 @@ config KEMBTK_BUSYB_FEATURE_TAR_UNAME_GNAME
 
 config KEMBTK_BUSYB_FEATURE_TAR_NOPRESERVE_TIME
 	bool "Enable -m (do not preserve time) option"
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	depends on KEMBTK_BUSYB_TAR
-	depends on EMBTK_BB_VERSION_1_16_X
 	help
 	  With this option busybox supports GNU tar -m
 	  (do not preserve time) option.
 
-endif #tar
+config KEMBTK_BUSYB_FEATURE_TAR_SELINUX
+	bool "Support for extracting SELinux labels"
+	depends on KEMBTK_BUSYB_TAR && KEMBTK_BUSYB_SELINUX
+	depends on EMBTK_BB_VERSION_1_17_X
+	help
+	  With this option busybox supports restoring SELinux labels
+	  when extracting files from tar archives.
 
 config KEMBTK_BUSYB_UNCOMPRESS
 	bool "uncompress"
@@ -270,6 +324,7 @@ config KEMBTK_BUSYB_UNCOMPRESS
 
 config KEMBTK_BUSYB_UNLZMA
 	bool "unlzma"
+	default y
 	help
 	  unlzma is a compression utility using the Lempel-Ziv-Markov chain
 	  compression algorithm, and range coding. Compression
@@ -284,13 +339,40 @@ config KEMBTK_BUSYB_UNLZMA
 
 config KEMBTK_BUSYB_FEATURE_LZMA_FAST
 	bool "Optimize unlzma for speed"
+	default y
 	depends on KEMBTK_BUSYB_UNLZMA
 	help
 	  This option reduces decompression time by about 25% at the cost of
 	  a 1K bigger binary.
 
+config KEMBTK_BUSYB_LZMA
+	bool "Provide lzma alias which supports only unpacking"
+	depends on EMBTK_BB_VERSION_1_17_X
+	default y
+	depends on KEMBTK_BUSYB_UNLZMA
+	help
+	  Enable this option if you want commands like "lzma -d" to work.
+	  IOW: you'll get lzma applet, but it will always require -d option.
+
+config KEMBTK_BUSYB_UNXZ
+	bool "unxz"
+	depends on EMBTK_BB_VERSION_1_17_X
+	default y
+	help
+	  unxz is a unlzma successor.
+
+config KEMBTK_BUSYB_XZ
+	bool "Provide xz alias which supports only unpacking"
+	depends on EMBTK_BB_VERSION_1_17_X
+	default y
+	depends on KEMBTK_BUSYB_UNXZ
+	help
+	  Enable this option if you want commands like "xz -d" to work.
+	  IOW: you'll get xz applet, but it will always require -d option.
+
 config KEMBTK_BUSYB_UNZIP
 	bool "unzip"
+	default y
 	help
 	  unzip will list or extract files from a ZIP archive,
 	  commonly found on DOS/WIN systems. The default behavior

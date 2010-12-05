@@ -7,14 +7,18 @@ comment "-------------------------------------------------"
 comment "Editors"
 comment "-------------------------------------------------"
 
+
+
 config KEMBTK_BUSYB_AWK
 	bool "awk"
+	default y
 	help
 	  Awk is used as a pattern scanning and processing language. This is
 	  the BusyBox implementation of that programming language.
 
 config KEMBTK_BUSYB_FEATURE_AWK_LIBM
 	bool "Enable math functions (requires libm)"
+	default y
 	depends on KEMBTK_BUSYB_AWK
 	help
 	  Enable math functions of the Awk programming language.
@@ -22,12 +26,14 @@ config KEMBTK_BUSYB_FEATURE_AWK_LIBM
 
 config KEMBTK_BUSYB_CMP
 	bool "cmp"
+	default y
 	help
 	  cmp is used to compare two files and returns the result
 	  to standard output.
 
 config KEMBTK_BUSYB_DIFF
 	bool "diff"
+	default y
 	help
 	  diff compares two files or directories and outputs the
 	  differences between them in a form that can be given to
@@ -39,13 +45,14 @@ config KEMBTK_BUSYB_FEATURE_DIFF_BINARY
 	depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X
 	default y
 	help
-		This option enables support for checking for binary files
-		before a comparison is carried out.
+	       This option enables support for checking for binary files
+	       before a comparison is carried out.
 
 config KEMBTK_BUSYB_FEATURE_DIFF_LONG_OPTIONS
 	bool "Enable long options"
 	depends on KEMBTK_BUSYB_DIFF && KEMBTK_BUSYB_LONG_OPTS
-	depends on EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  Enable use of long options.
 
@@ -58,15 +65,16 @@ config KEMBTK_BUSYB_FEATURE_DIFF_DIR
 	  comparison.
 
 config KEMBTK_BUSYB_FEATURE_DIFF_MINIMAL
-	bool "Enable -d option to find smaller sets of changes"
-	depends on KEMBTK_BUSYB_DIFF
-	depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X
-	help
-		Enabling this option allows the use of -d to make diff
-		try hard to find the smallest possible set of changes.
+       bool "Enable -d option to find smaller sets of changes"
+       depends on KEMBTK_BUSYB_DIFF
+       depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X
+       help
+               Enabling this option allows the use of -d to make diff
+               try hard to find the smallest possible set of changes.
 
 config KEMBTK_BUSYB_ED
 	bool "ed"
+	default y
 	help
 	  The original 1970's Unix text editor, from the days of teletypes.
 	  Small, simple, evil. Part of KEMBTK_BUSYB_SUSv3. If you're not already using
@@ -74,17 +82,20 @@ config KEMBTK_BUSYB_ED
 
 config KEMBTK_BUSYB_PATCH
 	bool "patch"
+	default y
 	help
 	  Apply a unified diff formatted patch.
 
 config KEMBTK_BUSYB_SED
 	bool "sed"
+	default y
 	help
 	  sed is used to perform text transformations on a file
 	  or input from a pipeline.
 
 config KEMBTK_BUSYB_VI
 	bool "vi"
+	default y
 	help
 	  'vi' is a text editor. More specifically, it is the One True
 	  text editor <grin>. It does, however, have a rather steep
@@ -102,7 +113,6 @@ config KEMBTK_BUSYB_FEATURE_VI_MAX_LEN
 
 config KEMBTK_BUSYB_FEATURE_VI_8BIT
 	bool "Allow vi to display 8-bit chars (otherwise shows dots)"
-	default y
 	depends on KEMBTK_BUSYB_VI
 	help
 	  If your terminal can display characters with high bit set,
@@ -178,6 +188,19 @@ config KEMBTK_BUSYB_FEATURE_VI_WIN_RESIZE
 	depends on KEMBTK_BUSYB_VI
 	help
 	  Make busybox vi behave nicely with terminals that get resized.
+
+config KEMBTK_BUSYB_FEATURE_VI_ASK_TERMINAL
+	bool "Use 'tell me cursor position' ESC sequence to measure window"
+	depends on KEMBTK_BUSYB_VI
+	depends on EMBTK_BB_VERSION_1_17_X
+	default y
+	help
+	  If terminal size can't be retrieved and $LINES/$COLUMNS are not set,
+	  this option makes vi perform a last-ditch effort to find it:
+	  vi positions cursor to 999,999 and asks terminal to report real
+	  cursor position using "ESC [ 6 n" escape sequence, then reads stdin.
+
+	  This is not clean but helps a lot on serial lines and such.
 
 config KEMBTK_BUSYB_FEATURE_VI_OPTIMIZE_CURSOR
 	bool "Optimize cursor movement"

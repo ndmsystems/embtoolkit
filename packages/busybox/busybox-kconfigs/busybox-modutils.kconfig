@@ -7,8 +7,16 @@ comment "-------------------------------------------------"
 comment "Linux Module Utilities"
 comment "-------------------------------------------------"
 
+config KEMBTK_BUSYB_MODINFO
+	bool "modinfo"
+	depends on EMBTK_BB_VERSION_1_17_X
+	default y
+	help
+	  Show information about a Linux Kernel module
+
 config KEMBTK_BUSYB_MODPROBE_SMALL
 	bool "Simplified modutils"
+	default y
 	help
 	  Simplified modutils.
 
@@ -41,12 +49,14 @@ config KEMBTK_BUSYB_MODPROBE_SMALL
 
 config KEMBTK_BUSYB_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE
 	bool "Accept module options on modprobe command line"
+	default y
 	depends on KEMBTK_BUSYB_MODPROBE_SMALL
 	help
 	  Allow insmod and modprobe take module options from command line.
 
 config KEMBTK_BUSYB_FEATURE_MODPROBE_SMALL_CHECK_ALREADY_LOADED
 	bool "Skip loading of already loaded modules"
+	default y
 	depends on KEMBTK_BUSYB_MODPROBE_SMALL
 	help
 	  Check if the module is already loaded.
@@ -115,7 +125,7 @@ config KEMBTK_BUSYB_FEATURE_2_4_MODULES
 config KEMBTK_BUSYB_FEATURE_INSMOD_TRY_MMAP
 	bool "Try to load module from a mmap'ed area"
 	depends on KEMBTK_BUSYB_INSMOD || KEMBTK_BUSYB_MODPROBE_SMALL
-	depends on EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  This option causes module loading code to try to mmap
 	  module first. If it does not work (for example,

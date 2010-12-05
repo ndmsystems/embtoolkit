@@ -7,38 +7,11 @@ comment "-------------------------------------------------"
 comment "Shells"
 comment "-------------------------------------------------"
 
-choice
-	prompt "Choose your default shell"
-	help
-	  Choose a shell. The ash shell is the most bash compatible
-	  and full featured one.
 
-config KEMBTK_BUSYB_FEATURE_SH_IS_ASH
-	select KEMBTK_BUSYB_ASH
-	bool "ash"
-	depends on !KEMBTK_BUSYB_NOMMU
-
-config KEMBTK_BUSYB_FEATURE_SH_IS_HUSH
-	select KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X
-	bool "hush"
-
-####config FEATURE_SH_IS_LASH
-####	select KEMBTK_BUSYB_LASH
-####	bool "lash"
-
-config KEMBTK_BUSYB_FEATURE_SH_IS_MSH
-	select KEMBTK_BUSYB_MSH
-	depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X
-	bool "msh"
-
-config KEMBTK_BUSYB_FEATURE_SH_IS_NONE
-	bool "none"
-
-endchoice
 
 config KEMBTK_BUSYB_ASH
 	bool "ash"
+	default y
 	depends on !KEMBTK_BUSYB_NOMMU
 	help
 	  Tha 'ash' shell adds about 60k in the default configuration and is
@@ -62,21 +35,21 @@ config KEMBTK_BUSYB_ASH_JOB_CONTROL
 	  Enable job control in the ash shell.
 
 config KEMBTK_BUSYB_ASH_READ_NCHARS
-       bool "'read -n N' and 'read -s' support"
-       depends on KEMBTK_BUSYB_ASH
-       depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X
-       help
-         'read -n N' will return a value after N characters have been read.
-         'read -s' will read without echoing the user's input.
+	bool "'read -n N' and 'read -s' support"
+	depends on KEMBTK_BUSYB_ASH
+	depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X
+	help
+		'read -n N' will return a value after N characters have been
+		read. 'read -s' will read without echoing the user's input.
 
 config KEMBTK_BUSYB_ASH_READ_TIMEOUT
-       bool "'read -t S' support"
-       depends on KEMBTK_BUSYB_ASH
-       depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X
-       help
-         'read -t S' will return a value after S seconds have passed.
-         This implementation will allow fractional seconds, expressed
-         as a decimal fraction, e.g. 'read -t 2.5 foo'.
+	bool "'read -t S' support"
+	depends on KEMBTK_BUSYB_ASH
+	depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X
+	help
+		'read -t S' will return a value after S seconds have passed.
+		This implementation will allow fractional seconds, expressed
+		as a decimal fraction, e.g. 'read -t 2.5 foo'.
 
 config KEMBTK_BUSYB_ASH_ALIAS
 	bool "alias support"
@@ -104,6 +77,7 @@ config KEMBTK_BUSYB_ASH_MATH_SUPPORT_64
 
 config KEMBTK_BUSYB_ASH_GETOPTS
 	bool "Builtin getopt to parse positional parameters"
+	default y
 	depends on KEMBTK_BUSYB_ASH
 	help
 	  Enable getopts builtin in the ash shell.
@@ -131,6 +105,7 @@ config KEMBTK_BUSYB_ASH_BUILTIN_TEST
 
 config KEMBTK_BUSYB_ASH_CMDCMD
 	bool "'command' command to override shell builtins"
+	default y
 	depends on KEMBTK_BUSYB_ASH
 	help
 	  Enable support for the ash 'command' builtin, which allows
@@ -139,7 +114,6 @@ config KEMBTK_BUSYB_ASH_CMDCMD
 
 config KEMBTK_BUSYB_ASH_MAIL
 	bool "Check for new mail on interactive shells"
-	default y
 	depends on KEMBTK_BUSYB_ASH
 	help
 	  Enable "check for new mail" in the ash shell.
@@ -153,6 +127,7 @@ config KEMBTK_BUSYB_ASH_OPTIMIZE_FOR_SIZE
 
 config KEMBTK_BUSYB_ASH_RANDOM_SUPPORT
 	bool "Pseudorandom generator and $RANDOM variable"
+	default y
 	depends on KEMBTK_BUSYB_ASH
 	help
 	  Enable pseudorandom generator and dynamic variable "$RANDOM".
@@ -163,6 +138,7 @@ config KEMBTK_BUSYB_ASH_RANDOM_SUPPORT
 
 config KEMBTK_BUSYB_ASH_EXPAND_PRMT
 	bool "Expand prompt string"
+	default y
 	depends on KEMBTK_BUSYB_ASH
 	help
 	  "PS#" may contain volatile content, such as backquote commands.
@@ -171,6 +147,7 @@ config KEMBTK_BUSYB_ASH_EXPAND_PRMT
 
 config KEMBTK_BUSYB_HUSH
 	bool "hush"
+	default y
 	help
 	  hush is a small shell (22k). It handles the normal flow control
 	  constructs such as if/then/elif/else/fi, for/in/do/done, while loops,
@@ -186,12 +163,13 @@ config KEMBTK_BUSYB_HUSH_BASH_COMPAT
 	bool "bash-compatible extensions"
 	default y
 	depends on KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Enable bash-compatible extensions.
 
 config KEMBTK_BUSYB_HUSH_HELP
 	bool "help builtin"
+	default y
 	depends on KEMBTK_BUSYB_HUSH
 	help
 	  Enable help builtin in hush. Code size + ~1 kbyte.
@@ -208,6 +186,7 @@ config KEMBTK_BUSYB_HUSH_INTERACTIVE
 
 config KEMBTK_BUSYB_HUSH_JOB
 	bool "Job control"
+	default y
 	depends on KEMBTK_BUSYB_HUSH_INTERACTIVE
 	help
 	  Enable job control: Ctrl-Z backgrounds, Ctrl-C interrupts current
@@ -218,65 +197,131 @@ config KEMBTK_BUSYB_HUSH_JOB
 
 config KEMBTK_BUSYB_HUSH_TICK
 	bool "Process substitution"
+	default y
 	depends on KEMBTK_BUSYB_HUSH
 	help
 	  Enable process substitution `command` and $(command) in hush.
 
 config KEMBTK_BUSYB_HUSH_IF
 	bool "Support if/then/elif/else/fi"
+	default y
 	depends on KEMBTK_BUSYB_HUSH
 	help
 	  Enable if/then/elif/else/fi in hush.
 
 config KEMBTK_BUSYB_HUSH_LOOPS
 	bool "Support for, while and until loops"
+	default y
 	depends on KEMBTK_BUSYB_HUSH
 	help
 	  Enable for, while and until loops in hush.
 
 config KEMBTK_BUSYB_HUSH_CASE
 	bool "Support case ... esac statement"
+	default y
 	depends on KEMBTK_BUSYB_HUSH
 	help
 	  Enable case ... esac statement in hush. +400 bytes.
 
 config KEMBTK_BUSYB_HUSH_FUNCTIONS
 	bool "Support funcname() { commands; } syntax"
+	default y
 	depends on KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Enable support for shell functions in hush. +800 bytes.
 
 config KEMBTK_BUSYB_HUSH_LOCAL
 	bool "Support local builtin"
+	default y
 	depends on KEMBTK_BUSYB_HUSH_FUNCTIONS
 	help
 	  Enable support for local variables in functions.
 
 config KEMBTK_BUSYB_HUSH_EXPORT_N
 	bool "Support export '-n' option"
+	default y
 	depends on KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Enable support for export '-n' option in hush. It is a bash extension.
 
 config KEMBTK_BUSYB_HUSH_RANDOM_SUPPORT
 	bool "Pseudorandom generator and $RANDOM variable"
+	default y
 	depends on KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Enable pseudorandom generator and dynamic variable "$RANDOM".
 	  Each read of "$RANDOM" will generate a new pseudorandom value.
 
+
+choice
+	prompt "Choose which shell is aliased to 'sh' name"
+	help
+	  Choose which shell you want to be executed by 'sh' alias.
+	  The ash shell is the most bash compatible and full featured one.
+
+# note: cannot use "select KEMBTK_BUSYB_ASH" here, it breaks "make allnoconfig"
+config KEMBTK_BUSYB_FEATURE_SH_IS_ASH
+	depends on KEMBTK_BUSYB_ASH
+	bool "ash"
+	depends on !KEMBTK_BUSYB_NOMMU
+
+config KEMBTK_BUSYB_FEATURE_SH_IS_HUSH
+	depends on KEMBTK_BUSYB_HUSH
+	bool "hush"
+
+config KEMBTK_BUSYB_FEATURE_SH_IS_MSH
+       select KEMBTK_BUSYB_MSH
+       depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X
+       bool "msh"
+
+config KEMBTK_BUSYB_FEATURE_SH_IS_NONE
+	bool "none"
+
+endchoice
+
+choice
+	prompt "Choose which shell is aliased to 'bash' name"
+	depends on EMBTK_BB_VERSION_1_17_X
+	help
+	  Choose which shell you want to be executed by 'bash' alias.
+	  The ash shell is the most bash compatible and full featured one.
+
+	  Note that selecting this option does not switch on any bash
+	  compatibility code. It merely makes it possible to install
+	  /bin/bash (sym)link and run scripts which start with
+	  #!/bin/bash line.
+
+	  Many systems use it in scripts which use bash-specific features,
+	  even simple ones like $RANDOM. Without this option, busybox
+	  can't be used for running them because it won't recongnize
+	  "bash" as a supported applet name.
+
+config KEMBTK_BUSYB_FEATURE_BASH_IS_ASH
+	depends on KEMBTK_BUSYB_ASH
+	bool "ash"
+	depends on !KEMBTK_BUSYB_NOMMU
+
+config KEMBTK_BUSYB_FEATURE_BASH_IS_HUSH
+	depends on KEMBTK_BUSYB_HUSH
+	bool "hush"
+
+config KEMBTK_BUSYB_FEATURE_BASH_IS_NONE
+	bool "none"
+
+endchoice
+
+
 config KEMBTK_BUSYB_LASH
-	bool "lash (deprecated: aliased to hush)"
-	select KEMBTK_BUSYB_HUSH if (EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X)
+	bool "lash (deprecated)"
+	select KEMBTK_BUSYB_HUSH if (EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X)
 	help
 	  lash is deprecated and will be removed, please migrate to hush.
 
 config KEMBTK_BUSYB_MSH
 	bool "msh (deprecated: please use hush)"
-	select KEMBTK_BUSYB_HUSH
 	help
 	  msh is deprecated and will be removed, please migrate to hush.
 	  If there is a feature msh has but hush does not, please let us know.
@@ -293,12 +338,13 @@ config KEMBTK_BUSYB_SH_MATH_SUPPORT
 	bool "POSIX math support"
 	default y
 	depends on KEMBTK_BUSYB_ASH || KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Enable math support in the shell via $((...)) syntax.
 
 config KEMBTK_BUSYB_SH_MATH_SUPPORT_64
 	bool "Extend POSIX math support to 64 bit"
+	default y
 	depends on KEMBTK_BUSYB_SH_MATH_SUPPORT
 	help
 	  Enable 64-bit math support in the shell. This will make the shell
@@ -307,6 +353,7 @@ config KEMBTK_BUSYB_SH_MATH_SUPPORT_64
 
 config KEMBTK_BUSYB_FEATURE_SH_EXTRA_QUIET
 	bool "Hide message on interactive shell startup"
+	default y
 	depends on KEMBTK_BUSYB_MSH || KEMBTK_BUSYB_LASH || KEMBTK_BUSYB_HUSH || KEMBTK_BUSYB_ASH
 	help
 	  Remove the busybox introduction when starting a shell.
@@ -361,6 +408,7 @@ config KEMBTK_BUSYB_FEATURE_SH_NOFORK
 
 config KEMBTK_BUSYB_CTTYHACK
 	bool "cttyhack"
+	default y
 	help
 	  One common problem reported on the mailing list is "can't access tty;
 	  job control turned off" error message which typically appears when
@@ -373,8 +421,19 @@ config KEMBTK_BUSYB_CTTYHACK
 	  It analyzes stdin with various ioctls, trying to determine whether
 	  it is a /dev/ttyN or /dev/ttySN (virtual terminal or serial line).
 	  If it detects one, it closes stdin/out/err and reopens that device.
-	  Then it executes given program. Usage example for /etc/inittab
-	  (for busybox init):
+	  Then it executes given program. Opening the device will make
+	  that device a controlling tty. This may require cttyhack
+	  to be a session leader.
+
+	  Example for /etc/inittab (for busybox init):
 
 	  ::respawn:/bin/cttyhack /bin/sh
+
+	  Giving controlling tty to shell running with PID 1:
+
+	  $ exec cttyhack sh
+
+	  Starting an interactive shell from boot shell script:
+
+	  setsid cttyhack sh
 

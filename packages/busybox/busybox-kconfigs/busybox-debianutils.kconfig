@@ -7,18 +7,23 @@ comment "-------------------------------------------------"
 comment "Debian Utilities"
 comment "-------------------------------------------------"
 
+
+
 config KEMBTK_BUSYB_MKTEMP
 	bool "mktemp"
+	default y
 	help
 	  mktemp is used to create unique temporary files
 
 config KEMBTK_BUSYB_PIPE_PROGRESS
 	bool "pipe_progress"
+	default y
 	help
 	  Display a dot to indicate pipe activity.
 
 config KEMBTK_BUSYB_RUN_PARTS
 	bool "run-parts"
+	default y
 	help
 	  run-parts is a utility designed to run all the scripts in a directory.
 
@@ -33,12 +38,14 @@ config KEMBTK_BUSYB_RUN_PARTS
 
 config KEMBTK_BUSYB_FEATURE_RUN_PARTS_LONG_OPTIONS
 	bool "Enable long options"
+	default y
 	depends on KEMBTK_BUSYB_RUN_PARTS && KEMBTK_BUSYB_LONG_OPTS
 	help
 	  Support long options for the run-parts applet.
 
 config KEMBTK_BUSYB_FEATURE_RUN_PARTS_FANCY
 	bool "Support additional arguments"
+	default y
 	depends on KEMBTK_BUSYB_RUN_PARTS
 	help
 	  Support additional options:
@@ -47,6 +54,7 @@ config KEMBTK_BUSYB_FEATURE_RUN_PARTS_FANCY
 
 config KEMBTK_BUSYB_START_STOP_DAEMON
 	bool "start-stop-daemon"
+	default y
 	help
 	  start-stop-daemon is used to control the creation and
 	  termination of system-level processes, usually the ones
@@ -54,6 +62,7 @@ config KEMBTK_BUSYB_START_STOP_DAEMON
 
 config KEMBTK_BUSYB_FEATURE_START_STOP_DAEMON_FANCY
 	bool "Support additional arguments"
+	default y
 	depends on KEMBTK_BUSYB_START_STOP_DAEMON
 	help
 	  Support additional arguments.
@@ -63,14 +72,15 @@ config KEMBTK_BUSYB_FEATURE_START_STOP_DAEMON_FANCY
 
 config KEMBTK_BUSYB_FEATURE_START_STOP_DAEMON_LONG_OPTIONS
 	bool "Enable long options"
+	default y
 	depends on KEMBTK_BUSYB_START_STOP_DAEMON && KEMBTK_BUSYB_LONG_OPTS
 	help
 	  Support long options for the start-stop-daemon applet.
 
 config KEMBTK_BUSYB_WHICH
 	bool "which"
+	default y
 	help
 	  which is used to find programs in your PATH and
 	  print out their pathnames.
-
 

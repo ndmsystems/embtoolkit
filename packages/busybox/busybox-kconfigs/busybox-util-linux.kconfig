@@ -7,9 +7,17 @@ comment "-------------------------------------------------"
 comment "Linux System Utilities"
 comment "-------------------------------------------------"
 
+config KEMBTK_BUSYB_REV
+	bool "rev"
+	depends on EMBTK_BB_VERSION_1_17_X
+	default y
+	help
+	  Reverse lines of a file or files.
+
 config KEMBTK_BUSYB_ACPID
 	bool "acpid"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  acpid listens to ACPI events coming either in textual form from
 	  /proc/acpi/event (though it is marked deprecated it is still widely
@@ -24,12 +32,14 @@ config KEMBTK_BUSYB_ACPID
 
 config KEMBTK_BUSYB_FEATURE_ACPID_COMPAT
 	bool "Accept and ignore redundant options"
+	default y
 	depends on KEMBTK_BUSYB_ACPID
 	help
 	  Accept and ignore compatibility options -g -m -s -S -v.
 
 config KEMBTK_BUSYB_BLKID
 	bool "blkid"
+	default y
 	select KEMBTK_BUSYB_VOLUMEID
 	help
 	  Lists labels and UUIDs of all filesystems.
@@ -38,6 +48,7 @@ config KEMBTK_BUSYB_BLKID
 
 config KEMBTK_BUSYB_DMESG
 	bool "dmesg"
+	default y
 	help
 	  dmesg is used to examine or control the kernel ring buffer. When the
 	  Linux kernel prints messages to the system log, they are stored in
@@ -70,6 +81,7 @@ config KEMBTK_BUSYB_FEATURE_DMESG_PRETTY
 
 config KEMBTK_BUSYB_FBSET
 	bool "fbset"
+	default y
 	help
 	  fbset is used to show or change the settings of a Linux frame buffer
 	  device. The frame buffer device provides a simple and unique
@@ -78,6 +90,7 @@ config KEMBTK_BUSYB_FBSET
 
 config KEMBTK_BUSYB_FEATURE_FBSET_FANCY
 	bool "Turn on extra fbset options"
+	default y
 	depends on KEMBTK_BUSYB_FBSET
 	help
 	  This option enables extended fbset options, allowing one to set the
@@ -87,6 +100,7 @@ config KEMBTK_BUSYB_FEATURE_FBSET_FANCY
 
 config KEMBTK_BUSYB_FEATURE_FBSET_READMODE
 	bool "Turn on fbset readmode support"
+	default y
 	depends on KEMBTK_BUSYB_FBSET
 	help
 	  This option allows fbset to read the video mode database stored by
@@ -95,6 +109,7 @@ config KEMBTK_BUSYB_FEATURE_FBSET_READMODE
 
 config KEMBTK_BUSYB_FDFLUSH
 	bool "fdflush"
+	default y
 	help
 	  fdflush is only needed when changing media on slightly-broken
 	  removable media drives. It is used to make Linux believe that a
@@ -106,11 +121,13 @@ config KEMBTK_BUSYB_FDFLUSH
 
 config KEMBTK_BUSYB_FDFORMAT
 	bool "fdformat"
+	default y
 	help
 	  fdformat is used to low-level format a floppy disk.
 
 config KEMBTK_BUSYB_FDISK
 	bool "fdisk"
+	default y
 	help
 	  The fdisk utility is used to divide hard disks into one or more
 	  logical disks, which are generally called partitions. This utility
@@ -163,6 +180,7 @@ config KEMBTK_BUSYB_FEATURE_OSF_LABEL
 
 config KEMBTK_BUSYB_FEATURE_FDISK_ADVANCED
 	bool "Support expert mode"
+	default y
 	depends on KEMBTK_BUSYB_FDISK && KEMBTK_BUSYB_FEATURE_FDISK_WRITABLE
 	help
 	  Enabling this option allows you to do terribly unsafe things like
@@ -172,14 +190,23 @@ config KEMBTK_BUSYB_FEATURE_FDISK_ADVANCED
 
 config KEMBTK_BUSYB_FINDFS
 	bool "findfs"
+	default y
 	select KEMBTK_BUSYB_VOLUMEID
 	help
 	  Prints the name of a filesystem with given label or UUID.
 	  WARNING:
 	  With all submodules selected, it will add ~8k to busybox.
 
+config KEMBTK_BUSYB_FLOCK
+	bool "flock"
+	depends on EMBTK_BB_VERSION_1_17_X
+	default y
+	help
+	  Manage locks from shell scripts
+
 config KEMBTK_BUSYB_FREERAMDISK
 	bool "freeramdisk"
+	default y
 	help
 	  Linux allows you to create ramdisks. This utility allows you to
 	  delete them and completely free all memory that was used for the
@@ -190,6 +217,7 @@ config KEMBTK_BUSYB_FREERAMDISK
 
 config KEMBTK_BUSYB_FSCK_MINIX
 	bool "fsck_minix"
+	default y
 	help
 	  The minix filesystem is a nice, small, compact, read-write filesystem
 	  with little overhead. It is not a journaling filesystem however and
@@ -200,19 +228,18 @@ config KEMBTK_BUSYB_FSCK_MINIX
 
 config KEMBTK_BUSYB_MKFS_EXT2
 	bool "mkfs_ext2"
-	depends on EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  Utility to create EXT2 filesystems.
 
 config KEMBTK_BUSYB_MKFS_MINIX
 	bool "mkfs_minix"
+	default y
 	help
 	  The minix filesystem is a nice, small, compact, read-write filesystem
 	  with little overhead. If you wish to be able to create minix
 	  filesystems this utility will do the job for you.
-
-comment "Minix filesystem support"
-	depends on KEMBTK_BUSYB_FSCK_MINIX || KEMBTK_BUSYB_MKFS_MINIX
 
 config KEMBTK_BUSYB_FEATURE_MINIX2
 	bool "Support Minix fs v2 (fsck_minix/mkfs_minix)"
@@ -225,18 +252,21 @@ config KEMBTK_BUSYB_FEATURE_MINIX2
 
 config KEMBTK_BUSYB_MKFS_REISER
 	bool "mkfs_reiser"
-	depends on EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Utility to create ReiserFS filesystems.
+	  Note: this applet needs a lot of testing and polishing.
 
 config KEMBTK_BUSYB_MKFS_VFAT
 	bool "mkfs_vfat"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  Utility to create FAT32 filesystems.
 
 config KEMBTK_BUSYB_GETOPT
 	bool "getopt"
+	default y
 	help
 	  The getopt utility is used to break up (parse) options in command
 	  lines to make it easy to write complex shell scripts that also check
@@ -249,18 +279,20 @@ config KEMBTK_BUSYB_FEATURE_GETOPT_LONG
 	bool "Support option -l"
 	default y if KEMBTK_BUSYB_LONG_OPTS
 	depends on KEMBTK_BUSYB_GETOPT
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Enable support for long options (option -l).
 
 config KEMBTK_BUSYB_HEXDUMP
 	bool "hexdump"
+	default y
 	help
 	  The hexdump utility is used to display binary data in a readable
 	  way that is comparable to the output from most hex editors.
 
 config KEMBTK_BUSYB_FEATURE_HEXDUMP_REVERSE
 	bool "Support -R, reverse of 'hexdump -Cv'"
+	default y
 	depends on KEMBTK_BUSYB_HEXDUMP
 	help
 	  The hexdump utility is used to display binary data in an ascii
@@ -270,12 +302,14 @@ config KEMBTK_BUSYB_FEATURE_HEXDUMP_REVERSE
 
 config KEMBTK_BUSYB_HD
 	bool "hd"
-	select KEMBTK_BUSYB_HEXDUMP
+	default y
+	depends on KEMBTK_BUSYB_HEXDUMP
 	help
 	  hd is an alias to hexdump -C.
 
 config KEMBTK_BUSYB_HWCLOCK
 	bool "hwclock"
+	default y
 	help
 	  The hwclock utility is used to read and set the hardware clock
 	  on a system. This is primarily used to set the current time on
@@ -284,6 +318,7 @@ config KEMBTK_BUSYB_HWCLOCK
 
 config KEMBTK_BUSYB_FEATURE_HWCLOCK_LONG_OPTIONS
 	bool "Support long options (--hctosys,...)"
+	default y
 	depends on KEMBTK_BUSYB_HWCLOCK && KEMBTK_BUSYB_LONG_OPTS
 	help
 	  By default, the hwclock utility only uses short options. If you
@@ -304,6 +339,7 @@ config KEMBTK_BUSYB_FEATURE_HWCLOCK_ADJTIME_FHS
 
 config KEMBTK_BUSYB_IPCRM
 	bool "ipcrm"
+	default y
 	select KEMBTK_BUSYB_FEATURE_SUID
 	help
 	  The ipcrm utility allows the removal of System V interprocess
@@ -312,6 +348,7 @@ config KEMBTK_BUSYB_IPCRM
 
 config KEMBTK_BUSYB_IPCS
 	bool "ipcs"
+	default y
 	select KEMBTK_BUSYB_FEATURE_SUID
 	help
 	  The ipcs utility is used to provide information on the currently
@@ -319,6 +356,7 @@ config KEMBTK_BUSYB_IPCS
 
 config KEMBTK_BUSYB_LOSETUP
 	bool "losetup"
+	default y
 	help
 	  losetup is used to associate or detach a loop device with a regular
 	  file or block device, and to query the status of a loop device. This
@@ -326,7 +364,8 @@ config KEMBTK_BUSYB_LOSETUP
 
 config KEMBTK_BUSYB_LSPCI
 	bool "lspci"
-	depends on EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  lspci is a utility for displaying information about PCI buses in the
 	  system and devices connected to them.
@@ -335,7 +374,8 @@ config KEMBTK_BUSYB_LSPCI
 
 config KEMBTK_BUSYB_LSUSB
 	bool "lsusb"
-	depends on EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  lsusb is a utility for displaying information about USB buses in the
 	  system and devices connected to them.
@@ -344,6 +384,7 @@ config KEMBTK_BUSYB_LSUSB
 
 config KEMBTK_BUSYB_MDEV
 	bool "mdev"
+	default y
 	help
 	  mdev is a mini-udev implementation for dynamically creating device
 	  nodes in the /dev directory.
@@ -352,6 +393,7 @@ config KEMBTK_BUSYB_MDEV
 
 config KEMBTK_BUSYB_FEATURE_MDEV_CONF
 	bool "Support /etc/mdev.conf"
+	default y
 	depends on KEMBTK_BUSYB_MDEV
 	help
 	  Add support for the mdev config file to control ownership and
@@ -361,6 +403,7 @@ config KEMBTK_BUSYB_FEATURE_MDEV_CONF
 
 config KEMBTK_BUSYB_FEATURE_MDEV_RENAME
 	bool "Support subdirs/symlinks"
+	default y
 	depends on KEMBTK_BUSYB_FEATURE_MDEV_CONF
 	help
 	  Add support for renaming devices and creating symlinks.
@@ -369,6 +412,7 @@ config KEMBTK_BUSYB_FEATURE_MDEV_RENAME
 
 config KEMBTK_BUSYB_FEATURE_MDEV_RENAME_REGEXP
 	bool "Support regular expressions substitutions when renaming device"
+	default y
 	depends on KEMBTK_BUSYB_FEATURE_MDEV_RENAME
 	help
 	  Add support for regular expressions substitutions when renaming
@@ -376,6 +420,7 @@ config KEMBTK_BUSYB_FEATURE_MDEV_RENAME_REGEXP
 
 config KEMBTK_BUSYB_FEATURE_MDEV_EXEC
 	bool "Support command execution at device addition/removal"
+	default y
 	depends on KEMBTK_BUSYB_FEATURE_MDEV_CONF
 	help
 	  This adds support for an optional field to /etc/mdev.conf for
@@ -385,6 +430,7 @@ config KEMBTK_BUSYB_FEATURE_MDEV_EXEC
 
 config KEMBTK_BUSYB_FEATURE_MDEV_LOAD_FIRMWARE
 	bool "Support loading of firmwares"
+	default y
 	depends on KEMBTK_BUSYB_MDEV
 	help
 	  Some devices need to load firmware before they can be usable.
@@ -395,6 +441,7 @@ config KEMBTK_BUSYB_FEATURE_MDEV_LOAD_FIRMWARE
 
 config KEMBTK_BUSYB_MKSWAP
 	bool "mkswap"
+	default y
 	help
 	  The mkswap utility is used to configure a file or disk partition as
 	  Linux swap space. This allows Linux to use the entire file or
@@ -415,13 +462,15 @@ config KEMBTK_BUSYB_FEATURE_MKSWAP_V0
 
 config KEMBTK_BUSYB_FEATURE_MKSWAP_UUID
 	bool "UUID support"
+	default y
 	depends on KEMBTK_BUSYB_MKSWAP
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Generate swap spaces with universally unique identifiers.
 
 config KEMBTK_BUSYB_MORE
 	bool "more"
+	default y
 	help
 	  more is a simple utility which allows you to read text one screen
 	  sized page at a time. If you want to read text that is larger than
@@ -440,193 +489,9 @@ config KEMBTK_BUSYB_FEATURE_USE_TERMIOS
 	  will be unable to determine the current screen size, and will be
 	  unable to move the cursor.
 
-config KEMBTK_BUSYB_VOLUMEID
-	bool #No description makes it a hidden option
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_EXT
-	bool "Ext filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_BTRFS
-	bool "btrfs filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	depends on EMBTK_BB_VERSION_1_16_X
-	help
-	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_REISERFS
-	bool "Reiser filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_FAT
-	bool "fat filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_HFS
-	bool "hfs filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_JFS
-	bool "jfs filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-### config FEATURE_VOLUMEID_UFS
-###	bool "ufs filesystem"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_XFS
-	bool "xfs filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_NTFS
-	bool "ntfs filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_ISO9660
-	bool "iso9660 filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_UDF
-	bool "udf filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_LUKS
-	bool "luks filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_LINUXSWAP
-	bool "linux swap filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-### config FEATURE_VOLUMEID_LVM
-###	bool "lvm"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_CRAMFS
-	bool "cramfs filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-### config FEATURE_VOLUMEID_HPFS
-###	bool "hpfs filesystem"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_ROMFS
-	bool "romfs filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_SYSV
-	bool "sysv filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-### config FEATURE_VOLUMEID_MINIX
-###	bool "minix filesystem"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-### These only detect partition tables - not used (yet?)
-### config FEATURE_VOLUMEID_MAC
-###	bool "mac filesystem"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-###
-### config FEATURE_VOLUMEID_MSDOS
-###	bool "msdos filesystem"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_OCFS2
-	bool "ocfs2 filesystem"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
-### config FEATURE_VOLUMEID_HIGHPOINTRAID
-###	bool "highpoint raid"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-### config FEATURE_VOLUMEID_ISWRAID
-###	bool "intel raid"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-### config FEATURE_VOLUMEID_LSIRAID
-###	bool "lsi raid"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-### config FEATURE_VOLUMEID_VIARAID
-###	bool "via raid"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-### config FEATURE_VOLUMEID_SILICONRAID
-###	bool "silicon raid"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-### config FEATURE_VOLUMEID_NVIDIARAID
-###	bool "nvidia raid"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-### config FEATURE_VOLUMEID_PROMISERAID
-###	bool "promise raid"
-###	depends on KEMBTK_BUSYB_VOLUMEID
-###	help
-###	  TODO
-
-config KEMBTK_BUSYB_FEATURE_VOLUMEID_LINUXRAID
-	bool "linuxraid"
-	depends on KEMBTK_BUSYB_VOLUMEID
-	help
-	  TODO
-
 config KEMBTK_BUSYB_MOUNT
 	bool "mount"
+	default y
 	help
 	  All files and filesystems in Unix are arranged into one big directory
 	  tree. The 'mount' utility is used to graft a filesystem onto a
@@ -637,12 +502,14 @@ config KEMBTK_BUSYB_MOUNT
 
 config KEMBTK_BUSYB_FEATURE_MOUNT_FAKE
 	bool "Support option -f"
+	default y
 	depends on KEMBTK_BUSYB_MOUNT
 	help
 	  Enable support for faking a file system mount.
 
 config KEMBTK_BUSYB_FEATURE_MOUNT_VERBOSE
 	bool "Support option -v"
+	default y
 	depends on KEMBTK_BUSYB_MOUNT
 	help
 	  Enable multi-level -v[vv...] verbose messages. Useful if you
@@ -661,7 +528,8 @@ config KEMBTK_BUSYB_FEATURE_MOUNT_HELPERS
 	  The idea is to use such virtual filesystems in /etc/fstab.
 
 config KEMBTK_BUSYB_FEATURE_MOUNT_LABEL
-	bool "Support specifiying devices by label or UUID"
+	bool "Support specifying devices by label or UUID"
+	default y
 	depends on KEMBTK_BUSYB_MOUNT
 	select KEMBTK_BUSYB_VOLUMEID
 	help
@@ -671,6 +539,7 @@ config KEMBTK_BUSYB_FEATURE_MOUNT_LABEL
 
 config KEMBTK_BUSYB_FEATURE_MOUNT_NFS
 	bool "Support mounting NFS file systems"
+	default y
 	depends on KEMBTK_BUSYB_MOUNT
 	select KEMBTK_BUSYB_FEATURE_HAVE_RPC
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
@@ -679,6 +548,7 @@ config KEMBTK_BUSYB_FEATURE_MOUNT_NFS
 
 config KEMBTK_BUSYB_FEATURE_MOUNT_CIFS
 	bool "Support mounting CIFS/SMB file systems"
+	default y
 	depends on KEMBTK_BUSYB_MOUNT
 	help
 	  Enable support for samba mounts.
@@ -702,6 +572,7 @@ config KEMBTK_BUSYB_FEATURE_MOUNT_FSTAB
 
 config KEMBTK_BUSYB_PIVOT_ROOT
 	bool "pivot_root"
+	default y
 	help
 	  The pivot_root utility swaps the mount points for the root filesystem
 	  with some other mounted filesystem. This allows you to do all sorts
@@ -713,6 +584,7 @@ config KEMBTK_BUSYB_PIVOT_ROOT
 
 config KEMBTK_BUSYB_RDATE
 	bool "rdate"
+	default y
 	help
 	  The rdate utility allows you to synchronize the date and time of your
 	  system clock with the date and time of a remote networked system using
@@ -720,34 +592,40 @@ config KEMBTK_BUSYB_RDATE
 	  systems.
 
 config KEMBTK_BUSYB_RDEV
-       bool "rdev"
-       help
+	bool "rdev"
+	default y
+	help
 	  Print the device node associated with the filesystem mounted at '/'.
 
 config KEMBTK_BUSYB_READPROFILE
 	bool "readprofile"
+	default y
 	help
 	  This allows you to parse /proc/profile for basic profiling.
 
 config KEMBTK_BUSYB_RTCWAKE
 	bool "rtcwake"
+	default y
 	help
 	  Enter a system sleep state until specified wakeup time.
 
 config KEMBTK_BUSYB_SCRIPT
 	bool "script"
+	default y
 	help
 	  The script makes typescript of terminal session.
 
 config KEMBTK_BUSYB_SCRIPTREPLAY
 	bool "scriptreplay"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  This program replays a typescript, using timing information
 	  given by script -t.
 
 config KEMBTK_BUSYB_SETARCH
 	bool "setarch"
+	default y
 	help
 	  The linux32 utility is used to create a 32bit environment for the
 	  specified program (usually a shell). It only makes sense to have
@@ -756,6 +634,7 @@ config KEMBTK_BUSYB_SETARCH
 
 config KEMBTK_BUSYB_SWAPONOFF
 	bool "swaponoff"
+	default y
 	help
 	  This option enables both the 'swapon' and the 'swapoff' utilities.
 	  Once you have created some swap space using 'mkswap', you also need
@@ -766,12 +645,14 @@ config KEMBTK_BUSYB_SWAPONOFF
 
 config KEMBTK_BUSYB_FEATURE_SWAPON_PRI
 	bool "Support priority option -p"
+	default y
 	depends on KEMBTK_BUSYB_SWAPONOFF
 	help
 	  Enable support for setting swap device priority in swapon.
 
 config KEMBTK_BUSYB_SWITCH_ROOT
 	bool "switch_root"
+	default y
 	help
 	  The switch_root utility is used from initramfs to select a new
 	  root device. Under initramfs, you have to use this instead of
@@ -790,6 +671,7 @@ config KEMBTK_BUSYB_SWITCH_ROOT
 
 config KEMBTK_BUSYB_UMOUNT
 	bool "umount"
+	default y
 	help
 	  When you want to remove a mounted filesystem from its current mount
 	  point, for example when you are shutting down the system, the
@@ -798,6 +680,7 @@ config KEMBTK_BUSYB_UMOUNT
 
 config KEMBTK_BUSYB_FEATURE_UMOUNT_ALL
 	bool "Support option -a"
+	default y
 	depends on KEMBTK_BUSYB_UMOUNT
 	help
 	  Support -a option to unmount all currently mounted filesystems.
@@ -807,6 +690,7 @@ comment "Common options for mount/umount"
 
 config KEMBTK_BUSYB_FEATURE_MOUNT_LOOP
 	bool "Support loopback mounts"
+	default y
 	depends on KEMBTK_BUSYB_MOUNT || KEMBTK_BUSYB_UMOUNT
 	help
 	  Enabling this feature allows automatic mounting of files (containing
@@ -820,6 +704,19 @@ config KEMBTK_BUSYB_FEATURE_MOUNT_LOOP
 	  with loop devices) if you need to do something advanced, such as
 	  specify an offset or cryptographic options to the loopback device.
 	  (If you don't want umount to free the loop device, use "umount -D".)
+
+config KEMBTK_BUSYB_FEATURE_MOUNT_LOOP_CREATE
+	bool "Create new loopback devices if needed"
+	default y
+	depends on KEMBTK_BUSYB_FEATURE_MOUNT_LOOP
+	depends on EMBTK_BB_VERSION_1_17_X
+	help
+	  Linux kernels >= 2.6.24 support unlimited loopback devices. They are
+	  allocated for use when trying to use a loop device. The loop device
+	  must however exist.
+
+	  This feature lets mount to try to create next /dev/loopN device
+	  if it does not find a free one.
 
 config KEMBTK_BUSYB_FEATURE_MTAB_SUPPORT
 	bool "Support for the old /etc/mtab file"
@@ -837,10 +734,230 @@ config KEMBTK_BUSYB_FEATURE_MTAB_SUPPORT
 	  If you must use this, keep in mind it's inherently brittle (for
 	  example a mount under chroot won't update it), can't handle modern
 	  features like separate per-process filesystem namespaces, requires
-	  that your /etc directory be writeable, tends to get easily confused
+	  that your /etc directory be writable, tends to get easily confused
 	  by --bind or --move mounts, won't update if you rename a directory
 	  that contains a mount point, and so on. (In brief: avoid.)
 
 	  About the only reason to use this is if you've removed /proc from
 	  your kernel.
+
+config KEMBTK_BUSYB_VOLUMEID
+	bool #No description makes it a hidden option
+
+comment "-------------------------------------------------"
+comment "Filesystem/Volume identification"
+comment "-------------------------------------------------"
+	depends on KEMBTK_BUSYB_VOLUMEID
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_EXT
+	bool "Ext filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_BTRFS
+	bool "btrfs filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_REISERFS
+	bool "Reiser filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_FAT
+	bool "fat filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_HFS
+	bool "hfs filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_JFS
+	bool "jfs filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+### config FEATURE_VOLUMEID_UFS
+###	bool "ufs filesystem"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_XFS
+	bool "xfs filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_NTFS
+	bool "ntfs filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_ISO9660
+	bool "iso9660 filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_UDF
+	bool "udf filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_LUKS
+	bool "luks filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_LINUXSWAP
+	bool "linux swap filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+### config FEATURE_VOLUMEID_LVM
+###	bool "lvm"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_CRAMFS
+	bool "cramfs filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+### config FEATURE_VOLUMEID_HPFS
+###	bool "hpfs filesystem"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_ROMFS
+	bool "romfs filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_SYSV
+	bool "sysv filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+### config FEATURE_VOLUMEID_MINIX
+###	bool "minix filesystem"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+### These only detect partition tables - not used (yet?)
+### config FEATURE_VOLUMEID_MAC
+###	bool "mac filesystem"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+###
+### config FEATURE_VOLUMEID_MSDOS
+###	bool "msdos filesystem"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_OCFS2
+	bool "ocfs2 filesystem"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
+### config FEATURE_VOLUMEID_HIGHPOINTRAID
+###	bool "highpoint raid"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+### config FEATURE_VOLUMEID_ISWRAID
+###	bool "intel raid"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+### config FEATURE_VOLUMEID_LSIRAID
+###	bool "lsi raid"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+### config FEATURE_VOLUMEID_VIARAID
+###	bool "via raid"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+### config FEATURE_VOLUMEID_SILICONRAID
+###	bool "silicon raid"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+### config FEATURE_VOLUMEID_NVIDIARAID
+###	bool "nvidia raid"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+### config FEATURE_VOLUMEID_PROMISERAID
+###	bool "promise raid"
+###	default y
+###	depends on KEMBTK_BUSYB_VOLUMEID
+###	help
+###	  TODO
+
+config KEMBTK_BUSYB_FEATURE_VOLUMEID_LINUXRAID
+	bool "linuxraid"
+	default y
+	depends on KEMBTK_BUSYB_VOLUMEID
+	help
+	  TODO
+
 

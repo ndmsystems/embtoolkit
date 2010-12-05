@@ -7,8 +7,11 @@ comment "-------------------------------------------------"
 comment "System Logging Utilities"
 comment "-------------------------------------------------"
 
+
+
 config KEMBTK_BUSYB_SYSLOGD
 	bool "syslogd"
+	default y
 	help
 	  The syslogd utility is used to record logs of all the
 	  significant events that occur on a system. Every
@@ -23,6 +26,7 @@ config KEMBTK_BUSYB_SYSLOGD
 
 config KEMBTK_BUSYB_FEATURE_ROTATE_LOGFILE
 	bool "Rotate message files"
+	default y
 	depends on KEMBTK_BUSYB_SYSLOGD
 	help
 	  This enables syslogd to rotate the message files
@@ -30,6 +34,7 @@ config KEMBTK_BUSYB_FEATURE_ROTATE_LOGFILE
 
 config KEMBTK_BUSYB_FEATURE_REMOTE_LOG
 	bool "Remote Log support"
+	default y
 	depends on KEMBTK_BUSYB_SYSLOGD
 	help
 	  When you enable this feature, the syslogd utility can
@@ -43,13 +48,26 @@ config KEMBTK_BUSYB_FEATURE_REMOTE_LOG
 
 config KEMBTK_BUSYB_FEATURE_SYSLOGD_DUP
 	bool "Support -D (drop dups) option"
+	default y
 	depends on KEMBTK_BUSYB_SYSLOGD
 	help
 	  Option -D instructs syslogd to drop consecutive messages
 	  which are totally the same.
 
+config KEMBTK_BUSYB_FEATURE_SYSLOGD_READ_BUFFER_SIZE
+	int "Read buffer size in bytes"
+	default 256
+	range 256 20000
+	depends on KEMBTK_BUSYB_SYSLOGD
+	depends on EMBTK_BB_VERSION_1_17_X
+	help
+	  This option sets the size of the syslog read buffer.
+	  Actual memory usage increases around five times the
+	  change done here.
+
 config KEMBTK_BUSYB_FEATURE_IPC_SYSLOG
 	bool "Circular Buffer support"
+	default y
 	depends on KEMBTK_BUSYB_SYSLOGD
 	help
 	  When you enable this feature, the syslogd utility will
@@ -82,6 +100,7 @@ config KEMBTK_BUSYB_LOGREAD
 
 config KEMBTK_BUSYB_FEATURE_LOGREAD_REDUCED_LOCKING
 	bool "Double buffering"
+	default y
 	depends on KEMBTK_BUSYB_LOGREAD
 	help
 	  'logread' ouput to slow serial terminals can have
@@ -92,6 +111,7 @@ config KEMBTK_BUSYB_FEATURE_LOGREAD_REDUCED_LOCKING
 
 config KEMBTK_BUSYB_KLOGD
 	bool "klogd"
+	default y
 	help
 	  klogd is a utility which intercepts and logs all
 	  messages from the Linux kernel and sends the messages
@@ -101,11 +121,11 @@ config KEMBTK_BUSYB_KLOGD
 
 config KEMBTK_BUSYB_LOGGER
 	bool "logger"
+	default y
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
 	    The logger utility allows you to send arbitrary text
 	    messages to the system log (i.e. the 'syslogd' utility) so
 	    they can be logged. This is generally used to help locate
 	    problems that occur within programs and scripts.
-
 

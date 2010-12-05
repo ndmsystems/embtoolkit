@@ -35,9 +35,11 @@ $(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed \
 	$(BB_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	busybox-$(BB_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(BB_BUILD_DIR) oldconfig
-	@CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing" \
 	$(Q)$(MAKE) -C $(BB_BUILD_DIR) \
+	CROSS_COMPILE=$(TOOLS)/bin/$(STRICT_GNU_TARGET)- \
+	CONFIG_PREFIX=$(ROOTFS) oldconfig
+	@CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing" \
+	$(MAKE) -C $(BB_BUILD_DIR) \
 	CROSS_COMPILE=$(TOOLS)/bin/$(STRICT_GNU_TARGET)- \
 	CONFIG_PREFIX=$(ROOTFS) install
 	@touch $@
@@ -55,6 +57,7 @@ $(BB_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring busybox...")
 	@grep "CONFIG_KEMBTK_BUSYB_" $(EMBTK_ROOT)/.config | \
 	sed -e 's/CONFIG_KEMBTK_BUSYB_*/CONFIG_/g' > $(BB_BUILD_DIR)/.config
+	@sed -i 's/_1_13_X_1_14_X//g' $(BB_BUILD_DIR)/.config
 
 busybox_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup busybox...")

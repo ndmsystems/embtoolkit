@@ -7,6 +7,8 @@ comment "-------------------------------------------------"
 comment "Busybox Library Tuning"
 comment "-------------------------------------------------"
 
+
+
 config KEMBTK_BUSYB_PASSWORD_MINLEN
 	int "Minimum password length"
 	default 6
@@ -30,6 +32,7 @@ config KEMBTK_BUSYB_MD5_SIZE_VS_SPEED
 
 config KEMBTK_BUSYB_FEATURE_FAST_TOP
 	bool "Faster /proc scanning code (+100 bytes)"
+	default y
 	help
 	  This option makes top (and ps) ~20% faster (or 20% less KEMBTK_BUSYB_CPU hungry),
 	  but code size is slightly bigger.
@@ -43,6 +46,7 @@ config KEMBTK_BUSYB_FEATURE_ETC_NETWORKS
 
 config KEMBTK_BUSYB_FEATURE_EDITING
 	bool "Command line editing"
+	default y
 	help
 	  Enable line editing (mainly for shell command line).
 
@@ -66,19 +70,21 @@ config KEMBTK_BUSYB_FEATURE_EDITING_VI
 config KEMBTK_BUSYB_FEATURE_EDITING_HISTORY
 	int "History size"
 	range 0 99999
-	default 15
+	default 255
 	depends on KEMBTK_BUSYB_FEATURE_EDITING
 	help
 	  Specify command history size.
 
 config KEMBTK_BUSYB_FEATURE_EDITING_SAVEHISTORY
 	bool "History saving"
+	default y
 	depends on KEMBTK_BUSYB_ASH && KEMBTK_BUSYB_FEATURE_EDITING
 	help
 	  Enable history saving in ash shell.
 
 config KEMBTK_BUSYB_FEATURE_TAB_COMPLETION
 	bool "Tab completion"
+	default y
 	depends on KEMBTK_BUSYB_FEATURE_EDITING
 	help
 	  Enable tab completion.
@@ -91,6 +97,7 @@ config KEMBTK_BUSYB_FEATURE_USERNAME_COMPLETION
 
 config KEMBTK_BUSYB_FEATURE_EDITING_FANCY_PROMPT
 	bool "Fancy shell prompts"
+	default y
 	depends on KEMBTK_BUSYB_FEATURE_EDITING
 	help
 	  Setting this option allows for prompts to use things like \w and
@@ -99,7 +106,7 @@ config KEMBTK_BUSYB_FEATURE_EDITING_FANCY_PROMPT
 config KEMBTK_BUSYB_FEATURE_EDITING_ASK_TERMINAL
 	bool "Query cursor position from terminal"
 	depends on KEMBTK_BUSYB_FEATURE_EDITING
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Allow usage of "ESC [ 6 n" sequence. Terminal answers back with
 	  current cursor position. This information is used to make line
@@ -110,7 +117,7 @@ config KEMBTK_BUSYB_FEATURE_EDITING_ASK_TERMINAL
 
 config KEMBTK_BUSYB_FEATURE_NON_POSIX_CP
 	bool "Non-POSIX, but safer, copying to special nodes"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	default y
 	help
 	  With this option, "cp file symlink" will delete symlink
@@ -144,7 +151,6 @@ config KEMBTK_BUSYB_FEATURE_COPYBUF_KB
 
 config KEMBTK_BUSYB_MONOTONIC_SYSCALL
 	bool "Use clock_gettime(CLOCK_MONOTONIC) syscall"
-	default y
 	help
 	  Use clock_gettime(CLOCK_MONOTONIC) syscall for measuring
 	  time intervals (time, ping, traceroute etc need this).

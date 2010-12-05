@@ -7,8 +7,29 @@ comment "-------------------------------------------------"
 comment "Miscellaneous Utilities"
 comment "-------------------------------------------------"
 
+config KEMBTK_BUSYB_CONSPY
+	bool "conspy"
+	depends on EMBTK_BB_VERSION_1_17_X
+	help
+	  A text-mode VNC like program for Linux virtual terminals.
+	  example:  conspy NUM      shared access to console num
+	  or        conspy -nd NUM  screenshot of console num
+	  or        conspy -cs NUM  poor man's GNU screen like
+config KEMBTK_BUSYB_UBIATTACH
+	bool "ubiattach"
+	depends on EMBTK_BB_VERSION_1_17_X
+	help
+	  Attach KEMBTK_BUSYB_MTD device to an UBI device.
+
+config KEMBTK_BUSYB_UBIDETACH
+	bool "ubidetach"
+	depends on EMBTK_BB_VERSION_1_17_X
+	help
+	  Detach KEMBTK_BUSYB_MTD device from an UBI device.
+
 config KEMBTK_BUSYB_ADJTIMEX
 	bool "adjtimex"
+	default y
 	help
 	  Adjtimex reads and optionally sets adjustment parameters for
 	  the Linux clock adjustment algorithm.
@@ -21,7 +42,8 @@ config KEMBTK_BUSYB_BBCONFIG
 
 config KEMBTK_BUSYB_BEEP
 	bool "beep"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  The beep applets beeps in a given freq/Hz.
 
@@ -43,6 +65,7 @@ config KEMBTK_BUSYB_FEATURE_BEEP_LENGTH_MS
 
 config KEMBTK_BUSYB_CHAT
 	bool "chat"
+	default y
 	help
 	  Simple chat utility.
 
@@ -75,6 +98,7 @@ config KEMBTK_BUSYB_FEATURE_CHAT_IMPLICIT_CR
 config KEMBTK_BUSYB_FEATURE_CHAT_SWALLOW_OPTS
 	bool "Swallow options"
 	depends on KEMBTK_BUSYB_CHAT
+	default y
 	help
 	  Busybox chat require no options. To make it not fail when used
 	  in place of original chat (which has a bunch of options) turn
@@ -83,6 +107,7 @@ config KEMBTK_BUSYB_FEATURE_CHAT_SWALLOW_OPTS
 config KEMBTK_BUSYB_FEATURE_CHAT_SEND_ESCAPES
 	bool "Support weird SEND escapes"
 	depends on KEMBTK_BUSYB_CHAT
+	default y
 	help
 	  Original chat uses some escape sequences in SEND arguments which
 	  are not sent to device but rather performs special actions.
@@ -93,23 +118,27 @@ config KEMBTK_BUSYB_FEATURE_CHAT_SEND_ESCAPES
 config KEMBTK_BUSYB_FEATURE_CHAT_VAR_ABORT_LEN
 	bool "Support variable-length ABORT conditions"
 	depends on KEMBTK_BUSYB_CHAT
+	default y
 	help
 	  Original chat uses fixed 50-bytes length ABORT conditions. Say N here.
 
 config KEMBTK_BUSYB_FEATURE_CHAT_CLR_ABORT
 	bool "Support revoking of ABORT conditions"
 	depends on KEMBTK_BUSYB_CHAT
+	default y
 	help
 	  Support CLR_ABORT directive.
 
 config KEMBTK_BUSYB_CHRT
 	bool "chrt"
+	default y
 	help
 	  manipulate real-time attributes of a process.
 	  This requires sched_{g,s}etparam support in your libc.
 
 config KEMBTK_BUSYB_CROND
 	bool "crond"
+	default y
 	select KEMBTK_BUSYB_FEATURE_SUID
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
@@ -124,11 +153,13 @@ config KEMBTK_BUSYB_CROND
 config KEMBTK_BUSYB_FEATURE_CROND_D
 	bool "Support option -d to redirect output to stderr"
 	depends on KEMBTK_BUSYB_CROND
+	default y
 	help
 	  -d sets loglevel to 0 (most verbose) and directs all output to stderr.
 
 config KEMBTK_BUSYB_FEATURE_CROND_CALL_SENDMAIL
 	bool "Report command output via email (using sendmail)"
+	default y
 	depends on KEMBTK_BUSYB_CROND
 	help
 	  Command output will be sent to corresponding user via email.
@@ -137,12 +168,13 @@ config KEMBTK_BUSYB_FEATURE_CROND_DIR
 	string "crond spool directory"
 	default "/var/spool/cron"
 	depends on KEMBTK_BUSYB_CROND || KEMBTK_BUSYB_CRONTAB
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Location of crond spool.
 
 config KEMBTK_BUSYB_CRONTAB
 	bool "crontab"
+	default y
 	select KEMBTK_BUSYB_FEATURE_SUID
 	help
 	  Crontab manipulates the crontab for a particular user. Only
@@ -152,12 +184,14 @@ config KEMBTK_BUSYB_CRONTAB
 
 config KEMBTK_BUSYB_DC
 	bool "dc"
+	default y
 	help
 	  Dc is a reverse-polish desk calculator which supports unlimited
 	  precision arithmetic.
 
 config KEMBTK_BUSYB_FEATURE_DC_LIBM
 	bool "Enable power and exp functions (requires libm)"
+	default y
 	depends on KEMBTK_BUSYB_DC
 	help
 	  Enable power and exp functions.
@@ -183,6 +217,7 @@ config KEMBTK_BUSYB_DEVFSD
 
 config KEMBTK_BUSYB_DEVFSD_MODLOAD
 	bool "Adds support for MODLOAD keyword in devsfd.conf"
+	default y
 	depends on KEMBTK_BUSYB_DEVFSD
 	help
 	  This actually doesn't work with busybox modutils but needs
@@ -190,6 +225,7 @@ config KEMBTK_BUSYB_DEVFSD_MODLOAD
 
 config KEMBTK_BUSYB_DEVFSD_FG_NP
 	bool "Enables the -fg and -np options"
+	default y
 	depends on KEMBTK_BUSYB_DEVFSD
 	help
 	  -fg  Run the daemon in the foreground.
@@ -198,6 +234,7 @@ config KEMBTK_BUSYB_DEVFSD_FG_NP
 
 config KEMBTK_BUSYB_DEVFSD_VERBOSE
 	bool "Increases logging (and size)"
+	default y
 	depends on KEMBTK_BUSYB_DEVFSD
 	help
 	  Increases logging to stderr or syslog.
@@ -215,17 +252,20 @@ config KEMBTK_BUSYB_FEATURE_DEVFS
 
 config KEMBTK_BUSYB_DEVMEM
 	bool "devmem"
+	default y
 	help
 	  devmem is a small program that reads and writes from physical
 	  memory using /dev/mem.
 
 config KEMBTK_BUSYB_EJECT
 	bool "eject"
+	default y
 	help
 	  Used to eject cdroms. (defaults to /dev/cdrom)
 
 config KEMBTK_BUSYB_FEATURE_EJECT_SCSI
 	bool "SCSI support"
+	default y
 	depends on KEMBTK_BUSYB_EJECT
 	help
 	  Add the -s option to eject, this allows to eject SCSI-Devices and
@@ -233,6 +273,7 @@ config KEMBTK_BUSYB_FEATURE_EJECT_SCSI
 
 config KEMBTK_BUSYB_FBSPLASH
 	bool "fbsplash"
+	default y
 	help
 	  Shows splash image and progress bar on framebuffer device.
 	  Can be used during boot phase of an embedded device. ~2kb.
@@ -253,35 +294,35 @@ config KEMBTK_BUSYB_FBSPLASH
 
 config KEMBTK_BUSYB_FLASHCP
 	bool "flashcp"
-	depends on EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  The flashcp binary, inspired by mtd-utils as of git head 5eceb74f7.
 	  This utility is used to copy images into a KEMBTK_BUSYB_MTD device.
 
 config KEMBTK_BUSYB_FLASH_LOCK
 	bool "flash_lock"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  The flash_lock binary from mtd-utils as of git head 5ec0c10d0. This
 	  utility locks part or all of the flash device.
 
 config KEMBTK_BUSYB_FLASH_UNLOCK
 	bool "flash_unlock"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  The flash_unlock binary from mtd-utils as of git head 5ec0c10d0. This
 	  utility unlocks part or all of the flash device.
 
 config KEMBTK_BUSYB_FLASH_ERASEALL
 	bool "flash_eraseall"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
 	help
 	  The flash_eraseall binary from mtd-utils as of git head c4c6a59eb.
 	  This utility is used to erase the whole KEMBTK_BUSYB_MTD device.
 
 config KEMBTK_BUSYB_IONICE
 	bool "ionice"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  Set/set program io scheduling class and priority
 	  Requires kernel >= 2.6.13
@@ -294,7 +335,8 @@ config KEMBTK_BUSYB_INOTIFYD
 
 config KEMBTK_BUSYB_LAST
 	bool "last"
-	select KEMBTK_BUSYB_FEATURE_WTMP
+	default y
+	depends on KEMBTK_BUSYB_FEATURE_WTMP
 	help
 	  'last' displays a list of the last users that logged into the system.
 
@@ -317,6 +359,7 @@ endchoice
 
 config KEMBTK_BUSYB_LESS
 	bool "less"
+	default y
 	help
 	  'less' is a pager, meaning that it displays text files. It possesses
 	  a wide array of features, and is an improvement over 'more'.
@@ -346,24 +389,28 @@ config KEMBTK_BUSYB_FEATURE_LESS_FLAGS
 
 config KEMBTK_BUSYB_FEATURE_LESS_MARKS
 	bool "Enable marks"
+	default y
 	depends on KEMBTK_BUSYB_LESS
 	help
 	  Marks enable positions in a file to be stored for easy reference.
 
 config KEMBTK_BUSYB_FEATURE_LESS_REGEXP
 	bool "Enable regular expressions"
+	default y
 	depends on KEMBTK_BUSYB_LESS
 	help
 	  Enable regular expressions, allowing complex file searches.
 
 config KEMBTK_BUSYB_FEATURE_LESS_WINCH
 	bool "Enable automatic resizing on window size changes"
+	default y
 	depends on KEMBTK_BUSYB_LESS
 	help
 	  Makes less track window size changes.
 
 config KEMBTK_BUSYB_FEATURE_LESS_DASHCMD
 	bool "Enable flag changes ('-' command)"
+	default y
 	depends on KEMBTK_BUSYB_LESS
 	help
 	  This enables the ability to change command-line flags within
@@ -371,12 +418,14 @@ config KEMBTK_BUSYB_FEATURE_LESS_DASHCMD
 
 config KEMBTK_BUSYB_FEATURE_LESS_LINENUMS
 	bool "Enable dynamic switching of line numbers"
+	default y
 	depends on KEMBTK_BUSYB_FEATURE_LESS_DASHCMD
 	help
 	  Enable "-N" command.
 
 config KEMBTK_BUSYB_HDPARM
 	bool "hdparm"
+	default y
 	help
 	  Get/Set hard drive parameters. Primarily intended for ATA
 	  drives. Adds about 13k (or around 30k if you enable the
@@ -394,6 +443,7 @@ config KEMBTK_BUSYB_FEATURE_HDPARM_GET_IDENTITY
 
 config KEMBTK_BUSYB_FEATURE_HDPARM_HDIO_SCAN_HWIF
 	bool "Register an KEMBTK_BUSYB_IDE interface (DANGEROUS)"
+	default y
 	depends on KEMBTK_BUSYB_HDPARM
 	help
 	  Enables the 'hdparm -R' option to register an KEMBTK_BUSYB_IDE interface.
@@ -401,6 +451,7 @@ config KEMBTK_BUSYB_FEATURE_HDPARM_HDIO_SCAN_HWIF
 
 config KEMBTK_BUSYB_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF
 	bool "Un-register an KEMBTK_BUSYB_IDE interface (DANGEROUS)"
+	default y
 	depends on KEMBTK_BUSYB_HDPARM
 	help
 	  Enables the 'hdparm -U' option to un-register an KEMBTK_BUSYB_IDE interface.
@@ -408,6 +459,7 @@ config KEMBTK_BUSYB_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF
 
 config KEMBTK_BUSYB_FEATURE_HDPARM_HDIO_DRIVE_RESET
 	bool "Perform device reset (DANGEROUS)"
+	default y
 	depends on KEMBTK_BUSYB_HDPARM
 	help
 	  Enables the 'hdparm -w' option to perform a device reset.
@@ -415,6 +467,7 @@ config KEMBTK_BUSYB_FEATURE_HDPARM_HDIO_DRIVE_RESET
 
 config KEMBTK_BUSYB_FEATURE_HDPARM_HDIO_TRISTATE_HWIF
 	bool "Tristate device for hotswap (DANGEROUS)"
+	default y
 	depends on KEMBTK_BUSYB_HDPARM
 	help
 	  Enables the 'hdparm -x' option to tristate device for hotswap,
@@ -423,12 +476,14 @@ config KEMBTK_BUSYB_FEATURE_HDPARM_HDIO_TRISTATE_HWIF
 
 config KEMBTK_BUSYB_FEATURE_HDPARM_HDIO_GETSET_DMA
 	bool "Get/set using_dma flag"
+	default y
 	depends on KEMBTK_BUSYB_HDPARM
 	help
 	  Enables the 'hdparm -d' option to get/set using_dma flag.
 
 config KEMBTK_BUSYB_MAKEDEVS
 	bool "makedevs"
+	default y
 	help
 	  'makedevs' is a utility used to create a batch of devices with
 	  one command.
@@ -459,21 +514,25 @@ endchoice
 
 config KEMBTK_BUSYB_MAN
 	bool "man"
+	default y
 	help
 	  Format and display manual pages.
 
 config KEMBTK_BUSYB_MICROCOM
 	bool "microcom"
+	default y
 	help
 	  The poor man's minicom utility for chatting with serial port devices.
 
 config KEMBTK_BUSYB_MOUNTPOINT
 	bool "mountpoint"
+	default y
 	help
 	  mountpoint checks if the directory is a mountpoint.
 
 config KEMBTK_BUSYB_MT
 	bool "mt"
+	default y
 	help
 	  mt is used to control tape devices. You can use the mt utility
 	  to advance or rewind a tape past a specified number of archive
@@ -481,12 +540,14 @@ config KEMBTK_BUSYB_MT
 
 config KEMBTK_BUSYB_RAIDAUTORUN
 	bool "raidautorun"
+	default y
 	help
 	  raidautorun tells the kernel md driver to
 	  search and start RAID arrays.
 
 config KEMBTK_BUSYB_READAHEAD
 	bool "readahead"
+	default y
 	depends on KEMBTK_BUSYB_LFS
 	help
 	  Preload the files listed on the command line into RAM cache so that
@@ -501,8 +562,20 @@ config KEMBTK_BUSYB_READAHEAD
 	  As readahead(2) blocks until each file has been read, it is best to
 	  run this applet as a background job.
 
+config KEMBTK_BUSYB_RFKILL
+	bool "rfkill"
+	depends on EMBTK_BB_VERSION_1_17_X
+	help
+	  Enable/disable wireless devices.
+
+	  rfkill list : list all wireless devices
+	  rfkill list bluetooth : list all bluetooth devices
+	  rfkill list 1 : list device corresponding to the given index
+	  rfkill block|unblock wlan : block/unblock all wlan(wifi) devices
+
 config KEMBTK_BUSYB_RUNLEVEL
 	bool "runlevel"
+	default y
 	help
 	  find the current and previous system runlevel.
 
@@ -511,16 +584,19 @@ config KEMBTK_BUSYB_RUNLEVEL
 
 config KEMBTK_BUSYB_RX
 	bool "rx"
+	default y
 	help
 	  Receive files using the Xmodem protocol.
 
 config KEMBTK_BUSYB_SETSID
 	bool "setsid"
+	default y
 	help
 	  setsid runs a program in a new session
 
 config KEMBTK_BUSYB_STRINGS
 	bool "strings"
+	default y
 	help
 	  strings prints the printable character sequences for each file
 	  specified.
@@ -542,6 +618,7 @@ config KEMBTK_BUSYB_FEATURE_TASKSET_FANCY
 
 config KEMBTK_BUSYB_TIME
 	bool "time"
+	default y
 	help
 	  The time command runs the specified program with the given arguments.
 	  When the command finishes, time writes a message to standard output
@@ -549,13 +626,15 @@ config KEMBTK_BUSYB_TIME
 
 config KEMBTK_BUSYB_TIMEOUT
 	bool "timeout"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  Runs a program and watches it. If it does not terminate in
 	  specified number of seconds, it is sent a signal.
 
 config KEMBTK_BUSYB_TTYSIZE
 	bool "ttysize"
+	default y
 	help
 	  A replacement for "stty size". Unlike stty, can report only width,
 	  only height, or both, in any order. It also does not complain on
@@ -564,18 +643,21 @@ config KEMBTK_BUSYB_TTYSIZE
 
 config KEMBTK_BUSYB_VOLNAME
 	bool "volname"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  Prints a CD-ROM volume name.
 
 config KEMBTK_BUSYB_WALL
 	bool "wall"
-	depends on EMBTK_BB_VERSION_1_16_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	default y
 	help
 	  Write a message to all users that are logged in.
 
 config KEMBTK_BUSYB_WATCHDOG
 	bool "watchdog"
+	default y
 	help
 	  The watchdog utility is used with hardware or software watchdog
 	  device drivers. It opens the specified watchdog device special file
