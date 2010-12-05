@@ -86,7 +86,8 @@ $(NCURSES_BUILD_DIR)/.configured:
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
 	--target=$(STRICT_GNU_TARGET) --program-prefix="" \
 	--prefix=/usr --disable-rpath --without-cxx-binding --without-ada \
-	--libdir=/usr/$(LIBDIR) --disable-database --enable-termcap
+	--libdir=/usr/$(LIBDIR) --disable-database --enable-termcap \
+	--without-progs
 	@touch $@
 
 ncurses_clean:
