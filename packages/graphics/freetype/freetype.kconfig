@@ -44,6 +44,8 @@ choice
 	help
 		Here you can choose which version of freetype you want to use.
 
+	config  EMBTK_FREETYPE_VERSION_2_4_4
+		bool "FreeType-2.4.4"
 	config  EMBTK_FREETYPE_VERSION_2_4_3
 		bool "FreeType-2.4.3"
 	config  EMBTK_FREETYPE_VERSION_2_4_2
@@ -64,6 +66,7 @@ endchoice
 
 config EMBTK_FREETYPE_VERSION_STRING
 	string
+	default "2.4.4"		if EMBTK_FREETYPE_VERSION_2_4_4
 	default "2.4.3"		if EMBTK_FREETYPE_VERSION_2_4_3
 	default "2.4.2"		if EMBTK_FREETYPE_VERSION_2_4_2
 	default "2.4.1"		if EMBTK_FREETYPE_VERSION_2_4_1
