@@ -82,9 +82,9 @@ endef
 #Generic message
 #unsage $(call EMBTK_GENERIC_MESSAGE,$(GENERIC_MESSAGE))
 define EMBTK_GENERIC_MESSAGE
-	@echo "####################################### EmbToolkit ######################################"
-	@echo "$(1)"
-	@echo "#########################################################################################"
+	$(call ECHO_BLUE,"################################################################################")
+	$(call ECHO_BLUE,"# EmbToolkit # $(1)")
+	$(call ECHO_BLUE,"################################################################################")
 endef
 
 #Successful build of EmbToolkit message
