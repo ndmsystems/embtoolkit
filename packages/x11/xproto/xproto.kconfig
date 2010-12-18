@@ -36,6 +36,8 @@ choice
 	help
 		Here you can choose which version of xproto you want to use.
 
+	config  EMBTK_XPROTO_VERSION_7_0_20
+		bool "xproto-7.0.20"
 	config  EMBTK_XPROTO_VERSION_7_0_19
 		bool "xproto-7.0.19"
 	config  EMBTK_XPROTO_VERSION_7_0_18
@@ -48,6 +50,7 @@ endchoice
 
 config EMBTK_XPROTO_VERSION_STRING
 	string
+	default "7.0.20"	if EMBTK_XPROTO_VERSION_7_0_20
 	default "7.0.19"	if EMBTK_XPROTO_VERSION_7_0_19
 	default "7.0.18"	if EMBTK_XPROTO_VERSION_7_0_18
 	default "7.0.17"	if EMBTK_XPROTO_VERSION_7_0_17
