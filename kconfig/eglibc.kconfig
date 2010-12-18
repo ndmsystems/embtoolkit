@@ -47,18 +47,19 @@ config EMBTK_EGLIBC_SVN_REVISION
 		moment you build your toolchain new revision is available,
 		you can increase this value.
 
-		At EmbToolkit release, eglibc svn revisions are:
-		12323	for eglibc-2.12
-		12231	for eglibc-2.11
-		10152	for eglibc-2.10
-		10153	for eglibc-2.9
-		12322	for eglibc-trunk (development version)
-
 	default 12323	if EMBTK_EGLIBC_VERSION_2_12
 	default 12231	if EMBTK_EGLIBC_VERSION_2_11
 	default 10152	if EMBTK_EGLIBC_VERSION_2_10
 	default 10153	if EMBTK_EGLIBC_VERSION_2_9
 	default 12322	if EMBTK_EGLIBC_VERSION_TRUNK
+
+comment "At EmbToolkit release, valid eglibc svn revisions are:"
+comment "svn revision 12323	for eglibc-2.12"
+comment "svn revision 12231	for eglibc-2.11"
+comment "svn revision 10152	for eglibc-2.10"
+comment "svn revision 10153	for eglibc-2.9"
+comment "svn revision 12322	for eglibc-trunk (development version)"
+comment ""
 
 config EMBTK_EGLIBC_BRANCH_STRING
 	string
@@ -80,6 +81,9 @@ config EMBTK_EGLIBC_NEED_PATCH
 	bool
 	default y
 
+comment "------------------------------------"
+comment "----- EGLIBC options configuration"
+comment "------------------------------------"
 if EMBTK_EGLIBC_VERSION_2_12
 source "kconfig/eglibc-kconfigs/eglibc-2.12.kconfig"
 endif
