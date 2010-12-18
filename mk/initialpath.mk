@@ -73,5 +73,5 @@ rmallpath:
 ifneq ($(CONFIG_EMBTK_CACHE_PATCHES),y)
 	@rm -rf $(DOWNLOAD_DIR)/*.patch
 endif
-	@rm -rf $(DOWNLOAD_DIR)/eglibc-*
+	@rm -rf $(DOWNLOAD_DIR)/eglibc-*.tar.bz2
 

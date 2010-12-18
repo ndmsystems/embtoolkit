@@ -77,6 +77,7 @@ endif
 	test -e $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE) || \
 	mv $(EGLIBC_PACKAGE) $(DOWNLOAD_DIR)
 ifeq	($(CONFIG_EMBTK_EGLIBC_NEED_PATCH),y)
+	@test -e $(DOWNLOAD_DIR)/eglibc-$(EGLIBC_VERSION).patch || \
 	wget $(EGLIBC_PATCHES_SITE)/eglibc-$(EGLIBC_VERSION)-*.patch \
 	-O $(DOWNLOAD_DIR)/eglibc-$(EGLIBC_VERSION).patch
 endif
