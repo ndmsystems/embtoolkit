@@ -22,8 +22,33 @@
 # \date         May 2009
 ################################################################################
 
+# Embtoolkit colors
+EMBTK_COLOR_RED = "\E[1;31m"
+EMBTK_COLOR_GREEN = "\E[1;32m"
+EMBTK_COLOR_YELLOW = "\E[1;33m"
+EMBTK_COLOR_BLUE = "\E[1;34m"
+EMBTK_NO_COLOR = "\E[0m"
+
+# echo colored text
+#usage $(call ECHO_RED,$(TEXT))
+define ECHO_RED
+	@echo -e $(EMBTK_COLOR_RED)$(1)$(EMBTK_NO_COLOR)
+endef
+#usage $(call ECHO_GREEN,$(TEXT))
+define ECHO_GREEN
+	@echo -e $(EMBTK_COLOR_GREEN)$(1)$(EMBTK_NO_COLOR)
+endef
+#usage $(call ECHO_YELLOW,$(TEXT))
+define ECHO_YELLOW
+	@echo -e $(EMBTK_COLOR_YELLOW)$(1)$(EMBTK_NO_COLOR)
+endef
+#usage $(call ECHO_BLUE,$(TEXT))
+define ECHO_BLUE
+	@echo -e $(EMBTK_COLOR_BLUE)$(1)$(EMBTK_NO_COLOR)
+endef
+
 #Decompress message
-#unsage $(call DECOMPRESS_MESSAGE,$(NAME_PACKAGE))
+#usage $(call DECOMPRESS_MESSAGE,$(NAME_PACKAGE))
 define DECOMPRESS_MESSAGE
 	@echo "########################### EmbToolkit ###########################"
 	@echo "Decompressing $(1)"
