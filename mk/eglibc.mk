@@ -4,7 +4,7 @@
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
+# the Free Software Foundation, either version 2 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -22,6 +22,7 @@
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
+
 EGLIBC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_VERSION_STRING)))
 EGLIBC_BRANCH := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_BRANCH_STRING)))
 EGLIBC_SVN_REVISION := $(CONFIG_EMBTK_EGLIBC_SVN_REVISION)
@@ -38,6 +39,10 @@ EGLIBC_FLOAT_TYPE := --with-fp=no
 else
 EGLIBC_FLOAT_TYPE := --with-fp=yes
 endif
+
+# Versioning in eglibc
+EGLIBC_VERSIONING_OPTION := \
+	$(if $(CONFIG_EMBTK_EGLIBC_DISABLE_VERSIONING),--disable-versioning,)
 
 OPTION_GROUPS_FILE = $(EMBTK_ROOT)/mk/eglibc/eglibc-$(EGLIBC_VERSION)-options.mk
 
@@ -108,7 +113,7 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.configured:
 	--with-headers=$(SYSROOT)/usr/include \
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) \
 	--disable-profile --without-gd --without-cvs --enable-add-ons \
-	--enable-kernel="2.6.0" --disable-versioning \
+	--enable-kernel="2.6.0" $(EGLIBC_VERSIONING_OPTION) \
 	--with-bugurl=$(EMBTK_BUGURL)
 	@touch $@
 
@@ -132,7 +137,7 @@ $(EGLIBC_BUILD_DIR)/.configured:
 	--with-headers=$(SYSROOT)/usr/include \
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) \
 	--disable-profile --without-gd --without-cvs --enable-add-ons \
-	--enable-kernel="2.6.0" --disable-versioning \
+	--enable-kernel="2.6.0" $(EGLIBC_VERSIONING_OPTION) \
 	--with-bugurl=$(EMBTK_BUGURL) \
 	--with-pkgversion="EGLIBC from embtoolkit-$(EMBTK_VERSION)"
 	@touch $@

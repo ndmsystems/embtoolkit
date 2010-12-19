@@ -4,7 +4,7 @@
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
+# the Free Software Foundation, either version 2 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -22,6 +22,7 @@
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
+
 choice
 	prompt "EGLIBC branch to checkout"
 	help
@@ -84,6 +85,19 @@ config EMBTK_EGLIBC_NEED_PATCH
 comment "------------------------------------"
 comment "----- EGLIBC options configuration"
 comment "------------------------------------"
+
+config EMBTK_EGLIBC_DISABLE_VERSIONING
+	bool "Build EGLIBC without compatibility code and symbol versioning"
+	depends on !EMBTK_EGLIBC_VERSION_2_10 && !EMBTK_EGLIBC_VERSION_2_9
+	default y
+	help
+		EGLIBC supports building the library without compatibility code
+		and symbol versioning.
+		This feature allows reduction of EGLIBC's footprint by omitting
+		functionality that implements older APIs.
+		To build EGLIBC without compatibility code and symbol
+		versioning, answer yes here.
+
 if EMBTK_EGLIBC_VERSION_2_12
 source "kconfig/eglibc-kconfigs/eglibc-2.12.kconfig"
 endif
