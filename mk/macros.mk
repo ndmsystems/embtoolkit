@@ -48,35 +48,35 @@ define ECHO_BLUE
 endef
 
 #Decompress message
-#usage $(call DECOMPRESS_MESSAGE,$(NAME_PACKAGE))
-define DECOMPRESS_MESSAGE
-	@echo "########################### EmbToolkit ###########################"
-	@echo "Decompressing $(1)"
-	@echo "##################################################################"
+#usage $(call EMBTK_DECOMPRESS_MSG,$(NAME_PACKAGE))
+define EMBTK_DECOMPRESS_MSG
+	$(call ECHO_BLUE,"################################################################################")
+	$(call ECHO_BLUE,"# EmbToolkit # Decompressing $(1)")
+	$(call ECHO_BLUE,"################################################################################")
 endef
 
 #Configure message
-#usage $(call CONFIGURE_MESSAGE,$(NAME_PACKAGE))
-define CONFIGURE_MESSAGE
-	@echo "########################### EmbToolkit ###########################"
-	@echo "Configuring $(1)"
-	@echo "##################################################################"
+#usage $(call EMBTK_CONFIGURE_MSG,$(NAME_PACKAGE))
+define EMBTK_CONFIGURE_MSG
+	$(call ECHO_BLUE,"################################################################################")
+	$(call ECHO_BLUE,"# EmbToolkit # Configuring $(1)")
+	$(call ECHO_BLUE,"################################################################################")
 endef
 
 #Build message
-#usage $(call BUILD_MESSAGE,$(NAME_PACKAGE))
-define BUILD_MESSAGE
-	@echo "########################### EmbToolkit ###########################"
-	@echo "Building $(1)"
-	@echo "##################################################################"
+#usage $(call EMBTK_BUILD_MSG,$(NAME_PACKAGE))
+define EMBTK_BUILD_MSG
+	$(call ECHO_BLUE,"################################################################################")
+	$(call ECHO_BLUE,"# EmbToolkit # Building $(1)")
+	$(call ECHO_BLUE,"################################################################################")
 endef
 
 #Install message
-#usage $(call INSTALL_MESSAGE,$(NAME_PACKAGE))
-define INSTALL_MESSAGE
-	@echo "########################### EmbToolkit ###########################"
-	@echo "Installing $(1)"
-	@echo "##################################################################"
+#usage $(call EMBTK_INSTALL_MSG,$(NAME_PACKAGE))
+define EMBTK_INSTALL_MSG
+	$(call ECHO_BLUE,"################################################################################")
+	$(call ECHO_BLUE,"# EmbToolkit # Installing $(1)")
+	$(call ECHO_BLUE,"################################################################################")
 endef
 
 #Generic message

@@ -47,7 +47,7 @@ eglibc_install: $(EGLIBC_BUILD_DIR)/.installed
 $(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download \
 	$(EGLIBC_HEADERS_BUILD_DIR)/.decompressed \
 	EGLIBC_OPTIONS_PARSE $(EGLIBC_HEADERS_BUILD_DIR)/.configured
-	$(call INSTALL_MESSAGE,"headers eglibc-$(EGLIBC_VERSION)")
+	$(call EMBTK_INSTALL_MSG,"headers eglibc-$(EGLIBC_VERSION)")
 	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) install-headers \
 	install_root=$(SYSROOT) install-bootstrap-headers=yes && \
 	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) csu/subdir_lib
@@ -83,7 +83,7 @@ ifeq	($(CONFIG_EMBTK_EGLIBC_NEED_PATCH),y)
 endif
 
 $(EGLIBC_HEADERS_BUILD_DIR)/.decompressed:
-	$(call DECOMPRESS_MESSAGE,$(EGLIBC_PACKAGE))
+	$(call EMBTK_DECOMPRESS_MSG,$(EGLIBC_PACKAGE))
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE)
 ifeq	($(CONFIG_EMBTK_EGLIBC_NEED_PATCH),y)
 	cd $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION); \
@@ -96,7 +96,7 @@ endif
 	@touch $@
 
 $(EGLIBC_HEADERS_BUILD_DIR)/.configured:
-	$(call CONFIGURE_MESSAGE,eglibc-$(EGLIBC_VERSION))
+	$(call EMBTK_CONFIGURE_MSG,eglibc-$(EGLIBC_VERSION))
 	cd $(EGLIBC_HEADERS_BUILD_DIR); BUILD_CC=$(HOSTCC_CACHED) \
 	CFLAGS="$(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS) \
 	$(TARGET_CFLAGS) -pipe" \
@@ -113,14 +113,14 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.configured:
 	@touch $@
 
 $(EGLIBC_BUILD_DIR)/.installed: $(EGLIBC_BUILD_DIR)/.configured
-	$(call INSTALL_MESSAGE,eglibc-$(EGLIBC_VERSION))
+	$(call EMBTK_INSTALL_MSG,eglibc-$(EGLIBC_VERSION))
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) $(J)
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) install \
 	install_root=$(SYSROOT)
 	@touch $@
 
 $(EGLIBC_BUILD_DIR)/.configured:
-	$(call CONFIGURE_MESSAGE,eglibc-$(EGLIBC_VERSION))
+	$(call EMBTK_CONFIGURE_MSG,eglibc-$(EGLIBC_VERSION))
 	cd $(EGLIBC_BUILD_DIR); BUILD_CC=$(HOSTCC_CACHED) \
 	CFLAGS="$(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS) \
 	$(TARGET_CFLAGS) -pipe" \

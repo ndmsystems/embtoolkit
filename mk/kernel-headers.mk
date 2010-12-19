@@ -33,7 +33,7 @@ LINUX_PACKAGE := linux-$(LINUX_VERSION).tar.bz2
 LINUX_BUILD_DIR := $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 
 kernel-headers_install:  download_linux $(LINUX_BUILD_DIR)/.decompressed
-	$(call INSTALL_MESSAGE,"headers linux-$(LINUX_VERSION)")
+	$(call EMBTK_INSTALL_MSG,"headers linux-$(LINUX_VERSION)")
 	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) \
 	headers_install ARCH=$(LINUX_ARCH) CROSS_COMPILE=$(STRICT_GNU_TARGET)- \
 	INSTALL_HDR_PATH=$(SYSROOT)/usr
@@ -45,7 +45,7 @@ download_linux:
 	wget -O $(DOWNLOAD_DIR)/$(LINUX_PACKAGE) $(LINUX_SITE)/$(LINUX_PACKAGE)
 
 $(LINUX_BUILD_DIR)/.decompressed:
-	$(call DECOMPRESS_MESSAGE,$(LINUX_PACKAGE))
+	$(call EMBTK_DECOMPRESS_MSG,$(LINUX_PACKAGE))
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(LINUX_PACKAGE)
 	@touch $@
 

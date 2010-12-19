@@ -87,7 +87,7 @@ ifeq ($(CONFIG_EMBTK_GCC_NEED_PATCH),y)
 endif
 
 $(GCC1_BUILD_DIR)/.decompressed:
-	$(call DECOMPRESS_MESSAGE,$(GCC_PACKAGE))
+	$(call EMBTK_DECOMPRESS_MSG,$(GCC_PACKAGE))
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(GCC_PACKAGE)
 ifeq ($(CONFIG_EMBTK_GCC_NEED_PATCH),y)
 	cd $(TOOLS_BUILD)/gcc-$(GCC_VERSION); \
@@ -97,7 +97,7 @@ endif
 	@touch $@
 
 $(GCC1_BUILD_DIR)/.configured:
-	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
+	$(call EMBTK_CONFIGURE_MSG,gcc-$(GCC_VERSION))
 	cd $(GCC1_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
 	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) \
@@ -120,7 +120,7 @@ $(GCC2_BUILD_DIR)/.built: $(GCC2_BUILD_DIR)/.configured
 	@touch $@
 
 $(GCC2_BUILD_DIR)/.configured:
-	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
+	$(call EMBTK_CONFIGURE_MSG,gcc-$(GCC_VERSION))
 	@mkdir -p $(GCC2_BUILD_DIR)
 	cd $(GCC2_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
@@ -156,7 +156,7 @@ endif
 	@touch $@
 
 $(GCC3_BUILD_DIR)/.configured:
-	$(call CONFIGURE_MESSAGE,gcc-$(GCC_VERSION))
+	$(call EMBTK_CONFIGURE_MSG,gcc-$(GCC_VERSION))
 	@mkdir -p $(GCC3_BUILD_DIR)
 	cd $(GCC3_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
