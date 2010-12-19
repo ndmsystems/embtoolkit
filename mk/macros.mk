@@ -89,7 +89,7 @@ endef
 
 #Successful build of EmbToolkit message
 successful_build:
-	$(call ECHO_BLUE,"####################################### EmbToolkit ######################################")
+	$(call ECHO_BLUE,"################################## EmbToolkit ##################################")
 	$(call ECHO_BLUE," --------------------- ")
 	$(call ECHO_BLUE,"| Toolchain build log |")
 	$(call ECHO_BLUE," --------------------- ")
@@ -116,7 +116,7 @@ endif
 	$(call ECHO_BLUE,"You can also visit the wiki at:")
 	$(call ECHO_BLUE,"   http://www.embtoolkit.org")
 	@echo
-	$(call ECHO_BLUE,"#########################################################################################")
+	$(call ECHO_BLUE,"################################################################################")
 
 #Macro to adapt libtool files (*.la) for cross compiling
 libtool_files_adapt:
