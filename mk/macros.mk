@@ -56,7 +56,7 @@ define DECOMPRESS_MESSAGE
 endef
 
 #Configure message
-#unsage $(call CONFIGURE_MESSAGE,$(NAME_PACKAGE))
+#usage $(call CONFIGURE_MESSAGE,$(NAME_PACKAGE))
 define CONFIGURE_MESSAGE
 	@echo "########################### EmbToolkit ###########################"
 	@echo "Configuring $(1)"
@@ -64,7 +64,7 @@ define CONFIGURE_MESSAGE
 endef
 
 #Build message
-#unsage $(call BUILD_MESSAGE,$(NAME_PACKAGE))
+#usage $(call BUILD_MESSAGE,$(NAME_PACKAGE))
 define BUILD_MESSAGE
 	@echo "########################### EmbToolkit ###########################"
 	@echo "Building $(1)"
@@ -72,7 +72,7 @@ define BUILD_MESSAGE
 endef
 
 #Install message
-#unsage $(call INSTALL_MESSAGE,$(NAME_PACKAGE))
+#usage $(call INSTALL_MESSAGE,$(NAME_PACKAGE))
 define INSTALL_MESSAGE
 	@echo "########################### EmbToolkit ###########################"
 	@echo "Installing $(1)"
@@ -80,7 +80,7 @@ define INSTALL_MESSAGE
 endef
 
 #Generic message
-#unsage $(call EMBTK_GENERIC_MESSAGE,$(GENERIC_MESSAGE))
+#usage $(call EMBTK_GENERIC_MESSAGE,$(GENERIC_MESSAGE))
 define EMBTK_GENERIC_MESSAGE
 	$(call ECHO_BLUE,"################################################################################")
 	$(call ECHO_BLUE,"# EmbToolkit # $(1)")
@@ -89,34 +89,34 @@ endef
 
 #Successful build of EmbToolkit message
 successful_build:
-	@echo "####################################### EmbToolkit ######################################"
-	@echo " --------------------- "
-	@echo "| Toolchain build log |"
-	@echo " --------------------- "
-	@echo "You successfully build your toolchain for $(GNU_TARGET)"
-	@echo "Tools built (GCC compiler, Binutils, etc.) are located in:"
-	@echo "    $(TOOLS)/bin"
+	$(call ECHO_BLUE,"####################################### EmbToolkit ######################################")
+	$(call ECHO_BLUE," --------------------- ")
+	$(call ECHO_BLUE,"| Toolchain build log |")
+	$(call ECHO_BLUE," --------------------- ")
+	$(call ECHO_BLUE,"You successfully build your toolchain for $(GNU_TARGET)")
+	$(call ECHO_BLUE,"Tools built (GCC compiler, Binutils, etc.) are located in:")
+	$(call ECHO_BLUE,"    $(TOOLS)/bin")
 	@echo
-	@echo " ---------------------------- "
-	@echo "| Root file system build log |"
-	@echo " ---------------------------- "
+	$(call ECHO_BLUE," ---------------------------- ")
+	$(call ECHO_BLUE,"| Root file system build log |")
+	$(call ECHO_BLUE," ---------------------------- ")
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-	@echo "You also successfully build a root filesystem located in the root directory"
-	@echo "of EmbToolkit."
+	$(call ECHO_BLUE,"You also successfully build a root filesystem located in the root directory")
+	$(call ECHO_BLUE,"of EmbToolkit.")
 else
-	@echo "Build of root filesystem not selected."
+	$(call ECHO_GREEN,"Build of root filesystem not selected.")
 endif
 	@echo
-	@echo " ---------------------------- "
-	@echo "| Embedded systems Toolkit   |"
-	@echo " ---------------------------- "
-	@echo "Hope that EmbToolkit will be useful for your project !!!"
-	@echo "Please report any bugs/suggestion at:"
-	@echo "   http://www.embtoolkit.org/issues/projects/show/embtoolkit"
-	@echo "You can also visit the wiki at:"
-	@echo "   http://www.embtoolkit.org"
+	$(call ECHO_BLUE," ---------------------------- ")
+	$(call ECHO_BLUE,"| Embedded systems Toolkit   |")
+	$(call ECHO_BLUE," ---------------------------- ")
+	$(call ECHO_BLUE,"Hope that EmbToolkit will be useful for your project !!!")
+	$(call ECHO_BLUE,"Please report any bugs/suggestion at:")
+	$(call ECHO_BLUE,"   http://www.embtoolkit.org/issues/projects/show/embtoolkit")
+	$(call ECHO_BLUE,"You can also visit the wiki at:")
+	$(call ECHO_BLUE,"   http://www.embtoolkit.org")
 	@echo
-	@echo "#########################################################################################"
+	$(call ECHO_BLUE,"#########################################################################################")
 
 #Macro to adapt libtool files (*.la) for cross compiling
 libtool_files_adapt:
