@@ -511,7 +511,7 @@ config KEMBTK_EGLIBC_OPTION_EGLIBC_MEMUSAGE
 		the `memusage' and `memusagestat' utilities.
 		These components provide memory profiling functions.
 
-config EMBTK_EGLIBC_OPTION_EGLIBC_MEMUSAGE_DEFAULT_BUFFER_SIZE
+config KEMBTK_EGLIBC_OPTION_EGLIBC_MEMUSAGE_DEFAULT_BUFFER_SIZE
 	int "Libmemusage library buffers size"
 	default 512
 	depends on KEMBTK_EGLIBC_OPTION_EGLIBC_MEMUSAGE
@@ -526,7 +526,7 @@ config EMBTK_EGLIBC_OPTION_EGLIBC_MEMUSAGE_DEFAULT_BUFFER_SIZE
 		so setting this option to the value of 512 will reduce the size
 		of the memory buffer to 24K.
 
-config EMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH
+config KEMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH
 	bool "Name service switch (nsswitch) support"
 	default y
 	help
@@ -542,6 +542,8 @@ config EMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH
 		configuration files specified when EGLIBC is built.  Your
 		'option-groups.config' file must set the following two
 		variables:
+			KEMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH_FIXED_CONFIG
+			KEMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH_FIXED_FUNCTIONS
 
 config KEMBTK_EGLIBC_OPTION_EGLIBC_NSSWITCH_FIXED_CONFIG
 	string "Alternate file for nsswitch.conf (see below help please)"
