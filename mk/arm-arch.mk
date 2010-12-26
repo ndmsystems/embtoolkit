@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009 Abdoulaye Walsimou GAYE. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -25,7 +25,6 @@
 LINUX_ARCH := arm
 GNU_TARGET_ARCH := arm
 EMBTK_MCU_FLAG := $(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
-TARGET_CFLAGS :=
 
 ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 #EGLIBC C library
@@ -71,3 +70,6 @@ else
 EMBTK_TARGET_FLOAT_CFLAGS := -mfloat-abi=hard
 endif
 
+# Some other flags for TARGET_CFLAGS
+EMBTK_TARGET_MCPU := -mcpu=$(EMBTK_MCU_FLAG)
+EMBTK_TARGET_MARCH :=

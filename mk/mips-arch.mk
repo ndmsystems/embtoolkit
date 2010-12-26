@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009 Abdoulaye Walsimou GAYE. All rights reserved.
+# Copyright(C) 2009-2010 Abdoulaye Walsimou GAYE. All rights reserved.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -209,7 +209,6 @@ endif
 endif
 
 EMBTK_MCU_FLAG := $(GNU_TARGET_ARCH)
-TARGET_CFLAGS :=
 
 #GCC configure options
 GCC_WITH_ARCH := --with-arch=$(GNU_TARGET_ARCH)
@@ -218,9 +217,12 @@ export GCC_WITH_ARCH
 #Hard or soft floating point for GCC?
 ifeq ($(CONFIG_EMBTK_HARDFLOAT),y)
 GCC_WITH_FLOAT := --with-float=hard
+EMBTK_TARGET_FLOAT_CFLAGS := -mhard-float
 else
 GCC_WITH_FLOAT := --with-float=soft
+EMBTK_TARGET_FLOAT_CFLAGS := -msoft-float
 endif
+export GCC_WITH_FLOAT EMBTK_TARGET_FLOAT_CFLAGS
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_O32),y)
 GCC_WITH_ABI := --with-abi=32
@@ -248,3 +250,6 @@ EMBTK_TARGET_ABI := -mabi=64
 export GCC_WITH_ABI EMBTK_TARGET_ABI
 endif
 
+# Some other flags for TARGET_CFLAGS
+EMBTK_TARGET_MCPU :=
+EMBTK_TARGET_MARCH := -march=$(EMBTK_MCU_FLAG)
