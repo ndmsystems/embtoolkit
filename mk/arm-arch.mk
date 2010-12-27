@@ -58,7 +58,7 @@ endif
 
 #Hard or soft floating point for GCC?
 ifeq ($(CONFIG_EMBTK_HARDFLOAT),y)
-GCC_WITH_FLOAT := --with-float=hard
+GCC_WITH_FLOAT := --with-float=softfp
 else
 GCC_WITH_FLOAT := --with-float=soft
 endif
@@ -67,7 +67,7 @@ endif
 ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
 EMBTK_TARGET_FLOAT_CFLAGS := -mfloat-abi=soft
 else
-EMBTK_TARGET_FLOAT_CFLAGS := -mfloat-abi=hard
+EMBTK_TARGET_FLOAT_CFLAGS := -mfloat-abi=softfp
 endif
 
 # Some other flags for TARGET_CFLAGS
