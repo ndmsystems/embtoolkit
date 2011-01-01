@@ -1363,6 +1363,7 @@ config KEMBTK_UCLIBC_UCLIBC_HAS_RPC
 	bool "Remote Procedure Call (RPC) support"
 	# RPC+socket-ipvX doesn't currently work.
 	depends on KEMBTK_UCLIBC_UCLIBC_HAS_NETWORK_SUPPORT
+	default y
 	help
 		If you want to include RPC support, enable this.  RPC is rarely
 		used for anything except for the NFS filesystem.  Unless you
