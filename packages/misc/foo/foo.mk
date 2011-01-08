@@ -81,7 +81,7 @@ $(FOO_BUILD_DIR)/.configured:
 	$(FOO_PACKAGE),				\
 	$(FOO_BUILD_DIR),			\
 	$(FOO_SRC_DIR),				\
-	$(FOO_CONFIGURE_OPTIONS))
+	$(FOO_CONFIGURE_OPTS))
 
 foo_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup foo...")
