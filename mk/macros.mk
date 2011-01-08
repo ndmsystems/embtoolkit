@@ -215,6 +215,7 @@ define EMBTK_PRINT_CONFIGURE_OPTS
 endef
 define EMBTK_CONFIGURE_PKG
 	$(call EMBTK_GENERIC_MESSAGE,"Configure $(strip $(1))...")
+	@test -e $(strip $(3))/configure || exit 1
 	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$(strip $(4))")
 	@cd $(strip $(2));						\
 	CC=$(TARGETCC_CACHED)						\
@@ -237,6 +238,6 @@ define EMBTK_CONFIGURE_PKG
 	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)		\
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)		\
 	--prefix=/usr $(strip $(4))
-	$(Q)touch $(strip $(2))/.configured
+	@touch $(strip $(2))/.configured
 	$(call EMBTK_KILL_LT_RPATH,$(strip $(2)))
 endef

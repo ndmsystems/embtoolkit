@@ -27,6 +27,7 @@ SQLITE_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_SQLITE_VERSION_STRING)))
 SQLITE_SITE := http://www.sqlite.org
 SQLITE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/sqlite/$(SQLITE_VERSION)
 SQLITE_PACKAGE := sqlite-amalgamation-$(SQLITE_VERSION).tar.gz
+SQLITE_SRC_DIR := $(PACKAGES_BUILD)/sqlite-$(SQLITE_VERSION)
 SQLITE_BUILD_DIR := $(PACKAGES_BUILD)/sqlite-$(SQLITE_VERSION)
 
 SQLITE_BINS = sqlite3
@@ -78,27 +79,11 @@ endif
 	@touch $@
 
 $(SQLITE_BUILD_DIR)/.configured:
-	$(Q)cd $(SQLITE_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr $(SQLITE_CONFIGURE_OPTS)
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,		\
+	$(SQLITE_PACKAGE),			\
+	$(SQLITE_BUILD_DIR),			\
+	$(SQLITE_SRC_DIR),			\
+	$(SQLITE_CONFIGURE_OPTS))
 
 sqlite_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup sqlite...")
