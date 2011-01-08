@@ -55,7 +55,7 @@ scmversion_print() {
 			# If we are past a tagged commit (like
 			# "v2.6.30-rc5-302-g72357d5"), we pretty print it.
 			if atag="`git describe 2>/dev/null`"; then
-				echo "$atag" | awk -F- '{printf("-%05d-%s", $(NF-1),$(NF))}'
+				echo "$atag" | awk -F- '{printf("%05d-%s", $(NF-1),$(NF))}'
 
 			# If we don't have a tag at all we print -g{commitish}.
 			else
@@ -104,7 +104,7 @@ scmversion_print() {
 	# Check for svn and a svn repo.
 	if rev=`svn info 2>/dev/null | grep '^Last Changed Rev'`; then
 		rev=`echo $rev | awk '{print $NF}'`
-		printf -- '-svn%s' "$rev"
+		printf -- 'svn%s' "$rev"
 
 		# All done with svn
 		return
