@@ -28,12 +28,15 @@ FOO_SITE := http://www.foo.org/download
 FOO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/foo/$(FOO_VERSION)
 FOO_PACKAGE := foo-$(FOO_VERSION).tar.gz
 FOO_BUILD_DIR := $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
+FOO_BUILD_SRC := $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
 
 FOO_BINS =
 FOO_SBINS =
 FOO_INCLUDES =
 FOO_LIBS =
 FOO_PKGCONFIGS =
+
+FOO_CONFIGURE_OPTS :=
 
 FOO_DEPS :=
 
@@ -74,27 +77,11 @@ endif
 	@touch $@
 
 $(FOO_BUILD_DIR)/.configured:
-	$(Q)cd $(FOO_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,		\
+	$(FOO_PACKAGE),				\
+	$(FOO_BUILD_DIR),			\
+	$(FOO_SRC_DIR),				\
+	$(FOO_CONFIGURE_OPTIONS))
 
 foo_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup foo...")

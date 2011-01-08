@@ -79,6 +79,14 @@ define EMBTK_INSTALL_MSG
 	$(call ECHO_BLUE,"################################################################################")
 endef
 
+#Install message
+#usage $(call EMBTK_ERROR_MSG,$(MESSAGE))
+define EMBTK_ERROR_MSG
+	$(call ECHO_RED,"################################################################################")
+	$(call ECHO_RED,"# EmbToolkit # ERROR: $(1)")
+	$(call ECHO_RED,"################################################################################")
+endef
+
 #Generic message
 #usage $(call EMBTK_GENERIC_MESSAGE,$(GENERIC_MESSAGE))
 define EMBTK_GENERIC_MESSAGE
@@ -189,4 +197,46 @@ define EMBTK_KILL_LT_RPATH
 	sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $$i; \
 	sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $$i; \
 	done
+endef
+
+#
+# A macro which runs configure script (conpatible with autotools configure)
+# for a package and sets environment variables correctly.
+# Usage:
+# $(call EMBTK_CONFIGURE_PKG,		\
+#	$(PKG_TARBALL),			\
+#	$(PKG_BUILD_DIR),		\
+#	$(PKG_SRC_DIR),			\
+#	$(PKG_CONFIGURE_OPTIONS))
+define EMBTK_PRINT_CONFIGURE_OPTS
+	$(call ECHO_BLUE,"Configure options:")
+	@for i in `echo $(1) | tr " " "\n"`; \
+	do echo -e $(EMBTK_COLOR_BLUE)$$i$(EMBTK_NO_COLOR); done
+endef
+define EMBTK_CONFIGURE_PKG
+	$(call EMBTK_GENERIC_MESSAGE,"Configure $(strip $(1))...")
+	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$(strip $(4))")
+	@cd $(strip $(2));						\
+	CC=$(TARGETCC_CACHED)						\
+	CXX=$(TARGETCXX_CACHED)						\
+	AR=$(TARGETAR)							\
+	RANLIB=$(TARGETRANLIB)						\
+	AS=$(CROSS_COMPILE)as						\
+	LD=$(TARGETLD)							\
+	NM=$(TARGETNM)							\
+	STRIP=$(TARGETSTRIP)						\
+	OBJDUMP=$(TARGETOBJDUMP)					\
+	OBJCOPY=$(TARGETOBJCOPY)					\
+	CFLAGS="$(TARGET_CFLAGS)"					\
+	CXXFLAGS="$(TARGET_CFLAGS)"					\
+	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"	\
+	CPPFLAGS="-I$(SYSROOT)/usr/include"				\
+	PKG_CONFIG=$(PKGCONFIG_BIN)					\
+	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)				\
+	$(CONFIG_SHELL) $(strip $(3))/configure				\
+	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)		\
+	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)		\
+	--prefix=/usr $(strip $(4))
+	$(Q)touch $(strip $(2))/.configured
+	$(call EMBTK_KILL_LT_RPATH,$(strip $(2)))
 endef
