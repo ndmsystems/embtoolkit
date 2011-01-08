@@ -2,6 +2,7 @@
 #
 # This scripts adds local version information from the version
 # control systems git, mercurial (hg) and subversion (svn).
+# <nico-linuxsetlocalversion -at- schottelius.org>.
 #
 # This script comes from linux kernel
 
