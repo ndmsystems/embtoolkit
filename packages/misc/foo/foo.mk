@@ -77,11 +77,7 @@ endif
 	@touch $@
 
 $(FOO_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,		\
-	$(FOO_PACKAGE),				\
-	$(FOO_BUILD_DIR),			\
-	$(FOO_SRC_DIR),				\
-	$(FOO_CONFIGURE_OPTS))
+	$(call EMBTK_CONFIGURE_PKG,FOO)
 
 foo_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup foo...")

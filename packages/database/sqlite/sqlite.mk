@@ -23,6 +23,7 @@
 # \date         October 2010
 ################################################################################
 
+SQLITE_NAME := sqlite
 SQLITE_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_SQLITE_VERSION_STRING)))
 SQLITE_SITE := http://www.sqlite.org
 SQLITE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/sqlite/$(SQLITE_VERSION)
@@ -79,11 +80,7 @@ endif
 	@touch $@
 
 $(SQLITE_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,		\
-	$(SQLITE_PACKAGE),			\
-	$(SQLITE_BUILD_DIR),			\
-	$(SQLITE_SRC_DIR),			\
-	$(SQLITE_CONFIGURE_OPTS))
+	$(call EMBTK_CONFIGURE_PKG,SQLITE)
 
 sqlite_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup sqlite...")

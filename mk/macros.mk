@@ -94,6 +94,9 @@ define EMBTK_GENERIC_MESSAGE
 	$(call ECHO_BLUE,"# EmbToolkit # $(1)")
 	$(call ECHO_BLUE,"################################################################################")
 endef
+define EMBTK_GENERIC_MSG
+	$(call EMBTK_GENERIC_MESSAGE,$(1))
+endef
 
 #Successful build of EmbToolkit message
 successful_build:
@@ -203,21 +206,17 @@ endef
 # A macro which runs configure script (conpatible with autotools configure)
 # for a package and sets environment variables correctly.
 # Usage:
-# $(call EMBTK_CONFIGURE_PKG,		\
-#	$(PKG_TARBALL),			\
-#	$(PKG_BUILD_DIR),		\
-#	$(PKG_SRC_DIR),			\
-#	$(PKG_CONFIGURE_OPTIONS))
+# $(call EMBTK_CONFIGURE_PKG,PACKAGE)
 define EMBTK_PRINT_CONFIGURE_OPTS
 	$(call ECHO_BLUE,"Configure options:")
 	@for i in `echo $(1) | tr " " "\n"`; \
 	do echo -e $(EMBTK_COLOR_BLUE)$$i$(EMBTK_NO_COLOR); done
 endef
 define EMBTK_CONFIGURE_PKG
-	$(call EMBTK_GENERIC_MESSAGE,"Configure $(strip $(1))...")
-	@test -e $(strip $(3))/configure || exit 1
-	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$(strip $(4))")
-	@cd $(strip $(2));						\
+	$(call EMBTK_GENERIC_MSG,"Configure $($(1)_PACKAGE)...")
+	@test -e $($(1)_SRC_DIR)/configure || exit 1
+	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$($(1)_CONFIGURE_OPTS)")
+	@cd $($(1)_BUILD_DIR);						\
 	CC=$(TARGETCC_CACHED)						\
 	CXX=$(TARGETCXX_CACHED)						\
 	AR=$(TARGETAR)							\
@@ -234,10 +233,10 @@ define EMBTK_CONFIGURE_PKG
 	CPPFLAGS="-I$(SYSROOT)/usr/include"				\
 	PKG_CONFIG=$(PKGCONFIG_BIN)					\
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)				\
-	$(CONFIG_SHELL) $(strip $(3))/configure				\
+	$(CONFIG_SHELL) $($(1)_SRC_DIR)/configure			\
 	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)		\
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)		\
-	--prefix=/usr $(strip $(4))
-	@touch $(strip $(2))/.configured
-	$(call EMBTK_KILL_LT_RPATH,$(strip $(2)))
+	--prefix=/usr $($(1)_CONFIGURE_OPTS)
+	@touch $($(1)_BUILD_DIR)/.configured
+	$(call EMBTK_KILL_LT_RPATH,"$($(1)_BUILD_DIR)")
 endef
