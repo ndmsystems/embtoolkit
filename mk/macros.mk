@@ -47,6 +47,18 @@ define ECHO_BLUE
 	@echo -e $(EMBTK_COLOR_BLUE)$(1)$(EMBTK_NO_COLOR)
 endef
 
+#
+# wget wrapper
+# usage: $(call EMBTK_WGET,$(OUTPUT_FILE),$(SITE),$(FOREIGN_FILE))
+#
+__WGET_OPTS = --tries=5 --timeout=10 --waitretry=5
+define EMBTK_WGET
+	wget $(__WGET_OPTS) -O $(DOWNLOAD_DIR)/$(strip $(1))		\
+	$(strip $(2))/$(strip $(3)) ||					\
+	wget $(__WGET_OPTS) --no-passive-ftp -O 			\
+	$(DOWNLOAD_DIR)/$(strip $(1))	$(strip $(2))/$(strip $(3))
+endef
+
 #Decompress message
 #usage $(call EMBTK_DECOMPRESS_MSG,$(NAME_PACKAGE))
 define EMBTK_DECOMPRESS_MSG
@@ -207,6 +219,7 @@ endef
 # for a package and sets environment variables correctly.
 # Usage:
 # $(call EMBTK_CONFIGURE_PKG,PACKAGE)
+#
 define EMBTK_PRINT_CONFIGURE_OPTS
 	$(call ECHO_BLUE,"Configure options:")
 	@for i in `echo $(1) | tr " " "\n"`; \
@@ -239,4 +252,42 @@ define EMBTK_CONFIGURE_PKG
 	--prefix=/usr $($(1)_CONFIGURE_OPTS)
 	@touch $($(1)_BUILD_DIR)/.configured
 	$(call EMBTK_KILL_LT_RPATH,"$($(1)_BUILD_DIR)")
+endef
+
+#
+# A macro which downloads a package.
+# Usage:
+# $(call EMBTK_DOWNLOAD_PKG,PACKAGE)
+#
+define EMBTK_DOWNLOAD_PKG_PATCHES
+if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ]; then			\
+	test -e $(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch ||	\
+	$(call EMBTK_WGET,						\
+		$($(1)_NAME)-$($(1)_VERSION).patch,			\
+		$($(1)_PATCH_SITE),					\
+		$($(1)_NAME)-$($(1)_VERSION)-*.patch);			\
+fi
+endef
+
+define EMBTK_DOWNLOAD_PKG_FROM_MIRROR
+if [ "x$($(1)_SITE_MIRROR$(2))" == "x" ]; then 				\
+	false;								\
+else									\
+	$(call EMBTK_WGET,						\
+		$($(1)_PACKAGE),					\
+		$($(1)_SITE_MIRROR$(2)),				\
+		$($(1)_PACKAGE)); 					\
+fi
+endef
+define EMBTK_DOWNLOAD_PKG
+	$(call EMBTK_GENERIC_MSG,"Download $($(1)_PACKAGE) if necessary...")
+	test -e $(DOWNLOAD_DIR)/$($(1)_PACKAGE) ||			\
+	$(call EMBTK_WGET,						\
+		$($(1)_PACKAGE),					\
+		$($(1)_SITE),						\
+		$($(1)_PACKAGE ))||					\
+	$(call EMBTK_DOWNLOAD_PKG_FROM_MIRROR,$(1),1) ||		\
+	$(call EMBTK_DOWNLOAD_PKG_FROM_MIRROR,$(1),2) ||		\
+	$(call EMBTK_DOWNLOAD_PKG_FROM_MIRROR,$(1),3) || exit 1
+	$(call EMBTK_DOWNLOAD_PKG_PATCHES,$(1))
 endef
