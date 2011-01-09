@@ -23,6 +23,7 @@
 # \date         December 2009
 ################################################################################
 
+FOO_NAME := foo
 FOO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_FOO_VERSION_STRING)))
 FOO_SITE := http://www.foo.org/download
 FOO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/foo/$(FOO_VERSION)
