@@ -36,6 +36,7 @@ choice
 	config  EMBTK_TSLIB_VERSION_1_0
 		bool "tslib-1.0"
 		select EMBTK_TSLIB_NEED_PATCH
+		select EMBTK_TSLIB_NEED_AUTORECONF
 endchoice
 
 config EMBTK_TSLIB_VERSION_STRING
@@ -44,4 +45,5 @@ config EMBTK_TSLIB_VERSION_STRING
 
 config EMBTK_TSLIB_NEED_PATCH
 	bool
-
+config EMBTK_TSLIB_NEED_AUTORECONF
+	bool

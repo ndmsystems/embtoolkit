@@ -23,10 +23,13 @@
 # \date         March 2010
 ################################################################################
 
+TSLIB_NAME := tslib
 TSLIB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_TSLIB_VERSION_STRING)))
 TSLIB_SITE := http://download.berlios.de/tslib
+TSLIB_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 TSLIB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/tslib/$(TSLIB_VERSION)
 TSLIB_PACKAGE := tslib-$(TSLIB_VERSION).tar.bz2
+TSLIB_SRC_DIR := $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION)
 TSLIB_BUILD_DIR := $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION)
 
 TSLIB_BINS = ts_calibrate ts_harvest ts_print ts_print_raw ts_test
@@ -53,16 +56,7 @@ $(TSLIB_BUILD_DIR)/.installed: $(TSLIB_DEPS) download_tslib \
 	@touch $@
 
 download_tslib:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(TSLIB_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(TSLIB_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(TSLIB_PACKAGE) \
-	$(TSLIB_SITE)/$(TSLIB_PACKAGE)
-ifeq ($(CONFIG_EMBTK_TSLIB_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/tslib-$(TSLIB_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/tslib-$(TSLIB_VERSION).patch \
-	$(TSLIB_PATCH_SITE)/tslib-$(TSLIB_VERSION)-*.patch
-endif
+	$(call EMBTK_DOWNLOAD_PKG,TSLIB)
 
 $(TSLIB_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(TSLIB_PACKAGE) ...")
@@ -74,31 +68,7 @@ endif
 	@touch $@
 
 $(TSLIB_BUILD_DIR)/.configured:
-	$(Q)cd $(TSLIB_BUILD_DIR); \
-	$(AUTOUPDATE); \
-	./autogen.sh; \
-	chmod a+x configure; \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	ac_cv_func_malloc_0_nonnull=yes \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,TSLIB)
 
 tslib_clean:
 	$(call EMBTK_GENERIC_MESSAGE,"cleanup tslib-$(TSLIB_VERSION)...")
