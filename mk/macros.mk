@@ -220,6 +220,12 @@ endef
 # Usage:
 # $(call EMBTK_CONFIGURE_PKG,PACKAGE)
 #
+define EMBTK_CONFIGURE_AUTORECONF_PKG
+@if [ "x$(CONFIG_EMBTK_$(1)_NEED_AUTORECONF)" == "xy" ]; then		\
+	cd $($(1)_SRC_DIR);						\
+	$(AUTORECONF) --install -f;					\
+fi
+endef
 define EMBTK_PRINT_CONFIGURE_OPTS
 	$(call ECHO_BLUE,"Configure options:")
 	@for i in `echo $(1) | tr " " "\n"`; \
@@ -227,7 +233,8 @@ define EMBTK_PRINT_CONFIGURE_OPTS
 endef
 define EMBTK_CONFIGURE_PKG
 	$(call EMBTK_GENERIC_MSG,"Configure $($(1)_PACKAGE)...")
-	@test -e $($(1)_SRC_DIR)/configure || exit 1
+	@test -e $($(1)_SRC_DIR)/configure.ac || exit 1
+	$(call  EMBTK_CONFIGURE_AUTORECONF_PKG,$(1))
 	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$($(1)_CONFIGURE_OPTS)")
 	@cd $($(1)_BUILD_DIR);						\
 	CC=$(TARGETCC_CACHED)						\
