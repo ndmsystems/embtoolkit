@@ -260,7 +260,7 @@ endef
 # $(call EMBTK_DOWNLOAD_PKG,PACKAGE)
 #
 define EMBTK_DOWNLOAD_PKG_PATCHES
-if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ]; then			\
+@if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ]; then		\
 	test -e $(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch ||	\
 	$(call EMBTK_WGET,						\
 		$($(1)_NAME)-$($(1)_VERSION).patch,			\
@@ -281,7 +281,7 @@ fi
 endef
 define EMBTK_DOWNLOAD_PKG
 	$(call EMBTK_GENERIC_MSG,"Download $($(1)_PACKAGE) if necessary...")
-	test -e $(DOWNLOAD_DIR)/$($(1)_PACKAGE) ||			\
+	@test -e $(DOWNLOAD_DIR)/$($(1)_PACKAGE) ||			\
 	$(call EMBTK_WGET,						\
 		$($(1)_PACKAGE),					\
 		$($(1)_SITE),						\
