@@ -26,6 +26,7 @@
 SQLITE_NAME := sqlite
 SQLITE_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_SQLITE_VERSION_STRING)))
 SQLITE_SITE := http://www.sqlite.org
+SQLITE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 SQLITE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/sqlite/$(SQLITE_VERSION)
 SQLITE_PACKAGE := sqlite-amalgamation-$(SQLITE_VERSION).tar.gz
 SQLITE_SRC_DIR := $(PACKAGES_BUILD)/sqlite-$(SQLITE_VERSION)
@@ -51,7 +52,6 @@ $(SQLITE_BUILD_DIR)/.installed: $(SQLITE_DEPS) download_sqlite \
 	$(SQLITE_BUILD_DIR)/.decompressed $(SQLITE_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	sqlite-$(SQLITE_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(SQLITE_BUILD_DIR))
 	$(Q)$(MAKE) -C $(SQLITE_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(SQLITE_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -59,16 +59,7 @@ $(SQLITE_BUILD_DIR)/.installed: $(SQLITE_DEPS) download_sqlite \
 	@touch $@
 
 download_sqlite:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(SQLITE_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(SQLITE_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(SQLITE_PACKAGE) \
-	$(SQLITE_SITE)/$(SQLITE_PACKAGE)
-ifeq ($(CONFIG_EMBTK_SQLITE_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/sqlite-$(SQLITE_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/sqlite-$(SQLITE_VERSION).patch \
-	$(SQLITE_PATCH_SITE)/sqlite-$(SQLITE_VERSION)-*.patch
-endif
+	$(call EMBTK_DOWNLOAD_PKG,SQLITE)
 
 $(SQLITE_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(SQLITE_PACKAGE) ...")
