@@ -285,7 +285,7 @@ define EMBTK_DOWNLOAD_PKG
 	$(call EMBTK_WGET,						\
 		$($(1)_PACKAGE),					\
 		$($(1)_SITE),						\
-		$($(1)_PACKAGE ))||					\
+		$($(1)_PACKAGE))||					\
 	$(call EMBTK_DOWNLOAD_PKG_FROM_MIRROR,$(1),1) ||		\
 	$(call EMBTK_DOWNLOAD_PKG_FROM_MIRROR,$(1),2) ||		\
 	$(call EMBTK_DOWNLOAD_PKG_FROM_MIRROR,$(1),3) || exit 1
