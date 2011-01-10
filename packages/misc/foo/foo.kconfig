@@ -43,5 +43,7 @@ config EMBTK_FOO_VERSION_STRING
 
 config EMBTK_FOO_NEED_PATCH
 	bool
+config EMBTK_FOO_NEED_AUTORECONF
+	bool
 
 

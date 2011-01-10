@@ -26,6 +26,7 @@
 FOO_NAME := foo
 FOO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_FOO_VERSION_STRING)))
 FOO_SITE := http://www.foo.org/download
+FOO_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 FOO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/foo/$(FOO_VERSION)
 FOO_PACKAGE := foo-$(FOO_VERSION).tar.gz
 FOO_BUILD_DIR := $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
@@ -49,7 +50,6 @@ $(FOO_BUILD_DIR)/.installed: $(FOO_DEPS) download_foo \
 	$(FOO_BUILD_DIR)/.decompressed $(FOO_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	foo-$(FOO_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(FOO_BUILD_DIR))
 	$(Q)$(MAKE) -C $(FOO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(FOO_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -57,16 +57,7 @@ $(FOO_BUILD_DIR)/.installed: $(FOO_DEPS) download_foo \
 	@touch $@
 
 download_foo:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(FOO_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(FOO_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(FOO_PACKAGE) \
-	$(FOO_SITE)/$(FOO_PACKAGE)
-ifeq ($(CONFIG_EMBTK_FOO_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/foo-$(FOO_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/foo-$(FOO_VERSION).patch \
-	$(FOO_PATCH_SITE)/foo-$(FOO_VERSION)-*.patch
-endif
+	$(call EMBTK_DOWNLOAD_PKG,FOO)
 
 $(FOO_BUILD_DIR)/.decompressed:
 	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(FOO_PACKAGE) ...")
