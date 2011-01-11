@@ -24,7 +24,7 @@
 ################################################################################
 
 SQLITE_NAME := sqlite
-SQLITE_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_SQLITE_VERSION_STRING)))
+SQLITE_VERSION := $(call EMBTK_GET_PKG_VERSION,SQLITE)
 SQLITE_SITE := http://www.sqlite.org
 SQLITE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 SQLITE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/sqlite/$(SQLITE_VERSION)
