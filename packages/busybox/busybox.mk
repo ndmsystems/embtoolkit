@@ -36,11 +36,11 @@ $(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed \
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	busybox-$(BB_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(BB_BUILD_DIR) \
-	CROSS_COMPILE=$(TOOLS)/bin/$(STRICT_GNU_TARGET)- \
+	CROSS_COMPILE="$(CCACHE_HOST_DIR)/bin/ccache $(TOOLS)/bin/$(STRICT_GNU_TARGET)-" \
 	CONFIG_PREFIX=$(ROOTFS) oldconfig
 	@CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing" \
 	$(MAKE) -C $(BB_BUILD_DIR) \
-	CROSS_COMPILE=$(TOOLS)/bin/$(STRICT_GNU_TARGET)- \
+	CROSS_COMPILE="$(CCACHE_HOST_DIR)/bin/ccache $(TOOLS)/bin/$(STRICT_GNU_TARGET)-" \
 	CONFIG_PREFIX=$(ROOTFS) install
 	@touch $@
 
