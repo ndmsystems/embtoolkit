@@ -215,6 +215,12 @@ define EMBTK_KILL_LT_RPATH
 endef
 
 #
+# A macro to get packages version from .config file.
+# usage: $(call EMBTK_GET_PKG_VERSION,PACKAGE)
+#
+EMBTK_GET_PKG_VERSION = $(subst ",,$(strip $(CONFIG_EMBTK_$(1)_VERSION_STRING)))
+
+#
 # A macro which runs configure script (conpatible with autotools configure)
 # for a package and sets environment variables correctly.
 # Usage:
