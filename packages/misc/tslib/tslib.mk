@@ -24,7 +24,7 @@
 ################################################################################
 
 TSLIB_NAME := tslib
-TSLIB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_TSLIB_VERSION_STRING)))
+TSLIB_VERSION := $(call EMBTK_GET_PKG_VERSION,TSLIB)
 TSLIB_SITE := http://download.berlios.de/tslib
 TSLIB_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 TSLIB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/tslib/$(TSLIB_VERSION)
