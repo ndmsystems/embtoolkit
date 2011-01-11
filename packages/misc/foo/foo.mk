@@ -24,7 +24,7 @@
 ################################################################################
 
 FOO_NAME := foo
-FOO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_FOO_VERSION_STRING)))
+FOO_VERSION := $(call EMBTK_GET_PKG_VERSION,FOO)
 FOO_SITE := http://www.foo.org/download
 FOO_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 FOO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/foo/$(FOO_VERSION)
