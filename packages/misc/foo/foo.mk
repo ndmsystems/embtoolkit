@@ -60,13 +60,7 @@ download_foo:
 	$(call EMBTK_DOWNLOAD_PKG,FOO)
 
 $(FOO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(FOO_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(FOO_PACKAGE)
-ifeq ($(CONFIG_EMBTK_FOO_NEED_PATCH),y)
-	@cd $(FOO_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/foo-$(FOO_VERSION).patch
-endif
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,FOO)
 
 $(FOO_BUILD_DIR)/.configured:
 	$(call EMBTK_CONFIGURE_PKG,FOO)

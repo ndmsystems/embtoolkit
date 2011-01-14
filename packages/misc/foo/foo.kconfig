@@ -35,6 +35,7 @@ choice
 
 	config  EMBTK_FOO_VERSION_0_16_4
 		bool "foo-0.16.4"
+		select EMBTK_FOO_PKG_IS_TARGZ
 endchoice
 
 config EMBTK_FOO_VERSION_STRING
@@ -45,5 +46,7 @@ config EMBTK_FOO_NEED_PATCH
 	bool
 config EMBTK_FOO_NEED_AUTORECONF
 	bool
-
-
+config EMBTK_FOO_PKG_IS_TARGZ
+	bool
+config EMBTK_FOO_PKG_IS_TARBZ2
+	bool
