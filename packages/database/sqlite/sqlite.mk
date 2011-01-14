@@ -62,13 +62,7 @@ download_sqlite:
 	$(call EMBTK_DOWNLOAD_PKG,SQLITE)
 
 $(SQLITE_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(SQLITE_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(SQLITE_PACKAGE)
-ifeq ($(CONFIG_EMBTK_SQLITE_NEED_PATCH),y)
-	@cd $(SQLITE_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/sqlite-$(SQLITE_VERSION).patch
-endif
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,SQLITE)
 
 $(SQLITE_BUILD_DIR)/.configured:
 	$(call EMBTK_CONFIGURE_PKG,SQLITE)
