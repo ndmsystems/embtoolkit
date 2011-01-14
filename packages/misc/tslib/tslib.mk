@@ -59,13 +59,7 @@ download_tslib:
 	$(call EMBTK_DOWNLOAD_PKG,TSLIB)
 
 $(TSLIB_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(TSLIB_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(TSLIB_PACKAGE)
-ifeq ($(CONFIG_EMBTK_TSLIB_NEED_PATCH),y)
-	@cd $(TSLIB_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/tslib-$(TSLIB_VERSION).patch
-endif
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,TSLIB)
 
 $(TSLIB_BUILD_DIR)/.configured:
 	$(call EMBTK_CONFIGURE_PKG,TSLIB)
