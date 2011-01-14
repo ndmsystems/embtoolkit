@@ -281,7 +281,6 @@ define EMBTK_DOWNLOAD_PKG_PATCHES
 		$($(1)_NAME)-$($(1)_VERSION)-*.patch);			\
 fi
 endef
-
 define EMBTK_DOWNLOAD_PKG_FROM_MIRROR
 if [ "x$($(1)_SITE_MIRROR$(2))" == "x" ]; then 				\
 	false;								\
@@ -303,4 +302,29 @@ define EMBTK_DOWNLOAD_PKG
 	$(call EMBTK_DOWNLOAD_PKG_FROM_MIRROR,$(1),2) ||		\
 	$(call EMBTK_DOWNLOAD_PKG_FROM_MIRROR,$(1),3) || exit 1
 	$(call EMBTK_DOWNLOAD_PKG_PATCHES,$(1))
+endef
+
+#
+# A macro to decompress packages tarball.
+# Usage:
+# $(call EMBTK_DECOMPRESS_PKG,PACKAGE)
+#
+define EMBTK_DECOMPRESS_PKG
+	$(call EMBTK_GENERIC_MSG,"Decrompressing $($(1)_PACKAGE) ...")
+	@if [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "xy" ]; then	\
+		tar -C $(PACKAGES_BUILD) -xzf				\
+		$(DOWNLOAD_DIR)/$($(1)_PACKAGE);			\
+	elif [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARBZ2)" == "xy" ]; then	\
+		tar -C $(PACKAGES_BUILD) -xjf				\
+		$(DOWNLOAD_DIR)/$($(1)_PACKAGE);			\
+	else								\
+		echo "!!!!Unknown package compression type!!!!";	\
+		exit 1;							\
+	fi
+	@if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ]; then	\
+		cd $($(1)_BUILD_DIR);					\
+		patch -p1 <						\
+		$(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch;	\
+	fi
+	@touch $@
 endef
