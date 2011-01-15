@@ -28,9 +28,19 @@ SQLITE_VERSION := $(call EMBTK_GET_PKG_VERSION,SQLITE)
 SQLITE_SITE := http://www.sqlite.org
 SQLITE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 SQLITE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/sqlite/$(SQLITE_VERSION)
+# Please sqlite people stop changing the way packages are named and packaged
+ifeq ($(CONFIG_EMBTK_SQLITE_VERSION_3_7_3),y)
 SQLITE_PACKAGE := sqlite-amalgamation-$(SQLITE_VERSION).tar.gz
+else
+SQLITE_PACKAGE := sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+endif
+ifeq ($(CONFIG_EMBTK_SQLITE_VERSION_3_7_3),y)
 SQLITE_SRC_DIR := $(PACKAGES_BUILD)/sqlite-$(SQLITE_VERSION)
 SQLITE_BUILD_DIR := $(PACKAGES_BUILD)/sqlite-$(SQLITE_VERSION)
+else
+SQLITE_SRC_DIR := $(PACKAGES_BUILD)/sqlite-autoconf-$(SQLITE_VERSION)
+SQLITE_BUILD_DIR := $(PACKAGES_BUILD)/sqlite-autoconf-$(SQLITE_VERSION)
+endif
 
 SQLITE_BINS = sqlite3
 SQLITE_SBINS =
