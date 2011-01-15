@@ -24,7 +24,7 @@
 ################################################################################
 
 XSERVER_NAME := xorg-server
-XSERVER_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_XSERVER_VERSION_STRING)))
+XSERVER_VERSION := $(call EMBTK_GET_PKG_VERSION,XSERVER)
 XSERVER_SITE := http://ftp.x.org/pub/individual/xserver
 XSERVER_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XSERVER_PACKAGE := xorg-server-$(XSERVER_VERSION).tar.bz2
