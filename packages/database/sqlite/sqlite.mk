@@ -68,11 +68,4 @@ $(SQLITE_BUILD_DIR)/.configured:
 	$(call EMBTK_CONFIGURE_PKG,SQLITE)
 
 sqlite_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup sqlite...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(SQLITE_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(SQLITE_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(SQLITE_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(SQLITE_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(SQLITE_PKGCONFIGS)
-	$(Q)-rm -rf $(SQLITE_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,SQLITE)
