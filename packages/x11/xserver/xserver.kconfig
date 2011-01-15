@@ -47,6 +47,7 @@ config EMBTK_HAVE_XSERVER
 	select EMBTK_HAVE_XTRANS
 	select EMBTK_HAVE_OPENSSL
 	select EMBTK_HAVE_PIXMAN
+	select EMBTK_XSERVER_PKG_IS_TARBZ2
 	help
 		Have a X server in your root file system
 choice
@@ -116,3 +117,11 @@ config EMBTK_XSERVER_VERSION_STRING
 	default "1.7.7"		if EMBTK_XSERVER_VERSION_1_7_7
 	default "1.7.6"		if EMBTK_XSERVER_VERSION_1_7_6
 
+config EMBTK_XSERVER_NEED_PATCH
+	bool
+config EMBTK_XSERVER_NEED_AUTORECONF
+	bool
+config EMBTK_XSERVER_PKG_IS_TARGZ
+	bool
+config EMBTK_XSERVER_PKG_IS_TARBZ2
+	bool

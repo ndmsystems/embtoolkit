@@ -23,9 +23,12 @@
 # \date         March 2010
 ################################################################################
 
+XSERVER_NAME := xorg-server
 XSERVER_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_XSERVER_VERSION_STRING)))
 XSERVER_SITE := http://ftp.x.org/pub/individual/xserver
+XSERVER_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XSERVER_PACKAGE := xorg-server-$(XSERVER_VERSION).tar.bz2
+XSERVER_SRC_DIR := $(PACKAGES_BUILD)/xorg-server-$(XSERVER_VERSION)
 XSERVER_BUILD_DIR := $(PACKAGES_BUILD)/xorg-server-$(XSERVER_VERSION)
 
 XSERVER_BINS = Xfbdev X Xorg
@@ -62,7 +65,19 @@ XSERVER_CONFIGURE_OPTS := $(XSERVER_VARIANT) --with-sha1=libcrypto \
 		--disable-xinerama --disable-xace --disable-dbe --disable-dpms \
 		--disable-vgahw --disable-xfree86-utils --disable-vbe \
 		--disable-int10-module --disable-xaa --disable-screensaver \
-		--disable-tcp-transport --disable-ipv6 --disable-secure-rpc
+		--disable-tcp-transport --disable-ipv6 --disable-secure-rpc \
+		--with-vendor-name="Embedded Systems Toolkit" \
+		--with-vendor-name-short="EmbToolkit" \
+		--with-vendor-web=$(EMBTK_HOMEURL) \
+		--with-builderstring="embtoolkit-$(EMBTK_VERSION)" \
+		--with-builder-addr="embtk-dev@embtoolkit.org" \
+		--with-os-name=$(STRICT_GNU_TARGET) \
+		--with-os-vendor="embtoolkit.org"
+
+XSERVER_CONFIGURE_ENV := XLIB_CFLAGS=`$(PKGCONFIG_BIN) xcb --cflags`
+XSERVER_CONFIGURE_ENV += XLIB_LIBS=`$(PKGCONFIG_BIN) xcb --libs`
+XSERVER_CONFIGURE_ENV += TSLIB_CFLAGS=`$(PKGCONFIG_BIN) tslib --cflags`
+XSERVER_CONFIGURE_ENV += TSLIB_LIBS=`$(PKGCONFIG_BIN) tslib --libs`
 
 ifeq ($(CONFIG_EMBTK_HAVE_XSERVER_WITH_TSLIB),y)
 XSERVER_DEPS += tslib_install
@@ -88,58 +103,16 @@ $(XSERVER_BUILD_DIR)/.installed: $(XSERVER_DEPS) download_xserver \
 	@touch $@
 
 download_xserver:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(XSERVER_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(XSERVER_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(XSERVER_PACKAGE) \
-	$(XSERVER_SITE)/$(XSERVER_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,XSERVER)
 
 $(XSERVER_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(XSERVER_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(XSERVER_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,XSERVER)
 
 $(XSERVER_BUILD_DIR)/.configured:
-	$(Q)cd $(XSERVER_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	XLIB_CFLAGS=`$(PKGCONFIG_BIN) xcb --cflags` \
-	XLIB_LIBS=`$(PKGCONFIG_BIN) xcb --libs` \
-	TSLIB_CFLAGS=`$(PKGCONFIG_BIN) tslib --cflags` \
-	TSLIB_LIBS=`$(PKGCONFIG_BIN) tslib --libs` \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --disable-malloc0returnsnull $(XSERVER_CONFIGURE_OPTS) \
-	--with-vendor-name="Embedded Systems Toolkit" \
-	--with-vendor-name-short="EmbToolkit" \
-	--with-vendor-web=$(EMBTK_HOMEURL) \
-	--with-builderstring="embtoolkit-$(EMBTK_VERSION)" \
-	--with-builder-addr="embtk-dev@embtoolkit.org" \
-	--with-os-name=$(STRICT_GNU_TARGET) --with-os-vendor="embtoolkit.org"
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,XSERVER)
 
 xserver_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xserver...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XSERVER_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XSERVER_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XSERVER_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XSERVER_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XSERVER_PKGCONFIGS)
-	$(Q)-rm -rf $(XSERVER_BUILD_DIR)*
+	$(call EMBTK_CLEANUP_PKG,XSERVER)
 
 .PHONY: $(XSERVER_BUILD_DIR)/.special
 
