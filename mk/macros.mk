@@ -259,6 +259,7 @@ define EMBTK_CONFIGURE_PKG
 	CPPFLAGS="-I$(SYSROOT)/usr/include"				\
 	PKG_CONFIG=$(PKGCONFIG_BIN)					\
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)				\
+	$($(1)_CONFIGURE_ENV)						\
 	$(CONFIG_SHELL) $($(1)_SRC_DIR)/configure			\
 	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)		\
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)		\
