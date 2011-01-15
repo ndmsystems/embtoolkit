@@ -328,3 +328,33 @@ define EMBTK_DECOMPRESS_PKG
 	fi
 	@touch $@
 endef
+
+#
+# A macro to clean installed packages from sysroot.
+# Usage:
+# $(call EMBTK_CLEANUP_PKG,PACKAGE)
+#
+define EMBTK_CLEANUP_PKG
+	$(call EMBTK_GENERIC_MESSAGE,"Cleanup $($(1)_NAME)...")
+	@-if [ "x$($(1)_BINS)" != "x" ]; then				\
+		cd $(SYSROOT)/usr/bin; rm -rf $($(1)_BINS);		\
+	fi
+	@-if [ "x$($(1)_SBINS)" != "x" ]; then				\
+		cd $(SYSROOT)/usr/sbin; rm -rf $($(1)_SBINS);		\
+	fi
+	@-if [ "x$($(1)_INCLUDES)" != "x" ]; then			\
+		cd $(SYSROOT)/usr/include; rm -rf $($(1)_INCLUDES);	\
+	fi
+	@-if [ "x$($(1)_LIBS)" != "x" ]; then				\
+		cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $($(1)_LIBS);	\
+	fi
+	@-if [ "x$($(1)_LIBEXECS)" != "x" ]; then			\
+		cd $(SYSROOT)/usr/$(LIBDIR)/libexec;			\
+		rm -rf $($(1)_LIBEXECS);				\
+	fi
+	@-if [ "x$($(1)_PKGCONFIGS)" != "x" ]; then			\
+		cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig;			\
+		rm -rf $($(1)_PKGCONFIGS);				\
+	fi
+	@-rm -rf $($(1)_BUILD_DIR)*
+endef
