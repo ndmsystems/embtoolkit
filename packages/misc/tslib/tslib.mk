@@ -36,7 +36,7 @@ TSLIB_BINS = ts_calibrate ts_harvest ts_print ts_print_raw ts_test
 TSLIB_SBINS =
 TSLIB_INCLUDES = tslib.h
 TSLIB_LIBS = libts* ts
-TSLIB_PKGCONFIGS = tslib-*.pc
+TSLIB_PKGCONFIGS = tslib*.pc
 
 TSLIB_DEPS =
 
@@ -65,14 +65,7 @@ $(TSLIB_BUILD_DIR)/.configured:
 	$(call EMBTK_CONFIGURE_PKG,TSLIB)
 
 tslib_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup tslib-$(TSLIB_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(TSLIB_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(TSLIB_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(TSLIB_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(TSLIB_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(TSLIB_PKGCONFIGS)
-	$(Q)-rm -rf $(TSLIB_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,TSLIB)
 
 .PHONY: $(TSLIB_BUILD_DIR)/.special
 
