@@ -36,6 +36,7 @@ FOO_BINS =
 FOO_SBINS =
 FOO_INCLUDES =
 FOO_LIBS =
+FOO_LIBEXECS =
 FOO_PKGCONFIGS =
 
 FOO_CONFIGURE_OPTS :=
@@ -66,11 +67,4 @@ $(FOO_BUILD_DIR)/.configured:
 	$(call EMBTK_CONFIGURE_PKG,FOO)
 
 foo_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup foo...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(FOO_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(FOO_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FOO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FOO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FOO_PKGCONFIGS)
-	$(Q)-rm -rf $(FOO_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,FOO)
