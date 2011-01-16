@@ -306,7 +306,7 @@ define EMBTK_DOWNLOAD_PKG
 endef
 
 #
-# A macro to decompress packages tarball.
+# A macro to decompress packages tarball intended to run on target.
 # Usage:
 # $(call EMBTK_DECOMPRESS_PKG,PACKAGE)
 #
@@ -317,6 +317,33 @@ define EMBTK_DECOMPRESS_PKG
 		$(DOWNLOAD_DIR)/$($(1)_PACKAGE);			\
 	elif [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARBZ2)" == "xy" ]; then	\
 		tar -C $(PACKAGES_BUILD) -xjf				\
+		$(DOWNLOAD_DIR)/$($(1)_PACKAGE);			\
+	else								\
+		echo "!!!!Unknown package compression type!!!!";	\
+		exit 1;							\
+	fi
+	@if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ]; then	\
+		cd $($(1)_SRC_DIR);					\
+		patch -p1 <						\
+		$(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch;	\
+	fi
+	@mkdir -p $($(1)_BUILD_DIR)
+	@touch $@
+endef
+
+#
+# A macro to decompress packages tarball intended to run on host development
+# machine.
+# Usage:
+# $(call EMBTK_DECOMPRESS_HOSTPKG,PACKAGE)
+#
+define EMBTK_DECOMPRESS_HOSTPKG
+	$(call EMBTK_GENERIC_MSG,"Decrompressing $($(1)_PACKAGE) ...")
+	@if [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "xy" ]; then	\
+		tar -C $(TOOLS_BUILD) -xzf				\
+		$(DOWNLOAD_DIR)/$($(1)_PACKAGE);			\
+	elif [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARBZ2)" == "xy" ]; then	\
+		tar -C $(TOOLS_BUILD) -xjf				\
 		$(DOWNLOAD_DIR)/$($(1)_PACKAGE);			\
 	else								\
 		echo "!!!!Unknown package compression type!!!!";	\
