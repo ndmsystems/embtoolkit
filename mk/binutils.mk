@@ -23,10 +23,13 @@
 # \date         May 2009
 ################################################################################
 
-BINUTILS_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_BINUTILS_VERSION_STRING)))
+BINUTILS_NAME := binutils
+BINUTILS_VERSION := $(call EMBTK_GET_PKG_VERSION,BINUTILS)
 BINUTILS_SITE := http://ftp.gnu.org/gnu/binutils
+BINUTILS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 BINUTILS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/binutils/$(BINUTILS_VERSION)
 BINUTILS_PACKAGE := binutils-$(BINUTILS_VERSION).tar.bz2
+BINUTILS_SRC_DIR := $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)
 BINUTILS_BUILD_DIR := $(TOOLS_BUILD)/binutils
 
 BINUTILS_MULTILIB := --disable-multilib
@@ -40,14 +43,7 @@ $(BINUTILS_BUILD_DIR)/.built: download_binutils \
 	@touch $@
 
 download_binutils:
-	@test -e $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE) \
-	$(BINUTILS_SITE)/$(BINUTILS_PACKAGE)
-ifeq ($(CONFIG_EMBTK_BINUTILS_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/binutils-$(BINUTILS_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/binutils-$(BINUTILS_VERSION).patch \
-	$(BINUTILS_PATCH_SITE)/binutils-$(BINUTILS_VERSION)-*.patch
-endif
+	$(call EMBTK_DOWNLOAD_PKG,BINUTILS)
 
 $(BINUTILS_BUILD_DIR)/.decompressed:
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE)
