@@ -323,10 +323,11 @@ define EMBTK_DECOMPRESS_PKG
 		exit 1;							\
 	fi
 	@if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ]; then	\
-		cd $($(1)_BUILD_DIR);					\
+		cd $($(1)_SRC_DIR);					\
 		patch -p1 <						\
 		$(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch;	\
 	fi
+	@mkdir -p $($(1)_BUILD_DIR)
 	@touch $@
 endef
 
