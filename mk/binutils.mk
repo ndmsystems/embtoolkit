@@ -34,9 +34,9 @@ BINUTILS_BUILD_DIR := $(TOOLS_BUILD)/binutils
 
 BINUTILS_MULTILIB := --disable-multilib
 
-binutils_install: $(BINUTILS_BUILD_DIR)/.built
+binutils_install: $(BINUTILS_BUILD_DIR)/.installed
 
-$(BINUTILS_BUILD_DIR)/.built: download_binutils \
+$(BINUTILS_BUILD_DIR)/.installed: download_binutils \
 	$(BINUTILS_BUILD_DIR)/.decompressed $(BINUTILS_BUILD_DIR)/.configured
 	@$(MAKE) -C $(BINUTILS_BUILD_DIR) $(J)
 	$(MAKE) -C $(BINUTILS_BUILD_DIR) install
@@ -46,13 +46,7 @@ download_binutils:
 	$(call EMBTK_DOWNLOAD_PKG,BINUTILS)
 
 $(BINUTILS_BUILD_DIR)/.decompressed:
-	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(BINUTILS_PACKAGE)
-ifeq ($(CONFIG_EMBTK_BINUTILS_NEED_PATCH),y)
-	cd $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION); \
-	patch -p1 < $(DOWNLOAD_DIR)/binutils-$(BINUTILS_VERSION).patch
-endif
-	@mkdir -p $(BINUTILS_BUILD_DIR)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_HOSTPKG,BINUTILS)
 
 $(BINUTILS_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"binutils: Configuring \
