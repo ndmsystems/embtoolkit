@@ -2,18 +2,19 @@
 # Embtoolkit
 # Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         autoconf.mk
@@ -22,12 +23,16 @@
 # \date         February 2010
 ################################################################################
 
-AUTOCONF_VERSION := 2.68
+AUTOCONF_NAME := autoconf
+AUTOCONF_VERSION := $(call EMBTK_GET_PKG_VERSION,AUTOCONF)
 AUTOCONF_SITE := http://ftp.gnu.org/gnu/autoconf
+AUTOCONF_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+AUTOCONF_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/autoconf/$(AUTOCONF_VERSION)
 AUTOCONF_PACKAGE := autoconf-$(AUTOCONF_VERSION).tar.bz2
+AUTOCONF_SRC_DIR := $(TOOLS_BUILD)/autoconf-$(AUTOCONF_VERSION)
 AUTOCONF_BUILD_DIR := $(TOOLS_BUILD)/autoconf-$(AUTOCONF_VERSION)
-AUTOCONF_DIR := $(HOSTTOOLS)/usr
 
+AUTOCONF_DIR := $(HOSTTOOLS)/usr
 AUTOCONF := $(AUTOCONF_DIR)/bin/autoconf
 AUTOHEADER := $(AUTOCONF_DIR)/bin/autoheader
 AUTOM4TE := $(AUTOCONF_DIR)/bin/autom4te
@@ -47,18 +52,10 @@ $(AUTOCONF_BUILD_DIR)/.installed: download_autoconf \
 	@touch $@
 
 download_autoconf:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(AUTOCONF_PACKAGE) if \
-	necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(AUTOCONF_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(AUTOCONF_PACKAGE) \
-	$(AUTOCONF_SITE)/$(AUTOCONF_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,AUTOCONF)
 
 $(AUTOCONF_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(AUTOCONF_PACKAGE)...")
-	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(AUTOCONF_PACKAGE)
-	@mkdir -p $(AUTOCONF_BUILD_DIR)
-	@mkdir -p $(AUTOCONF_DIR)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_HOSTPKG,AUTOCONF)
 
 $(AUTOCONF_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring \

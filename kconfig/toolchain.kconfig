@@ -77,3 +77,10 @@ menu "MPC"
 source "kconfig/mpchost.kconfig"
 endmenu
 
+#
+# Autotools
+#
+source kconfig/m4.kconfig
+source kconfig/libtool.kconfig
+source kconfig/autoconf.kconfig
+source kconfig/automake.kconfig

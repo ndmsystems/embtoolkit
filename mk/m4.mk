@@ -23,13 +23,17 @@
 # \date         February 2010
 ################################################################################
 
-M4_VERSION := 1.4.15
+M4_NAME := m4
+M4_VERSION := $(call EMBTK_GET_PKG_VERSION,M4)
 M4_SITE := http://ftp.gnu.org/gnu/m4
+M4_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+M4_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/m4/$(M4_VERSION)
 M4_PACKAGE := m4-$(M4_VERSION).tar.bz2
+M4_SRC_DIR := $(TOOLS_BUILD)/m4-$(M4_VERSION)
 M4_BUILD_DIR := $(TOOLS_BUILD)/m4-$(M4_VERSION)
+
 M4_DIR := $(HOSTTOOLS)/usr
 M4_BIN := $(M4_DIR)/bin/m4
-
 M4 := $(M4_BIN)
 export M4
 
@@ -42,18 +46,10 @@ $(M4_BUILD_DIR)/.installed: download_m4 \
 	@touch $@
 
 download_m4:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(M4_PACKAGE) if \
-	necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(M4_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(M4_PACKAGE) \
-	$(M4_SITE)/$(M4_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,M4)
 
 $(M4_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(M4_PACKAGE)...")
-	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(M4_PACKAGE)
-	@mkdir -p $(M4_BUILD_DIR)
-	@mkdir -p $(M4_DIR)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_HOSTPKG,M4)
 
 $(M4_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring \

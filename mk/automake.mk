@@ -2,18 +2,19 @@
 # Embtoolkit
 # Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         automake.mk
@@ -22,12 +23,16 @@
 # \date         February 2010
 ################################################################################
 
-AUTOMAKE_VERSION := 1.11.1
+AUTOMAKE_NAME := automake
+AUTOMAKE_VERSION := $(call EMBTK_GET_PKG_VERSION,AUTOMAKE)
 AUTOMAKE_SITE := http://ftp.gnu.org/gnu/automake
+AUTOMAKE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+AUTOMAKE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/automake/$(AUTOMAKE_VERSION)
 AUTOMAKE_PACKAGE := automake-$(AUTOMAKE_VERSION).tar.bz2
+AUTOMAKE_SRC_DIR := $(TOOLS_BUILD)/automake-$(AUTOMAKE_VERSION)
 AUTOMAKE_BUILD_DIR := $(TOOLS_BUILD)/automake-$(AUTOMAKE_VERSION)
-AUTOMAKE_DIR := $(HOSTTOOLS)/usr
 
+AUTOMAKE_DIR := $(HOSTTOOLS)/usr
 ACLOCAL := $(AUTOMAKE_DIR)/bin/aclocal
 AUTOMAKE := $(AUTOMAKE_DIR)/bin/automake
 
@@ -42,18 +47,10 @@ $(AUTOMAKE_BUILD_DIR)/.installed: download_automake \
 	@touch $@
 
 download_automake:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(AUTOMAKE_PACKAGE) if \
-	necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(AUTOMAKE_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(AUTOMAKE_PACKAGE) \
-	$(AUTOMAKE_SITE)/$(AUTOMAKE_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,AUTOMAKE)
 
 $(AUTOMAKE_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(AUTOMAKE_PACKAGE)...")
-	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(AUTOMAKE_PACKAGE)
-	@mkdir -p $(AUTOMAKE_BUILD_DIR)
-	@mkdir -p $(AUTOMAKE_DIR)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_HOSTPKG,AUTOMAKE)
 
 $(AUTOMAKE_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring \

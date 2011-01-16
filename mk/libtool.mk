@@ -23,12 +23,16 @@
 # \date         March 2010
 ################################################################################
 
-LIBTOOL_VERSION := 2.4
+LIBTOOL_NAME := libtool
+LIBTOOL_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBTOOL)
 LIBTOOL_SITE := http://ftp.gnu.org/gnu/libtool
+LIBTOOL_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBTOOL_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libtool/$(LIBTOOL_VERSION)
 LIBTOOL_PACKAGE := libtool-$(LIBTOOL_VERSION).tar.gz
+LIBTOOL_SRC_DIR := $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
 LIBTOOL_BUILD_DIR := $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
-LIBTOOL_DIR := $(HOSTTOOLS)/usr
 
+LIBTOOL_DIR := $(HOSTTOOLS)/usr
 LIBTOOL := $(LIBTOOL_DIR)/bin/libtool
 LIBTOOLIZE := $(LIBTOOL_DIR)/bin/libtoolize
 
@@ -43,18 +47,10 @@ $(LIBTOOL_BUILD_DIR)/.installed: download_libtool \
 	@touch $@
 
 download_libtool:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(LIBTOOL_PACKAGE) if \
-	necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(LIBTOOL_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LIBTOOL_PACKAGE) \
-	$(LIBTOOL_SITE)/$(LIBTOOL_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,LIBTOOL)
 
 $(LIBTOOL_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LIBTOOL_PACKAGE)...")
-	@tar -C $(TOOLS_BUILD) -xzf $(DOWNLOAD_DIR)/$(LIBTOOL_PACKAGE)
-	@mkdir -p $(LIBTOOL_BUILD_DIR)
-	@mkdir -p $(LIBTOOL_DIR)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_HOSTPKG,LIBTOOL)
 
 $(LIBTOOL_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring \
