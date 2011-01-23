@@ -23,10 +23,13 @@
 # \date         May 2009
 ################################################################################
 
-BB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_BB_VERSION_STRING)))
-BB_DOT_CONFIG := $(subst ",,$(strip $(CONFIG_EMBTK_BB_DOT_CONFIG)))
+BB_NAME := busybox
+BB_VERSION := $(call EMBTK_GET_PKG_VERSION,BB)
 BB_SITE := http://www.busybox.net/downloads
+BB_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+BB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/busybox/$(BB_VERSION)
 BB_PACKAGE := busybox-$(BB_VERSION).tar.bz2
+BB_SRC_DIR := $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
 BB_BUILD_DIR := $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
 
 busybox_install: $(BB_BUILD_DIR)/.installed
@@ -45,13 +48,10 @@ $(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed \
 	@touch $@
 
 download_busybox:
-	@test -e $(DOWNLOAD_DIR)/$(BB_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(BB_PACKAGE) $(BB_SITE)/$(BB_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,BB)
 
 $(BB_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(BB_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(BB_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,BB)
 
 $(BB_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MESSAGE,"Configuring busybox...")

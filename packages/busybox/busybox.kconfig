@@ -31,14 +31,19 @@ choice
 
 	config EMBTK_BB_VERSION_1_17_X
 		bool "busybox-1.17.x"
+		select EMBTK_BB_PKG_IS_TARBZ2
 	config EMBTK_BB_VERSION_1_16_X
 		bool "busybox-1.16.x"
+		select EMBTK_BB_PKG_IS_TARBZ2
 	config EMBTK_BB_VERSION_1_15_X
 		bool "busybox-1.15.x"
+		select EMBTK_BB_PKG_IS_TARBZ2
 	config EMBTK_BB_VERSION_1_14_X
 		bool "busybox-1.14.x"
+		select EMBTK_BB_PKG_IS_TARBZ2
 	config EMBTK_BB_VERSION_1_13_X
 		bool "busybox-1.13.x"
+		select EMBTK_BB_PKG_IS_TARBZ2
 endchoice
 
 choice
@@ -102,5 +107,14 @@ config EMBTK_BB_VERSION_STRING
 	default "1.14.2"	if EMBTK_BB_VERSION_1_14_2
 	default "1.14.1"	if EMBTK_BB_VERSION_1_14_1
 	default "1.13.4"	if EMBTK_BB_VERSION_1_13_4
+
+config EMBTK_BB_NEED_PATCH
+	bool
+config EMBTK_BB_NEED_AUTORECONF
+	bool
+config EMBTK_BB_PKG_IS_TARGZ
+	bool
+config EMBTK_BB_PKG_IS_TARBZ2
+	bool
 
 source packages/busybox/busybox-kconfigs/busybox.kconfig
