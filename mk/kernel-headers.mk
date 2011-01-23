@@ -23,13 +23,16 @@
 # \date         May 2009
 ################################################################################
 
-LINUX_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LINUX_VERSION_STRING)))
+LINUX_NAME := linux
+LINUX_VERSION := $(call EMBTK_GET_PKG_VERSION,LINUX)
 ifeq ($(CONFIG_EMBTK_LINUX_HAVE_MIRROR),y)
 LINUX_SITE := $(subst ",,$(strip $(CONFIG_EMBTK_LINUX_HAVE_MIRROR_SITE)))
 else
 LINUX_SITE := http://ftp.kernel.org/pub/linux/kernel/v2.6
 endif
+LINUX_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LINUX_PACKAGE := linux-$(LINUX_VERSION).tar.bz2
+LINUX_SRC_DIR := $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 LINUX_BUILD_DIR := $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 
 kernel-headers_install:  download_linux $(LINUX_BUILD_DIR)/.decompressed
@@ -41,11 +44,8 @@ kernel-headers_install:  download_linux $(LINUX_BUILD_DIR)/.decompressed
 	$(MAKE) -C $(LINUX_BUILD_DIR) headers_install INSTALL_HDR_PATH=$(HOSTTOOLS)/usr
 
 download_linux: 
-	@test -e $(DOWNLOAD_DIR)/$(LINUX_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LINUX_PACKAGE) $(LINUX_SITE)/$(LINUX_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,LINUX)
 
 $(LINUX_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_MSG,$(LINUX_PACKAGE))
-	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(LINUX_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_HOSTPKG,LINUX)
 
