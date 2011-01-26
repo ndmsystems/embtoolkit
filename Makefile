@@ -42,7 +42,8 @@ export EMBTK_ROOT
 CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
 	  else echo sh; fi ; fi)
-export CONFIG_SHELL
+SHELL := $(CONFIG_SHELL)
+export SHELL CONFIG_SHELL
 
 HOST_ARCH := `$(CONFIG_SHELL) $(EMBTK_ROOT)/scripts/config.guess`
 HOST_BUILD := $(HOST_ARCH)
