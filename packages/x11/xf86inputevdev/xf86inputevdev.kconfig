@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_XF86INPUTEVDEV
 	bool "Have xf86-input-evdev"
+	select EMBTK_XF86INPUTEVDEV_PKG_IS_TARBZ2
 	depends on EMBTK_HAVE_XSERVER_XORG
 	help
 		X.Org evdev input driver.
@@ -34,6 +35,8 @@ choice
 	help
 	 Here you can choose which version of xf86inputevdev you want to use.
 
+	config  EMBTK_XF86INPUTEVDEV_VERSION_2_6_0
+		bool "xf86-input-evdev-2.6.0"
 	config  EMBTK_XF86INPUTEVDEV_VERSION_2_5_0
 		bool "xf86-input-evdev-2.5.0"
 	config  EMBTK_XF86INPUTEVDEV_VERSION_2_4_0
@@ -42,10 +45,18 @@ endchoice
 
 config EMBTK_XF86INPUTEVDEV_VERSION_STRING
 	string
+	default "2.6.0"		if EMBTK_XF86INPUTEVDEV_VERSION_2_6_0
 	default "2.5.0"		if EMBTK_XF86INPUTEVDEV_VERSION_2_5_0
 	default "2.4.0"		if EMBTK_XF86INPUTEVDEV_VERSION_2_4_0
 
 config EMBTK_XF86INPUTEVDEV_NEED_PATCH
 	bool
 
-
+config EMBTK_XF86INPUTEVDEV_NEED_PATCH
+	bool
+config EMBTK_XF86INPUTEVDEV_NEED_AUTORECONF
+	bool
+config EMBTK_XF86INPUTEVDEV_PKG_IS_TARGZ
+	bool
+config EMBTK_XF86INPUTEVDEV_PKG_IS_TARBZ2
+	bool
