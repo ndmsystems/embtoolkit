@@ -239,8 +239,9 @@ define EMBTK_PRINT_CONFIGURE_OPTS
 endef
 define EMBTK_CONFIGURE_PKG
 	$(call EMBTK_GENERIC_MSG,"Configure $($(1)_PACKAGE)...")
-	@test -e $($(1)_SRC_DIR)/configure.ac || exit 1
-	$(call  EMBTK_CONFIGURE_AUTORECONF_PKG,$(1))
+	@test -e $($(1)_SRC_DIR)/configure.ac ||			\
+	test -e $($(1)_SRC_DIR)/configure.in || exit 1
+	$(call EMBTK_CONFIGURE_AUTORECONF_PKG,$(1))
 	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$($(1)_CONFIGURE_OPTS)")
 	@cd $($(1)_BUILD_DIR);						\
 	CC=$(TARGETCC_CACHED)						\
@@ -259,11 +260,13 @@ define EMBTK_CONFIGURE_PKG
 	CPPFLAGS="-I$(SYSROOT)/usr/include"				\
 	PKG_CONFIG=$(PKGCONFIG_BIN)					\
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)				\
+	ac_cv_func_malloc_0_nonnull=yes					\
+	ac_cv_func_realloc_0_nonnull=yes				\
 	$($(1)_CONFIGURE_ENV)						\
 	$(CONFIG_SHELL) $($(1)_SRC_DIR)/configure			\
 	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)		\
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)		\
-	--prefix=/usr $($(1)_CONFIGURE_OPTS)
+	--prefix=/usr --disable-rpath $($(1)_CONFIGURE_OPTS)
 	@touch $($(1)_BUILD_DIR)/.configured
 	$(call EMBTK_KILL_LT_RPATH,"$($(1)_BUILD_DIR)")
 endef
