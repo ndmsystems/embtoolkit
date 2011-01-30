@@ -23,11 +23,14 @@
 # \date         December 2009
 ################################################################################
 
-LIBNIH_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBNIH_VERSION_STRING)))
-LIBNIH_MAJOR_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBNIH_MAJOR_VERSION_STRING)))
+LIBNIH_NAME := libnih
+LIBNIH_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBNIH)
+LIBNIH_MAJOR_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBNIH_MAJOR)
 LIBNIH_SITE := http://launchpad.net/libnih/$(LIBNIH_MAJOR_VERSION)/$(LIBNIH_VERSION)/+download
+LIBNIH_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBNIH_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libnih/$(LIBNIH_VERSION)
 LIBNIH_PACKAGE := libnih-$(LIBNIH_VERSION).tar.gz
+LIBNIH_SRC_DIR := $(PACKAGES_BUILD)/libnih-$(LIBNIH_VERSION)
 LIBNIH_BUILD_DIR := $(PACKAGES_BUILD)/libnih-$(LIBNIH_VERSION)
 
 LIBNIH_BINS = nih-dbus-tool
@@ -46,7 +49,6 @@ $(LIBNIH_BUILD_DIR)/.installed: $(LIBNIH_DEPS) download_libnih \
 	$(LIBNIH_BUILD_DIR)/.decompressed $(LIBNIH_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libnih-$(LIBNIH_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(LIBNIH_BUILD_DIR))
 	$(Q)$(MAKE) -C $(LIBNIH_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBNIH_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -54,56 +56,13 @@ $(LIBNIH_BUILD_DIR)/.installed: $(LIBNIH_DEPS) download_libnih \
 	@touch $@
 
 download_libnih:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(LIBNIH_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(LIBNIH_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LIBNIH_PACKAGE) \
-	$(LIBNIH_SITE)/$(LIBNIH_PACKAGE)
-ifeq ($(CONFIG_EMBTK_LIBNIH_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/libnih-$(LIBNIH_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/libnih-$(LIBNIH_VERSION).patch \
-	$(LIBNIH_PATCH_SITE)/libnih-$(LIBNIH_VERSION)-*.patch
-endif
+	$(call EMBTK_DOWNLOAD_PKG,LIBNIH)
 
 $(LIBNIH_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LIBNIH_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(LIBNIH_PACKAGE)
-ifeq ($(CONFIG_EMBTK_LIBNIH_NEED_PATCH),y)
-	@cd $(LIBNIH_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/libnih-$(LIBNIH_VERSION).patch
-endif
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,LIBNIH)
 
 $(LIBNIH_BUILD_DIR)/.configured:
-	$(Q)cd $(LIBNIH_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	NIH_DBUS_TOOL=nih-dbus-tool \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --disable-rpath
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,LIBNIH)
 
 libnih_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libnih...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBNIH_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBNIH_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBNIH_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBNIH_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBNIH_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBNIH_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,LIBNIH)
