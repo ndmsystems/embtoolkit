@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_ATK
 	bool "Have atk"
+	select EMBTK_ATK_PKG_IS_TARBZ2
 	help
 		GNOME Accessibility is the suite of software services and
 		support in GNOME that allows people with disabilities to utilize
@@ -92,3 +93,11 @@ config EMBTK_ATK_VERSION_STRING
 	default "1.30.0"	if EMBTK_ATK_VERSION_1_30_0
 	default "1.28.0"	if EMBTK_ATK_VERSION_1_28_0
 
+config EMBTK_ATK_NEED_PATCH
+	bool
+config EMBTK_ATK_NEED_AUTORECONF
+	bool
+config EMBTK_ATK_PKG_IS_TARGZ
+	bool
+config EMBTK_ATK_PKG_IS_TARBZ2
+	bool

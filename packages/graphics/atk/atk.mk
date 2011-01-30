@@ -23,10 +23,14 @@
 # \date         December 2009
 ################################################################################
 
-ATK_MAJOR_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_ATK_MAJOR_VERSION_STRING)))
-ATK_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_ATK_VERSION_STRING)))
+ATK_NAME := atk
+ATK_VERSION := $(call EMBTK_GET_PKG_VERSION,ATK)
+ATK_MAJOR_VERSION := $(call EMBTK_GET_PKG_VERSION,ATK_MAJOR)
 ATK_SITE := http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_MAJOR_VERSION)
+ATK_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+ATK_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/atk/$(ATK_VERSION)
 ATK_PACKAGE := atk-$(ATK_VERSION).tar.bz2
+ATK_SRC_DIR := $(PACKAGES_BUILD)/atk-$(ATK_VERSION)
 ATK_BUILD_DIR := $(PACKAGES_BUILD)/atk-$(ATK_VERSION)
 
 ATK_BINS =
@@ -51,46 +55,13 @@ $(ATK_BUILD_DIR)/.installed: glib_install download_atk \
 	@touch $@
 
 download_atk:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(ATK_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(ATK_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(ATK_PACKAGE) \
-	$(ATK_SITE)/$(ATK_PACKAGE)
+	$(call EMBTK_DOWNLOAD,ATK)
 
 $(ATK_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(ATK_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(ATK_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,ATK)
 
 $(ATK_BUILD_DIR)/.configured:
-	$(Q)cd $(ATK_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,ATK)
 
 atk_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup atk...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(ATK_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(ATK_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(ATK_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(ATK_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(ATK_PKGCONFIGS)
-	$(Q)-rm -rf $(ATK_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,ATK)
