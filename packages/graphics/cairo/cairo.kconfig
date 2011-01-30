@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_CAIRO
 	bool "Have cairo"
+	select EMBTK_CAIRO_PKG_IS_TARGZ
 	select EMBTK_HAVE_PIXMAN
 
 	help
@@ -66,3 +67,11 @@ config EMBTK_CAIRO_VERSION_STRING
 	default "1.8.9"		if EMBTK_CAIRO_VERSION_1_8_9
 	default "1.8.8"		if EMBTK_CAIRO_VERSION_1_8_8
 
+config EMBTK_CAIRO_NEED_PATCH
+	bool
+config EMBTK_CAIRO_NEED_AUTORECONF
+	bool
+config EMBTK_CAIRO_PKG_IS_TARGZ
+	bool
+config EMBTK_CAIRO_PKG_IS_TARBZ2
+	bool

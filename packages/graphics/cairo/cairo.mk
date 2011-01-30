@@ -23,9 +23,13 @@
 # \date         December 2009
 ################################################################################
 
-CAIRO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_CAIRO_VERSION_STRING)))
+CAIRO_NAME := cairo
+CAIRO_VERSION := $(call EMBTK_GET_PKG_VERSION,CAIRO)
 CAIRO_SITE := http://www.cairographics.org/releases
+CAIRO_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+CAIRO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/cairo/$(CAIRO_VERSION)
 CAIRO_PACKAGE := cairo-$(CAIRO_VERSION).tar.gz
+CAIRO_SRC_DIR := $(PACKAGES_BUILD)/cairo-$(CAIRO_VERSION)
 CAIRO_BUILD_DIR := $(PACKAGES_BUILD)/cairo-$(CAIRO_VERSION)
 
 CAIRO_BINS =
@@ -53,6 +57,8 @@ CAIRO_CONFIG_OPTS-n += --enable-xcb=no
 CAIRO_CONFIG_OPTS-n += --without-x
 endif
 
+CAIRO_CONFIGURE_OPTS := $(CAIRO_CONFIG_OPTS-n) $(CAIRO_CONFIG_OPTS-y)
+
 cairo_install:
 	@test -e $(CAIRO_BUILD_DIR)/.installed || \
 	$(MAKE) $(CAIRO_BUILD_DIR)/.installed
@@ -61,7 +67,6 @@ $(CAIRO_BUILD_DIR)/.installed: $(CAIRO_DEPS) download_cairo \
 	$(CAIRO_BUILD_DIR)/.decompressed $(CAIRO_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	cairo-$(CAIRO_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH, $(CAIRO_BUILD_DIR))
 	$(Q)$(MAKE) -C $(CAIRO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(CAIRO_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -69,45 +74,13 @@ $(CAIRO_BUILD_DIR)/.installed: $(CAIRO_DEPS) download_cairo \
 	@touch $@
 
 download_cairo:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(CAIRO_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(CAIRO_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(CAIRO_PACKAGE) \
-	$(CAIRO_SITE)/$(CAIRO_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,CAIRO)
 
 $(CAIRO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(CAIRO_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(CAIRO_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,CAIRO)
 
 $(CAIRO_BUILD_DIR)/.configured:
-	$(Q)cd $(CAIRO_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include" \
-	CXXFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr $(CAIRO_CONFIG_OPTS-y)  $(CAIRO_CONFIG_OPTS-n)
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,CAIRO)
 
 cairo_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup cairo...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(CAIRO_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(CAIRO_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(CAIRO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(CAIRO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(CAIRO_PKGCONFIGS)
-	$(Q)-rm -rf $(CAIRO_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,CAIRO)
