@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_OPENSSL
 	bool "Have OpenSSL"
+	select EMBTK_OPENSSL_PKG_IS_TARGZ
 	help
 		The OpenSSL Project is a collaborative effort to develop a
 		robust, commercial-grade, full-featured, and Open Source toolkit
@@ -36,6 +37,9 @@ choice
 	depends on EMBTK_HAVE_OPENSSL
 	help
 		Here you can choose which version of openssl you want to use.
+
+	config  EMBTK_OPENSSL_VERSION_0_9_8Q
+		bool "openssl-0.9.8q"
 	config  EMBTK_OPENSSL_VERSION_0_9_8O
 		bool "openssl-0.9.8o"
 		select EMBTK_OPENSSL_NEED_PATCH
@@ -49,10 +53,16 @@ endchoice
 
 config EMBTK_OPENSSL_VERSION_STRING
 	string
+	default "0.9.8q"	if EMBTK_OPENSSL_VERSION_0_9_8Q
 	default "0.9.8o"	if EMBTK_OPENSSL_VERSION_0_9_8O
 	default "0.9.8n"	if EMBTK_OPENSSL_VERSION_0_9_8N
 	default "0.9.8l"	if EMBTK_OPENSSL_VERSION_0_9_8L
 
 config EMBTK_OPENSSL_NEED_PATCH
 	bool
-
+config EMBTK_OPENSSL_NEED_AUTORECONF
+	bool
+config EMBTK_OPENSSL_PKG_IS_TARGZ
+	bool
+config EMBTK_OPENSSL_PKG_IS_TARBZ2
+	bool

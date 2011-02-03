@@ -23,10 +23,13 @@
 # \date         February 2010
 ################################################################################
 
-OPENSSL_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_OPENSSL_VERSION_STRING)))
+OPENSSL_NAME := openssl
+OPENSSL_VERSION := $(call EMBTK_GET_PKG_VERSION,OPENSSL)
 OPENSSL_SITE := ftp://ftp.openssl.org/source
+OPENSSL_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 OPENSSL_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/openssl/$(OPENSSL_VERSION)
 OPENSSL_PACKAGE := openssl-$(OPENSSL_VERSION).tar.gz
+OPENSSL_SRC_DIR := $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
 OPENSSL_BUILD_DIR := $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
 
 OPENSSL_ETC = ssl
@@ -62,33 +65,17 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	INSTALL_PREFIX=$(SYSROOT)/ LIBDIR=lib32 MANDIR=/usr/share/man install
 else
 	$(Q)$(MAKE) -C $(OPENSSL_BUILD_DIR) \
-	INSTALL_PREFIX=$(SYSROOT)/ LIBDIR=lib MANDIR=/usr/share/man install
+	INSTALL_PREFIX=$(SYSROOT) LIBDIR=lib MANDIR=/usr/share/man install
 endif
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	@touch $@
 
 download_openssl:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(OPENSSL_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(OPENSSL_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(OPENSSL_PACKAGE) \
-	$(OPENSSL_SITE)/$(OPENSSL_PACKAGE)
-ifeq	($(CONFIG_EMBTK_OPENSSL_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/openssl-$(OPENSSL_VERSION).patch || \
-	wget $(OPENSSL_PATCH_SITE)/openssl-$(OPENSSL_VERSION)-*.patch \
-	-O $(DOWNLOAD_DIR)/openssl-$(OPENSSL_VERSION).patch
-endif
-
+	$(call EMBTK_DOWNLOAD_PKG,OPENSSL)
 
 $(OPENSSL_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(OPENSSL_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(OPENSSL_PACKAGE)
-ifeq	($(CONFIG_EMBTK_OPENSSL_NEED_PATCH),y)
-	cd $(OPENSSL_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/openssl-$(OPENSSL_VERSION).patch
-endif
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,OPENSSL)
 
 $(OPENSSL_BUILD_DIR)/.configured:
 	$(Q)cd $(OPENSSL_BUILD_DIR); \
@@ -97,14 +84,7 @@ $(OPENSSL_BUILD_DIR)/.configured:
 	@touch $@
 
 openssl_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup openssl-$(OPENSSL_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(OPENSSL_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(OPENSSL_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(OPENSSL_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(OPENSSL_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(OPENSSL_PKGCONFIGS)
-	$(Q)-cd $(SYSROOT)/etc; rm -rf $(OPENSSL_ETC)
-	$(Q)-rm -rf $(OPENSSL_BUILD_DIR)*
+	$(call EMBTK_CLEANUP_PKG,OPENSSL)
 
 .PHONY: $(OPENSSL_BUILD_DIR)/.special
 
