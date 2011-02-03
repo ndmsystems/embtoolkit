@@ -266,7 +266,8 @@ define EMBTK_CONFIGURE_PKG
 	$(CONFIG_SHELL) $($(1)_SRC_DIR)/configure			\
 	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)		\
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)		\
-	--prefix=/usr --disable-rpath $($(1)_CONFIGURE_OPTS)
+	--prefix=/usr --sysconfdir=/etc --disable-rpath			\
+	$($(1)_CONFIGURE_OPTS)
 	@touch $($(1)_BUILD_DIR)/.configured
 	$(call EMBTK_KILL_LT_RPATH,"$($(1)_BUILD_DIR)")
 endef
@@ -368,6 +369,9 @@ endef
 #
 define EMBTK_CLEANUP_PKG
 	$(call EMBTK_GENERIC_MESSAGE,"Cleanup $($(1)_NAME)...")
+	@-if [ "x$($(1)_ETC)" != "x" ]; then				\
+		cd $(SYSROOT)/etc; rm -rf $($(1)_ETC);			\
+	fi
 	@-if [ "x$($(1)_BINS)" != "x" ]; then				\
 		cd $(SYSROOT)/usr/bin; rm -rf $($(1)_BINS);		\
 	fi
