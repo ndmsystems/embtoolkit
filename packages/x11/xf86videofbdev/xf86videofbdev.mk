@@ -51,7 +51,7 @@ $(XF86VIDEOFBDEV_BUILD_DIR)/.installed: $(XF86VIDEOFBDEV_DEPS) \
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	xf86videofbdev-$(XF86VIDEOFBDEV_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(XF86VIDEOFBDEV_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(XF86VIDEOFBDEV_BUILD_DIR) DESTDIR=$(SYSROOT)/testfbdev install
+	$(Q)$(MAKE) -C $(XF86VIDEOFBDEV_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	@touch $@
