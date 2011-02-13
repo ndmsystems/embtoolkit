@@ -23,9 +23,13 @@
 # \date         December 2009
 ################################################################################
 
-PIXMAN_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_PIXMAN_VERSION_STRING)))
+PIXMAN_NAME := pixman
+PIXMAN_VERSION := $(call EMBTK_GET_PKG_VERSION,PIXMAN)
 PIXMAN_SITE := http://www.cairographics.org/releases
+PIXMAN_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+PIXMAN_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/pixman/$(PIXMAN_VERSION)
 PIXMAN_PACKAGE := pixman-$(PIXMAN_VERSION).tar.gz
+PIXMAN_SRC_DIR := $(PACKAGES_BUILD)/pixman-$(PIXMAN_VERSION)
 PIXMAN_BUILD_DIR := $(PACKAGES_BUILD)/pixman-$(PIXMAN_VERSION)
 
 PIXMAN_BINS =
@@ -42,7 +46,6 @@ $(PIXMAN_BUILD_DIR)/.installed: download_pixman \
 	$(PIXMAN_BUILD_DIR)/.decompressed $(PIXMAN_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	pixman-$(PIXMAN_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH, $(PIXMAN_BUILD_DIR))
 	$(Q)$(MAKE) -C $(PIXMAN_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(PIXMAN_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -50,46 +53,13 @@ $(PIXMAN_BUILD_DIR)/.installed: download_pixman \
 	@touch $@
 
 download_pixman:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(PIXMAN_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(PIXMAN_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(PIXMAN_PACKAGE) \
-	$(PIXMAN_SITE)/$(PIXMAN_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,PIXMAN)
 
 $(PIXMAN_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(PIXMAN_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(PIXMAN_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,PIXMAN)
 
 $(PIXMAN_BUILD_DIR)/.configured:
-	$(Q)cd $(PIXMAN_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,PIXMAN)
 
 pixman_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup pixman-$(PIXMAN_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(PIXMAN_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(PIXMAN_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(PIXMAN_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(PIXMAN_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(PIXMAN_PKGCONFIGS)
-	$(Q)-rm -rf $(PIXMAN_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,PIXMAN)
