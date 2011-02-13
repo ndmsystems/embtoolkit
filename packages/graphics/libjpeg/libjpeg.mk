@@ -23,15 +23,21 @@
 # \date         October 2009
 ################################################################################
 
-LIBJPEG_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBJPEG_VERSION_STRING)))
+LIBJPEG_NAME := jpeg
+LIBJPEG_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBJPEG)
 LIBJPEG_SITE := http://www.ijg.org/files
+LIBJPEG_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBJPEG_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/jpeg/$(LIBJPEG_VERSION)
 LIBJPEG_PACKAGE := jpegsrc.v$(LIBJPEG_VERSION).tar.gz
+LIBJPEG_SRC_DIR := $(PACKAGES_BUILD)/jpeg-$(LIBJPEG_VERSION)
 LIBJPEG_BUILD_DIR := $(PACKAGES_BUILD)/jpeg-$(LIBJPEG_VERSION)
 
 LIBJPEG_BINS := cjpeg djpeg jpegtran rdjpgcom wrjpgcom
 LIBJPEG_SBINS :=
 LIBJPEG_LIBS := libjpeg*
-LIBJEPG_INCLUDES := jconfig.h jerror.h jmorecfg.h jpeglib.h
+LIBJPEG_INCLUDES := jconfig.h jerror.h jmorecfg.h jpeglib.h
+
+LIBJPEG_CONFIGURE_OPTS := --program-suffix=""
 
 libjpeg_install:
 	@test -e $(LIBJPEG_BUILD_DIR)/.installed || \
@@ -41,52 +47,19 @@ $(LIBJPEG_BUILD_DIR)/.installed: download_libjpeg \
 	$(LIBJPEG_BUILD_DIR)/.decompressed $(LIBJPEG_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	jpeg-$(LIBJPEG_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH, $(LIBJPEG_BUILD_DIR))
 	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	@touch $@
 
 download_libjpeg:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(LIBJPEG_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(LIBJPEG_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LIBJPEG_PACKAGE) \
-	$(LIBJPEG_SITE)/$(LIBJPEG_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,LIBJPEG)
 
 $(LIBJPEG_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LIBJPEG_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzvf $(DOWNLOAD_DIR)/$(LIBJPEG_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,LIBJPEG)
 
 $(LIBJPEG_BUILD_DIR)/.configured:
-	cd $(LIBJPEG_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --enable-static=no --program-suffix=""
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,LIBJPEG)
 
 libjpeg_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup jpeg-$(LIBJPEG_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBJPEG_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBJPEG_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBJPEG_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBJPEG_LIBS)
-	$(Q)-rm -rf $(LIBJPEG_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,LIBJPEG)

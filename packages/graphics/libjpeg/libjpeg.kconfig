@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_LIBJPEG
 	bool "Have libjpeg"
+	select EMBTK_LIBJPEG_PKG_IS_TARGZ
 	help
 		JPEG (pronounced "jay-peg") is a standardized image compression
 		mechanism. JPEG stands for Joint Photographic Experts Group, the
@@ -46,3 +47,12 @@ config	EMBTK_LIBJPEG_VERSION_STRING
 	string
 	default "8"		if EMBTK_LIBJPEG_VERSION_V8
 	default "7"		if EMBTK_LIBJPEG_VERSION_V7
+
+config EMBTK_LIBJPEG_NEED_PATCH
+	bool
+config EMBTK_LIBJPEG_NEED_AUTORECONF
+	bool
+config EMBTK_LIBJPEG_PKG_IS_TARGZ
+	bool
+config EMBTK_LIBJPEG_PKG_IS_TARBZ2
+	bool
