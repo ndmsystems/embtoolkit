@@ -23,10 +23,13 @@
 # \date         June 2010
 ################################################################################
 
-IMLIB2_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_IMLIB2_VERSION_STRING)))
+IMLIB2_NAME := imlib2
+IMLIB2_VERSION := $(call EMBTK_GET_PKG_VERSION,IMLIB2)
 IMLIB2_SITE := http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
+IMLIB2_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 IMLIB2_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/imlib2/$(IMLIB2_VERSION)
 IMLIB2_PACKAGE := imlib2-$(IMLIB2_VERSION).tar.gz
+IMLIB2_SRC_DIR := $(PACKAGES_BUILD)/imlib2-$(IMLIB2_VERSION)
 IMLIB2_BUILD_DIR := $(PACKAGES_BUILD)/imlib2-$(IMLIB2_VERSION)
 
 IMLIB2_BINS = imlib2_bumpmap imlib2_colorspace imlib2-config imlib2_conv \
@@ -47,7 +50,6 @@ $(IMLIB2_BUILD_DIR)/.installed: $(IMLIB2_DEPS) download_imlib2 \
 	$(IMLIB2_BUILD_DIR)/.decompressed $(IMLIB2_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	imlib2-$(IMLIB2_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(IMLIB2_BUILD_DIR))
 	$(Q)$(MAKE) -C $(IMLIB2_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(IMLIB2_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -55,57 +57,16 @@ $(IMLIB2_BUILD_DIR)/.installed: $(IMLIB2_DEPS) download_imlib2 \
 	@touch $@
 
 download_imlib2:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(IMLIB2_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(IMLIB2_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(IMLIB2_PACKAGE) \
-	$(IMLIB2_SITE)/$(IMLIB2_PACKAGE)
-ifeq ($(CONFIG_EMBTK_IMLIB2_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/imlib2-$(IMLIB2_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/imlib2-$(IMLIB2_VERSION).patch \
-	$(IMLIB2_PATCH_SITE)/imlib2-$(IMLIB2_VERSION)-*.patch
-endif
+	$(call EMBTK_DOWNLOAD_PKG,IMLIB2)
 
 $(IMLIB2_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(IMLIB2_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(IMLIB2_PACKAGE)
-ifeq ($(CONFIG_EMBTK_IMLIB2_NEED_PATCH),y)
-	@cd $(PACKAGES_BUILD)/imlib2-$(IMLIB2_VERSION); \
-	patch -p1 < $(DOWNLOAD_DIR)/imlib2-$(IMLIB2_VERSION).patch
-endif
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,IMLIB2)
 
 $(IMLIB2_BUILD_DIR)/.configured:
-	$(Q)cd $(IMLIB2_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,IMLIB2)
 
 imlib2_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup imlib2...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(IMLIB2_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(IMLIB2_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(IMLIB2_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(IMLIB2_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(IMLIB2_PKGCONFIGS)
-	$(Q)-rm -rf $(IMLIB2_BUILD_DIR)*
+	$(call EMBTK_CLEANUP_PKG,IMLIB2)
 
 .PHONY: $(IMLIB2_BUILD_DIR)/.special
 
