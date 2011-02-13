@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_FREETYPE
 	bool "Have FreeType"
+	select EMBTK_FREETYPE_PKG_IS_TARBZ2
 	select EMBTK_HAVE_ZLIB
 	help
 	 FreeType 2 is a software font engine that is designed to be small,
@@ -76,3 +77,11 @@ config EMBTK_FREETYPE_VERSION_STRING
 	default "2.3.10"	if EMBTK_FREETYPE_VERSION_2_3_10
 	default "2.3.9"		if EMBTK_FREETYPE_VERSION_2_3_9
 
+config EMBTK_FREETYPE_NEED_PATCH
+	bool
+config EMBTK_FREETYPE_NEED_AUTORECONF
+	bool
+config EMBTK_FREETYPE_PKG_IS_TARGZ
+	bool
+config EMBTK_FREETYPE_PKG_IS_TARBZ2
+	bool

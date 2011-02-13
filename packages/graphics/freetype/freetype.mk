@@ -23,9 +23,13 @@
 # \date         October 2009
 ################################################################################
 
-FREETYPE_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_FREETYPE_VERSION_STRING)))
+FREETYPE_NAME := freetype
+FREETYPE_VERSION := $(call EMBTK_GET_PKG_VERSION,FREETYPE)
 FREETYPE_SITE := http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+FREETYPE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+FREETYPE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/freetype/$(FREETYPE_VERSION)
 FREETYPE_PACKAGE := freetype-$(FREETYPE_VERSION).tar.bz2
+FREETYPE_SRC_DIR := $(PACKAGES_BUILD)/freetype-$(FREETYPE_VERSION)
 FREETYPE_BUILD_DIR := $(PACKAGES_BUILD)/freetype-$(FREETYPE_VERSION)
 
 FREETYPE_BINS = freetype*
@@ -55,43 +59,13 @@ $(FREETYPE_BUILD_DIR)/.installed: $(FREETYPE_DEPS) download_freetype \
 	@touch $@
 
 download_freetype:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(FREETYPE_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(FREETYPE_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(FREETYPE_PACKAGE) \
-	$(FREETYPE_SITE)/$(FREETYPE_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,FREETYPE)
 
 $(FREETYPE_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(FREETYPE_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(FREETYPE_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,FREETYPE)
 
 $(FREETYPE_BUILD_DIR)/.configured:
-	$(Q)cd $(FREETYPE_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --enable-static=no --libdir=/usr/$(LIBDIR)
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,FREETYPE)
 
 freetype_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup freetype...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(FREETYPE_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(FREETYPE_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FREETYPE_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(FREETYPE_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(FREETYPE_PKGCONFIGS)
-	$(Q)-rm -rf $(FREETYPE_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,FREETYPE)
