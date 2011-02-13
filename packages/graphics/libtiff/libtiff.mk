@@ -52,7 +52,7 @@ $(LIBTIFF_BUILD_DIR)/.installed: download_libtiff \
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libtiff-$(LIBTIFF_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBTIFF_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBTIFF_BUILD_DIR) DESTDIR=$(SYSROOT)/testlibtiff install
+	$(Q)$(MAKE) -C $(LIBTIFF_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	@touch $@
