@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_LIBPNG
 	bool "Have libpng"
+	select EMBTK_LIBPNG_PKG_IS_TARGZ
 	select EMBTK_HAVE_ZLIB
 	help
 		libpng is the reference library for use in applications that
@@ -63,3 +64,11 @@ config EMBTK_LIBPNG_VERSION_STRING
 	default "1.2.41"	if EMBTK_LIBPNG_VERSION_1_2_41
 	default "1.2.40"	if EMBTK_LIBPNG_VERSION_1_2_40
 
+config EMBTK_LIBPNG_NEED_PATCH
+	bool
+config EMBTK_LIBPNG_NEED_AUTORECONF
+	bool
+config EMBTK_LIBPNG_PKG_IS_TARGZ
+	bool
+config EMBTK_LIBPNG_PKG_IS_TARBZ2
+	bool
