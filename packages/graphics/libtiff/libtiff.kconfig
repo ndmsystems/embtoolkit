@@ -2,18 +2,19 @@
 # Embtoolkit
 # Copyright(C) 2009-2011 GAYE Abdoulaye Walsimou. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         libtiff.kconfig
@@ -24,6 +25,7 @@
 
 config EMBTK_HAVE_LIBTIFF
 	bool "Have libtiff"
+	select EMBTK_LIBTIFF_PKG_IS_TARGZ
 	help
 		libtiff provides support for the Tag Image File Format (TIFF), a
 		widely used format for storing image data.
@@ -36,7 +38,7 @@ choice
 	prompt "libtiff version you wish"
 	depends on EMBTK_HAVE_LIBTIFF
 	help
-	 Here you can choose which version of libtiff you want to use.
+		Here you can choose which version of libtiff you want to use.
 
 	config  EMBTK_LIBTIFF_VERSION_3_9_2
 		bool "libtiff-3.9.2"
@@ -46,3 +48,11 @@ config EMBTK_LIBTIFF_VERSION_STRING
 	string
 	default "3.9.2"		if EMBTK_LIBTIFF_VERSION_3_9_2
 
+config EMBTK_LIBTIFF_NEED_PATCH
+	bool
+config EMBTK_LIBTIFF_NEED_AUTORECONF
+	bool
+config EMBTK_LIBTIFF_PKG_IS_TARGZ
+	bool
+config EMBTK_LIBTIFF_PKG_IS_TARBZ2
+	bool
