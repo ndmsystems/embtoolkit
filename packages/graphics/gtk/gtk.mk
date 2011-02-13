@@ -23,10 +23,14 @@
 # \date         December 2009
 ################################################################################
 
-GTK_MAJOR_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GTK_MAJOR_VERSION_STRING)))
-GTK_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GTK_VERSION_STRING)))
+GTK_NAME := gtk+
+GTK_MAJOR_VERSION := $(call EMBTK_GET_PKG_VERSION,GTK_MAJOR)
+GTK_VERSION := $(call EMBTK_GET_PKG_VERSION,GTK)
 GTK_SITE := http://ftp.gnome.org/pub/gnome/sources/gtk+/$(GTK_MAJOR_VERSION)
+GTK_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+GTK_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/gtk/$(GTK_VERSION)
 GTK_PACKAGE := gtk+-$(GTK_VERSION).tar.bz2
+GTK_SRC_DIR := $(PACKAGES_BUILD)/gtk+-$(GTK_VERSION)
 GTK_BUILD_DIR := $(PACKAGES_BUILD)/gtk+-$(GTK_VERSION)
 
 GTK_BINS = gtk-* gdk-*
@@ -34,6 +38,7 @@ GTK_SBINS =
 GTK_INCLUDES = gail-* gtk-*
 GTK_LIBS = gtk-* libgail* libgdk-* libgdk_* libgtk-*
 GTK_PKGCONFIGS = gail*.pc gdk*.pc gtk*.pc
+GTK_ETC = gtk-*
 
 GTK_DEPS := libjpeg_install libpng_install libtiff_install fontconfig_install \
 		glib_install atk_install cairo_install pango_install
@@ -45,6 +50,10 @@ else
 GTK_BACKEND := --with-gdktarget=x11 --with-x --with-xinput=yes
 GTK_DEPS += libx11_install libxext_install libxrender_install xinput_install
 endif
+
+GTK_CONFIGURE_ENV := gio_can_sniff=yes
+GTK_CONFIGURE_OPTS := $(GTK_BACKEND)
+GTK_CONFIGURE_OPTS += --disable-cups --disable-gtk-doc --disable-glibtest
 
 gtk_install:
 	@test -e $(GTK_BUILD_DIR)/.installed || \
@@ -64,41 +73,13 @@ $(GTK_BUILD_DIR)/.installed: $(GTK_DEPS) download_gtk \
 	@touch $@
 
 download_gtk:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(GTK_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(GTK_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(GTK_PACKAGE) \
-	$(GTK_SITE)/$(GTK_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,GTK)
 
 $(GTK_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(GTK_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(GTK_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,GTK)
 
 $(GTK_BUILD_DIR)/.configured:
-	$(Q)cd $(GTK_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	gio_can_sniff=yes \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --disable-cups --disable-gtk-doc --disable-glibtest \
-	$(GTK_BACKEND) --libdir=/usr/$(LIBDIR)
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,GTK)
 
 $(GTK_BUILD_DIR)/.patchlibtool:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
@@ -137,11 +118,4 @@ $(GTK_BUILD_DIR)/.special:
 	@touch $@
 
 gtk_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup gtk-$(GTK_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(GTK_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(GTK_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(GTK_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(GTK_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(GTK_PKGCONFIGS)
-	$(Q)-rm -rf $(GTK_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,GTK)

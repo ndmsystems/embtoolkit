@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_GTK
 	bool "Have gtk+"
+	select EMBTK_GTK_PKG_IS_TARBZ2
 	select EMBTK_HAVE_GLIB
 	select EMBTK_HAVE_PANGO
 	select EMBTK_HAVE_ATK
@@ -100,3 +101,11 @@ config EMBTK_GTK_VERSION_STRING
 	default "2.18.6"	if EMBTK_GTK_VERSION_2_18_6
 	default "2.18.5"	if EMBTK_GTK_VERSION_2_18_5
 
+config EMBTK_GTK_NEED_PATCH
+	bool
+config EMBTK_GTK_NEED_AUTORECONF
+	bool
+config EMBTK_GTK_PKG_IS_TARGZ
+	bool
+config EMBTK_GTK_PKG_IS_TARBZ2
+	bool
