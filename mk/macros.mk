@@ -228,6 +228,8 @@ EMBTK_GET_PKG_VERSION = $(subst ",,$(strip $(CONFIG_EMBTK_$(1)_VERSION_STRING)))
 #
 define EMBTK_CONFIGURE_AUTORECONF_PKG
 @if [ "x$(CONFIG_EMBTK_$(1)_NEED_AUTORECONF)" == "xy" ]; then		\
+	test -e $($(1)_SRC_DIR)/configure.ac ||				\
+	test -e $($(1)_SRC_DIR)/configure.in || exit 1;			\
 	cd $($(1)_SRC_DIR);						\
 	$(AUTORECONF) --install -f;					\
 fi
@@ -239,9 +241,8 @@ define EMBTK_PRINT_CONFIGURE_OPTS
 endef
 define EMBTK_CONFIGURE_PKG
 	$(call EMBTK_GENERIC_MSG,"Configure $($(1)_PACKAGE)...")
-	@test -e $($(1)_SRC_DIR)/configure.ac ||			\
-	test -e $($(1)_SRC_DIR)/configure.in || exit 1
 	$(call EMBTK_CONFIGURE_AUTORECONF_PKG,$(1))
+	@test -e $($(1)_SRC_DIR)/configure || exit 1
 	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$($(1)_CONFIGURE_OPTS)")
 	@cd $($(1)_BUILD_DIR);						\
 	CC=$(TARGETCC_CACHED)						\
