@@ -53,6 +53,7 @@ choice
 
 	config  EMBTK_BB_VERSION_1_17_4
 		bool "busybox-1.17.4"
+		select EMBTK_BB_NEED_PATCH
 		depends on EMBTK_BB_VERSION_1_17_X
 
 	config  EMBTK_BB_VERSION_1_16_2
