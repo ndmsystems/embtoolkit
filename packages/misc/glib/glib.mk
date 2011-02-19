@@ -23,10 +23,14 @@
 # \date         December 2009
 ################################################################################
 
-GLIB_MAJOR_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GLIB_MAJOR_VERSION_STRING)))
-GLIB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GLIB_VERSION_STRING)))
+GLIB_NAME := glib
+GLIB_MAJOR_VERSION := $(call EMBTK_GET_PKG_VERSION,GLIB_MAJOR)
+GLIB_VERSION :=  $(call EMBTK_GET_PKG_VERSION,GLIB)
 GLIB_SITE := http://ftp.gnome.org/pub/gnome/sources/glib/$(GLIB_MAJOR_VERSION)
+GLIB_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+GLIB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/glib/$(GLIB_VERSION)
 GLIB_PACKAGE := glib-$(GLIB_VERSION).tar.bz2
+GLIB_SRC_DIR := $(PACKAGES_BUILD)/glib-$(GLIB_VERSION)
 GLIB_BUILD_DIR := $(PACKAGES_BUILD)/glib-$(GLIB_VERSION)
 
 GLIB_BINS = 	glib-genmarshal glib-gettextize glib-mkenums gobject-query \
@@ -35,6 +39,13 @@ GLIB_SBINS =
 GLIB_INCLUDES = gio-unix-* glib-*
 GLIB_LIBS = gio* libgio-* libglib-* libgmodule-* libgobject-* libgthread-* glib-*
 GLIB_PKGCONFIGS = gio-*.pc glib-*.pc gmodule-*.pc gobject-*.pc gthread-*.pc
+
+GLIB_CONFIGURE_ENV :=	glib_cv_stack_grows=no			\
+			glib_cv_uscore=no			\
+			ac_cv_func_posix_getpwuid_r=yes		\
+			ac_cv_func_nonposix_getpwuid_r=no	\
+			ac_cv_func_posix_getgrgid_r=yes
+GLIB_CONFIGURE_OPTS :=	--disable-fam
 
 GLIB_DEPS := zlib_target_install gettext_install
 
@@ -47,7 +58,6 @@ $(GLIB_BUILD_DIR)/.installed: $(GLIB_DEPS) \
 	$(GLIB_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	glib-$(GLIB_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH, $(GLIB_BUILD_DIR))
 	$(Q)$(MAKE) -C $(GLIB_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(GLIB_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -56,44 +66,13 @@ $(GLIB_BUILD_DIR)/.installed: $(GLIB_DEPS) \
 	@touch $@
 
 download_glib:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(GLIB_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(GLIB_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(GLIB_PACKAGE) \
-	$(GLIB_SITE)/$(GLIB_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,GLIB)
 
 $(GLIB_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(GLIB_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(GLIB_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,GLIB)
 
 $(GLIB_BUILD_DIR)/.configured:
-	$(Q)cd $(GLIB_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	glib_cv_stack_grows=no \
-	glib_cv_uscore=no \
-	ac_cv_func_posix_getpwuid_r=yes \
-	ac_cv_func_nonposix_getpwuid_r=no \
-	ac_cv_func_posix_getgrgid_r=yes \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --disable-fam
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,GLIB)
 
 #FIXME: this should be fixed in glib2 project
 $(GLIB_BUILD_DIR)/.patchlibtool:
@@ -119,11 +98,5 @@ $(GLIB_BUILD_DIR)/.patchlibtool:
 	mv libgthread-2.0.la.new $(SYSROOT)/usr/$(LIBDIR)/libgthread-2.0.la
 
 glib_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup glib...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(GLIB_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(GLIB_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(GLIB_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(GLIB_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(GLIB_PKGCONFIGS)
-	$(Q)-rm -rf $(GLIB_BUILD_DIR)*
+	$(call EMBTK_CLEANUP_PKG,GLIB)
 
