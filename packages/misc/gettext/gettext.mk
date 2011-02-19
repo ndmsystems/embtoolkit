@@ -2,18 +2,19 @@
 # Embtoolkit
 # Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         gettext.mk
@@ -22,20 +23,32 @@
 # \date         December 2009
 ################################################################################
 
-GETTEXT_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GETTEXT_VERSION_STRING)))
+GETTEXT_NAME := gettext
+GETTEXT_VERSION := $(call EMBTK_GET_PKG_VERSION,GETTEXT)
 GETTEXT_SITE := http://ftp.gnu.org/pub/gnu/gettext
+GETTEXT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GETTEXT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/gettext/$(GETTEXT_VERSION)
 GETTEXT_PACKAGE := gettext-$(GETTEXT_VERSION).tar.gz
+GETTEXT_SRC_DIR := $(PACKAGES_BUILD)/gettext-$(GETTEXT_VERSION)
 GETTEXT_BUILD_DIR := $(PACKAGES_BUILD)/gettext-$(GETTEXT_VERSION)
 
-GETTEXT_BINS =	autopoint gettext gettext.sh msgcat msgcomm msgen msgfilter \
-		msggrep msgmerge msguniq recode-sr-latin envsubst gettextize \
-		msgattrib msgcmp msgconv msgexec msgfmt msginit msgunfmt \
-		ngettext xgettext
+GETTEXT_BINS =	autopoint gettext gettext.sh msgcat msgcomm msgen	\
+		msgfilter msggrep msgmerge msguniq recode-sr-latin	\
+		envsubst gettextize msgattrib msgcmp msgconv msgexec	\
+		msgfmt msginit msgunfmt ngettext xgettext
 GETTEXT_SBINS =
 GETTEXT_INCLUDES = autosprintf.h gettext-po.h libintl.h
 GETTEXT_LIBS = gettext libgettext* libasprintf* libintl*
 GETTEXT_PKGCONFIGS =
+
+GETTEXT_CONFIGURE_ENV := gl_cv_func_wcwidth_works=yes			\
+			am_cv_func_iconv_works=yes			\
+			gt_cv_func_printf_posix=yes			\
+			gt_cv_int_divbyzero_sigfpe=no
+GETTEXT_CONFIGURE_OPTS := --enable-relocatable --with-included-gettext	\
+			--disable-rpath --disable-openmp --disable-java	\
+			--with-libxml2-prefix=$(SYSROOT)/usr		\
+			--disable-openmp
 
 GETTEXT_DEPS = ncurses_install libxml2_install
 
@@ -47,7 +60,6 @@ $(GETTEXT_BUILD_DIR)/.installed: $(GETTEXT_DEPS) download_gettext \
 	$(GETTEXT_BUILD_DIR)/.decompressed $(GETTEXT_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	gettext-$(GETTEXT_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH, $(GETTEXT_BUILD_DIR))
 	$(Q)$(MAKE) -C $(GETTEXT_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(GETTEXT_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -55,51 +67,16 @@ $(GETTEXT_BUILD_DIR)/.installed: $(GETTEXT_DEPS) download_gettext \
 	@touch $@
 
 download_gettext:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(GETTEXT_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(GETTEXT_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(GETTEXT_PACKAGE) \
-	$(GETTEXT_SITE)/$(GETTEXT_PACKAGE)
-ifeq ($(CONFIG_EMBTK_GETTEXT_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/gettext-$(GETTEXT_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/gettext-$(GETTEXT_VERSION).patch \
-	$(GETTEXT_PATCH_SITE)/gettext-$(GETTEXT_VERSION)-*.patch
-endif
+	$(call EMBTK_DOWNLOAD_PKG,GETTEXT)
 
 $(GETTEXT_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(GETTEXT_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(GETTEXT_PACKAGE)
-ifeq ($(CONFIG_EMBTK_GETTEXT_NEED_PATCH),y)
-	@cd $(GETTEXT_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/gettext-$(GETTEXT_VERSION).patch
-endif
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,GETTEXT)
 
 $(GETTEXT_BUILD_DIR)/.configured:
-	$(Q)cd $(GETTEXT_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) CXX=$(TARGETCXX_CACHED) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	gl_cv_func_wcwidth_works=yes \
-	am_cv_func_iconv_works=yes \
-	gt_cv_func_printf_posix=yes \
-	gt_cv_int_divbyzero_sigfpe=no \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --enable-relocatable --with-included-gettext \
-	--disable-rpath --disable-openmp --disable-java \
-	--with-libxml2-prefix=$(SYSROOT)/usr --disable-openmp
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,GETTEXT)
 
 gettext_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup gettext-$(GETTEXT_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(GETTEXT_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(GETTEXT_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(GETTEXT_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(GETTEXT_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(GETTEXT_PKGCONFIGS)
-	$(Q)-rm -rf $(GETTEXT_BUILD_DIR)*
+	$(call EMBTK_CLEANUP_PKG,GETTEXT)
 
 #FIXME: this should be fixed in gettext project
 $(GETTEXT_BUILD_DIR)/.patchlibtool:
