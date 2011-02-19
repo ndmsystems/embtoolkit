@@ -24,6 +24,7 @@
 
 config EMBTK_HAVE_NCURSES
 	bool "Have ncurses"
+	select EMBTK_NCURSES_PKG_IS_TARGZ
 	select KEMBTK_EGLIBC_OPTION_EGLIBC_CHARSETS if EMBTK_CLIB_EGLIBC
 	help
 		The Ncurses (new curses) library is a free software emulation of
@@ -48,3 +49,11 @@ config EMBTK_NCURSES_VERSION_STRING
 	string
 	default "5.7"	if EMBTK_NCURSES_VERSION_5_7
 
+config EMBTK_NCURSES_NEED_PATCH
+	bool
+config EMBTK_NCURSES_NEED_AUTORECONF
+	bool
+config EMBTK_NCURSES_PKG_IS_TARGZ
+	bool
+config EMBTK_NCURSES_PKG_IS_TARBZ2
+	bool

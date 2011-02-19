@@ -23,9 +23,13 @@
 # \date         January 2010
 ################################################################################
 
-NCURSES_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_NCURSES_VERSION_STRING)))
+NCURSES_NAME := ncurses
+NCURSES_VERSION := $(call EMBTK_GET_PKG_VERSION,NCURSES)
 NCURSES_SITE := http://ftp.gnu.org/pub/gnu/ncurses
 NCURSES_PACKAGE := ncurses-$(NCURSES_VERSION).tar.gz
+NCURSES_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+NCURSES_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/ncurses/$(NCURSES_VERSION)
+NCURSES_SRC_DIR := $(PACKAGES_BUILD)/ncurses-$(NCURSES_VERSION)
 NCURSES_BUILD_DIR := $(PACKAGES_BUILD)/ncurses-$(NCURSES_VERSION)
 
 NCURSES_BINS = captoinfo clear infocmp infotocap ncurses5-config reset tic toe \
@@ -39,6 +43,11 @@ NCURSES_LIBS = libcurses.a libform.a libform_g.a libmenu.a libmenu_g.a \
 		libncurses.a libncurses++.a libncurses_g.a libpanel.a \
 		libpanel_g.a terminfo
 NCURSES_PKGCONFIGS =
+
+NCURSES_CONFIGURE_OPTS := --disable-rpath --without-cxx-binding		\
+			--without-ada --disable-database		\
+			--enable-termcap --without-progs		\
+			--program-prefix=""
 
 ncurses_install:
 	@test -e $(NCURSES_BUILD_DIR)/.installed || \
@@ -54,52 +63,18 @@ $(NCURSES_BUILD_DIR)/.installed: download_ncurses \
 	@touch $@
 
 download_ncurses:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(NCURSES_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(NCURSES_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(NCURSES_PACKAGE) \
-	$(NCURSES_SITE)/$(NCURSES_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,NCURSES)
 
 $(NCURSES_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(NCURSES_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(NCURSES_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,NCURSES)
 
 $(NCURSES_BUILD_DIR)/.configured:
-	$(Q)cd $(NCURSES_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS) -fPIC" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --program-prefix="" \
-	--prefix=/usr --disable-rpath --without-cxx-binding --without-ada \
-	--libdir=/usr/$(LIBDIR) --disable-database --enable-termcap \
-	--without-progs
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,NCURSES)
 
 ncurses_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup ncurses...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(NCURSES_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(NCURSES_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(NCURSES_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(NCURSES_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(NCURSES_PKGCONFIGS)
-	$(Q)-rm -rf $(NCURSES_BUILD_DIR)*
+	$(call EMBTK_CLEANUP_PKG,NCURSES)
 
-.PHONY: $(NCURSES_BUILD_DIR)/.special
+.PHONY: $(NCURSES_BUILD_DIR)/.special ncurses_clean
 
 $(NCURSES_BUILD_DIR)/.special:
 	$(Q)mkdir -p $(ROOTFS)/usr/share
