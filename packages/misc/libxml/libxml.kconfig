@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_LIBXML2
 	bool "Have libxml2"
+	select EMBTK_LIBXML2_PKG_IS_TARGZ
 	help
 		libxml2
 choice
@@ -44,3 +45,11 @@ config EMBTK_LIBXML2_VERSION_STRING
 	default "2.7.7"		if EMBTK_LIBXML2_VERSION_2_7_7
 	default "2.7.6"		if EMBTK_LIBXML2_VERSION_2_7_6
 
+config EMBTK_LIBXML2_NEED_PATCH
+	bool
+config EMBTK_LIBXML2_NEED_AUTORECONF
+	bool
+config EMBTK_LIBXML2_PKG_IS_TARGZ
+	bool
+config EMBTK_LIBXML2_PKG_IS_TARBZ2
+	bool

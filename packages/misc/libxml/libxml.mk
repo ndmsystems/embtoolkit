@@ -23,9 +23,13 @@
 # \date         December 2009
 ################################################################################
 
-LIBXML2_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBXML2_VERSION_STRING)))
+LIBXML2_NAME := libxml2
+LIBXML2_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXML2)
 LIBXML2_SITE := ftp://xmlsoft.org/libxml2
+LIBXML2_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBXML2_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxml2/$(LIBXML2_VERSION)
 LIBXML2_PACKAGE := libxml2-$(LIBXML2_VERSION).tar.gz
+LIBXML2_SRC_DIR := $(PACKAGES_BUILD)/libxml2-$(LIBXML2_VERSION)
 LIBXML2_BUILD_DIR := $(PACKAGES_BUILD)/libxml2-$(LIBXML2_VERSION)
 
 LIBXML2_BINS = xml2-config xmlcatalog xmllint
@@ -33,7 +37,8 @@ LIBXML2_SBINS =
 LIBXML2_INCLUDES = libxml2
 LIBXML2_LIBS = libxml2* xml2Conf.sh
 LIBXML2_PKGCONFIGS = libxml*.pc
-LIBXML2_LIBTOOLS = libxml2.la
+
+LIBXML2_CONFIGURE_OPTS := --without-python
 
 libxml2_install:
 	@test -e $(LIBXML2_BUILD_DIR)/.installed || \
@@ -43,7 +48,6 @@ $(LIBXML2_BUILD_DIR)/.installed: download_libxml2 \
 	$(LIBXML2_BUILD_DIR)/.decompressed $(LIBXML2_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libxml2-$(LIBXML2_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH, $(LIBXML2_BUILD_DIR))
 	$(Q)$(MAKE) -C $(LIBXML2_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBXML2_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -51,47 +55,13 @@ $(LIBXML2_BUILD_DIR)/.installed: download_libxml2 \
 	@touch $@
 
 download_libxml2:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(LIBXML2_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(LIBXML2_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LIBXML2_PACKAGE) \
-	$(LIBXML2_SITE)/$(LIBXML2_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,LIBXML2)
 
 $(LIBXML2_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LIBXML2_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzvf $(DOWNLOAD_DIR)/$(LIBXML2_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,LIBXML2)
 
 $(LIBXML2_BUILD_DIR)/.configured:
-	$(Q)cd $(LIBXML2_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --disable-rpath --without-python
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,LIBXML2)
 
 libxml2_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup fontconfig-$(FONTCONFIG_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBXML2_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBXML2_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXML2_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXML2_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXML2_PKGCONFIGS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXML2_LIBTOOLS)
-	$(Q)-rm -rf $(LIBXML2_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,LIBXML2)
