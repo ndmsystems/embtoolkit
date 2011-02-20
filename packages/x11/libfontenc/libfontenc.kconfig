@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_LIBFONTENC
 	bool "Have libfontenc"
+	select EMBTK_LIBFONTENC_PKG_IS_TARBZ2
 	select EMBK_HAVE_ZLIB
 	help
 		libfontenc for X windowing system
@@ -45,3 +46,11 @@ config EMBTK_LIBFONTENC_VERSION_STRING
 	default "1.1.0"	if EMBTK_LIBFONTENC_VERSION_1_1_0
 	default "1.0.5"	if EMBTK_LIBFONTENC_VERSION_1_0_5
 
+config EMBTK_LIBFONTENC_NEED_PATCH
+	bool
+config EMBTK_LIBFONTENC_NEED_AUTORECONF
+	bool
+config EMBTK_LIBFONTENC_PKG_IS_TARGZ
+	bool
+config EMBTK_LIBFONTENC_PKG_IS_TARBZ2
+	bool

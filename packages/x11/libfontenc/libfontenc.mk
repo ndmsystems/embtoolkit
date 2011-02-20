@@ -23,9 +23,13 @@
 # \date         March 2010
 ################################################################################
 
-LIBFONTENC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBFONTENC_VERSION_STRING)))
+LIBFONTENC_NAME := libfontenc
+LIBFONTENC_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBFONTENC)
 LIBFONTENC_SITE := http://xorg.freedesktop.org/archive/individual/lib
+LIBFONTENC_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBFONTENC_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libfontenc/$(LIBFONTENC_VERSION)
 LIBFONTENC_PACKAGE := libfontenc-$(LIBFONTENC_VERSION).tar.bz2
+LIBFONTENC_SRC_DIR := $(PACKAGES_BUILD)/libfontenc-$(LIBFONTENC_VERSION)
 LIBFONTENC_BUILD_DIR := $(PACKAGES_BUILD)/libfontenc-$(LIBFONTENC_VERSION)
 
 LIBFONTENC_BINS =
@@ -33,6 +37,8 @@ LIBFONTENC_SBINS =
 LIBFONTENC_INCLUDES = X11/fonts/fontenc.h
 LIBFONTENC_LIBS = libfontenc.*
 LIBFONTENC_PKGCONFIGS = libfontenc.pc
+
+LIBFONTENC_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
 LIBFONTENC_DEPS := zlib_target_install
 
@@ -51,46 +57,13 @@ $(LIBFONTENC_BUILD_DIR)/.installed: $(LIBFONTENC_DEPS) download_libfontenc \
 	@touch $@
 
 download_libfontenc:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(LIBFONTENC_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(LIBFONTENC_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LIBFONTENC_PACKAGE) \
-	$(LIBFONTENC_SITE)/$(LIBFONTENC_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,LIBFONTENC)
 
 $(LIBFONTENC_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LIBFONTENC_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(LIBFONTENC_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,LIBFONTENC)
 
 $(LIBFONTENC_BUILD_DIR)/.configured:
-	$(Q)cd $(LIBFONTENC_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --prefix=/usr --libdir=/usr/$(LIBDIR) \
-	--disable-malloc0returnsnull
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,LIBFONTENC)
 
 libfontenc_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libfontenc-$(LIBFONTENC_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBFONTENC_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBFONTENC_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBFONTENC_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBFONTENC_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBFONTENC_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBFONTENC_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,LIBFONTENC)
