@@ -23,10 +23,13 @@
 # \date         July 2010
 ################################################################################
 
-DBUS_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_DBUS_VERSION_STRING)))
+DBUS_NAME := dbus
+DBUS_VERSION := $(call EMBTK_GET_PKG_VERSION,DBUS)
 DBUS_SITE := http://dbus.freedesktop.org/releases/dbus
+DBUS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 DBUS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/dbus/$(DBUS_VERSION)
 DBUS_PACKAGE := dbus-$(DBUS_VERSION).tar.gz
+DBUS_SRC_DIR := $(PACKAGES_BUILD)/dbus-$(DBUS_VERSION)
 DBUS_BUILD_DIR := $(PACKAGES_BUILD)/dbus-$(DBUS_VERSION)
 
 DBUS_BINS = dbus-cleanup-sockets dbus-daemon dbus-launch dbus-monitor \
@@ -51,7 +54,6 @@ $(DBUS_BUILD_DIR)/.installed: $(DBUS_DEPS) download_dbus \
 	$(DBUS_BUILD_DIR)/.decompressed $(DBUS_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	dbus-$(DBUS_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(DBUS_BUILD_DIR))
 	$(Q)$(MAKE) -C $(DBUS_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(DBUS_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -60,64 +62,19 @@ $(DBUS_BUILD_DIR)/.installed: $(DBUS_DEPS) download_dbus \
 	@touch $@
 
 download_dbus:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(DBUS_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(DBUS_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(DBUS_PACKAGE) \
-	$(DBUS_SITE)/$(DBUS_PACKAGE)
-ifeq ($(CONFIG_EMBTK_DBUS_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/dbus-$(DBUS_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/dbus-$(DBUS_VERSION).patch \
-	$(DBUS_PATCH_SITE)/dbus-$(DBUS_VERSION)-*.patch
-endif
+	$(call EMBTK_DOWNLOAD_PKG,DBUS)
 
 $(DBUS_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(DBUS_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(DBUS_PACKAGE)
-ifeq ($(CONFIG_EMBTK_DBUS_NEED_PATCH),y)
-	@cd $(PACKAGES_BUILD)/dbus-$(DBUS_VERSION); \
-	patch -p1 < $(DOWNLOAD_DIR)/dbus-$(DBUS_VERSION).patch
-endif
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,DBUS)
 
 $(DBUS_BUILD_DIR)/.configured:
-	$(Q)cd $(DBUS_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr $(DBUS_CONFIGURE_OPTS)
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,DBUS)
 
 dbus_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup dbus...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(DBUS_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(DBUS_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(DBUS_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(DBUS_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(DBUS_PKGCONFIGS)
-	$(Q)-rm -rf $(DBUS_BUILD_DIR)*
+	$(call EMBTK_CLEANUP_PKG,DBUS)
 
-.PHONY: $(DBUS_BUILD_DIR)/.special
+.PHONY: $(DBUS_BUILD_DIR)/.special dbus_clean
 
 $(DBUS_BUILD_DIR)/.special:
-	$(Q)-mkdir -p $(ROOTFS)/usr
-	$(Q)-mkdir -p $(ROOTFS)/usr/etc
-	$(Q)-cp -R $(SYSROOT)/usr/etc/dbus* $(ROOTFS)/usr/etc/
 	$(Q)-mkdir -p $(ROOTFS)/usr/libexec
 	$(Q)-cp -R $(SYSROOT)/usr/libexec/dbus* $(ROOTFS)/usr/libexec/
-

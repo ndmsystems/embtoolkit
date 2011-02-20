@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_DBUS
 	bool "Have D-bus"
+	select EMBTK_DBUS_PKG_IS_TARGZ
 	select EMBTK_HAVE_EXPAT
 	help
 		D-Bus is a message bus system, a simple way for applications to
@@ -49,5 +50,9 @@ config EMBTK_DBUS_VERSION_STRING
 
 config EMBTK_DBUS_NEED_PATCH
 	bool
-
-
+config EMBTK_DBUS_NEED_AUTORECONF
+	bool
+config EMBTK_DBUS_PKG_IS_TARGZ
+	bool
+config EMBTK_DBUS_PKG_IS_TARBZ2
+	bool
