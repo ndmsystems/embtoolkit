@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_LIBXEXT
 	bool "Have libXext"
+	select EMBTK_LIBXEXT_PKG_IS_TARBZ2
 	select EMBTK_HAVE_LIBX11
 	help
 		libXext for X windowing system
@@ -48,3 +49,11 @@ config EMBTK_LIBXEXT_VERSION_STRING
 	default "1.1.2"	if EMBTK_LIBXEXT_VERSION_1_1_2
 	default "1.1.1"	if EMBTK_LIBXEXT_VERSION_1_1_1
 
+config EMBTK_LIBXEXT_NEED_PATCH
+	bool
+config EMBTK_LIBXEXT_NEED_AUTORECONF
+	bool
+config EMBTK_LIBXEXT_PKG_IS_TARGZ
+	bool
+config EMBTK_LIBXEXT_PKG_IS_TARBZ2
+	bool

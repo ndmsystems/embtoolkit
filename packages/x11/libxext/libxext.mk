@@ -23,9 +23,13 @@
 # \date         March 2010
 ################################################################################
 
-LIBXEXT_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBXEXT_VERSION_STRING)))
+LIBXEXT_NAME := libXext
+LIBXEXT_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXEXT)
 LIBXEXT_SITE := http://xorg.freedesktop.org/archive/individual/lib
+LIBXEXT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBXEXT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/expat/$(LIBXEXT_VERSION)
 LIBXEXT_PACKAGE := libXext-$(LIBXEXT_VERSION).tar.bz2
+LIBXEXT_SRC_DIR := $(PACKAGES_BUILD)/libXext-$(LIBXEXT_VERSION)
 LIBXEXT_BUILD_DIR := $(PACKAGES_BUILD)/libXext-$(LIBXEXT_VERSION)
 
 LIBXEXT_BINS =
@@ -42,6 +46,8 @@ LIBXEXT_INCLUDES = X11/extensions/dpms.h X11/extensions/lbxbuf.h \
 LIBXEXT_LIBS = libXext.*
 LIBXEXT_PKGCONFIGS =
 
+LIBXEXT_CONFIGURE_OPTS := --disable-malloc0returnsnull
+
 LIBXEXT_DEPS = libx11_install
 
 libxext_install:
@@ -52,7 +58,6 @@ $(LIBXEXT_BUILD_DIR)/.installed: $(LIBXEXT_DEPS) download_libxext \
 	$(LIBXEXT_BUILD_DIR)/.decompressed $(LIBXEXT_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libxext-$(LIBXEXT_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(LIBXEXT_BUILD_DIR))
 	$(Q)$(MAKE) -C $(LIBXEXT_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBXEXT_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -60,46 +65,13 @@ $(LIBXEXT_BUILD_DIR)/.installed: $(LIBXEXT_DEPS) download_libxext \
 	@touch $@
 
 download_libxext:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(LIBXEXT_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(LIBXEXT_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LIBXEXT_PACKAGE) \
-	$(LIBXEXT_SITE)/$(LIBXEXT_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,LIBXEXT)
 
 $(LIBXEXT_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LIBXEXT_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(LIBXEXT_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,LIBXEXT)
 
 $(LIBXEXT_BUILD_DIR)/.configured:
-	$(Q)cd $(LIBXEXT_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --disable-malloc0returnsnull
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,LIBXEXT)
 
 libxext_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxext-$(LIBXEXT_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBXEXT_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBXEXT_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXEXT_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXEXT_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXEXT_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXEXT_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,LIBXEXT)
