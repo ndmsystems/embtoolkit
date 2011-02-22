@@ -23,16 +23,22 @@
 # \date         March 2010
 ################################################################################
 
-LIBXCB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBXCB_VERSION_STRING)))
+LIBXCB_NAME := libxcb
+LIBXCB_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXCB)
 LIBXCB_SITE := http://xcb.freedesktop.org/dist
+LIBXCB_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBXCB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxcb/$(LIBXCB_VERSION)
 LIBXCB_PACKAGE := libxcb-$(LIBXCB_VERSION).tar.gz
+LIBXCB_SRC_DIR := $(PACKAGES_BUILD)/libxcb-$(LIBXCB_VERSION)
 LIBXCB_BUILD_DIR := $(PACKAGES_BUILD)/libxcb-$(LIBXCB_VERSION)
 
 LIBXCB_BINS =
 LIBXCB_SBINS =
 LIBXCB_INCLUDES = xcb
 LIBXCB_LIBS = libxcb*
-LIBXCB_PKGCONFIGS = xcb*
+LIBXCB_PKGCONFIGS = xcb*.pc
+
+LIBXCB_CONFIGURE_OPTS := --enable-xinput
 
 LIBXCB_DEPS = xcbproto_install libpthreadstubs_install libxau_install
 
@@ -44,57 +50,24 @@ $(LIBXCB_BUILD_DIR)/.installed: $(LIBXCB_DEPS) download_libxcb \
 	$(LIBXCB_BUILD_DIR)/.decompressed $(LIBXCB_BUILD_DIR)/.configured
 	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
 	libxcb-$(LIBXCB_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(LIBXCB_BUILD_DIR))
 	$(Q)$(MAKE) -C $(LIBXCB_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBXCB_BUILD_DIR) DESTDIR=$(SYSROOT) install
+	$(Q)$(MAKE) -C $(LIBXCB_BUILD_DIR) DESTDIR=$(SYSROOT)/ install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	$(Q)$(MAKE) $(LIBXCB_BUILD_DIR)/.patchlibtool
 	@touch $@
 
 download_libxcb:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(LIBXCB_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(LIBXCB_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LIBXCB_PACKAGE) \
-	$(LIBXCB_SITE)/$(LIBXCB_PACKAGE)
+	$(call EMBTK_DOWNLOAD_PKG,LIBXCB)
 
 $(LIBXCB_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LIBXCB_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(LIBXCB_PACKAGE)
-	@touch $@
+	$(call EMBTK_DECOMPRESS_PKG,LIBXCB)
 
 $(LIBXCB_BUILD_DIR)/.configured:
-	$(Q)cd $(LIBXCB_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --enable-xinput \
-	--prefix=/usr --libdir=/usr/$(LIBDIR)
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,LIBXCB)
 
 libxcb_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxcb-$(LIBXCB_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBXCB_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBXCB_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXCB_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXCB_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXCB_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXCB_BUILD_DIR)*
+	$(call EMBTK_CLEANUP_PKG,LIBXCB)
 
 $(LIBXCB_BUILD_DIR)/.patchlibtool:
 	@LIBXCB_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \
