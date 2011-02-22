@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_LIBXAU
 	bool "Have libxau"
+	select EMBTK_LIBXAU_PKG_IS_TARBZ2
 	select EMBTK_HAVE_XPROTO
 	help
 		X authorization file management libary
@@ -45,3 +46,11 @@ config EMBTK_LIBXAU_VERSION_STRING
 	default "1.0.6"		if EMBTK_LIBXAU_VERSION_1_0_6
 	default "1.0.5"		if EMBTK_LIBXAU_VERSION_1_0_5
 
+config EMBTK_LIBXAU_NEED_PATCH
+	bool
+config EMBTK_LIBXAU_NEED_AUTORECONF
+	bool
+config EMBTK_LIBXAU_PKG_IS_TARGZ
+	bool
+config EMBTK_LIBXAU_PKG_IS_TARBZ2
+	bool
