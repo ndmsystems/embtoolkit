@@ -23,9 +23,13 @@
 # \date         March 2010
 ################################################################################
 
-LIBXRENDER_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBXRENDER_VERSION_STRING)))
+LIBXRENDER_NAME := libXrender
+LIBXRENDER_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXRENDER)
 LIBXRENDER_SITE := http://xorg.freedesktop.org/archive/individual/lib
+LIBXRENDER_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBXRENDER_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxrender/$(LIBXI_VERSION)
 LIBXRENDER_PACKAGE := libXrender-$(LIBXRENDER_VERSION).tar.bz2
+LIBXRENDER_SRC_DIR := $(PACKAGES_BUILD)/libXrender-$(LIBXRENDER_VERSION)
 LIBXRENDER_BUILD_DIR := $(PACKAGES_BUILD)/libXrender-$(LIBXRENDER_VERSION)
 
 LIBXRENDER_BINS =
@@ -34,64 +38,15 @@ LIBXRENDER_INCLUDES = X11/extensions/Xrender.h
 LIBXRENDER_LIBS = libXrender.*
 LIBXRENDER_PKGCONFIGS = xrender.pc
 
+LIBXRENDER_CONFIGURE_OPTS := --disable-malloc0returnsnull
+
 LIBXRENDER_DEPS = renderproto_install libx11_install
 
 libxrender_install:
-	@test -e $(LIBXRENDER_BUILD_DIR)/.installed || \
-	$(MAKE) $(LIBXRENDER_BUILD_DIR)/.installed
-
-$(LIBXRENDER_BUILD_DIR)/.installed: $(LIBXRENDER_DEPS) download_libxrender \
-	$(LIBXRENDER_BUILD_DIR)/.decompressed $(LIBXRENDER_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	libxrender-$(LIBXRENDER_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(LIBXRENDER_BUILD_DIR))
-	$(Q)$(MAKE) -C $(LIBXRENDER_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBXRENDER_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
+	$(call EMBTK_INSTALL_PKG,LIBXRENDER)
 
 download_libxrender:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(LIBXRENDER_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(LIBXRENDER_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LIBXRENDER_PACKAGE) \
-	$(LIBXRENDER_SITE)/$(LIBXRENDER_PACKAGE)
-
-$(LIBXRENDER_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LIBXRENDER_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(LIBXRENDER_PACKAGE)
-	@touch $@
-
-$(LIBXRENDER_BUILD_DIR)/.configured:
-	$(Q)cd $(LIBXRENDER_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) --prefix=/usr \
-	--disable-malloc0returnsnull
-	@touch $@
+	$(call EMBTK_DOWNLOAD_PKG,LIBXRENDER)
 
 libxrender_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxrender-$(LIBXRENDER_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBXRENDER_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBXRENDER_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXRENDER_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXRENDER_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXRENDER_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXRENDER_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,LIBXRENDER)
