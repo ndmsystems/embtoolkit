@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_XKBCOMP
 	bool "Have xkbcomp"
+	select EMBTK_XKBCOMP_PKG_IS_TARBZ2
 	select EMBTK_HAVE_LIBXKBFILE
 	help
 		xkbcomp for X windowing system.
@@ -51,4 +52,10 @@ config EMBTK_XKBCOMP_VERSION_STRING
 	default "1.1.1"		if EMBTK_XKBCOMP_VERSION_1_1_1
 
 config EMBTK_XKBCOMP_NEED_PATCH
+	bool
+config EMBTK_XKBCOMP_NEED_AUTORECONF
+	bool
+config EMBTK_XKBCOMP_PKG_IS_TARGZ
+	bool
+config EMBTK_XKBCOMP_PKG_IS_TARBZ2
 	bool
