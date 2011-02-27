@@ -39,32 +39,16 @@ FOO_LIBS =
 FOO_LIBEXECS =
 FOO_PKGCONFIGS =
 
+FOO_CONFIGURE_ENV :=
 FOO_CONFIGURE_OPTS :=
 
 FOO_DEPS :=
 
 foo_install:
-	@test -e $(FOO_BUILD_DIR)/.installed || \
-	$(MAKE) $(FOO_BUILD_DIR)/.installed
-
-$(FOO_BUILD_DIR)/.installed: $(FOO_DEPS) download_foo \
-	$(FOO_BUILD_DIR)/.decompressed $(FOO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	foo-$(FOO_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(FOO_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(FOO_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
+	$(call EMBTK_INSTALL_PKG,FOO)
 
 download_foo:
 	$(call EMBTK_DOWNLOAD_PKG,FOO)
-
-$(FOO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,FOO)
-
-$(FOO_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,FOO)
 
 foo_clean:
 	$(call EMBTK_CLEANUP_PKG,FOO)
