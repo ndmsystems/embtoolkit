@@ -274,6 +274,28 @@ define EMBTK_CONFIGURE_PKG
 endef
 
 #
+# A macro to install automatically a package intended to run on the target.
+# Usage:
+# $(call EMBTK_INSTALL_PKG,PACKAGE)
+#
+define __EMBTK_INSTALL_PKG_MAKE
+	$(call EMBTK_GENERIC_PKG,"Compiling and installing $($(1)_NAME)-$($(1)_VERSION) in your root filesystem...")
+	$(Q)$(if $(strip $($(1)_DEPS)),$(MAKE) $($(1)_DEPS))
+	$(Q)$(call EMBTK_DOWNLOAD_PKG,$(1))
+	$(Q)$(call EMBTK_DECOMPRESS_PKG,$(1))
+	$(Q)$(call EMBTK_CONFIGURE_PKG,$(1))
+	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) $(J)
+	$(Q)$(MAKE) -C $($(1)_BUILD_DIR)				\
+	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) install
+	$(Q)$(MAKE) libtool_files_adapt
+	$(Q)$(MAKE) pkgconfig_files_adapt
+	@touch $($(1)_BUILD_DIR)/.installed
+endef
+define EMBTK_INSTALL_PKG
+	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),	\
+	echo,$(call __EMBTK_INSTALL_PKG_MAKE,$(1)))
+endef
+#
 # A macro which downloads a package.
 # Usage:
 # $(call EMBTK_DOWNLOAD_PKG,PACKAGE)
@@ -333,7 +355,7 @@ define EMBTK_DECOMPRESS_PKG
 		$(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch;	\
 	fi
 	@mkdir -p $($(1)_BUILD_DIR)
-	@touch $@
+	@touch $($(1)_BUILD_DIR)/.decompressed
 endef
 
 #
@@ -360,7 +382,7 @@ define EMBTK_DECOMPRESS_HOSTPKG
 		$(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch;	\
 	fi
 	@mkdir -p $($(1)_BUILD_DIR)
-	@touch $@
+	@touch $($(1)_BUILD_DIR)/.decompressed
 endef
 
 #
