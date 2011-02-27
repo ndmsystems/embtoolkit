@@ -23,10 +23,13 @@
 # \date         September 2010
 ################################################################################
 
-LIBXI_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBXI_VERSION_STRING)))
+LIBXI_NAME := libXi
+LIBXI_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXI)
 LIBXI_SITE := http://xorg.freedesktop.org/archive/individual/lib
+LIBXI_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXI_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxi/$(LIBXI_VERSION)
 LIBXI_PACKAGE := libXi-$(LIBXI_VERSION).tar.bz2
+LIBXI_SRC_DIR := $(PACKAGES_BUILD)/libXi-$(LIBXI_VERSION)
 LIBXI_BUILD_DIR := $(PACKAGES_BUILD)/libXi-$(LIBXI_VERSION)
 
 LIBXI_BINS =
@@ -35,74 +38,16 @@ LIBXI_INCLUDES = X11/extensions/XInput.h X11/extensions/XInput2.h
 LIBXI_LIBS = libXi.*
 LIBXI_PKGCONFIGS = xi.pc
 
+LIBXI_CONFIGURE_OPTS := --disable-malloc0returnsnull
+
 LIBXI_DEPS := xproto_install xextproto_install inputproto_install \
 	libx11_install libxext_install
 
 libxi_install:
-	@test -e $(LIBXI_BUILD_DIR)/.installed || \
-	$(MAKE) $(LIBXI_BUILD_DIR)/.installed
-
-$(LIBXI_BUILD_DIR)/.installed: $(LIBXI_DEPS) download_libxi \
-	$(LIBXI_BUILD_DIR)/.decompressed $(LIBXI_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	libxi-$(LIBXI_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(LIBXI_BUILD_DIR))
-	$(Q)$(MAKE) -C $(LIBXI_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBXI_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
+	$(call EMBTK_INSTALL_PKG,LIBXI)
 
 download_libxi:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(LIBXI_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(LIBXI_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LIBXI_PACKAGE) \
-	$(LIBXI_SITE)/$(LIBXI_PACKAGE)
-ifeq ($(CONFIG_EMBTK_LIBXI_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/libXi-$(LIBXI_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/libXi-$(LIBXI_VERSION).patch \
-	$(LIBXI_PATCH_SITE)/libXi-$(LIBXI_VERSION)-*.patch
-endif
-
-$(LIBXI_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LIBXI_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(LIBXI_PACKAGE)
-ifeq ($(CONFIG_EMBTK_LIBXI_NEED_PATCH),y)
-	@cd $(LIBXI_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/libXi-$(LIBXI_VERSION).patch
-endif
-	@touch $@
-
-$(LIBXI_BUILD_DIR)/.configured:
-	$(Q)cd $(LIBXI_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr --disable-malloc0returnsnull
-	@touch $@
+	$(call EMBTK_DOWNLOAD_PKG,LIBXI)
 
 libxi_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup libxi...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBXI_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBXI_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBXI_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBXI_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBXI_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBXI_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,LIBXI)
