@@ -87,29 +87,11 @@ XSERVER_CONFIGURE_OPTS += --disable-tslib
 endif
 
 xserver_install:
-	@test -e $(XSERVER_BUILD_DIR)/.installed || \
-	$(MAKE) $(XSERVER_BUILD_DIR)/.installed
+	$(call EMBTK_INSTALL_PKG,XSERVER)
 	$(Q)$(MAKE) $(XSERVER_BUILD_DIR)/.special
-
-$(XSERVER_BUILD_DIR)/.installed: $(XSERVER_DEPS) download_xserver \
-	$(XSERVER_BUILD_DIR)/.decompressed $(XSERVER_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	xserver-$(XSERVER_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(XSERVER_BUILD_DIR))
-	$(Q)$(MAKE) -C $(XSERVER_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(XSERVER_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
 
 download_xserver:
 	$(call EMBTK_DOWNLOAD_PKG,XSERVER)
-
-$(XSERVER_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,XSERVER)
-
-$(XSERVER_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,XSERVER)
 
 xserver_clean:
 	$(call EMBTK_CLEANUP_PKG,XSERVER)
