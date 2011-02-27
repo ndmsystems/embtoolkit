@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_XTRANS
 	bool "Have xtrans"
+	select EMBTK_XTRANS_PKG_IS_TARBZ2
 	help
 		xtrans for X windowing system
 choice
@@ -44,3 +45,11 @@ config EMBTK_XTRANS_VERSION_STRING
 	default "1.2.6"		if EMBTK_XTRANS_VERSION_1_2_6
 	default "1.2.5"		if EMBTK_XTRANS_VERSION_1_2_5
 
+config EMBTK_XTRANS_NEED_PATCH
+	bool
+config EMBTK_XTRANS_NEED_AUTORECONF
+	bool
+config EMBTK_XTRANS_PKG_IS_TARGZ
+	bool
+config EMBTK_XTRANS_PKG_IS_TARBZ2
+	bool

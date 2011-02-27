@@ -23,9 +23,13 @@
 # \date         March 2010
 ################################################################################
 
+XTRANS_NAME := xtrans
 XTRANS_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_XTRANS_VERSION_STRING)))
 XTRANS_SITE := http://xorg.freedesktop.org/archive/individual/lib
+XTRANS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+XTRANS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/xtrans/$(XTRANS_VERSION)
 XTRANS_PACKAGE := xtrans-$(XTRANS_VERSION).tar.bz2
+XTRANS_SRC_DIR := $(PACKAGES_BUILD)/xtrans-$(XTRANS_VERSION)
 XTRANS_BUILD_DIR := $(PACKAGES_BUILD)/xtrans-$(XTRANS_VERSION)
 
 XTRANS_BINS =
@@ -34,62 +38,13 @@ XTRANS_INCLUDES = X11/xtrans
 XTRANS_LIBS =
 XTRANS_PKGCONFIGS =
 
-xtrans_install:
-	@test -e $(XTRANS_BUILD_DIR)/.installed || \
-	$(MAKE) $(XTRANS_BUILD_DIR)/.installed
+XTRANS_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
-$(XTRANS_BUILD_DIR)/.installed: download_xtrans \
-	$(XTRANS_BUILD_DIR)/.decompressed $(XTRANS_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	xtrans-$(XTRANS_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(XTRANS_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(XTRANS_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)cp $(SYSROOT)/usr/share/pkgconfig/xtrans.pc $(PKG_CONFIG_PATH)
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
+xtrans_install:
+	$(call EMBTK_INSTALL_PKG,XTRANS)
 
 download_xtrans:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(XTRANS_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(XTRANS_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(XTRANS_PACKAGE) \
-	$(XTRANS_SITE)/$(XTRANS_PACKAGE)
-
-$(XTRANS_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(XTRANS_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(XTRANS_PACKAGE)
-	@touch $@
-
-$(XTRANS_BUILD_DIR)/.configured:
-	$(Q)cd $(XTRANS_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --prefix=/usr --libdir=/usr/$(LIBDIR) \
-	--disable-malloc0returnsnull
-	@touch $@
+	$(call EMBTK_DOWNLOAD_PKG,XTRANS)
 
 xtrans_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xtrans...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XTRANS_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XTRANS_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XTRANS_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XTRANS_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XTRANS_PKGCONFIGS)
-	$(Q)-rm -rf $(XTRANS_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,XTRANS)
