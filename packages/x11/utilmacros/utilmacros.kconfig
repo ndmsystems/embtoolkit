@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_UTILMACROS
 	bool "Have utilmacros"
+	select EMBTK_UTILMACROS_PKG_IS_TARBZ2
 	help
 		util-macros for X windowing system.
 		This is a set of autoconf macros used by the configure.ac
@@ -66,3 +67,11 @@ config EMBTK_UTILMACROS_VERSION_STRING
 	default "1.6.1"		if EMBTK_UTILMACROS_VERSION_1_6_1
 	default "1.6.0"		if EMBTK_UTILMACROS_VERSION_1_6_0
 
+config EMBTK_UTILMACROS_NEED_PATCH
+	bool
+config EMBTK_UTILMACROS_NEED_AUTORECONF
+	bool
+config EMBTK_UTILMACROS_PKG_IS_TARGZ
+	bool
+config EMBTK_UTILMACROS_PKG_IS_TARBZ2
+	bool
