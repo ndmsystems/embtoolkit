@@ -38,6 +38,8 @@ LIBXRANDR_INCLUDES = X11/extensions/Xrandr.h
 LIBXRANDR_LIBS = libXrandr.*
 LIBXRANDR_PKGCONFIGS = xrandr.pc
 
+LIBXRANDR_CONFIGURE_OPTS := --disable-malloc0returnsnull
+
 LIBXRANDR_DEPS = xproto_install randrproto_install
 
 libxrandr_install:
