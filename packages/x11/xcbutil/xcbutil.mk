@@ -2,18 +2,19 @@
 # Embtoolkit
 # Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE. All rights reserved.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         xcbutil.mk
@@ -22,9 +23,13 @@
 # \date         March 2009
 ################################################################################
 
-XCBUTIL_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_XCBUTIL_VERSION_STRING)))
+XCBUTIL_NAME := xcb-util
+XCBUTIL_VERSION := $(call EMBTK_GET_PKG_VERSION,XCBUTIL)
 XCBUTIL_SITE := http://xcb.freedesktop.org/dist
+XCBUTIL_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+XCBUTIL_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/xcb-util/$(XCBUTIL_VERSION)
 XCBUTIL_PACKAGE := xcb-util-$(XCBUTIL_VERSION).tar.bz2
+XCBUTIL_SRC_DIR := $(PACKAGES_BUILD)/xcb-util-$(XCBUTIL_VERSION)
 XCBUTIL_BUILD_DIR := $(PACKAGES_BUILD)/xcb-util-$(XCBUTIL_VERSION)
 
 XCBUTIL_BINS =
@@ -43,63 +48,14 @@ XCBUTIL_PKGCONFIGS = xcb-atom.pc xcb-aux.pc xcb-event.pc xcb-icccm.pc \
 XCBUTIL_DEPS = libxcb_install
 
 xcbutil_install:
-	@test -e $(XCBUTIL_BUILD_DIR)/.installed || \
-	$(MAKE) $(XCBUTIL_BUILD_DIR)/.installed
-
-$(XCBUTIL_BUILD_DIR)/.installed: $(XCBUTIL_DEPS) download_xcbutil \
-	$(XCBUTIL_BUILD_DIR)/.decompressed $(XCBUTIL_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	xcbutil-$(XCBUTIL_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(XCBUTIL_BUILD_DIR))
-	$(Q)$(MAKE) -C $(XCBUTIL_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(XCBUTIL_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
+	$(call EMBTK_INSTALL_PKG,XCBUTIL)
 	$(Q)$(MAKE) $(XCBUTIL_BUILD_DIR)/.patchlibtool
-	@touch $@
 
 download_xcbutil:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(XCBUTIL_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(XCBUTIL_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(XCBUTIL_PACKAGE) \
-	$(XCBUTIL_SITE)/$(XCBUTIL_PACKAGE)
-
-$(XCBUTIL_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(XCBUTIL_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(XCBUTIL_PACKAGE)
-	@touch $@
-
-$(XCBUTIL_BUILD_DIR)/.configured:
-	cd $(XCBUTIL_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure $XORG_CONFIG --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) --prefix=/usr
-	@touch $@
+	$(call EMBTK_DOWNLOAD_PKG,XCBUTIL)
 
 xcbutil_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xcbutil-$(XCBUTIL_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XCBUTIL_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XCBUTIL_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XCBUTIL_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XCBUTIL_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XCBUTIL_PKGCONFIGS)
-	$(Q)-rm -rf $(XCBUTIL_BUILD_DIR)*
+	$(call EMBTK_CLEANUP_PKG,XCBUTIL)
 
 $(XCBUTIL_BUILD_DIR)/.patchlibtool:
 	@XCBUTIL_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \
@@ -114,4 +70,3 @@ $(XCBUTIL_BUILD_DIR)/.patchlibtool:
 	sed \
 	-i "s; /usr/$(LIBDIR)/libxcb-atom.la ; $(SYSROOT)/usr/$(LIBDIR)/libxcb-atom.la ;" $$i; \
 	done
-
