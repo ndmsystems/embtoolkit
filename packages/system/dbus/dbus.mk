@@ -46,29 +46,11 @@ DBUS_CONFIGURE_OPTS := --enable-abstract-sockets \
 	$(if $(CONFIG_EMBTK_HAVE_LIBX11),--with-x,--without-x)
 
 dbus_install:
-	test -e $(DBUS_BUILD_DIR)/.installed || \
-	$(MAKE) $(DBUS_BUILD_DIR)/.installed
+	$(call EMBTK_INSTALL_PKG,DBUS)
 	$(Q)$(MAKE) $(DBUS_BUILD_DIR)/.special
-
-$(DBUS_BUILD_DIR)/.installed: $(DBUS_DEPS) download_dbus \
-	$(DBUS_BUILD_DIR)/.decompressed $(DBUS_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	dbus-$(DBUS_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(DBUS_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(DBUS_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	$(Q)$(MAKE) $(DBUS_BUILD_DIR)/.special
-	@touch $@
 
 download_dbus:
 	$(call EMBTK_DOWNLOAD_PKG,DBUS)
-
-$(DBUS_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,DBUS)
-
-$(DBUS_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,DBUS)
 
 dbus_clean:
 	$(call EMBTK_CLEANUP_PKG,DBUS)
