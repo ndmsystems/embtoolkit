@@ -41,27 +41,10 @@ LIBEVENT_PKGCONFIGS =
 LIBEVENT_DEPS :=
 
 libevent_install:
-	@test -e $(LIBEVENT_BUILD_DIR)/.installed || \
-	$(MAKE) $(LIBEVENT_BUILD_DIR)/.installed
-
-$(LIBEVENT_BUILD_DIR)/.installed: $(LIBEVENT_DEPS) download_libevent \
-	$(LIBEVENT_BUILD_DIR)/.decompressed $(LIBEVENT_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	libevent-$(LIBEVENT_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(LIBEVENT_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBEVENT_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
+	$(call EMBTK_INSTALL_PKG,LIBEVENT)
 
 download_libevent:
 	$(call EMBTK_DOWNLOAD_PKG,LIBEVENT)
-
-$(LIBEVENT_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBEVENT)
-
-$(LIBEVENT_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBEVENT)
 
 libevent_clean:
 	$(call EMBTK_CLEANUP_PKG,LIBEVENT)
