@@ -55,27 +55,10 @@ SQLITE_CONFIGURE_OPTS := --enable-threadsafe --enable-readline \
 SQLITE_DEPS :=
 
 sqlite_install:
-	@test -e $(SQLITE_BUILD_DIR)/.installed || \
-	$(MAKE) $(SQLITE_BUILD_DIR)/.installed
-
-$(SQLITE_BUILD_DIR)/.installed: $(SQLITE_DEPS) download_sqlite \
-	$(SQLITE_BUILD_DIR)/.decompressed $(SQLITE_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	sqlite-$(SQLITE_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(SQLITE_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(SQLITE_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
+	$(call EMBTK_INSTALL_PKG,SQLITE)
 
 download_sqlite:
 	$(call EMBTK_DOWNLOAD_PKG,SQLITE)
-
-$(SQLITE_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,SQLITE)
-
-$(SQLITE_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,SQLITE)
 
 sqlite_clean:
 	$(call EMBTK_CLEANUP_PKG,SQLITE)
