@@ -41,27 +41,10 @@ EXPAT_PKGCONFIGS =
 EXPAT_DEPS =
 
 expat_install:
-	@test -e $(EXPAT_BUILD_DIR)/.installed || \
-	$(MAKE) $(EXPAT_BUILD_DIR)/.installed
-
-$(EXPAT_BUILD_DIR)/.installed: $(EXPAT_DEPS) download_expat \
-	$(EXPAT_BUILD_DIR)/.decompressed $(EXPAT_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	expat-$(EXPAT_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(EXPAT_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(EXPAT_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
+	$(call EMBTK_INSTALL_PKG,EXPAT)
 
 download_expat:
 	$(call EMBTK_DOWNLOAD_PKG,EXPAT)
-
-$(EXPAT_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,EXPAT)
-
-$(EXPAT_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,EXPAT)
 
 expat_clean:
 	$(call EMBTK_CLEANUP_PKG,EXPAT)
