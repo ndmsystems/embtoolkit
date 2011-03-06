@@ -23,9 +23,13 @@
 # \date         February 2010
 ################################################################################
 
-BIGREQSPROTO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_BIGREQSPROTO_VERSION_STRING)))
+BIGREQSPROTO_NAME := bigreqsproto
+BIGREQSPROTO_VERSION := $(call EMBTK_GET_PKG_VERSION,BIGREQSPROTO)
 BIGREQSPROTO_SITE := http://xorg.freedesktop.org/archive/individual/proto
+BIGREQSPROTO_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+BIGREQSPROTO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/bigreqsprot/$(BIGREQSPROTO_VERSION)
 BIGREQSPROTO_PACKAGE := bigreqsproto-$(BIGREQSPROTO_VERSION).tar.bz2
+BIGREQSPROTO_SRC_DIR := $(PACKAGES_BUILD)/bigreqsproto-$(BIGREQSPROTO_VERSION)
 BIGREQSPROTO_BUILD_DIR := $(PACKAGES_BUILD)/bigreqsproto-$(BIGREQSPROTO_VERSION)
 
 BIGREQSPROTO_BINS =
@@ -35,60 +39,10 @@ BIGREQSPROTO_LIBS =
 BIGREQSPROTO_PKGCONFIGS = bigreqsproto.pc
 
 bigreqsproto_install:
-	@test -e $(BIGREQSPROTO_BUILD_DIR)/.installed || \
-	$(MAKE) $(BIGREQSPROTO_BUILD_DIR)/.installed
-
-$(BIGREQSPROTO_BUILD_DIR)/.installed: download_bigreqsproto \
-	$(BIGREQSPROTO_BUILD_DIR)/.decompressed $(BIGREQSPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	bigreqsproto-$(BIGREQSPROTO_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(BIGREQSPROTO_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(BIGREQSPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
+	$(call EMBTK_INSTALL_PKG,BIGREQSPROTO)
 
 download_bigreqsproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(BIGREQSPROTO_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(BIGREQSPROTO_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(BIGREQSPROTO_PACKAGE) \
-	$(BIGREQSPROTO_SITE)/$(BIGREQSPROTO_PACKAGE)
-
-$(BIGREQSPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(BIGREQSPROTO_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(BIGREQSPROTO_PACKAGE)
-	@touch $@
-
-$(BIGREQSPROTO_BUILD_DIR)/.configured:
-	$(Q)cd $(BIGREQSPROTO_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --prefix=/usr --libdir=/usr/$(LIBDIR) \
-	--disable-malloc0returnsnull
-	@touch $@
+	$(call EMBTK_DOWNLOAD_PKG,BIGREQSPROTO)
 
 bigreqsproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup bigreqsproto-$(BIGREQSPROTO_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(BIGREQSPROTO_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(BIGREQSPROTO_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(BIGREQSPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(BIGREQSPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(BIGREQSPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(BIGREQSPROTO_BUILD_DIR)*
-
+	$(call EMBTK_CLEANUP_PKG,BIGREQSPROTO)
