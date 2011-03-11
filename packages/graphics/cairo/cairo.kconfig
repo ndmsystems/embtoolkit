@@ -53,6 +53,8 @@ choice
 	help
 	 Here you can choose which version of cairo you want to use.
 
+	config  EMBTK_CAIRO_VERSION_1_10_2
+		bool "cairo-1.10.2"
 	config  EMBTK_CAIRO_VERSION_1_8_10
 		bool "cairo-1.8.10"
 	config  EMBTK_CAIRO_VERSION_1_8_9
@@ -63,6 +65,7 @@ endchoice
 
 config EMBTK_CAIRO_VERSION_STRING
 	string
+	default "1.10.2"	if EMBTK_CAIRO_VERSION_1_10_2
 	default "1.8.10"	if EMBTK_CAIRO_VERSION_1_8_10
 	default "1.8.9"		if EMBTK_CAIRO_VERSION_1_8_9
 	default "1.8.8"		if EMBTK_CAIRO_VERSION_1_8_8

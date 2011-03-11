@@ -60,27 +60,10 @@ endif
 CAIRO_CONFIGURE_OPTS := $(CAIRO_CONFIG_OPTS-n) $(CAIRO_CONFIG_OPTS-y)
 
 cairo_install:
-	@test -e $(CAIRO_BUILD_DIR)/.installed || \
-	$(MAKE) $(CAIRO_BUILD_DIR)/.installed
-
-$(CAIRO_BUILD_DIR)/.installed: $(CAIRO_DEPS) download_cairo \
-	$(CAIRO_BUILD_DIR)/.decompressed $(CAIRO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	cairo-$(CAIRO_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(CAIRO_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(CAIRO_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
+	$(call EMBTK_INSTALL_PKG,CAIRO)
 
 download_cairo:
 	$(call EMBTK_DOWNLOAD_PKG,CAIRO)
-
-$(CAIRO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,CAIRO)
-
-$(CAIRO_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,CAIRO)
 
 cairo_clean:
 	$(call EMBTK_CLEANUP_PKG,CAIRO)
