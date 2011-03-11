@@ -36,6 +36,8 @@ choice
 	help
 	 Here you can choose which version of pixman you want to use.
 
+	config  EMBTK_PIXMAN_VERSION_0_20_2
+		bool "pixman-0.20.2"
 	config  EMBTK_PIXMAN_VERSION_0_18_4
 		bool "pixman-0.18.4"
 	config  EMBTK_PIXMAN_VERSION_0_18_2
@@ -54,6 +56,7 @@ endchoice
 
 config EMBTK_PIXMAN_VERSION_STRING
 	string
+	default "0.20.2"	if EMBTK_PIXMAN_VERSION_0_20_2
 	default "0.18.4"	if EMBTK_PIXMAN_VERSION_0_18_4
 	default "0.18.2"	if EMBTK_PIXMAN_VERSION_0_18_2
 	default "0.18.1"	if EMBTK_PIXMAN_VERSION_0_18_1

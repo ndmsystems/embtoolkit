@@ -39,27 +39,10 @@ PIXMAN_LIBS = libpixman-*
 PIXMAN_PKGCONFIGS = pixman-*.pc
 
 pixman_install:
-	@test -e $(PIXMAN_BUILD_DIR)/.installed || \
-	$(MAKE) $(PIXMAN_BUILD_DIR)/.installed
-
-$(PIXMAN_BUILD_DIR)/.installed: download_pixman \
-	$(PIXMAN_BUILD_DIR)/.decompressed $(PIXMAN_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	pixman-$(PIXMAN_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(PIXMAN_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(PIXMAN_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
+	$(call EMBTK_INSTALL_PKG,PIXMAN)
 
 download_pixman:
 	$(call EMBTK_DOWNLOAD_PKG,PIXMAN)
-
-$(PIXMAN_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,PIXMAN)
-
-$(PIXMAN_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,PIXMAN)
 
 pixman_clean:
 	$(call EMBTK_CLEANUP_PKG,PIXMAN)
