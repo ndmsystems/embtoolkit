@@ -26,7 +26,7 @@
 # \date         May 2009
 ################################################################################
 
-CCACHE_VERSION := 3.1.3
+CCACHE_VERSION := 3.1.4
 CCACHE_SITE := http://samba.org/ftp/ccache
 CCACHE_PACKAGE := ccache-$(CCACHE_VERSION).tar.bz2
 CCACHE_HOST_BUILD_DIR := $(TOOLS_BUILD)/ccachehost-build
