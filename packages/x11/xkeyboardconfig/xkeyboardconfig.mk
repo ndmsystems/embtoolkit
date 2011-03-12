@@ -25,7 +25,7 @@
 
 XKEYBOARDCONFIG_NAME := xkeyboard-config
 XKEYBOARDCONFIG_VERSION := $(call EMBTK_GET_PKG_VERSION,XKEYBOARDCONFIG)
-XKEYBOARDCONFIG_SITE := http://xlibs.freedesktop.org/xkbdesc
+XKEYBOARDCONFIG_SITE := http://www.x.org/releases/individual/data/xkeyboard-config
 XKEYBOARDCONFIG_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XKEYBOARDCONFIG_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/xkeyboard-config/$(XKEYBOARDCONFIG_VERSION)
 XKEYBOARDCONFIG_PACKAGE := xkeyboard-config-$(XKEYBOARDCONFIG_VERSION).tar.bz2
