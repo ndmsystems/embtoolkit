@@ -41,7 +41,9 @@ XTRANS_PKGCONFIGS =
 XTRANS_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
 xtrans_install:
-	$(call EMBTK_INSTALL_PKG,XTRANS)
+	$(call EMBTK_INSTALL_PKG,XTRANS) && 				\
+	cp $(SYSROOT)/usr/share/pkgconfig/xtrans.pc $(PKG_CONFIG_PATH)	\
+	&& $(MAKE) pkgconfig_files_adapt
 
 download_xtrans:
 	$(call EMBTK_DOWNLOAD_PKG,XTRANS)
