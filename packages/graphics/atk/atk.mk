@@ -39,6 +39,9 @@ ATK_INCLUDES = atk-*
 ATK_LIBS = libatk-*
 ATK_PKGCONFIGS = atk.pc
 
+ATK_CONFIGURE_OPTS := --disable-glibtest
+ATK_DEPS := glib_install
+
 atk_install:
 	$(call EMBTK_INSTALL_PKG,ATK)
 
