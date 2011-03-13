@@ -41,7 +41,9 @@ UTILMACROS_PKGCONFIGS = xorg-macros.pc
 UTILMACROS_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
 utilmacros_install:
-	$(call EMBTK_INSTALL_PKG,UTILMACROS)
+	$(call EMBTK_INSTALL_PKG,UTILMACROS) && \
+	cp $(SYSROOT)/usr/share/pkgconfig/xorg-macros.pc $(PKG_CONFIG_PATH) \
+	&& $(MAKE) pkgconfig_files_adapt
 
 download_utilmacros:
 	$(call EMBTK_DOWNLOAD_PKG,UTILMACROS)
