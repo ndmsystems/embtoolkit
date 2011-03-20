@@ -2,18 +2,19 @@
 # Embtoolkit
 # Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         initialpath.mk
@@ -23,15 +24,17 @@
 # \date         May 2009
 ################################################################################
 
-SYSROOT:=$(EMBTK_ROOT)/sysroot-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-TOOLS:=$(EMBTK_ROOT)/tools-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-TOOLS_BUILD:=$(EMBTK_ROOT)/build/tools_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-PACKAGES_BUILD:=$(EMBTK_ROOT)/build/packages_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-ROOTFS:=$(EMBTK_ROOT)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-HOSTTOOLS :=$(EMBTK_ROOT)/host-tools-$(EMBTK_MCU_FLAG)
-DOWNLOAD_DIR := $(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR)))
+SYSROOT			:= $(EMBTK_ROOT)/sysroot-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+TOOLS			:= $(EMBTK_ROOT)/tools-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+TOOLS_BUILD		:= $(EMBTK_ROOT)/build/tools_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+PACKAGES_BUILD		:= $(EMBTK_ROOT)/build/packages_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+EMBTK_GENERATED 	:= $(EMBTK_ROOT)/generated
+ROOTFS			:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+HOSTTOOLS		:= $(EMBTK_ROOT)/host-tools-$(EMBTK_MCU_FLAG)
+DOWNLOAD_DIR		:= $(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR)))
 
-export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD ROOTFS HOSTTOOLS DOWNLOAD_DIR
+export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD EMBTK_GENERATED ROOTFS
+export HOSTTOOLS DOWNLOAD_DIR
 
 mkinitialpath:
 	@mkdir -p $(SYSROOT)
@@ -68,8 +71,7 @@ endif
 
 rmallpath:
 	@rm -Rf $(PACKAGES_BUILD) $(ROOTFS) $(TOOLS) $(TOOLS_BUILD) $(SYSROOT)
-	@rm -Rf rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
-	@rm -Rf initramfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
+	@rm -Rf $(EMBTK_GENERATED)
 ifneq ($(CONFIG_EMBTK_CACHE_PATCHES),y)
 	@rm -rf $(DOWNLOAD_DIR)/*.patch
 endif
