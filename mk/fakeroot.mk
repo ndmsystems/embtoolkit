@@ -24,13 +24,15 @@
 # \date         June 2009
 ################################################################################
 
-FAKEROOT_VERSION := 1.12.4
-FAKEROOT_SITE := http://ftp.debian.org/debian/pool/main/f/fakeroot
-FAKEROOT_PACKAGE := fakeroot_$(FAKEROOT_VERSION).tar.gz
-FAKEROOT_BUILD_DIR := $(TOOLS_BUILD)/fakeroot-build
-FAKEROOT_DIR := $(HOSTTOOLS)/usr/local/fakeroot
-FAKEROOT_BIN := $(FAKEROOT_DIR)/bin/fakeroot
-export FAKEROOT_BIN
+FAKEROOT_VERSION	:= 1.12.4
+FAKEROOT_SITE		:= http://ftp.debian.org/debian/pool/main/f/fakeroot
+FAKEROOT_PACKAGE	:= fakeroot_$(FAKEROOT_VERSION).tar.gz
+FAKEROOT_BUILD_DIR	:= $(TOOLS_BUILD)/fakeroot-build
+FAKEROOT_DIR		:= $(HOSTTOOLS)/usr/local/fakeroot
+FAKEROOT_BIN		:= $(FAKEROOT_DIR)/bin/fakeroot
+FAKEROOT_ENV_FILE	:= $(EMBTK_ROOT)/.fakeroot.001
+
+export FAKEROOT_BIN FAKEROOT_ENV_FILE
 
 fakeroot_install:
 	@test -e $(FAKEROOT_BUILD_DIR)/.installed || \
