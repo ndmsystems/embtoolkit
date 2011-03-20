@@ -23,11 +23,14 @@
 # \date         August 2009
 ################################################################################
 
-SQUASHFS_VERSION := 4.0
-SQUASHFS_SITE := http://downloads.sourceforge.net/project/squashfs/squashfs
-SQUASHFS_PACKAGE := squashfs$(SQUASHFS_VERSION).tar.gz
-SQUASHFS_HOST_BUILD_DIR := $(TOOLS_BUILD)/squashfs-build
-SQUASHFS_TARGET_BUILD_DIR := $(PACKAGES_BUILD)/squashfs-build
+SQUASHFS_VERSION		:= 4.0
+SQUASHFS_SITE			:= http://downloads.sourceforge.net/project/squashfs/squashfs
+SQUASHFS_PACKAGE		:= squashfs$(SQUASHFS_VERSION).tar.gz
+SQUASHFS_HOST_BUILD_DIR		:= $(TOOLS_BUILD)/squashfs-build
+SQUASHFS_TARGET_BUILD_DIR	:= $(PACKAGES_BUILD)/squashfs-build
+
+MKSQUASHFS_BIN			:= $(HOSTTOOLS)/usr/bin/mksquashfs
+UNSQUASHFS_BIN			:= $(HOSTTOOLS)/usr/bin/unsquashfs
 
 squashfs_host_install:
 	@test -e $(SQUASHFS_HOST_BUILD_DIR)/.installed || \
