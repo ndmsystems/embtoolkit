@@ -28,3 +28,6 @@ source packages/development/libevent/libevent.kconfig
 
 #libnih
 source packages/development/libnih/libnih.kconfig
+
+#libsigsegv
+source packages/development/libsigsegv/libsigsegv.kconfig
