@@ -23,39 +23,20 @@
 # \date         March 2010
 ################################################################################
 
-LIBTOOL_NAME := libtool
-LIBTOOL_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBTOOL)
-LIBTOOL_SITE := http://ftp.gnu.org/gnu/libtool
-LIBTOOL_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBTOOL_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libtool/$(LIBTOOL_VERSION)
-LIBTOOL_PACKAGE := libtool-$(LIBTOOL_VERSION).tar.gz
-LIBTOOL_SRC_DIR := $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
-LIBTOOL_BUILD_DIR := $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
+LIBTOOL_NAME		:= libtool
+LIBTOOL_VERSION		:= $(call EMBTK_GET_PKG_VERSION,LIBTOOL)
+LIBTOOL_SITE		:= http://ftp.gnu.org/gnu/libtool
+LIBTOOL_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBTOOL_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/libtool/$(LIBTOOL_VERSION)
+LIBTOOL_PACKAGE		:= libtool-$(LIBTOOL_VERSION).tar.gz
+LIBTOOL_SRC_DIR		:= $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
+LIBTOOL_BUILD_DIR	:= $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
 
-LIBTOOL_DIR := $(HOSTTOOLS)/usr
-LIBTOOL := $(LIBTOOL_DIR)/bin/libtool
-LIBTOOLIZE := $(LIBTOOL_DIR)/bin/libtoolize
-
+LIBTOOL			:= $(HOSTTOOLS)/usr/bin/libtool
+LIBTOOLIZE		:= $(HOSTTOOLS)/usr/bin/libtoolize
 export LIBTOOL LIBTOOLIZE
 
-libtool_install: $(LIBTOOL_BUILD_DIR)/.installed
+LIBTOOL_CONFIGURE_OPTS := --disable-ltdl-install
 
-$(LIBTOOL_BUILD_DIR)/.installed: download_libtool \
-	$(LIBTOOL_BUILD_DIR)/.decompressed $(LIBTOOL_BUILD_DIR)/.configured
-	@$(MAKE) -C $(LIBTOOL_BUILD_DIR) $(J)
-	$(MAKE) -C $(LIBTOOL_BUILD_DIR) install
-	@touch $@
-
-download_libtool:
-	$(call EMBTK_DOWNLOAD_PKG,LIBTOOL)
-
-$(LIBTOOL_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_HOSTPKG,LIBTOOL)
-
-$(LIBTOOL_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MESSAGE,"Configuring \
-	libtool_$(LIBTOOL_VERSION)...")
-	@cd $(LIBTOOL_BUILD_DIR); \
-	$(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)/configure \
-	--prefix=$(LIBTOOL_DIR) --build=$(HOST_BUILD) --host=$(HOST_ARCH)
-	@touch $@
+libtool_install:
+	$(call EMBTK_INSTALL_HOSTPKG,LIBTOOL)
