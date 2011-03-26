@@ -2,18 +2,19 @@
 # Embtoolkit
 # Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 ################################################################################
 #
 # \file         macros.mk
@@ -274,12 +275,31 @@ define EMBTK_CONFIGURE_PKG
 endef
 
 #
+# A macro which runs configure script (conpatible with autotools configure)
+# for a package for host development machine and sets environment variables
+# correctly.
+# Usage:
+# $(call EMBTK_CONFIGURE_HOSTPKG,PACKAGE)
+#
+define EMBTK_CONFIGURE_HOSTPKG
+	$(call EMBTK_GENERIC_MSG,"Configure $($(1)_PACKAGE) for host...")
+	$(call EMBTK_CONFIGURE_AUTORECONF_PKG,$(1))
+	@test -e $($(1)_SRC_DIR)/configure || exit 1
+	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$($(1)_CONFIGURE_OPTS)")
+	@cd $($(1)_BUILD_DIR);						\
+	$(CONFIG_SHELL) $($(1)_SRC_DIR)/configure			\
+	--build=$(HOST_BUILD) --host=$(HOST_ARCH)			\
+	--prefix=$(HOSTTOOLS)/usr $($(1)_CONFIGURE_OPTS)
+	@touch $($(1)_BUILD_DIR)/.configured
+endef
+
+#
 # A macro to install automatically a package intended to run on the target.
 # Usage:
 # $(call EMBTK_INSTALL_PKG,PACKAGE)
 #
 define __EMBTK_INSTALL_PKG_MAKE
-	$(call EMBTK_GENERIC_PKG,"Compiling and installing $($(1)_NAME)-$($(1)_VERSION) in your root filesystem...")
+	$(call EMBTK_GENERIC_MSG,"Compiling and installing $($(1)_NAME)-$($(1)_VERSION) in your root filesystem...")
 	$(Q)$(if $(strip $($(1)_DEPS)),$(MAKE) $($(1)_DEPS))
 	$(Q)$(call EMBTK_DOWNLOAD_PKG,$(1))
 	$(Q)$(call EMBTK_DECOMPRESS_PKG,$(1))
@@ -295,6 +315,28 @@ define EMBTK_INSTALL_PKG
 	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),	\
 	echo,$(call __EMBTK_INSTALL_PKG_MAKE,$(1)))
 endef
+
+#
+# A macro to install automatically a package intended to run on the host
+# development machine.
+# Usage:
+# $(call EMBTK_INSTALL_HOSTPKG,PACKAGE)
+#
+define __EMBTK_INSTALL_HOSTPKG_MAKE
+	$(call EMBTK_GENERIC_MSG,"Compiling and installing $($(1)_NAME)-$($(1)_VERSION) for host...")
+	$(Q)$(if $(strip $($(1)_DEPS)),$(MAKE) $($(1)_DEPS))
+	$(Q)$(call EMBTK_DOWNLOAD_PKG,$(1))
+	$(Q)$(call EMBTK_DECOMPRESS_HOSTPKG,$(1))
+	$(Q)$(call EMBTK_CONFIGURE_HOSTPKG,$(1))
+	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) $(J)
+	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) install
+	@touch $($(1)_BUILD_DIR)/.installed
+endef
+define EMBTK_INSTALL_HOSTPKG
+	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),	\
+	echo,$(call __EMBTK_INSTALL_HOSTPKG_MAKE,$(1)))
+endef
+
 #
 # A macro which downloads a package.
 # Usage:
