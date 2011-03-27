@@ -31,7 +31,6 @@ HOSTTOOLS_COMPONENTS-y := mkimage_install
 include $(EMBTK_ROOT)/mk/lzo.mk
 include $(EMBTK_ROOT)/mk/mkimage.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
-include $(EMBTK_ROOT)/mk/termcap.mk
 
 #gdb
 include $(EMBTK_ROOT)/mk/gdb.mk
