@@ -32,13 +32,13 @@ PKGCONFIG_PACKAGE	:= pkg-config-$(PKGCONFIG_VERSION).tar.gz
 PKGCONFIG_SRC_DIR	:= $(TOOLS_BUILD)/pkg-config-$(PKGCONFIG_VERSION)
 PKGCONFIG_BUILD_DIR	:= $(TOOLS_BUILD)/pkg-config-$(PKGCONFIG_VERSION)
 
-PKGCONFIG_BIN	:=  $(HOSTTOOLS)/usr/bin/pkg-config
+PKGCONFIG_BIN	:= $(HOSTTOOLS)/usr/bin/pkg-config
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-PKG_CONFIG_PATH	:=$(SYSROOT)/usr/lib32/pkgconfig
+PKG_CONFIG_PATH	:= $(SYSROOT)/usr/lib32/pkgconfig
 else
-PKG_CONFIG_PATH	:=$(SYSROOT)/usr/lib/pkgconfig
+PKG_CONFIG_PATH	:= $(SYSROOT)/usr/lib/pkgconfig
 endif
-export PKGCONFIG_BIN PKG_CONFIG_PATH
+export PKGCONFIG_BIN
 
 pkgconfig_install:
 	$(call EMBTK_INSTALL_HOSTPKG,PKGCONFIG)
