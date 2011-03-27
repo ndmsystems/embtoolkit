@@ -50,26 +50,11 @@ NCURSES_CONFIGURE_OPTS := --disable-rpath --without-cxx-binding		\
 			--program-prefix=""
 
 ncurses_install:
-	@test -e $(NCURSES_BUILD_DIR)/.installed || \
-	$(MAKE) $(NCURSES_BUILD_DIR)/.installed
+	$(call EMBTK_INSTALL_PKG,NCURSES)
 	$(Q)$(MAKE) $(NCURSES_BUILD_DIR)/.special
-
-$(NCURSES_BUILD_DIR)/.installed: download_ncurses \
-	$(NCURSES_BUILD_DIR)/.decompressed $(NCURSES_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	ncurses-$(NCURSES_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(NCURSES_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(NCURSES_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	@touch $@
 
 download_ncurses:
 	$(call EMBTK_DOWNLOAD_PKG,NCURSES)
-
-$(NCURSES_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,NCURSES)
-
-$(NCURSES_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,NCURSES)
 
 ncurses_clean:
 	$(call EMBTK_CLEANUP_PKG,NCURSES)
