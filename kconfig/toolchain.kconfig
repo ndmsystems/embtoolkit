@@ -90,3 +90,8 @@ source kconfig/automake.kconfig
 # pkg-config
 #
 source kconfig/pkgconfig.kconfig
+
+#
+# fakeroot
+#
+source kconfig/fakeroot.kconfig
