@@ -287,6 +287,8 @@ define EMBTK_CONFIGURE_HOSTPKG
 	@test -e $($(1)_SRC_DIR)/configure || exit 1
 	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$($(1)_CONFIGURE_OPTS)")
 	@cd $($(1)_BUILD_DIR);						\
+	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\
+	LDFLAGS="-L$(HOSTTOOLS)/$(LIBDIR) -L$(HOSTTOOLS)/usr/$(LIBDIR)"	\
 	$(CONFIG_SHELL) $($(1)_SRC_DIR)/configure			\
 	--build=$(HOST_BUILD) --host=$(HOST_ARCH)			\
 	--prefix=$(HOSTTOOLS)/usr $($(1)_CONFIGURE_OPTS)
