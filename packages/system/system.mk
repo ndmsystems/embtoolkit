@@ -30,6 +30,7 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_DBUS) += dbus_install
 #util-linux-ng
 include $(EMBTK_ROOT)/packages/system/utillinuxng/utillinuxng.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_UTILLINUXNG) += utillinuxng_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_UTILLINUXNG) += utillinuxng_host_install
 
 #upstart
 include $(EMBTK_ROOT)/packages/system/upstart/upstart.mk
