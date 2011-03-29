@@ -23,5 +23,8 @@
 # \date         August 2010
 ################################################################################
 
+#lzo
+source packages/compression/lzo/lzo.kconfig
+
 #zlib
 source packages/compression/zlib/zlib.kconfig

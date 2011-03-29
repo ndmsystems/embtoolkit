@@ -28,7 +28,6 @@ HOSTTOOLS_COMPONENTS-y := mkimage_install
 ################################################################################
 #################### Common include for target and host ########################
 ################################################################################
-include $(EMBTK_ROOT)/mk/lzo.mk
 include $(EMBTK_ROOT)/mk/mkimage.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
 

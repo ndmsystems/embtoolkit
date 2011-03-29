@@ -25,8 +25,9 @@
 
 config EMBTK_HOST_HAVE_MTDUTILS
 	bool
-	select EMBTK_HAVE_UTILLINUXNG
+	select EMBTK_HOST_HAVE_UTILLINUXNG
 	select EMBTK_HOST_HAVE_ZLIB
+	select EMBTK_HOST_HAVE_LZO
 	help
 		mtd-utils intented to run on the host development machine.
 choice
