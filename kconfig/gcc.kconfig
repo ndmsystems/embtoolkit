@@ -43,6 +43,9 @@ choice
 	help
 		Here you can choose which version of gcc-4.5.x you want to use
 
+	config EMBTK_GCC_VERSION_4_5_3
+		bool "gcc-4.5.3"
+		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_5_2
 		bool "gcc-4.5.2"
 		select EMBTK_GCC_NEED_PATCH
@@ -61,6 +64,9 @@ choice
 	help
 		Here you can choose which version of gcc-4.4.x you want to use
 
+	config EMBTK_GCC_VERSION_4_4_6
+		bool "gcc-4.4.6"
+		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_4_5
 		bool "gcc-4.4.5"
 		select EMBTK_GCC_NEED_PATCH
@@ -170,9 +176,11 @@ config EMBTK_GCC_LANGUAGE_FORTRAN
 
 config EMBTK_GCC_VERSION_STRING
 	string
+	default "4.5.3"		if EMBTK_GCC_VERSION_4_5_3
 	default "4.5.2"		if EMBTK_GCC_VERSION_4_5_2
 	default "4.5.1"		if EMBTK_GCC_VERSION_4_5_1
 	default "4.5.0"		if EMBTK_GCC_VERSION_4_5_0
+	default "4.4.6"		if EMBTK_GCC_VERSION_4_4_6
 	default "4.4.5"		if EMBTK_GCC_VERSION_4_4_5
 	default "4.4.4"		if EMBTK_GCC_VERSION_4_4_4
 	default "4.4.3"		if EMBTK_GCC_VERSION_4_4_3
