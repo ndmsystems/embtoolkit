@@ -80,23 +80,30 @@ All: $(EMBTK_BUILD)
 
 xconfig: basic
 ifeq ($(CONFIG_EMBTK_DOTCONFIG),y)
-	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig xconfig
+	$(Q)PKG_CONFIG_PATH=/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig \
+	make -f scripts/Makefile.build obj=scripts/kconfig xconfig
 else
 	@if [ -e $(EMBTK_ROOT)/.config.old ]; then \
 	cp  $(EMBTK_ROOT)/.config.old  $(EMBTK_ROOT)/.config; \
+	PKG_CONFIG_PATH=/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig \
 	make -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
 	else \
+	PKG_CONFIG_PATH=/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig \
 	make -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
 	fi
 endif
 
 menuconfig: basic
-	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig menuconfig
+	$(Q)PKG_CONFIG_PATH=/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig \
+	make -f scripts/Makefile.build obj=scripts/kconfig menuconfig
+
 randconfig: basic
-	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig randconfig
+	$(Q)PKG_CONFIG_PATH=/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig \
+	make -f scripts/Makefile.build obj=scripts/kconfig randconfig
 
 basic:
-	$(Q)make -f scripts/Makefile.build obj=scripts/basic
+	$(Q)PKG_CONFIG_PATH=/lib/pkgconfig:/usr/lib/pkgconfig:/usr/local/lib/pkgconfig \
+	make -f scripts/Makefile.build obj=scripts/basic
 
 clean: rmallpath
 	$(Q)make -f scripts/Makefile.clean obj=scripts/kconfig
