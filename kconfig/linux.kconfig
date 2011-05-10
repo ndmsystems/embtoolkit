@@ -29,6 +29,16 @@ choice
 		Here you can choose which Linux kernel headers you
 		you want to use.
 
+	config EMBTK_LINUX_VERSION_2_6_38_X
+		bool "linux-2.6.38.x"
+		select EMBTK_LINUX_PKG_IS_TARBZ2
+		help
+		 Use a linux-2.6.38.x version.
+	config EMBTK_LINUX_VERSION_2_6_37_X
+		bool "linux-2.6.37.x"
+		select EMBTK_LINUX_PKG_IS_TARBZ2
+		help
+		 Use a linux-2.6.37.x version.
 	config EMBTK_LINUX_VERSION_2_6_36_X
 		bool "linux-2.6.36.x"
 		select EMBTK_LINUX_PKG_IS_TARBZ2
@@ -80,6 +90,14 @@ choice
 		help
 		 Use a linux-2.6.27.x version.
 endchoice
+
+if EMBTK_LINUX_VERSION_2_6_38_X
+source kconfig/linux-kconfigs/linux-2.6.38.kconfig
+endif
+
+if EMBTK_LINUX_VERSION_2_6_37_X
+source kconfig/linux-kconfigs/linux-2.6.37.kconfig
+endif
 
 if EMBTK_LINUX_VERSION_2_6_36_X
 source kconfig/linux-kconfigs/linux-2.6.36.kconfig

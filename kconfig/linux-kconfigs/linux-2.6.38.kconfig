@@ -1,0 +1,56 @@
+################################################################################
+# Embtoolkit
+# Copyright(C) 2011 Abdoulaye Walsimou GAYE.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         linux-2.6.38.kconfig
+# \brief	linux v2.6.38.x series
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         May 2011
+################################################################################
+
+choice
+	prompt "Linux v2.6.38.x series exact version to use."
+	help
+		Linux v2.6.38.x series exact version to use.
+
+	config EMBTK_LINUX_VERSION_2_6_38_6
+		bool "linux-2.6.38.6"
+	config EMBTK_LINUX_VERSION_2_6_38_5
+		bool "linux-2.6.38.5"
+	config EMBTK_LINUX_VERSION_2_6_38_4
+		bool "linux-2.6.38.4"
+	config EMBTK_LINUX_VERSION_2_6_38_3
+		bool "linux-2.6.38.3"
+	config EMBTK_LINUX_VERSION_2_6_38_2
+		bool "linux-2.6.38.2"
+	config EMBTK_LINUX_VERSION_2_6_38_1
+		bool "linux-2.6.38.1"
+	config EMBTK_LINUX_VERSION_2_6_38
+		bool "linux-2.6.38"
+endchoice
+
+config EMBTK_LINUX_VERSION_STRING
+	string
+	default "2.6.38.6"		if EMBTK_LINUX_VERSION_2_6_38_6
+	default "2.6.38.5"		if EMBTK_LINUX_VERSION_2_6_38_5
+	default "2.6.38.4"		if EMBTK_LINUX_VERSION_2_6_38_4
+	default "2.6.38.3"		if EMBTK_LINUX_VERSION_2_6_38_3
+	default "2.6.38.2"		if EMBTK_LINUX_VERSION_2_6_38_2
+	default "2.6.38.1"		if EMBTK_LINUX_VERSION_2_6_38_1
+	default "2.6.38"		if EMBTK_LINUX_VERSION_2_6_38
+
