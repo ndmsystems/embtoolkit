@@ -53,8 +53,8 @@ mtdutils_host_install:
 
 $(MTDUTILS_HOST_BUILD_DIR)/.installed:  $(MTDUTILS_HOST_DEPS) \
 	download_mtdutils $(MTDUTILS_HOST_BUILD_DIR)/.decompressed
-	LDFLAGS="-L$(HOSTTOOLS)/usr/local/lib" \
-	CPPFLAGS="-I. -I$(HOSTTOOLS)/usr/local/include -I$(HOSTTOOLS)/usr/include" \
+	LDFLAGS="-L$(HOSTTOOLS)/usr/lib -L$(HOSTTOOLS)/usr/local/lib" \
+	CPPFLAGS="-I. -Iinclude -I../include -I$(HOSTTOOLS)/usr/include -I$(HOSTTOOLS)/usr/local/include" \
 	DESTDIR=$(HOSTTOOLS) \
 	BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR) \
 	$(MAKE) -C $(TOOLS_BUILD)/mtd-utils-$(MTDUTILS_VERSION) install
