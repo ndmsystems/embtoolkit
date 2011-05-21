@@ -60,11 +60,11 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 ROOTFS_STRIPPED_FILES += `find $$ROOTFS/lib32 -type f -name *.so*`
 ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/lib32 -type f -name *.so*`
 endif
-ROOTFS_STRIPPED_FILES += `find $$ROOTFS/bin -type f`
-ROOTFS_STRIPPED_FILES += `find $$ROOTFS/sbin -type f`
-ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/bin -type f`
-ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/sbin -type f`
-ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/libexec -type f`
+ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/bin ] && find $$ROOTFS/bin -type f`
+ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/sbin ] && find $$ROOTFS/sbin -type f`
+ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/usr/bin ] && find $$ROOTFS/usr/bin -type f`
+ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/usr/sbin ] && find $$ROOTFS/usr/sbin -type f`
+ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/usr/libexec ] && find $$ROOTFS/usr/libexec -type f`
 endif
 
 rootfs_build:
@@ -96,16 +96,16 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 	@-cp -d $(SYSROOT)/lib32/*.so* $(ROOTFS)/lib32/
 	@-cp -d $(SYSROOT)/usr/lib32/*.so* $(ROOTFS)/usr/lib32/
 endif
-	@-cp -R $(SYSROOT)/bin/* $(ROOTFS)/bin/
+	@-cp -R $(SYSROOT)/bin/* $(ROOTFS)/bin/ >/dev/null 2>/dev/null
 	@-cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
-	@-cp -R $(SYSROOT)/sbin/* $(ROOTFS)/sbin/
+	@-cp -R $(SYSROOT)/sbin/* $(ROOTFS)/sbin/ >/dev/null 2>/dev/null
 	@-cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
-	@-cp -R $(SYSROOT)/etc/* $(ROOTFS)/etc/
+	@-cp -R $(SYSROOT)/etc/* $(ROOTFS)/etc/ >/dev/null 2>/dev/null
 	@cp -R $(SYSROOT)/root $(ROOTFS)/
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
 	$(call EMBTK_GENERIC_MESSAGE,"Stripping binaries as specified...")
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
-	$(TARGETSTRIP) $(ROOTFS_STRIPPED_FILES)
+	$(TARGETSTRIP) $(ROOTFS_STRIPPED_FILES) >/dev/null 2>&1
 endif
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	rm -rf `find $$ROOTFS -type f -name *.la`
