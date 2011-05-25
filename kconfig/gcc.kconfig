@@ -48,9 +48,11 @@ choice
 		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_5_2
 		bool "gcc-4.5.2"
+		depends on EMBTK_OLDPACKAGES
 		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_5_1
 		bool "gcc-4.5.1"
+		depends on EMBTK_OLDPACKAGES
 		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_5_0
 		bool "gcc-4.5.0"
@@ -69,9 +71,11 @@ choice
 		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_4_5
 		bool "gcc-4.4.5"
+		depends on EMBTK_OLDPACKAGES
 		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_4_4
 		bool "gcc-4.4.4"
+		depends on EMBTK_OLDPACKAGES
 		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_4_3
 		depends on EMBTK_OLDPACKAGES
