@@ -30,6 +30,8 @@ config EMBTK_HAVE_UTILLINUXNG
 	select KEMBTK_UCLIBC_UCLIBC_HAS___PROGNAME if EMBTK_CLIB_UCLIBC
 	select KEMBTK_UCLIBC_DO_C99_MATH if EMBTK_CLIB_UCLIBC
 	select KEMBTK_UCLIBC_UCLIBC_HAS_WCHAR if EMBTK_CLIB_UCLIBC
+	select KEMBTK_EGLIBC_OPTION_POSIX_C_LANG_WIDE_CHAR if EMBTK_CLIB_EGLIBC
+	select KEMBTK_EGLIBC_OPTION_EGLIBC_LOCALE_CODE if EMBTK_CLIB_EGLIBC
 	help
 		The util-linux-ng is a fork of the original util-linux project.
 		The goal of the util-linux-ng is a transparent and reliable
