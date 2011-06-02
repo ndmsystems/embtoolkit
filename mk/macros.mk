@@ -206,7 +206,7 @@ endif
 
 #A macro to remove rpath in packages that use libtool -rpath
 define EMBTK_KILL_LT_RPATH
-	@cd $(1); \
+	@cd $(strip $(1)); \
 	LOCAL_LT_FILES=`find -type f -name libtool`; \
 	for i in $$LOCAL_LT_FILES; \
 	do \
@@ -271,7 +271,7 @@ define EMBTK_CONFIGURE_PKG
 	--prefix=/usr --sysconfdir=/etc --disable-rpath			\
 	$($(1)_CONFIGURE_OPTS)
 	@touch $($(1)_BUILD_DIR)/.configured
-	$(call EMBTK_KILL_LT_RPATH,"$($(1)_BUILD_DIR)")
+	$(call EMBTK_KILL_LT_RPATH,$($(1)_BUILD_DIR))
 endef
 
 #
