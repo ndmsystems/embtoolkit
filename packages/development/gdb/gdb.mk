@@ -30,7 +30,9 @@ GDB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GDB_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/gdb/$(GDB_VERSION)
 GDB_PACKAGE		:= gdb-$(GDB_VERSION).tar.bz2
 GDB_SRC_DIR		:= $(PACKAGES_BUILD)/gdb-$(GDB_VERSION)
-GDB_BUILD_DIR		:= $(PACKAGES_BUILD)/gdb-$(GDB_VERSION)
+GDB_BUILD_DIR		:= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),		\
+		$(PACKAGES_BUILD)/gdb-$(GDB_VERSION)-serverbuild,	\
+		$(PACKAGES_BUILD)/gdb-$(GDB_VERSION)-build)
 
 # GDB installed files
 GDBSERVER_BIN	:= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),,gdbserver)
