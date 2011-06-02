@@ -23,61 +23,78 @@
 # \date         July 2009
 ################################################################################
 
-config EMBTK_HAVE_GDB
+config EMBTK_HAVE_GDB_SYSTEM
 	bool "Have GDB: Gnu debugging system"
-	select EMBTK_HAVE_NCURSES
+	select EMBTK_GDB_PKG_IS_TARBZ2
 	help
-	 Have GNU debugger components on your embedded target and/or on your
-	 development machine.
+		Have GNU debugger components on your embedded target and/or on
+		your development machine.
 
 choice
 	prompt "GDB version to use"
-	depends on EMBTK_HAVE_GDB
+	depends on EMBTK_HAVE_GDB_SYSTEM
 	help
 		Choose which version of gdb to use.
 
-	config EMBTK_GDB_VERSION_7_1
-		bool "gdb-7.1"
-	config EMBTK_GDB_VERSION_7_0_1
-		depends on !EMBTK_CLIB_UCLIBC
-		depends on EMBTK_OLDPACKAGES
-		bool "gdb-7.0.1"
-	config EMBTK_GDB_VERSION_7_0
-		depends on !EMBTK_CLIB_UCLIBC
-		depends on EMBTK_OLDPACKAGES
-		bool "gdb-7.0"
+	config EMBTK_GDB_VERSION_7_2
+		bool "gdb-7.2"
+		select EMBTK_GDB_NEED_PATCH
 	config EMBTK_GDB_VERSION_6_8
 		bool "gdb-6.8"
 endchoice
 
-config EMBTK_GDB_VERSION_STRING
-	string
-	default "7.1"		if EMBTK_GDB_VERSION_7_1
-	default "7.0.1"		if EMBTK_GDB_VERSION_7_0_1
-	default "7.0"		if EMBTK_GDB_VERSION_7_0
-	default "6.8"		if EMBTK_GDB_VERSION_6_8
-
 choice
 	prompt "GDB on your target embedded system"
-	depends on EMBTK_HAVE_GDB
 	depends on EMBTK_HAVE_ROOTFS
-	config EMBTK_HAVE_GDBSERVER_ON_TARGET
+	depends on EMBTK_HAVE_GDB_SYSTEM
+	config EMBTK_HAVE_GDBSERVER
 		bool "Have gdbserver on target"
+		select EMBTK_HAVE_NCURSES
+		select KEMBTK_UCLIBC_PTHREADS_DEBUG_SUPPORT if EMBTK_CLIB_UCLIBC
 		help
-		 Say yes if you want to have only gdbserver on your embedded
-		 system target.
+			Say yes if you want to have only gdbserver on your
+			embedded system target.
 
-	config EMBTK_HAVE_GDB_ON_TARGET
+	config EMBTK_HAVE_GDB
 		bool "Have gdb on target"
+		select EMBTK_HAVE_NCURSES
+		select KEMBTK_UCLIBC_PTHREADS_DEBUG_SUPPORT if EMBTK_CLIB_UCLIBC
 		help
-		 Say yes if you want to have full gdb on your embedded system
-		 target.
+			Say yes if you want to have full gdb on your embedded
+			system target.
 endchoice
 
-config EMBTK_HAVE_GDB_ON_HOST
-	bool "Have gdb on host"
-	depends on EMBTK_HAVE_GDB
+config EMBTK_HOST_HAVE_GDB
+	bool "Have gdb on host your development machine"
+	depends on EMBTK_HAVE_GDB_SYSTEM
 	help
-	 Say yes if you want to have gdb on your host development machine.
+		Say yes if you want to have gdb on your host development
+		machine.
 
 
+config EMBTK_GDB_VERSION_STRING
+	string
+	default "7.2"		if EMBTK_GDB_VERSION_7_2
+	default "6.8"		if EMBTK_GDB_VERSION_6_8
+
+config EMBTK_GDB_NEED_PATCH
+	bool
+	select EMBTK_GDB_HOST_NEED_PATCH
+config EMBTK_GDB_NEED_AUTORECONF
+	bool
+	select EMBTK_GDB_HOST_NEED_AUTORECONF
+config EMBTK_GDB_PKG_IS_TARGZ
+	bool
+	select EMBTK_GDB_HOST_PKG_IS_TARGZ
+config EMBTK_GDB_PKG_IS_TARBZ2
+	bool
+	select EMBTK_GDB_HOST_PKG_IS_TARBZ2
+
+config EMBTK_GDB_HOST_NEED_PATCH
+	bool
+config EMBTK_GDB_HOST_NEED_AUTORECONF
+	bool
+config EMBTK_GDB_HOST_PKG_IS_TARGZ
+	bool
+config EMBTK_GDB_HOST_PKG_IS_TARBZ2
+	bool

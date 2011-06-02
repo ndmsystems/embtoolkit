@@ -23,6 +23,8 @@
 # \date         October 2010
 ################################################################################
 
+# GDB: already included from main kconfig
+
 #libevent
 source packages/development/libevent/libevent.kconfig
 

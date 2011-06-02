@@ -31,18 +31,9 @@ HOSTTOOLS_COMPONENTS-y := mkimage_install
 include $(EMBTK_ROOT)/mk/mkimage.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
 
-#gdb
-include $(EMBTK_ROOT)/mk/gdb.mk
-
 ################################################################################
-############################# Packages for TARGET ##############################
+######################### Packages for TARGET and HOST #########################
 ################################################################################
-
-#gdb
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GDB_ON_TARGET) += gdb_target_install
-
-#gdbserver
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GDBSERVER_ON_TARGET) += gdbserver_target_install
 
 #strace
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_STRACE) += strace_install
@@ -86,13 +77,6 @@ include $(EMBTK_ROOT)/packages/busybox/busybox.mk
 
 #Clean for all unselected packages
 ROOTFS_COMPONENTS_CLEAN := $(subst install,clean,$(ROOTFS_COMPONENTS-))
-
-################################################################################
-########################## Packages for HOST MACHINE ###########################
-################################################################################
-
-#gdb
-HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GDB_ON_HOST) += gdb_host_install
 
 ################################################################################
 ########################### Targets for HOST MACHINE ###########################

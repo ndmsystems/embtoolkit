@@ -48,7 +48,7 @@ source kconfig/targetbuildopts.kconfig
 endmenu
 
 menu "Debugging system"
-source "kconfig/gdb.kconfig"
+source "packages/development/gdb/gdb.kconfig"
 source "kconfig/strace.kconfig"
 endmenu
 
