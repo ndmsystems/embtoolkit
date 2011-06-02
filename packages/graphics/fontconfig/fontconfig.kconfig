@@ -24,6 +24,7 @@
 
 config EMBTK_HAVE_FONTCONFIG
 	bool "Have fontconfig"
+	select EMBTK_FONTCONFIG_PKG_IS_TARGZ
 	select EMBTK_HAVE_LIBXML2
 	help
 		Fontconfig is a library for font customization and
@@ -36,9 +37,18 @@ choice
 
 	config  EMBTK_FONTCONFIG_VERSION_2_8_0
 		bool "fontconfig-2.8.0"
+		select EMBTK_FONTCONFIG_NEED_PATCH
 endchoice
 
 config EMBTK_FONTCONFIG_VERSION_STRING
 	string
 	default "2.8.0"		if EMBTK_FONTCONFIG_VERSION_2_8_0
 
+config EMBTK_FONTCONFIG_NEED_PATCH
+	bool
+config EMBTK_FONTCONFIG_NEED_AUTORECONF
+	bool
+config EMBTK_FONTCONFIG_PKG_IS_TARGZ
+	bool
+config EMBTK_FONTCONFIG_PKG_IS_TARBZ2
+	bool
