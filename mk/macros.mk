@@ -386,30 +386,31 @@ endef
 define EMBTK_DECOMPRESS_PKG
 	$(call EMBTK_GENERIC_MSG,"Decrompressing $($(1)_PACKAGE) ...")
 	@if [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "xy" ] &&			\
-	[ ! -e $($(1)_BUILD_DIR)/.decompressed ]; then				\
+	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
 		tar -C $(PACKAGES_BUILD) -xzf					\
 		$(DOWNLOAD_DIR)/$($(1)_PACKAGE) &&				\
 		mkdir -p $($(1)_BUILD_DIR) &&					\
-		touch $($(1)_BUILD_DIR)/.decompressed;				\
+		touch $($(1)_SRC_DIR)/.decompressed;				\
 	elif [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARBZ2)" == "xy" ] &&		\
-	[ ! -e $($(1)_BUILD_DIR)/.decompressed ]; then				\
+	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
 		tar -C $(PACKAGES_BUILD) -xjf					\
 		$(DOWNLOAD_DIR)/$($(1)_PACKAGE) &&				\
 		mkdir -p $($(1)_BUILD_DIR) &&					\
-		touch $($(1)_BUILD_DIR)/.decompressed;				\
+		touch $($(1)_SRC_DIR)/.decompressed;				\
 	elif [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARBZ2)" == "x" ] &&		\
 	[ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "x" ] &&			\
-	[ ! -e $($(1)_BUILD_DIR)/.decompressed ]; then				\
+	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
 		echo -e "\E[1;31m!Unknown package compression type!\E[0m";	\
 		exit 1;								\
 	fi
 	@if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ] &&			\
-	[ ! -e $($(1)_BUILD_DIR)/.patched ]; then				\
+	[ ! -e $($(1)_SRC_DIR)/.patched ]; then					\
 		cd $($(1)_SRC_DIR);						\
 		patch -p1 <							\
 		$(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch &&		\
-		touch $($(1)_BUILD_DIR)/.patched;				\
+		touch $($(1)_SRC_DIR)/.patched;					\
 	fi
+	@mkdir -p $($(1)_BUILD_DIR)
 endef
 
 #
@@ -421,30 +422,31 @@ endef
 define EMBTK_DECOMPRESS_HOSTPKG
 	$(call EMBTK_GENERIC_MSG,"Decrompressing $($(1)_PACKAGE) ...")
 	@if [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "xy" ] &&			\
-	[ ! -e $($(1)_BUILD_DIR)/.decompressed ]; then				\
+	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
 		tar -C $(TOOLS_BUILD) -xzf					\
 		$(DOWNLOAD_DIR)/$($(1)_PACKAGE) &&				\
 		mkdir -p $($(1)_BUILD_DIR) &&					\
-		touch $($(1)_BUILD_DIR)/.decompressed;				\
+		touch $($(1)_SRC_DIR)/.decompressed;				\
 	elif [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARBZ2)" == "xy" ] &&		\
-	[ ! -e $($(1)_BUILD_DIR)/.decompressed ]; then				\
+	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
 		tar -C $(TOOLS_BUILD) -xjf					\
 		$(DOWNLOAD_DIR)/$($(1)_PACKAGE) &&				\
 		mkdir -p $($(1)_BUILD_DIR) &&					\
-		touch $($(1)_BUILD_DIR)/.decompressed;				\
+		touch $($(1)_SRC_DIR)/.decompressed;				\
 	elif [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARBZ2)" == "x" ] &&		\
 	[ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "x" ] &&			\
-	[ ! -e $($(1)_BUILD_DIR)/.decompressed ]; then				\
+	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
 		echo -e "\E[1;31m!Unknown package compression type!\E[0m";	\
 		exit 1;								\
 	fi
 	@if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ] &&			\
-	[ ! -e $($(1)_BUILD_DIR)/.patched ]; then				\
+	[ ! -e $($(1)_SRC_DIR)/.patched ]; then					\
 		cd $($(1)_SRC_DIR);						\
 		patch -p1 <							\
 		$(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch &&		\
-		touch $($(1)_BUILD_DIR)/.patched;				\
+		touch $($(1)_SRC_DIR)/.patched;					\
 	fi
+	@mkdir -p $($(1)_BUILD_DIR)
 endef
 
 #
