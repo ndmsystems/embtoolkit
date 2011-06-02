@@ -23,24 +23,24 @@
 # \date         December 2009
 ################################################################################
 
-FOO_NAME := foo
-FOO_VERSION := $(call EMBTK_GET_PKG_VERSION,FOO)
-FOO_SITE := http://www.foo.org/download
-FOO_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-FOO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/foo/$(FOO_VERSION)
-FOO_PACKAGE := foo-$(FOO_VERSION).tar.gz
-FOO_SRC_DIR := $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
-FOO_BUILD_DIR := $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
+FOO_NAME		:= foo
+FOO_VERSION		:= $(call EMBTK_GET_PKG_VERSION,FOO)
+FOO_SITE		:= http://www.foo.org/download
+FOO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+FOO_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/foo/$(FOO_VERSION)
+FOO_PACKAGE		:= foo-$(FOO_VERSION).tar.gz
+FOO_SRC_DIR		:= $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
+FOO_BUILD_DIR		:= $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
 
-FOO_BINS =
-FOO_SBINS =
-FOO_INCLUDES =
-FOO_LIBS =
-FOO_LIBEXECS =
-FOO_PKGCONFIGS =
+FOO_BINS		:=
+FOO_SBINS		:=
+FOO_INCLUDES		:=
+FOO_LIBS		:=
+FOO_LIBEXECS		:=
+FOO_PKGCONFIGS		:=
 
-FOO_CONFIGURE_ENV :=
-FOO_CONFIGURE_OPTS :=
+FOO_CONFIGURE_ENV	:=
+FOO_CONFIGURE_OPTS	:=
 
 FOO_DEPS :=
 
