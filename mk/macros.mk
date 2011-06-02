@@ -436,28 +436,37 @@ endef
 #
 define EMBTK_CLEANUP_PKG
 	$(call EMBTK_GENERIC_MESSAGE,"Cleanup $($(1)_NAME)...")
-	@-if [ "x$($(1)_ETC)" != "x" ]; then				\
-		cd $(SYSROOT)/etc; rm -rf $($(1)_ETC);			\
+	@-if [ "x$($(1)_ETC)" != "x" ] && [ -e $(SYSROOT)/etc ];		\
+		then								\
+		cd $(SYSROOT)/etc; rm -rf $($(1)_ETC);				\
 	fi
-	@-if [ "x$($(1)_BINS)" != "x" ]; then				\
-		cd $(SYSROOT)/usr/bin; rm -rf $($(1)_BINS);		\
+	@-if [ "x$($(1)_BINS)" != "x" ] && [ -e $(SYSROOT)/usr/bin ];		\
+		then								\
+		cd $(SYSROOT)/usr/bin; rm -rf $($(1)_BINS);			\
 	fi
-	@-if [ "x$($(1)_SBINS)" != "x" ]; then				\
-		cd $(SYSROOT)/usr/sbin; rm -rf $($(1)_SBINS);		\
+	@-if [ "x$($(1)_SBINS)" != "x" ] && [ -e $(SYSROOT)/usr/sbin ];		\
+		then								\
+		cd $(SYSROOT)/usr/sbin; rm -rf $($(1)_SBINS);			\
 	fi
-	@-if [ "x$($(1)_INCLUDES)" != "x" ]; then			\
-		cd $(SYSROOT)/usr/include; rm -rf $($(1)_INCLUDES);	\
+	@-if [ "x$($(1)_INCLUDES)" != "x" ] && [ -e $(SYSROOT)/usr/include ];	\
+		then								\
+		cd $(SYSROOT)/usr/include; rm -rf $($(1)_INCLUDES);		\
 	fi
-	@-if [ "x$($(1)_LIBS)" != "x" ]; then				\
-		cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $($(1)_LIBS);	\
+	@-if [ "x$($(1)_LIBS)" != "x" ] && [ -e $(SYSROOT)/usr/$(LIBDIR) ];	\
+		then								\
+		cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $($(1)_LIBS);		\
 	fi
-	@-if [ "x$($(1)_LIBEXECS)" != "x" ]; then			\
-		cd $(SYSROOT)/usr/$(LIBDIR)/libexec;			\
-		rm -rf $($(1)_LIBEXECS);				\
+	@-if [ "x$($(1)_LIBEXECS)" != "x" ] &&					\
+	[ -e $(SYSROOT)/usr/$(LIBDIR)/libexec ];				\
+		then								\
+		cd $(SYSROOT)/usr/$(LIBDIR)/libexec;				\
+		rm -rf $($(1)_LIBEXECS);					\
 	fi
-	@-if [ "x$($(1)_PKGCONFIGS)" != "x" ]; then			\
-		cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig;			\
-		rm -rf $($(1)_PKGCONFIGS);				\
+	@-if [ "x$($(1)_PKGCONFIGS)" != "x" ] &&				\
+	[ -e $(SYSROOT)/usr/$(LIBDIR)/pkgconfig ];				\
+		then								\
+		cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig;				\
+		rm -rf $($(1)_PKGCONFIGS);					\
 	fi
 	@-rm -rf $($(1)_BUILD_DIR)*
 endef
