@@ -37,6 +37,7 @@ choice
 
 	config  EMBTK_FONTCONFIG_VERSION_2_8_0
 		bool "fontconfig-2.8.0"
+		select EMBTK_FONTCONFIG_NEED_PATCH
 endchoice
 
 config EMBTK_FONTCONFIG_VERSION_STRING
