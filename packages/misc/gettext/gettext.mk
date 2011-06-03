@@ -54,7 +54,8 @@ GETTEXT_DEPS = ncurses_install libxml2_install
 
 gettext_install:
 	$(call EMBTK_INSTALL_PKG,GETTEXT)
-	$(Q)$(MAKE) $(GETTEXT_BUILD_DIR)/.patchlibtool
+	@test -e $(GETTEXT_BUILD_DIR)/.patchlibtool || \
+	$(MAKE) $(GETTEXT_BUILD_DIR)/.patchlibtool
 
 download_gettext:
 	$(call EMBTK_DOWNLOAD_PKG,GETTEXT)
@@ -72,4 +73,4 @@ $(GETTEXT_BUILD_DIR)/.patchlibtool:
 	$(Q)sed \
 	-i "s;/usr/$(LIBDIR)/libgettextlib.la;$(SYSROOT)/$(LIBDIR)/libgettextlib.la;" \
 	$(SYSROOT)/usr/$(LIBDIR)/libgettextsrc.la
-
+	@touch $@
