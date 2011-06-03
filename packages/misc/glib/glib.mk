@@ -54,7 +54,8 @@ GLIB_DEPS := zlib_target_install gettext_install
 
 glib_install:
 	$(call EMBTK_INSTALL_PKG,GLIB)
-	$(Q)$(MAKE) $(GLIB_BUILD_DIR)/.patchlibtool
+	@test -e $(GLIB_BUILD_DIR)/.patchlibtool || \
+	$(MAKE) $(GLIB_BUILD_DIR)/.patchlibtool
 
 download_glib:
 	$(call EMBTK_DOWNLOAD_PKG,GLIB)
@@ -81,6 +82,7 @@ $(GLIB_BUILD_DIR)/.patchlibtool:
 	-e "s;\/usr\/$(LIBDIR)\/libglib-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libglib-2.0.la;" \
 	< $(SYSROOT)/usr/$(LIBDIR)/libgthread-2.0.la > libgthread-2.0.la.new; \
 	mv libgthread-2.0.la.new $(SYSROOT)/usr/$(LIBDIR)/libgthread-2.0.la
+	@touch $@
 
 glib_clean:
 	$(call EMBTK_CLEANUP_PKG,GLIB)
