@@ -23,46 +23,29 @@
 # \date         March 2010
 ################################################################################
 
-TSLIB_NAME := tslib
-TSLIB_VERSION := $(call EMBTK_GET_PKG_VERSION,TSLIB)
-TSLIB_SITE := http://download.berlios.de/tslib
-TSLIB_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-TSLIB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/tslib/$(TSLIB_VERSION)
-TSLIB_PACKAGE := tslib-$(TSLIB_VERSION).tar.bz2
-TSLIB_SRC_DIR := $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION)
-TSLIB_BUILD_DIR := $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION)
+TSLIB_NAME		:= tslib
+TSLIB_VERSION		:= $(call EMBTK_GET_PKG_VERSION,TSLIB)
+TSLIB_SITE		:= http://download.berlios.de/tslib
+TSLIB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+TSLIB_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/tslib/$(TSLIB_VERSION)
+TSLIB_PACKAGE		:= tslib-$(TSLIB_VERSION).tar.bz2
+TSLIB_SRC_DIR		:= $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION)
+TSLIB_BUILD_DIR		:= $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION)
 
-TSLIB_BINS = ts_calibrate ts_harvest ts_print ts_print_raw ts_test
-TSLIB_SBINS =
-TSLIB_INCLUDES = tslib.h
-TSLIB_LIBS = libts* ts
-TSLIB_PKGCONFIGS = tslib*.pc
+TSLIB_BINS		= ts_calibrate ts_harvest ts_print ts_print_raw ts_test
+TSLIB_SBINS		=
+TSLIB_INCLUDES		= tslib.h
+TSLIB_LIBS		= libts* ts
+TSLIB_PKGCONFIGS	= tslib*.pc
 
 TSLIB_DEPS =
 
 tslib_install:
-	@test -e $(TSLIB_BUILD_DIR)/.installed || \
-	$(MAKE) $(TSLIB_BUILD_DIR)/.installed
+	$(call EMBTK_INSTALL_PKG,TSLIB)
 	$(Q)$(MAKE) $(TSLIB_BUILD_DIR)/.special
-
-$(TSLIB_BUILD_DIR)/.installed: $(TSLIB_DEPS) download_tslib \
-	$(TSLIB_BUILD_DIR)/.decompressed $(TSLIB_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	tslib-$(TSLIB_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(TSLIB_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(TSLIB_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
 
 download_tslib:
 	$(call EMBTK_DOWNLOAD_PKG,TSLIB)
-
-$(TSLIB_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,TSLIB)
-
-$(TSLIB_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,TSLIB)
 
 tslib_clean:
 	$(call EMBTK_CLEANUP_PKG,TSLIB)
