@@ -23,14 +23,14 @@
 # \date         December 2009
 ################################################################################
 
-CAIRO_NAME := cairo
-CAIRO_VERSION := $(call EMBTK_GET_PKG_VERSION,CAIRO)
-CAIRO_SITE := http://www.cairographics.org/releases
-CAIRO_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-CAIRO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/cairo/$(CAIRO_VERSION)
-CAIRO_PACKAGE := cairo-$(CAIRO_VERSION).tar.gz
-CAIRO_SRC_DIR := $(PACKAGES_BUILD)/cairo-$(CAIRO_VERSION)
-CAIRO_BUILD_DIR := $(PACKAGES_BUILD)/cairo-$(CAIRO_VERSION)
+CAIRO_NAME		:= cairo
+CAIRO_VERSION		:= $(call EMBTK_GET_PKG_VERSION,CAIRO)
+CAIRO_SITE		:= http://www.cairographics.org/releases
+CAIRO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+CAIRO_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/cairo/$(CAIRO_VERSION)
+CAIRO_PACKAGE		:= cairo-$(CAIRO_VERSION).tar.gz
+CAIRO_SRC_DIR		:= $(PACKAGES_BUILD)/cairo-$(CAIRO_VERSION)
+CAIRO_BUILD_DIR		:= $(PACKAGES_BUILD)/cairo-$(CAIRO_VERSION)
 
 CAIRO_BINS =
 CAIRO_SBINS =
@@ -57,7 +57,8 @@ CAIRO_CONFIG_OPTS-n += --enable-xcb=no
 CAIRO_CONFIG_OPTS-n += --without-x
 endif
 
-CAIRO_CONFIGURE_OPTS := $(CAIRO_CONFIG_OPTS-n) $(CAIRO_CONFIG_OPTS-y)
+CAIRO_CONFIGURE_OPTS := $(CAIRO_CONFIG_OPTS-n) $(CAIRO_CONFIG_OPTS-y)	\
+		--enable-pthread=yes
 
 cairo_install:
 	$(call EMBTK_INSTALL_PKG,CAIRO)
