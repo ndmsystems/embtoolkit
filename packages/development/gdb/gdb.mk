@@ -121,5 +121,5 @@ gdb_host_clean:
 #
 # Common for target and host development machine
 #
-download_gdb:
+download_gdb download_gdb_host:
 	$(call EMBTK_DOWNLOAD_PKG,GDB)
