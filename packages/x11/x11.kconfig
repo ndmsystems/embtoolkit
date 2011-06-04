@@ -72,6 +72,6 @@ source packages/x11/xkbcomp/xkbcomp.kconfig
 source packages/x11/xtrans/xtrans.kconfig
 endmenu
 
-menu "X windowing server"
+menu "X windowing server and drivers"
 source packages/x11/xserver/xserver.kconfig
 endmenu
