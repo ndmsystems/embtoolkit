@@ -143,24 +143,16 @@ endif
 	$(call ECHO_BLUE,"################################################################################")
 
 #Macro to adapt libtool files (*.la) for cross compiling
+define __EMBTK_FIX_LIBTOOL_FILES
+	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/$(LIBDIR) -name *.la`;			\
+	for i in $$LIBTOOLS_LA_FILES; do						\
+	sed -e "s;libdir='\/usr\/$(LIBDIR)';libdir='$(SYSROOT)\/usr\/$(LIBDIR)';" $$i	\
+	> $$i.new;									\
+	mv $$i.new $$i;									\
+	done
+endef
 libtool_files_adapt:
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib32 -name *.la`; \
-	for i in $$LIBTOOLS_LA_FILES; \
-	do \
-	sed -e "s;libdir='\/usr\/lib32';libdir='$(SYSROOT)\/usr\/lib32';" $$i \
-	> $$i.new; \
-	mv $$i.new $$i; \
-	done
-else
-	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib -name *.la`; \
-	for i in $$LIBTOOLS_LA_FILES; \
-	do \
-	sed -e "s;libdir='\/usr\/lib';libdir='$(SYSROOT)\/usr\/lib';" < $$i \
-	> $$i.new; \
-	mv $$i.new $$i; \
-	done
-endif
+	$(Q)$(call __EMBTK_FIX_LIBTOOL_FILES)
 
 #Macro to restore libtool files (*.la)
 libtool_files_restore:
@@ -183,26 +175,17 @@ else
 endif
 
 #Macro to adapt pkg-config files for cross compiling
+define __EMBTK_FIX_PKGCONFIG_FILES
+	@PKGCONFIG_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/pkgconfig -name *.pc`;	\
+	for i in $$PKGCONFIG_FILES; do						\
+	sed -e 's;prefix=.*;prefix=$(SYSROOT)/usr;'				\
+	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;'	\
+	-e 's;libdir=.*;libdir=$(SYSROOT)/usr/$(LIBDIR);' < $$i > $$i.new;	\
+	mv $$i.new $$i;								\
+	done
+endef
 pkgconfig_files_adapt:
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	@PKGCONF_FILES=`find $(SYSROOT)/usr/lib32/pkgconfig -name *.pc`; \
-	for i in $$PKGCONF_FILES; \
-	do \
-	sed -e 's;prefix=.*;prefix=$(SYSROOT)/usr;' \
-	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
-	-e 's;libdir=.*;libdir=$(SYSROOT)/usr/lib32;' < $$i > $$i.new; \
-	mv $$i.new $$i; \
-	done
-else
-	@PKGCONF_FILES=`find $(SYSROOT)/usr/lib/pkgconfig -name *.pc`; \
-	for i in $$PKGCONF_FILES; \
-	do \
-	sed -e 's;prefix=.*;prefix=$(SYSROOT)/usr;' \
-	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;' \
-	-e 's;libdir=.*;libdir=$(SYSROOT)/usr/lib;' < $$i > $$i.new; \
-	mv $$i.new $$i; \
-	done
-endif
+	$(Q)$(call __EMBTK_FIX_PKGCONFIG_FILES)
 
 #A macro to remove rpath in packages that use libtool -rpath
 define EMBTK_KILL_LT_RPATH
@@ -311,8 +294,8 @@ define __EMBTK_INSTALL_PKG_MAKE
 	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $($(1)_BUILD_DIR)				\
 	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
+	$(Q)$(call __EMBTK_FIX_LIBTOOL_FILES)
+	$(Q)$(call __EMBTK_FIX_PKGCONFIG_FILES)
 	@touch $($(1)_BUILD_DIR)/.installed
 endef
 define EMBTK_INSTALL_PKG
