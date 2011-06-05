@@ -40,7 +40,7 @@ LIBFONTENC_PKGCONFIGS = libfontenc.pc
 
 LIBFONTENC_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
-LIBFONTENC_DEPS := zlib_target_install
+LIBFONTENC_DEPS := zlib_install
 
 libfontenc_install:
 	@test -e $(LIBFONTENC_BUILD_DIR)/.installed || \

@@ -76,7 +76,7 @@ mtdutils_host_clean:
 # mtd-utils for target #
 ########################
 
-MTDUTILS_DEPS := zlib_target_install lzo_install utillinuxng_install
+MTDUTILS_DEPS := zlib_install lzo_install utillinuxng_install
 
 mtdutils_target_install:
 	@test -e $(MTDUTILS_TARGET_BUILD_DIR)/.installed || \

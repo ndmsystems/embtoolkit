@@ -40,7 +40,7 @@ LIBPNG_PKGCONFIGS = libpng*
 
 LIBPNG_CONFIGURE_OPTS := --with-libpng-compat=no
 
-LIBPNG_DEPS := zlib_target_install
+LIBPNG_DEPS := zlib_install
 
 libpng_install:
 	@test -e $(LIBPNG_BUILD_DIR)/.installed || \

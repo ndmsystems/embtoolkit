@@ -38,7 +38,7 @@ FREETYPE_INCLUDES = ft*build.h freetype*
 FREETYPE_LIBS = libfreetype*
 FREETYPE_PKGCONFIGS = freetype*.pc
 
-FREETYPE_DEPS := zlib_target_install
+FREETYPE_DEPS := zlib_install
 
 freetype_install:
 	@test -e $(FREETYPE_BUILD_DIR)/.installed || \

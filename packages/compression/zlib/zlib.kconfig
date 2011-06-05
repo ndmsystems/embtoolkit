@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_ZLIB
 	bool "Have zlib in target"
+	select EMBTK_ZLIB_PKG_IS_TARBZ2
 	help
 		zlib is a compression library.
 
@@ -42,9 +43,28 @@ choice
 		bool "zlib-1.2.5"
 endchoice
 
-config EMBTK_ZLIB_NEED_PATCH
-	bool
-
 config EMBTK_ZLIB_VERSION_STRING
 	string
 	default "1.2.5"		if EMBTK_ZLIB_VERSION_1_2_5
+
+config EMBTK_ZLIB_NEED_PATCH
+	bool
+	select EMBTK_ZLIB_HOST_NEED_PATCH
+config EMBTK_ZLIB_NEED_AUTORECONF
+	bool
+	select EMBTK_ZLIB_HOST_NEED_AUTORECONF
+config EMBTK_ZLIB_PKG_IS_TARGZ
+	bool
+	select EMBTK_ZLIB_HOST_PKG_IS_TARGZ
+config EMBTK_ZLIB_PKG_IS_TARBZ2
+	bool
+	select EMBTK_ZLIB_HOST_PKG_IS_TARBZ2
+
+config EMBTK_ZLIB_HOST_NEED_PATCH
+	bool
+config EMBTK_ZLIB_HOST_NEED_AUTORECONF
+	bool
+config EMBTK_ZLIB_HOST_PKG_IS_TARGZ
+	bool
+config EMBTK_ZLIB_HOST_PKG_IS_TARBZ2
+	bool

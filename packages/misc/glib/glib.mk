@@ -50,7 +50,7 @@ GLIB_CONFIGURE_ENV	:= glib_cv_stack_grows=no			\
 
 GLIB_CONFIGURE_OPTS	:= --disable-fam
 
-GLIB_DEPS := zlib_target_install gettext_install
+GLIB_DEPS := zlib_install gettext_install
 
 glib_install:
 	$(call EMBTK_INSTALL_PKG,GLIB)

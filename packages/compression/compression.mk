@@ -30,6 +30,6 @@ HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LZO) += lzo_host_install
 
 #zlib for host and target
 include $(EMBTK_ROOT)/packages/compression/zlib/zlib.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_ZLIB) += zlib_target_install
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_ZLIB) += zlib_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_ZLIB) += zlib_host_install
 
