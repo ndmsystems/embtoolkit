@@ -104,6 +104,8 @@ ZLIB_HOST_PACKAGE	:= $(ZLIB_PACKAGE)
 ZLIB_HOST_SRC_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_VERSION)
 ZLIB_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_VERSION)
 
+ZLIB_HOST_CONFIGURE_ENV	:= CC=$(HOSTCC_CACHED)
+
 zlib_host_install:
 	@test -e $(ZLIB_HOST_BUILD_DIR)/.installed || \
 	$(MAKE) $(ZLIB_HOST_BUILD_DIR)/.installed
@@ -116,7 +118,7 @@ $(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib \
 	@touch $@
 
 $(ZLIB_HOST_SRC_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,ZLIB)
+	$(call EMBTK_DECOMPRESS_HOSTPKG,ZLIB_HOST)
 
 $(ZLIB_HOST_BUILD_DIR)/.configured:
 	$(call EMBTK_GENERIC_MSG,"Configure $(ZLIB_HOST_PACKAGE) for host...")
@@ -125,7 +127,7 @@ $(ZLIB_HOST_BUILD_DIR)/.configured:
 	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\
 	LDFLAGS="-L$(HOSTTOOLS)/$(LIBDIR) -L$(HOSTTOOLS)/usr/$(LIBDIR)"	\
 	$(ZLIB_HOST_CONFIGURE_ENV)					\
-	$(CONFIG_SHELL) $(ZLIB_SRC_DIR)/configure			\
+	$(CONFIG_SHELL) $(ZLIB_HOST_SRC_DIR)/configure			\
 	--prefix=$(HOSTTOOLS)/usr $(ZLIB_HOST_CONFIGURE_OPTS)
 	@touch $@
 
