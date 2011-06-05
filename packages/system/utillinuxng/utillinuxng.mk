@@ -23,13 +23,15 @@
 # \date         August 2010
 ################################################################################
 
-UTILLINUXNG_MAJOR_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_UTILLINUXNG_MAJOR_VERSION_STRING)))
-UTILLINUXNG_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_UTILLINUXNG_VERSION_STRING)))
-UTILLINUXNG_SITE := ftp://ftp.kernel.org/pub/linux/utils/util-linux-ng/$(UTILLINUXNG_MAJOR_VERSION)
-UTILLINUXNG_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/util-linux-ng/$(UTILLINUXNG_VERSION)
-UTILLINUXNG_PACKAGE := util-linux-ng-$(UTILLINUXNG_VERSION).tar.bz2
-UTILLINUXNG_BUILD_DIR := $(PACKAGES_BUILD)/util-linux-ng-$(UTILLINUXNG_VERSION)
-UTILLINUXNG_HOST_BUILD_DIR := $(TOOLS_BUILD)/util-linux-ng-$(UTILLINUXNG_VERSION)
+UTILLINUXNG_NAME		:= util-linux-ng
+UTILLINUXNG_MAJOR_VERSION	:= $(call EMBTK_GET_PKG_VERSION,UTILLINUXNG_MAJOR)
+UTILLINUXNG_VERSION		:= $(call EMBTK_GET_PKG_VERSION,UTILLINUXNG)
+UTILLINUXNG_SITE		:= ftp://ftp.kernel.org/pub/linux/utils/util-linux-ng/$(UTILLINUXNG_MAJOR_VERSION)
+UTILLINUXNG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+UTILLINUXNG_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/util-linux-ng/$(UTILLINUXNG_VERSION)
+UTILLINUXNG_PACKAGE		:= util-linux-ng-$(UTILLINUXNG_VERSION).tar.bz2
+UTILLINUXNG_SRC_DIR		:= $(PACKAGES_BUILD)/util-linux-ng-$(UTILLINUXNG_VERSION)
+UTILLINUXNG_BUILD_DIR		:= $(PACKAGES_BUILD)/util-linux-ng-$(UTILLINUXNG_VERSION)
 
 ################################
 # util-linux-ng for the target #
@@ -41,7 +43,7 @@ UTILLINUXNG_INCLUDES = uuid
 UTILLINUXNG_LIBS = libuuid.*
 UTILLINUXNG_PKGCONFIGS = uuid.pc
 
-UTILLINUXNG_CONFIGURE_OPTS := --without-audit --without-selinux \
+UTILLINUXNG_CONFIGURE_OPTS := --without-audit --without-selinux	\
 	--without-pam --without-slang --without-ncurses \
 	--disable-makeinstall-setuid --disable-makeinstall-chown \
 	--disable-use-tty-group --disable-require-password --disable-pg-bell \
@@ -62,62 +64,38 @@ utillinuxng_install:
 	@test -e $(UTILLINUXNG_BUILD_DIR)/.installed || \
 	$(MAKE) $(UTILLINUXNG_BUILD_DIR)/.installed
 
-$(UTILLINUXNG_BUILD_DIR)/.installed: $(UTILLINUXNG_DEPS) download_utillinuxng \
-	$(UTILLINUXNG_BUILD_DIR)/.decompressed \
+$(UTILLINUXNG_BUILD_DIR)/.installed: $(UTILLINUXNG_DEPS) \
+	download_utillinuxng \
+	$(UTILLINUXNG_SRC_DIR)/.decompressed \
 	$(UTILLINUXNG_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call EMBTK_GENERIC_MSG,"Compiling and installing \
 	util-linux-ng-$(UTILLINUXNG_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(UTILLINUXNG_BUILD_DIR))
 	$(Q)$(MAKE) -C $(UTILLINUXNG_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(UTILLINUXNG_BUILD_DIR)/shlibs/uuid DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	@touch $@
 
-$(UTILLINUXNG_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(UTILLINUXNG_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(UTILLINUXNG_PACKAGE)
-ifeq ($(CONFIG_EMBTK_UTILLINUXNG_NEED_PATCH),y)
-	@cd $(UTILLINUXNG_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/util-linux-ng-$(UTILLINUXNG_VERSION).patch
-endif
-	@touch $@
+$(UTILLINUXNG_SRC_DIR)/.decompressed:
+	$(call EMBTK_DECOMPRESS_PKG,UTILLINUXNG)
 
 $(UTILLINUXNG_BUILD_DIR)/.configured:
-	$(Q)cd $(UTILLINUXNG_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) \
-	--prefix=/usr $(UTILLINUXNG_CONFIGURE_OPTS)
-	@touch $@
+	$(call EMBTK_CONFIGURE_PKG,UTILLINUXNG)
 
 utillinuxng_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup util-linux-ng...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(UTILLINUXNG_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(UTILLINUXNG_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(UTILLINUXNG_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(UTILLINUXNG_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(UTILLINUXNG_PKGCONFIGS)
-	$(Q)-rm -rf $(UTILLINUXNG_BUILD_DIR)*
+	$(call EMBTK_CLEANUP_PKG,UTILLINUXNG)
 
 ##################################################
 # util-linux-ng for the host development machine #
 ##################################################
+UTILLINUXNG_HOST_NAME		:= $(UTILLINUXNG_NAME)
+UTILLINUXNG_HOST_VERSION	:= $(UTILLINUXNG_VERSION)
+UTILLINUXNG_HOST_SITE		:= $(UTILLINUXNG_SITE)
+UTILLINUXNG_HOST_SITE_MIRROR3	:= $(UTILLINUXNG_SITE_MIRROR3)
+UTILLINUXNG_HOST_PATCH_SITE	:= $(UTILLINUXNG_PATCH_SITE)
+UTILLINUXNG_HOST_PACKAGE	:= $(UTILLINUXNG_PACKAGE)
+UTILLINUXNG_HOST_SRC_DIR	:= $(TOOLS_BUILD)/util-linux-ng-$(UTILLINUXNG_VERSION)
+UTILLINUXNG_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/util-linux-ng-$(UTILLINUXNG_VERSION)
 
 UTILLINUXNG_HOST_CONFIGURE_OPTS := --without-audit --without-selinux \
 	--without-pam --without-slang --without-ncurses \
@@ -137,48 +115,30 @@ UTILLINUXNG_HOST_CONFIGURE_OPTS := --without-audit --without-selinux \
 UTILLINUXNG_HOST_DEPS =
 
 utillinuxng_host_install:
-	test -e $(UTILLINUXNG_HOST_BUILD_DIR)/.installed || \
+	@test -e $(UTILLINUXNG_HOST_BUILD_DIR)/.installed || \
 	$(MAKE) $(UTILLINUXNG_HOST_BUILD_DIR)/.installed
 
 $(UTILLINUXNG_HOST_BUILD_DIR)/.installed: $(UTILLINUXNG_HOST_DEPS) \
-	download_utillinuxng $(UTILLINUXNG_HOST_BUILD_DIR)/.decompressed \
+	download_utillinuxng \
+	$(UTILLINUXNG_HOST_SRC_DIR)/.decompressed \
 	$(UTILLINUXNG_HOST_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call EMBTK_GENERIC_MSG,"Compiling and installing \
 	util-linux-ng-$(UTILLINUXNG_VERSION) in host tools...")
 	$(Q)$(MAKE) -C $(UTILLINUXNG_HOST_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(UTILLINUXNG_HOST_BUILD_DIR)/shlibs/uuid install
 	@touch $@
 
-$(UTILLINUXNG_HOST_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(UTILLINUXNG_PACKAGE) ...")
-	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(UTILLINUXNG_PACKAGE)
-ifeq ($(CONFIG_EMBTK_UTILLINUXNG_NEED_PATCH),y)
-	@cd $(UTILLINUXNG_HOST_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/util-linux-ng-$(UTILLINUXNG_VERSION).patch
-endif
-	@touch $@
+$(UTILLINUXNG_HOST_SRC_DIR)/.decompressed:
+	$(call EMBTK_DECOMPRESS_HOSTPKG,UTILLINUXNG_HOST)
 
 $(UTILLINUXNG_HOST_BUILD_DIR)/.configured:
-	$(Q)cd $(UTILLINUXNG_HOST_BUILD_DIR); \
-	./configure --build=$(HOST_BUILD) --host=$(HOST_ARCH) \
-	--prefix=$(HOSTTOOLS)/usr/local \
-	$(UTILLINUXNG_HOST_CONFIGURE_OPTS)
-	@touch $@
+	$(call EMBTK_CONFIGURE_HOSTPKG,UTILLINUXNG_HOST)
 
 utillinuxng_host_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"Cleanup util-linux-ng...")
+	$(call EMBTK_GENERIC_MSG,"Cleanup util-linux-ng for host...")
 
 ##############################
 # Common for host and target #
 ##############################
-download_utillinuxng:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(UTILLINUXNG_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(UTILLINUXNG_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(UTILLINUXNG_PACKAGE) \
-	$(UTILLINUXNG_SITE)/$(UTILLINUXNG_PACKAGE)
-ifeq ($(CONFIG_EMBTK_UTILLINUXNG_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/util-linux-ng-$(UTILLINUXNG_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/util-linux-ng-$(UTILLINUXNG_VERSION).patch \
-	$(UTILLINUXNG_PATCH_SITE)/util-linux-ng-$(UTILLINUXNG_VERSION)-*.patch
-endif
+download_utillinuxng download_utillinuxng_host:
+	$(call EMBTK_DOWNLOAD_PKG,UTILLINUXNG)

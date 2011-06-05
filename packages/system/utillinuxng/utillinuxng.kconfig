@@ -23,8 +23,13 @@
 # \date         August 2010
 ################################################################################
 
+config EMBTK_HOST_HAVE_UTILLINUXNG
+	bool
+	select EMBTK_UTILLINUXNG_PKG_IS_TARBZ2
+
 config EMBTK_HAVE_UTILLINUXNG
 	bool "Have util-linux-ng"
+	select EMBTK_UTILLINUXNG_PKG_IS_TARBZ2
 	select KEMBTK_UCLIBC_UCLIBC_HAS_PROGRAM_INVOCATION_NAME \
 		if EMBTK_CLIB_UCLIBC
 	select KEMBTK_UCLIBC_UCLIBC_HAS___PROGNAME if EMBTK_CLIB_UCLIBC
@@ -42,7 +47,7 @@ config EMBTK_HAVE_UTILLINUXNG
 		features are already in busybox.
 choice
 	prompt "util-linux-ng version you wish"
-	depends on EMBTK_HAVE_UTILLINUXNG
+	depends on EMBTK_HAVE_UTILLINUXNG || EMBTK_HOST_HAVE_UTILLINUXNG
 	help
 		Here you can choose which version of util-linux-ng you want to
 		use.
@@ -60,4 +65,23 @@ config EMBTK_UTILLINUXNG_VERSION_STRING
 	default "2.18"		if EMBTK_UTILLINUXNG_VERSION_2_18
 
 config EMBTK_UTILLINUXNG_NEED_PATCH
+	bool
+	select EMBTK_UTILLINUXNG_HOST_NEED_PATCH
+config EMBTK_UTILLINUXNG_NEED_AUTORECONF
+	bool
+	select EMBTK_UTILLINUXNG_HOST_NEED_AUTORECONF
+config EMBTK_UTILLINUXNG_PKG_IS_TARGZ
+	bool
+	select EMBTK_UTILLINUXNG_HOST_PKG_IS_TARGZ
+config EMBTK_UTILLINUXNG_PKG_IS_TARBZ2
+	bool
+	select EMBTK_UTILLINUXNG_HOST_PKG_IS_TARBZ2
+
+config EMBTK_UTILLINUXNG_HOST_NEED_PATCH
+	bool
+config EMBTK_UTILLINUXNG_HOST_NEED_AUTORECONF
+	bool
+config EMBTK_UTILLINUXNG_HOST_PKG_IS_TARGZ
+	bool
+config EMBTK_UTILLINUXNG_HOST_PKG_IS_TARBZ2
 	bool
