@@ -44,7 +44,8 @@ NCURSES_LIBS = libcurses.a libform.a libform_g.a libmenu.a libmenu_g.a \
 		libpanel_g.a terminfo
 NCURSES_PKGCONFIGS =
 
-NCURSES_CONFIGURE_OPTS := --disable-rpath --without-cxx-binding		\
+NCURSES_CONFIGURE_ENV	:= CFLAGS="$(CFLAGS) -fPIC"
+NCURSES_CONFIGURE_OPTS	:= --disable-rpath --without-cxx-binding	\
 			--without-ada --disable-database		\
 			--enable-termcap --without-progs		\
 			--program-prefix=""
