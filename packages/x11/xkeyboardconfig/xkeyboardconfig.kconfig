@@ -35,6 +35,8 @@ choice
 	help
 	 Here you can choose which version of xkeyboardconfig you want to use.
 
+	config  EMBTK_XKEYBOARDCONFIG_VERSION_2_2_1
+		bool "xkeyboard-config-2.2.1"
 	config  EMBTK_XKEYBOARDCONFIG_VERSION_2_1
 		bool "xkeyboard-config-2.1"
 	config  EMBTK_XKEYBOARDCONFIG_VERSION_1_8
@@ -43,6 +45,7 @@ endchoice
 
 config EMBTK_XKEYBOARDCONFIG_VERSION_STRING
 	string
+	default "2.2.1"	if EMBTK_XKEYBOARDCONFIG_VERSION_2_2_1
 	default "2.1"	if EMBTK_XKEYBOARDCONFIG_VERSION_2_1
 	default "1.8"	if EMBTK_XKEYBOARDCONFIG_VERSION_1_8
 

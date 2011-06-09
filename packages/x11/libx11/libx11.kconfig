@@ -41,6 +41,8 @@ choice
 	help
 		Here you can choose which version of libx11 you want to use.
 
+	config  EMBTK_LIBX11_VERSION_1_4_3
+		bool "libX11-1.4.3"
 	config  EMBTK_LIBX11_VERSION_1_4_1
 		bool "libX11-1.4.1"
 	config  EMBTK_LIBX11_VERSION_1_3_6
@@ -55,6 +57,7 @@ endchoice
 
 config EMBTK_LIBX11_VERSION_STRING
 	string
+	default "1.4.3"		if EMBTK_LIBX11_VERSION_1_4_3
 	default "1.4.1"		if EMBTK_LIBX11_VERSION_1_4_1
 	default "1.3.6"		if EMBTK_LIBX11_VERSION_1_3_6
 	default "1.3.5"		if EMBTK_LIBX11_VERSION_1_3_5

@@ -39,6 +39,8 @@ choice
 	help
 		Here you can choose which version of xkbcomp you want to use.
 
+	config  EMBTK_XKBCOMP_VERSION_1_2_1
+		bool "xkbcomp-1.2.1"
 	config  EMBTK_XKBCOMP_VERSION_1_2_0
 		bool "xkbcomp-1.2.0"
 		select EMBTK_XKBCOMP_NEED_PATCH
@@ -48,6 +50,7 @@ endchoice
 
 config EMBTK_XKBCOMP_VERSION_STRING
 	string
+	default "1.2.1"		if EMBTK_XKBCOMP_VERSION_1_2_1
 	default "1.2.0"		if EMBTK_XKBCOMP_VERSION_1_2_0
 	default "1.1.1"		if EMBTK_XKBCOMP_VERSION_1_1_1
 
