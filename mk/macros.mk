@@ -285,21 +285,37 @@ endef
 # Usage:
 # $(call EMBTK_INSTALL_PKG,PACKAGE)
 #
+__EMBTK_MULTI_MAKE = $(foreach builddir,$($(1)_MAKE_DIRS),			\
+				$(MAKE) -C $($(1)_BUILD_DIR)/$(builddir)	\
+				$($(1)_MAKE_OPTS) $(J))
+
+__EMBTK_SINGLE_MAKE = $(MAKE) -C $($(1)_BUILD_DIR) $($(1)_MAKE_OPTS) $(J)
+
+__EMBTK_MULTI_MAKE_INSTALL = $(foreach builddir,$($(1)_MAKE_DIRS),		\
+	$(MAKE) -C $($(1)_BUILD_DIR)/$(builddir)				\
+	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) $($(1)_MAKE_OPTS) install)
+
+__EMBTK_SINGLE_MAKE_INSTALL = $(MAKE) -C $($(1)_BUILD_DIR)			\
+	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) $($(1)_MAKE_OPTS) install
+
 define __EMBTK_INSTALL_PKG_MAKE
 	$(call EMBTK_GENERIC_MSG,"Compiling and installing $($(1)_NAME)-$($(1)_VERSION) in your root filesystem...")
 	$(Q)$(if $(strip $($(1)_DEPS)),$(MAKE) $($(1)_DEPS))
 	$(Q)$(call EMBTK_DOWNLOAD_PKG,$(1))
 	$(Q)$(call EMBTK_DECOMPRESS_PKG,$(1))
 	$(Q)$(call EMBTK_CONFIGURE_PKG,$(1))
-	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $($(1)_BUILD_DIR)				\
-	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) install
+	$(Q)$(if $($(1)_MAKE_DIRS),						\
+		$(__EMBTK_MULTI_MAKE),						\
+		$(__EMBTK_SINGLE_MAKE))
+	$(Q)$(if $($(1)_MAKE_DIRS),						\
+		$(__EMBTK_MULTI_MAKE_INSTALL),					\
+		$(__EMBTK_SINGLE_MAKE_INSTALL))
 	$(Q)$(call __EMBTK_FIX_LIBTOOL_FILES)
 	$(Q)$(call __EMBTK_FIX_PKGCONFIG_FILES)
 	@touch $($(1)_BUILD_DIR)/.installed
 endef
 define EMBTK_INSTALL_PKG
-	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),	\
+	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),		\
 	true,$(call __EMBTK_INSTALL_PKG_MAKE,$(1)))
 endef
 
@@ -315,12 +331,12 @@ define __EMBTK_INSTALL_HOSTPKG_MAKE
 	$(Q)$(call EMBTK_DOWNLOAD_PKG,$(1))
 	$(Q)$(call EMBTK_DECOMPRESS_HOSTPKG,$(1))
 	$(Q)$(call EMBTK_CONFIGURE_HOSTPKG,$(1))
-	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) install
+	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) $($(1)_MAKE_OPTS) $(J)
+	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) $($(1)_MAKE_OPTS) install
 	@touch $($(1)_BUILD_DIR)/.installed
 endef
 define EMBTK_INSTALL_HOSTPKG
-	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),	\
+	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),		\
 	true,$(call __EMBTK_INSTALL_HOSTPKG_MAKE,$(1)))
 endef
 
