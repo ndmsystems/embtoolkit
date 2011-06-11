@@ -23,7 +23,7 @@
 # \date         February 2010
 ################################################################################
 
-#libevent
+# gdb
 include $(EMBTK_ROOT)/packages/development/gdb/gdb.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GDB) += gdbfull_install
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GDBSERVER) += gdbserver_install
