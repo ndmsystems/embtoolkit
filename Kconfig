@@ -61,8 +61,8 @@ config EMBTK_HAVE_ROOTFS
 	 Select packages in "Packages to include in your root filesystem".
 
 if EMBTK_HAVE_ROOTFS
-source kconfig/mtdutils.kconfig
 source kconfig/fs.kconfig
+source kconfig/mtdutils.kconfig
 source kconfig/packages.kconfig
 endif
 

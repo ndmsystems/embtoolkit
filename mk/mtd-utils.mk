@@ -45,7 +45,7 @@ MTDUTILS_SBINS := bin2nand flash_eraseall flash_unlock mkfs.jffs2 nand2bin \
 ##############################################
 
 MTDUTILS_HOST_DEPS := zlib_host_install lzo_host_install \
-		utillinuxng_host_install
+		e2fsprogs_host_install
 
 mtdutils_host_install:
 	@test -e $(MTDUTILS_HOST_BUILD_DIR)/.installed || \
@@ -76,7 +76,7 @@ mtdutils_host_clean:
 # mtd-utils for target #
 ########################
 
-MTDUTILS_DEPS := zlib_install lzo_install utillinuxng_install
+MTDUTILS_DEPS := zlib_install lzo_install e2fsprogs_install
 
 mtdutils_target_install:
 	@test -e $(MTDUTILS_TARGET_BUILD_DIR)/.installed || \

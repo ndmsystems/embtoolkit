@@ -1,0 +1,75 @@
+################################################################################
+# Embtoolkit
+# Copyright(C) 2011 Abdoulaye Walsimou GAYE.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         e2fsprogs.kconfig
+# \brief	e2fsprogs.kconfig of Embtoolkit
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         June 2011
+################################################################################
+
+config EMBTK_HOST_HAVE_E2FSPROGS
+	bool
+	select EMBTK_E2FSPROGS_PKG_IS_TARGZ
+	help
+		NOTE: used only to have libuuid
+
+		UUID library from the e2fsprogs package.
+
+config EMBTK_HAVE_E2FSPROGS
+	bool "Have e2fsprogs/libuuid"
+	select EMBTK_E2FSPROGS_PKG_IS_TARGZ
+	help
+		NOTE: used only to have libuuid
+
+		UUID library from the e2fsprogs package.
+choice
+	prompt "e2fsprogs/libuuid version you wish"
+	depends on EMBTK_HAVE_E2FSPROGS || EMBTK_HOST_HAVE_E2FSPROGS
+	help
+	 Here you can choose which version of e2fsprogs you want to use.
+
+	config  EMBTK_E2FSPROGS_VERSION_1_41_14
+		bool "e2fsprogs/libuuid-1.41.14"
+endchoice
+
+config EMBTK_E2FSPROGS_VERSION_STRING
+	string
+	default "1.41.14"	if EMBTK_E2FSPROGS_VERSION_1_41_14
+
+config EMBTK_E2FSPROGS_NEED_PATCH
+	bool
+	select EMBTK_E2FSPROGS_HOST_NEED_PATCH
+config EMBTK_E2FSPROGS_NEED_AUTORECONF
+	bool
+	select EMBTK_E2FSPROGS_HOST_NEED_AUTORECONF
+config EMBTK_E2FSPROGS_PKG_IS_TARGZ
+	bool
+	select EMBTK_E2FSPROGS_HOST_PKG_IS_TARGZ
+config EMBTK_E2FSPROGS_PKG_IS_TARBZ2
+	bool
+	select EMBTK_E2FSPROGS_HOST_PKG_IS_TARBZ2
+
+config EMBTK_E2FSPROGS_HOST_NEED_PATCH
+	bool
+config EMBTK_E2FSPROGS_HOST_NEED_AUTORECONF
+	bool
+config EMBTK_E2FSPROGS_HOST_PKG_IS_TARGZ
+	bool
+config EMBTK_E2FSPROGS_HOST_PKG_IS_TARBZ2
+	bool

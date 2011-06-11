@@ -315,8 +315,8 @@ define __EMBTK_INSTALL_PKG_MAKE
 	@touch $($(1)_BUILD_DIR)/.installed
 endef
 define EMBTK_INSTALL_PKG
-	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),		\
-	true,$(call __EMBTK_INSTALL_PKG_MAKE,$(1)))
+	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),true,	\
+		$(call __EMBTK_INSTALL_PKG_MAKE,$(1)))
 endef
 
 #
@@ -336,8 +336,8 @@ define __EMBTK_INSTALL_HOSTPKG_MAKE
 	@touch $($(1)_BUILD_DIR)/.installed
 endef
 define EMBTK_INSTALL_HOSTPKG
-	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),		\
-	true,$(call __EMBTK_INSTALL_HOSTPKG_MAKE,$(1)))
+	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),true,	\
+		$(call __EMBTK_INSTALL_HOSTPKG_MAKE,$(1)))
 endef
 
 #

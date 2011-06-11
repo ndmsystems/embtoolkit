@@ -27,10 +27,10 @@
 include $(EMBTK_ROOT)/packages/system/dbus/dbus.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_DBUS) += dbus_install
 
-#util-linux-ng
-include $(EMBTK_ROOT)/packages/system/utillinuxng/utillinuxng.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_UTILLINUXNG) += utillinuxng_install
-HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_UTILLINUXNG) += utillinuxng_host_install
+# e2fsprogs
+include $(EMBTK_ROOT)/packages/system/e2fsprogs/e2fsprogs.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_E2FSPROGS) += e2fsprogs_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_E2FSPROGS) += e2fsprogs_host_install
 
 #upstart
 include $(EMBTK_ROOT)/packages/system/upstart/upstart.mk
