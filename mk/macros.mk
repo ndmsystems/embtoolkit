@@ -287,13 +287,13 @@ endef
 #
 __EMBTK_MULTI_MAKE = $(foreach builddir,$($(1)_MAKE_DIRS),			\
 				$(MAKE) -C $($(1)_BUILD_DIR)/$(builddir)	\
-				$($(1)_MAKE_OPTS) $(J))
+				$($(1)_MAKE_OPTS) $(J);)
 
 __EMBTK_SINGLE_MAKE = $(MAKE) -C $($(1)_BUILD_DIR) $($(1)_MAKE_OPTS) $(J)
 
 __EMBTK_MULTI_MAKE_INSTALL = $(foreach builddir,$($(1)_MAKE_DIRS),		\
 	$(MAKE) -C $($(1)_BUILD_DIR)/$(builddir)				\
-	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) $($(1)_MAKE_OPTS) install)
+	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) $($(1)_MAKE_OPTS) install;)
 
 __EMBTK_SINGLE_MAKE_INSTALL = $(MAKE) -C $($(1)_BUILD_DIR)			\
 	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) $($(1)_MAKE_OPTS) install
