@@ -43,11 +43,22 @@ config KEMBTK_BUSYB_INCLUDE_SUSv2
 
 config KEMBTK_BUSYB_USE_PORTABLE_CODE
 	bool "Avoid using GCC-specific code constructs"
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Use this option if you are trying to compile busybox with
 	  compiler other than gcc.
 	  If you do use gcc, this option may needlessly increase code size.
+
+config KEMBTK_BUSYB_PLATFORM_LINUX
+	bool
+	default y
+	help
+	  For the most part, busybox requires only POSIX compatibility
+	  from the target system, but some applets and features use
+	  Linux-specific interfaces.
+
+	  Answering 'N' here will disable such applets and hide the
+	  corresponding configuration options.
 
 choice
 	prompt "Buffer allocation policy"
@@ -113,6 +124,13 @@ config KEMBTK_BUSYB_FEATURE_INSTALLER
 	  busybox at runtime to create hard links or symlinks for all the
 	  applets that are compiled into busybox.
 
+config KEMBTK_BUSYB_INSTALL_NO_USR
+	bool "Don't use /usr"
+	help
+	  Disable use of /usr. busybox --install and "make install"
+	  will install applets only to /bin and /sbin,
+	  never to /usr/bin or /usr/sbin.
+
 config KEMBTK_BUSYB_LOCALE_SUPPORT
 	bool "Enable locale support (system needs locale for this to work)"
 	help
@@ -120,9 +138,9 @@ config KEMBTK_BUSYB_LOCALE_SUPPORT
 	  busybox to support locale settings.
 
 config KEMBTK_BUSYB_FEATURE_ASSUME_UNICODE
-	bool
-	help
-		backward compatibility for busybox-1.{13,14,15,16}.x
+       bool
+       help
+               backward compatibility for busybox-1.{13,14,15,16}.x
 
 config KEMBTK_BUSYB_UNICODE_SUPPORT
 	bool "Support Unicode"
@@ -140,7 +158,7 @@ config KEMBTK_BUSYB_UNICODE_SUPPORT
 config KEMBTK_BUSYB_UNICODE_USING_LOCALE
 	bool "Use libc routines for Unicode (else uses internal ones)"
 	depends on KEMBTK_BUSYB_UNICODE_SUPPORT && KEMBTK_BUSYB_LOCALE_SUPPORT
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  With this option on, Unicode support is implemented using libc
 	  routines. Otherwise, internal implementation is used.
@@ -149,7 +167,7 @@ config KEMBTK_BUSYB_UNICODE_USING_LOCALE
 config KEMBTK_BUSYB_FEATURE_CHECK_UNICODE_IN_ENV
 	bool "Check $LANG environment variable"
 	depends on KEMBTK_BUSYB_UNICODE_SUPPORT && !(KEMBTK_BUSYB_UNICODE_USING_LOCALE || KEMBTK_BUSYB_UNICODE_USING_LOCALE)
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  With this option on, Unicode support is activated
 	  only if LANG variable has the value of the form "xxxx.utf8"
@@ -165,7 +183,7 @@ config KEMBTK_BUSYB_GETOPT_LONG
 config KEMBTK_BUSYB_SUBST_WCHAR
 	int "Character code to substitute unprintable characters with"
 	depends on KEMBTK_BUSYB_UNICODE_SUPPORT
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default 63
 	help
 	  Typical values are 63 for '?' (works with any output device),
@@ -175,7 +193,7 @@ config KEMBTK_BUSYB_SUBST_WCHAR
 config KEMBTK_BUSYB_LAST_SUPPORTED_WCHAR
 	int "Range of supported Unicode characters"
 	depends on KEMBTK_BUSYB_UNICODE_SUPPORT
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default 767
 	help
 	  Any character with Unicode value bigger than this is assumed
@@ -206,7 +224,7 @@ config KEMBTK_BUSYB_LAST_SUPPORTED_WCHAR
 config KEMBTK_BUSYB_UNICODE_COMBINING_WCHARS
 	bool "Allow zero-width Unicode characters on output"
 	depends on KEMBTK_BUSYB_UNICODE_SUPPORT
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  With this option off, any Unicode char with width of 0
 	  is substituted on output.
@@ -214,7 +232,7 @@ config KEMBTK_BUSYB_UNICODE_COMBINING_WCHARS
 config KEMBTK_BUSYB_UNICODE_WIDE_WCHARS
 	bool "Allow wide Unicode characters on output"
 	depends on KEMBTK_BUSYB_UNICODE_SUPPORT
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  With this option off, any Unicode char with width > 1
 	  is substituted on output.
@@ -222,7 +240,7 @@ config KEMBTK_BUSYB_UNICODE_WIDE_WCHARS
 config KEMBTK_BUSYB_UNICODE_BIDI_SUPPORT
 	bool "Bidirectional character-aware line input"
 	depends on KEMBTK_BUSYB_UNICODE_SUPPORT && !KEMBTK_BUSYB_UNICODE_USING_LOCALE
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  With this option on, right-to-left Unicode characters
 	  are treated differently on input (e.g. cursor movement).
@@ -230,7 +248,7 @@ config KEMBTK_BUSYB_UNICODE_BIDI_SUPPORT
 config KEMBTK_BUSYB_UNICODE_NEUTRAL_TABLE
 	bool "In bidi input, support non-ASCII neutral chars too"
 	depends on KEMBTK_BUSYB_UNICODE_BIDI_SUPPORT
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  In most cases it's enough to treat only ASCII non-letters
 	  (i.e. punctuation, numbers and space) as characters
@@ -241,7 +259,7 @@ config KEMBTK_BUSYB_UNICODE_NEUTRAL_TABLE
 config KEMBTK_BUSYB_UNICODE_PRESERVE_BROKEN
 	bool "Make it possible to enter sequences of chars which are not Unicode"
 	depends on KEMBTK_BUSYB_UNICODE_SUPPORT
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  With this option on, invalid UTF-8 bytes are not substituted
 	  with the selected substitution character.
@@ -251,7 +269,6 @@ config KEMBTK_BUSYB_UNICODE_PRESERVE_BROKEN
 
 config KEMBTK_BUSYB_LONG_OPTS
 	bool "Support for --long-options"
-	select KEMBTK_BUSYB_GETOPT_LONG
 	default y
 	help
 	  Enable this if you want busybox applets to use the gnu --long-option
@@ -278,15 +295,6 @@ config KEMBTK_BUSYB_FEATURE_CLEAN_UP
 	  Don't enable this unless you have a really good reason to clean
 	  things up manually.
 
-config KEMBTK_BUSYB_FEATURE_UTMP
-	bool "Support utmp file"
-	default y
-	help
-	  The file /var/run/utmp is used to track who is currently logged in.
-	  With this option on, certain applets (getty, login, telnetd etc)
-	  will create and delete entries there.
-	  "who" applet requires this option.
-
 config KEMBTK_BUSYB_FEATURE_WTMP
 	bool "Support wtmp file"
 	default y
@@ -297,6 +305,15 @@ config KEMBTK_BUSYB_FEATURE_WTMP
 	  With this option on, certain applets (getty, login, telnetd etc)
 	  will append new entries there.
 	  "last" applet requires this option.
+
+config KEMBTK_BUSYB_FEATURE_UTMP
+	bool "Support utmp file"
+	default y
+	help
+	  The file /var/run/utmp is used to track who is currently logged in.
+	  With this option on, certain applets (getty, login, telnetd etc)
+	  will create and delete entries there.
+	  "who" applet requires this option.
 
 config KEMBTK_BUSYB_FEATURE_PIDFILE
 	bool "Support writing pidfiles"
@@ -310,14 +327,19 @@ config KEMBTK_BUSYB_FEATURE_SUID
 	default y
 	help
 	  With this option you can install the busybox binary belonging
-	  to root with the suid bit set, and it will automatically drop
-	  priviledges for applets that don't need root access.
+	  to root with the suid bit set, enabling some applets to perform
+	  root-level operations even when run by ordinary users
+	  (for example, mounting of user mounts in fstab needs this).
+
+	  Busybox will automatically drop priviledges for applets
+	  that don't need root access.
 
 	  If you are really paranoid and don't want to do this, build two
 	  busybox binaries with different applets in them (and the appropriate
 	  symlinks pointing to each binary), and only set the suid bit on the
-	  one that needs it. The applets currently marked to need the suid bit
-	  are:
+	  one that needs it.
+
+	  The applets currently marked to need the suid bit are:
 
 	  crontab, dnsd, findfs, ipcrm, ipcs, login, passwd, ping, su,
 	  traceroute, vlock.
@@ -366,6 +388,7 @@ config KEMBTK_BUSYB_FEATURE_SUID_CONFIG_QUIET
 
 config KEMBTK_BUSYB_SELINUX
 	bool "Support NSA Security Enhanced Linux"
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Enable support for SELinux in applets ls, ps, and id. Also provide
 	  the option of compiling in SELinux applets.
@@ -558,8 +581,8 @@ config KEMBTK_BUSYB_CROSS_COMPILER_PREFIX
 	  Native builds leave this empty.
 
 config KEMBTK_BUSYB_EXTRA_CFLAGS
-	string "Additional CFLAGS"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	string
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default ""
 	help
 	  Additional CFLAGS to pass to the compiler verbatim.
@@ -642,19 +665,13 @@ endchoice
 
 
 comment "-------------------------------------------------"
-comment 'Installation Options'
+comment 'Installation Options ("make install" behavior)'
 comment "-------------------------------------------------"
 
-config KEMBTK_BUSYB_INSTALL_NO_USR
-	bool "Don't use /usr"
-	help
-	  Disable use of /usr. Don't activate this option if you don't know
-	  that you really want this behaviour.
-
 choice
-	prompt "Applets links"
+	prompt "What kind of applet links to install"
 	help
-	  Choose how you install applets links.
+	  Choose what kind of links to applets are created by "make install".
 
 config KEMBTK_BUSYB_INSTALL_APPLET_SYMLINKS
 	bool "as soft-links"
@@ -678,8 +695,9 @@ config KEMBTK_BUSYB_INSTALL_APPLET_DONT
 	bool "not installed"
 	depends on KEMBTK_BUSYB_FEATURE_INSTALLER || KEMBTK_BUSYB_FEATURE_SH_STANDALONE || KEMBTK_BUSYB_FEATURE_PREFER_APPLETS
 	help
-	  Do not install applet links. Useful when using the -install feature
-	  or a standalone shell for rescue purposes.
+	  Do not install applet links. Useful when you plan to use
+	  busybox --install for installing links, or plan to use
+	  a standalone shell and thus don't need applet links.
 
 endchoice
 
@@ -702,8 +720,8 @@ config KEMBTK_BUSYB_INSTALL_SH_APPLET_HARDLINK
 config KEMBTK_BUSYB_INSTALL_SH_APPLET_SCRIPT_WRAPPER
 	bool "as script wrapper"
 	help
-	  Install /bin/sh applet as script wrapper that call the busybox
-	  binary.
+	  Install /bin/sh applet as script wrapper that calls
+	  the busybox binary.
 
 endchoice
 

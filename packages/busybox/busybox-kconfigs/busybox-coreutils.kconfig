@@ -35,10 +35,11 @@ config KEMBTK_BUSYB_FEATURE_DATE_ISOFMT
 	  Enable option (-I) to output an ISO-8601 compliant
 	  date/time string.
 
+# defaults to "no": stat's nanosecond field is a bit non-portable
 config KEMBTK_BUSYB_FEATURE_DATE_NANO
 	bool "Support %[num]N nanosecond format specifier"
-	depends on KEMBTK_BUSYB_DATE
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
+	depends on KEMBTK_BUSYB_DATE && KEMBTK_BUSYB_PLATFORM_LINUX # syscall(__NR_clock_gettime)
 	help
 	  Support %[num]N format specifier. Adds ~250 bytes of code.
 
@@ -46,7 +47,7 @@ config KEMBTK_BUSYB_FEATURE_DATE_COMPAT
 	bool "Support weird 'date MMDDhhmm[[YY]YY][.ss]' format"
 	default y
 	depends on KEMBTK_BUSYB_DATE
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  System time can be set by 'date -s KEMBTK_BUSYB_DATE' and simply 'date KEMBTK_BUSYB_DATE',
 	  but formats of KEMBTK_BUSYB_DATE string are different. 'date KEMBTK_BUSYB_DATE' accepts
@@ -97,6 +98,12 @@ config KEMBTK_BUSYB_FEATURE_TR_EQUIV
 	  replace all instances of 'a' with 'xyz'. This option is mainly
 	  useful for cases when no other way of expressing a character
 	  is possible.
+config KEMBTK_BUSYB_BASE64
+	bool "base64"
+	depends on EMBTK_BB_VERSION_1_18_X
+	default y
+	help
+	  Base64 encode and decode
 
 config KEMBTK_BUSYB_CAL
 	bool "cal"
@@ -132,9 +139,9 @@ config KEMBTK_BUSYB_CHOWN
 
 config KEMBTK_BUSYB_FEATURE_CHOWN_LONG_OPTIONS
 	bool "Enable long options"
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	default y
 	depends on KEMBTK_BUSYB_CHOWN && KEMBTK_BUSYB_LONG_OPTS
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable use of long options
 
@@ -166,9 +173,9 @@ config KEMBTK_BUSYB_CP
 
 config KEMBTK_BUSYB_FEATURE_CP_LONG_OPTIONS
 	bool "Enable long options for cp"
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	depends on KEMBTK_BUSYB_CP && KEMBTK_BUSYB_LONG_OPTS
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	help
 	  Enable long options for cp.
 	  Also add support for --parents option.
@@ -206,7 +213,7 @@ config KEMBTK_BUSYB_FEATURE_DD_THIRD_STATUS_LINE
 	bool "Enable the third status line upon signal"
 	default y
 	depends on KEMBTK_BUSYB_DD && KEMBTK_BUSYB_FEATURE_DD_SIGNAL_HANDLING
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Displays a coreutils-like third status line with transferred bytes,
 	  elapsed time and speed.
@@ -345,7 +352,7 @@ config KEMBTK_BUSYB_FOLD
 
 config KEMBTK_BUSYB_FSYNC
 	bool "fsync"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  fsync is used to flush file-related cached blocks to disk.
@@ -612,14 +619,14 @@ config KEMBTK_BUSYB_SHA1SUM
 
 config KEMBTK_BUSYB_SHA256SUM
 	bool "sha256sum"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Compute and check SHA256 message digest
 
 config KEMBTK_BUSYB_SHA512SUM
 	bool "sha512sum"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Compute and check SHA512 message digest
@@ -688,6 +695,7 @@ config KEMBTK_BUSYB_FEATURE_SPLIT_FANCY
 config KEMBTK_BUSYB_STAT
 	bool "stat"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX # statfs()
 	help
 	  display file or filesystem status.
 

@@ -7,17 +7,24 @@ comment "-------------------------------------------------"
 comment "Linux System Utilities"
 comment "-------------------------------------------------"
 
+config KEMBTK_BUSYB_BLOCKDEV
+	bool "blockdev"
+	depends on EMBTK_BB_VERSION_1_18_X
+	default y
+	help
+	  Performs some ioctls with block devices.
 config KEMBTK_BUSYB_REV
 	bool "rev"
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Reverse lines of a file or files.
 
 config KEMBTK_BUSYB_ACPID
 	bool "acpid"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  acpid listens to ACPI events coming either in textual form from
 	  /proc/acpi/event (though it is marked deprecated it is still widely
@@ -40,6 +47,7 @@ config KEMBTK_BUSYB_FEATURE_ACPID_COMPAT
 config KEMBTK_BUSYB_BLKID
 	bool "blkid"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	select KEMBTK_BUSYB_VOLUMEID
 	help
 	  Lists labels and UUIDs of all filesystems.
@@ -49,6 +57,7 @@ config KEMBTK_BUSYB_BLKID
 config KEMBTK_BUSYB_DMESG
 	bool "dmesg"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  dmesg is used to examine or control the kernel ring buffer. When the
 	  Linux kernel prints messages to the system log, they are stored in
@@ -82,6 +91,7 @@ config KEMBTK_BUSYB_FEATURE_DMESG_PRETTY
 config KEMBTK_BUSYB_FBSET
 	bool "fbset"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  fbset is used to show or change the settings of a Linux frame buffer
 	  device. The frame buffer device provides a simple and unique
@@ -110,6 +120,7 @@ config KEMBTK_BUSYB_FEATURE_FBSET_READMODE
 config KEMBTK_BUSYB_FDFLUSH
 	bool "fdflush"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  fdflush is only needed when changing media on slightly-broken
 	  removable media drives. It is used to make Linux believe that a
@@ -122,12 +133,14 @@ config KEMBTK_BUSYB_FDFLUSH
 config KEMBTK_BUSYB_FDFORMAT
 	bool "fdformat"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  fdformat is used to low-level format a floppy disk.
 
 config KEMBTK_BUSYB_FDISK
 	bool "fdisk"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  The fdisk utility is used to divide hard disks into one or more
 	  logical disks, which are generally called partitions. This utility
@@ -178,6 +191,14 @@ config KEMBTK_BUSYB_FEATURE_OSF_LABEL
 	  Enabling this option allows you to create or change BSD disklabels
 	  and define and edit BSD disk slices.
 
+config KEMBTK_BUSYB_FEATURE_GPT_LABEL
+	bool "Support GPT disklabels"
+	depends on KEMBTK_BUSYB_FDISK && KEMBTK_BUSYB_FEATURE_FDISK_WRITABLE
+	depends on EMBTK_BB_VERSION_1_18_X
+	help
+	  Enabling this option allows you to view GUID Partition Table
+	  disklabels.
+
 config KEMBTK_BUSYB_FEATURE_FDISK_ADVANCED
 	bool "Support expert mode"
 	default y
@@ -191,6 +212,7 @@ config KEMBTK_BUSYB_FEATURE_FDISK_ADVANCED
 config KEMBTK_BUSYB_FINDFS
 	bool "findfs"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	select KEMBTK_BUSYB_VOLUMEID
 	help
 	  Prints the name of a filesystem with given label or UUID.
@@ -199,7 +221,7 @@ config KEMBTK_BUSYB_FINDFS
 
 config KEMBTK_BUSYB_FLOCK
 	bool "flock"
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Manage locks from shell scripts
@@ -207,6 +229,7 @@ config KEMBTK_BUSYB_FLOCK
 config KEMBTK_BUSYB_FREERAMDISK
 	bool "freeramdisk"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Linux allows you to create ramdisks. This utility allows you to
 	  delete them and completely free all memory that was used for the
@@ -228,14 +251,16 @@ config KEMBTK_BUSYB_FSCK_MINIX
 
 config KEMBTK_BUSYB_MKFS_EXT2
 	bool "mkfs_ext2"
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Utility to create EXT2 filesystems.
 
 config KEMBTK_BUSYB_MKFS_MINIX
 	bool "mkfs_minix"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  The minix filesystem is a nice, small, compact, read-write filesystem
 	  with little overhead. If you wish to be able to create minix
@@ -252,15 +277,17 @@ config KEMBTK_BUSYB_FEATURE_MINIX2
 
 config KEMBTK_BUSYB_MKFS_REISER
 	bool "mkfs_reiser"
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Utility to create ReiserFS filesystems.
 	  Note: this applet needs a lot of testing and polishing.
 
 config KEMBTK_BUSYB_MKFS_VFAT
 	bool "mkfs_vfat"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Utility to create FAT32 filesystems.
 
@@ -279,7 +306,7 @@ config KEMBTK_BUSYB_FEATURE_GETOPT_LONG
 	bool "Support option -l"
 	default y if KEMBTK_BUSYB_LONG_OPTS
 	depends on KEMBTK_BUSYB_GETOPT
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable support for long options (option -l).
 
@@ -310,6 +337,7 @@ config KEMBTK_BUSYB_HD
 config KEMBTK_BUSYB_HWCLOCK
 	bool "hwclock"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  The hwclock utility is used to read and set the hardware clock
 	  on a system. This is primarily used to set the current time on
@@ -327,7 +355,6 @@ config KEMBTK_BUSYB_FEATURE_HWCLOCK_LONG_OPTIONS
 
 config KEMBTK_BUSYB_FEATURE_HWCLOCK_ADJTIME_FHS
 	bool "Use FHS /var/lib/hwclock/adjtime"
-	default y
 	depends on KEMBTK_BUSYB_HWCLOCK
 	help
 	  Starting with FHS 2.3, the adjtime state file is supposed to exist
@@ -340,7 +367,6 @@ config KEMBTK_BUSYB_FEATURE_HWCLOCK_ADJTIME_FHS
 config KEMBTK_BUSYB_IPCRM
 	bool "ipcrm"
 	default y
-	select KEMBTK_BUSYB_FEATURE_SUID
 	help
 	  The ipcrm utility allows the removal of System V interprocess
 	  communication (KEMBTK_BUSYB_IPC) objects and the associated data structures
@@ -349,7 +375,7 @@ config KEMBTK_BUSYB_IPCRM
 config KEMBTK_BUSYB_IPCS
 	bool "ipcs"
 	default y
-	select KEMBTK_BUSYB_FEATURE_SUID
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  The ipcs utility is used to provide information on the currently
 	  allocated System V interprocess (KEMBTK_BUSYB_IPC) objects in the system.
@@ -357,6 +383,7 @@ config KEMBTK_BUSYB_IPCS
 config KEMBTK_BUSYB_LOSETUP
 	bool "losetup"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  losetup is used to associate or detach a loop device with a regular
 	  file or block device, and to query the status of a loop device. This
@@ -364,8 +391,9 @@ config KEMBTK_BUSYB_LOSETUP
 
 config KEMBTK_BUSYB_LSPCI
 	bool "lspci"
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	default y
+	#depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  lspci is a utility for displaying information about PCI buses in the
 	  system and devices connected to them.
@@ -374,8 +402,9 @@ config KEMBTK_BUSYB_LSPCI
 
 config KEMBTK_BUSYB_LSUSB
 	bool "lsusb"
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	default y
+	#depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  lsusb is a utility for displaying information about USB buses in the
 	  system and devices connected to them.
@@ -385,6 +414,7 @@ config KEMBTK_BUSYB_LSUSB
 config KEMBTK_BUSYB_MDEV
 	bool "mdev"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  mdev is a mini-udev implementation for dynamically creating device
 	  nodes in the /dev directory.
@@ -464,7 +494,7 @@ config KEMBTK_BUSYB_FEATURE_MKSWAP_UUID
 	bool "UUID support"
 	default y
 	depends on KEMBTK_BUSYB_MKSWAP
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Generate swap spaces with universally unique identifiers.
 
@@ -478,20 +508,10 @@ config KEMBTK_BUSYB_MORE
 	  you will probably find this utility very helpful. If you don't have
 	  any need to reading text files, you can leave this disabled.
 
-config KEMBTK_BUSYB_FEATURE_USE_TERMIOS
-	bool "Use termios to manipulate the screen"
-	default y
-	depends on KEMBTK_BUSYB_MORE || KEMBTK_BUSYB_TOP
-	help
-	  This option allows utilities such as 'more' and 'top' to determine
-	  the size of the screen. If you leave this disabled, your utilities
-	  that display things on the screen will be especially primitive and
-	  will be unable to determine the current screen size, and will be
-	  unable to move the cursor.
-
 config KEMBTK_BUSYB_MOUNT
 	bool "mount"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  All files and filesystems in Unix are arranged into one big directory
 	  tree. The 'mount' utility is used to graft a filesystem onto a
@@ -573,6 +593,7 @@ config KEMBTK_BUSYB_FEATURE_MOUNT_FSTAB
 config KEMBTK_BUSYB_PIVOT_ROOT
 	bool "pivot_root"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  The pivot_root utility swaps the mount points for the root filesystem
 	  with some other mounted filesystem. This allows you to do all sorts
@@ -600,12 +621,14 @@ config KEMBTK_BUSYB_RDEV
 config KEMBTK_BUSYB_READPROFILE
 	bool "readprofile"
 	default y
+	#depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This allows you to parse /proc/profile for basic profiling.
 
 config KEMBTK_BUSYB_RTCWAKE
 	bool "rtcwake"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Enter a system sleep state until specified wakeup time.
 
@@ -617,7 +640,7 @@ config KEMBTK_BUSYB_SCRIPT
 
 config KEMBTK_BUSYB_SCRIPTREPLAY
 	bool "scriptreplay"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  This program replays a typescript, using timing information
@@ -626,6 +649,7 @@ config KEMBTK_BUSYB_SCRIPTREPLAY
 config KEMBTK_BUSYB_SETARCH
 	bool "setarch"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  The linux32 utility is used to create a 32bit environment for the
 	  specified program (usually a shell). It only makes sense to have
@@ -635,6 +659,7 @@ config KEMBTK_BUSYB_SETARCH
 config KEMBTK_BUSYB_SWAPONOFF
 	bool "swaponoff"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This option enables both the 'swapon' and the 'swapoff' utilities.
 	  Once you have created some swap space using 'mkswap', you also need
@@ -653,6 +678,7 @@ config KEMBTK_BUSYB_FEATURE_SWAPON_PRI
 config KEMBTK_BUSYB_SWITCH_ROOT
 	bool "switch_root"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  The switch_root utility is used from initramfs to select a new
 	  root device. Under initramfs, you have to use this instead of
@@ -672,6 +698,7 @@ config KEMBTK_BUSYB_SWITCH_ROOT
 config KEMBTK_BUSYB_UMOUNT
 	bool "umount"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  When you want to remove a mounted filesystem from its current mount
 	  point, for example when you are shutting down the system, the
@@ -709,7 +736,7 @@ config KEMBTK_BUSYB_FEATURE_MOUNT_LOOP_CREATE
 	bool "Create new loopback devices if needed"
 	default y
 	depends on KEMBTK_BUSYB_FEATURE_MOUNT_LOOP
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Linux kernels >= 2.6.24 support unlimited loopback devices. They are
 	  allocated for use when trying to use a loop device. The loop device

@@ -7,9 +7,33 @@ comment "-------------------------------------------------"
 comment "Process Utilities"
 comment "-------------------------------------------------"
 
+config KEMBTK_BUSYB_IOSTAT
+	bool "iostat"
+	depends on EMBTK_BB_VERSION_1_18_X
+	default y
+	help
+	  Report KEMBTK_BUSYB_CPU and I/O statistics
+config KEMBTK_BUSYB_MPSTAT
+	bool "mpstat"
+	depends on EMBTK_BB_VERSION_1_18_X
+	default y
+	help
+	  Per-processor statistics
+config KEMBTK_BUSYB_PMAP
+       bool "pmap"
+       depends on EMBTK_BB_VERSION_1_18_X
+       default y
+       help
+         Display processes' memory mappings.
+config KEMBTK_BUSYB_POWERTOP
+	bool
+	depends on EMBTK_BB_VERSION_1_18_X
+	default y
+	help
+	  Analyze power consumption on Intel-based laptops
 config KEMBTK_BUSYB_SMEMCAP
 	bool "smemcap"
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  smemcap is a tool for capturing process data for smem,
@@ -18,6 +42,7 @@ config KEMBTK_BUSYB_SMEMCAP
 config KEMBTK_BUSYB_FREE
 	bool "free"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX #sysinfo()
 	help
 	  free displays the total amount of free and used physical and swap
 	  memory in the system, as well as the buffers used by the kernel.
@@ -112,7 +137,7 @@ config KEMBTK_BUSYB_FEATURE_PS_WIDE
 config KEMBTK_BUSYB_FEATURE_PS_TIME
 	bool "Enable time and elapsed time output"
 	default y
-	depends on KEMBTK_BUSYB_PS && KEMBTK_BUSYB_DESKTOP
+	depends on KEMBTK_BUSYB_PS && KEMBTK_BUSYB_DESKTOP && KEMBTK_BUSYB_PLATFORM_LINUX #sysinfo()
 	help
 	  Support -o time and -o etime output specifiers.
 
@@ -120,7 +145,7 @@ config KEMBTK_BUSYB_FEATURE_PS_ADDITIONAL_COLUMNS
 	bool "Enable additional ps columns"
 	default y
 	depends on KEMBTK_BUSYB_PS && KEMBTK_BUSYB_DESKTOP
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Support -o rgroup, -o ruser, -o nice output specifiers.
 
@@ -202,13 +227,14 @@ config KEMBTK_BUSYB_FEATURE_SHOW_THREADS
 	bool "Support for showing threads in ps/top"
 	default y
 	depends on KEMBTK_BUSYB_PS || KEMBTK_BUSYB_TOP
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enables ps -T option and 'h' command in top
 
 config KEMBTK_BUSYB_UPTIME
 	bool "uptime"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX #sysinfo()
 	help
 	  uptime gives a one line display of the current time, how long
 	  the system has been running, how many users are currently logged

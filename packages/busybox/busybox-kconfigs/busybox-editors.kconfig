@@ -7,7 +7,11 @@ comment "-------------------------------------------------"
 comment "Editors"
 comment "-------------------------------------------------"
 
-
+config KEMBTK_BUSYB_PATCH
+	bool "patch"
+	default y
+	help
+	  Apply a unified diff formatted patch.
 
 config KEMBTK_BUSYB_AWK
 	bool "awk"
@@ -45,14 +49,14 @@ config KEMBTK_BUSYB_FEATURE_DIFF_BINARY
 	depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X
 	default y
 	help
-	       This option enables support for checking for binary files
-	       before a comparison is carried out.
+		This option enables support for checking for binary files
+		before a comparison is carried out.
 
 config KEMBTK_BUSYB_FEATURE_DIFF_LONG_OPTIONS
 	bool "Enable long options"
-	depends on KEMBTK_BUSYB_DIFF && KEMBTK_BUSYB_LONG_OPTS
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	default y
+	depends on KEMBTK_BUSYB_DIFF && KEMBTK_BUSYB_LONG_OPTS
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable use of long options.
 
@@ -79,12 +83,6 @@ config KEMBTK_BUSYB_ED
 	  The original 1970's Unix text editor, from the days of teletypes.
 	  Small, simple, evil. Part of KEMBTK_BUSYB_SUSv3. If you're not already using
 	  this, you don't need it.
-
-config KEMBTK_BUSYB_PATCH
-	bool "patch"
-	default y
-	help
-	  Apply a unified diff formatted patch.
 
 config KEMBTK_BUSYB_SED
 	bool "sed"
@@ -191,9 +189,9 @@ config KEMBTK_BUSYB_FEATURE_VI_WIN_RESIZE
 
 config KEMBTK_BUSYB_FEATURE_VI_ASK_TERMINAL
 	bool "Use 'tell me cursor position' ESC sequence to measure window"
-	depends on KEMBTK_BUSYB_VI
-	depends on EMBTK_BB_VERSION_1_17_X
 	default y
+	depends on KEMBTK_BUSYB_VI
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  If terminal size can't be retrieved and $LINES/$COLUMNS are not set,
 	  this option makes vi perform a last-ditch effort to find it:

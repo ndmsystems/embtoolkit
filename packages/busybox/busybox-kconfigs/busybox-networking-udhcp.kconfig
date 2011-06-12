@@ -29,8 +29,9 @@ config KEMBTK_BUSYB_APP_UDHCPC
 
 config KEMBTK_BUSYB_UDHCPD
 	bool "udhcp server (udhcpd)"
-	select KEMBTK_BUSYB_APP_UDHCPD
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_APP_UDHCPD
 	help
 	  udhcpd is a DHCP server geared primarily toward embedded systems,
 	  while striving to be fully functional and RFC compliant.
@@ -75,14 +76,23 @@ config KEMBTK_BUSYB_DHCPD_LEASES_FILE
 
 config KEMBTK_BUSYB_UDHCPC
 	bool "udhcp client (udhcpc)"
-	select KEMBTK_BUSYB_APP_UDHCPC
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_APP_UDHCPC
 	help
 	  udhcpc is a DHCP client geared primarily toward embedded systems,
 	  while striving to be fully functional and RFC compliant.
 
 	  The udhcp client negotiates a lease with the DHCP server and
 	  runs a script when a lease is obtained or lost.
+
+config KEMBTK_BUSYB_UDHCP_DEBUG_1_13_X_1_14_X
+       bool "Compile udhcp with noisy debugging messages"
+       default n
+       depends on KEMBTK_BUSYB_UDHCPD || KEMBTK_BUSYB_UDHCPC || KEMBTK_BUSYB_DHCPRELAY
+       depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X
+       help
+               If selected, udhcpd will output extra debugging output.
 
 config KEMBTK_BUSYB_FEATURE_UDHCPC_ARPING
 	bool "Verify that the offered address is free, using KEMBTK_BUSYB_ARP ping"
@@ -102,23 +112,15 @@ config KEMBTK_BUSYB_FEATURE_UDHCP_PORT
 	  At the cost of ~300 bytes, enables -P port option.
 	  This feature is typically not needed.
 
-config KEMBTK_BUSYB_UDHCP_DEBUG_1_13_X_1_14_X
-	bool "Compile udhcp with noisy debugging messages"
-	default n
-	depends on KEMBTK_BUSYB_UDHCPD || KEMBTK_BUSYB_UDHCPC || KEMBTK_BUSYB_DHCPRELAY
-	depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X
-	help
-		If selected, udhcpd will output extra debugging output.
-
 config KEMBTK_BUSYB_UDHCP_DEBUG
 	int "Maximum verbosity level for udhcp applets (0..9)"
 	default 9
 	range 0 9
 	depends on KEMBTK_BUSYB_UDHCPD || KEMBTK_BUSYB_UDHCPC || KEMBTK_BUSYB_DHCPRELAY
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Verbosity can be increased with multiple -v options.
-	  This options controls how high it can be cranked up.
+	  This option controls how high it can be cranked up.
 
 	  Bigger values result in bigger code. Levels above 1
 	  are very verbose and useful for debugging only.

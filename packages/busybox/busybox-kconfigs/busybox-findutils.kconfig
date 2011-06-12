@@ -174,9 +174,9 @@ config KEMBTK_BUSYB_FEATURE_FIND_CONTEXT
 
 config KEMBTK_BUSYB_FEATURE_FIND_LINKS
 	bool "Enable -links: link count matching"
-	depends on KEMBTK_BUSYB_FIND
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
 	default y
+	depends on KEMBTK_BUSYB_FIND
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Support the 'find -links' option for matching number of links.
 config KEMBTK_BUSYB_GREP

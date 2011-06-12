@@ -12,14 +12,16 @@ comment "-------------------------------------------------"
 config KEMBTK_BUSYB_CHVT
 	bool "chvt"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This program is used to change to another terminal.
 	  Example: chvt 4 (change to terminal /dev/tty4)
 
 config KEMBTK_BUSYB_FGCONSOLE
 	bool "fgconsole"
-	depends on EMBTK_BB_VERSION_1_17_X
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  This program prints active (foreground) console number.
 
@@ -32,12 +34,14 @@ config KEMBTK_BUSYB_CLEAR
 config KEMBTK_BUSYB_DEALLOCVT
 	bool "deallocvt"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This program deallocates unused virtual consoles.
 
 config KEMBTK_BUSYB_DUMPKMAP
 	bool "dumpkmap"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This program dumps the kernel's keyboard translation table to
 	  stdout, in binary format. You can then use loadkmap to load it.
@@ -45,18 +49,21 @@ config KEMBTK_BUSYB_DUMPKMAP
 config KEMBTK_BUSYB_KBD_MODE
 	bool "kbd_mode"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This program reports and sets keyboard mode.
 
 config KEMBTK_BUSYB_LOADFONT
 	bool "loadfont"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This program loads a console font from standard input.
 
 config KEMBTK_BUSYB_LOADKMAP
 	bool "loadkmap"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This program loads a keyboard translation table from
 	  standard input.
@@ -64,6 +71,7 @@ config KEMBTK_BUSYB_LOADKMAP
 config KEMBTK_BUSYB_OPENVT
 	bool "openvt"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This program is used to start a command on an unused
 	  virtual terminal.
@@ -95,6 +103,7 @@ config KEMBTK_BUSYB_FEATURE_RESIZE_PRINT
 config KEMBTK_BUSYB_SETCONSOLE
 	bool "setconsole"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This program redirects the system console to another device,
 	  like the current tty while logged in via telnet.
@@ -109,6 +118,7 @@ config KEMBTK_BUSYB_FEATURE_SETCONSOLE_LONG_OPTIONS
 config KEMBTK_BUSYB_SETFONT
 	bool "setfont"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Allows to load console screen map. Useful for i18n.
 
@@ -130,6 +140,7 @@ config KEMBTK_BUSYB_DEFAULT_SETFONT_DIR
 config KEMBTK_BUSYB_SETKEYCODES
 	bool "setkeycodes"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This program loads entries into the kernel's scancode-to-keycode
 	  map, allowing unusual keyboards to generate usable keycodes.
@@ -137,32 +148,34 @@ config KEMBTK_BUSYB_SETKEYCODES
 config KEMBTK_BUSYB_SETLOGCONS
 	bool "setlogcons"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This program redirects the output console of kernel messages.
 
 config KEMBTK_BUSYB_SHOWKEY
 	bool "showkey"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Shows keys pressed.
 
 comment "Common options for loadfont and setfont"
 	depends on KEMBTK_BUSYB_LOADFONT || KEMBTK_BUSYB_SETFONT
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 
 config KEMBTK_BUSYB_FEATURE_LOADFONT_PSF2
 	bool "Support for KEMBTK_BUSYB_PSF2 console fonts"
-	depends on EMBTK_BB_VERSION_1_17_X
 	default y
 	depends on KEMBTK_BUSYB_LOADFONT || KEMBTK_BUSYB_SETFONT
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Support KEMBTK_BUSYB_PSF2 console fonts.
 
 config KEMBTK_BUSYB_FEATURE_LOADFONT_RAW
 	bool "Support for old (raw) console fonts"
-	depends on EMBTK_BB_VERSION_1_17_X
 	default y
 	depends on KEMBTK_BUSYB_LOADFONT || KEMBTK_BUSYB_SETFONT
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Support old (raw) console fonts.
 

@@ -35,6 +35,7 @@ config KEMBTK_BUSYB_FSCK
 config KEMBTK_BUSYB_LSATTR
 	bool "lsattr"
 	default y
+	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  lsattr lists the file attributes on a second extended file system.
 

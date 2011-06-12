@@ -9,7 +9,7 @@ comment "-------------------------------------------------"
 
 config KEMBTK_BUSYB_BOOTCHARTD
 	bool "bootchartd"
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  bootchartd is commonly used to profile the boot process
@@ -46,7 +46,32 @@ config KEMBTK_BUSYB_FEATURE_BOOTCHARTD_CONFIG_FILE
 	help
 	  Enable reading and parsing of $PWD/bootchartd.conf
 	  and /etc/bootchartd.conf files.
+config KEMBTK_BUSYB_HALT
+	bool "poweroff, halt, and reboot"
+	default y
+	help
+	  Stop all processes and either halt, reboot, or power off the system.
 
+config KEMBTK_BUSYB_FEATURE_CALL_TELINIT
+	bool "Call telinit on shutdown and reboot"
+	default y
+	depends on KEMBTK_BUSYB_HALT && !KEMBTK_BUSYB_INIT
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
+	help
+	  Call an external program (normally telinit) to facilitate
+	  a switch to a proper runlevel.
+
+	  This option is only available if you selected halt and friends,
+	  but did not select init.
+
+config KEMBTK_BUSYB_TELINIT_PATH
+	string "Path to telinit executable"
+	default "/sbin/telinit"
+	depends on KEMBTK_BUSYB_FEATURE_CALL_TELINIT
+	help
+	  When busybox halt and friends have to call external telinit
+	  to facilitate proper shutdown, this path is to be used when
+	  locating telinit executable.
 config KEMBTK_BUSYB_INIT
 	bool "init"
 	default y
@@ -128,33 +153,18 @@ config KEMBTK_BUSYB_FEATURE_INITRD
 	  This does not apply to initramfs, which runs /init as PID 1 and
 	  requires no special support.
 
-config KEMBTK_BUSYB_HALT
-	bool "poweroff, halt, and reboot"
-	default y
+config KEMBTK_BUSYB_INIT_TERMINAL_TYPE
+	string "Initial terminal type"
+	default "linux"
+	depends on KEMBTK_BUSYB_INIT
+	depends on EMBTK_BB_VERSION_1_18_X
 	help
-	  Stop all processes and either halt, reboot, or power off the system.
+	  This is the initial value set by init for the TERM environment
+	  variable. This variable is used by programs which make use of
+	  extended terminal capabilities.
 
-config KEMBTK_BUSYB_FEATURE_CALL_TELINIT
-	bool "Call telinit on shutdown and reboot"
-	default y
-	depends on KEMBTK_BUSYB_HALT && !KEMBTK_BUSYB_INIT
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
-	help
-	  Call an external program (normally telinit) to facilitate
-	  a switch to a proper runlevel.
-
-	  This option is only available if you selected halt and friends,
-	  but did not select init.
-
-config KEMBTK_BUSYB_TELINIT_PATH
-	string "Path to telinit executable"
-	default "/sbin/telinit"
-	depends on KEMBTK_BUSYB_FEATURE_CALL_TELINIT
-	help
-	  When busybox halt and friends have to call external telinit
-	  to facilitate proper shutdown, this path is to be used when
-	  locating telinit executable.
-
+	  Note that on Linux, init attempts to detect serial terminal and
+	  sets TERM to "vt102" if one is found.
 config KEMBTK_BUSYB_MESG
 	bool "mesg"
 	default y

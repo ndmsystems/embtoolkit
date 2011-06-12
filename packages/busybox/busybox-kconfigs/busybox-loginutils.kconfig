@@ -7,7 +7,19 @@ comment "-------------------------------------------------"
 comment "Login/Password Management Utilities"
 comment "-------------------------------------------------"
 
+config KEMBTK_BUSYB_ADD_SHELL
+       bool "add-shell"
+       depends on EMBTK_BB_VERSION_1_18_X
+       default y if KEMBTK_BUSYB_DESKTOP
+       help
+         Add shells to /etc/shells.
 
+config KEMBTK_BUSYB_REMOVE_SHELL
+       bool "remove-shell"
+       depends on EMBTK_BB_VERSION_1_18_X
+       default y if KEMBTK_BUSYB_DESKTOP
+       help
+         Remove shells from /etc/shells.
 
 config KEMBTK_BUSYB_FEATURE_SHADOWPASSWDS
 	bool "Support for shadow passwords"
@@ -87,7 +99,7 @@ config KEMBTK_BUSYB_USE_BB_CRYPT_SHA
 	bool "Enable SHA256/512 crypt functions"
 	default y
 	depends on KEMBTK_BUSYB_USE_BB_CRYPT
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable this if you have passwords starting with "$5$" or "$6$"
 	  in your /etc/passwd or /etc/shadow files. These passwords
@@ -95,6 +107,48 @@ config KEMBTK_BUSYB_USE_BB_CRYPT_SHA
 	  was added to glibc in 2008.
 	  With this option off, login will fail password check for any
 	  user which has password encrypted with these algorithms.
+
+config KEMBTK_BUSYB_ADDUSER
+	bool "adduser"
+	default y
+	help
+	  Utility for creating a new user account.
+
+config KEMBTK_BUSYB_FEATURE_ADDUSER_LONG_OPTIONS
+	bool "Enable long options"
+	default y
+	depends on KEMBTK_BUSYB_ADDUSER && KEMBTK_BUSYB_LONG_OPTS
+	help
+	  Support long options for the adduser applet.
+
+config KEMBTK_BUSYB_FEATURE_CHECK_NAMES
+	bool "Enable sanity check on user/group names in adduser and addgroup"
+	depends on KEMBTK_BUSYB_ADDUSER || KEMBTK_BUSYB_ADDGROUP
+	help
+	  Enable sanity check on user and group names in adduser and addgroup.
+	  To avoid problems, the user or group name should consist only of
+	  letters, digits, underscores, periods, at signs and dashes,
+	  and not start with a dash (as defined by IEEE Std 1003.1-2001).
+	  For compatibility with Samba machine accounts "$" is also supported
+	  at the end of the user or group name.
+
+config KEMBTK_BUSYB_FIRST_SYSTEM_ID
+	int "First valid system uid or gid for adduser and addgroup"
+	depends on KEMBTK_BUSYB_ADDUSER || KEMBTK_BUSYB_ADDGROUP
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
+	range 0 64900
+	default 100
+	help
+	  First valid system uid or gid for adduser and addgroup
+
+config KEMBTK_BUSYB_LAST_SYSTEM_ID
+	int "Last valid system uid or gid for adduser and addgroup"
+	depends on KEMBTK_BUSYB_ADDUSER || KEMBTK_BUSYB_ADDGROUP
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
+	range 0 64900
+	default 999
+	help
+	  Last valid system uid or gid for adduser and addgroup
 
 config KEMBTK_BUSYB_ADDGROUP
 	bool "addgroup"
@@ -106,7 +160,7 @@ config KEMBTK_BUSYB_FEATURE_ADDGROUP_LONG_OPTIONS
 	bool "Enable long options"
 	default y
 	depends on KEMBTK_BUSYB_ADDGROUP && KEMBTK_BUSYB_LONG_OPTS
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Support long options for the addgroup applet.
 
@@ -118,6 +172,12 @@ config KEMBTK_BUSYB_FEATURE_ADDUSER_TO_GROUP
 	  If  called  with two non-option arguments,
 	  addgroup will add an existing user to an
 	  existing group.
+
+config KEMBTK_BUSYB_DELUSER
+	bool "deluser"
+	default y
+	help
+	  Utility for deleting a user account.
 
 config KEMBTK_BUSYB_DELGROUP
 	bool "delgroup"
@@ -133,54 +193,6 @@ config KEMBTK_BUSYB_FEATURE_DEL_USER_FROM_GROUP
 	  If called with two non-option arguments, deluser
 	  or delgroup will remove an user from a specified group.
 
-config KEMBTK_BUSYB_FEATURE_CHECK_NAMES
-	bool "Enable sanity check on user/group names in adduser and addgroup"
-	depends on KEMBTK_BUSYB_ADDUSER || KEMBTK_BUSYB_ADDGROUP
-	help
-	  Enable sanity check on user and group names in adduser and addgroup.
-	  To avoid problems, the user or group name should consist only of
-	  letters, digits, underscores, periods, at signs and dashes,
-	  and not start with a dash (as defined by IEEE Std 1003.1-2001).
-	  For compatibility with Samba machine accounts "$" is also supported
-	  at the end of the user or group name.
-
-config KEMBTK_BUSYB_ADDUSER
-	bool "adduser"
-	default y
-	help
-	  Utility for creating a new user account.
-
-config KEMBTK_BUSYB_FEATURE_ADDUSER_LONG_OPTIONS
-	bool "Enable long options"
-	default y
-	depends on KEMBTK_BUSYB_ADDUSER && KEMBTK_BUSYB_LONG_OPTS
-	help
-	  Support long options for the adduser applet.
-
-config KEMBTK_BUSYB_FIRST_SYSTEM_ID
-	int "First valid system uid or gid for adduser and addgroup"
-	depends on KEMBTK_BUSYB_ADDUSER || KEMBTK_BUSYB_ADDGROUP
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
-	range 0 64900
-	default 100
-	help
-	  First valid system uid or gid for adduser and addgroup
-
-config KEMBTK_BUSYB_LAST_SYSTEM_ID
-	int "Last valid system uid or gid for adduser and addgroup"
-	depends on KEMBTK_BUSYB_ADDUSER || KEMBTK_BUSYB_ADDGROUP
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
-	range 0 64900
-	default 999
-	help
-	  Last valid system uid or gid for adduser and addgroup
-
-config KEMBTK_BUSYB_DELUSER
-	bool "deluser"
-	default y
-	help
-	  Utility for deleting a user account.
-
 config KEMBTK_BUSYB_GETTY
 	bool "getty"
 	default y
@@ -191,7 +203,6 @@ config KEMBTK_BUSYB_GETTY
 config KEMBTK_BUSYB_LOGIN
 	bool "login"
 	default y
-	select KEMBTK_BUSYB_FEATURE_SUID
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
 	  login is used when signing onto a system.
@@ -233,7 +244,6 @@ config KEMBTK_BUSYB_FEATURE_SECURETTY
 config KEMBTK_BUSYB_PASSWD
 	bool "passwd"
 	default y
-	select KEMBTK_BUSYB_FEATURE_SUID
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
 	  passwd changes passwords for user and group accounts. A normal user
@@ -269,7 +279,6 @@ config KEMBTK_BUSYB_CHPASSWD
 config KEMBTK_BUSYB_SU
 	bool "su"
 	default y
-	select KEMBTK_BUSYB_FEATURE_SUID
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
 	  su is used to become another user during a login session.
@@ -299,7 +308,6 @@ config KEMBTK_BUSYB_SULOGIN
 config KEMBTK_BUSYB_VLOCK
 	bool "vlock"
 	default y
-	select KEMBTK_BUSYB_FEATURE_SUID
 	help
 	  Build the "vlock" applet which allows you to lock (virtual) terminals.
 

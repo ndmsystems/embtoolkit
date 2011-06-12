@@ -6,10 +6,11 @@
 comment "-------------------------------------------------"
 comment "Linux Module Utilities"
 comment "-------------------------------------------------"
+depends on KEMBTK_BUSYB_PLATFORM_LINUX
 
 config KEMBTK_BUSYB_MODINFO
 	bool "modinfo"
-	depends on EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Show information about a Linux Kernel module
@@ -125,7 +126,7 @@ config KEMBTK_BUSYB_FEATURE_2_4_MODULES
 config KEMBTK_BUSYB_FEATURE_INSMOD_TRY_MMAP
 	bool "Try to load module from a mmap'ed area"
 	depends on KEMBTK_BUSYB_INSMOD || KEMBTK_BUSYB_MODPROBE_SMALL
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X
+	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  This option causes module loading code to try to mmap
 	  module first. If it does not work (for example,
@@ -186,6 +187,7 @@ config KEMBTK_BUSYB_FEATURE_INSMOD_LOAD_MAP_FULL
 config KEMBTK_BUSYB_FEATURE_CHECK_TAINTED_MODULE
 	bool "Support tainted module checking with new kernels"
 	default y
+	depends on (KEMBTK_BUSYB_LSMOD || KEMBTK_BUSYB_FEATURE_2_4_MODULES) && !KEMBTK_BUSYB_MODPROBE_SMALL
 	help
 	  Support checking for tainted modules. These are usually binary
 	  only modules that will make the linux-kernel list ignore your
@@ -222,6 +224,7 @@ config KEMBTK_BUSYB_FEATURE_MODUTILS_SYMBOLS
 config KEMBTK_BUSYB_DEFAULT_MODULES_DIR
 	string "Default directory containing modules"
 	default "/lib/modules"
+	depends on KEMBTK_BUSYB_DEPMOD || KEMBTK_BUSYB_MODPROBE || KEMBTK_BUSYB_MODPROBE_SMALL || KEMBTK_BUSYB_MODINFO
 	help
 	  Directory that contains kernel modules.
 	  Defaults to "/lib/modules"
@@ -229,6 +232,7 @@ config KEMBTK_BUSYB_DEFAULT_MODULES_DIR
 config KEMBTK_BUSYB_DEFAULT_DEPMOD_FILE
 	string "Default name of modules.dep"
 	default "modules.dep"
+	depends on KEMBTK_BUSYB_DEPMOD || KEMBTK_BUSYB_MODPROBE || KEMBTK_BUSYB_MODPROBE_SMALL || KEMBTK_BUSYB_MODINFO
 	help
 	  Filename that contains kernel modules dependencies.
 	  Defaults to "modules.dep"
