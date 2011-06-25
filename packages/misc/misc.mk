@@ -34,6 +34,10 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GETTEXT) += gettext_install
 include $(EMBTK_ROOT)/packages/misc/glib/glib.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GLIB) += glib_install
 
+# intltool
+include $(EMBTK_ROOT)/packages/misc/intltool/intltool.mk
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_INTLTOOL) += intltool_host_install
+
 #libelf
 include $(EMBTK_ROOT)/packages/misc/libelf/libelf.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBELF) += libelf_install

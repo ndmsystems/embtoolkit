@@ -27,6 +27,7 @@
 source packages/misc/expat/expat.kconfig
 source packages/misc/gettext/gettext.kconfig
 source packages/misc/glib/glib.kconfig
+source packages/misc/intltool/intltool.kconfig
 source packages/misc/libelf/libelf.kconfig
 source packages/misc/libxml/libxml.kconfig
 source packages/misc/ncurses/ncurses.kconfig
