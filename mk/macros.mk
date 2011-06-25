@@ -244,7 +244,7 @@ define EMBTK_CONFIGURE_PKG
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"	\
 	CPPFLAGS="-I$(SYSROOT)/usr/include"				\
 	PKG_CONFIG=$(PKGCONFIG_BIN)					\
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)				\
+	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
 	ac_cv_func_malloc_0_nonnull=yes					\
 	ac_cv_func_realloc_0_nonnull=yes				\
 	$($(1)_CONFIGURE_ENV)						\

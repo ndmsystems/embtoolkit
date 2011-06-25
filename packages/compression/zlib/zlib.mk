@@ -80,7 +80,7 @@ $(ZLIB_BUILD_DIR)/.configured:
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"	\
 	CPPFLAGS="-I$(SYSROOT)/usr/include"				\
 	PKG_CONFIG=$(PKGCONFIG_BIN)					\
-	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)				\
+	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)				\
 	$(ZLIB_CONFIGURE_ENV)						\
 	$(CONFIG_SHELL) $(ZLIB_SRC_DIR)/configure			\
 	--libdir=/usr/$(LIBDIR)	--prefix=/usr --sysconfdir=/etc		\
