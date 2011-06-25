@@ -45,7 +45,7 @@ XCBUTIL_PKGCONFIGS = xcb-atom.pc xcb-aux.pc xcb-event.pc xcb-icccm.pc \
 		xcb-image.pc xcb-keysyms.pc xcb-property.pc xcb-renderutil.pc \
 		xcb-reply.pc
 
-XCBUTIL_DEPS = libxcb_install
+XCBUTIL_DEPS = gperf_host_install libxcb_install
 
 xcbutil_install:
 	$(call EMBTK_INSTALL_PKG,XCBUTIL)

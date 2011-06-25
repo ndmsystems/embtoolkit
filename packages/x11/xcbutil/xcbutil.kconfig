@@ -27,6 +27,7 @@ config EMBTK_HAVE_XCBUTIL
 	bool "Have xcbutil"
 	select EMBTK_XCBUTIL_PKG_IS_TARBZ2
 	select EMBTK_HAVE_LIBXCB
+	select EMBTK_HOST_HAVE_GPERF
 	help
 		xcb-util for XCB (X windowing system related).
 choice
