@@ -55,10 +55,11 @@ HOSTCFLAGS   = -Wall
 HOSTCXXFLAGS = -O2
 export HOSTCC HOSTCXX HOSTCFLAGS HOSTCXXFLAGS
 
-ifeq ($(Q),)
-Q:=@
+ifeq ($(V),)
+Q = @
+MAKEFLAGS += --no-print-directory --silent
 else
-Q:=
+Q =
 endif
 export Q
 
