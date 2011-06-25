@@ -25,13 +25,13 @@
 
 config EMBTK_HOST_HAVE_GPERF
 	bool
-	select EMBTK_GPERF_PKG_IS_TARBZ2
+	select EMBTK_GPERF_PKG_IS_TARGZ
 	help
 		gperf for host development machine.
 
 config EMBTK_HAVE_GPERF
 	bool
-	select EMBTK_GPERF_PKG_IS_TARBZ2
+	select EMBTK_GPERF_PKG_IS_TARGZ
 	help
 		This is GNU gperf. It is a program that generates perfect hash
 		functions for sets of key words.
@@ -47,7 +47,6 @@ choice
 
 	config  EMBTK_GPERF_VERSION_3_0_4
 		bool "gperf-3.0.4"
-		select EMBTK_GPERF_PKG_IS_TARGZ
 endchoice
 
 config EMBTK_GPERF_VERSION_STRING
