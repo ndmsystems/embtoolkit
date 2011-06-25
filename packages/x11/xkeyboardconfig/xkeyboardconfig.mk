@@ -23,14 +23,14 @@
 # \date         March 2010
 ################################################################################
 
-XKEYBOARDCONFIG_NAME := xkeyboard-config
-XKEYBOARDCONFIG_VERSION := $(call EMBTK_GET_PKG_VERSION,XKEYBOARDCONFIG)
-XKEYBOARDCONFIG_SITE := http://www.x.org/releases/individual/data/xkeyboard-config
-XKEYBOARDCONFIG_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-XKEYBOARDCONFIG_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/xkeyboard-config/$(XKEYBOARDCONFIG_VERSION)
-XKEYBOARDCONFIG_PACKAGE := xkeyboard-config-$(XKEYBOARDCONFIG_VERSION).tar.bz2
-XKEYBOARDCONFIG_SRC_DIR := $(PACKAGES_BUILD)/xkeyboard-config-$(XKEYBOARDCONFIG_VERSION)
-XKEYBOARDCONFIG_BUILD_DIR := $(PACKAGES_BUILD)/xkeyboard-config-$(XKEYBOARDCONFIG_VERSION)
+XKEYBOARDCONFIG_NAME		:= xkeyboard-config
+XKEYBOARDCONFIG_VERSION		:= $(call EMBTK_GET_PKG_VERSION,XKEYBOARDCONFIG)
+XKEYBOARDCONFIG_SITE		:= http://www.x.org/releases/individual/data/xkeyboard-config
+XKEYBOARDCONFIG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+XKEYBOARDCONFIG_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/xkeyboard-config/$(XKEYBOARDCONFIG_VERSION)
+XKEYBOARDCONFIG_PACKAGE		:= xkeyboard-config-$(XKEYBOARDCONFIG_VERSION).tar.bz2
+XKEYBOARDCONFIG_SRC_DIR		:= $(PACKAGES_BUILD)/xkeyboard-config-$(XKEYBOARDCONFIG_VERSION)
+XKEYBOARDCONFIG_BUILD_DIR	:= $(PACKAGES_BUILD)/xkeyboard-config-$(XKEYBOARDCONFIG_VERSION)
 
 XKEYBOARDCONFIG_BINS =
 XKEYBOARDCONFIG_SBINS =
@@ -38,7 +38,7 @@ XKEYBOARDCONFIG_INCLUDES =
 XKEYBOARDCONFIG_LIBS =
 XKEYBOARDCONFIG_PKGCONFIGS =
 
-XKEYBOARDCONFIG_DEPS = xkbcomp_install
+XKEYBOARDCONFIG_DEPS = intltool_host_install xkbcomp_install
 
 xkeyboardconfig_install:
 	$(call EMBTK_INSTALL_PKG,XKEYBOARDCONFIG)
