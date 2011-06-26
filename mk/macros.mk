@@ -113,7 +113,6 @@ endef
 
 #Successful build of EmbToolkit message
 successful_build:
-	$(call ECHO_BLUE,"################################## EmbToolkit ##################################")
 	$(call ECHO_BLUE," --------------------- ")
 	$(call ECHO_BLUE,"| Toolchain build log |")
 	$(call ECHO_BLUE," --------------------- ")
@@ -125,8 +124,8 @@ successful_build:
 	$(call ECHO_BLUE,"| Root file system build log |")
 	$(call ECHO_BLUE," ---------------------------- ")
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-	$(call ECHO_BLUE,"You also successfully build a root filesystem located in the root directory")
-	$(call ECHO_BLUE,"of EmbToolkit.")
+	$(call ECHO_BLUE,"You also successfully build root filesystem(s) located in the")
+	$(call ECHO_BLUE,"'generated' sub-directory of EmbToolkit.")
 else
 	$(call ECHO_GREEN,"Build of root filesystem not selected.")
 endif
