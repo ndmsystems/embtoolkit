@@ -23,49 +23,29 @@
 # \date         October 2009
 ################################################################################
 
-FREETYPE_NAME := freetype
-FREETYPE_VERSION := $(call EMBTK_GET_PKG_VERSION,FREETYPE)
-FREETYPE_SITE := http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
-FREETYPE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-FREETYPE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/freetype/$(FREETYPE_VERSION)
-FREETYPE_PACKAGE := freetype-$(FREETYPE_VERSION).tar.bz2
-FREETYPE_SRC_DIR := $(PACKAGES_BUILD)/freetype-$(FREETYPE_VERSION)
-FREETYPE_BUILD_DIR := $(PACKAGES_BUILD)/freetype-$(FREETYPE_VERSION)
+FREETYPE_NAME		:= freetype
+FREETYPE_VERSION	:= $(call EMBTK_GET_PKG_VERSION,FREETYPE)
+FREETYPE_SITE		:= http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+FREETYPE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+FREETYPE_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/freetype/$(FREETYPE_VERSION)
+FREETYPE_PACKAGE	:= freetype-$(FREETYPE_VERSION).tar.bz2
+FREETYPE_SRC_DIR	:= $(PACKAGES_BUILD)/freetype-$(FREETYPE_VERSION)
+FREETYPE_BUILD_DIR	:= $(PACKAGES_BUILD)/freetype-$(FREETYPE_VERSION)
 
-FREETYPE_BINS = freetype*
-FREETYPE_SBINS =
-FREETYPE_INCLUDES = ft*build.h freetype*
-FREETYPE_LIBS = libfreetype*
-FREETYPE_PKGCONFIGS = freetype*.pc
+FREETYPE_BINS		= freetype*
+FREETYPE_SBINS		=
+FREETYPE_INCLUDES	= ft*build.h freetype*
+FREETYPE_LIBS		= libfreetype*
+FREETYPE_PKGCONFIGS	= freetype*.pc
 
-FREETYPE_DEPS := zlib_install
+FREETYPE_DEPS		:= zlib_install
+FREETYPE_MAKE_OPTS	:= LIBTOOL=$(FREETYPE_BUILD_DIR)/builds/unix/libtool
 
 freetype_install:
-	@test -e $(FREETYPE_BUILD_DIR)/.installed || \
-	$(MAKE) $(FREETYPE_BUILD_DIR)/.installed
-
-$(FREETYPE_BUILD_DIR)/.installed: $(FREETYPE_DEPS) download_freetype \
-	$(FREETYPE_BUILD_DIR)/.decompressed $(FREETYPE_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
-	freetype-$(FREETYPE_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH, $(FREETYPE_BUILD_DIR))
-	$(MAKE) -C $(FREETYPE_BUILD_DIR) $(J) \
-	LIBTOOL=$(FREETYPE_BUILD_DIR)/builds/unix/libtool
-	$(MAKE) -C $(FREETYPE_BUILD_DIR) \
-	LIBTOOL=$(FREETYPE_BUILD_DIR)/builds/unix/libtool \
-	DESTDIR=$(SYSROOT) install
-	$(MAKE) libtool_files_adapt
-	$(MAKE) pkgconfig_files_adapt
-	@touch $@
+	$(call EMBTK_INSTALL_PKG,FREETYPE)
 
 download_freetype:
 	$(call EMBTK_DOWNLOAD_PKG,FREETYPE)
-
-$(FREETYPE_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,FREETYPE)
-
-$(FREETYPE_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,FREETYPE)
 
 freetype_clean:
 	$(call EMBTK_CLEANUP_PKG,FREETYPE)
