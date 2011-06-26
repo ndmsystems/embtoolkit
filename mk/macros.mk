@@ -332,7 +332,8 @@ define __EMBTK_INSTALL_HOSTPKG_MAKE
 	$(Q)$(call EMBTK_DECOMPRESS_HOSTPKG,$(1))
 	$(Q)$(call EMBTK_CONFIGURE_HOSTPKG,$(1))
 	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) $($(1)_MAKE_OPTS) $(J)
-	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) $($(1)_MAKE_OPTS) install
+	$(Q)$(MAKE) -C $($(1)_BUILD_DIR) $($(1)_MAKE_OPTS)			\
+		$(if $($(1)_DESTDIR),DESTDIR=$($(1)_DESTDIR)) install
 	@touch $($(1)_BUILD_DIR)/.installed
 endef
 define EMBTK_INSTALL_HOSTPKG
