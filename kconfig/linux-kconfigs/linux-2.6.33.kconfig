@@ -28,6 +28,22 @@ choice
 	help
 		Linux v2.6.33.x series exact version to use.
 
+	config EMBTK_LINUX_VERSION_2_6_33_15
+		bool "linux-2.6.33.15"
+	config EMBTK_LINUX_VERSION_2_6_33_14
+		bool "linux-2.6.33.14"
+	config EMBTK_LINUX_VERSION_2_6_33_13
+		bool "linux-2.6.33.13"
+	config EMBTK_LINUX_VERSION_2_6_33_12
+		bool "linux-2.6.33.12"
+	config EMBTK_LINUX_VERSION_2_6_33_11
+		bool "linux-2.6.33.11"
+	config EMBTK_LINUX_VERSION_2_6_33_10
+		bool "linux-2.6.33.10"
+	config EMBTK_LINUX_VERSION_2_6_33_9
+		bool "linux-2.6.33.9"
+	config EMBTK_LINUX_VERSION_2_6_33_8
+		bool "linux-2.6.33.8"
 	config EMBTK_LINUX_VERSION_2_6_33_7
 		bool "linux-2.6.33.7"
 	config EMBTK_LINUX_VERSION_2_6_33_6
@@ -48,6 +64,14 @@ endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "2.6.33.15"		if EMBTK_LINUX_VERSION_2_6_33_15
+	default "2.6.33.14"		if EMBTK_LINUX_VERSION_2_6_33_14
+	default "2.6.33.13"		if EMBTK_LINUX_VERSION_2_6_33_13
+	default "2.6.33.12"		if EMBTK_LINUX_VERSION_2_6_33_12
+	default "2.6.33.11"		if EMBTK_LINUX_VERSION_2_6_33_11
+	default "2.6.33.10"		if EMBTK_LINUX_VERSION_2_6_33_10
+	default "2.6.33.9"		if EMBTK_LINUX_VERSION_2_6_33_9
+	default "2.6.33.8"		if EMBTK_LINUX_VERSION_2_6_33_8
 	default "2.6.33.7"		if EMBTK_LINUX_VERSION_2_6_33_7
 	default "2.6.33.6"		if EMBTK_LINUX_VERSION_2_6_33_6
 	default "2.6.33.5"		if EMBTK_LINUX_VERSION_2_6_33_5
