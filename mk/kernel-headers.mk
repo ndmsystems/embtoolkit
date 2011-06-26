@@ -23,17 +23,22 @@
 # \date         May 2009
 ################################################################################
 
-LINUX_NAME := linux
-LINUX_VERSION := $(call EMBTK_GET_PKG_VERSION,LINUX)
-ifeq ($(CONFIG_EMBTK_LINUX_HAVE_MIRROR),y)
-LINUX_SITE := $(subst ",,$(strip $(CONFIG_EMBTK_LINUX_HAVE_MIRROR_SITE)))
-else
-LINUX_SITE := http://ftp.kernel.org/pub/linux/kernel/v2.6
-endif
-LINUX_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LINUX_PACKAGE := linux-$(LINUX_VERSION).tar.bz2
-LINUX_SRC_DIR := $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
-LINUX_BUILD_DIR := $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
+__LINUX_SITE_BASE	= http://ftp.kernel.org/pub/linux/kernel
+__LINUX_SITE_LONGTERM	= $(strip $(if $(LINUX_LONGTERMV),			\
+					/longterm/$(LINUX_LONGTERMV)))
+__LINUX_SITE		= $(strip $(if $(CONFIG_EMBTK_LINUX_HAVE_MIRROR),	\
+	$(patsubst '"',,$(strip $(CONFIG_EMBTK_LINUX_HAVE_MIRROR_SITE))),	\
+	$(__LINUX_SITE_BASE)/$(LINUX_MAJORV)$(__LINUX_SITE_LONGTERM)))
+
+LINUX_NAME		:= linux
+LINUX_MAJORV		:= $(call EMBTK_GET_PKG_VERSION,LINUX_MAJOR)
+LINUX_LONGTERMV		:= $(call EMBTK_GET_PKG_VERSION,LINUX_LONGTERM)
+LINUX_VERSION		:= $(call EMBTK_GET_PKG_VERSION,LINUX)
+LINUX_SITE		:= $(call __LINUX_SITE)
+LINUX_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LINUX_PACKAGE		:= linux-$(LINUX_VERSION).tar.bz2
+LINUX_SRC_DIR		:= $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
+LINUX_BUILD_DIR		:= $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 
 kernel-headers_install:  download_linux $(LINUX_BUILD_DIR)/.decompressed
 	$(call EMBTK_INSTALL_MSG,"headers linux-$(LINUX_VERSION)")

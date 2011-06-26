@@ -66,3 +66,6 @@ config EMBTK_LINUX_VERSION_STRING
 	default "2.6.30.1"		if EMBTK_LINUX_VERSION_2_6_30_1
 	default "2.6.30"		if EMBTK_LINUX_VERSION_2_6_30
 
+config EMBTK_LINUX_MAJOR_VERSION_STRING
+	string
+	default "v2.6"

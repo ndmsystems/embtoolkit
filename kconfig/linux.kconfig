@@ -31,67 +31,54 @@ choice
 
 	config EMBTK_LINUX_VERSION_2_6_39_X
 		bool "linux-2.6.39.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.39.x version.
 	config EMBTK_LINUX_VERSION_2_6_38_X
 		bool "linux-2.6.38.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.38.x version.
 	config EMBTK_LINUX_VERSION_2_6_37_X
 		bool "linux-2.6.37.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.37.x version.
 	config EMBTK_LINUX_VERSION_2_6_36_X
 		bool "linux-2.6.36.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.36.x version.
 	config EMBTK_LINUX_VERSION_2_6_35_X
 		bool "linux-2.6.35.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.35.x version.
 	config EMBTK_LINUX_VERSION_2_6_34_X
 		bool "linux-2.6.34.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.34.x version.
 	config EMBTK_LINUX_VERSION_2_6_33_X
 		bool "linux-2.6.33.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.33.x version.
 	config EMBTK_LINUX_VERSION_2_6_32_X
 		bool "linux-2.6.32.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.32.x version.
 	config EMBTK_LINUX_VERSION_2_6_31_X
 		bool "linux-2.6.31.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.31.x version.
 	config EMBTK_LINUX_VERSION_2_6_30_X
 		bool "linux-2.6.30.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.30.x version.
 	config EMBTK_LINUX_VERSION_2_6_29_X
 		bool "linux-2.6.29.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.29.x version.
 	config EMBTK_LINUX_VERSION_2_6_28_X
 		bool "linux-2.6.28.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.28.x version.
 	config EMBTK_LINUX_VERSION_2_6_27_X
 		bool "linux-2.6.27.x"
-		select EMBTK_LINUX_PKG_IS_TARBZ2
 		help
 		 Use a linux-2.6.27.x version.
 endchoice
@@ -161,7 +148,6 @@ config EMBTK_LINUX_HAVE_MIRROR_SITE
 
 config EMBTK_LINUX_NEED_PATCH
 	bool
-config EMBTK_LINUX_PKG_IS_TARGZ
-	bool
 config EMBTK_LINUX_PKG_IS_TARBZ2
 	bool
+	default y

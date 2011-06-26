@@ -62,6 +62,17 @@ choice
 		bool "linux-2.6.33"
 endchoice
 
+config EMBTK_LINUX_LONGTERM_VERSION_STRING
+	string
+	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_15
+	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_14
+	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_13
+	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_12
+	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_11
+	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_10
+	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_9
+	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_8
+
 config EMBTK_LINUX_VERSION_STRING
 	string
 	default "2.6.33.15"		if EMBTK_LINUX_VERSION_2_6_33_15
@@ -81,3 +92,6 @@ config EMBTK_LINUX_VERSION_STRING
 	default "2.6.33.1"		if EMBTK_LINUX_VERSION_2_6_33_1
 	default "2.6.33"		if EMBTK_LINUX_VERSION_2_6_33
 
+config EMBTK_LINUX_MAJOR_VERSION_STRING
+	string
+	default "v2.6"

@@ -28,6 +28,34 @@ choice
 	help
 		Linux v2.6.32.x series exact version to use.
 
+	config EMBTK_LINUX_VERSION_2_6_32_42
+		bool "linux-2.6.32.42"
+	config EMBTK_LINUX_VERSION_2_6_32_41
+		bool "linux-2.6.32.41"
+	config EMBTK_LINUX_VERSION_2_6_32_40
+		bool "linux-2.6.32.40"
+	config EMBTK_LINUX_VERSION_2_6_32_39
+		bool "linux-2.6.32.39"
+	config EMBTK_LINUX_VERSION_2_6_32_38
+		bool "linux-2.6.32.38"
+	config EMBTK_LINUX_VERSION_2_6_32_37
+		bool "linux-2.6.32.37"
+	config EMBTK_LINUX_VERSION_2_6_32_36
+		bool "linux-2.6.32.36"
+	config EMBTK_LINUX_VERSION_2_6_32_35
+		bool "linux-2.6.32.35"
+	config EMBTK_LINUX_VERSION_2_6_32_34
+		bool "linux-2.6.32.34"
+	config EMBTK_LINUX_VERSION_2_6_32_33
+		bool "linux-2.6.32.33"
+	config EMBTK_LINUX_VERSION_2_6_32_32
+		bool "linux-2.6.32.32"
+	config EMBTK_LINUX_VERSION_2_6_32_31
+		bool "linux-2.6.32.31"
+	config EMBTK_LINUX_VERSION_2_6_32_30
+		bool "linux-2.6.32.30"
+	config EMBTK_LINUX_VERSION_2_6_32_29
+		bool "linux-2.6.32.29"
 	config EMBTK_LINUX_VERSION_2_6_32_28
 		bool "linux-2.6.32.28"
 	config EMBTK_LINUX_VERSION_2_6_32_27
@@ -88,8 +116,40 @@ choice
 		bool "linux-2.6.32"
 endchoice
 
+config EMBTK_LINUX_LONGTERM_VERSION_STRING
+	string
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_42
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_41
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_40
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_39
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_38
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_37
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_36
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_35
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_34
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_33
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_32
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_31
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_30
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_29
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_28
+
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "2.6.32.42"		if EMBTK_LINUX_VERSION_2_6_32_42
+	default "2.6.32.41"		if EMBTK_LINUX_VERSION_2_6_32_41
+	default "2.6.32.40"		if EMBTK_LINUX_VERSION_2_6_32_40
+	default "2.6.32.39"		if EMBTK_LINUX_VERSION_2_6_32_39
+	default "2.6.32.38"		if EMBTK_LINUX_VERSION_2_6_32_38
+	default "2.6.32.37"		if EMBTK_LINUX_VERSION_2_6_32_37
+	default "2.6.32.36"		if EMBTK_LINUX_VERSION_2_6_32_36
+	default "2.6.32.35"		if EMBTK_LINUX_VERSION_2_6_32_35
+	default "2.6.32.34"		if EMBTK_LINUX_VERSION_2_6_32_34
+	default "2.6.32.33"		if EMBTK_LINUX_VERSION_2_6_32_33
+	default "2.6.32.32"		if EMBTK_LINUX_VERSION_2_6_32_32
+	default "2.6.32.31"		if EMBTK_LINUX_VERSION_2_6_32_31
+	default "2.6.32.30"		if EMBTK_LINUX_VERSION_2_6_32_30
+	default "2.6.32.29"		if EMBTK_LINUX_VERSION_2_6_32_29
 	default "2.6.32.28"		if EMBTK_LINUX_VERSION_2_6_32_28
 	default "2.6.32.27"		if EMBTK_LINUX_VERSION_2_6_32_27
 	default "2.6.32.26"		if EMBTK_LINUX_VERSION_2_6_32_26
@@ -120,3 +180,6 @@ config EMBTK_LINUX_VERSION_STRING
 	default "2.6.32.1"		if EMBTK_LINUX_VERSION_2_6_32_1
 	default "2.6.32"		if EMBTK_LINUX_VERSION_2_6_32
 
+config EMBTK_LINUX_MAJOR_VERSION_STRING
+	string
+	default "v2.6"
