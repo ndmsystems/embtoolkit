@@ -1,10 +1,8 @@
 .config
 .config.old
-packages_build-*
-rootfs-*
-sysroot-*
-tools_build-*
-tools-*
 .fakeroot*
-
-host-tools/
+build/
+generated/
+host-tools-*
+tools-*
+sysroot-*
