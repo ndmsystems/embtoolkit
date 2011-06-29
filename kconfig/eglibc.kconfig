@@ -48,18 +48,18 @@ config EMBTK_EGLIBC_SVN_REVISION
 		moment you build your toolchain new revision is available,
 		you can increase this value.
 
-	default 13230	if EMBTK_EGLIBC_VERSION_2_12
+	default 14158	if EMBTK_EGLIBC_VERSION_2_12
 	default 14016	if EMBTK_EGLIBC_VERSION_2_11
 	default 10152	if EMBTK_EGLIBC_VERSION_2_10
 	default 10153	if EMBTK_EGLIBC_VERSION_2_9
-	default 14015	if EMBTK_EGLIBC_VERSION_TRUNK
+	default 14311	if EMBTK_EGLIBC_VERSION_TRUNK
 
 comment "At EmbToolkit release, valid eglibc svn revisions are:"
-comment "svn revision 13230	for eglibc-2.12"
+comment "svn revision 14158	for eglibc-2.12"
 comment "svn revision 14016	for eglibc-2.11"
 comment "svn revision 10152	for eglibc-2.10"
 comment "svn revision 10153	for eglibc-2.9"
-comment "svn revision 14015	for eglibc-trunk (development version)"
+comment "svn revision 14311	for eglibc-trunk (development version)"
 comment ""
 
 config EMBTK_EGLIBC_BRANCH_STRING
