@@ -60,6 +60,9 @@ endif
 CAIRO_CONFIGURE_OPTS := $(CAIRO_CONFIG_OPTS-n) $(CAIRO_CONFIG_OPTS-y)	\
 		--enable-pthread=yes
 
+CAIRO_CONFIGURE_ENV	:= png_CFLAGS=`$(PKG_CONFIG_BIN) libpng --cflags`
+CAIRO_CONFIGURE_ENV	+= png_LIBS=`$(PKG_CONFIG_BIN) libpng --cflags`
+
 cairo_install:
 	$(call EMBTK_INSTALL_PKG,CAIRO)
 
