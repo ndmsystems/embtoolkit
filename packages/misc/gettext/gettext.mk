@@ -53,15 +53,15 @@ GETTEXT_CONFIGURE_OPTS	:= --enable-relocatable --with-included-gettext	\
 GETTEXT_DEPS = ncurses_install libxml2_install
 
 gettext_install:
-	$(call embtk_install_pkg,GETTEXT)
+	$(call embtk_install_pkg,gettext)
 	@test -e $(GETTEXT_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(GETTEXT_BUILD_DIR)/.patchlibtool
 
 download_gettext:
-	$(call embtk_download_pkg,GETTEXT)
+	$(call embtk_download_pkg,gettext)
 
 gettext_clean:
-	$(call embtk_cleanup_pkg,GETTEXT)
+	$(call embtk_cleanup_pkg,gettext)
 
 #FIXME: this should be fixed in gettext project
 $(GETTEXT_BUILD_DIR)/.patchlibtool:
