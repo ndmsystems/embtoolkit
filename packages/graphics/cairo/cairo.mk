@@ -62,6 +62,7 @@ CAIRO_CONFIGURE_OPTS := $(CAIRO_CONFIG_OPTS-n) $(CAIRO_CONFIG_OPTS-y)	\
 
 CAIRO_CONFIGURE_ENV	:= png_CFLAGS=`$(PKGCONFIG_BIN) libpng --cflags`
 CAIRO_CONFIGURE_ENV	+= png_LIBS=`$(PKGCONFIG_BIN) libpng --libs`
+CAIRO_CONFIGURE_ENV	+= png_REQUIRES=libpng
 
 cairo_install:
 	$(call embtk_install_pkg,CAIRO)
