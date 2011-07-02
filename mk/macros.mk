@@ -198,10 +198,15 @@ define __embtk_kill_lt_rpath
 endef
 
 #
+# Get passed package varible
+#
+PKGV=$(strip $(shell echo $(1) | tr a-z A-Z))
+
+#
 # A macro to get packages version from .config file.
 # usage: $(call embtk_get_pkgversion,PACKAGE)
 #
-embtk_get_pkgversion = $(subst ",,$(strip $(CONFIG_EMBTK_$(1)_VERSION_STRING)))
+embtk_get_pkgversion = $(subst ",,$(strip $(CONFIG_EMBTK_$(PKGV)_VERSION_STRING)))
 
 #
 # A macro which runs configure script (conpatible with autotools configure)
@@ -210,11 +215,11 @@ embtk_get_pkgversion = $(subst ",,$(strip $(CONFIG_EMBTK_$(1)_VERSION_STRING)))
 # $(call embtk_configure_pkg,PACKAGE)
 #
 define __embtk_configure_autoreconfpkg
-@if [ "x$(CONFIG_EMBTK_$(1)_NEED_AUTORECONF)" == "xy" ]; then		\
-	test -e $($(1)_SRC_DIR)/configure.ac ||				\
-	test -e $($(1)_SRC_DIR)/configure.in || exit 1;			\
-	cd $($(1)_SRC_DIR);						\
-	$(AUTORECONF) --install -f;					\
+@if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_AUTORECONF)" == "xy" ]; then		\
+	test -e $($(PKGV)_SRC_DIR)/configure.ac ||				\
+	test -e $($(PKGV)_SRC_DIR)/configure.in || exit 1;			\
+	cd $($(PKGV)_SRC_DIR);							\
+	$(AUTORECONF) --install -f;						\
 fi
 endef
 define __embtk_print_configure_opts
@@ -223,37 +228,37 @@ define __embtk_print_configure_opts
 	do echo -e $(__embtk_color_blue)$$i$(__embtk_no_color); done
 endef
 define embtk_configure_pkg
-	$(call embtk_generic_msg,"Configure $($(1)_PACKAGE)...")
+	$(call embtk_generic_msg,"Configure $($(PKGV)_PACKAGE)...")
 	$(call __embtk_configure_autoreconfpkg,$(1))
-	@test -e $($(1)_SRC_DIR)/configure || exit 1
-	$(call __embtk_print_configure_opts,"$($(1)_CONFIGURE_OPTS)")
-	@cd $($(1)_BUILD_DIR);						\
-	CC=$(TARGETCC_CACHED)						\
-	CXX=$(TARGETCXX_CACHED)						\
-	AR=$(TARGETAR)							\
-	RANLIB=$(TARGETRANLIB)						\
-	AS=$(CROSS_COMPILE)as						\
-	LD=$(TARGETLD)							\
-	NM=$(TARGETNM)							\
-	STRIP=$(TARGETSTRIP)						\
-	OBJDUMP=$(TARGETOBJDUMP)					\
-	OBJCOPY=$(TARGETOBJCOPY)					\
-	CFLAGS="$(TARGET_CFLAGS)"					\
-	CXXFLAGS="$(TARGET_CFLAGS)"					\
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"	\
-	CPPFLAGS="-I$(SYSROOT)/usr/include"				\
-	PKG_CONFIG=$(PKGCONFIG_BIN)					\
-	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
-	ac_cv_func_malloc_0_nonnull=yes					\
-	ac_cv_func_realloc_0_nonnull=yes				\
-	$($(1)_CONFIGURE_ENV)						\
-	$(CONFIG_SHELL) $($(1)_SRC_DIR)/configure			\
-	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)		\
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)		\
-	--prefix=/usr --sysconfdir=/etc --disable-rpath			\
-	$($(1)_CONFIGURE_OPTS)
-	@touch $($(1)_BUILD_DIR)/.configured
-	$(call __embtk_kill_lt_rpath,$($(1)_BUILD_DIR))
+	@test -e $($(PKGV)_SRC_DIR)/configure || exit 1
+	$(call __embtk_print_configure_opts,"$($(PKGV)_CONFIGURE_OPTS)")
+	@cd $($(PKGV)_BUILD_DIR);						\
+	CC=$(TARGETCC_CACHED)							\
+	CXX=$(TARGETCXX_CACHED)							\
+	AR=$(TARGETAR)								\
+	RANLIB=$(TARGETRANLIB)							\
+	AS=$(CROSS_COMPILE)as							\
+	LD=$(TARGETLD)								\
+	NM=$(TARGETNM)								\
+	STRIP=$(TARGETSTRIP)							\
+	OBJDUMP=$(TARGETOBJDUMP)						\
+	OBJCOPY=$(TARGETOBJCOPY)						\
+	CFLAGS="$(TARGET_CFLAGS)"						\
+	CXXFLAGS="$(TARGET_CFLAGS)"						\
+	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"		\
+	CPPFLAGS="-I$(SYSROOT)/usr/include"					\
+	PKG_CONFIG=$(PKGCONFIG_BIN)						\
+	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)				\
+	ac_cv_func_malloc_0_nonnull=yes						\
+	ac_cv_func_realloc_0_nonnull=yes					\
+	$($(PKGV)_CONFIGURE_ENV)						\
+	$(CONFIG_SHELL) $($(PKGV)_SRC_DIR)/configure				\
+	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)			\
+	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)			\
+	--prefix=/usr --sysconfdir=/etc --disable-rpath				\
+	$($(PKGV)_CONFIGURE_OPTS)
+	@touch $($(PKGV)_BUILD_DIR)/.configured
+	$(call __embtk_kill_lt_rpath,$($(PKGV)_BUILD_DIR))
 endef
 
 #
@@ -264,19 +269,19 @@ endef
 # $(call embtk_configure_hostpkg,PACKAGE)
 #
 define embtk_configure_hostpkg
-	$(call embtk_generic_msg,"Configure $($(1)_PACKAGE) for host...")
+	$(call embtk_generic_msg,"Configure $($(PKGV)_PACKAGE) for host...")
 	$(call __embtk_configure_autoreconfpkg,$(1))
-	@test -e $($(1)_SRC_DIR)/configure || exit 1
-	$(call __embtk_print_configure_opts,"$($(1)_CONFIGURE_OPTS)")
-	@cd $($(1)_BUILD_DIR);						\
-	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\
-	LDFLAGS="-L$(HOSTTOOLS)/$(LIBDIR) -L$(HOSTTOOLS)/usr/$(LIBDIR)"	\
-	$($(1)_CONFIGURE_ENV)						\
-	$(CONFIG_SHELL) $($(1)_SRC_DIR)/configure			\
-	--build=$(HOST_BUILD) --host=$(HOST_ARCH)			\
-	--prefix=$(if $($(1)_PREFIX),$($(1)_PREFIX),$(HOSTTOOLS)/usr)	\
-	$($(1)_CONFIGURE_OPTS)
-	@touch $($(1)_BUILD_DIR)/.configured
+	@test -e $($(PKGV)_SRC_DIR)/configure || exit 1
+	$(call __embtk_print_configure_opts,"$($(PKGV)_CONFIGURE_OPTS)")
+	@cd $($(PKGV)_BUILD_DIR);						\
+	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"					\
+	LDFLAGS="-L$(HOSTTOOLS)/$(LIBDIR) -L$(HOSTTOOLS)/usr/$(LIBDIR)"		\
+	$($(PKGV)_CONFIGURE_ENV)						\
+	$(CONFIG_SHELL) $($(PKGV)_SRC_DIR)/configure				\
+	--build=$(HOST_BUILD) --host=$(HOST_ARCH)				\
+	--prefix=$(if $($(PKGV)_PREFIX),$($(PKGV)_PREFIX),$(HOSTTOOLS)/usr)	\
+	$($(PKGV)_CONFIGURE_OPTS)
+	@touch $($(PKGV)_BUILD_DIR)/.configured
 endef
 
 #
@@ -284,45 +289,45 @@ endef
 # Usage:
 # $(call embtk_install_pkg,PACKAGE)
 #
-__embtk_multi_make = $(foreach builddir,$($(1)_MAKE_DIRS),			\
-				$(MAKE) -C $($(1)_BUILD_DIR)/$(builddir)	\
-				$($(1)_MAKE_OPTS) $(J);)
+__embtk_multi_make = $(foreach builddir,$($(PKGV)_MAKE_DIRS),			\
+				$(MAKE) -C $($(PKGV)_BUILD_DIR)/$(builddir)	\
+				$($(PKGV)_MAKE_OPTS) $(J);)
 
-__embtk_single_make = $(MAKE) -C $($(1)_BUILD_DIR) $($(1)_MAKE_OPTS) $(J)
+__embtk_single_make = $(MAKE) -C $($(PKGV)_BUILD_DIR) $($(PKGV)_MAKE_OPTS) $(J)
 
-__embtk_multi_make_install = $(foreach builddir,$($(1)_MAKE_DIRS),		\
-	$(MAKE) -C $($(1)_BUILD_DIR)/$(builddir)				\
-	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) $($(1)_MAKE_OPTS) install;)
+__embtk_multi_make_install = $(foreach builddir,$($(PKGV)_MAKE_DIRS),		\
+	$(MAKE) -C $($(PKGV)_BUILD_DIR)/$(builddir)				\
+	DESTDIR=$(SYSROOT)/$($(PKGV)_SYSROOT_SUFFIX) $($(PKGV)_MAKE_OPTS) install;)
 
-__embtk_single_make_install = $(MAKE) -C $($(1)_BUILD_DIR)			\
-	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) $($(1)_MAKE_OPTS) install
+__embtk_single_make_install = $(MAKE) -C $($(PKGV)_BUILD_DIR)			\
+	DESTDIR=$(SYSROOT)/$($(PKGV)_SYSROOT_SUFFIX) $($(PKGV)_MAKE_OPTS) install
 
-__embtk_multi_make_hostinstall = $(foreach builddir,$($(1)_MAKE_DIRS),		\
-	$(MAKE) -C $($(1)_BUILD_DIR)/$(builddir)				\
-	$(if $($(1)_DESTDIR),DESTDIR=$($(1)_DESTDIR))				\
-	$($(1)_MAKE_OPTS) install;)
+__embtk_multi_make_hostinstall = $(foreach builddir,$($(PKGV)_MAKE_DIRS),	\
+	$(MAKE) -C $($(PKGV)_BUILD_DIR)/$(builddir)				\
+	$(if $($(PKGV)_DESTDIR),DESTDIR=$($(PKGV)_DESTDIR))			\
+	$($(PKGV)_MAKE_OPTS) install;)
 
-__embtk_single_make_hostinstall = $(MAKE) -C $($(1)_BUILD_DIR)			\
-	$(if $($(1)_DESTDIR),DESTDIR=$($(1)_DESTDIR)) $($(1)_MAKE_OPTS) install
+__embtk_single_make_hostinstall = $(MAKE) -C $($(PKGV)_BUILD_DIR)		\
+	$(if $($(PKGV)_DESTDIR),DESTDIR=$($(PKGV)_DESTDIR)) $($(PKGV)_MAKE_OPTS) install
 
 define __embtk_install_pkg_make
-	$(call embtk_generic_msg,"Compiling and installing $($(1)_NAME)-$($(1)_VERSION) in your root filesystem...")
-	$(Q)$(if $(strip $($(1)_DEPS)),$(MAKE) $($(1)_DEPS))
+	$(call embtk_generic_msg,"Compiling and installing $($(PKGV)_NAME)-$($(PKGV)_VERSION) in your root filesystem...")
+	$(Q)$(if $(strip $($(PKGV)_DEPS)),$(MAKE) $($(PKGV)_DEPS))
 	$(Q)$(call embtk_download_pkg,$(1))
 	$(Q)$(call embtk_decompress_pkg,$(1))
 	$(Q)$(call embtk_configure_pkg,$(1))
-	$(Q)$(if $($(1)_MAKE_DIRS),						\
+	$(Q)$(if $($(PKGV)_MAKE_DIRS),						\
 		$(__embtk_multi_make),						\
 		$(__embtk_single_make))
-	$(Q)$(if $($(1)_MAKE_DIRS),						\
+	$(Q)$(if $($(PKGV)_MAKE_DIRS),						\
 		$(__embtk_multi_make_install),					\
 		$(__embtk_single_make_install))
 	$(Q)$(call __embtk_fix_libtool_files)
 	$(Q)$(call __embtk_fix_pkgconfig_files)
-	@touch $($(1)_BUILD_DIR)/.installed
+	@touch $($(PKGV)_BUILD_DIR)/.installed
 endef
 define embtk_install_pkg
-	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),true,	\
+	@$(if $(shell test -e $($(PKGV)_BUILD_DIR)/.installed && echo y),true,	\
 		$(call __embtk_install_pkg_make,$(1)))
 endef
 
@@ -333,21 +338,21 @@ endef
 # $(call embtk_install_hostpkg,PACKAGE)
 #
 define __embtk_install_hostpkg_make
-	$(call embtk_generic_msg,"Compiling and installing $($(1)_NAME)-$($(1)_VERSION) for host...")
-	$(Q)$(if $(strip $($(1)_DEPS)),$(MAKE) $($(1)_DEPS))
+	$(call embtk_generic_msg,"Compiling and installing $($(PKGV)_NAME)-$($(PKGV)_VERSION) for host...")
+	$(Q)$(if $(strip $($(PKGV)_DEPS)),$(MAKE) $($(PKGV)_DEPS))
 	$(Q)$(call embtk_download_pkg,$(1))
 	$(Q)$(call embtk_decompress_hostpkg,$(1))
 	$(Q)$(call embtk_configure_hostpkg,$(1))
-	$(Q)$(if $($(1)_MAKE_DIRS),						\
+	$(Q)$(if $($(PKGV)_MAKE_DIRS),						\
 		$(__embtk_multi_make),						\
 		$(__embtk_single_make))
-	$(Q)$(if $($(1)_MAKE_DIRS),						\
+	$(Q)$(if $($(PKGV)_MAKE_DIRS),						\
 		$(__embtk_multi_make_hostinstall),				\
 		$(__embtk_single_make_hostinstall))
-	@touch $($(1)_BUILD_DIR)/.installed
+	@touch $($(PKGV)_BUILD_DIR)/.installed
 endef
 define embtk_install_hostpkg
-	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),true,	\
+	@$(if $(shell test -e $($(PKGV)_BUILD_DIR)/.installed && echo y),true,	\
 		$(call __embtk_install_hostpkg_make,$(1)))
 endef
 
@@ -357,33 +362,33 @@ endef
 # $(call embtk_download_pkg,PACKAGE)
 #
 define __embtk_download_pkg_patches
-@if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ]; then		\
-	test -e $(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch ||	\
-	$(call embtk_wget,						\
-		$($(1)_NAME)-$($(1)_VERSION).patch,			\
-		$($(1)_PATCH_SITE),					\
-		$($(1)_NAME)-$($(1)_VERSION)-*.patch);			\
+@if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" == "xy" ]; then			\
+	test -e $(DOWNLOAD_DIR)/$($(PKGV)_NAME)-$($(PKGV)_VERSION).patch ||	\
+	$(call embtk_wget,							\
+		$($(PKGV)_NAME)-$($(PKGV)_VERSION).patch,			\
+		$($(PKGV)_PATCH_SITE),						\
+		$($(PKGV)_NAME)-$($(PKGV)_VERSION)-*.patch);			\
 fi
 endef
 define __embtk_download_pkg_from_mirror
-if [ "x$($(1)_SITE_MIRROR$(2))" == "x" ]; then 				\
-	false;								\
-else									\
-	$(call embtk_wget,						\
-		$($(1)_PACKAGE),					\
-		$($(1)_SITE_MIRROR$(2)),				\
-		$($(1)_PACKAGE)); 					\
+if [ "x$($(PKGV)_SITE_MIRROR$(2))" == "x" ]; then 				\
+	false;									\
+else										\
+	$(call embtk_wget,							\
+		$($(PKGV)_PACKAGE),						\
+		$($(PKGV)_SITE_MIRROR$(2)),					\
+		$($(PKGV)_PACKAGE)); 						\
 fi
 endef
 define embtk_download_pkg
-	$(call embtk_generic_msg,"Download $($(1)_PACKAGE) if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$($(1)_PACKAGE) ||			\
-	$(call embtk_wget,						\
-		$($(1)_PACKAGE),					\
-		$($(1)_SITE),						\
-		$($(1)_PACKAGE))||					\
-	$(call __embtk_download_pkg_from_mirror,$(1),1) ||		\
-	$(call __embtk_download_pkg_from_mirror,$(1),2) ||		\
+	$(call embtk_generic_msg,"Download $($(PKGV)_PACKAGE) if necessary...")
+	@test -e $(DOWNLOAD_DIR)/$($(PKGV)_PACKAGE) ||				\
+	$(call embtk_wget,							\
+		$($(PKGV)_PACKAGE),						\
+		$($(PKGV)_SITE),						\
+		$($(PKGV)_PACKAGE))||						\
+	$(call __embtk_download_pkg_from_mirror,$(1),1) ||			\
+	$(call __embtk_download_pkg_from_mirror,$(1),2) ||			\
 	$(call __embtk_download_pkg_from_mirror,$(1),3) || exit 1
 	$(call __embtk_download_pkg_patches,$(1))
 endef
@@ -394,33 +399,33 @@ endef
 # $(call embtk_decompress_pkg,PACKAGE)
 #
 define embtk_decompress_pkg
-	$(call embtk_generic_msg,"Decrompressing $($(1)_PACKAGE) ...")
-	@if [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "xy" ] &&			\
-	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
+	$(call embtk_generic_msg,"Decrompressing $($(PKGV)_PACKAGE) ...")
+	@if [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" == "xy" ] &&		\
+	[ ! -e $($(PKGV)_SRC_DIR)/.decompressed ]; then				\
 		tar -C $(PACKAGES_BUILD) -xzf					\
-		$(DOWNLOAD_DIR)/$($(1)_PACKAGE) &&				\
-		mkdir -p $($(1)_BUILD_DIR) &&					\
-		touch $($(1)_SRC_DIR)/.decompressed;				\
-	elif [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARBZ2)" == "xy" ] &&		\
-	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
+		$(DOWNLOAD_DIR)/$($(PKGV)_PACKAGE) &&				\
+		mkdir -p $($(PKGV)_BUILD_DIR) &&				\
+		touch $($(PKGV)_SRC_DIR)/.decompressed;				\
+	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" == "xy" ] &&		\
+	[ ! -e $($(PKGV)_SRC_DIR)/.decompressed ]; then				\
 		tar -C $(PACKAGES_BUILD) -xjf					\
-		$(DOWNLOAD_DIR)/$($(1)_PACKAGE) &&				\
-		mkdir -p $($(1)_BUILD_DIR) &&					\
-		touch $($(1)_SRC_DIR)/.decompressed;				\
-	elif [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARBZ2)" == "x" ] &&		\
-	[ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "x" ] &&			\
-	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
+		$(DOWNLOAD_DIR)/$($(PKGV)_PACKAGE) &&				\
+		mkdir -p $($(PKGV)_BUILD_DIR) &&				\
+		touch $($(PKGV)_SRC_DIR)/.decompressed;				\
+	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" == "x" ] &&		\
+	[ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" == "x" ] &&			\
+	[ ! -e $($(PKGV)_SRC_DIR)/.decompressed ]; then				\
 		echo -e "\E[1;31m!Unknown package compression type!\E[0m";	\
 		exit 1;								\
 	fi
-	@if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ] &&			\
-	[ ! -e $($(1)_SRC_DIR)/.patched ]; then					\
-		cd $($(1)_SRC_DIR);						\
+	@if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" == "xy" ] &&		\
+	[ ! -e $($(PKGV)_SRC_DIR)/.patched ]; then				\
+		cd $($(PKGV)_SRC_DIR);						\
 		patch -p1 <							\
-		$(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch &&		\
-		touch $($(1)_SRC_DIR)/.patched;					\
+		$(DOWNLOAD_DIR)/$($(PKGV)_NAME)-$($(PKGV)_VERSION).patch &&	\
+		touch $($(PKGV)_SRC_DIR)/.patched;				\
 	fi
-	@mkdir -p $($(1)_BUILD_DIR)
+	@mkdir -p $($(PKGV)_BUILD_DIR)
 endef
 
 #
@@ -430,33 +435,33 @@ endef
 # $(call embtk_decompress_hostpkg,PACKAGE)
 #
 define embtk_decompress_hostpkg
-	$(call embtk_generic_msg,"Decrompressing $($(1)_PACKAGE) ...")
-	@if [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "xy" ] &&			\
-	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
+	$(call embtk_generic_msg,"Decrompressing $($(PKGV)_PACKAGE) ...")
+	@if [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" == "xy" ] &&		\
+	[ ! -e $($(PKGV)_SRC_DIR)/.decompressed ]; then				\
 		tar -C $(TOOLS_BUILD) -xzf					\
-		$(DOWNLOAD_DIR)/$($(1)_PACKAGE) &&				\
-		mkdir -p $($(1)_BUILD_DIR) &&					\
-		touch $($(1)_SRC_DIR)/.decompressed;				\
-	elif [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARBZ2)" == "xy" ] &&		\
-	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
+		$(DOWNLOAD_DIR)/$($(PKGV)_PACKAGE) &&				\
+		mkdir -p $($(PKGV)_BUILD_DIR) &&				\
+		touch $($(PKGV)_SRC_DIR)/.decompressed;				\
+	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" == "xy" ] &&		\
+	[ ! -e $($(PKGV)_SRC_DIR)/.decompressed ]; then				\
 		tar -C $(TOOLS_BUILD) -xjf					\
-		$(DOWNLOAD_DIR)/$($(1)_PACKAGE) &&				\
-		mkdir -p $($(1)_BUILD_DIR) &&					\
-		touch $($(1)_SRC_DIR)/.decompressed;				\
-	elif [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARBZ2)" == "x" ] &&		\
-	[ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "x" ] &&			\
-	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
+		$(DOWNLOAD_DIR)/$($(PKGV)_PACKAGE) &&				\
+		mkdir -p $($(PKGV)_BUILD_DIR) &&				\
+		touch $($(PKGV)_SRC_DIR)/.decompressed;				\
+	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" == "x" ] &&		\
+	[ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" == "x" ] &&			\
+	[ ! -e $($(PKGV)_SRC_DIR)/.decompressed ]; then				\
 		echo -e "\E[1;31m!Unknown package compression type!\E[0m";	\
 		exit 1;								\
 	fi
-	@if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ] &&			\
-	[ ! -e $($(1)_SRC_DIR)/.patched ]; then					\
-		cd $($(1)_SRC_DIR);						\
+	@if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" == "xy" ] &&		\
+	[ ! -e $($(PKGV)_SRC_DIR)/.patched ]; then				\
+		cd $($(PKGV)_SRC_DIR);						\
 		patch -p1 <							\
-		$(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch &&		\
-		touch $($(1)_SRC_DIR)/.patched;					\
+		$(DOWNLOAD_DIR)/$($(PKGV)_NAME)-$($(PKGV)_VERSION).patch &&	\
+		touch $($(PKGV)_SRC_DIR)/.patched;				\
 	fi
-	@mkdir -p $($(1)_BUILD_DIR)
+	@mkdir -p $($(PKGV)_BUILD_DIR)
 endef
 
 #
@@ -465,38 +470,38 @@ endef
 # $(call embtk_cleanup_pkg,PACKAGE)
 #
 define embtk_cleanup_pkg
-	$(call embtk_generic_message,"Cleanup $($(1)_NAME)...")
-	@-if [ "x$($(1)_ETC)" != "x" ] && [ -e $(SYSROOT)/etc ];		\
+	$(call embtk_generic_message,"Cleanup $($(PKGV)_NAME)...")
+	@-if [ "x$($(PKGV)_ETC)" != "x" ] && [ -e $(SYSROOT)/etc ];		\
 		then								\
-		cd $(SYSROOT)/etc; rm -rf $($(1)_ETC);				\
+		cd $(SYSROOT)/etc; rm -rf $($(PKGV)_ETC);			\
 	fi
-	@-if [ "x$($(1)_BINS)" != "x" ] && [ -e $(SYSROOT)/usr/bin ];		\
+	@-if [ "x$($(PKGV)_BINS)" != "x" ] && [ -e $(SYSROOT)/usr/bin ];	\
 		then								\
-		cd $(SYSROOT)/usr/bin; rm -rf $($(1)_BINS);			\
+		cd $(SYSROOT)/usr/bin; rm -rf $($(PKGV)_BINS);			\
 	fi
-	@-if [ "x$($(1)_SBINS)" != "x" ] && [ -e $(SYSROOT)/usr/sbin ];		\
+	@-if [ "x$($(PKGV)_SBINS)" != "x" ] && [ -e $(SYSROOT)/usr/sbin ];	\
 		then								\
-		cd $(SYSROOT)/usr/sbin; rm -rf $($(1)_SBINS);			\
+		cd $(SYSROOT)/usr/sbin; rm -rf $($(PKGV)_SBINS);		\
 	fi
-	@-if [ "x$($(1)_INCLUDES)" != "x" ] && [ -e $(SYSROOT)/usr/include ];	\
+	@-if [ "x$($(PKGV)_INCLUDES)" != "x" ] && [ -e $(SYSROOT)/usr/include ];\
 		then								\
-		cd $(SYSROOT)/usr/include; rm -rf $($(1)_INCLUDES);		\
+		cd $(SYSROOT)/usr/include; rm -rf $($(PKGV)_INCLUDES);		\
 	fi
-	@-if [ "x$($(1)_LIBS)" != "x" ] && [ -e $(SYSROOT)/usr/$(LIBDIR) ];	\
+	@-if [ "x$($(PKGV)_LIBS)" != "x" ] && [ -e $(SYSROOT)/usr/$(LIBDIR) ];	\
 		then								\
-		cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $($(1)_LIBS);		\
+		cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $($(PKGV)_LIBS);		\
 	fi
-	@-if [ "x$($(1)_LIBEXECS)" != "x" ] &&					\
+	@-if [ "x$($(PKGV)_LIBEXECS)" != "x" ] &&				\
 	[ -e $(SYSROOT)/usr/$(LIBDIR)/libexec ];				\
 		then								\
 		cd $(SYSROOT)/usr/$(LIBDIR)/libexec;				\
-		rm -rf $($(1)_LIBEXECS);					\
+		rm -rf $($(PKGV)_LIBEXECS);					\
 	fi
-	@-if [ "x$($(1)_PKGCONFIGS)" != "x" ] &&				\
+	@-if [ "x$($(PKGV)_PKGCONFIGS)" != "x" ] &&				\
 	[ -e $(SYSROOT)/usr/$(LIBDIR)/pkgconfig ];				\
 		then								\
 		cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig;				\
-		rm -rf $($(1)_PKGCONFIGS);					\
+		rm -rf $($(PKGV)_PKGCONFIGS);					\
 	fi
-	@-rm -rf $($(1)_BUILD_DIR)*
+	@-rm -rf $($(PKGV)_BUILD_DIR)*
 endef
