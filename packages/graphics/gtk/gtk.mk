@@ -23,63 +23,50 @@
 # \date         December 2009
 ################################################################################
 
-GTK_NAME := gtk+
-GTK_MAJOR_VERSION := $(call embtk_get_pkgversion,GTK_MAJOR)
-GTK_VERSION := $(call embtk_get_pkgversion,GTK)
-GTK_SITE := http://ftp.gnome.org/pub/gnome/sources/gtk+/$(GTK_MAJOR_VERSION)
-GTK_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-GTK_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/gtk/$(GTK_VERSION)
-GTK_PACKAGE := gtk+-$(GTK_VERSION).tar.bz2
-GTK_SRC_DIR := $(PACKAGES_BUILD)/gtk+-$(GTK_VERSION)
-GTK_BUILD_DIR := $(PACKAGES_BUILD)/gtk+-$(GTK_VERSION)
+GTK_NAME		:= gtk+
+GTK_MAJOR_VERSION	:= $(call embtk_get_pkgversion,GTK_MAJOR)
+GTK_VERSION		:= $(call embtk_get_pkgversion,GTK)
+GTK_SITE		:= http://ftp.gnome.org/pub/gnome/sources/gtk+/$(GTK_MAJOR_VERSION)
+GTK_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+GTK_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/gtk/$(GTK_VERSION)
+GTK_PACKAGE		:= gtk+-$(GTK_VERSION).tar.bz2
+GTK_SRC_DIR		:= $(PACKAGES_BUILD)/gtk+-$(GTK_VERSION)
+GTK_BUILD_DIR		:= $(PACKAGES_BUILD)/gtk+-$(GTK_VERSION)
 
-GTK_BINS = gtk-* gdk-*
-GTK_SBINS =
-GTK_INCLUDES = gail-* gtk-*
-GTK_LIBS = gtk-* libgail* libgdk-* libgdk_* libgtk-*
-GTK_PKGCONFIGS = gail*.pc gdk*.pc gtk*.pc
-GTK_ETC = gtk-*
+GTK_BINS	= gtk-* gdk-*
+GTK_SBINS	=
+GTK_INCLUDES	= gail-* gtk-*
+GTK_LIBS	= gtk-* libgail* libgdk-* libgdk_* libgtk-*
+GTK_PKGCONFIGS	= gail*.pc gdk*.pc gtk*.pc
+GTK_ETC		= gtk-*
 
-GTK_DEPS := libjpeg_install libpng_install libtiff_install fontconfig_install \
-		glib_install atk_install cairo_install pango_install
-
+GTK_DEPS	:=	libjpeg_install libpng_install libtiff_install \
+			fontconfig_install glib_install atk_install \
+			cairo_install pango_install
 ifeq ($(CONFIG_EMBTK_GTK_BACKEND_DIRECTFB),y)
-GTK_BACKEND := --with-gdktarget=directfb --without-x
-GTK_DEPS += directfb_install
+GTK_BACKEND	:= --with-gdktarget=directfb --without-x
+GTK_DEPS	+= directfb_install
 else
-GTK_BACKEND := --with-gdktarget=x11 --with-x --with-xinput=yes
-GTK_DEPS += libx11_install libxext_install libxrender_install xinput_install
+GTK_BACKEND	:= --with-gdktarget=x11 --with-x --with-xinput=yes
+GTK_DEPS	+= libx11_install libxext_install libxrender_install xinput_install
 endif
 
-GTK_CONFIGURE_ENV := gio_can_sniff=yes
-GTK_CONFIGURE_OPTS := $(GTK_BACKEND)
-GTK_CONFIGURE_OPTS += --disable-cups --disable-gtk-doc --disable-glibtest
+GTK_CONFIGURE_ENV	:= gio_can_sniff=yes
+GTK_CONFIGURE_OPTS	:= $(GTK_BACKEND)
+GTK_CONFIGURE_OPTS	+= --disable-cups --disable-gtk-doc --disable-glibtest
+GTK_CONFIGURE_OPTS	+= LIBPNG=-lpng
 
 gtk_install:
-	@test -e $(GTK_BUILD_DIR)/.installed || \
-	$(MAKE) $(GTK_BUILD_DIR)/.installed
+	$(call embtk_install_pkg,gtk)
+	$(Q)test -e $(GTK_BUILD_DIR)/.patchlibtool || \
+	$(MAKE) $(GTK_BUILD_DIR)/.patchlibtool
 	$(Q)$(MAKE) $(GTK_BUILD_DIR)/.special
 
-$(GTK_BUILD_DIR)/.installed: $(GTK_DEPS) download_gtk \
-	$(GTK_BUILD_DIR)/.decompressed $(GTK_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	gtk-$(GTK_VERSION) in your root filesystem...")
-	$(call __embtk_kill_lt_rpath, $(GTK_BUILD_DIR))
-	$(Q)$(MAKE) -C $(GTK_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(GTK_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	$(Q)$(MAKE) $(GTK_BUILD_DIR)/.patchlibtool
-	@touch $@
-
 download_gtk:
-	$(call embtk_download_pkg,GTK)
+	$(call embtk_download_pkg,gtk)
 
-$(GTK_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,GTK)
-
-$(GTK_BUILD_DIR)/.configured:
-	$(call embtk_configure_pkg,GTK)
+gtk_clean:
+	$(call embtk_cleanup_pkg,gtk)
 
 $(GTK_BUILD_DIR)/.patchlibtool:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
@@ -116,6 +103,3 @@ endif
 $(GTK_BUILD_DIR)/.special:
 	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/gtk-* $(ROOTFS)/usr/$(LIBDIR)/
 	@touch $@
-
-gtk_clean:
-	$(call embtk_cleanup_pkg,GTK)
