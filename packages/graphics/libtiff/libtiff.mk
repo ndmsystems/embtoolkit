@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBTIFF_NAME := libtiff
-LIBTIFF_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBTIFF)
+LIBTIFF_VERSION := $(call embtk_get_pkgversion,LIBTIFF)
 LIBTIFF_SITE := ftp://ftp.remotesensing.org/pub/libtiff
 LIBTIFF_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBTIFF_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libtiff/$(LIBTIFF_VERSION)
@@ -49,7 +49,7 @@ libtiff_install:
 
 $(LIBTIFF_BUILD_DIR)/.installed: download_libtiff \
 	$(LIBTIFF_BUILD_DIR)/.decompressed $(LIBTIFF_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libtiff-$(LIBTIFF_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBTIFF_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBTIFF_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -58,13 +58,13 @@ $(LIBTIFF_BUILD_DIR)/.installed: download_libtiff \
 	@touch $@
 
 download_libtiff:
-	$(call EMBTK_DOWNLOAD_PKG,LIBTIFF)
+	$(call embtk_download_pkg,LIBTIFF)
 
 $(LIBTIFF_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBTIFF)
+	$(call embtk_decompress_pkg,LIBTIFF)
 
 $(LIBTIFF_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBTIFF)
+	$(call embtk_configure_pkg,LIBTIFF)
 
 libtiff_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBTIFF)
+	$(call embtk_cleanup_pkg,LIBTIFF)

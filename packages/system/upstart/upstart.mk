@@ -42,16 +42,16 @@ upstart_install: $(UPSTART_BUILD_DIR)/.installed
 
 $(UPSTART_BUILD_DIR)/.installed: $(UPSTART_DEPS) download_upstart \
 	$(UPSTART_BUILD_DIR)/.decompressed $(UPSTART_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	upstart-$(UPSTART_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH,$(UPSTART_BUILD_DIR))
+	$(call __embtk_kill_lt_rpath,$(UPSTART_BUILD_DIR))
 	$(Q)$(MAKE) -C $(UPSTART_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(UPSTART_BUILD_DIR) DESTDIR=$(ROOTFS)/ install
 	$(Q)-rm -rf $(ROOTFS)/share
 	@touch $@
 
 download_upstart:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(UPSTART_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(UPSTART_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(UPSTART_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(UPSTART_PACKAGE) \
@@ -63,7 +63,7 @@ ifeq ($(CONFIG_EMBTK_UPSTART_NEED_PATCH),y)
 endif
 
 $(UPSTART_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(UPSTART_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(UPSTART_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(UPSTART_PACKAGE)
 ifeq ($(CONFIG_EMBTK_UPSTART_NEED_PATCH),y)
 	@cd $(UPSTART_BUILD_DIR); \
@@ -95,7 +95,7 @@ $(UPSTART_BUILD_DIR)/.configured:
 	@touch $@
 
 upstart_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup upstart...")
+	$(call embtk_generic_message,"cleanup upstart...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(UPSTART_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(UPSTART_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(UPSTART_INCLUDES)

@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBXEXT_NAME := libXext
-LIBXEXT_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXEXT)
+LIBXEXT_VERSION := $(call embtk_get_pkgversion,LIBXEXT)
 LIBXEXT_SITE := http://xorg.freedesktop.org/archive/individual/lib
 LIBXEXT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXEXT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/expat/$(LIBXEXT_VERSION)
@@ -56,7 +56,7 @@ libxext_install:
 
 $(LIBXEXT_BUILD_DIR)/.installed: $(LIBXEXT_DEPS) download_libxext \
 	$(LIBXEXT_BUILD_DIR)/.decompressed $(LIBXEXT_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libxext-$(LIBXEXT_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBXEXT_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBXEXT_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -65,13 +65,13 @@ $(LIBXEXT_BUILD_DIR)/.installed: $(LIBXEXT_DEPS) download_libxext \
 	@touch $@
 
 download_libxext:
-	$(call EMBTK_DOWNLOAD_PKG,LIBXEXT)
+	$(call embtk_download_pkg,LIBXEXT)
 
 $(LIBXEXT_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBXEXT)
+	$(call embtk_decompress_pkg,LIBXEXT)
 
 $(LIBXEXT_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBXEXT)
+	$(call embtk_configure_pkg,LIBXEXT)
 
 libxext_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBXEXT)
+	$(call embtk_cleanup_pkg,LIBXEXT)

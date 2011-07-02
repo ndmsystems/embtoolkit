@@ -42,10 +42,10 @@ XINPUT_DEPS := xproto_install inputproto_install libx11_install \
 	libxext_install libxi_install
 
 xinput_install:
-	$(call EMBTK_INSTALL_PKG,XINPUT)
+	$(call embtk_install_pkg,XINPUT)
 
 download_xinput:
-	$(call EMBTK_DOWNLOAD_PKG,XINPUT)
+	$(call embtk_download_pkg,XINPUT)
 
 xinput_clean:
-	$(call EMBTK_CLEANUP_PKG,XINPUT)
+	$(call embtk_cleanup_pkg,XINPUT)

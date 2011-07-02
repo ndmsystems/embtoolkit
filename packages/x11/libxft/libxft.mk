@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBXFT_NAME := libXft
-LIBXFT_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXFT)
+LIBXFT_VERSION := $(call embtk_get_pkgversion,LIBXFT)
 LIBXFT_SITE := http://xorg.freedesktop.org/archive/individual/lib
 LIBXFT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXFT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxft/$(LIBXFT_VERSION)
@@ -43,10 +43,10 @@ LIBXFT_CONFIGURE_OPTS := --disable-malloc0returnsnull
 LIBXFT_DEPS = freetype_install fontconfig_install libxrender_install
 
 libxft_install:
-	$(call EMBTK_INSTALL_PKG,LIBXFT)
+	$(call embtk_install_pkg,LIBXFT)
 
 download_libxft:
-	$(call EMBTK_DOWNLOAD_PKG,LIBXFT)
+	$(call embtk_download_pkg,LIBXFT)
 
 libxft_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBXFT)
+	$(call embtk_cleanup_pkg,LIBXFT)

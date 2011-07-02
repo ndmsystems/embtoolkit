@@ -24,7 +24,7 @@
 ################################################################################
 
 E2FSPROGS_NAME		:= e2fsprogs
-E2FSPROGS_VERSION	:= $(call EMBTK_GET_PKG_VERSION,E2FSPROGS)
+E2FSPROGS_VERSION	:= $(call embtk_get_pkgversion,E2FSPROGS)
 E2FSPROGS_SITE		:= http://sourceforge.net/projects/e2fsprogs/files/e2fsprogs/$(E2FSPROGS_VERSION)
 E2FSPROGS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 E2FSPROGS_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/e2fsprogs/$(E2FSPROGS_VERSION)
@@ -52,13 +52,13 @@ E2FSPROGS_CONFIGURE_OPTS := --disable-compression --disable-htree	\
 		--disable-nls --disable-rpath --with-included-gettext
 
 e2fsprogs_install:
-	$(call EMBTK_INSTALL_PKG,E2FSPROGS)
+	$(call embtk_install_pkg,E2FSPROGS)
 
 download_e2fsprogs:
-	$(call EMBTK_DOWNLOAD_PKG,E2FSPROGS)
+	$(call embtk_download_pkg,E2FSPROGS)
 
 e2fsprogs_clean:
-	$(call EMBTK_CLEANUP_PKG,E2FSPROGS)
+	$(call embtk_cleanup_pkg,E2FSPROGS)
 
 #
 # E2FSPROGS for host development machine
@@ -77,9 +77,9 @@ E2FSPROGS_HOST_MAKE_DIRS := $(E2FSPROGS_MAKE_DIRS)
 E2FSPROGS_CONFIGURE_OPTS := $(E2FSPROGS_CONFIGURE_OPTS)
 
 e2fsprogs_host_install:
-	$(call EMBTK_INSTALL_HOSTPKG,E2FSPROGS_HOST)
+	$(call embtk_install_hostpkg,E2FSPROGS_HOST)
 
 download_e2fsprogs_host:
-	$(call EMBTK_DOWNLOAD_PKG,E2FSPROGS_HOST)
+	$(call embtk_download_pkg,E2FSPROGS_HOST)
 
 e2fsprogs_host_clean:

@@ -24,7 +24,7 @@
 ################################################################################
 
 IMLIB2_NAME := imlib2
-IMLIB2_VERSION := $(call EMBTK_GET_PKG_VERSION,IMLIB2)
+IMLIB2_VERSION := $(call embtk_get_pkgversion,IMLIB2)
 IMLIB2_SITE := http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
 IMLIB2_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 IMLIB2_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/imlib2/$(IMLIB2_VERSION)
@@ -48,7 +48,7 @@ imlib2_install:
 
 $(IMLIB2_BUILD_DIR)/.installed: $(IMLIB2_DEPS) download_imlib2 \
 	$(IMLIB2_BUILD_DIR)/.decompressed $(IMLIB2_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	imlib2-$(IMLIB2_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(IMLIB2_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(IMLIB2_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -57,16 +57,16 @@ $(IMLIB2_BUILD_DIR)/.installed: $(IMLIB2_DEPS) download_imlib2 \
 	@touch $@
 
 download_imlib2:
-	$(call EMBTK_DOWNLOAD_PKG,IMLIB2)
+	$(call embtk_download_pkg,IMLIB2)
 
 $(IMLIB2_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,IMLIB2)
+	$(call embtk_decompress_pkg,IMLIB2)
 
 $(IMLIB2_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,IMLIB2)
+	$(call embtk_configure_pkg,IMLIB2)
 
 imlib2_clean:
-	$(call EMBTK_CLEANUP_PKG,IMLIB2)
+	$(call embtk_cleanup_pkg,IMLIB2)
 
 .PHONY: $(IMLIB2_BUILD_DIR)/.special
 

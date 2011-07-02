@@ -59,7 +59,7 @@ ifeq ($(CONFIG_EMBTK_MPFR_HOST_VERSION_PATCH),y)
 endif
 
 $(MPFR_HOST_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MESSAGE,"mpfrhost: Configuring \
+	$(call embtk_generic_message,"mpfrhost: Configuring \
 	mpfr-$(MPFR_HOST_VERSION) ...")
 	@mkdir -p $(MPFR_HOST_DIR)
 	cd $(MPFR_HOST_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \

@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBXCOMPOSITE_NAME := libXcomposite
-LIBXCOMPOSITE_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXCOMPOSITE)
+LIBXCOMPOSITE_VERSION := $(call embtk_get_pkgversion,LIBXCOMPOSITE)
 LIBXCOMPOSITE_SITE := http://xorg.freedesktop.org/archive/individual/lib
 LIBXCOMPOSITE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxcomposite/$(LIBXCOMPOSITE_VERSION)
 LIBXCOMPOSITE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
@@ -46,7 +46,7 @@ libxcomposite_install:
 
 $(LIBXCOMPOSITE_BUILD_DIR)/.installed: $(LIBXCOMPOSITE_DEPS) download_libxcomposite \
 	$(LIBXCOMPOSITE_BUILD_DIR)/.decompressed $(LIBXCOMPOSITE_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libxcomposite-$(LIBXCOMPOSITE_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBXCOMPOSITE_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBXCOMPOSITE_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -55,13 +55,13 @@ $(LIBXCOMPOSITE_BUILD_DIR)/.installed: $(LIBXCOMPOSITE_DEPS) download_libxcompos
 	@touch $@
 
 download_libxcomposite:
-	$(call EMBTK_DOWNLOAD_PKG,LIBXCOMPOSITE)
+	$(call embtk_download_pkg,LIBXCOMPOSITE)
 
 $(LIBXCOMPOSITE_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBXCOMPOSITE)
+	$(call embtk_decompress_pkg,LIBXCOMPOSITE)
 
 $(LIBXCOMPOSITE_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBXCOMPOSITE)
+	$(call embtk_configure_pkg,LIBXCOMPOSITE)
 
 libxcomposite_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBXCOMPOSITE)
+	$(call embtk_cleanup_pkg,LIBXCOMPOSITE)

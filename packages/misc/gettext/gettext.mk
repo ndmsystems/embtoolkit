@@ -24,7 +24,7 @@
 ################################################################################
 
 GETTEXT_NAME		:= gettext
-GETTEXT_VERSION		:= $(call EMBTK_GET_PKG_VERSION,GETTEXT)
+GETTEXT_VERSION		:= $(call embtk_get_pkgversion,GETTEXT)
 GETTEXT_SITE		:= http://ftp.gnu.org/pub/gnu/gettext
 GETTEXT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GETTEXT_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/gettext/$(GETTEXT_VERSION)
@@ -53,15 +53,15 @@ GETTEXT_CONFIGURE_OPTS	:= --enable-relocatable --with-included-gettext	\
 GETTEXT_DEPS = ncurses_install libxml2_install
 
 gettext_install:
-	$(call EMBTK_INSTALL_PKG,GETTEXT)
+	$(call embtk_install_pkg,GETTEXT)
 	@test -e $(GETTEXT_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(GETTEXT_BUILD_DIR)/.patchlibtool
 
 download_gettext:
-	$(call EMBTK_DOWNLOAD_PKG,GETTEXT)
+	$(call embtk_download_pkg,GETTEXT)
 
 gettext_clean:
-	$(call EMBTK_CLEANUP_PKG,GETTEXT)
+	$(call embtk_cleanup_pkg,GETTEXT)
 
 #FIXME: this should be fixed in gettext project
 $(GETTEXT_BUILD_DIR)/.patchlibtool:

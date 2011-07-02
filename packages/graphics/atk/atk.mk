@@ -24,8 +24,8 @@
 ################################################################################
 
 ATK_NAME := atk
-ATK_VERSION := $(call EMBTK_GET_PKG_VERSION,ATK)
-ATK_MAJOR_VERSION := $(call EMBTK_GET_PKG_VERSION,ATK_MAJOR)
+ATK_VERSION := $(call embtk_get_pkgversion,ATK)
+ATK_MAJOR_VERSION := $(call embtk_get_pkgversion,ATK_MAJOR)
 ATK_SITE := http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_MAJOR_VERSION)
 ATK_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 ATK_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/atk/$(ATK_VERSION)
@@ -43,10 +43,10 @@ ATK_CONFIGURE_OPTS := --disable-glibtest
 ATK_DEPS := glib_install
 
 atk_install:
-	$(call EMBTK_INSTALL_PKG,ATK)
+	$(call embtk_install_pkg,ATK)
 
 download_atk:
-	$(call EMBTK_DOWNLOAD_PKG,ATK)
+	$(call embtk_download_pkg,ATK)
 
 atk_clean:
-	$(call EMBTK_CLEANUP_PKG,ATK)
+	$(call embtk_cleanup_pkg,ATK)

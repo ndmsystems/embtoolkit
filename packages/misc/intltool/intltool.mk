@@ -24,8 +24,8 @@
 ################################################################################
 
 INTLTOOL_NAME		:= intltool
-INTLTOOL_MAJOR_VERSION	:= $(call EMBTK_GET_PKG_VERSION,INTLTOOL_MAJOR)
-INTLTOOL_VERSION	:= $(call EMBTK_GET_PKG_VERSION,INTLTOOL)
+INTLTOOL_MAJOR_VERSION	:= $(call embtk_get_pkgversion,INTLTOOL_MAJOR)
+INTLTOOL_VERSION	:= $(call embtk_get_pkgversion,INTLTOOL)
 INTLTOOL_SITE		:= http://ftp.gnome.org/pub/gnome/sources/intltool/$(INTLTOOL_MAJOR_VERSION)
 INTLTOOL_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 INTLTOOL_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/intltool/$(INTLTOOL_VERSION)
@@ -49,10 +49,10 @@ INTLTOOL_CONFIGURE_OPTS	:=
 INTLTOOL_DEPS :=
 
 intltool_install:
-	$(call EMBTK_INSTALL_PKG,INTLTOOL)
+	$(call embtk_install_pkg,INTLTOOL)
 
 intltool_clean:
-	$(call EMBTK_CLEANUP_PKG,INTLTOOL)
+	$(call embtk_cleanup_pkg,INTLTOOL)
 
 #
 # intltool for host
@@ -67,10 +67,10 @@ INTLTOOL_HOST_SRC_DIR		:= $(TOOLS_BUILD)/intltool-$(INTLTOOL_VERSION)
 INTLTOOL_HOST_BUILD_DIR		:= $(TOOLS_BUILD)/intltool-$(INTLTOOL_VERSION)
 
 intltool_host_install:
-	$(call EMBTK_INSTALL_HOSTPKG,INTLTOOL_HOST)
+	$(call embtk_install_hostpkg,INTLTOOL_HOST)
 
 #
 # common targets
 #
 download_intltool download_intltool_host:
-	$(call EMBTK_DOWNLOAD_PKG,INTLTOOL)
+	$(call embtk_download_pkg,INTLTOOL)

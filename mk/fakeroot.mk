@@ -25,7 +25,7 @@
 ################################################################################
 
 FAKEROOT_NAME		:= fakeroot
-FAKEROOT_VERSION	:= $(call EMBTK_GET_PKG_VERSION,FAKEROOT)
+FAKEROOT_VERSION	:= $(call embtk_get_pkgversion,FAKEROOT)
 FAKEROOT_SITE		:= http://ftp.debian.org/debian/pool/main/f/fakeroot
 FAKEROOT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 FAKEROOT_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/fakeroot/$(FAKEROOT_VERSION)
@@ -39,7 +39,7 @@ FAKEROOT_ENV_FILE	:= $(EMBTK_ROOT)/.fakeroot.001
 export FAKEROOT_BIN FAKEROOT_ENV_FILE
 
 fakeroot_install:
-	$(call EMBTK_INSTALL_HOSTPKG,FAKEROOT)
+	$(call embtk_install_hostpkg,FAKEROOT)
 
 download_fakeroot:
-	$(call EMBTK_DOWNLOAD_PKG,FAKEROOT)
+	$(call embtk_download_pkg,FAKEROOT)

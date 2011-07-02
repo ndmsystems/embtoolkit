@@ -24,7 +24,7 @@
 ################################################################################
 
 BIGREQSPROTO_NAME := bigreqsproto
-BIGREQSPROTO_VERSION := $(call EMBTK_GET_PKG_VERSION,BIGREQSPROTO)
+BIGREQSPROTO_VERSION := $(call embtk_get_pkgversion,BIGREQSPROTO)
 BIGREQSPROTO_SITE := http://xorg.freedesktop.org/archive/individual/proto
 BIGREQSPROTO_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 BIGREQSPROTO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/bigreqsprot/$(BIGREQSPROTO_VERSION)
@@ -39,10 +39,10 @@ BIGREQSPROTO_LIBS =
 BIGREQSPROTO_PKGCONFIGS = bigreqsproto.pc
 
 bigreqsproto_install:
-	$(call EMBTK_INSTALL_PKG,BIGREQSPROTO)
+	$(call embtk_install_pkg,BIGREQSPROTO)
 
 download_bigreqsproto:
-	$(call EMBTK_DOWNLOAD_PKG,BIGREQSPROTO)
+	$(call embtk_download_pkg,BIGREQSPROTO)
 
 bigreqsproto_clean:
-	$(call EMBTK_CLEANUP_PKG,BIGREQSPROTO)
+	$(call embtk_cleanup_pkg,BIGREQSPROTO)

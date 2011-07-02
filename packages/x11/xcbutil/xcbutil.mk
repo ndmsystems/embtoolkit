@@ -24,7 +24,7 @@
 ################################################################################
 
 XCBUTIL_NAME := xcb-util
-XCBUTIL_VERSION := $(call EMBTK_GET_PKG_VERSION,XCBUTIL)
+XCBUTIL_VERSION := $(call embtk_get_pkgversion,XCBUTIL)
 XCBUTIL_SITE := http://xcb.freedesktop.org/dist
 XCBUTIL_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XCBUTIL_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/xcb-util/$(XCBUTIL_VERSION)
@@ -48,14 +48,14 @@ XCBUTIL_PKGCONFIGS = xcb-atom.pc xcb-aux.pc xcb-event.pc xcb-icccm.pc \
 XCBUTIL_DEPS = gperf_host_install libxcb_install
 
 xcbutil_install:
-	$(call EMBTK_INSTALL_PKG,XCBUTIL)
+	$(call embtk_install_pkg,XCBUTIL)
 	$(Q)$(MAKE) $(XCBUTIL_BUILD_DIR)/.patchlibtool
 
 download_xcbutil:
-	$(call EMBTK_DOWNLOAD_PKG,XCBUTIL)
+	$(call embtk_download_pkg,XCBUTIL)
 
 xcbutil_clean:
-	$(call EMBTK_CLEANUP_PKG,XCBUTIL)
+	$(call embtk_cleanup_pkg,XCBUTIL)
 
 $(XCBUTIL_BUILD_DIR)/.patchlibtool:
 	@XCBUTIL_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \

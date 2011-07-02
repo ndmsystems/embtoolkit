@@ -24,7 +24,7 @@
 ################################################################################
 
 EXPAT_NAME := expat
-EXPAT_VERSION := $(call EMBTK_GET_PKG_VERSION,EXPAT)
+EXPAT_VERSION := $(call embtk_get_pkgversion,EXPAT)
 EXPAT_SITE := http://downloads.sourceforge.net/expat
 EXPAT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 EXPAT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/expat/$(EXPAT_VERSION)
@@ -41,10 +41,10 @@ EXPAT_PKGCONFIGS =
 EXPAT_DEPS =
 
 expat_install:
-	$(call EMBTK_INSTALL_PKG,EXPAT)
+	$(call embtk_install_pkg,EXPAT)
 
 download_expat:
-	$(call EMBTK_DOWNLOAD_PKG,EXPAT)
+	$(call embtk_download_pkg,EXPAT)
 
 expat_clean:
-	$(call EMBTK_CLEANUP_PKG,EXPAT)
+	$(call embtk_cleanup_pkg,EXPAT)

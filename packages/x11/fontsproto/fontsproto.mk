@@ -42,7 +42,7 @@ fontsproto_install:
 
 $(FONTSPROTO_BUILD_DIR)/.installed: download_fontsproto \
 	$(FONTSPROTO_BUILD_DIR)/.decompressed $(FONTSPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	fontsproto-$(FONTSPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(FONTSPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(FONTSPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -51,14 +51,14 @@ $(FONTSPROTO_BUILD_DIR)/.installed: download_fontsproto \
 	@touch $@
 
 download_fontsproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(FONTSPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(FONTSPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(FONTSPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(FONTSPROTO_PACKAGE) \
 	$(FONTSPROTO_SITE)/$(FONTSPROTO_PACKAGE)
 
 $(FONTSPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(FONTSPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(FONTSPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(FONTSPROTO_PACKAGE)
 	@touch $@
 
@@ -86,7 +86,7 @@ $(FONTSPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 fontsproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup fontsproto...")
+	$(call embtk_generic_message,"cleanup fontsproto...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(FONTSPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(FONTSPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FONTSPROTO_INCLUDES)

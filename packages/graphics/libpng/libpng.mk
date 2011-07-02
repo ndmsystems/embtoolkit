@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBPNG_NAME := libpng
-LIBPNG_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBPNG)
+LIBPNG_VERSION := $(call embtk_get_pkgversion,LIBPNG)
 LIBPNG_SITE := http://download.sourceforge.net/libpng
 LIBPNG_PACKAGE := libpng-$(LIBPNG_VERSION).tar.gz
 LIBPNG_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
@@ -48,7 +48,7 @@ libpng_install:
 
 $(LIBPNG_BUILD_DIR)/.installed:  $(LIBPNG_DEPS) download_libpng \
 	$(LIBPNG_BUILD_DIR)/.decompressed $(LIBPNG_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libpng-$(LIBPNG_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBPNG_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBPNG_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -57,13 +57,13 @@ $(LIBPNG_BUILD_DIR)/.installed:  $(LIBPNG_DEPS) download_libpng \
 	@touch $@
 
 download_libpng:
-	$(call EMBTK_DOWNLOAD_PKG,LIBPNG)
+	$(call embtk_download_pkg,LIBPNG)
 
 $(LIBPNG_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBPNG)
+	$(call embtk_decompress_pkg,LIBPNG)
 
 $(LIBPNG_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBPNG)
+	$(call embtk_configure_pkg,LIBPNG)
 
 libpng_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBPNG)
+	$(call embtk_cleanup_pkg,LIBPNG)

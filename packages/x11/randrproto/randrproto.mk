@@ -40,7 +40,7 @@ randrproto_install:
 
 $(RANDRPROTO_BUILD_DIR)/.installed: download_randrproto \
 	$(RANDRPROTO_BUILD_DIR)/.decompressed $(RANDRPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	randrproto-$(RANDRPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(RANDRPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(RANDRPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -49,14 +49,14 @@ $(RANDRPROTO_BUILD_DIR)/.installed: download_randrproto \
 	@touch $@
 
 download_randrproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(RANDRPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(RANDRPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(RANDRPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(RANDRPROTO_PACKAGE) \
 	$(RANDRPROTO_SITE)/$(RANDRPROTO_PACKAGE)
 
 $(RANDRPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(RANDRPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(RANDRPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(RANDRPROTO_PACKAGE)
 	@touch $@
 
@@ -84,7 +84,7 @@ $(RANDRPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 randrproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup randrproto-$(RANDRPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup randrproto-$(RANDRPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RANDRPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RANDRPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RANDRPROTO_INCLUDES)

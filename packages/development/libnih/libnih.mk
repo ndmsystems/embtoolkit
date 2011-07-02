@@ -24,8 +24,8 @@
 ################################################################################
 
 LIBNIH_NAME := libnih
-LIBNIH_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBNIH)
-LIBNIH_MAJOR_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBNIH_MAJOR)
+LIBNIH_VERSION := $(call embtk_get_pkgversion,LIBNIH)
+LIBNIH_MAJOR_VERSION := $(call embtk_get_pkgversion,LIBNIH_MAJOR)
 LIBNIH_SITE := http://launchpad.net/libnih/$(LIBNIH_MAJOR_VERSION)/$(LIBNIH_VERSION)/+download
 LIBNIH_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBNIH_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libnih/$(LIBNIH_VERSION)
@@ -47,7 +47,7 @@ libnih_install:
 
 $(LIBNIH_BUILD_DIR)/.installed: $(LIBNIH_DEPS) download_libnih \
 	$(LIBNIH_BUILD_DIR)/.decompressed $(LIBNIH_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libnih-$(LIBNIH_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBNIH_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBNIH_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -56,13 +56,13 @@ $(LIBNIH_BUILD_DIR)/.installed: $(LIBNIH_DEPS) download_libnih \
 	@touch $@
 
 download_libnih:
-	$(call EMBTK_DOWNLOAD_PKG,LIBNIH)
+	$(call embtk_download_pkg,LIBNIH)
 
 $(LIBNIH_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBNIH)
+	$(call embtk_decompress_pkg,LIBNIH)
 
 $(LIBNIH_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBNIH)
+	$(call embtk_configure_pkg,LIBNIH)
 
 libnih_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBNIH)
+	$(call embtk_cleanup_pkg,LIBNIH)

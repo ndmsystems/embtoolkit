@@ -33,7 +33,7 @@ microperl_install: $(MICROPERL_BUILD_DIR)/.installed
 
 $(MICROPERL_BUILD_DIR)/.installed: download_perl \
 	$(PERL_BUILD_DIR)/.decompressed
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	microperl-$(PERL_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(MICROPERL_BUILD_DIR) -f Makefile.micro \
 	OPTIMIZE="$(TARGET_CFLAGS)" CC=$(TARGETCC_CACHED)
@@ -43,7 +43,7 @@ $(MICROPERL_BUILD_DIR)/.installed: download_perl \
 	@touch $@
 
 download_perl:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(PERL_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(PERL_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(PERL_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(PERL_PACKAGE) \
@@ -55,7 +55,7 @@ ifeq ($(CONFIG_EMBTK_PERL_NEED_PATCH),y)
 endif
 
 $(PERL_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(PERL_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(PERL_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xzvf $(DOWNLOAD_DIR)/$(PERL_PACKAGE)
 ifeq ($(CONFIG_EMBTK_PERL_NEED_PATCH),y)
 	@cd $(PERL_BUILD_DIR); \
@@ -67,4 +67,4 @@ endif
 	@touch $@
 
 microperl_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"Clean microperl for target...")
+	$(call embtk_generic_message,"Clean microperl for target...")

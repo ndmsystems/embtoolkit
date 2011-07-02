@@ -24,7 +24,7 @@
 ################################################################################
 
 PIXMAN_NAME := pixman
-PIXMAN_VERSION := $(call EMBTK_GET_PKG_VERSION,PIXMAN)
+PIXMAN_VERSION := $(call embtk_get_pkgversion,PIXMAN)
 PIXMAN_SITE := http://www.cairographics.org/releases
 PIXMAN_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 PIXMAN_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/pixman/$(PIXMAN_VERSION)
@@ -39,10 +39,10 @@ PIXMAN_LIBS = libpixman-*
 PIXMAN_PKGCONFIGS = pixman-*.pc
 
 pixman_install:
-	$(call EMBTK_INSTALL_PKG,PIXMAN)
+	$(call embtk_install_pkg,PIXMAN)
 
 download_pixman:
-	$(call EMBTK_DOWNLOAD_PKG,PIXMAN)
+	$(call embtk_download_pkg,PIXMAN)
 
 pixman_clean:
-	$(call EMBTK_CLEANUP_PKG,PIXMAN)
+	$(call embtk_cleanup_pkg,PIXMAN)

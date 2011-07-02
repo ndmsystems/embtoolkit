@@ -42,7 +42,7 @@ kbproto_install:
 
 $(KBPROTO_BUILD_DIR)/.installed: download_kbproto \
 	$(KBPROTO_BUILD_DIR)/.decompressed $(KBPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	kbproto-$(KBPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(KBPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(KBPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -51,14 +51,14 @@ $(KBPROTO_BUILD_DIR)/.installed: download_kbproto \
 	@touch $@
 
 download_kbproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(KBPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(KBPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(KBPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(KBPROTO_PACKAGE) \
 	$(KBPROTO_SITE)/$(KBPROTO_PACKAGE)
 
 $(KBPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(KBPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(KBPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(KBPROTO_PACKAGE)
 	@touch $@
 
@@ -86,7 +86,7 @@ $(KBPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 kbproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup kbproto...")
+	$(call embtk_generic_message,"cleanup kbproto...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(KBPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(KBPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(KBPROTO_INCLUDES)

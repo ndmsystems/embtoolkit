@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBXKBFILE_NAME := libxkbfile
-LIBXKBFILE_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXKBFILE)
+LIBXKBFILE_VERSION := $(call embtk_get_pkgversion,LIBXKBFILE)
 LIBXKBFILE_SITE := http://xorg.freedesktop.org/archive/individual/lib
 LIBXKBFILE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXKBFILE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxkbfile/$(LIBXKBFILE_VERSION)
@@ -43,10 +43,10 @@ LIBXKBFILE_PKGCONFIGS =
 LIBXKBFILE_DEPS = kbproto_install libx11_install
 
 libxkbfile_install:
-	$(call EMBTK_INSTALL_PKG,LIBXKBFILE)
+	$(call embtk_install_pkg,LIBXKBFILE)
 
 download_libxkbfile:
-	$(call EMBTK_DOWNLOAD_PKG,LIBXKBFILE)
+	$(call embtk_download_pkg,LIBXKBFILE)
 
 libxkbfile_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBXKBFILE)
+	$(call embtk_cleanup_pkg,LIBXKBFILE)

@@ -39,7 +39,7 @@ xcbproto_install:
 
 $(XCBPROTO_BUILD_DIR)/.installed: download_xcbproto \
 	$(XCBPROTO_BUILD_DIR)/.decompressed $(XCBPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	xcbproto-$(XCBPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(XCBPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(XCBPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -48,14 +48,14 @@ $(XCBPROTO_BUILD_DIR)/.installed: download_xcbproto \
 	@touch $@
 
 download_xcbproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(XCBPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(XCBPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(XCBPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(XCBPROTO_PACKAGE) \
 	$(XCBPROTO_SITE)/$(XCBPROTO_PACKAGE)
 
 $(XCBPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(XCBPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(XCBPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(XCBPROTO_PACKAGE)
 	@touch $@
 
@@ -83,7 +83,7 @@ $(XCBPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 xcbproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xcbproto-$(XCBPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup xcbproto-$(XCBPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XCBPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XCBPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XCBPROTO_INCLUDES)

@@ -24,7 +24,7 @@
 ################################################################################
 
 AUTOCONF_NAME		:= autoconf
-AUTOCONF_VERSION	:= $(call EMBTK_GET_PKG_VERSION,AUTOCONF)
+AUTOCONF_VERSION	:= $(call embtk_get_pkgversion,AUTOCONF)
 AUTOCONF_SITE		:= http://ftp.gnu.org/gnu/autoconf
 AUTOCONF_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 AUTOCONF_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/autoconf/$(AUTOCONF_VERSION)
@@ -44,7 +44,7 @@ IFNAMES		:= $(AUTOCONF_DIR)/bin/ifnames
 export AUTOCONF AUTOHEADER AUTOM4TE AUTORECONF AUTOSCAN AUTOUPDATE IFNAMES
 
 autoconf_install:
-	$(call EMBTK_INSTALL_HOSTPKG,AUTOCONF)
+	$(call embtk_install_hostpkg,AUTOCONF)
 
 download_autoconf:
-	$(call EMBTK_DOWNLOAD_PKG,AUTOCONF)
+	$(call embtk_download_pkg,AUTOCONF)

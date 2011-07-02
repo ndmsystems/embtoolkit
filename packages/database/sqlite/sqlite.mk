@@ -24,7 +24,7 @@
 ################################################################################
 
 SQLITE_NAME := sqlite
-SQLITE_VERSION := $(call EMBTK_GET_PKG_VERSION,SQLITE)
+SQLITE_VERSION := $(call embtk_get_pkgversion,SQLITE)
 SQLITE_SITE := http://www.sqlite.org
 SQLITE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 SQLITE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/sqlite/$(SQLITE_VERSION)
@@ -55,10 +55,10 @@ SQLITE_CONFIGURE_OPTS := --enable-threadsafe --enable-readline \
 SQLITE_DEPS :=
 
 sqlite_install:
-	$(call EMBTK_INSTALL_PKG,SQLITE)
+	$(call embtk_install_pkg,SQLITE)
 
 download_sqlite:
-	$(call EMBTK_DOWNLOAD_PKG,SQLITE)
+	$(call embtk_download_pkg,SQLITE)
 
 sqlite_clean:
-	$(call EMBTK_CLEANUP_PKG,SQLITE)
+	$(call embtk_cleanup_pkg,SQLITE)

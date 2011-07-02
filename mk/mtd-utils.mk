@@ -61,7 +61,7 @@ $(MTDUTILS_HOST_BUILD_DIR)/.installed:  $(MTDUTILS_HOST_DEPS) \
 	@touch $@
 
 $(MTDUTILS_HOST_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(MTDUTILS_PACKAGE)...")
+	$(call embtk_generic_message,"Decompressing $(MTDUTILS_PACKAGE)...")
 	@tar -C $(TOOLS_BUILD) -xvf $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE)
 ifeq ($(CONFIG_EMBTK_MTDUTILS_NEED_PATCH),y)
 	cd $(MTDUTILS_HOST_BUILD_DIR); \
@@ -70,7 +70,7 @@ endif
 	@touch $@
 
 mtdutils_host_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"Cleaning mtd-utils in host ...")
+	$(call embtk_generic_message,"Cleaning mtd-utils in host ...")
 
 ########################
 # mtd-utils for target #
@@ -93,7 +93,7 @@ $(MTDUTILS_TARGET_BUILD_DIR)/.installed: $(MTDUTILS_DEPS) download_mtdutils \
 	@touch $@
 
 $(MTDUTILS_TARGET_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(MTDUTILS_PACKAGE)...")
+	$(call embtk_generic_message,"Decompressing $(MTDUTILS_PACKAGE)...")
 	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE)
 ifeq ($(CONFIG_EMBTK_MTDUTILS_NEED_PATCH),y)
 	@cd $(MTDUTILS_TARGET_BUILD_DIR); \
@@ -102,7 +102,7 @@ endif
 	@touch $@
 
 mtdutils_target_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"Cleaning mtd-utils in target ...")
+	$(call embtk_generic_message,"Cleaning mtd-utils in target ...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(MTDUTILS_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(MTDUTILS_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(MTDUTILS_INCLUDES)
@@ -111,7 +111,7 @@ mtdutils_target_clean:
 	$(Q)-rm -rf $(MTDUTILS_TARGET_BUILD_DIR)*
 
 download_mtdutils:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(MTDUTILS_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(MTDUTILS_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE) \

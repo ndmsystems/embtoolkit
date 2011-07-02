@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBX11_NAME := libX11
-LIBX11_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBX11)
+LIBX11_VERSION := $(call embtk_get_pkgversion,LIBX11)
 LIBX11_SITE := http://xorg.freedesktop.org/archive/individual/lib
 LIBX11_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBX11_PACKAGE := libX11-$(LIBX11_VERSION).tar.bz2
@@ -52,7 +52,7 @@ libx11_install:
 
 $(LIBX11_BUILD_DIR)/.installed: $(LIBX11_DEPS) download_libx11 \
 	$(LIBX11_BUILD_DIR)/.decompressed $(LIBX11_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libx11-$(LIBX11_VERSION) in your root filesystem...")
 	@cd $(LIBX11_BUILD_DIR)/src/util; \
 	gcc makekeys.c -c -o makekeys-makekeys.o; gcc makekeys.c -o makekeys
@@ -64,16 +64,16 @@ $(LIBX11_BUILD_DIR)/.installed: $(LIBX11_DEPS) download_libx11 \
 	@touch $@
 
 download_libx11:
-	$(call EMBTK_DOWNLOAD_PKG,LIBX11)
+	$(call embtk_download_pkg,LIBX11)
 
 $(LIBX11_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBX11)
+	$(call embtk_decompress_pkg,LIBX11)
 
 $(LIBX11_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBX11)
+	$(call embtk_configure_pkg,LIBX11)
 
 libx11_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBX11)
+	$(call embtk_cleanup_pkg,LIBX11)
 
 $(LIBX11_BUILD_DIR)/.patchlibtool:
 	@LIBX11_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libX11-* -type f -name *.la`; \

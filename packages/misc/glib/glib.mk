@@ -24,8 +24,8 @@
 ################################################################################
 
 GLIB_NAME		:= glib
-GLIB_MAJOR_VERSION	:= $(call EMBTK_GET_PKG_VERSION,GLIB_MAJOR)
-GLIB_VERSION		:= $(call EMBTK_GET_PKG_VERSION,GLIB)
+GLIB_MAJOR_VERSION	:= $(call embtk_get_pkgversion,GLIB_MAJOR)
+GLIB_VERSION		:= $(call embtk_get_pkgversion,GLIB)
 GLIB_SITE		:= http://ftp.gnome.org/pub/gnome/sources/glib/$(GLIB_MAJOR_VERSION)
 GLIB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GLIB_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/glib/$(GLIB_VERSION)
@@ -53,12 +53,12 @@ GLIB_CONFIGURE_OPTS	:= --disable-fam
 GLIB_DEPS := zlib_install gettext_install
 
 glib_install:
-	$(call EMBTK_INSTALL_PKG,GLIB)
+	$(call embtk_install_pkg,GLIB)
 	@test -e $(GLIB_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(GLIB_BUILD_DIR)/.patchlibtool
 
 download_glib:
-	$(call EMBTK_DOWNLOAD_PKG,GLIB)
+	$(call embtk_download_pkg,GLIB)
 
 #FIXME: this should be fixed in glib2 project
 $(GLIB_BUILD_DIR)/.patchlibtool:
@@ -85,5 +85,5 @@ $(GLIB_BUILD_DIR)/.patchlibtool:
 	@touch $@
 
 glib_clean:
-	$(call EMBTK_CLEANUP_PKG,GLIB)
+	$(call embtk_cleanup_pkg,GLIB)
 

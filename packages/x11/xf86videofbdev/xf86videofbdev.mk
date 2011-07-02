@@ -48,7 +48,7 @@ xf86videofbdev_install:
 $(XF86VIDEOFBDEV_BUILD_DIR)/.installed: $(XF86VIDEOFBDEV_DEPS) \
 	download_xf86videofbdev $(XF86VIDEOFBDEV_BUILD_DIR)/.decompressed \
 	$(XF86VIDEOFBDEV_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	xf86videofbdev-$(XF86VIDEOFBDEV_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(XF86VIDEOFBDEV_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(XF86VIDEOFBDEV_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -57,16 +57,16 @@ $(XF86VIDEOFBDEV_BUILD_DIR)/.installed: $(XF86VIDEOFBDEV_DEPS) \
 	@touch $@
 
 download_xf86videofbdev:
-	$(call EMBTK_DOWNLOAD_PKG,XF86VIDEOFBDEV)
+	$(call embtk_download_pkg,XF86VIDEOFBDEV)
 
 $(XF86VIDEOFBDEV_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,XF86VIDEOFBDEV)
+	$(call embtk_decompress_pkg,XF86VIDEOFBDEV)
 
 $(XF86VIDEOFBDEV_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,XF86VIDEOFBDEV)
+	$(call embtk_configure_pkg,XF86VIDEOFBDEV)
 
 xf86videofbdev_clean:
-	$(call EMBTK_CLEANUP_PKG,XF86VIDEOFBDEV)
+	$(call embtk_cleanup_pkg,XF86VIDEOFBDEV)
 
 .PHONY: $(XF86VIDEOFBDEV_BUILD_DIR)/.special
 

@@ -103,9 +103,9 @@ directfb_install:
 
 $(DIRECTFB_BUILD_DIR)/.installed:  $(DIRECTFB_DEPS) download_directfb \
 	$(DIRECTFB_BUILD_DIR)/.decompressed $(DIRECTFB_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	DirectFB-$(DIRECTFB_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH, $(DIRECTFB_BUILD_DIR))
+	$(call __embtk_kill_lt_rpath, $(DIRECTFB_BUILD_DIR))
 	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -114,14 +114,14 @@ $(DIRECTFB_BUILD_DIR)/.installed:  $(DIRECTFB_DEPS) download_directfb \
 	@touch $@
 
 download_directfb:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(DIRECTFB_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(DIRECTFB_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(DIRECTFB_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(DIRECTFB_PACKAGE) \
 	$(DIRECTFB_SITE)/$(DIRECTFB_PACKAGE)
 
 $(DIRECTFB_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(DIRECTFB_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(DIRECTFB_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xzvf $(DOWNLOAD_DIR)/$(DIRECTFB_PACKAGE)
 	@touch $@
 
@@ -196,7 +196,7 @@ endif
 	@touch $@
 
 directfb_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup directfb...")
+	$(call embtk_generic_message,"cleanup directfb...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(DIRECTFB_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(DIRECTFB_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(DIRECTFB_INCLUDES)

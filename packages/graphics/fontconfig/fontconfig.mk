@@ -24,7 +24,7 @@
 ################################################################################
 
 FONTCONFIG_NAME		:= fontconfig
-FONTCONFIG_VERSION	:= $(call EMBTK_GET_PKG_VERSION,FONTCONFIG)
+FONTCONFIG_VERSION	:= $(call embtk_get_pkgversion,FONTCONFIG)
 FONTCONFIG_SITE		:= http://fontconfig.org/release
 FONTCONFIG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 FONTCONFIG_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/fontconfig/$(FONTCONFIG_VERSION)
@@ -49,16 +49,16 @@ FONTCONFIG_CONFIGURE_OPTS := --with-arch=$(STRICT_GNU_TARGET)	\
 			--disable-docs --program-prefix=""
 
 fontconfig_install:
-	$(call EMBTK_INSTALL_PKG,FONTCONFIG)
+	$(call embtk_install_pkg,FONTCONFIG)
 	$(MAKE) $(FONTCONFIG_BUILD_DIR)/.special
 
 download_fontconfig:
-	$(call EMBTK_DOWNLOAD_PKG,FONTCONFIG)
+	$(call embtk_download_pkg,FONTCONFIG)
 
 .PHONY: $(FONTCONFIG_BUILD_DIR)/.special fontconfig_clean
 
 fontconfig_clean:
-	$(call EMBTK_CLEANUP_PKG,FONTCONFIG)
+	$(call embtk_cleanup_pkg,FONTCONFIG)
 
 $(FONTCONFIG_BUILD_DIR)/.special:
 	$(Q)-cp -R $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc/

@@ -43,10 +43,10 @@ LIBXRANDR_CONFIGURE_OPTS := --disable-malloc0returnsnull
 LIBXRANDR_DEPS = xproto_install randrproto_install
 
 libxrandr_install:
-	$(call EMBTK_INSTALL_PKG,LIBXRANDR)
+	$(call embtk_install_pkg,LIBXRANDR)
 
 download_libxrandr:
-	$(call EMBTK_DOWNLOAD_PKG,LIBXRANDR)
+	$(call embtk_download_pkg,LIBXRANDR)
 
 libxrandr_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBXRANDR)
+	$(call embtk_cleanup_pkg,LIBXRANDR)

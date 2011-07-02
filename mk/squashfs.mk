@@ -51,13 +51,13 @@ $(SQUASHFS_HOST_BUILD_DIR)/.installed: download_squashfs \
 	@touch $@
 
 $(SQUASHFS_HOST_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(SQUASHFS_PACKAGE)...")
+	$(call embtk_generic_message,"Decompressing $(SQUASHFS_PACKAGE)...")
 	@tar -C $(TOOLS_BUILD) -xzvf $(DOWNLOAD_DIR)/$(SQUASHFS_PACKAGE)
 	@mkdir -p $(SQUASHFS_HOST_BUILD_DIR)
 	@touch $@
 
 squashfs_host_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"Cleaning squashfs in host ...")
+	$(call embtk_generic_message,"Cleaning squashfs in host ...")
 
 #squashfs for target
 $(SQUASHFS_TARGET_BUILD_DIR)/.installed: download_squashfs \
@@ -65,16 +65,16 @@ $(SQUASHFS_TARGET_BUILD_DIR)/.installed: download_squashfs \
 	@touch $@
 
 $(SQUASHFS_TARGET_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(SQUASHFS_PACKAGE)...")
+	$(call embtk_generic_message,"Decompressing $(SQUASHFS_PACKAGE)...")
 	@tar -C $(PACKAGES_BUILD) -xzvf $(DOWNLOAD_DIR)/$(SQUASHFS_PACKAGE)
 	@mkdir -p $(SQUASHFS_TARGET_BUILD_DIR)
 	@touch $@
 
 squashfs_target_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"Cleaning squashfs in target ...")
+	$(call embtk_generic_message,"Cleaning squashfs in target ...")
 
 download_squashfs:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(SQUASHFS_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(SQUASHFS_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(SQUASHFS_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(SQUASHFS_PACKAGE) \

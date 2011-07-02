@@ -24,7 +24,7 @@
 ################################################################################
 
 XKEYBOARDCONFIG_NAME		:= xkeyboard-config
-XKEYBOARDCONFIG_VERSION		:= $(call EMBTK_GET_PKG_VERSION,XKEYBOARDCONFIG)
+XKEYBOARDCONFIG_VERSION		:= $(call embtk_get_pkgversion,XKEYBOARDCONFIG)
 XKEYBOARDCONFIG_SITE		:= http://www.x.org/releases/individual/data/xkeyboard-config
 XKEYBOARDCONFIG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XKEYBOARDCONFIG_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/xkeyboard-config/$(XKEYBOARDCONFIG_VERSION)
@@ -41,14 +41,14 @@ XKEYBOARDCONFIG_PKGCONFIGS =
 XKEYBOARDCONFIG_DEPS = intltool_host_install xkbcomp_install
 
 xkeyboardconfig_install:
-	$(call EMBTK_INSTALL_PKG,XKEYBOARDCONFIG)
+	$(call embtk_install_pkg,XKEYBOARDCONFIG)
 	$(Q)$(MAKE) $(XKEYBOARDCONFIG_BUILD_DIR)/.special
 
 download_xkeyboardconfig:
-	$(call EMBTK_DOWNLOAD_PKG,XKEYBOARDCONFIG)
+	$(call embtk_download_pkg,XKEYBOARDCONFIG)
 
 xkeyboardconfig_clean:
-	$(call EMBTK_CLEANUP_PKG,XKEYBOARDCONFIG)
+	$(call embtk_cleanup_pkg,XKEYBOARDCONFIG)
 
 .PHONY: $(XKEYBOARDCONFIG_BUILD_DIR)/.special
 

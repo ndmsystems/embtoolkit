@@ -54,7 +54,7 @@ xextproto_install:
 
 $(XEXTPROTO_BUILD_DIR)/.installed: download_xextproto \
 	$(XEXTPROTO_BUILD_DIR)/.decompressed $(XEXTPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	xextproto-$(XEXTPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(XEXTPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(XEXTPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -63,14 +63,14 @@ $(XEXTPROTO_BUILD_DIR)/.installed: download_xextproto \
 	@touch $@
 
 download_xextproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(XEXTPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(XEXTPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(XEXTPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(XEXTPROTO_PACKAGE) \
 	$(XEXTPROTO_SITE)/$(XEXTPROTO_PACKAGE)
 
 $(XEXTPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(XEXTPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(XEXTPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(XEXTPROTO_PACKAGE)
 	@touch $@
 
@@ -98,7 +98,7 @@ $(XEXTPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 xextproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xextproto-$(XEXTPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup xextproto-$(XEXTPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XEXTPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XEXTPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XEXTPROTO_INCLUDES)

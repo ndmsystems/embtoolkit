@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBEVENT_NAME := libevent
-LIBEVENT_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBEVENT)
+LIBEVENT_VERSION := $(call embtk_get_pkgversion,LIBEVENT)
 LIBEVENT_SITE := http://www.monkey.org/~provos
 LIBEVENT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBEVENT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libevent/$(LIBEVENT_VERSION)
@@ -41,10 +41,10 @@ LIBEVENT_PKGCONFIGS =
 LIBEVENT_DEPS :=
 
 libevent_install:
-	$(call EMBTK_INSTALL_PKG,LIBEVENT)
+	$(call embtk_install_pkg,LIBEVENT)
 
 download_libevent:
-	$(call EMBTK_DOWNLOAD_PKG,LIBEVENT)
+	$(call embtk_download_pkg,LIBEVENT)
 
 libevent_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBEVENT)
+	$(call embtk_cleanup_pkg,LIBEVENT)

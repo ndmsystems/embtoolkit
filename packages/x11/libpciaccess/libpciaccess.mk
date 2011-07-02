@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBPCIACCESS_NAME := libpciaccess
-LIBPCIACCESS_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBPCIACCESS)
+LIBPCIACCESS_VERSION := $(call embtk_get_pkgversion,LIBPCIACCESS)
 LIBPCIACCESS_SITE := http://xorg.freedesktop.org/archive/individual/lib
 LIBPCIACCESS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libpciaccess/$(LIBPCIACCESS_VERSION)
 LIBPCIACCESS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
@@ -47,7 +47,7 @@ libpciaccess_install:
 $(LIBPCIACCESS_BUILD_DIR)/.installed: $(LIBPCIACCESS_DEPS) \
 	download_libpciaccess $(LIBPCIACCESS_BUILD_DIR)/.decompressed \
 	$(LIBPCIACCESS_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libpciaccess-$(LIBPCIACCESS_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBPCIACCESS_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBPCIACCESS_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -56,13 +56,13 @@ $(LIBPCIACCESS_BUILD_DIR)/.installed: $(LIBPCIACCESS_DEPS) \
 	@touch $@
 
 download_libpciaccess:
-	$(call EMBTK_DOWNLOAD_PKG,LIBPCIACCESS)
+	$(call embtk_download_pkg,LIBPCIACCESS)
 
 $(LIBPCIACCESS_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBPCIACCESS)
+	$(call embtk_decompress_pkg,LIBPCIACCESS)
 
 $(LIBPCIACCESS_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBPCIACCESS)
+	$(call embtk_configure_pkg,LIBPCIACCESS)
 
 libpciaccess_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBPCIACCESS)
+	$(call embtk_cleanup_pkg,LIBPCIACCESS)

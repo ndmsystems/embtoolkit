@@ -24,7 +24,7 @@
 ################################################################################
 
 GPERF_NAME		:= gperf
-GPERF_VERSION		:= $(call EMBTK_GET_PKG_VERSION,GPERF)
+GPERF_VERSION		:= $(call embtk_get_pkgversion,GPERF)
 GPERF_SITE		:= http://ftp.gnu.org/gnu/gperf
 GPERF_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GPERF_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/gperf/$(GPERF_VERSION)
@@ -48,10 +48,10 @@ GPERF_CONFIGURE_OPTS	:=
 GPERF_DEPS :=
 
 gperf_install:
-	$(call EMBTK_INSTALL_PKG,GPERF)
+	$(call embtk_install_pkg,GPERF)
 
 gperf_clean:
-	$(call EMBTK_CLEANUP_PKG,GPERF)
+	$(call embtk_cleanup_pkg,GPERF)
 
 #
 # gperf for for host
@@ -71,7 +71,7 @@ GPERF_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/gperf-$(GPERF_VERSION)
 # common targets
 #
 gperf_host_install:
-	$(call EMBTK_INSTALL_HOSTPKG,GPERF_HOST)
+	$(call embtk_install_hostpkg,GPERF_HOST)
 
 download_gperf download_gperf_host:
-	$(call EMBTK_DOWNLOAD_PKG,GPERF)
+	$(call embtk_download_pkg,GPERF)

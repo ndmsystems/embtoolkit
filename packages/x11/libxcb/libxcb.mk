@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBXCB_NAME := libxcb
-LIBXCB_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXCB)
+LIBXCB_VERSION := $(call embtk_get_pkgversion,LIBXCB)
 LIBXCB_SITE := http://xcb.freedesktop.org/dist
 LIBXCB_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXCB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxcb/$(LIBXCB_VERSION)
@@ -48,7 +48,7 @@ libxcb_install:
 
 $(LIBXCB_BUILD_DIR)/.installed: $(LIBXCB_DEPS) download_libxcb \
 	$(LIBXCB_BUILD_DIR)/.decompressed $(LIBXCB_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libxcb-$(LIBXCB_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBXCB_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBXCB_BUILD_DIR) DESTDIR=$(SYSROOT)/ install
@@ -58,16 +58,16 @@ $(LIBXCB_BUILD_DIR)/.installed: $(LIBXCB_DEPS) download_libxcb \
 	@touch $@
 
 download_libxcb:
-	$(call EMBTK_DOWNLOAD_PKG,LIBXCB)
+	$(call embtk_download_pkg,LIBXCB)
 
 $(LIBXCB_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBXCB)
+	$(call embtk_decompress_pkg,LIBXCB)
 
 $(LIBXCB_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBXCB)
+	$(call embtk_configure_pkg,LIBXCB)
 
 libxcb_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBXCB)
+	$(call embtk_cleanup_pkg,LIBXCB)
 
 $(LIBXCB_BUILD_DIR)/.patchlibtool:
 	@LIBXCB_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \

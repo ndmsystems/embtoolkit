@@ -41,7 +41,7 @@ inputproto_install:
 
 $(INPUTPROTO_BUILD_DIR)/.installed: download_inputproto \
 	$(INPUTPROTO_BUILD_DIR)/.decompressed $(INPUTPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	inputproto-$(INPUTPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(INPUTPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(INPUTPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -50,14 +50,14 @@ $(INPUTPROTO_BUILD_DIR)/.installed: download_inputproto \
 	@touch $@
 
 download_inputproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(INPUTPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(INPUTPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(INPUTPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(INPUTPROTO_PACKAGE) \
 	$(INPUTPROTO_SITE)/$(INPUTPROTO_PACKAGE)
 
 $(INPUTPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(INPUTPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(INPUTPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(INPUTPROTO_PACKAGE)
 	@touch $@
 
@@ -85,7 +85,7 @@ $(INPUTPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 inputproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup inputproto-$(INPUTPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup inputproto-$(INPUTPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(INPUTPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(INPUTPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(INPUTPROTO_INCLUDES)

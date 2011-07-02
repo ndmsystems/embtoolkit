@@ -40,7 +40,7 @@ fixesproto_install:
 
 $(FIXESPROTO_BUILD_DIR)/.installed: download_fixesproto \
 	$(FIXESPROTO_BUILD_DIR)/.decompressed $(FIXESPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	fixesproto-$(FIXESPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(FIXESPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(FIXESPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -49,14 +49,14 @@ $(FIXESPROTO_BUILD_DIR)/.installed: download_fixesproto \
 	@touch $@
 
 download_fixesproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(FIXESPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(FIXESPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(FIXESPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(FIXESPROTO_PACKAGE) \
 	$(FIXESPROTO_SITE)/$(FIXESPROTO_PACKAGE)
 
 $(FIXESPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(FIXESPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(FIXESPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(FIXESPROTO_PACKAGE)
 	@touch $@
 
@@ -84,7 +84,7 @@ $(FIXESPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 fixesproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup fixesproto-$(FIXESPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup fixesproto-$(FIXESPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(FIXESPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(FIXESPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(FIXESPROTO_INCLUDES)

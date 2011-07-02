@@ -108,7 +108,7 @@ endif
 
 #targets
 buildtoolchain: $(TOOLCHAINBUILD)
-	$(call EMBTK_GENERIC_MESSAGE,"You successfully build a toolchain for \
+	$(call embtk_generic_message,"You successfully build a toolchain for \
 	$(STRICT_GNU_TARGET) !!!")
 
 symlink_tools:

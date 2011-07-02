@@ -41,7 +41,7 @@ recordproto_install:
 
 $(RECORDPROTO_BUILD_DIR)/.installed: download_recordproto \
 	$(RECORDPROTO_BUILD_DIR)/.decompressed $(RECORDPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	recordproto-$(RECORDPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(RECORDPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(RECORDPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -50,14 +50,14 @@ $(RECORDPROTO_BUILD_DIR)/.installed: download_recordproto \
 	@touch $@
 
 download_recordproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(RECORDPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(RECORDPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(RECORDPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(RECORDPROTO_PACKAGE) \
 	$(RECORDPROTO_SITE)/$(RECORDPROTO_PACKAGE)
 
 $(RECORDPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(RECORDPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(RECORDPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(RECORDPROTO_PACKAGE)
 	@touch $@
 
@@ -84,7 +84,7 @@ $(RECORDPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 recordproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup recordproto-$(RECORDPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup recordproto-$(RECORDPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RECORDPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RECORDPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RECORDPROTO_INCLUDES)

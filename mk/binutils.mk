@@ -24,7 +24,7 @@
 ################################################################################
 
 BINUTILS_NAME := binutils
-BINUTILS_VERSION := $(call EMBTK_GET_PKG_VERSION,BINUTILS)
+BINUTILS_VERSION := $(call embtk_get_pkgversion,BINUTILS)
 BINUTILS_SITE := http://ftp.gnu.org/gnu/binutils
 BINUTILS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 BINUTILS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/binutils/$(BINUTILS_VERSION)
@@ -43,13 +43,13 @@ $(BINUTILS_BUILD_DIR)/.installed: download_binutils \
 	@touch $@
 
 download_binutils:
-	$(call EMBTK_DOWNLOAD_PKG,BINUTILS)
+	$(call embtk_download_pkg,BINUTILS)
 
 $(BINUTILS_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_HOSTPKG,BINUTILS)
+	$(call embtk_decompress_hostpkg,BINUTILS)
 
 $(BINUTILS_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MESSAGE,"binutils: Configuring \
+	$(call embtk_generic_message,"binutils: Configuring \
 	binutils-$(BINUTILS_VERSION) ...")
 	cd $(BINUTILS_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
 	$(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)/configure \

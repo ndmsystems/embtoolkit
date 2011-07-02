@@ -24,7 +24,7 @@
 ################################################################################
 
 NCURSES_NAME := ncurses
-NCURSES_VERSION := $(call EMBTK_GET_PKG_VERSION,NCURSES)
+NCURSES_VERSION := $(call embtk_get_pkgversion,NCURSES)
 NCURSES_SITE := http://ftp.gnu.org/pub/gnu/ncurses
 NCURSES_PACKAGE := ncurses-$(NCURSES_VERSION).tar.gz
 NCURSES_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
@@ -51,14 +51,14 @@ NCURSES_CONFIGURE_OPTS	:= --disable-rpath --without-cxx-binding	\
 			--program-prefix=""
 
 ncurses_install:
-	$(call EMBTK_INSTALL_PKG,NCURSES)
+	$(call embtk_install_pkg,NCURSES)
 	$(Q)$(MAKE) $(NCURSES_BUILD_DIR)/.special
 
 download_ncurses:
-	$(call EMBTK_DOWNLOAD_PKG,NCURSES)
+	$(call embtk_download_pkg,NCURSES)
 
 ncurses_clean:
-	$(call EMBTK_CLEANUP_PKG,NCURSES)
+	$(call embtk_cleanup_pkg,NCURSES)
 
 .PHONY: $(NCURSES_BUILD_DIR)/.special ncurses_clean
 

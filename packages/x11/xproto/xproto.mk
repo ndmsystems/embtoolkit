@@ -43,7 +43,7 @@ xproto_install:
 
 $(XPROTO_BUILD_DIR)/.installed: download_xproto \
 	$(XPROTO_BUILD_DIR)/.decompressed $(XPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	xproto-$(XPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(XPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(XPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -52,14 +52,14 @@ $(XPROTO_BUILD_DIR)/.installed: download_xproto \
 	@touch $@
 
 download_xproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(XPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(XPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(XPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(XPROTO_PACKAGE) \
 	$(XPROTO_SITE)/$(XPROTO_PACKAGE)
 
 $(XPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(XPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(XPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(XPROTO_PACKAGE)
 	@touch $@
 
@@ -87,7 +87,7 @@ $(XPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 xproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xproto...")
+	$(call embtk_generic_message,"cleanup xproto...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XPROTO_INCLUDES)

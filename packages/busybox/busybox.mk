@@ -24,7 +24,7 @@
 ################################################################################
 
 BB_NAME := busybox
-BB_VERSION := $(call EMBTK_GET_PKG_VERSION,BB)
+BB_VERSION := $(call embtk_get_pkgversion,BB)
 BB_SITE := http://www.busybox.net/downloads
 BB_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 BB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/busybox/$(BB_VERSION)
@@ -36,7 +36,7 @@ busybox_install: $(BB_BUILD_DIR)/.installed
 
 $(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed \
 	$(BB_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	busybox-$(BB_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(BB_BUILD_DIR) \
 	CROSS_COMPILE="$(CCACHE_HOST_DIR)/bin/ccache $(TOOLS)/bin/$(STRICT_GNU_TARGET)-" \
@@ -48,16 +48,16 @@ $(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed \
 	@touch $@
 
 download_busybox:
-	$(call EMBTK_DOWNLOAD_PKG,BB)
+	$(call embtk_download_pkg,BB)
 
 $(BB_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,BB)
+	$(call embtk_decompress_pkg,BB)
 
 $(BB_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MESSAGE,"Configuring busybox...")
+	$(call embtk_generic_message,"Configuring busybox...")
 	@grep "CONFIG_KEMBTK_BUSYB_" $(EMBTK_ROOT)/.config | \
 	sed -e 's/CONFIG_KEMBTK_BUSYB_*/CONFIG_/g' > $(BB_BUILD_DIR)/.config
 	@sed -i 's/_1_13_X_1_14_X//g' $(BB_BUILD_DIR)/.config
 
 busybox_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup busybox...")
+	$(call embtk_generic_message,"cleanup busybox...")

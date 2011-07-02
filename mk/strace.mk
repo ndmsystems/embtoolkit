@@ -24,7 +24,7 @@
 ################################################################################
 
 STRACE_NAME := strace
-STRACE_VERSION:= $(call EMBTK_GET_PKG_VERSION,STRACE)
+STRACE_VERSION:= $(call embtk_get_pkgversion,STRACE)
 STRACE_SITE:=http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
 STRACE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 STRACE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/strace/$(STRACE_VERSION)
@@ -39,10 +39,10 @@ STRACE_LIBS =
 STRACE_PKGCONFIGS =
 
 strace_install:
-	$(call EMBTK_INSTALL_PKG,STRACE)
+	$(call embtk_install_pkg,STRACE)
 
 download_strace:
-	$(call EMBTK_DOWNLOAD_PKG,STRACE)
+	$(call embtk_download_pkg,STRACE)
 
 strace_clean:
-	$(call EMBTK_CLEANUP_PKG,STRACE)
+	$(call embtk_cleanup_pkg,STRACE)

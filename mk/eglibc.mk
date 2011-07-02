@@ -68,7 +68,7 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download \
 	@touch $@
 
 eglibc_download:
-	$(call EMBTK_GENERIC_MESSAGE,"downloading eglibc-$(EGLIBC_VERSION) \
+	$(call embtk_generic_message,"downloading eglibc-$(EGLIBC_VERSION) \
 	if necessary ...")
 ifeq ($(CONFIG_EMBTK_EGLIBC_VERSION_STRING),"trunk")
 	@cd $(EMBTK_ROOT)/src; \
@@ -145,7 +145,7 @@ $(EGLIBC_BUILD_DIR)/.configured:
 	@touch $@
 
 EGLIBC_OPTIONS_PARSE:
-	$(call EMBTK_GENERIC_MESSAGE,"Parsing \
+	$(call embtk_generic_message,"Parsing \
 	eglibc-$(EGLIBC_VERSION) option groups...")
 	@cat $(OPTION_GROUPS_FILE) > $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
 	@echo "#######################################################" >> $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config

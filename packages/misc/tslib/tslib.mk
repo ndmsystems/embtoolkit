@@ -24,7 +24,7 @@
 ################################################################################
 
 TSLIB_NAME		:= tslib
-TSLIB_VERSION		:= $(call EMBTK_GET_PKG_VERSION,TSLIB)
+TSLIB_VERSION		:= $(call embtk_get_pkgversion,TSLIB)
 TSLIB_SITE		:= http://download.berlios.de/tslib
 TSLIB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 TSLIB_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/tslib/$(TSLIB_VERSION)
@@ -41,14 +41,14 @@ TSLIB_PKGCONFIGS	= tslib*.pc
 TSLIB_DEPS =
 
 tslib_install:
-	$(call EMBTK_INSTALL_PKG,TSLIB)
+	$(call embtk_install_pkg,TSLIB)
 	$(Q)$(MAKE) $(TSLIB_BUILD_DIR)/.special
 
 download_tslib:
-	$(call EMBTK_DOWNLOAD_PKG,TSLIB)
+	$(call embtk_download_pkg,TSLIB)
 
 tslib_clean:
-	$(call EMBTK_CLEANUP_PKG,TSLIB)
+	$(call embtk_cleanup_pkg,TSLIB)
 
 .PHONY: $(TSLIB_BUILD_DIR)/.special
 

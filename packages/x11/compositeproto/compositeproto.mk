@@ -41,7 +41,7 @@ compositeproto_install:
 
 $(COMPOSITEPROTO_BUILD_DIR)/.installed: download_compositeproto \
 	$(COMPOSITEPROTO_BUILD_DIR)/.decompressed $(COMPOSITEPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	compositeproto-$(COMPOSITEPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(COMPOSITEPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(COMPOSITEPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -50,14 +50,14 @@ $(COMPOSITEPROTO_BUILD_DIR)/.installed: download_compositeproto \
 	@touch $@
 
 download_compositeproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(COMPOSITEPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(COMPOSITEPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(COMPOSITEPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(COMPOSITEPROTO_PACKAGE) \
 	$(COMPOSITEPROTO_SITE)/$(COMPOSITEPROTO_PACKAGE)
 
 $(COMPOSITEPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(COMPOSITEPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(COMPOSITEPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(COMPOSITEPROTO_PACKAGE)
 	@touch $@
 
@@ -85,7 +85,7 @@ $(COMPOSITEPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 compositeproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup compositeproto-$(COMPOSITEPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup compositeproto-$(COMPOSITEPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(COMPOSITEPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(COMPOSITEPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(COMPOSITEPROTO_INCLUDES)

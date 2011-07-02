@@ -24,7 +24,7 @@
 ################################################################################
 
 OPENSSL_NAME := openssl
-OPENSSL_VERSION := $(call EMBTK_GET_PKG_VERSION,OPENSSL)
+OPENSSL_VERSION := $(call embtk_get_pkgversion,OPENSSL)
 OPENSSL_SITE := ftp://ftp.openssl.org/source
 OPENSSL_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 OPENSSL_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/openssl/$(OPENSSL_VERSION)
@@ -57,7 +57,7 @@ openssl_install:
 
 $(OPENSSL_BUILD_DIR)/.installed: download_openssl \
 	$(OPENSSL_BUILD_DIR)/.decompressed $(OPENSSL_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	openssl-$(OPENSSL_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(OPENSSL_BUILD_DIR) CC=$(TARGETCC_CACHED)
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
@@ -72,10 +72,10 @@ endif
 	@touch $@
 
 download_openssl:
-	$(call EMBTK_DOWNLOAD_PKG,OPENSSL)
+	$(call embtk_download_pkg,OPENSSL)
 
 $(OPENSSL_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,OPENSSL)
+	$(call embtk_decompress_pkg,OPENSSL)
 
 $(OPENSSL_BUILD_DIR)/.configured:
 	$(Q)cd $(OPENSSL_BUILD_DIR); \
@@ -84,7 +84,7 @@ $(OPENSSL_BUILD_DIR)/.configured:
 	@touch $@
 
 openssl_clean:
-	$(call EMBTK_CLEANUP_PKG,OPENSSL)
+	$(call embtk_cleanup_pkg,OPENSSL)
 
 .PHONY: $(OPENSSL_BUILD_DIR)/.special
 

@@ -24,7 +24,7 @@
 ################################################################################
 
 CAIRO_NAME		:= cairo
-CAIRO_VERSION		:= $(call EMBTK_GET_PKG_VERSION,CAIRO)
+CAIRO_VERSION		:= $(call embtk_get_pkgversion,CAIRO)
 CAIRO_SITE		:= http://www.cairographics.org/releases
 CAIRO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 CAIRO_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/cairo/$(CAIRO_VERSION)
@@ -64,10 +64,10 @@ CAIRO_CONFIGURE_ENV	:= png_CFLAGS=`$(PKG_CONFIG_BIN) libpng --cflags`
 CAIRO_CONFIGURE_ENV	+= png_LIBS=`$(PKG_CONFIG_BIN) libpng --cflags`
 
 cairo_install:
-	$(call EMBTK_INSTALL_PKG,CAIRO)
+	$(call embtk_install_pkg,CAIRO)
 
 download_cairo:
-	$(call EMBTK_DOWNLOAD_PKG,CAIRO)
+	$(call embtk_download_pkg,CAIRO)
 
 cairo_clean:
-	$(call EMBTK_CLEANUP_PKG,CAIRO)
+	$(call embtk_cleanup_pkg,CAIRO)

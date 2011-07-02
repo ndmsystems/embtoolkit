@@ -24,7 +24,7 @@
 ################################################################################
 
 ZLIB_NAME		:= zlib
-ZLIB_VERSION		:= $(call EMBTK_GET_PKG_VERSION,ZLIB)
+ZLIB_VERSION		:= $(call embtk_get_pkgversion,ZLIB)
 ZLIB_SITE		:= http://zlib.net
 ZLIB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 ZLIB_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/zlib/$(ZLIB_VERSION)
@@ -59,10 +59,10 @@ $(ZLIB_BUILD_DIR)/.installed: download_zlib \
 	@touch $@
 
 $(ZLIB_SRC_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,ZLIB)
+	$(call embtk_decompress_pkg,ZLIB)
 
 $(ZLIB_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MSG,"Configure $(ZLIB_PACKAGE)...")
+	$(call embtk_generic_msg,"Configure $(ZLIB_PACKAGE)...")
 	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$(ZLIB_CONFIGURE_OPTS)")
 	@cd $(ZLIB_BUILD_DIR);						\
 	CC=$(TARGETCC_CACHED)						\
@@ -88,7 +88,7 @@ $(ZLIB_BUILD_DIR)/.configured:
 	@touch $@
 
 zlib_clean:
-	$(call EMBTK_CLEANUP_PKG,ZLIB)
+	$(call embtk_cleanup_pkg,ZLIB)
 
 ########################
 # zlib on host machine #
@@ -118,10 +118,10 @@ $(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib \
 	@touch $@
 
 $(ZLIB_HOST_SRC_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_HOSTPKG,ZLIB_HOST)
+	$(call embtk_decompress_hostpkg,ZLIB_HOST)
 
 $(ZLIB_HOST_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MSG,"Configure $(ZLIB_HOST_PACKAGE) for host...")
+	$(call embtk_generic_msg,"Configure $(ZLIB_HOST_PACKAGE) for host...")
 	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$(ZLIB_HOST_CONFIGURE_OPTS)")
 	@cd $(ZLIB_HOST_BUILD_DIR);					\
 	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\
@@ -139,4 +139,4 @@ zlib_host_clean:
 
 #zlib download
 download_zlib download_zlib_host:
-	$(call EMBTK_DOWNLOAD_PKG,ZLIB)
+	$(call embtk_download_pkg,ZLIB)

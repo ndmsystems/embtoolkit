@@ -41,10 +41,10 @@ XKBCOMP_PKGCONFIGS =
 XKBCOMP_DEPS = libxkbfile_install
 
 xkbcomp_install:
-	$(call EMBTK_INSTALL_PKG,XKBCOMP)
+	$(call embtk_install_pkg,XKBCOMP)
 
 download_xkbcomp:
-	$(call EMBTK_CLEANUP_PKG,XKBCOMP)
+	$(call embtk_cleanup_pkg,XKBCOMP)
 
 xkbcomp_clean:
-	$(call EMBTK_CLEANUP_PKG,XKBCOMP)
+	$(call embtk_cleanup_pkg,XKBCOMP)

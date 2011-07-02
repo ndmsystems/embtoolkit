@@ -27,7 +27,7 @@ MAKEDEVS_DIR := $(HOSTTOOLS)/usr/local/makedevs
 makedevs_install: $(MAKEDEVS_DIR)/.installed
 
 $(MAKEDEVS_DIR)/.installed:
-	$(call EMBTK_GENERIC_MESSAGE,"Installing makedevs...")
+	$(call embtk_generic_message,"Installing makedevs...")
 	@mkdir -p $(MAKEDEVS_DIR)
 	$(subst ",,$(strip $(HOSTCC_CACHED))) -o $(MAKEDEVS_DIR)/makedevs $(EMBTK_ROOT)/src/makedevs/makedevs.c
 	@touch $@

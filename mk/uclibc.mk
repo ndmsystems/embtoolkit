@@ -40,7 +40,7 @@ uclibc_install: $(UCLIBC_BUILD_DIR)/.installed
 
 $(UCLIBC_BUILD_DIR)/.installed: uclibc_download \
 	$(UCLIBC_BUILD_DIR)/.decompressed $(UCLIBC_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Building and installing \
+	$(call embtk_generic_message,"Building and installing \
 	uClibc-$(UCLIBC_VERSION) ...")
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) oldconfig
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/ \
@@ -59,7 +59,7 @@ $(UCLIBC_BUILD_DIR)/.installed: uclibc_download \
 	UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install
 
 uclibc_download:
-	$(call EMBTK_GENERIC_MESSAGE,"downloading uClibc-$(UCLIBC_VERSION) \
+	$(call embtk_generic_message,"downloading uClibc-$(UCLIBC_VERSION) \
 	if necessary ...")
 ifeq ($(CONFIG_EMBTK_UCLIBC_VERSION_GIT),y)
 	@test -e $(EMBTK_ROOT)/src/uClibc-git || \
@@ -87,7 +87,7 @@ ifeq ($(CONFIG_EMBTK_UCLIBC_NEED_PATCH),y)
 endif
 
 $(UCLIBC_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing \
+	$(call embtk_generic_message,"Decompressing \
 	uClibc-$(UCLIBC_VERSION) ...")
 	$(Q)tar -C $(TOOLS_BUILD) -xjvf $(DOWNLOAD_DIR)/$(UCLIBC_PACKAGE)
 ifeq ($(CONFIG_EMBTK_UCLIBC_NEED_PATCH),y)
@@ -96,7 +96,7 @@ ifeq ($(CONFIG_EMBTK_UCLIBC_NEED_PATCH),y)
 endif
 
 $(UCLIBC_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MESSAGE,"Configuring \
+	$(call embtk_generic_message,"Configuring \
 	uClibc-$(UCLIBC_VERSION) ...")
 	$(Q)grep "CONFIG_KEMBTK_UCLIBC_" $(EMBTK_ROOT)/.config | \
 	sed -e 's/CONFIG_KEMBTK_UCLIBC_*//g' \

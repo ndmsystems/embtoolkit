@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBTOOL_NAME		:= libtool
-LIBTOOL_VERSION		:= $(call EMBTK_GET_PKG_VERSION,LIBTOOL)
+LIBTOOL_VERSION		:= $(call embtk_get_pkgversion,LIBTOOL)
 LIBTOOL_SITE		:= http://ftp.gnu.org/gnu/libtool
 LIBTOOL_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBTOOL_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/libtool/$(LIBTOOL_VERSION)
@@ -39,4 +39,4 @@ export LIBTOOL LIBTOOLIZE
 LIBTOOL_CONFIGURE_OPTS := --disable-ltdl-install
 
 libtool_install:
-	$(call EMBTK_INSTALL_HOSTPKG,LIBTOOL)
+	$(call embtk_install_hostpkg,LIBTOOL)

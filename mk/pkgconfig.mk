@@ -24,7 +24,7 @@
 ################################################################################
 
 PKGCONFIG_NAME		:= pkg-config
-PKGCONFIG_VERSION	:= $(call EMBTK_GET_PKG_VERSION,PKGCONFIG)
+PKGCONFIG_VERSION	:= $(call embtk_get_pkgversion,PKGCONFIG)
 PKGCONFIG_SITE		:= http://pkgconfig.freedesktop.org/releases
 PKGCONFIG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 PKGCONFIG_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/pkgconfig/$(PKGCONFIG_VERSION)
@@ -40,7 +40,7 @@ PKGCONFIG_PREFIX	:= /usr
 PKGCONFIG_DESTDIR	:= $(HOSTTOOLS)
 
 pkgconfig_install:
-	$(call EMBTK_INSTALL_HOSTPKG,PKGCONFIG)
+	$(call embtk_install_hostpkg,PKGCONFIG)
 
 download_pkgconfig:
-	$(call EMBTK_DOWNLOAD_PKG,PKGCONFIG)
+	$(call embtk_download_pkg,PKGCONFIG)

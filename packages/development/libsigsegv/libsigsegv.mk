@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBSIGSEGV_NAME		:= libsigsegv
-LIBSIGSEGV_VERSION	:= $(call EMBTK_GET_PKG_VERSION,LIBSIGSEGV)
+LIBSIGSEGV_VERSION	:= $(call embtk_get_pkgversion,LIBSIGSEGV)
 LIBSIGSEGV_SITE		:= ftp://ftp.gnu.org/pub/gnu/libsigsegv
 LIBSIGSEGV_SITE_MIRROR3	:= http://ftp.gnu.org/gnu/libsigsegv
 LIBSIGSEGV_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
@@ -46,10 +46,10 @@ LIBSIGSEGV_CONFIGURE_OPTS :=
 LIBSIGSEGV_DEPS :=
 
 libsigsegv_install:
-	$(call EMBTK_INSTALL_PKG,LIBSIGSEGV)
+	$(call embtk_install_pkg,LIBSIGSEGV)
 
 download_libsigsegv:
-	$(call EMBTK_DOWNLOAD_PKG,LIBSIGSEGV)
+	$(call embtk_download_pkg,LIBSIGSEGV)
 
 libsigsegv_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBSIGSEGV)
+	$(call embtk_cleanup_pkg,LIBSIGSEGV)

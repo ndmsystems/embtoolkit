@@ -55,13 +55,13 @@ ccache_download:
 	$(CCACHE_SITE)/$(CCACHE_PACKAGE)
 
 $(CCACHE_HOST_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(CCACHE_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(CCACHE_PACKAGE) ...")
 	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(CCACHE_PACKAGE)
 	@mkdir -p $(CCACHE_HOST_BUILD_DIR)
 	@touch $@
 
 $(CCACHE_HOST_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MESSAGE,"Configure ccache-$(CCACHE_VERSION) ...")
+	$(call embtk_generic_message,"Configure ccache-$(CCACHE_VERSION) ...")
 	cd $(CCACHE_HOST_BUILD_DIR) ; \
 	$(TOOLS_BUILD)/ccache-$(CCACHE_VERSION)/configure \
 	--prefix=$(CCACHE_HOST_DIR) \

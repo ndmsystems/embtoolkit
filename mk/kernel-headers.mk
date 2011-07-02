@@ -31,9 +31,9 @@ __LINUX_SITE		= $(strip $(if $(CONFIG_EMBTK_LINUX_HAVE_MIRROR),	\
 	$(__LINUX_SITE_BASE)/$(LINUX_MAJORV)$(__LINUX_SITE_LONGTERM)))
 
 LINUX_NAME		:= linux
-LINUX_MAJORV		:= $(call EMBTK_GET_PKG_VERSION,LINUX_MAJOR)
-LINUX_LONGTERMV		:= $(call EMBTK_GET_PKG_VERSION,LINUX_LONGTERM)
-LINUX_VERSION		:= $(call EMBTK_GET_PKG_VERSION,LINUX)
+LINUX_MAJORV		:= $(call embtk_get_pkgversion,LINUX_MAJOR)
+LINUX_LONGTERMV		:= $(call embtk_get_pkgversion,LINUX_LONGTERM)
+LINUX_VERSION		:= $(call embtk_get_pkgversion,LINUX)
 LINUX_SITE		:= $(call __LINUX_SITE)
 LINUX_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LINUX_PACKAGE		:= linux-$(LINUX_VERSION).tar.bz2
@@ -49,8 +49,8 @@ kernel-headers_install:  download_linux $(LINUX_BUILD_DIR)/.decompressed
 	$(MAKE) -C $(LINUX_BUILD_DIR) headers_install INSTALL_HDR_PATH=$(HOSTTOOLS)/usr
 
 download_linux: 
-	$(call EMBTK_DOWNLOAD_PKG,LINUX)
+	$(call embtk_download_pkg,LINUX)
 
 $(LINUX_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_HOSTPKG,LINUX)
+	$(call embtk_decompress_hostpkg,LINUX)
 

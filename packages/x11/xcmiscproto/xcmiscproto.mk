@@ -40,7 +40,7 @@ xcmiscproto_install:
 
 $(XCMISCPROTO_BUILD_DIR)/.installed: download_xcmiscproto \
 	$(XCMISCPROTO_BUILD_DIR)/.decompressed $(XCMISCPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	xcmiscproto-$(XCMISCPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(XCMISCPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(XCMISCPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -49,14 +49,14 @@ $(XCMISCPROTO_BUILD_DIR)/.installed: download_xcmiscproto \
 	@touch $@
 
 download_xcmiscproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(XCMISCPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(XCMISCPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(XCMISCPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(XCMISCPROTO_PACKAGE) \
 	$(XCMISCPROTO_SITE)/$(XCMISCPROTO_PACKAGE)
 
 $(XCMISCPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(XCMISCPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(XCMISCPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(XCMISCPROTO_PACKAGE)
 	@touch $@
 
@@ -84,7 +84,7 @@ $(XCMISCPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 xcmiscproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup xcmiscproto-$(XCMISCPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup xcmiscproto-$(XCMISCPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XCMISCPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XCMISCPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XCMISCPROTO_INCLUDES)

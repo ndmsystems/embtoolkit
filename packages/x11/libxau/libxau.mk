@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBXAU_NAME := libXau
-LIBXAU_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXAU)
+LIBXAU_VERSION := $(call embtk_get_pkgversion,LIBXAU)
 LIBXAU_SITE := http://xorg.freedesktop.org/archive/individual/lib
 LIBXAU_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXAU_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxau/$(LIBXAU_VERSION)
@@ -46,7 +46,7 @@ libxau_install:
 
 $(LIBXAU_BUILD_DIR)/.installed: $(LIBXAU_DEPS) download_libxau \
 	$(LIBXAU_BUILD_DIR)/.decompressed $(LIBXAU_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libxau-$(LIBXAU_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBXAU_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBXAU_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -55,13 +55,13 @@ $(LIBXAU_BUILD_DIR)/.installed: $(LIBXAU_DEPS) download_libxau \
 	@touch $@
 
 download_libxau:
-	$(call EMBTK_DOWNLOAD_PKG,LIBXAU)
+	$(call embtk_download_pkg,LIBXAU)
 
 $(LIBXAU_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBXAU)
+	$(call embtk_decompress_pkg,LIBXAU)
 
 $(LIBXAU_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBXAU)
+	$(call embtk_configure_pkg,LIBXAU)
 
 libxau_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBXAU)
+	$(call embtk_cleanup_pkg,LIBXAU)

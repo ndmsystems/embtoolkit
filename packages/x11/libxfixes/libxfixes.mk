@@ -46,7 +46,7 @@ libxfixes_install:
 
 $(LIBXFIXES_BUILD_DIR)/.installed: $(LIBXFIXES_DEPS) download_libxfixes \
 	$(LIBXFIXES_BUILD_DIR)/.decompressed $(LIBXFIXES_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libxfixes-$(LIBXFIXES_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBXFIXES_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBXFIXES_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -55,13 +55,13 @@ $(LIBXFIXES_BUILD_DIR)/.installed: $(LIBXFIXES_DEPS) download_libxfixes \
 	@touch $@
 
 download_libxfixes:
-	$(call EMBTK_DOWNLOAD_PKG,LIBXFIXES)
+	$(call embtk_download_pkg,LIBXFIXES)
 
 $(LIBXFIXES_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBXFIXES)
+	$(call embtk_decompress_pkg,LIBXFIXES)
 
 $(LIBXFIXES_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBXFIXES)
+	$(call embtk_configure_pkg,LIBXFIXES)
 
 libxfixes_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBXFIXES)
+	$(call embtk_cleanup_pkg,LIBXFIXES)

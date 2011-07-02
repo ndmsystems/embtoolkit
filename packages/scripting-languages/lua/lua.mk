@@ -43,7 +43,7 @@ lua_install:
 
 $(LUA_BUILD_DIR)/.installed: $(LUA_DEPS) download_lua \
 	$(LUA_BUILD_DIR)/.decompressed
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	lua-$(LUA_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LUA_BUILD_DIR) CC=$(TARGETCC_CACHED) \
 	AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB) \
@@ -55,7 +55,7 @@ $(LUA_BUILD_DIR)/.installed: $(LUA_DEPS) download_lua \
 	@touch $@
 
 download_lua:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(LUA_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(LUA_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(LUA_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(LUA_PACKAGE) \
@@ -67,7 +67,7 @@ ifeq ($(CONFIG_EMBTK_LUA_NEED_PATCH),y)
 endif
 
 $(LUA_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(LUA_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(LUA_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(LUA_PACKAGE)
 ifeq ($(CONFIG_EMBTK_LUA_NEED_PATCH),y)
 	@cd $(LUA_BUILD_DIR); \
@@ -76,7 +76,7 @@ endif
 	@touch $@
 
 lua_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup lua...")
+	$(call embtk_generic_message,"cleanup lua...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LUA_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LUA_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LUA_INCLUDES)

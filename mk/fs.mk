@@ -29,18 +29,18 @@ SQUASHFS_ROOTFS		:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).sq
 INITRAMFS_ROOTFS	:= $(EMBTK_GENERATED)/initramfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 
 build_rootfs_devnodes:
-	$(call EMBTK_GENERIC_MSG,"Populating device nodes of the rootfs...")
+	$(call embtk_generic_msg,"Populating device nodes of the rootfs...")
 	@$(FAKEROOT_BIN) -s $(FAKEROOT_ENV_FILE) -- $(MAKEDEVS_DIR)/makedevs \
 	-d $(EMBTK_ROOT)/src/devices_table.txt $(ROOTFS)
 
 build_tarbz2_rootfs:
-	$(call EMBTK_GENERIC_MSG,"Generating TAR.BZ2 file of the rootfs...")
+	$(call embtk_generic_msg,"Generating TAR.BZ2 file of the rootfs...")
 	@cd $(ROOTFS) ; $(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- \
 	tar cjf rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).tar.bz2 * ; \
 	mv $(BZIP2_ROOTFS) $(EMBTK_GENERATED)/
 
 build_jffs2_rootfs:
-	$(call EMBTK_GENERIC_MSG,"Generating JFFS2 rootfs..")
+	$(call embtk_generic_msg,"Generating JFFS2 rootfs..")
 	@$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- \
 	$(HOSTTOOLS)/usr/sbin/mkfs.jffs2 \
 	--eraseblock=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE) \
@@ -60,12 +60,12 @@ build_jffs2_rootfs:
 	@rm -rf $(JFFS2_ROOTFS).temp
 
 build_squashfs_rootfs:
-	$(call EMBTK_GENERIC_MSG,"Generating SQUASHFS rootfs...")
+	$(call embtk_generic_msg,"Generating SQUASHFS rootfs...")
 	$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- \
 	$(MKSQUASHFS_BIN) $(ROOTFS) $(SQUASHFS_ROOTFS)
 
 build_initramfs_archive:
-	$(call EMBTK_GENERIC_MSG,"Generating cpio archive for INITRAMFS...")
+	$(call embtk_generic_msg,"Generating cpio archive for INITRAMFS...")
 	@$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- \
 	$(EMBTK_ROOT)/scripts/mkinitramfs $(ROOTFS) \
 	$(if $(EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO_GZIPED),gzip,bzip2) \

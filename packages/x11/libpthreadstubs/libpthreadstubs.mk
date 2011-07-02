@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBPTHREADSTUBS_NAME := libpthread-stubs
-LIBPTHREADSTUBS_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBPTHREADSTUBS)
+LIBPTHREADSTUBS_VERSION := $(call embtk_get_pkgversion,LIBPTHREADSTUBS)
 LIBPTHREADSTUBS_SITE := http://xcb.freedesktop.org/dist
 LIBPTHREADSTUBS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBPTHREADSTUBS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libpthreadstubs/$(LIBPTHREADSTUBS_VERSION)
@@ -44,7 +44,7 @@ libpthreadstubs_install:
 
 $(LIBPTHREADSTUBS_BUILD_DIR)/.installed: download_libpthreadstubs \
 	$(LIBPTHREADSTUBS_BUILD_DIR)/.decompressed $(LIBPTHREADSTUBS_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libpthreadstubs-$(LIBPTHREADSTUBS_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBPTHREADSTUBS_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBPTHREADSTUBS_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -53,13 +53,13 @@ $(LIBPTHREADSTUBS_BUILD_DIR)/.installed: download_libpthreadstubs \
 	@touch $@
 
 download_libpthreadstubs:
-	$(call EMBTK_DOWNLOAD_PKG,LIBPTHREADSTUBS)
+	$(call embtk_download_pkg,LIBPTHREADSTUBS)
 
 $(LIBPTHREADSTUBS_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBPTHREADSTUBS)
+	$(call embtk_decompress_pkg,LIBPTHREADSTUBS)
 
 $(LIBPTHREADSTUBS_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBPTHREADSTUBS)
+	$(call embtk_configure_pkg,LIBPTHREADSTUBS)
 
 libpthreadstubs_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBPTHREADSTUBS)
+	$(call embtk_cleanup_pkg,LIBPTHREADSTUBS)

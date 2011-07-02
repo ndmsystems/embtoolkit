@@ -24,37 +24,37 @@
 ################################################################################
 
 # Embtoolkit colors
-EMBTK_COLOR_RED = "\E[1;31m"
-EMBTK_COLOR_GREEN = "\E[1;32m"
-EMBTK_COLOR_YELLOW = "\E[1;33m"
-EMBTK_COLOR_BLUE = "\E[1;34m"
-EMBTK_NO_COLOR = "\E[0m"
+__embtk_color_red = "\E[1;31m"
+__embtk_color_green = "\E[1;32m"
+__embtk_color_yellow = "\E[1;33m"
+__embtk_color_blue = "\E[1;34m"
+__embtk_no_color = "\E[0m"
 
 # echo colored text
-#usage $(call ECHO_RED,$(TEXT))
-define ECHO_RED
-	@echo -e $(EMBTK_COLOR_RED)$(1)$(EMBTK_NO_COLOR)
+#usage $(call embtk_echo_red,$(TEXT))
+define embtk_echo_red
+	@echo -e $(__embtk_color_red)$(1)$(__embtk_no_color)
 endef
-#usage $(call ECHO_GREEN,$(TEXT))
-define ECHO_GREEN
-	@echo -e $(EMBTK_COLOR_GREEN)$(1)$(EMBTK_NO_COLOR)
+#usage $(call embtk_echo_green,$(TEXT))
+define embtk_echo_green
+	@echo -e $(__embtk_color_green)$(1)$(__embtk_no_color)
 endef
-#usage $(call ECHO_YELLOW,$(TEXT))
-define ECHO_YELLOW
-	@echo -e $(EMBTK_COLOR_YELLOW)$(1)$(EMBTK_NO_COLOR)
+#usage $(call echo_yellow,$(TEXT))
+define echo_yellow
+	@echo -e $(__embtk_color_yellow)$(1)$(__embtk_no_color)
 endef
-#usage $(call ECHO_BLUE,$(TEXT))
-define ECHO_BLUE
-	@echo -e $(EMBTK_COLOR_BLUE)$(1)$(EMBTK_NO_COLOR)
+#usage $(call embtk_echo_blue,$(TEXT))
+define embtk_echo_blue
+	@echo -e $(__embtk_color_blue)$(1)$(__embtk_no_color)
 endef
 
 #
 # wget wrapper
-# usage: $(call EMBTK_WGET,$(OUTPUT_FILE),$(SITE),$(FOREIGN_FILE))
+# usage: $(call embtk_wget,$(OUTPUT_FILE),$(SITE),$(FOREIGN_FILE))
 #
-__WGET_OPTS = --tries=5 --timeout=10 --waitretry=5
-define EMBTK_WGET
-	wget $(__WGET_OPTS) -O $(DOWNLOAD_DIR)/$(strip $(1))		\
+__wget_opts = --tries=5 --timeout=10 --waitretry=5
+define embtk_wget
+	wget $(__wget_opts) -O $(DOWNLOAD_DIR)/$(strip $(1))		\
 	$(strip $(2))/$(strip $(3)) ||					\
 	wget $(__WGET_OPTS) --no-passive-ftp -O 			\
 	$(DOWNLOAD_DIR)/$(strip $(1))	$(strip $(2))/$(strip $(3))
@@ -63,86 +63,86 @@ endef
 #Decompress message
 #usage $(call EMBTK_DECOMPRESS_MSG,$(NAME_PACKAGE))
 define EMBTK_DECOMPRESS_MSG
-	$(call ECHO_BLUE,"################################################################################")
-	$(call ECHO_BLUE,"# EmbToolkit # Decompressing $(1)")
-	$(call ECHO_BLUE,"################################################################################")
+	$(call embtk_echo_blue,"################################################################################")
+	$(call embtk_echo_blue,"# EmbToolkit # Decompressing $(1)")
+	$(call embtk_echo_blue,"################################################################################")
 endef
 
 #Configure message
 #usage $(call EMBTK_CONFIGURE_MSG,$(NAME_PACKAGE))
 define EMBTK_CONFIGURE_MSG
-	$(call ECHO_BLUE,"################################################################################")
-	$(call ECHO_BLUE,"# EmbToolkit # Configuring $(1)")
-	$(call ECHO_BLUE,"################################################################################")
+	$(call embtk_echo_blue,"################################################################################")
+	$(call embtk_echo_blue,"# EmbToolkit # Configuring $(1)")
+	$(call embtk_echo_blue,"################################################################################")
 endef
 
 #Build message
 #usage $(call EMBTK_BUILD_MSG,$(NAME_PACKAGE))
 define EMBTK_BUILD_MSG
-	$(call ECHO_BLUE,"################################################################################")
-	$(call ECHO_BLUE,"# EmbToolkit # Building $(1)")
-	$(call ECHO_BLUE,"################################################################################")
+	$(call embtk_echo_blue,"################################################################################")
+	$(call embtk_echo_blue,"# EmbToolkit # Building $(1)")
+	$(call embtk_echo_blue,"################################################################################")
 endef
 
 #Install message
 #usage $(call EMBTK_INSTALL_MSG,$(NAME_PACKAGE))
 define EMBTK_INSTALL_MSG
-	$(call ECHO_BLUE,"################################################################################")
-	$(call ECHO_BLUE,"# EmbToolkit # Installing $(1)")
-	$(call ECHO_BLUE,"################################################################################")
+	$(call embtk_echo_blue,"################################################################################")
+	$(call embtk_echo_blue,"# EmbToolkit # Installing $(1)")
+	$(call embtk_echo_blue,"################################################################################")
 endef
 
 #Install message
-#usage $(call EMBTK_ERROR_MSG,$(MESSAGE))
-define EMBTK_ERROR_MSG
-	$(call ECHO_RED,"################################################################################")
-	$(call ECHO_RED,"# EmbToolkit # ERROR: $(1)")
-	$(call ECHO_RED,"################################################################################")
+#usage $(call embtk_error_msg,$(MESSAGE))
+define embtk_error_msg
+	$(call embtk_echo_red,"################################################################################")
+	$(call embtk_echo_red,"# EmbToolkit # ERROR: $(1)")
+	$(call embtk_echo_red,"################################################################################")
 endef
 
 #Generic message
-#usage $(call EMBTK_GENERIC_MESSAGE,$(GENERIC_MESSAGE))
-define EMBTK_GENERIC_MESSAGE
-	$(call ECHO_BLUE,"################################################################################")
-	$(call ECHO_BLUE,"# EmbToolkit # $(1)")
-	$(call ECHO_BLUE,"################################################################################")
+#usage $(call embtk_generic_message,$(GENERIC_MESSAGE))
+define embtk_generic_message
+	$(call embtk_echo_blue,"################################################################################")
+	$(call embtk_echo_blue,"# EmbToolkit # $(1)")
+	$(call embtk_echo_blue,"################################################################################")
 endef
-define EMBTK_GENERIC_MSG
-	$(call EMBTK_GENERIC_MESSAGE,$(1))
+define embtk_generic_msg
+	$(call embtk_generic_message,$(1))
 endef
 
 #Successful build of EmbToolkit message
 successful_build:
-	$(call ECHO_BLUE," --------------------- ")
-	$(call ECHO_BLUE,"| Toolchain build log |")
-	$(call ECHO_BLUE," --------------------- ")
-	$(call ECHO_BLUE,"You successfully build your toolchain for $(GNU_TARGET)")
-	$(call ECHO_BLUE,"Tools built (GCC compiler, Binutils, etc.) are located in:")
-	$(call ECHO_BLUE,"    $(TOOLS)/bin")
+	$(call embtk_echo_blue," --------------------- ")
+	$(call embtk_echo_blue,"| Toolchain build log |")
+	$(call embtk_echo_blue," --------------------- ")
+	$(call embtk_echo_blue,"You successfully build your toolchain for $(GNU_TARGET)")
+	$(call embtk_echo_blue,"Tools built (GCC compiler, Binutils, etc.) are located in:")
+	$(call embtk_echo_blue,"    $(TOOLS)/bin")
 	@echo
-	$(call ECHO_BLUE," ---------------------------- ")
-	$(call ECHO_BLUE,"| Root file system build log |")
-	$(call ECHO_BLUE," ---------------------------- ")
+	$(call embtk_echo_blue," ---------------------------- ")
+	$(call embtk_echo_blue,"| Root file system build log |")
+	$(call embtk_echo_blue," ---------------------------- ")
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-	$(call ECHO_BLUE,"You also successfully build root filesystem(s) located in the")
-	$(call ECHO_BLUE,"'generated' sub-directory of EmbToolkit.")
+	$(call embtk_echo_blue,"You also successfully build root filesystem(s) located in the")
+	$(call embtk_echo_blue,"'generated' sub-directory of EmbToolkit.")
 else
-	$(call ECHO_GREEN,"Build of root filesystem not selected.")
+	$(call embtk_echo_green,"Build of root filesystem not selected.")
 endif
 	@echo
-	$(call ECHO_BLUE," ---------------------------- ")
-	$(call ECHO_BLUE,"| Embedded systems Toolkit   |")
-	$(call ECHO_BLUE," ---------------------------- ")
-	$(call ECHO_BLUE,"Hope that EmbToolkit will be useful for your project !!!")
-	$(call ECHO_BLUE,"Please report any bugs/suggestion at:")
-	$(call ECHO_BLUE,"   http://www.embtoolkit.org/issues/projects/show/embtoolkit")
-	$(call ECHO_BLUE,"You can also visit the wiki at:")
-	$(call ECHO_BLUE,"   http://www.embtoolkit.org")
+	$(call embtk_echo_blue," ---------------------------- ")
+	$(call embtk_echo_blue,"| Embedded systems Toolkit   |")
+	$(call embtk_echo_blue," ---------------------------- ")
+	$(call embtk_echo_blue,"Hope that EmbToolkit will be useful for your project !!!")
+	$(call embtk_echo_blue,"Please report any bugs/suggestion at:")
+	$(call embtk_echo_blue,"   http://www.embtoolkit.org/issues/projects/show/embtoolkit")
+	$(call embtk_echo_blue,"You can also visit the wiki at:")
+	$(call embtk_echo_blue,"   http://www.embtoolkit.org")
 	@echo
-	$(call ECHO_BLUE,"################################################################################")
+	$(call embtk_echo_blue,"################################################################################")
 
 #Macro to adapt libtool files (*.la) for cross compiling
-define __EMBTK_FIX_LIBTOOL_FILES
+define __embtk_fix_libtool_files
 	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/$(LIBDIR) -name *.la`;			\
 	for i in $$LIBTOOLS_LA_FILES; do						\
 	sed -e "s;libdir='\/usr\/$(LIBDIR)';libdir='$(SYSROOT)\/usr\/$(LIBDIR)';" $$i	\
@@ -151,7 +151,7 @@ define __EMBTK_FIX_LIBTOOL_FILES
 	done
 endef
 libtool_files_adapt:
-	$(Q)$(call __EMBTK_FIX_LIBTOOL_FILES)
+	$(Q)$(call __embtk_fix_libtool_files)
 
 #Macro to restore libtool files (*.la)
 libtool_files_restore:
@@ -174,7 +174,7 @@ else
 endif
 
 #Macro to adapt pkg-config files for cross compiling
-define __EMBTK_FIX_PKGCONFIG_FILES
+define __embtk_fix_pkgconfig_files
 	@PKGCONFIG_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/pkgconfig -name *.pc`;	\
 	for i in $$PKGCONFIG_FILES; do						\
 	sed -e 's;prefix=.*;prefix=$(SYSROOT)/usr;'				\
@@ -184,10 +184,10 @@ define __EMBTK_FIX_PKGCONFIG_FILES
 	done
 endef
 pkgconfig_files_adapt:
-	$(Q)$(call __EMBTK_FIX_PKGCONFIG_FILES)
+	$(Q)$(call __embtk_fix_pkgconfig_files)
 
 #A macro to remove rpath in packages that use libtool -rpath
-define EMBTK_KILL_LT_RPATH
+define __embtk_kill_lt_rpath
 	@cd $(strip $(1)); \
 	LOCAL_LT_FILES=`find -type f -name libtool`; \
 	for i in $$LOCAL_LT_FILES; \
@@ -199,17 +199,17 @@ endef
 
 #
 # A macro to get packages version from .config file.
-# usage: $(call EMBTK_GET_PKG_VERSION,PACKAGE)
+# usage: $(call embtk_get_pkgversion,PACKAGE)
 #
-EMBTK_GET_PKG_VERSION = $(subst ",,$(strip $(CONFIG_EMBTK_$(1)_VERSION_STRING)))
+embtk_get_pkgversion = $(subst ",,$(strip $(CONFIG_EMBTK_$(1)_VERSION_STRING)))
 
 #
 # A macro which runs configure script (conpatible with autotools configure)
 # for a package and sets environment variables correctly.
 # Usage:
-# $(call EMBTK_CONFIGURE_PKG,PACKAGE)
+# $(call embtk_configure_pkg,PACKAGE)
 #
-define EMBTK_CONFIGURE_AUTORECONF_PKG
+define __embtk_configure_autoreconfpkg
 @if [ "x$(CONFIG_EMBTK_$(1)_NEED_AUTORECONF)" == "xy" ]; then		\
 	test -e $($(1)_SRC_DIR)/configure.ac ||				\
 	test -e $($(1)_SRC_DIR)/configure.in || exit 1;			\
@@ -217,16 +217,16 @@ define EMBTK_CONFIGURE_AUTORECONF_PKG
 	$(AUTORECONF) --install -f;					\
 fi
 endef
-define EMBTK_PRINT_CONFIGURE_OPTS
-	$(call ECHO_BLUE,"Configure options:")
+define __embtk_print_configure_opts
+	$(call embtk_echo_blue,"Configure options:")
 	@for i in `echo $(1) | tr " " "\n"`; \
-	do echo -e $(EMBTK_COLOR_BLUE)$$i$(EMBTK_NO_COLOR); done
+	do echo -e $(__embtk_color_blue)$$i$(__embtk_no_color); done
 endef
-define EMBTK_CONFIGURE_PKG
-	$(call EMBTK_GENERIC_MSG,"Configure $($(1)_PACKAGE)...")
-	$(call EMBTK_CONFIGURE_AUTORECONF_PKG,$(1))
+define embtk_configure_pkg
+	$(call embtk_generic_msg,"Configure $($(1)_PACKAGE)...")
+	$(call __embtk_configure_autoreconfpkg,$(1))
 	@test -e $($(1)_SRC_DIR)/configure || exit 1
-	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$($(1)_CONFIGURE_OPTS)")
+	$(call __embtk_print_configure_opts,"$($(1)_CONFIGURE_OPTS)")
 	@cd $($(1)_BUILD_DIR);						\
 	CC=$(TARGETCC_CACHED)						\
 	CXX=$(TARGETCXX_CACHED)						\
@@ -253,7 +253,7 @@ define EMBTK_CONFIGURE_PKG
 	--prefix=/usr --sysconfdir=/etc --disable-rpath			\
 	$($(1)_CONFIGURE_OPTS)
 	@touch $($(1)_BUILD_DIR)/.configured
-	$(call EMBTK_KILL_LT_RPATH,$($(1)_BUILD_DIR))
+	$(call __embtk_kill_lt_rpath,$($(1)_BUILD_DIR))
 endef
 
 #
@@ -261,13 +261,13 @@ endef
 # for a package for host development machine and sets environment variables
 # correctly.
 # Usage:
-# $(call EMBTK_CONFIGURE_HOSTPKG,PACKAGE)
+# $(call embtk_configure_hostpkg,PACKAGE)
 #
-define EMBTK_CONFIGURE_HOSTPKG
-	$(call EMBTK_GENERIC_MSG,"Configure $($(1)_PACKAGE) for host...")
-	$(call EMBTK_CONFIGURE_AUTORECONF_PKG,$(1))
+define embtk_configure_hostpkg
+	$(call embtk_generic_msg,"Configure $($(1)_PACKAGE) for host...")
+	$(call __embtk_configure_autoreconfpkg,$(1))
 	@test -e $($(1)_SRC_DIR)/configure || exit 1
-	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$($(1)_CONFIGURE_OPTS)")
+	$(call __embtk_print_configure_opts,"$($(1)_CONFIGURE_OPTS)")
 	@cd $($(1)_BUILD_DIR);						\
 	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\
 	LDFLAGS="-L$(HOSTTOOLS)/$(LIBDIR) -L$(HOSTTOOLS)/usr/$(LIBDIR)"	\
@@ -282,119 +282,119 @@ endef
 #
 # A macro to install automatically a package intended to run on the target.
 # Usage:
-# $(call EMBTK_INSTALL_PKG,PACKAGE)
+# $(call embtk_install_pkg,PACKAGE)
 #
-__EMBTK_MULTI_MAKE = $(foreach builddir,$($(1)_MAKE_DIRS),			\
+__embtk_multi_make = $(foreach builddir,$($(1)_MAKE_DIRS),			\
 				$(MAKE) -C $($(1)_BUILD_DIR)/$(builddir)	\
 				$($(1)_MAKE_OPTS) $(J);)
 
-__EMBTK_SINGLE_MAKE = $(MAKE) -C $($(1)_BUILD_DIR) $($(1)_MAKE_OPTS) $(J)
+__embtk_single_make = $(MAKE) -C $($(1)_BUILD_DIR) $($(1)_MAKE_OPTS) $(J)
 
-__EMBTK_MULTI_MAKE_INSTALL = $(foreach builddir,$($(1)_MAKE_DIRS),		\
+__embtk_multi_make_install = $(foreach builddir,$($(1)_MAKE_DIRS),		\
 	$(MAKE) -C $($(1)_BUILD_DIR)/$(builddir)				\
 	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) $($(1)_MAKE_OPTS) install;)
 
-__EMBTK_SINGLE_MAKE_INSTALL = $(MAKE) -C $($(1)_BUILD_DIR)			\
+__embtk_single_make_install = $(MAKE) -C $($(1)_BUILD_DIR)			\
 	DESTDIR=$(SYSROOT)/$($(1)_SYSROOT_SUFFIX) $($(1)_MAKE_OPTS) install
 
-__EMBTK_MULTI_MAKE_HOSTINSTALL = $(foreach builddir,$($(1)_MAKE_DIRS),		\
+__embtk_multi_make_hostinstall = $(foreach builddir,$($(1)_MAKE_DIRS),		\
 	$(MAKE) -C $($(1)_BUILD_DIR)/$(builddir)				\
 	$(if $($(1)_DESTDIR),DESTDIR=$($(1)_DESTDIR))				\
 	$($(1)_MAKE_OPTS) install;)
 
-__EMBTK_SINGLE_MAKE_HOSTINSTALL = $(MAKE) -C $($(1)_BUILD_DIR)			\
+__embtk_single_make_hostinstall = $(MAKE) -C $($(1)_BUILD_DIR)			\
 	$(if $($(1)_DESTDIR),DESTDIR=$($(1)_DESTDIR)) $($(1)_MAKE_OPTS) install
 
-define __EMBTK_INSTALL_PKG_MAKE
-	$(call EMBTK_GENERIC_MSG,"Compiling and installing $($(1)_NAME)-$($(1)_VERSION) in your root filesystem...")
+define __embtk_install_pkg_make
+	$(call embtk_generic_msg,"Compiling and installing $($(1)_NAME)-$($(1)_VERSION) in your root filesystem...")
 	$(Q)$(if $(strip $($(1)_DEPS)),$(MAKE) $($(1)_DEPS))
-	$(Q)$(call EMBTK_DOWNLOAD_PKG,$(1))
-	$(Q)$(call EMBTK_DECOMPRESS_PKG,$(1))
-	$(Q)$(call EMBTK_CONFIGURE_PKG,$(1))
+	$(Q)$(call embtk_download_pkg,$(1))
+	$(Q)$(call embtk_decompress_pkg,$(1))
+	$(Q)$(call embtk_configure_pkg,$(1))
 	$(Q)$(if $($(1)_MAKE_DIRS),						\
-		$(__EMBTK_MULTI_MAKE),						\
-		$(__EMBTK_SINGLE_MAKE))
+		$(__embtk_multi_make),						\
+		$(__embtk_single_make))
 	$(Q)$(if $($(1)_MAKE_DIRS),						\
-		$(__EMBTK_MULTI_MAKE_INSTALL),					\
-		$(__EMBTK_SINGLE_MAKE_INSTALL))
-	$(Q)$(call __EMBTK_FIX_LIBTOOL_FILES)
-	$(Q)$(call __EMBTK_FIX_PKGCONFIG_FILES)
+		$(__embtk_multi_make_install),					\
+		$(__embtk_single_make_install))
+	$(Q)$(call __embtk_fix_libtool_files)
+	$(Q)$(call __embtk_fix_pkgconfig_files)
 	@touch $($(1)_BUILD_DIR)/.installed
 endef
-define EMBTK_INSTALL_PKG
+define embtk_install_pkg
 	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),true,	\
-		$(call __EMBTK_INSTALL_PKG_MAKE,$(1)))
+		$(call __embtk_install_pkg_make,$(1)))
 endef
 
 #
 # A macro to install automatically a package intended to run on the host
 # development machine.
 # Usage:
-# $(call EMBTK_INSTALL_HOSTPKG,PACKAGE)
+# $(call embtk_install_hostpkg,PACKAGE)
 #
-define __EMBTK_INSTALL_HOSTPKG_MAKE
-	$(call EMBTK_GENERIC_MSG,"Compiling and installing $($(1)_NAME)-$($(1)_VERSION) for host...")
+define __embtk_install_hostpkg_make
+	$(call embtk_generic_msg,"Compiling and installing $($(1)_NAME)-$($(1)_VERSION) for host...")
 	$(Q)$(if $(strip $($(1)_DEPS)),$(MAKE) $($(1)_DEPS))
-	$(Q)$(call EMBTK_DOWNLOAD_PKG,$(1))
-	$(Q)$(call EMBTK_DECOMPRESS_HOSTPKG,$(1))
-	$(Q)$(call EMBTK_CONFIGURE_HOSTPKG,$(1))
+	$(Q)$(call embtk_download_pkg,$(1))
+	$(Q)$(call embtk_decompress_hostpkg,$(1))
+	$(Q)$(call embtk_configure_hostpkg,$(1))
 	$(Q)$(if $($(1)_MAKE_DIRS),						\
-		$(__EMBTK_MULTI_MAKE),						\
-		$(__EMBTK_SINGLE_MAKE))
+		$(__embtk_multi_make),						\
+		$(__embtk_single_make))
 	$(Q)$(if $($(1)_MAKE_DIRS),						\
-		$(__EMBTK_MULTI_MAKE_HOSTINSTALL),				\
-		$(__EMBTK_SINGLE_MAKE_HOSTINSTALL))
+		$(__embtk_multi_make_hostinstall),				\
+		$(__embtk_single_make_hostinstall))
 	@touch $($(1)_BUILD_DIR)/.installed
 endef
-define EMBTK_INSTALL_HOSTPKG
+define embtk_install_hostpkg
 	@$(if $(shell test -e $($(1)_BUILD_DIR)/.installed && echo y),true,	\
-		$(call __EMBTK_INSTALL_HOSTPKG_MAKE,$(1)))
+		$(call __embtk_install_hostpkg_make,$(1)))
 endef
 
 #
 # A macro which downloads a package.
 # Usage:
-# $(call EMBTK_DOWNLOAD_PKG,PACKAGE)
+# $(call embtk_download_pkg,PACKAGE)
 #
-define EMBTK_DOWNLOAD_PKG_PATCHES
+define __embtk_download_pkg_patches
 @if [ "x$(CONFIG_EMBTK_$(1)_NEED_PATCH)" == "xy" ]; then		\
 	test -e $(DOWNLOAD_DIR)/$($(1)_NAME)-$($(1)_VERSION).patch ||	\
-	$(call EMBTK_WGET,						\
+	$(call embtk_wget,						\
 		$($(1)_NAME)-$($(1)_VERSION).patch,			\
 		$($(1)_PATCH_SITE),					\
 		$($(1)_NAME)-$($(1)_VERSION)-*.patch);			\
 fi
 endef
-define EMBTK_DOWNLOAD_PKG_FROM_MIRROR
+define __embtk_download_pkg_from_mirror
 if [ "x$($(1)_SITE_MIRROR$(2))" == "x" ]; then 				\
 	false;								\
 else									\
-	$(call EMBTK_WGET,						\
+	$(call embtk_wget,						\
 		$($(1)_PACKAGE),					\
 		$($(1)_SITE_MIRROR$(2)),				\
 		$($(1)_PACKAGE)); 					\
 fi
 endef
-define EMBTK_DOWNLOAD_PKG
-	$(call EMBTK_GENERIC_MSG,"Download $($(1)_PACKAGE) if necessary...")
+define embtk_download_pkg
+	$(call embtk_generic_msg,"Download $($(1)_PACKAGE) if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$($(1)_PACKAGE) ||			\
-	$(call EMBTK_WGET,						\
+	$(call embtk_wget,						\
 		$($(1)_PACKAGE),					\
 		$($(1)_SITE),						\
 		$($(1)_PACKAGE))||					\
-	$(call EMBTK_DOWNLOAD_PKG_FROM_MIRROR,$(1),1) ||		\
-	$(call EMBTK_DOWNLOAD_PKG_FROM_MIRROR,$(1),2) ||		\
-	$(call EMBTK_DOWNLOAD_PKG_FROM_MIRROR,$(1),3) || exit 1
-	$(call EMBTK_DOWNLOAD_PKG_PATCHES,$(1))
+	$(call __embtk_download_pkg_from_mirror,$(1),1) ||		\
+	$(call __embtk_download_pkg_from_mirror,$(1),2) ||		\
+	$(call __embtk_download_pkg_from_mirror,$(1),3) || exit 1
+	$(call __embtk_download_pkg_patches,$(1))
 endef
 
 #
 # A macro to decompress packages tarball intended to run on target.
 # Usage:
-# $(call EMBTK_DECOMPRESS_PKG,PACKAGE)
+# $(call embtk_decompress_pkg,PACKAGE)
 #
-define EMBTK_DECOMPRESS_PKG
-	$(call EMBTK_GENERIC_MSG,"Decrompressing $($(1)_PACKAGE) ...")
+define embtk_decompress_pkg
+	$(call embtk_generic_msg,"Decrompressing $($(1)_PACKAGE) ...")
 	@if [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "xy" ] &&			\
 	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
 		tar -C $(PACKAGES_BUILD) -xzf					\
@@ -427,10 +427,10 @@ endef
 # A macro to decompress packages tarball intended to run on host development
 # machine.
 # Usage:
-# $(call EMBTK_DECOMPRESS_HOSTPKG,PACKAGE)
+# $(call embtk_decompress_hostpkg,PACKAGE)
 #
-define EMBTK_DECOMPRESS_HOSTPKG
-	$(call EMBTK_GENERIC_MSG,"Decrompressing $($(1)_PACKAGE) ...")
+define embtk_decompress_hostpkg
+	$(call embtk_generic_msg,"Decrompressing $($(1)_PACKAGE) ...")
 	@if [ "x$(CONFIG_EMBTK_$(1)_PKG_IS_TARGZ)" == "xy" ] &&			\
 	[ ! -e $($(1)_SRC_DIR)/.decompressed ]; then				\
 		tar -C $(TOOLS_BUILD) -xzf					\
@@ -462,10 +462,10 @@ endef
 #
 # A macro to clean installed packages from sysroot.
 # Usage:
-# $(call EMBTK_CLEANUP_PKG,PACKAGE)
+# $(call embtk_cleanup_pkg,PACKAGE)
 #
-define EMBTK_CLEANUP_PKG
-	$(call EMBTK_GENERIC_MESSAGE,"Cleanup $($(1)_NAME)...")
+define embtk_cleanup_pkg
+	$(call embtk_generic_message,"Cleanup $($(1)_NAME)...")
 	@-if [ "x$($(1)_ETC)" != "x" ] && [ -e $(SYSROOT)/etc ];		\
 		then								\
 		cd $(SYSROOT)/etc; rm -rf $($(1)_ETC);				\

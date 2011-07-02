@@ -24,8 +24,8 @@
 ################################################################################
 
 GTK_NAME := gtk+
-GTK_MAJOR_VERSION := $(call EMBTK_GET_PKG_VERSION,GTK_MAJOR)
-GTK_VERSION := $(call EMBTK_GET_PKG_VERSION,GTK)
+GTK_MAJOR_VERSION := $(call embtk_get_pkgversion,GTK_MAJOR)
+GTK_VERSION := $(call embtk_get_pkgversion,GTK)
 GTK_SITE := http://ftp.gnome.org/pub/gnome/sources/gtk+/$(GTK_MAJOR_VERSION)
 GTK_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GTK_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/gtk/$(GTK_VERSION)
@@ -62,9 +62,9 @@ gtk_install:
 
 $(GTK_BUILD_DIR)/.installed: $(GTK_DEPS) download_gtk \
 	$(GTK_BUILD_DIR)/.decompressed $(GTK_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	gtk-$(GTK_VERSION) in your root filesystem...")
-	$(call EMBTK_KILL_LT_RPATH, $(GTK_BUILD_DIR))
+	$(call __embtk_kill_lt_rpath, $(GTK_BUILD_DIR))
 	$(Q)$(MAKE) -C $(GTK_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(GTK_BUILD_DIR) DESTDIR=$(SYSROOT) install
 	$(Q)$(MAKE) libtool_files_adapt
@@ -73,13 +73,13 @@ $(GTK_BUILD_DIR)/.installed: $(GTK_DEPS) download_gtk \
 	@touch $@
 
 download_gtk:
-	$(call EMBTK_DOWNLOAD_PKG,GTK)
+	$(call embtk_download_pkg,GTK)
 
 $(GTK_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,GTK)
+	$(call embtk_decompress_pkg,GTK)
 
 $(GTK_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,GTK)
+	$(call embtk_configure_pkg,GTK)
 
 $(GTK_BUILD_DIR)/.patchlibtool:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
@@ -118,4 +118,4 @@ $(GTK_BUILD_DIR)/.special:
 	@touch $@
 
 gtk_clean:
-	$(call EMBTK_CLEANUP_PKG,GTK)
+	$(call embtk_cleanup_pkg,GTK)

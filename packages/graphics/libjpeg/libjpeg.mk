@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBJPEG_NAME := jpeg
-LIBJPEG_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBJPEG)
+LIBJPEG_VERSION := $(call embtk_get_pkgversion,LIBJPEG)
 LIBJPEG_SITE := http://www.ijg.org/files
 LIBJPEG_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBJPEG_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/jpeg/$(LIBJPEG_VERSION)
@@ -45,7 +45,7 @@ libjpeg_install:
 
 $(LIBJPEG_BUILD_DIR)/.installed: download_libjpeg \
 	$(LIBJPEG_BUILD_DIR)/.decompressed $(LIBJPEG_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	jpeg-$(LIBJPEG_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBJPEG_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -53,13 +53,13 @@ $(LIBJPEG_BUILD_DIR)/.installed: download_libjpeg \
 	@touch $@
 
 download_libjpeg:
-	$(call EMBTK_DOWNLOAD_PKG,LIBJPEG)
+	$(call embtk_download_pkg,LIBJPEG)
 
 $(LIBJPEG_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBJPEG)
+	$(call embtk_decompress_pkg,LIBJPEG)
 
 $(LIBJPEG_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBJPEG)
+	$(call embtk_configure_pkg,LIBJPEG)
 
 libjpeg_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBJPEG)
+	$(call embtk_cleanup_pkg,LIBJPEG)

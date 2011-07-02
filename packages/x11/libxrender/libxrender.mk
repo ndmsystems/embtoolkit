@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBXRENDER_NAME := libXrender
-LIBXRENDER_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXRENDER)
+LIBXRENDER_VERSION := $(call embtk_get_pkgversion,LIBXRENDER)
 LIBXRENDER_SITE := http://xorg.freedesktop.org/archive/individual/lib
 LIBXRENDER_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXRENDER_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxrender/$(LIBXI_VERSION)
@@ -43,10 +43,10 @@ LIBXRENDER_CONFIGURE_OPTS := --disable-malloc0returnsnull
 LIBXRENDER_DEPS = renderproto_install libx11_install
 
 libxrender_install:
-	$(call EMBTK_INSTALL_PKG,LIBXRENDER)
+	$(call embtk_install_pkg,LIBXRENDER)
 
 download_libxrender:
-	$(call EMBTK_DOWNLOAD_PKG,LIBXRENDER)
+	$(call embtk_download_pkg,LIBXRENDER)
 
 libxrender_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBXRENDER)
+	$(call embtk_cleanup_pkg,LIBXRENDER)

@@ -40,7 +40,7 @@ damageproto_install:
 
 $(DAMAGEPROTO_BUILD_DIR)/.installed: download_damageproto \
 	$(DAMAGEPROTO_BUILD_DIR)/.decompressed $(DAMAGEPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	damageproto-$(DAMAGEPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(DAMAGEPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(DAMAGEPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -49,14 +49,14 @@ $(DAMAGEPROTO_BUILD_DIR)/.installed: download_damageproto \
 	@touch $@
 
 download_damageproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(DAMAGEPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(DAMAGEPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(DAMAGEPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(DAMAGEPROTO_PACKAGE) \
 	$(DAMAGEPROTO_SITE)/$(DAMAGEPROTO_PACKAGE)
 
 $(DAMAGEPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(DAMAGEPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(DAMAGEPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(DAMAGEPROTO_PACKAGE)
 	@touch $@
 
@@ -84,7 +84,7 @@ $(DAMAGEPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 damageproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup damageproto-$(DAMAGEPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup damageproto-$(DAMAGEPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(DAMAGEPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(DAMAGEPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(DAMAGEPROTO_INCLUDES)

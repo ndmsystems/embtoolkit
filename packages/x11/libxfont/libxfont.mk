@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBXFONT_NAME := libXfont
-LIBXFONT_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBXFONT)
+LIBXFONT_VERSION := $(call embtk_get_pkgversion,LIBXFONT)
 LIBXFONT_SITE := http://xorg.freedesktop.org/archive/individual/lib
 LIBXFONT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXFONT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxfont/$(LIBXFONT_VERSION)
@@ -47,10 +47,10 @@ LIBXFONT_CONFIGURE_OPTS := --disable-malloc0returnsnull
 LIBXFONT_DEPS = libfontenc_install freetype_install
 
 libxfont_install:
-	$(call EMBTK_INSTALL_PKG,LIBXFONT)
+	$(call embtk_install_pkg,LIBXFONT)
 
 download_libxfont:
-	$(call EMBTK_DOWNLOAD_PKG,LIBXFONT)
+	$(call embtk_download_pkg,LIBXFONT)
 
 libxfont_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBXFONT)
+	$(call embtk_cleanup_pkg,LIBXFONT)

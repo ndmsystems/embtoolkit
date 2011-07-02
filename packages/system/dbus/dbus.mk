@@ -24,7 +24,7 @@
 ################################################################################
 
 DBUS_NAME := dbus
-DBUS_VERSION := $(call EMBTK_GET_PKG_VERSION,DBUS)
+DBUS_VERSION := $(call embtk_get_pkgversion,DBUS)
 DBUS_SITE := http://dbus.freedesktop.org/releases/dbus
 DBUS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 DBUS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/dbus/$(DBUS_VERSION)
@@ -46,14 +46,14 @@ DBUS_CONFIGURE_OPTS := --enable-abstract-sockets \
 	$(if $(CONFIG_EMBTK_HAVE_LIBX11),--with-x,--without-x)
 
 dbus_install:
-	$(call EMBTK_INSTALL_PKG,DBUS)
+	$(call embtk_install_pkg,DBUS)
 	$(Q)$(MAKE) $(DBUS_BUILD_DIR)/.special
 
 download_dbus:
-	$(call EMBTK_DOWNLOAD_PKG,DBUS)
+	$(call embtk_download_pkg,DBUS)
 
 dbus_clean:
-	$(call EMBTK_CLEANUP_PKG,DBUS)
+	$(call embtk_cleanup_pkg,DBUS)
 
 .PHONY: $(DBUS_BUILD_DIR)/.special dbus_clean
 

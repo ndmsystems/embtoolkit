@@ -48,7 +48,7 @@ $(GMP_HOST_BUILD_DIR)/.decompressed:
 	@touch $@
 
 $(GMP_HOST_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MESSAGE,"gmphost: Configuring \
+	$(call embtk_generic_message,"gmphost: Configuring \
 	gmp-$(GMP_HOST_VERSION) ...")
 	@mkdir -p $(GMP_HOST_DIR)
 	cd $(GMP_HOST_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \

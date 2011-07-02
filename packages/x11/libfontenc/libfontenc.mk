@@ -24,7 +24,7 @@
 ################################################################################
 
 LIBFONTENC_NAME := libfontenc
-LIBFONTENC_VERSION := $(call EMBTK_GET_PKG_VERSION,LIBFONTENC)
+LIBFONTENC_VERSION := $(call embtk_get_pkgversion,LIBFONTENC)
 LIBFONTENC_SITE := http://xorg.freedesktop.org/archive/individual/lib
 LIBFONTENC_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBFONTENC_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libfontenc/$(LIBFONTENC_VERSION)
@@ -48,7 +48,7 @@ libfontenc_install:
 
 $(LIBFONTENC_BUILD_DIR)/.installed: $(LIBFONTENC_DEPS) download_libfontenc \
 	$(LIBFONTENC_BUILD_DIR)/.decompressed $(LIBFONTENC_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	libfontenc-$(LIBFONTENC_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBFONTENC_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBFONTENC_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -57,13 +57,13 @@ $(LIBFONTENC_BUILD_DIR)/.installed: $(LIBFONTENC_DEPS) download_libfontenc \
 	@touch $@
 
 download_libfontenc:
-	$(call EMBTK_DOWNLOAD_PKG,LIBFONTENC)
+	$(call embtk_download_pkg,LIBFONTENC)
 
 $(LIBFONTENC_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,LIBFONTENC)
+	$(call embtk_decompress_pkg,LIBFONTENC)
 
 $(LIBFONTENC_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,LIBFONTENC)
+	$(call embtk_configure_pkg,LIBFONTENC)
 
 libfontenc_clean:
-	$(call EMBTK_CLEANUP_PKG,LIBFONTENC)
+	$(call embtk_cleanup_pkg,LIBFONTENC)

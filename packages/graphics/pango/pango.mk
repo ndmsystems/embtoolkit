@@ -24,8 +24,8 @@
 ################################################################################
 
 PANGO_NAME := pango
-PANGO_MAJOR_VERSION := $(call EMBTK_GET_PKG_VERSION,PANGO_MAJOR)
-PANGO_VERSION := $(call EMBTK_GET_PKG_VERSION,PANGO)
+PANGO_MAJOR_VERSION := $(call embtk_get_pkgversion,PANGO_MAJOR)
+PANGO_VERSION := $(call embtk_get_pkgversion,PANGO)
 PANGO_SITE := http://ftp.gnome.org/pub/gnome/sources/pango/$(PANGO_MAJOR_VERSION)
 PANGO_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 PANGO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/pango/$(PANGO_VERSION)
@@ -55,7 +55,7 @@ pango_install:
 
 $(PANGO_BUILD_DIR)/.installed: $(PANGO_DEPS) download_pango \
 	$(PANGO_BUILD_DIR)/.decompressed $(PANGO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	pango-$(PANGO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(PANGO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(PANGO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -65,13 +65,13 @@ $(PANGO_BUILD_DIR)/.installed: $(PANGO_DEPS) download_pango \
 	@touch $@
 
 download_pango:
-	$(call EMBTK_DOWNLOAD_PKG,PANGO)
+	$(call embtk_download_pkg,PANGO)
 
 $(PANGO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,PANGO)
+	$(call embtk_decompress_pkg,PANGO)
 
 $(PANGO_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,PANGO)
+	$(call embtk_configure_pkg,PANGO)
 
 $(PANGO_BUILD_DIR)/.patchlibtool:
 	$(Q)PANGO_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/* -type f -name *.la`; \
@@ -91,4 +91,4 @@ $(PANGO_BUILD_DIR)/.special:
 	@touch $@
 
 pango_clean:
-	$(call EMBTK_CLEANUP_PKG,PANGO)
+	$(call embtk_cleanup_pkg,PANGO)

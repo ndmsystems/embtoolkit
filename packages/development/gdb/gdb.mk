@@ -24,7 +24,7 @@
 ################################################################################
 
 GDB_NAME		:= gdb
-GDB_VERSION		:= $(call EMBTK_GET_PKG_VERSION,GDB)
+GDB_VERSION		:= $(call embtk_get_pkgversion,GDB)
 GDB_SITE		:= http://ftp.gnu.org/gnu/gdb
 GDB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GDB_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/gdb/$(GDB_VERSION)
@@ -56,7 +56,7 @@ GDB_DEPS := ncurses_install
 # GDB for target
 #
 gdbfull_install:
-	$(call EMBTK_INSTALL_PKG,GDB)
+	$(call embtk_install_pkg,GDB)
 
 gdbserver_install:
 	@test -e $(GDB_BUILD_DIR)/.gdbserver_installed ||		\
@@ -73,15 +73,15 @@ $(GDB_BUILD_DIR)/.gdbserver_installed: $(GDB_DEPS)			\
 	@touch $@
 
 $(GDB_BUILD_DIR)/.gdbserver_configured:
-	$(call EMBTK_CONFIGURE_PKG,GDB)
+	$(call embtk_configure_pkg,GDB)
 	@touch $@
 
 $(GDB_BUILD_DIR)/.gdbserver_decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,GDB)
+	$(call embtk_decompress_pkg,GDB)
 	@touch $@
 
 gdbserver_clean gdbfull_clean:
-	$(call EMBTK_CLEANUP_PKG,GDB)
+	$(call embtk_cleanup_pkg,GDB)
 
 #
 # GDB for host development machine
@@ -113,13 +113,13 @@ GDB_HOST_CONFIGURE_OPTS	:= --disable-werror --disable-sim		\
 GDB_HOST_PREFIX := $(TOOLS)
 
 gdb_host_install:
-	$(call EMBTK_INSTALL_HOSTPKG,GDB_HOST)
+	$(call embtk_install_hostpkg,GDB_HOST)
 
 gdb_host_clean:
-	$(call EMBTK_GENERIC_MSG,"Clean up gdb host")
+	$(call embtk_generic_msg,"Clean up gdb host")
 
 #
 # Common for target and host development machine
 #
 download_gdb download_gdb_host:
-	$(call EMBTK_DOWNLOAD_PKG,GDB)
+	$(call embtk_download_pkg,GDB)

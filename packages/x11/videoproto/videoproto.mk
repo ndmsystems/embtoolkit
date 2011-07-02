@@ -42,7 +42,7 @@ videoproto_install:
 
 $(VIDEOPROTO_BUILD_DIR)/.installed: download_videoproto \
 	$(VIDEOPROTO_BUILD_DIR)/.decompressed $(VIDEOPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	videoproto-$(VIDEOPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(VIDEOPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(VIDEOPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -51,14 +51,14 @@ $(VIDEOPROTO_BUILD_DIR)/.installed: download_videoproto \
 	@touch $@
 
 download_videoproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(VIDEOPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(VIDEOPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(VIDEOPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(VIDEOPROTO_PACKAGE) \
 	$(VIDEOPROTO_SITE)/$(VIDEOPROTO_PACKAGE)
 
 $(VIDEOPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(VIDEOPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(VIDEOPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(VIDEOPROTO_PACKAGE)
 	@touch $@
 
@@ -86,7 +86,7 @@ $(VIDEOPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 videoproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup videoproto-$(VIDEOPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup videoproto-$(VIDEOPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(VIDEOPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(VIDEOPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(VIDEOPROTO_INCLUDES)

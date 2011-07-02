@@ -24,7 +24,7 @@
 ################################################################################
 
 LZO_NAME		:= lzo
-LZO_VERSION		:= $(call EMBTK_GET_PKG_VERSION,LZO)
+LZO_VERSION		:= $(call embtk_get_pkgversion,LZO)
 LZO_SITE		:= http://www.oberhumer.com/opensource/lzo/download
 LZO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LZO_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/lzo/$(LZO_VERSION)
@@ -45,17 +45,17 @@ LZO_CONFIGURE_OPTS :=
 LZO_DEPS :=
 
 lzo_install:
-	$(call EMBTK_INSTALL_PKG,LZO)
+	$(call embtk_install_pkg,LZO)
 
 lzo_clean:
-	$(call EMBTK_CLEANUP_PKG,LZO)
+	$(call embtk_cleanup_pkg,LZO)
 
 #
 # lzo common targets
 #
 
 download_lzo download_lzo_host:
-	$(call EMBTK_DOWNLOAD_PKG,LZO)
+	$(call embtk_download_pkg,LZO)
 
 #
 # LZO for host development machine
@@ -72,4 +72,4 @@ LZO_HOST_SRC_DIR	:= $(TOOLS_BUILD)/lzo-$(LZO_VERSION)
 LZO_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/lzo-$(LZO_VERSION)
 
 lzo_host_install:
-	$(call EMBTK_INSTALL_HOSTPKG,LZO_HOST)
+	$(call embtk_install_hostpkg,LZO_HOST)

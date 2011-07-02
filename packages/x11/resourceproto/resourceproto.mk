@@ -40,7 +40,7 @@ resourceproto_install:
 
 $(RESOURCEPROTO_BUILD_DIR)/.installed: download_resourceproto \
 	$(RESOURCEPROTO_BUILD_DIR)/.decompressed $(RESOURCEPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	resourceproto-$(RESOURCEPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(RESOURCEPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(RESOURCEPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -49,14 +49,14 @@ $(RESOURCEPROTO_BUILD_DIR)/.installed: download_resourceproto \
 	@touch $@
 
 download_resourceproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(RESOURCEPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(RESOURCEPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(RESOURCEPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(RESOURCEPROTO_PACKAGE) \
 	$(RESOURCEPROTO_SITE)/$(RESOURCEPROTO_PACKAGE)
 
 $(RESOURCEPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(RESOURCEPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(RESOURCEPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(RESOURCEPROTO_PACKAGE)
 	@touch $@
 
@@ -84,7 +84,7 @@ $(RESOURCEPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 resourceproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup resourceproto-$(RESOURCEPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup resourceproto-$(RESOURCEPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RESOURCEPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RESOURCEPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RESOURCEPROTO_INCLUDES)

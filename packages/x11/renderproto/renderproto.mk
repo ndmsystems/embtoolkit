@@ -40,7 +40,7 @@ renderproto_install:
 
 $(RENDERPROTO_BUILD_DIR)/.installed: download_renderproto \
 	$(RENDERPROTO_BUILD_DIR)/.decompressed $(RENDERPROTO_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	renderproto-$(RENDERPROTO_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(RENDERPROTO_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(RENDERPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -49,14 +49,14 @@ $(RENDERPROTO_BUILD_DIR)/.installed: download_renderproto \
 	@touch $@
 
 download_renderproto:
-	$(call EMBTK_GENERIC_MESSAGE,"Downloading $(RENDERPROTO_PACKAGE) \
+	$(call embtk_generic_message,"Downloading $(RENDERPROTO_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(RENDERPROTO_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(RENDERPROTO_PACKAGE) \
 	$(RENDERPROTO_SITE)/$(RENDERPROTO_PACKAGE)
 
 $(RENDERPROTO_BUILD_DIR)/.decompressed:
-	$(call EMBTK_GENERIC_MESSAGE,"Decompressing $(RENDERPROTO_PACKAGE) ...")
+	$(call embtk_generic_message,"Decompressing $(RENDERPROTO_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(RENDERPROTO_PACKAGE)
 	@touch $@
 
@@ -84,7 +84,7 @@ $(RENDERPROTO_BUILD_DIR)/.configured:
 	@touch $@
 
 renderproto_clean:
-	$(call EMBTK_GENERIC_MESSAGE,"cleanup renderproto-$(RENDERPROTO_VERSION)...")
+	$(call embtk_generic_message,"cleanup renderproto-$(RENDERPROTO_VERSION)...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RENDERPROTO_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RENDERPROTO_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RENDERPROTO_INCLUDES)

@@ -48,7 +48,7 @@ xf86inputevdev_install:
 $(XF86INPUTEVDEV_BUILD_DIR)/.installed: $(XF86INPUTEVDEV_DEPS) \
 	download_xf86inputevdev $(XF86INPUTEVDEV_BUILD_DIR)/.decompressed \
 	$(XF86INPUTEVDEV_BUILD_DIR)/.configured
-	$(call EMBTK_GENERIC_MESSAGE,"Compiling and installing \
+	$(call embtk_generic_message,"Compiling and installing \
 	xf86inputevdev-$(XF86INPUTEVDEV_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(XF86INPUTEVDEV_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(XF86INPUTEVDEV_BUILD_DIR) DESTDIR=$(SYSROOT) install
@@ -57,16 +57,16 @@ $(XF86INPUTEVDEV_BUILD_DIR)/.installed: $(XF86INPUTEVDEV_DEPS) \
 	@touch $@
 
 download_xf86inputevdev:
-	$(call EMBTK_DOWNLOAD_PKG,XF86INPUTEVDEV)
+	$(call embtk_download_pkg,XF86INPUTEVDEV)
 
 $(XF86INPUTEVDEV_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_PKG,XF86INPUTEVDEV)
+	$(call embtk_decompress_pkg,XF86INPUTEVDEV)
 
 $(XF86INPUTEVDEV_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_PKG,XF86INPUTEVDEV)
+	$(call embtk_configure_pkg,XF86INPUTEVDEV)
 
 xf86inputevdev_clean:
-	$(call EMBTK_CLEANUP_PKG,XF86INPUTEVDEV)
+	$(call embtk_cleanup_pkg,XF86INPUTEVDEV)
 
 .PHONY: $(XF86INPUTEVDEV_BUILD_DIR)/.special
 

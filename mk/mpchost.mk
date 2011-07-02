@@ -59,7 +59,7 @@ ifeq ($(CONFIG_EMBTK_MPC_HOST_VERSION_PATCH),y)
 endif
 
 $(MPC_HOST_BUILD_DIR)/.configured:
-	$(call EMBTK_GENERIC_MESSAGE,"Configuring mpc-$(MPC_HOST_VERSION) ...")
+	$(call embtk_generic_message,"Configuring mpc-$(MPC_HOST_VERSION) ...")
 	cd $(MPC_HOST_BUILD_DIR); \
 	CC=$(HOSTCC_CACHED) \
 	CXX=$(HOSTCXX_CACHED) \

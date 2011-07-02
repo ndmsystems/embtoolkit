@@ -24,7 +24,7 @@
 ################################################################################
 
 XSERVER_NAME := xorg-server
-XSERVER_VERSION := $(call EMBTK_GET_PKG_VERSION,XSERVER)
+XSERVER_VERSION := $(call embtk_get_pkgversion,XSERVER)
 XSERVER_SITE := http://ftp.x.org/pub/individual/xserver
 XSERVER_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XSERVER_PACKAGE := xorg-server-$(XSERVER_VERSION).tar.bz2
@@ -87,14 +87,14 @@ XSERVER_CONFIGURE_OPTS += --disable-tslib
 endif
 
 xserver_install:
-	$(call EMBTK_INSTALL_PKG,XSERVER)
+	$(call embtk_install_pkg,XSERVER)
 	$(Q)$(MAKE) $(XSERVER_BUILD_DIR)/.special
 
 download_xserver:
-	$(call EMBTK_DOWNLOAD_PKG,XSERVER)
+	$(call embtk_download_pkg,XSERVER)
 
 xserver_clean:
-	$(call EMBTK_CLEANUP_PKG,XSERVER)
+	$(call embtk_cleanup_pkg,XSERVER)
 
 .PHONY: $(XSERVER_BUILD_DIR)/.special
 

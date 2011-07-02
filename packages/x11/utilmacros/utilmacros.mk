@@ -24,7 +24,7 @@
 ################################################################################
 
 UTILMACROS_NAME := util-macro
-UTILMACROS_VERSION := $(call EMBTK_GET_PKG_VERSION,UTILMACROS)
+UTILMACROS_VERSION := $(call embtk_get_pkgversion,UTILMACROS)
 UTILMACROS_SITE := http://xorg.freedesktop.org/archive/individual/util
 UTILMACROS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 UTILMACROS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/util-macro/$(UTILMACROS_VERSION)
@@ -41,12 +41,12 @@ UTILMACROS_PKGCONFIGS = xorg-macros.pc
 UTILMACROS_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
 utilmacros_install:
-	$(call EMBTK_INSTALL_PKG,UTILMACROS) && \
+	$(call embtk_install_pkg,UTILMACROS) && \
 	cp $(SYSROOT)/usr/share/pkgconfig/xorg-macros.pc $(EMBTK_PKG_CONFIG_PATH) \
 	&& $(MAKE) pkgconfig_files_adapt
 
 download_utilmacros:
-	$(call EMBTK_DOWNLOAD_PKG,UTILMACROS)
+	$(call embtk_download_pkg,UTILMACROS)
 
 utilmacros_clean:
-	$(call EMBTK_CLEANUP_PKG,UTILMACROS)
+	$(call embtk_cleanup_pkg,UTILMACROS)
