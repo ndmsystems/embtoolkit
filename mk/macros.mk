@@ -142,36 +142,16 @@ endif
 	$(call embtk_echo_blue,"################################################################################")
 
 #Macro to adapt libtool files (*.la) for cross compiling
+__ltlibdirold=libdir='\/usr\/$(LIBDIR)'
+__ltlibdirnew=libdir='$(SYSROOT)\/usr\/$(LIBDIR)'
 define __embtk_fix_libtool_files
-	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/$(LIBDIR) -name *.la`;			\
-	for i in $$LIBTOOLS_LA_FILES; do						\
-	sed -e "s;libdir='\/usr\/$(LIBDIR)';libdir='$(SYSROOT)\/usr\/$(LIBDIR)';" $$i	\
-	> $$i.new;									\
-	mv $$i.new $$i;									\
+	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/$(LIBDIR) -name *.la`;		\
+	for i in $$LIBTOOLS_LA_FILES; do					\
+	sed -i "s;$(__ltlibdirold);$(__ltlibdirnew);" $$i;			\
 	done
 endef
 libtool_files_adapt:
 	$(Q)$(call __embtk_fix_libtool_files)
-
-#Macro to restore libtool files (*.la)
-libtool_files_restore:
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib32 -name *.la`; \
-	for i in $$LIBTOOLS_LA_FILES; \
-	do \
-	sed -e "s;libdir='$(SYSROOT)\/usr\/lib32';libdir='\/usr\/lib32';" $$i \
-	> $$i.new; \
-	mv $$i.new $$i; \
-	done
-else
-	@LIBTOOLS_LA_FILES=`find $(SYSROOT)/usr/lib -name *.la`; \
-	for i in $$LIBTOOLS_LA_FILES; \
-	do \
-	sed -e "s;libdir='$(SYSROOT)\/usr\/lib';libdir='\/usr\/lib';" < $$i \
-	> $$i.new; \
-	mv $$i.new $$i; \
-	done
-endif
 
 #Macro to adapt pkg-config files for cross compiling
 define __embtk_fix_pkgconfig_files
