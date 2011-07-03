@@ -24,8 +24,8 @@
 ################################################################################
 
 GTK_NAME		:= gtk+
-GTK_MAJOR_VERSION	:= $(call embtk_get_pkgversion,GTK_MAJOR)
-GTK_VERSION		:= $(call embtk_get_pkgversion,GTK)
+GTK_MAJOR_VERSION	:= $(call embtk_get_pkgversion,gtk_major)
+GTK_VERSION		:= $(call embtk_get_pkgversion,gtk)
 GTK_SITE		:= http://ftp.gnome.org/pub/gnome/sources/gtk+/$(GTK_MAJOR_VERSION)
 GTK_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GTK_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/gtk/$(GTK_VERSION)
