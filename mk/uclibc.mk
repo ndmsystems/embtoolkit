@@ -23,24 +23,26 @@
 # \date         August 2009
 ################################################################################
 
-UCLIBC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_VERSION_STRING)))
-UCLIBC_SITE := http://www.uclibc.org/downloads
-UCLIBC_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/uclibc/$(UCLIBC_VERSION)
-UCLIBC_GIT_SITE := http://git.busybox.net/uClibc
-UCLIBC_GIT_BRANCH := $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_GIT_BRANCH)))
-UCLIBC_GIT_REVISION := $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_GIT_REVISION)))
-UCLIBC_PACKAGE := uClibc-$(UCLIBC_VERSION).tar.bz2
-UCLIBC_BUILD_DIR := $(TOOLS_BUILD)/uClibc-$(UCLIBC_VERSION)
+UCLIBC_VERSION		:= $(call embtk_get_pkgversion,uclibc)
+UCLIBC_SITE		:= http://www.uclibc.org/downloads
+UCLIBC_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/uclibc/$(UCLIBC_VERSION)
+UCLIBC_GIT_SITE		:= http://git.busybox.net/uClibc
+UCLIBC_GIT_BRANCH	:= $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_GIT_BRANCH)))
+UCLIBC_GIT_REVISION	:= $(subst ",,$(strip $(CONFIG_EMBTK_UCLIBC_GIT_REVISION)))
+UCLIBC_PACKAGE		:= uClibc-$(UCLIBC_VERSION).tar.bz2
+UCLIBC_BUILD_DIR	:= $(TOOLS_BUILD)/uClibc-$(UCLIBC_VERSION)
 
-EMBTK_UCLIBC_CFLAGS := $(TARGET_CFLAGS) $(EMBTK_TARGET_MCPU)
-EMBTK_UCLIBC_CFLAGS += $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
-EMBTK_UCLIBC_CFLAGS += $(EMBTK_TARGET_MARCH) -pipe
+UCLIBC_DOTCONFIG	:= $(UCLIBC_BUILD_DIR)/.config
+
+EMBTK_UCLIBC_CFLAGS	:= $(TARGET_CFLAGS) $(EMBTK_TARGET_MCPU)
+EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
+EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_MARCH) -pipe
 
 uclibc_install: $(UCLIBC_BUILD_DIR)/.installed
 
 $(UCLIBC_BUILD_DIR)/.installed: uclibc_download \
 	$(UCLIBC_BUILD_DIR)/.decompressed $(UCLIBC_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Building and installing \
+	$(call embtk_generic_msg,"Building and installing \
 	uClibc-$(UCLIBC_VERSION) ...")
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) oldconfig
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/ \
@@ -59,7 +61,7 @@ $(UCLIBC_BUILD_DIR)/.installed: uclibc_download \
 	UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install
 
 uclibc_download:
-	$(call embtk_generic_message,"downloading uClibc-$(UCLIBC_VERSION) \
+	$(call embtk_generic_msg,"downloading uClibc-$(UCLIBC_VERSION) \
 	if necessary ...")
 ifeq ($(CONFIG_EMBTK_UCLIBC_VERSION_GIT),y)
 	@test -e $(EMBTK_ROOT)/src/uClibc-git || \
@@ -87,7 +89,7 @@ ifeq ($(CONFIG_EMBTK_UCLIBC_NEED_PATCH),y)
 endif
 
 $(UCLIBC_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing \
+	$(call embtk_generic_msg,"Decompressing \
 	uClibc-$(UCLIBC_VERSION) ...")
 	$(Q)tar -C $(TOOLS_BUILD) -xjvf $(DOWNLOAD_DIR)/$(UCLIBC_PACKAGE)
 ifeq ($(CONFIG_EMBTK_UCLIBC_NEED_PATCH),y)
@@ -95,10 +97,14 @@ ifeq ($(CONFIG_EMBTK_UCLIBC_NEED_PATCH),y)
 	patch -p1 < $(DOWNLOAD_DIR)/uClibc-$(UCLIBC_VERSION).patch
 endif
 
+#
+# uClibc configuration macros and target
+#
+__embtk_get_uclibc_config=grep "CONFIG_KEMBTK_UCLIBC_" $(EMBTK_DOTCONFIG)
+__embtk_set_uclibc_config=sed -e 's/CONFIG_KEMBTK_UCLIBC_*//g' > $(UCLIBC_DOTCONFIG)
+define embtk_configure_uclibc
+	$(shell  $(__embtk_get_uclibc_config) | $(__embtk_set_uclibc_config))
+endef
 $(UCLIBC_BUILD_DIR)/.configured:
-	$(call embtk_generic_message,"Configuring \
-	uClibc-$(UCLIBC_VERSION) ...")
-	$(Q)grep "CONFIG_KEMBTK_UCLIBC_" $(EMBTK_ROOT)/.config | \
-	sed -e 's/CONFIG_KEMBTK_UCLIBC_*//g' \
-	> $(UCLIBC_BUILD_DIR)/.config
-
+	$(call embtk_generic_msg,"Configure uClibc-$(UCLIBC_VERSION) ...")
+	$(Q)$(call embtk_configure_uclibc)
