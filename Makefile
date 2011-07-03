@@ -86,8 +86,8 @@ xconfig: basic
 ifeq ($(CONFIG_EMBTK_DOTCONFIG),y)
 	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig xconfig
 else
-	$(Q)if [ -e $(EMBTK_DOCONFIG).old ]; then \
-	cp  $(EMBTK_DOCONFIG).old  $(EMBTK_DOCONFIG); \
+	$(Q)if [ -e $(EMBTK_DOTCONFIG).old ]; then \
+	cp  $(EMBTK_DOTCONFIG).old  $(EMBTK_DOTCONFIG); \
 	$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
 	else \
 	$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
