@@ -38,6 +38,9 @@ export EMBTK_BUGURL EMBTK_HOMEURL
 EMBTK_ROOT := $(shell pwd)
 export EMBTK_ROOT
 
+EMBTK_DOTCONFIG := $(EMBTK_ROOT)/.config
+export EMBTK_DOTCONFIG
+
 # SHELL used by kbuild
 CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
@@ -83,8 +86,8 @@ xconfig: basic
 ifeq ($(CONFIG_EMBTK_DOTCONFIG),y)
 	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig xconfig
 else
-	@if [ -e $(EMBTK_ROOT)/.config.old ]; then \
-	cp  $(EMBTK_ROOT)/.config.old  $(EMBTK_ROOT)/.config; \
+	$(Q)if [ -e $(EMBTK_DOCONFIG).old ]; then \
+	cp  $(EMBTK_DOCONFIG).old  $(EMBTK_DOCONFIG); \
 	$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
 	else \
 	$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
