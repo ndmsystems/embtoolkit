@@ -178,7 +178,7 @@ define __embtk_kill_lt_rpath
 endef
 
 #
-# Get passed package varible
+# Get passed package variables prefix
 #
 PKGV=$(strip $(shell echo $(1) | tr a-z A-Z))
 
