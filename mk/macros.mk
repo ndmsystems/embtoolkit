@@ -49,6 +49,16 @@ define embtk_echo_blue
 endef
 
 #
+# __embtk_mk_strcmp:
+# A macro for two strings comparison. It returns y if the strings are identical
+# and nothing if not.
+# Note: This macro strips passed parameters
+# Usage:
+# $(call __embtk_mk_strcmp,str1,str2)
+#
+__embtk_mk_strcmp=$(shell [ $(strip $(1)) = $(strip $(2)) ] && echo y)
+
+#
 # wget wrapper
 # usage: $(call embtk_wget,$(OUTPUT_FILE),$(SITE),$(FOREIGN_FILE))
 #
