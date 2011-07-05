@@ -40,7 +40,8 @@ LIBX11_LIBS = libX11* X11/Xcms.txt
 LIBX11_PKGCONFIGS = x11.pc x11-xcb.pc
 
 LIBX11_CONFIGURE_OPTS := --with-xcb --without-xmlto --without-ps2pdf \
-	--without-groff --disable-malloc0returnsnull
+	--without-groff --disable-malloc0returnsnull \
+	--disable-loadable-xcursor
 
 LIBX11_DEPS = utilmacros_install inputproto_install kbproto_install \
 		xextproto_install xproto_install libxcb_install xtrans_install
