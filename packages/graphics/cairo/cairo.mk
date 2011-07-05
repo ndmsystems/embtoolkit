@@ -50,8 +50,12 @@ CAIRO_CONFIG_OPTS-n += --enable-directfb=no
 endif
 
 ifeq ($(CONFIG_EMBTK_HAVE_CAIRO_WITH_LIBXCB),y)
-CAIRO_DEPS += xcbutil_install libx11_install
 CAIRO_CONFIG_OPTS-y += --enable-xcb=yes
+CAIRO_CONFIG_OPTS-y += $(if $(CONFIG_EMBTK_HAVE_LIBXRENDER),		\
+				--enable-xlib-xrender,			\
+				--disable-xlib-xrender)
+CAIRO_DEPS += $(if $(CONFIG_EMBTK_HAVE_LIBXRENDER),libxrender_install)
+CAIRO_DEPS += xcbutil_install libx11_install
 else
 CAIRO_CONFIG_OPTS-n += --enable-xcb=no
 CAIRO_CONFIG_OPTS-n += --without-x
