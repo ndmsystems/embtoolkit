@@ -26,44 +26,28 @@
 # \date         May 2009
 ################################################################################
 
-CCACHE_VERSION := 3.1.5
-CCACHE_SITE := http://samba.org/ftp/ccache
-CCACHE_PACKAGE := ccache-$(CCACHE_VERSION).tar.bz2
-CCACHE_HOST_BUILD_DIR := $(TOOLS_BUILD)/ccachehost-build
-CCACHE_HOST_DIR := $(HOSTTOOLS)/usr/local/ccachehost
+CCACHE_NAME		:= ccache
+CCACHE_VERSION		:= $(call embtk_get_pkgversion,ccache)
+CCACHE_SITE		:= http://samba.org/ftp/ccache
+CCACHE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+CCACHE_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/ccache/$(CCACHE_VERSION)
+CCACHE_PACKAGE		:= ccache-$(CCACHE_VERSION).tar.bz2
+CCACHE_SRC_DIR		:= $(TOOLS_BUILD)/ccache-$(CCACHE_VERSION)
+CCACHE_BUILD_DIR	:= $(TOOLS_BUILD)/ccachehost-build
 
-CCACHE_DIR := $(CCACHE_HOST_DIR)
-HOSTCC_CACHED := "$(CCACHE_HOST_DIR)/bin/ccache $(HOSTCC)"
-HOSTCXX_CACHED := "$(CCACHE_HOST_DIR)/bin/ccache $(HOSTCXX)"
-TARGETCC_CACHED := "$(CCACHE_HOST_DIR)/bin/ccache $(TARGETCC)"
-TARGETCXX_CACHED := "$(CCACHE_HOST_DIR)/bin/ccache $(TARGETCXX)"
+CCACHE_HOST_DIR		:= $(HOSTTOOLS)/usr/local/ccachehost
+CCACHE_DIR		:= $(CCACHE_HOST_DIR)
+HOSTCC_CACHED		:= "$(CCACHE_HOST_DIR)/bin/ccache $(HOSTCC)"
+HOSTCXX_CACHED		:= "$(CCACHE_HOST_DIR)/bin/ccache $(HOSTCXX)"
+TARGETCC_CACHED		:= "$(CCACHE_HOST_DIR)/bin/ccache $(TARGETCC)"
+TARGETCXX_CACHED	:= "$(CCACHE_HOST_DIR)/bin/ccache $(TARGETCXX)"
 
 export CCACHE_DIR HOSTCC_CACHED HOSTCXX_CACHED TARGETCC_CACHED TARGETCXX_CACHED
 
-ccachehost_install: $(CCACHE_HOST_BUILD_DIR)/.installed
+CCACHE_PREFIX		:= $(CCACHE_HOST_DIR)
 
-$(CCACHE_HOST_BUILD_DIR)/.installed: ccache_download \
-	$(CCACHE_HOST_BUILD_DIR)/.decompressed \
-	$(CCACHE_HOST_BUILD_DIR)/.configured
-	$(MAKE) -C $(CCACHE_HOST_BUILD_DIR) $(J)
-	$(MAKE) -C $(CCACHE_HOST_BUILD_DIR) install
-	@touch $@
+ccache_install:
+	$(call embtk_install_hostpkg,ccache)
 
-ccache_download:
-	@test -e $(DOWNLOAD_DIR)/$(CCACHE_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(CCACHE_PACKAGE) \
-	$(CCACHE_SITE)/$(CCACHE_PACKAGE)
-
-$(CCACHE_HOST_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(CCACHE_PACKAGE) ...")
-	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(CCACHE_PACKAGE)
-	@mkdir -p $(CCACHE_HOST_BUILD_DIR)
-	@touch $@
-
-$(CCACHE_HOST_BUILD_DIR)/.configured:
-	$(call embtk_generic_message,"Configure ccache-$(CCACHE_VERSION) ...")
-	cd $(CCACHE_HOST_BUILD_DIR) ; \
-	$(TOOLS_BUILD)/ccache-$(CCACHE_VERSION)/configure \
-	--prefix=$(CCACHE_HOST_DIR) \
-	--build=$(HOST_BUILD) --host=$(HOST_ARCH)
-	@touch $@
+download_ccache:
+	$(call embtk_download_pkg,ccache)

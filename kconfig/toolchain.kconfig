@@ -79,6 +79,11 @@ source "kconfig/mpchost.kconfig"
 endmenu
 
 #
+# ccache
+#
+source kconfig/ccache.kconfig
+
+#
 # Autotools
 #
 source kconfig/m4.kconfig
