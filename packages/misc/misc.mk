@@ -29,6 +29,7 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_EXPAT) += expat_install
 #gettext
 include $(EMBTK_ROOT)/packages/misc/gettext/gettext.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GETTEXT) += gettext_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GETTEXT) += gettext_host_install
 
 #GLib
 include $(EMBTK_ROOT)/packages/misc/glib/glib.mk
