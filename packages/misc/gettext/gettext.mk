@@ -51,7 +51,7 @@ GETTEXT_CONFIGURE_OPTS	:= --enable-relocatable --with-included-gettext	\
 			--with-libxml2-prefix=$(SYSROOT)/usr		\
 			--disable-openmp
 
-GETTEXT_DEPS = ncurses_install libxml2_install
+GETTEXT_DEPS = ncurses_install libxml2_install gettext_host_install
 
 gettext_install:
 	$(call embtk_install_pkg,gettext)
