@@ -92,16 +92,18 @@ EMBTK_CMAKE_INSTALL := $(if $(CONFIG_EMBTK_HOST_HAVE_CMAKE),cmake_install,)
 ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 #EGLIBC
 include $(EMBTK_ROOT)/mk/eglibc.mk
-TOOLCHAINBUILD := mkinitialpath $(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL) \
-		kernel-headers_install ccache_install \
+TOOLCHAINBUILD := mkinitialpath ccache_install \
+		$(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL) \
+		kernel-headers_install\
 		gmphost_install mpfrhost_install mpchost_install \
 		binutils_install gcc1_install eglibc-headers_install \
 		gcc2_install eglibc_install gcc3_install
 else
 #uClibc
 include $(EMBTK_ROOT)/mk/uclibc.mk
-TOOLCHAINBUILD := mkinitialpath $(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL) \
-		kernel-headers_install ccache_install \
+TOOLCHAINBUILD := mkinitialpath ccache_install \
+		$(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL) \
+		kernel-headers_install \
 		gmphost_install mpfrhost_install mpchost_install \
 		binutils_install gcc1_install uclibc_install gcc3_install
 endif
