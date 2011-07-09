@@ -24,8 +24,8 @@
 ################################################################################
 
 GLIB_NAME		:= glib
-GLIB_MAJOR_VERSION	:= $(call embtk_get_pkgversion,GLIB_MAJOR)
-GLIB_VERSION		:= $(call embtk_get_pkgversion,GLIB)
+GLIB_MAJOR_VERSION	:= $(call embtk_get_pkgversion,glib_major)
+GLIB_VERSION		:= $(call embtk_get_pkgversion,glib)
 GLIB_SITE		:= http://ftp.gnome.org/pub/gnome/sources/glib/$(GLIB_MAJOR_VERSION)
 GLIB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GLIB_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/glib/$(GLIB_VERSION)
@@ -50,15 +50,12 @@ GLIB_CONFIGURE_ENV	:= glib_cv_stack_grows=no			\
 
 GLIB_CONFIGURE_OPTS	:= --disable-fam
 
-GLIB_DEPS := zlib_install gettext_install
+GLIB_DEPS		:= zlib_install gettext_install glib_host_install
 
 glib_install:
-	$(call embtk_install_pkg,GLIB)
+	$(call embtk_install_pkg,glib)
 	@test -e $(GLIB_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(GLIB_BUILD_DIR)/.patchlibtool
-
-download_glib:
-	$(call embtk_download_pkg,GLIB)
 
 #FIXME: this should be fixed in glib2 project
 $(GLIB_BUILD_DIR)/.patchlibtool:
@@ -85,5 +82,32 @@ $(GLIB_BUILD_DIR)/.patchlibtool:
 	@touch $@
 
 glib_clean:
-	$(call embtk_cleanup_pkg,GLIB)
+	$(call embtk_cleanup_pkg,glib)
 
+#
+# glib for host
+#
+GLIB_HOST_NAME		:= $(GLIB_NAME)
+GLIB_HOST_MAJOR_VERSION	:= $(GLIB_MAJOR_VERSION)
+GLIB_HOST_VERSION	:= $(GLIB_VERSION)
+GLIB_HOST_SITE		:= $(GLIB_SITE)
+GLIB_HOST_SITE_MIRROR1	:= $(GLIB_SITE_MIRROR1)
+GLIB_HOST_SITE_MIRROR2	:= $(GLIB_SITE_MIRROR2)
+GLIB_HOST_SITE_MIRROR3	:= $(GLIB_SITE_MIRROR3)
+GLIB_HOST_PATCH_SITE	:= $(GLIB_PATCH_SITE)
+GLIB_HOST_PACKAGE	:= $(GLIB_PACKAGE)
+GLIB_HOST_SRC_DIR	:= $(TOOLS_BUILD)/glib-$(GLIB_VERSION)
+GLIB_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/glib-$(GLIB_VERSION)
+
+
+GLIB_HOST_CONFIGURE_OPTS	:= --disable-fam
+GLIB_HOST_DEPS			:= gettext_host_install
+
+glib_host_install:
+	$(call embtk_install_hostpkg,glib_host)
+
+#
+# Common for target and host
+#
+download_glib download_glib_host:
+	$(call embtk_download_pkg,glib)
