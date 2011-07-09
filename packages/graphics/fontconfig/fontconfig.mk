@@ -24,7 +24,7 @@
 ################################################################################
 
 FONTCONFIG_NAME		:= fontconfig
-FONTCONFIG_VERSION	:= $(call embtk_get_pkgversion,FONTCONFIG)
+FONTCONFIG_VERSION	:= $(call embtk_get_pkgversion,fontconfig)
 FONTCONFIG_SITE		:= http://fontconfig.org/release
 FONTCONFIG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 FONTCONFIG_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/fontconfig/$(FONTCONFIG_VERSION)
@@ -39,26 +39,29 @@ FONTCONFIG_LIBS		= libfontconfig*
 FONTCONFIG_PKGCONFIGS	= fontconfig.pc
 
 LIBXML2_CFLAGS := -I$(SYSROOT)/usr/include/libxml2
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-LIBXML2_CFLAGS += -L$(SYSROOT)/usr/lib32
-else
-LIBXML2_CFLAGS += -L$(SYSROOT)/usr/lib
-endif
+LIBXML2_CFLAGS += -L$(SYSROOT)/usr/$(LIBDIR)
 
-FONTCONFIG_CONFIGURE_OPTS := --with-arch=$(STRICT_GNU_TARGET)	\
-			--disable-docs --program-prefix=""
+FREETYPE_CFLAGS := -I$(SYSROOT)/usr/include/freetype2
+FREETYPE_CFLAGS += -L$(SYSROOT)/usr/$(LIBDIR)
+
+FONTCONFIG_CONFIGURE_ENV	:= LIBXML2_CFLAGS="$(LIBXML2_CFLAGS)"
+FONTCONFIG_CONFIGURE_ENV	:= FREETYPE_CFLAGS="$(FREETYPE_CFLAGS)"
+FONTCONFIG_CONFIGURE_OPTS	:= --with-arch=$(STRICT_GNU_TARGET)	\
+				--disable-docs --program-prefix=""
+
+FONTCONFIG_DEPS			:= libxml2_install freetype_install
 
 fontconfig_install:
-	$(call embtk_install_pkg,FONTCONFIG)
+	$(call embtk_install_pkg,fontconfig)
 	$(MAKE) $(FONTCONFIG_BUILD_DIR)/.special
 
 download_fontconfig:
-	$(call embtk_download_pkg,FONTCONFIG)
+	$(call embtk_download_pkg,fontconfig)
 
 .PHONY: $(FONTCONFIG_BUILD_DIR)/.special fontconfig_clean
 
 fontconfig_clean:
-	$(call embtk_cleanup_pkg,FONTCONFIG)
+	$(call embtk_cleanup_pkg,fontconfig)
 
 $(FONTCONFIG_BUILD_DIR)/.special:
 	$(Q)-cp -R $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc/
