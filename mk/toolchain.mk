@@ -47,14 +47,10 @@ export ac_cv_func_malloc_0_nonnull
 ac_cv_func_realloc_0_nonnull=yes
 export ac_cv_func_realloc_0_nonnull
 
-PATH:=$(HOSTTOOLS)/usr/bin:$(HOSTTOOLS)/usr/sbin:$(PATH)
+PATH			:= $(HOSTTOOLS)/usr/bin:$(HOSTTOOLS)/usr/sbin:$(PATH)
 export PATH
 
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-LIBDIR=lib32
-else
-LIBDIR=lib
-endif
+LIBDIR			:= $(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),lib32,lib)
 export LIBDIR
 
 #ccache on host
