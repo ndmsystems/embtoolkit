@@ -265,7 +265,7 @@ define embtk_configure_hostpkg
 	$(call __embtk_print_configure_opts,"$($(PKGV)_CONFIGURE_OPTS)")
 	@cd $($(PKGV)_BUILD_DIR);						\
 	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"					\
-	LDFLAGS="-L$(HOSTTOOLS)/$(LIBDIR) -L$(HOSTTOOLS)/usr/$(LIBDIR)"		\
+	LDFLAGS="-L$(HOSTTOOLS)/usr/lib -Wl,-rpath,$(HOSTTOOLS)/usr/lib"	\
 	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CC=$(HOSTCC_CACHED))	\
 	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CXX=$(HOSTCXX_CACHED))	\
 	$($(PKGV)_CONFIGURE_ENV)						\
