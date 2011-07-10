@@ -41,8 +41,8 @@ GTK_PKGCONFIGS	= gail*.pc gdk*.pc gtk*.pc
 GTK_ETC		= gtk-*
 
 GTK_DEPS	:=	libjpeg_install libpng_install libtiff_install \
-			fontconfig_install glib_install atk_install \
-			cairo_install pango_install
+			fontconfig_install glib_install gdkpixbuf_host_install \
+			atk_install cairo_install pango_install
 ifeq ($(CONFIG_EMBTK_GTK_BACKEND_DIRECTFB),y)
 GTK_BACKEND	:= --with-gdktarget=directfb --without-x
 GTK_DEPS	+= directfb_install
