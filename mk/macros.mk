@@ -151,6 +151,30 @@ endif
 	@echo
 	$(call embtk_echo_blue,"################################################################################")
 
+#
+# embtk_pkgconfig_getlibs:
+# A macro to get pkg-config libs entry for a target package
+# Usage: $(call embtk_pkgconfig_getlibs,pkgname)
+#
+define embtk_pkgconfig_getlibs
+	$(shell									\
+		PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
+		PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"			\
+		$(PKGCONFIG_BIN) $(strip $(1)) --libs)
+endef
+
+#
+# embtk_pkgconfig_getcflags:
+# A macro to get pkg-config cflags entry for a target package
+# Usage: $(call embtk_pkgconfig_getcflags,pkgname)
+#
+define embtk_pkgconfig_getcflags
+	$(shell									\
+		PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
+		PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"			\
+		$(PKGCONFIG_BIN) $(strip $(1)) --cflags)
+endef
+
 #Macro to adapt libtool files (*.la) for cross compiling
 __ltlibdirold=libdir='\/usr\/$(LIBDIR)'
 __ltlibdirnew=libdir='$(SYSROOT)\/usr\/$(LIBDIR)'
