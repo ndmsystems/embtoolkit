@@ -62,6 +62,7 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBJPEG) += libjpeg_install
 #libpng
 include $(EMBTK_ROOT)/packages/graphics/libpng/libpng.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPNG) += libpng_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBPNG) += libpng_host_install
 
 #libtiff
 include $(EMBTK_ROOT)/packages/graphics/libtiff/libtiff.mk
