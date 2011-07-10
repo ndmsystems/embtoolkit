@@ -39,7 +39,7 @@ FONTCONFIG_LIBS		= libfontconfig*
 FONTCONFIG_PKGCONFIGS	= fontconfig.pc
 
 LIBXML2_CFLAGS-y	= -I$(SYSROOT)/usr/include/libxml2
-LIBXML2_LIBS-y		= -L$(SYSROOT)/usr/$(LIBDIR)
+LIBXML2_LIBS-y		= -L$(SYSROOT)/usr/$(LIBDIR) -lxml2
 
 FREETYPE_CFLAGS-y	= $(shell						\
 				PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)	\
