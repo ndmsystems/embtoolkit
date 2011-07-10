@@ -23,6 +23,12 @@
 # \date         October 2009
 ################################################################################
 
+config EMBTK_HOST_HAVE_LIBJPEG
+	bool
+	select EMBTK_LIBJPEG_PKG_IS_TARGZ
+	help
+		JPEG (pronounced "jay-peg") for host development machine.
+
 config EMBTK_HAVE_LIBJPEG
 	bool "Have libjpeg"
 	select EMBTK_LIBJPEG_PKG_IS_TARGZ
@@ -33,7 +39,7 @@ config EMBTK_HAVE_LIBJPEG
 
 choice
 	prompt "libjpeg version you wish"
-	depends on EMBTK_HAVE_LIBJPEG
+	depends on EMBTK_HAVE_LIBJPEG || EMBTK_HOST_HAVE_LIBJPEG
 	help
 		Here you can choose which version of libjpeg you want to use.
 
@@ -50,9 +56,22 @@ config	EMBTK_LIBJPEG_VERSION_STRING
 
 config EMBTK_LIBJPEG_NEED_PATCH
 	bool
+	select EMBTK_LIBJPEG_HOST_NEED_PATCH
 config EMBTK_LIBJPEG_NEED_AUTORECONF
 	bool
+	select EMBTK_LIBJPEG_HOST_NEED_AUTORECONF
 config EMBTK_LIBJPEG_PKG_IS_TARGZ
 	bool
+	select EMBTK_LIBJPEG_HOST_PKG_IS_TARGZ
 config EMBTK_LIBJPEG_PKG_IS_TARBZ2
+	bool
+	select EMBTK_LIBJPEG_HOST_PKG_IS_TARBZ2
+
+config EMBTK_LIBJPEG_HOST_NEED_PATCH
+	bool
+config EMBTK_LIBJPEG_HOST_NEED_AUTORECONF
+	bool
+config EMBTK_LIBJPEG_HOST_PKG_IS_TARGZ
+	bool
+config EMBTK_LIBJPEG_HOST_PKG_IS_TARBZ2
 	bool
