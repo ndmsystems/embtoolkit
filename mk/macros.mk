@@ -222,7 +222,7 @@ define embtk_configure_pkg
 	$(call __embtk_configure_autoreconfpkg,$(1))
 	@test -e $($(PKGV)_SRC_DIR)/configure || exit 1
 	$(call __embtk_print_configure_opts,"$($(PKGV)_CONFIGURE_OPTS)")
-	@cd $($(PKGV)_BUILD_DIR);						\
+	$(Q)cd $($(PKGV)_BUILD_DIR);						\
 	CC=$(TARGETCC_CACHED)							\
 	CXX=$(TARGETCXX_CACHED)							\
 	AR=$(TARGETAR)								\
@@ -237,8 +237,9 @@ define embtk_configure_pkg
 	CXXFLAGS="$(TARGET_CFLAGS)"						\
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"		\
 	CPPFLAGS="-I$(SYSROOT)/usr/include"					\
-	PKG_CONFIG=$(PKGCONFIG_BIN)						\
-	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)				\
+	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
+	PKG_CONFIG_PATH="$(EMBTK_PKG_CONFIG_PATH)"				\
+	PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"				\
 	ac_cv_func_malloc_0_nonnull=yes						\
 	ac_cv_func_realloc_0_nonnull=yes					\
 	$($(PKGV)_CONFIGURE_ENV)						\
@@ -265,7 +266,9 @@ define embtk_configure_hostpkg
 	$(call __embtk_print_configure_opts,"$($(PKGV)_CONFIGURE_OPTS)")
 	@cd $($(PKGV)_BUILD_DIR);						\
 	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"					\
-	LDFLAGS="-L$(HOSTTOOLS)/$(LIBDIR) -L$(HOSTTOOLS)/usr/$(LIBDIR)"		\
+	LDFLAGS="-L$(HOSTTOOLS)/usr/lib -Wl,-rpath,$(HOSTTOOLS)/usr/lib"	\
+	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CC=$(HOSTCC_CACHED))	\
+	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CXX=$(HOSTCXX_CACHED))	\
 	$($(PKGV)_CONFIGURE_ENV)						\
 	$(CONFIG_SHELL) $($(PKGV)_SRC_DIR)/configure				\
 	--build=$(HOST_BUILD) --host=$(HOST_ARCH)				\

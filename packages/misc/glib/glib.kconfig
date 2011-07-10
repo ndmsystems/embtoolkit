@@ -23,9 +23,17 @@
 # \date         December 2009
 ################################################################################
 
+config EMBTK_HOST_HAVE_GLIB
+	bool
+	select EMBTK_GLIB_PKG_IS_TARBZ2
+	select EMBTK_HOST_HAVE_GETTEXT
+	help
+		Have glib for host development machine.
+
 config EMBTK_HAVE_GLIB
 	bool "Have GLib"
 	select EMBTK_GLIB_PKG_IS_TARBZ2
+	select EMBTK_HOST_HAVE_GLIB
 	select EMBTK_HAVE_GETTEXT
 	select EMBTK_HAVE_ZLIB
 	select KEMBTK_UCLIBC_DO_C99_MATH if EMBTK_CLIB_UCLIBC
@@ -48,7 +56,7 @@ config EMBTK_HAVE_GLIB
 		operation.
 choice
 	prompt "GLib version you wish"
-	depends on EMBTK_HAVE_GLIB
+	depends on EMBTK_HAVE_GLIB || EMBTK_HOST_HAVE_GLIB
 	help
 		Here you can choose which version of GLib you want to use.
 
@@ -70,9 +78,22 @@ config EMBTK_GLIB_VERSION_STRING
 
 config EMBTK_GLIB_NEED_PATCH
 	bool
+	select EMBTK_GLIB_HOST_NEED_PATCH
 config EMBTK_GLIB_NEED_AUTORECONF
 	bool
+	select EMBTK_GLIB_HOST_NEED_AUTORECONF
 config EMBTK_GLIB_PKG_IS_TARGZ
 	bool
+	select EMBTK_GLIB_HOST_PKG_IS_TARGZ
 config EMBTK_GLIB_PKG_IS_TARBZ2
+	bool
+	select EMBTK_GLIB_HOST_PKG_IS_TARBZ2
+
+config EMBTK_GLIB_HOST_NEED_PATCH
+	bool
+config EMBTK_GLIB_HOST_NEED_AUTORECONF
+	bool
+config EMBTK_GLIB_HOST_PKG_IS_TARGZ
+	bool
+config EMBTK_GLIB_HOST_PKG_IS_TARBZ2
 	bool

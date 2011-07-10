@@ -24,7 +24,7 @@
 ################################################################################
 
 GETTEXT_NAME		:= gettext
-GETTEXT_VERSION		:= $(call embtk_get_pkgversion,GETTEXT)
+GETTEXT_VERSION		:= $(call embtk_get_pkgversion,gettext)
 GETTEXT_SITE		:= http://ftp.gnu.org/pub/gnu/gettext
 GETTEXT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GETTEXT_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/gettext/$(GETTEXT_VERSION)
@@ -32,6 +32,7 @@ GETTEXT_PACKAGE		:= gettext-$(GETTEXT_VERSION).tar.gz
 GETTEXT_SRC_DIR		:= $(PACKAGES_BUILD)/gettext-$(GETTEXT_VERSION)
 GETTEXT_BUILD_DIR	:= $(PACKAGES_BUILD)/gettext-$(GETTEXT_VERSION)
 
+# gettext for target
 GETTEXT_BINS =	autopoint gettext gettext.sh msgcat msgcomm msgen	\
 		msgfilter msggrep msgmerge msguniq recode-sr-latin	\
 		envsubst gettextize msgattrib msgcmp msgconv msgexec	\
@@ -57,9 +58,6 @@ gettext_install:
 	@test -e $(GETTEXT_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(GETTEXT_BUILD_DIR)/.patchlibtool
 
-download_gettext:
-	$(call embtk_download_pkg,gettext)
-
 gettext_clean:
 	$(call embtk_cleanup_pkg,gettext)
 
@@ -74,3 +72,26 @@ $(GETTEXT_BUILD_DIR)/.patchlibtool:
 	-i "s;/usr/$(LIBDIR)/libgettextlib.la;$(SYSROOT)/$(LIBDIR)/libgettextlib.la;" \
 	$(SYSROOT)/usr/$(LIBDIR)/libgettextsrc.la
 	@touch $@
+
+# gettext for host development machine
+GETTEXT_HOST_NAME		:= $(GETTEXT_NAME)
+GETTEXT_HOST_VERSION		:= $(GETTEXT_VERSION)
+GETTEXT_HOST_SITE		:= $(GETTEXT_SITE)
+GETTEXT_HOST_SITE_MIRROR1	:= $(GETTEXT_SITE_MIRROR1)
+GETTEXT_HOST_SITE_MIRROR2	:= $(GETTEXT_SITE_MIRROR2)
+GETTEXT_HOST_SITE_MIRROR3	:= $(GETTEXT_SITE_MIRROR3)
+GETTEXT_HOST_PATCH_SITE		:= $(GETTEXT_PATCH_SITE)
+GETTEXT_HOST_PACKAGE		:= $(GETTEXT_PACKAGE)
+GETTEXT_HOST_SRC_DIR		:= $(TOOLS_BUILD)/gettext-$(GETTEXT_VERSION)
+GETTEXT_HOST_BUILD_DIR		:= $(TOOLS_BUILD)/gettext-$(GETTEXT_VERSION)
+
+GETTEXT_HOST_CONFIGURE_OPTS	:= --disable-java --disable-native-java	\
+	--disable-openmp --with-included-gettext --with-included-glib	\
+	--with-included-libcroco --with-included-libxml
+
+gettext_host_install:
+	$(call embtk_install_hostpkg,gettext_host)
+
+# common tagets
+download_gettext download_gettext_host:
+	$(call embtk_download_pkg,gettext)

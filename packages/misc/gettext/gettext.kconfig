@@ -23,6 +23,13 @@
 # \date         December 2009
 ################################################################################
 
+config EMBTK_HOST_HAVE_GETTEXT
+	bool
+	select EMBTK_GETTEXT_PKG_IS_TARGZ
+	default y
+	help
+		gettext for host development machine.
+
 config EMBTK_HAVE_GETTEXT
 	bool "Have gettext"
 	select EMBTK_GETTEXT_PKG_IS_TARGZ
@@ -56,26 +63,36 @@ config EMBTK_HAVE_GETTEXT
 		www.gnu.org/software/gettext/FAQ.html
 choice
 	prompt "gettext version you wish"
-	depends on EMBTK_HAVE_GETTEXT
+	depends on EMBTK_HAVE_GETTEXT || EMBTK_HOST_HAVE_GETTEXT
 	help
 		Here you can choose which version of gettext you want to use.
 
-	config  EMBTK_GETTEXT_VERSION_0_17
-		bool "gettext-0.17"
 	config  EMBTK_GETTEXT_VERSION_0_16_1
 		bool "gettext-0.16.1"
 endchoice
 
 config EMBTK_GETTEXT_VERSION_STRING
 	string
-	default "0.17"		if EMBTK_GETTEXT_VERSION_0_17
-	default "0.16.1"	if EMBTK_GETTEXT_VERSION_0_16_1
+	default "0.16.1"		if EMBTK_GETTEXT_VERSION_0_16_1
 
 config EMBTK_GETTEXT_NEED_PATCH
 	bool
+	select EMBTK_GETTEXT_HOST_NEED_PATCH
 config EMBTK_GETTEXT_NEED_AUTORECONF
 	bool
+	select EMBTK_GETTEXT_HOST_NEED_AUTORECONF
 config EMBTK_GETTEXT_PKG_IS_TARGZ
 	bool
+	select EMBTK_GETTEXT_HOST_PKG_IS_TARGZ
 config EMBTK_GETTEXT_PKG_IS_TARBZ2
+	bool
+	select EMBTK_GETTEXT_HOST_PKG_IS_TARBZ2
+
+config EMBTK_GETTEXT_HOST_NEED_PATCH
+	bool
+config EMBTK_GETTEXT_HOST_NEED_AUTORECONF
+	bool
+config EMBTK_GETTEXT_HOST_PKG_IS_TARGZ
+	bool
+config EMBTK_GETTEXT_HOST_PKG_IS_TARBZ2
 	bool
