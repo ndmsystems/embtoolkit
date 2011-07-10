@@ -68,6 +68,7 @@ HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBPNG) += libpng_host_install
 #libtiff
 include $(EMBTK_ROOT)/packages/graphics/libtiff/libtiff.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIFF) += libtiff_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBTIFF) += libtiff_host_install
 
 #Pango
 include $(EMBTK_ROOT)/packages/graphics/pango/pango.mk
