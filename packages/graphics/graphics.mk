@@ -47,6 +47,11 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FREEFONT_TTF) += freefont_ttf_install
 include $(EMBTK_ROOT)/packages/graphics/freetype/freetype.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FREETYPE) += freetype_install
 
+#gdk-pixbuf
+include $(EMBTK_ROOT)/packages/graphics/gdk-pixbuf/gdk-pixbuf.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GDKPIXBUF) += gdkpixbuf_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GDKPIXBUF) += gdkpixbuf_host_install
+
 #gtk+
 include $(EMBTK_ROOT)/packages/graphics/gtk/gtk.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GTK) += gtk_install
