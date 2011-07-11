@@ -93,7 +93,7 @@ TOOLCHAINBUILD := mkinitialpath ccache_install \
 		kernel-headers_install\
 		gmphost_install mpfrhost_install mpchost_install \
 		binutils_install gcc1_install eglibc-headers_install \
-		gcc2_install eglibc_install gcc3_install pkgconfig_install
+		gcc2_install eglibc_install gcc3_install
 else
 #uClibc
 include $(EMBTK_ROOT)/mk/uclibc.mk
@@ -101,8 +101,7 @@ TOOLCHAINBUILD := mkinitialpath ccache_install \
 		$(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL) \
 		kernel-headers_install \
 		gmphost_install mpfrhost_install mpchost_install \
-		binutils_install gcc1_install uclibc_install gcc3_install \
-		pkgconfig_install
+		binutils_install gcc1_install uclibc_install gcc3_install
 endif
 
 #targets
