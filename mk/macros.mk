@@ -285,25 +285,33 @@ endef
 # $(call embtk_install_pkg,PACKAGE)
 #
 __embtk_multi_make = $(foreach builddir,$($(PKGV)_MAKE_DIRS),			\
+				$($(PKGV)_MAKE_ENV)				\
 				$(MAKE) -C $($(PKGV)_BUILD_DIR)/$(builddir)	\
 				$($(PKGV)_MAKE_OPTS) $(J);)
 
-__embtk_single_make = $(MAKE) -C $($(PKGV)_BUILD_DIR) $($(PKGV)_MAKE_OPTS) $(J)
+__embtk_single_make = $($(PKGV)_MAKE_ENV) $(MAKE) -C $($(PKGV)_BUILD_DIR)	\
+			$($(PKGV)_MAKE_OPTS) $(J)
 
 __embtk_multi_make_install = $(foreach builddir,$($(PKGV)_MAKE_DIRS),		\
-	$(MAKE) -C $($(PKGV)_BUILD_DIR)/$(builddir)				\
-	DESTDIR=$(SYSROOT)/$($(PKGV)_SYSROOT_SUFFIX) $($(PKGV)_MAKE_OPTS) install;)
+	$($(PKGV)_MAKE_ENV) $(MAKE) -C $($(PKGV)_BUILD_DIR)/$(builddir)		\
+	DESTDIR=$(SYSROOT)$(if $($(PKGV)_SYSROOT_SUFFIX),/$($(PKGV)_SYSROOT_SUFFIX)) \
+	$($(PKGV)_MAKE_OPTS) install;)
 
-__embtk_single_make_install = $(MAKE) -C $($(PKGV)_BUILD_DIR)			\
-	DESTDIR=$(SYSROOT)/$($(PKGV)_SYSROOT_SUFFIX) $($(PKGV)_MAKE_OPTS) install
+__embtk_single_make_install = $($(PKGV)_MAKE_ENV)				\
+	$(MAKE) -C $($(PKGV)_BUILD_DIR)						\
+	DESTDIR=$(SYSROOT)$(if $($(PKGV)_SYSROOT_SUFFIX),/$($(PKGV)_SYSROOT_SUFFIX)) \
+	$($(PKGV)_MAKE_OPTS) install
 
 __embtk_multi_make_hostinstall = $(foreach builddir,$($(PKGV)_MAKE_DIRS),	\
+	$($(PKGV)_MAKE_ENV)							\
 	$(MAKE) -C $($(PKGV)_BUILD_DIR)/$(builddir)				\
 	$(if $($(PKGV)_DESTDIR),DESTDIR=$($(PKGV)_DESTDIR))			\
 	$($(PKGV)_MAKE_OPTS) install;)
 
-__embtk_single_make_hostinstall = $(MAKE) -C $($(PKGV)_BUILD_DIR)		\
-	$(if $($(PKGV)_DESTDIR),DESTDIR=$($(PKGV)_DESTDIR)) $($(PKGV)_MAKE_OPTS) install
+__embtk_single_make_hostinstall = $($(PKGV)_MAKE_ENV)				\
+	$(MAKE) -C $($(PKGV)_BUILD_DIR)						\
+	$(if $($(PKGV)_DESTDIR),DESTDIR=$($(PKGV)_DESTDIR))			\
+	$($(PKGV)_MAKE_OPTS) install
 
 define __embtk_install_pkg_make
 	$(call embtk_generic_msg,"Compiling and installing $($(PKGV)_NAME)-$($(PKGV)_VERSION) in your root filesystem...")
