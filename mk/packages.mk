@@ -41,7 +41,7 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_STRACE) += strace_install
 include $(EMBTK_ROOT)/mk/strace.mk
 
 # Flash manipulation tools: mtd-utils
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS) += mtdutils_target_install
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MTDUTILS) += mtdutils_install
 
 #Compression packages
 include $(EMBTK_ROOT)/packages/compression/compression.mk

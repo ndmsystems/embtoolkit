@@ -36,8 +36,9 @@ menu "Packages to include in your root filesystem"
 
 menu "Flash manipulation tools"
 #mtd-utils on target
-config EMBTK_ROOTFS_HAVE_MTDUTILS
+config EMBTK_HAVE_MTDUTILS
 	bool "Have mtd-utils in your target root filesystem"
+	select EMBTK_MTDUTILS_PKG_IS_TARBZ2
 	select EMBTK_HAVE_E2FSPROGS
 	select EMBTK_HAVE_ZLIB
 	select EMBTK_HAVE_LZO
