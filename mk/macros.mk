@@ -199,6 +199,30 @@ PKGV=$(strip $(shell echo $(1) | tr a-z A-Z))
 embtk_get_pkgversion = $(subst ",,$(strip $(CONFIG_EMBTK_$(PKGV)_VERSION_STRING)))
 
 #
+# A macro to test if a package is already decompressed.
+# It returns y if decompressed and nothing if not.
+#
+__embtk_pkg_decompressed-y = $(shell test -e $($(PKGV)_SRC_DIR)/.decompressed && echo y)
+
+#
+# A macro to test if a package is already patched.
+# It returns y if patched and nothing if not.
+#
+__embtk_pkg_patched-y = $(shell test -e $($(PKGV)_SRC_DIR)/.patched && echo y)
+
+#
+# A macro to test if a package is already configured using autotools configure
+# script. It returns y if configured and nothing if not.
+#
+__embtk_pkg_configured-y = $(shell test -e $($(PKGV)_BUILD_DIR)/.configured && echo y)
+
+#
+# A macro to test if a package is already installed.
+# It returns y if installed and nothing if not.
+#
+__embtk_pkg_installed-y = $(shell test -e $($(PKGV)_BUILD_DIR)/.installed && echo y)
+
+#
 # A macro which runs configure script (conpatible with autotools configure)
 # for a package and sets environment variables correctly.
 # Usage:
