@@ -397,7 +397,7 @@ endef
 #
 define embtk_install_hostpkg
 	$(Q)$(if $(__embtk_pkg_installed-y),true,	\
-		$(call __embtk_install_hostpkg_make,$(1)),autotools)
+		$(call __embtk_install_hostpkg_make,$(1),autotools))
 endef
 
 #
