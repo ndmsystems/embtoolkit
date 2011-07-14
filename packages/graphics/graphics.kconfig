@@ -28,6 +28,7 @@ source packages/graphics/cairo/cairo.kconfig
 source packages/graphics/directfb/directfb.kconfig
 source packages/graphics/fontconfig/fontconfig.kconfig
 source packages/graphics/freetype/freetype.kconfig
+source packages/graphics/gdk-pixbuf/gdk-pixbuf.kconfig
 source packages/graphics/gtk/gtk.kconfig
 source packages/graphics/imlib2/imlib2.kconfig
 source packages/graphics/libjpeg/libjpeg.kconfig

@@ -47,6 +47,11 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FREEFONT_TTF) += freefont_ttf_install
 include $(EMBTK_ROOT)/packages/graphics/freetype/freetype.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FREETYPE) += freetype_install
 
+#gdk-pixbuf
+include $(EMBTK_ROOT)/packages/graphics/gdk-pixbuf/gdk-pixbuf.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GDKPIXBUF) += gdkpixbuf_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GDKPIXBUF) += gdkpixbuf_host_install
+
 #gtk+
 include $(EMBTK_ROOT)/packages/graphics/gtk/gtk.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GTK) += gtk_install
@@ -58,14 +63,17 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_IMLIB2) += imlib2_install
 #libjpeg
 include $(EMBTK_ROOT)/packages/graphics/libjpeg/libjpeg.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBJPEG) += libjpeg_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBJPEG) += libjpeg_host_install
 
 #libpng
 include $(EMBTK_ROOT)/packages/graphics/libpng/libpng.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPNG) += libpng_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBPNG) += libpng_host_install
 
 #libtiff
 include $(EMBTK_ROOT)/packages/graphics/libtiff/libtiff.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIFF) += libtiff_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBTIFF) += libtiff_host_install
 
 #Pango
 include $(EMBTK_ROOT)/packages/graphics/pango/pango.mk

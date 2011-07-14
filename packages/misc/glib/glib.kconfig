@@ -60,6 +60,8 @@ choice
 	help
 		Here you can choose which version of GLib you want to use.
 
+	config  EMBTK_GLIB_VERSION_2_26_1
+		bool "GLib-2.26.1"
 	config  EMBTK_GLIB_VERSION_2_24_2
 		bool "GLib-2.24.2"
 	config  EMBTK_GLIB_VERSION_2_24_1
@@ -68,11 +70,13 @@ endchoice
 
 config EMBTK_GLIB_MAJOR_VERSION_STRING
 	string
+	default "2.26"		if EMBTK_GLIB_VERSION_2_26_1
 	default "2.24"		if EMBTK_GLIB_VERSION_2_24_2
 	default "2.24"		if EMBTK_GLIB_VERSION_2_24_1
 
 config EMBTK_GLIB_VERSION_STRING
 	string
+	default "2.26.1"	if EMBTK_GLIB_VERSION_2_26_1
 	default "2.24.2"	if EMBTK_GLIB_VERSION_2_24_2
 	default "2.24.1"	if EMBTK_GLIB_VERSION_2_24_1
 

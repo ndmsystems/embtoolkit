@@ -23,12 +23,14 @@
 # \date         June 2009
 ################################################################################
 
-MTDUTILS_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_MTDUTILS_VERSION_STRING)))
-MTDUTILS_SITE := ftp://ftp.infradead.org/pub/mtd-utils
-MTDUTILS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/mtd-utils/$(MTDUTILS_VERSION)
-MTDUTILS_PACKAGE := mtd-utils-$(MTDUTILS_VERSION).tar.bz2
-MTDUTILS_HOST_BUILD_DIR := $(TOOLS_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
-MTDUTILS_TARGET_BUILD_DIR := $(PACKAGES_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
+MTDUTILS_NAME			:= mtd-utils
+MTDUTILS_VERSION		:= $(call embtk_get_pkgversion,mtdutils)
+MTDUTILS_SITE			:= ftp://ftp.infradead.org/pub/mtd-utils
+MTDUTILS_SITE_MIRROR3		:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+MTDUTILS_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/mtd-utils/$(MTDUTILS_VERSION)
+MTDUTILS_PACKAGE		:= mtd-utils-$(MTDUTILS_VERSION).tar.bz2
+MTDUTILS_SRC_DIR		:= $(PACKAGES_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
+MTDUTILS_BUILD_DIR		:= $(PACKAGES_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
 
 MTDUTILS_SBINS := bin2nand flash_eraseall flash_unlock mkfs.jffs2 nand2bin \
 		nftl_format rfddump ubicrc32 ubimirror ubirmvol docfdisk \
@@ -40,84 +42,50 @@ MTDUTILS_SBINS := bin2nand flash_eraseall flash_unlock mkfs.jffs2 nand2bin \
 		ubinize unubi flash_erase flash_otp_info mkbootenv mtdinfo \
 		nftldump recv_image ubiattach ubigen ubirename
 
-##############################################
-# mtd-utils for the host development machine #
-##############################################
+MTDUTILS_DEPS		:= zlib_install lzo_install e2fsprogs_install
+MTDUTILS_MAKE_ENV	:= LDFLAGS="-L$(SYSROOT)/lib -L$(SYSROOT)/usr/lib"
+MTDUTILS_MAKE_ENV	+= CPPFLAGS="-I. -I./include -I$(SYSROOT)/usr/include"
+MTDUTILS_MAKE_ENV	+= CFLAGS="$(TARGET_CFLAGS)"
+MTDUTILS_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_BUILD_DIR)
+MTDUTILS_MAKE_ENV	+= DESTDIR=$(SYSROOT)
+MTDUTILS_MAKE_ENV	+= PATH=$(PATH):$(TOOLS)/bin CROSS=$(CROSS_COMPILE)
 
-MTDUTILS_HOST_DEPS := zlib_host_install lzo_host_install \
-		e2fsprogs_host_install
+mtdutils_install:
+	$(call embtk_makeinstall_pkg,mtdutils)
+
+mtdutils_clean:
+	$(call embtk_cleanup_pkg,mtdutils)
+
+#
+# mtd-utils for host development machine.
+#
+MTDUTILS_HOST_NAME		:= $(MTDUTILS_NAME)
+MTDUTILS_HOST_VERSION		:= $(MTDUTILS_VERSION)
+MTDUTILS_HOST_SITE		:= $(MTDUTILS_SITE)
+MTDUTILS_HOST_SITE_MIRROR1	:= $(MTDUTILS_SITE_MIRROR1)
+MTDUTILS_SITE_MIRROR2		:= $(MTDUTILS_SITE_MIRROR2)
+MTDUTILS_HOST_SITE_MIRROR3	:= $(MTDUTILS_SITE_MIRROR3)
+MTDUTILS_HOST_PATCH_SITE	:= $(MTDUTILS_PATCH_SITE)
+MTDUTILS_HOST_PACKAGE		:= $(MTDUTILS_PACKAGE)
+MTDUTILS_HOST_SRC_DIR		:= $(TOOLS_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
+MTDUTILS_HOST_BUILD_DIR		:= $(TOOLS_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
+
+MTDUTILS_HOST_DEPS	:= zlib_host_install lzo_host_install \
+			e2fsprogs_host_install
+
+MTDUTILS_HOST_MAKE_ENV	:= LDFLAGS="-L$(HOSTTOOLS)/usr/lib"
+MTDUTILS_HOST_MAKE_ENV	+= CPPFLAGS="-I. -Iinclude -I../include -I$(HOSTTOOLS)/usr/include"
+MTDUTILS_HOST_MAKE_ENV	+= DESTDIR=$(HOSTTOOLS)
+MTDUTILS_HOST_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR)
 
 mtdutils_host_install:
-	@test -e $(MTDUTILS_HOST_BUILD_DIR)/.installed || \
-	$(MAKE) $(MTDUTILS_HOST_BUILD_DIR)/.installed
-
-$(MTDUTILS_HOST_BUILD_DIR)/.installed:  $(MTDUTILS_HOST_DEPS) \
-	download_mtdutils $(MTDUTILS_HOST_BUILD_DIR)/.decompressed
-	LDFLAGS="-L$(HOSTTOOLS)/usr/lib -L$(HOSTTOOLS)/usr/local/lib" \
-	CPPFLAGS="-I. -Iinclude -I../include -I$(HOSTTOOLS)/usr/include -I$(HOSTTOOLS)/usr/local/include" \
-	DESTDIR=$(HOSTTOOLS) \
-	BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR) \
-	$(MAKE) -C $(TOOLS_BUILD)/mtd-utils-$(MTDUTILS_VERSION) install
-	@touch $@
-
-$(MTDUTILS_HOST_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(MTDUTILS_PACKAGE)...")
-	@tar -C $(TOOLS_BUILD) -xvf $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE)
-ifeq ($(CONFIG_EMBTK_MTDUTILS_NEED_PATCH),y)
-	cd $(MTDUTILS_HOST_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/mtd-utils-$(MTDUTILS_VERSION).patch
-endif
-	@touch $@
+	$(call embtk_makeinstall_hostpkg,mtdutils_host)
 
 mtdutils_host_clean:
-	$(call embtk_generic_message,"Cleaning mtd-utils in host ...")
+	$(call embtk_generic_msg,"Cleaning mtd-utils on host ...")
 
-########################
-# mtd-utils for target #
-########################
-
-MTDUTILS_DEPS := zlib_install lzo_install e2fsprogs_install
-
-mtdutils_target_install:
-	@test -e $(MTDUTILS_TARGET_BUILD_DIR)/.installed || \
-	$(MAKE) $(MTDUTILS_TARGET_BUILD_DIR)/.installed
-
-$(MTDUTILS_TARGET_BUILD_DIR)/.installed: $(MTDUTILS_DEPS) download_mtdutils \
-	$(MTDUTILS_TARGET_BUILD_DIR)/.decompressed
-	LDFLAGS="-L$(SYSROOT)/usr/local/lib" \
-	CPPFLAGS="-I. -I./include -I$(SYSROOT)/usr/local/include -I$(SYSROOT)/usr/include" \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	BUILDDIR=$(MTDUTILS_TARGET_BUILD_DIR) DESTDIR=$(SYSROOT) \
-	PATH=$(PATH):$(TOOLS)/bin CROSS=$(CROSS_COMPILE) \
-	$(MAKE) -C $(PACKAGES_BUILD)/mtd-utils-$(MTDUTILS_VERSION) install
-	@touch $@
-
-$(MTDUTILS_TARGET_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(MTDUTILS_PACKAGE)...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE)
-ifeq ($(CONFIG_EMBTK_MTDUTILS_NEED_PATCH),y)
-	@cd $(MTDUTILS_TARGET_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/mtd-utils-$(MTDUTILS_VERSION).patch
-endif
-	@touch $@
-
-mtdutils_target_clean:
-	$(call embtk_generic_message,"Cleaning mtd-utils in target ...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(MTDUTILS_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(MTDUTILS_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(MTDUTILS_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(MTDUTILS_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(MTDUTILS_PKGCONFIGS)
-	$(Q)-rm -rf $(MTDUTILS_TARGET_BUILD_DIR)*
-
-download_mtdutils:
-	$(call embtk_generic_message,"Downloading $(MTDUTILS_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(MTDUTILS_PACKAGE) \
-	$(MTDUTILS_SITE)/$(MTDUTILS_PACKAGE)
-ifeq ($(CONFIG_EMBTK_MTDUTILS_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/mtd-utils-$(MTDUTILS_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/mtd-utils-$(MTDUTILS_VERSION).patch \
-	$(MTDUTILS_PATCH_SITE)/mtd-utils-$(MTDUTILS_VERSION)-*.patch
-endif
+#
+# Common for host and target.
+#
+download_mtdutils download_mtdutils_host:
+	$(call embtk_download_pkg,mtdutils)

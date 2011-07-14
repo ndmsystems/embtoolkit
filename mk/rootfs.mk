@@ -35,8 +35,7 @@ include $(EMBTK_ROOT)/mk/fs.mk
 #host tools in order to build root filesystems: fakeroot and makedevs.
 include $(EMBTK_ROOT)/mk/fakeroot.mk
 include $(EMBTK_ROOT)/mk/makedevs.mk
-include $(EMBTK_ROOT)/mk/pkgconfig.mk
-ROOTFS_HOSTTOOLS-y += makedevs_install fakeroot_install pkgconfig_install
+ROOTFS_HOSTTOOLS-y += makedevs_install fakeroot_install
 
 #Does CPIO archive for initramfs selected?
 FILESYSTEMS-$(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO) += build_initramfs_archive

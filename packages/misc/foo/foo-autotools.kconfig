@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_FOO
 	bool "Have foo"
+	select EMBTK_FOO_PKG_IS_TARGZ
 	help
 		foo description
 choice
@@ -35,7 +36,6 @@ choice
 
 	config  EMBTK_FOO_VERSION_0_16_4
 		bool "foo-0.16.4"
-		select EMBTK_FOO_PKG_IS_TARGZ
 endchoice
 
 config EMBTK_FOO_VERSION_STRING

@@ -23,13 +23,14 @@
 # \date         May 2009
 ################################################################################
 
-ROOTFS_COMPONENTS-y :=
-HOSTTOOLS_COMPONENTS-y := mkimage_install
+ROOTFS_COMPONENTS-y		:=
+HOSTTOOLS_COMPONENTS-y		:= mkimage_install pkgconfig_install
 ################################################################################
 #################### Common include for target and host ########################
 ################################################################################
 include $(EMBTK_ROOT)/mk/mkimage.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
+include $(EMBTK_ROOT)/mk/pkgconfig.mk
 
 ################################################################################
 ######################### Packages for TARGET and HOST #########################
@@ -40,7 +41,7 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_STRACE) += strace_install
 include $(EMBTK_ROOT)/mk/strace.mk
 
 # Flash manipulation tools: mtd-utils
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_MTDUTILS) += mtdutils_target_install
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MTDUTILS) += mtdutils_install
 
 #Compression packages
 include $(EMBTK_ROOT)/packages/compression/compression.mk
@@ -84,7 +85,7 @@ ROOTFS_COMPONENTS_CLEAN := $(subst install,clean,$(ROOTFS_COMPONENTS-))
 host_packages_build:
 ifeq ($(HOSTTOOLS_COMPONENTS-y),)
 else
-	$(call embtk_generic_message,"Building extra packages intended to run \
+	$(call embtk_generic_msg,"Building extra packages intended to run \
 	on your host machine ...")
 	@$(MAKE) $(HOSTTOOLS_COMPONENTS-y)
 endif
