@@ -244,7 +244,22 @@ __embtk_pkg_configured-y = $(shell test -e $($(PKGV)_BUILD_DIR)/.configured && e
 # A macro to test if a package is already installed.
 # It returns y if installed and nothing if not.
 #
-__embtk_pkg_installed-y = $(shell test -e $($(PKGV)_BUILD_DIR)/.installed && echo y)
+__installed_f_old=$($(PKGV)_BUILD_DIR)/.installed.old
+__installed_f=$($(PKGV)_BUILD_DIR)/.installed
+__embtk_pkg_installed-y = $(shell						\
+	if [ -e $(__installed_f) ]; then					\
+		cp $(__installed_f) $(__installed_f_old);			\
+		grep 'CONFIG_EMBTK_.*$(PKGV)_.*' $(EMBTK_DOTCONFIG)		\
+							> $(__installed_f);	\
+		cmp -s $(__installed_f) $(__installed_f_old);			\
+		if [ "x$$?" = "x0" ]; then					\
+			echo y;							\
+		fi;								\
+	else									\
+		mkdir -p $($(PKGV)_BUILD_DIR);					\
+		grep 'CONFIG_EMBTK_.*$(PKGV)_.*' $(EMBTK_DOTCONFIG)		\
+							> $(__installed_f);	\
+	fi;)
 
 #
 # A macro which runs configure script (conpatible with autotools configure)
