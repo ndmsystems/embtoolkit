@@ -62,12 +62,15 @@ __embtk_mk_strcmp=$(shell [ $(strip $(1)) = $(strip $(2)) ] && echo y)
 # wget wrapper
 # usage: $(call embtk_wget,$(OUTPUT_FILE),$(SITE),$(FOREIGN_FILE))
 #
-__wget_opts = --tries=5 --timeout=10 --waitretry=5
+__wget_outfile		= $(patsubst %/,%,$(DOWNLOAD_DIR))/$(strip $(1))
+__wget_remotesite	= $(patsubst %/,%,$(strip $(2)))
+__wget_foreignfiles	= $(strip $(3))
+__wget_opts		= --tries=5 --timeout=10 --waitretry=5
 define embtk_wget
-	wget $(__wget_opts) -O $(DOWNLOAD_DIR)/$(strip $(1))		\
-	$(strip $(2))/$(strip $(3)) ||					\
-	wget $(__WGET_OPTS) --no-passive-ftp -O 			\
-	$(DOWNLOAD_DIR)/$(strip $(1))	$(strip $(2))/$(strip $(3))
+	wget $(__wget_opts) -O $(__wget_outfile)				\
+	$(__wget_remotesite)/$(__wget_foreignfiles) ||				\
+	wget $(__wget_opts) --no-passive-ftp -O $(__wget_outfile)		\
+	$(__wget_remotesite)/$(__wget_foreignfiles)
 endef
 
 #Decompress message
