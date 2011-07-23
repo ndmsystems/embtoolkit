@@ -32,7 +32,7 @@ config EMBTK_HAVE_M4
 
 config EMBTK_M4_VERSION_STRING
 	string
-	default "1.4.15"
+	default "1.4.16"
 
 config EMBTK_M4_NEED_PATCH
 	bool
