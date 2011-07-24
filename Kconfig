@@ -28,6 +28,10 @@ config EMBTK_DOTCONFIG
 	bool
 	default y
 
+config EMBTK_DEFAULT_DL
+	string
+	option env="EMBTK_DEFAULT_DL"
+
 menu "Architecture/variants/options Selection"
 source "kconfig/arch.kconfig"
 source "kconfig/arch-variant.kconfig"
@@ -84,7 +88,7 @@ config EMBTK_NUMBER_BUILD_JOBS
 
 config EMBTK_DOWNLOAD_DIR
 	string "Download directory"
-	default "$(EMBTK_ROOT)/dl"
+	default $EMBTK_DEFAULT_DL
 	help
 	 Directory where downloaded packages are stored.
 

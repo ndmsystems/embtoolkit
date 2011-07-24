@@ -154,6 +154,30 @@ endif
 	@echo
 	$(call embtk_echo_blue,"################################################################################")
 
+#
+# embtk_pkgconfig_getlibs:
+# A macro to get pkg-config libs entry for a target package
+# Usage: $(call embtk_pkgconfig_getlibs,pkgname)
+#
+define embtk_pkgconfig_getlibs
+	$(shell									\
+		PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
+		PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"			\
+		$(PKGCONFIG_BIN) $(strip $(1)) --libs)
+endef
+
+#
+# embtk_pkgconfig_getcflags:
+# A macro to get pkg-config cflags entry for a target package
+# Usage: $(call embtk_pkgconfig_getcflags,pkgname)
+#
+define embtk_pkgconfig_getcflags
+	$(shell									\
+		PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
+		PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"			\
+		$(PKGCONFIG_BIN) $(strip $(1)) --cflags)
+endef
+
 #Macro to adapt libtool files (*.la) for cross compiling
 __ltlibdirold=libdir='\/usr\/$(LIBDIR)'
 __ltlibdirnew=libdir='$(SYSROOT)\/usr\/$(LIBDIR)'
@@ -223,7 +247,23 @@ __embtk_pkg_configured-y = $(shell test -e $($(PKGV)_BUILD_DIR)/.configured && e
 # A macro to test if a package is already installed.
 # It returns y if installed and nothing if not.
 #
-__embtk_pkg_installed-y = $(shell test -e $($(PKGV)_BUILD_DIR)/.installed && echo y)
+__installed_f=$($(PKGV)_BUILD_DIR)/.installed
+__pkgkconfig_f=$($(PKGV)_BUILD_DIR)/.embtk.$($(PKGV)_NAME).kconfig
+__pkgkconfig_f_old=$($(PKGV)_BUILD_DIR)/.embtk.$($(PKGV)_NAME).kconfig.old
+__embtk_pkg_installed-y = $(shell						\
+	if [ -e $(__installed_f) ] && [ -e $(__pkgkconfig_f) ]; then		\
+		cp $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
+		grep 'CONFIG_EMBTK_.*$(PKGV)_.*' $(EMBTK_DOTCONFIG)		\
+							> $(__pkgkconfig_f);	\
+		cmp -s $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
+		if [ "x$$?" = "x0" ]; then					\
+			echo y;							\
+		fi;								\
+	else									\
+		mkdir -p $($(PKGV)_BUILD_DIR);					\
+		grep 'CONFIG_EMBTK_.*$(PKGV)_.*' $(EMBTK_DOTCONFIG)		\
+							> $(__pkgkconfig_f);	\
+	fi;)
 
 #
 # A macro which runs configure script (conpatible with autotools configure)
@@ -399,7 +439,7 @@ endef
 # $(call embtk_install_hostpkg,package)
 #
 define embtk_install_hostpkg
-	$(Q)$(if $(__embtk_pkg_installed-y),true,	\
+	$(Q)$(if $(__embtk_pkg_installed-y),true,				\
 		$(call __embtk_install_hostpkg_make,$(1),autotools))
 endef
 
@@ -410,7 +450,7 @@ endef
 # $(call embtk_makeinstall_hostpkg,package)
 #
 define embtk_makeinstall_hostpkg
-	$(Q)$(if $(__embtk_pkg_installed-y),true,	\
+	$(Q)$(if $(__embtk_pkg_installed-y),true,				\
 		$(call __embtk_install_hostpkg_make,$(1)))
 endef
 

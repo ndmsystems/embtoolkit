@@ -23,50 +23,34 @@
 # \date         June 2010
 ################################################################################
 
-IMLIB2_NAME := imlib2
-IMLIB2_VERSION := $(call embtk_get_pkgversion,IMLIB2)
-IMLIB2_SITE := http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
-IMLIB2_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-IMLIB2_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/imlib2/$(IMLIB2_VERSION)
-IMLIB2_PACKAGE := imlib2-$(IMLIB2_VERSION).tar.gz
-IMLIB2_SRC_DIR := $(PACKAGES_BUILD)/imlib2-$(IMLIB2_VERSION)
-IMLIB2_BUILD_DIR := $(PACKAGES_BUILD)/imlib2-$(IMLIB2_VERSION)
+IMLIB2_NAME		:= imlib2
+IMLIB2_VERSION		:= $(call embtk_get_pkgversion,imlib2)
+IMLIB2_SITE		:= http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
+IMLIB2_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+IMLIB2_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/imlib2/$(IMLIB2_VERSION)
+IMLIB2_PACKAGE		:= imlib2-$(IMLIB2_VERSION).tar.gz
+IMLIB2_SRC_DIR		:= $(PACKAGES_BUILD)/imlib2-$(IMLIB2_VERSION)
+IMLIB2_BUILD_DIR	:= $(PACKAGES_BUILD)/imlib2-$(IMLIB2_VERSION)
 
-IMLIB2_BINS = imlib2_bumpmap imlib2_colorspace imlib2-config imlib2_conv \
-		imlib2_grab imlib2_poly imlib2_show imlib2_test imlib2_view
-IMLIB2_SBINS =
-IMLIB2_INCLUDES = Imlib2.h
-IMLIB2_LIBS = imlib2 libImlib2.*
-IMLIB2_PKGCONFIGS = imlib2.pc
+IMLIB2_BINS		= imlib2_bumpmap imlib2_colorspace imlib2-config	\
+			imlib2_conv imlib2_grab imlib2_poly imlib2_show		\
+			imlib2_test imlib2_view
+IMLIB2_SBINS		=
+IMLIB2_INCLUDES		= Imlib2.h
+IMLIB2_LIBS		= imlib2 libImlib2.*
+IMLIB2_PKGCONFIGS	= imlib2.pc
 
-IMLIB2_DEPS := libpng_install freetype_install libjpeg_install
+IMLIB2_DEPS		:= libpng_install freetype_install libjpeg_install
 
 imlib2_install:
-	test -e $(IMLIB2_BUILD_DIR)/.installed || \
-	$(MAKE) $(IMLIB2_BUILD_DIR)/.installed
+	$(call embtk_install_pkg,imlib2)
 	$(Q)$(MAKE) $(IMLIB2_BUILD_DIR)/.special
 
-$(IMLIB2_BUILD_DIR)/.installed: $(IMLIB2_DEPS) download_imlib2 \
-	$(IMLIB2_BUILD_DIR)/.decompressed $(IMLIB2_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	imlib2-$(IMLIB2_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(IMLIB2_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(IMLIB2_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
 download_imlib2:
-	$(call embtk_download_pkg,IMLIB2)
-
-$(IMLIB2_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,IMLIB2)
-
-$(IMLIB2_BUILD_DIR)/.configured:
-	$(call embtk_configure_pkg,IMLIB2)
+	$(call embtk_download_pkg,imlib2)
 
 imlib2_clean:
-	$(call embtk_cleanup_pkg,IMLIB2)
+	$(call embtk_cleanup_pkg,imlib2)
 
 .PHONY: $(IMLIB2_BUILD_DIR)/.special
 

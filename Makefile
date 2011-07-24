@@ -84,21 +84,26 @@ All: $(EMBTK_BUILD)
 
 xconfig: basic
 ifeq ($(CONFIG_EMBTK_DOTCONFIG),y)
-	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig xconfig
+	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig \
+	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" xconfig
 else
 	$(Q)if [ -e $(EMBTK_DOTCONFIG).old ]; then \
 	cp  $(EMBTK_DOTCONFIG).old  $(EMBTK_DOTCONFIG); \
-	$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
+	$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig \
+	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" xconfig; \
 	else \
-	$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig xconfig; \
+	$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig \
+	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" xconfig; \
 	fi
 endif
 
 menuconfig: basic
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig menuconfig
+	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig \
+	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" menuconfig
 
 randconfig: basic
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig randconfig
+	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig \
+	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" randconfig
 
 basic:
 	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/basic
