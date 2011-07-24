@@ -378,21 +378,21 @@ __embtk_single_make_hostinstall = $($(PKGV)_MAKE_ENV)				\
 	$(if $($(PKGV)_DESTDIR),DESTDIR=$($(PKGV)_DESTDIR))			\
 	$($(PKGV)_MAKE_OPTS) install
 
-__embtk_autotolspkg-y=$(2)
+__embtk_autotoolspkg-y=$(2)
 define __embtk_install_pkg_make
 	$(call embtk_generic_msg,"Compiling and installing $($(PKGV)_NAME)-$($(PKGV)_VERSION) in your root filesystem...")
 	$(Q)$(if $(strip $($(PKGV)_DEPS)),$(MAKE) $($(PKGV)_DEPS))
 	$(Q)$(call embtk_download_pkg,$(1))
 	$(Q)$(call embtk_decompress_pkg,$(1))
-	$(Q)$(if $(__embtk_autotolspkg-y),$(call embtk_configure_pkg,$(1)))
+	$(Q)$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_pkg,$(1)))
 	$(Q)$(if $($(PKGV)_MAKE_DIRS),						\
 		$(__embtk_multi_make),						\
 		$(__embtk_single_make))
 	$(Q)$(if $($(PKGV)_MAKE_DIRS),						\
 		$(__embtk_multi_make_install),					\
 		$(__embtk_single_make_install))
-	$(Q)$(if $(__embtk_autotolspkg-y),$(call __embtk_fix_libtool_files))
-	$(Q)$(if $(__embtk_autotolspkg-y),$(call __embtk_fix_pkgconfig_files))
+	$(Q)$(if $(__embtk_autotoolspkg-y),$(call __embtk_fix_libtool_files))
+	$(Q)$(if $(__embtk_autotoolspkg-y),$(call __embtk_fix_pkgconfig_files))
 	@touch $($(PKGV)_BUILD_DIR)/.installed
 endef
 define __embtk_install_hostpkg_make
@@ -400,7 +400,7 @@ define __embtk_install_hostpkg_make
 	$(Q)$(if $(strip $($(PKGV)_DEPS)),$(MAKE) $($(PKGV)_DEPS))
 	$(Q)$(call embtk_download_pkg,$(1))
 	$(Q)$(call embtk_decompress_hostpkg,$(1))
-	$(Q)$(if $(__embtk_autotolspkg-y),$(call embtk_configure_hostpkg,$(1)))
+	$(Q)$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_hostpkg,$(1)))
 	$(Q)$(if $($(PKGV)_MAKE_DIRS),						\
 		$(__embtk_multi_make),						\
 		$(__embtk_single_make))
