@@ -25,7 +25,7 @@
 VERSION = 0
 PATCHLEVEL = 1
 SUBLEVEL = 0
-EXTRAVERSION = -rc13
+EXTRAVERSION = -rc15
 KERNELVERSION = $(shell if [ -e .git ]; then echo `scripts/setlocalversion .`; \
 	else echo $(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION); fi)
 EMBTK_VERSION = $(KERNELVERSION)
