@@ -57,6 +57,7 @@ choice
 	config  EMBTK_BB_VERSION_1_18_5
 		bool "busybox-1.18.5"
 		depends on EMBTK_BB_VERSION_1_18_X
+		select EMBTK_BB_NEED_PATCH
 	config  EMBTK_BB_VERSION_1_18_4
 		bool "busybox-1.18.4"
 		depends on EMBTK_BB_VERSION_1_18_X
