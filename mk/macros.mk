@@ -460,7 +460,7 @@ endef
 # $(call embtk_download_pkg,PACKAGE)
 #
 define __embtk_download_pkg_patches
-@if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" == "xy" ]; then			\
+if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" == "xy" ]; then			\
 	test -e $(DOWNLOAD_DIR)/$($(PKGV)_NAME)-$($(PKGV)_VERSION).patch ||	\
 	$(call embtk_wget,							\
 		$($(PKGV)_NAME)-$($(PKGV)_VERSION).patch,			\
@@ -480,7 +480,7 @@ fi
 endef
 define embtk_download_pkg
 	$(call embtk_generic_msg,"Download $($(PKGV)_PACKAGE) if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$($(PKGV)_PACKAGE) ||				\
+	$(Q)test -e $(strip $(DOWNLOAD_DIR))/$(strip $($(PKGV)_PACKAGE)) ||	\
 	$(call embtk_wget,							\
 		$($(PKGV)_PACKAGE),						\
 		$($(PKGV)_SITE),						\
