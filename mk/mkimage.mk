@@ -40,3 +40,5 @@ $(MAKEIMAGE_BUILD_DIR)/.installed:
 	$(MAKE) -C $(MAKEIMAGE_BUILD_DIR)
 	$(MAKE) -C $(MAKEIMAGE_BUILD_DIR) DESTDIR=$(HOSTTOOLS) install
 	@touch $@
+
+download_mkimage:

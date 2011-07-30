@@ -42,7 +42,7 @@ $(MICROPERL_BUILD_DIR)/.installed: download_perl \
 	ln -s microperl perl
 	@touch $@
 
-download_perl:
+download_perl download_microperl:
 	$(call embtk_generic_message,"Downloading $(PERL_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(PERL_PACKAGE) || \
