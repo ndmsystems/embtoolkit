@@ -33,6 +33,9 @@ choice
 	depends on EMBTK_HAVE_SQLITE
 	help
 		Here you can choose which version of sqlite you want to use.
+
+	config  EMBTK_SQLITE_VERSION_3_7_7_1
+		bool "sqlite-3.7.7.1"
 	config  EMBTK_SQLITE_VERSION_3_7_4
 		bool "sqlite-3.7.4"
 	config  EMBTK_SQLITE_VERSION_3_7_3
@@ -41,8 +44,9 @@ endchoice
 
 config EMBTK_SQLITE_VERSION_STRING
 	string
-	default "3.7.3"			if EMBTK_SQLITE_VERSION_3_7_3
+	default "3070701"		if EMBTK_SQLITE_VERSION_3_7_7_1
 	default "3070400"		if EMBTK_SQLITE_VERSION_3_7_4
+	default "3.7.3"			if EMBTK_SQLITE_VERSION_3_7_3
 
 config EMBTK_SQLITE_NEED_PATCH
 	bool

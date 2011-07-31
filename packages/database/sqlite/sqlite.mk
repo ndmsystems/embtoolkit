@@ -23,42 +23,36 @@
 # \date         October 2010
 ################################################################################
 
-SQLITE_NAME := sqlite
-SQLITE_VERSION := $(call embtk_get_pkgversion,SQLITE)
-SQLITE_SITE := http://www.sqlite.org
-SQLITE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-SQLITE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/sqlite/$(SQLITE_VERSION)
+SQLITE_NAME		:= sqlite
+SQLITE_VERSION		:= $(call embtk_get_pkgversion,sqlite)
+SQLITE_SITE		:= http://www.sqlite.org
+SQLITE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+SQLITE_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/sqlite/$(SQLITE_VERSION)
 # Please sqlite people stop changing the way packages are named and packaged
-ifeq ($(CONFIG_EMBTK_SQLITE_VERSION_3_7_3),y)
-SQLITE_PACKAGE := sqlite-amalgamation-$(SQLITE_VERSION).tar.gz
-else
-SQLITE_PACKAGE := sqlite-autoconf-$(SQLITE_VERSION).tar.gz
-endif
-ifeq ($(CONFIG_EMBTK_SQLITE_VERSION_3_7_3),y)
-SQLITE_SRC_DIR := $(PACKAGES_BUILD)/sqlite-$(SQLITE_VERSION)
-SQLITE_BUILD_DIR := $(PACKAGES_BUILD)/sqlite-$(SQLITE_VERSION)
-else
-SQLITE_SRC_DIR := $(PACKAGES_BUILD)/sqlite-autoconf-$(SQLITE_VERSION)
-SQLITE_BUILD_DIR := $(PACKAGES_BUILD)/sqlite-autoconf-$(SQLITE_VERSION)
-endif
+SQLITE_PACKAGE		:= $(if $(CONFIG_EMBTK_SQLITE_VERSION_3_7_3),		\
+				sqlite-amalgamation-$(SQLITE_VERSION).tar.gz,	\
+				sqlite-autoconf-$(SQLITE_VERSION).tar.gz)
+SQLITE_SRC_DIR		:= $(if $(CONFIG_EMBTK_SQLITE_VERSION_3_7_3),		\
+			$(PACKAGES_BUILD)/sqlite-$(SQLITE_VERSION),		\
+			$(PACKAGES_BUILD)/sqlite-autoconf-$(SQLITE_VERSION))
+SQLITE_BUILD_DIR	:= $(if $(CONFIG_EMBTK_SQLITE_VERSION_3_7_3),		\
+			$(PACKAGES_BUILD)/sqlite-$(SQLITE_VERSION),		\
+			$(PACKAGES_BUILD)/sqlite-autoconf-$(SQLITE_VERSION))
 
-SQLITE_BINS = sqlite3
-SQLITE_SBINS =
-SQLITE_INCLUDES = sqlite3.h sqlite3ext.h
-SQLITE_LIBS = libsqlite3.*
-SQLITE_PKGCONFIGS = sqlite3.pc
+SQLITE_BINS		= sqlite3
+SQLITE_SBINS		=
+SQLITE_INCLUDES		= sqlite3.h sqlite3ext.h
+SQLITE_LIBS		= libsqlite3.*
+SQLITE_PKGCONFIGS	= sqlite3.pc
 
-SQLITE_CONFIGURE_OPTS := --enable-threadsafe --enable-readline \
-	--enable-threadsafe --enable-dynamic-extensions
-	
-
-SQLITE_DEPS :=
+SQLITE_CONFIGURE_OPTS	:= --enable-threadsafe --enable-readline 		\
+			--enable-dynamic-extensions
 
 sqlite_install:
-	$(call embtk_install_pkg,SQLITE)
+	$(call embtk_install_pkg,sqlite)
 
 download_sqlite:
-	$(call embtk_download_pkg,SQLITE)
+	$(call embtk_download_pkg,sqlite)
 
 sqlite_clean:
-	$(call embtk_cleanup_pkg,SQLITE)
+	$(call embtk_cleanup_pkg,sqlite)
