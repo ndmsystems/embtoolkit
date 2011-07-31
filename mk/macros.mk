@@ -238,6 +238,7 @@ __embtk_pkg_libexecs		= $(strip $($(PKGV)_LIBEXECS))
 __embtk_pkg_pkgconfigs		= $(strip $($(PKGV)_PKGCONFIGS))
 
 __embtk_pkg_configureenv 	= $(strip $($(PKGV)_CONFIGURE_ENV))
+__embtk_pkg_setrpath		= $(strip $($(PKGV)_SET_RPATH))
 __embtk_pkg_configureopts	= $(strip $($(PKGV)_CONFIGURE_OPTS))
 __embtk_pkg_sysrootsuffix	= $(strip $($(PKGV)_SYSROOT_SUFFIX))
 __embtk_pkg_prefix		= $(strip $($(PKGV)_PREFIX))
@@ -355,6 +356,9 @@ endef
 # Usage:
 # $(call embtk_configure_hostpkg,PACKAGE)
 #
+__embtk_hostpkg_rpathldflags="-Wl,-rpath,$(HOSTTOOLS)/usr/lib"
+__embtk_hostpkg_rpath=$(strip $(if $(__embtk_pkg_setrpath),			\
+				$(__embtk_hostpkg_rpathldflags)))
 define embtk_configure_hostpkg
 	$(call embtk_generic_msg,"Configure $(__embtk_pkg_package) for host...")
 	$(call __embtk_configure_autoreconfpkg,$(1))
@@ -362,7 +366,7 @@ define embtk_configure_hostpkg
 	$(call __embtk_print_configure_opts,"$(__embtk_pkg_configureopts)")
 	$(Q)cd $(__embtk_pkg_builddir);						\
 	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"					\
-	LDFLAGS="-L$(HOSTTOOLS)/usr/lib -Wl,-rpath,$(HOSTTOOLS)/usr/lib"	\
+	LDFLAGS="-L$(HOSTTOOLS)/usr/lib $(__embtk_hostpkg_rpath)"		\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
 	PKG_CONFIG_PATH="$(EMBTK_HOST_PKG_CONFIG_PATH)"				\
 	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CC=$(HOSTCC_CACHED))	\
@@ -510,7 +514,7 @@ fi
 endef
 define embtk_download_pkg
 	$(call embtk_generic_msg,"Download $(__embtk_pkg_package) if necessary...")
-	$(Q)test -e $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_package) ||	\
+	$(Q)test -e $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_package) ||		\
 	$(call embtk_wget,							\
 		$(__embtk_pkg_package),						\
 		$(__embtk_pkg_site),						\
