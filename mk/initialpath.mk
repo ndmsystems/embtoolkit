@@ -71,7 +71,7 @@ endif
 
 rmallpath:
 	@rm -Rf $(PACKAGES_BUILD) $(ROOTFS) $(TOOLS) $(TOOLS_BUILD) $(SYSROOT)
-	@rm -Rf $(EMBTK_GENERATED)
+	@rm -Rf $(EMBTK_GENERATED) $(HOSTTOOLS)
 ifneq ($(CONFIG_EMBTK_CACHE_PATCHES),y)
 	@rm -rf $(DOWNLOAD_DIR)/*.patch
 endif
