@@ -39,26 +39,39 @@ EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
 EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_MARCH) -pipe
 
 uclibc_install: $(UCLIBC_BUILD_DIR)/.installed
+uclibc_headers_install: $(UCLIBC_BUILD_DIR)/.headers_installed
 
-$(UCLIBC_BUILD_DIR)/.installed: uclibc_download \
+$(UCLIBC_BUILD_DIR)/.installed:
+	$(call embtk_generic_msg,"Build and install uClibc-$(UCLIBC_VERSION) ...")
+	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/			\
+		CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
+		SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"				\
+		MULTILIB_DIR="/$(LIBDIR)/"					\
+		RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"				\
+		KERNEL_HEADERS="$(SYSROOT)/usr/include/"			\
+		UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install
+
+$(UCLIBC_BUILD_DIR)/.headers_installed: uclibc_download \
 	$(UCLIBC_BUILD_DIR)/.decompressed $(UCLIBC_BUILD_DIR)/.configured
-	$(call embtk_generic_msg,"Building and installing \
-	uClibc-$(UCLIBC_VERSION) ...")
-	$(MAKE) -C $(UCLIBC_BUILD_DIR) oldconfig
-	$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/ \
-	CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-" \
-	SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/" \
-	MULTILIB_DIR="/$(LIBDIR)/" \
-	RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/" \
-	KERNEL_HEADERS="$(SYSROOT)/usr/include/" \
-	UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install_headers
-	$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/ \
-	CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-" \
-	SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/" \
-	MULTILIB_DIR="/$(LIBDIR)/" \
-	RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/" \
-	KERNEL_HEADERS="$(SYSROOT)/usr/include/" \
-	UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install
+	$(call embtk_generic_msg,"Install uClibc-$(UCLIBC_VERSION) headers ...")
+	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) oldconfig
+	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/			\
+		CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
+		SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"				\
+		MULTILIB_DIR="/$(LIBDIR)/"					\
+		RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"				\
+		KERNEL_HEADERS="$(SYSROOT)/usr/include/"			\
+		UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install_headers
+	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/			\
+		CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
+		SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"				\
+		MULTILIB_DIR="/$(LIBDIR)/"					\
+		RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"				\
+		KERNEL_HEADERS="$(SYSROOT)/usr/include/"			\
+		UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install_startfiles
+	$(Q)$(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc -nostdlib -nostartfiles 	\
+	-shared -x c /dev/null -o $(SYSROOT)/usr/$(LIBDIR)/libc.so
+	$(Q)touch $@
 
 uclibc_download:
 	$(call embtk_generic_msg,"downloading uClibc-$(UCLIBC_VERSION) \
