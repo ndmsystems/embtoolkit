@@ -32,6 +32,7 @@ config EMBTK_HOST_HAVE_LZO
 config EMBTK_HAVE_LZO
 	bool "Have lzo for the target"
 	select EMBTK_LZO_PKG_IS_TARGZ
+	select KEMBTK_UCLIBC_UCLIBC_SUSV4_LEGACY if EMBTK_CLIB_UCLIBC
 	help
 		LZO is a data compression library which is suitable for data
 		de-/compression in real-time. This means it favours speed over
