@@ -31,49 +31,36 @@ PACKAGES_BUILD		:= $(EMBTK_ROOT)/build/packages_build-$(GNU_TARGET)-$(EMBTK_MCU_
 EMBTK_GENERATED 	:= $(EMBTK_ROOT)/generated
 ROOTFS			:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 HOSTTOOLS		:= $(EMBTK_ROOT)/host-tools-$(EMBTK_MCU_FLAG)
-DOWNLOAD_DIR		:= $(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR)))
+DOWNLOAD_DIR		:= $(patsubst %/,%,$(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR))))
 
 export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD EMBTK_GENERATED ROOTFS
 export HOSTTOOLS DOWNLOAD_DIR
 
 mkinitialpath:
-	@mkdir -p $(SYSROOT)
-	@mkdir -p $(SYSROOT)/lib
-	@mkdir -p $(SYSROOT)/usr
-	@mkdir -p $(SYSROOT)/usr/etc
-	@mkdir -p $(SYSROOT)/root
-	@mkdir -p $(SYSROOT)/usr/lib
-ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
-	@-cd $(SYSROOT); \
-	ln -s lib lib64
-	@-cd $(SYSROOT)/usr; \
-	ln -s lib lib64
-endif
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	@-cd $(SYSROOT); \
-	ln -s lib lib64; \
-	mkdir -p lib32
-	@-cd $(SYSROOT)/usr; \
-	ln -s lib lib64; \
-	mkdir -p lib32
-endif
-	@mkdir -p $(TOOLS)
-	@mkdir -p $(TOOLS_BUILD)
-	@mkdir -p $(HOSTTOOLS)
-	@mkdir -p $(HOSTTOOLS)/usr/
-	@mkdir -p $(HOSTTOOLS)/usr/include
-	@mkdir -p $(HOSTTOOLS)/usr/local
-ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-	@mkdir -p $(ROOTFS)
-	@cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(ROOTFS)/
-	@mkdir -p $(PACKAGES_BUILD)
-endif
+	$(Q)mkdir -p $(SYSROOT)
+	$(Q)mkdir -p $(SYSROOT)/lib
+	$(Q)mkdir -p $(SYSROOT)/usr
+	$(Q)mkdir -p $(SYSROOT)/usr/etc
+	$(Q)mkdir -p $(SYSROOT)/root
+	$(Q)mkdir -p $(SYSROOT)/usr/lib
+	$(Q)$(if $(CONFIG_EMBTK_32BITS_FS),,cd $(SYSROOT);			\
+		ln -sf lib lib64; cd $(SYSROOT)/usr;ln -sf lib lib64)
+	$(Q)$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
+		cd $(SYSROOT); ln -sf lib lib64; mkdir -p lib32;		\
+		cd $(SYSROOT)/usr; ln -sf lib lib64; mkdir -p lib32)
+	$(Q)mkdir -p $(TOOLS)
+	$(Q)mkdir -p $(TOOLS_BUILD)
+	$(Q)mkdir -p $(HOSTTOOLS)
+	$(Q)mkdir -p $(HOSTTOOLS)/usr
+	$(Q)mkdir -p $(HOSTTOOLS)/usr/include
+	$(Q)mkdir -p $(HOSTTOOLS)/usr/local
+	$(Q)$(if $(CONFIG_EMBTK_HAVE_ROOTFS),					\
+		mkdir -p $(ROOTFS);						\
+		cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(ROOTFS)/;		\
+		mkdir -p $(PACKAGES_BUILD))
 
 rmallpath:
-	@rm -Rf $(PACKAGES_BUILD) $(ROOTFS) $(TOOLS) $(TOOLS_BUILD) $(SYSROOT)
-	@rm -Rf $(EMBTK_GENERATED) $(HOSTTOOLS)
-ifneq ($(CONFIG_EMBTK_CACHE_PATCHES),y)
-	@rm -rf $(DOWNLOAD_DIR)/*.patch
-endif
-	@rm -rf $(DOWNLOAD_DIR)/eglibc-*.tar.bz2
-
+	$(Q)rm -rf $(PACKAGES_BUILD) $(ROOTFS) $(TOOLS) $(TOOLS_BUILD)
+	$(Q)rm -rf $(SYSROOT) $(EMBTK_GENERATED) $(HOSTTOOLS)
+	$(Q)rm -rf $(DOWNLOAD_DIR)/eglibc-*.tar.bz2
+	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(DOWNLOAD_DIR)/*.patch)
