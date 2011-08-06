@@ -56,20 +56,6 @@ source "packages/development/gdb/gdb.kconfig"
 source "kconfig/strace.kconfig"
 endmenu
 
-config EMBTK_HAVE_ROOTFS
-	bool "Build root filesystem"
-	help
-	 If you want to build a root filesystem for your target, and include
-	 some packages within it, you must say yes here.
-	 Select the root filesystem type in "Type of root filesystem to build".
-	 Select packages in "Packages to include in your root filesystem".
-
-if EMBTK_HAVE_ROOTFS
-source kconfig/fs.kconfig
-source kconfig/mtdutils.kconfig
-source kconfig/packages.kconfig
-endif
-
 menu "Embtoolkit build options and host tools"
 comment "-----------------------------"
 comment "Host tools"
@@ -112,3 +98,16 @@ config EMBTK_CACHE_PATCHES
 	 downloaded the second time you run the build process.
 endmenu
 
+config EMBTK_HAVE_ROOTFS
+	bool "Build root filesystem"
+	help
+	 If you want to build a root filesystem for your target, and include
+	 some packages within it, you must say yes here.
+	 Select the root filesystem type in "Type of root filesystem to build".
+	 Select packages in "Packages to include in your root filesystem".
+
+if EMBTK_HAVE_ROOTFS
+source kconfig/fs.kconfig
+source kconfig/mtdutils.kconfig
+source kconfig/packages.kconfig
+endif
