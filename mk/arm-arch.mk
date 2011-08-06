@@ -22,54 +22,46 @@
 # \date         June 2009
 ################################################################################
 
-LINUX_ARCH := arm
-GNU_TARGET_ARCH := arm
-EMBTK_MCU_FLAG := $(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
+LINUX_ARCH		:= arm
+GNU_TARGET_ARCH		:= arm
+EMBTK_MCU_FLAG		:= $(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
 
 ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
-#EGLIBC C library
+# EGLIBC C library
 ifeq ($(CONFIG_EMBTK_ARCH_ARM_BIG_ENDIAN),y)
-GNU_TARGET := armeb-linux
-STRICT_GNU_TARGET := armeb-unknown-linux-gnueabi
+GNU_TARGET		:= armeb-linux
+STRICT_GNU_TARGET	:= armeb-unknown-linux-gnueabi
 else
-GNU_TARGET := armel-linux
-STRICT_GNU_TARGET := armel-unknown-linux-gnueabi
+GNU_TARGET		:= armel-linux
+STRICT_GNU_TARGET	:= armel-unknown-linux-gnueabi
 endif
 
 else
-#uClibc C library
+# uClibc C library
 ifeq ($(CONFIG_EMBTK_ARCH_ARM_BIG_ENDIAN),y)
-GNU_TARGET := armeb-linux
-STRICT_GNU_TARGET := armeb-unknown-linux-uclibceabi
+GNU_TARGET		:= armeb-linux
+STRICT_GNU_TARGET	:= armeb-unknown-linux-uclibceabi
 else
-GNU_TARGET := armel-linux
-STRICT_GNU_TARGET := armel-unknown-linux-uclibceabi
+GNU_TARGET		:= armel-linux
+STRICT_GNU_TARGET	:= armel-unknown-linux-uclibceabi
 endif
 
 endif
 
-#GCC configure options
+# GCC configure options
 GCC_WITH_CPU := --with-cpu=$(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
 
-#GCC extra configure options for arm
-ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),y)
-GCC3_CONFIGURE_EXTRA_OPTIONS += --enable-sjlj-exceptions
-endif
+# GCC extra configure options for arm
+GCC3_CONFIGURE_EXTRA_OPTIONS += $(strip $(if $(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),	\
+					--enable-sjlj-exceptions))
 
-#Hard or soft floating point for GCC?
-ifeq ($(CONFIG_EMBTK_HARDFLOAT),y)
-GCC_WITH_FLOAT := --with-float=softfp
-else
-GCC_WITH_FLOAT := --with-float=soft
-endif
-
-#Hard or soft floating point?
-ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
-EMBTK_TARGET_FLOAT_CFLAGS := -mfloat-abi=soft
-else
-EMBTK_TARGET_FLOAT_CFLAGS := -mfloat-abi=softfp
-endif
+# Hard or soft floating point for GCC?
+GCC_WITH_FLOAT := $(strip $(if $(CONFIG_EMBTK_SOFTFLOAT),			\
+					--with-float=softfp,--with-float=soft))
+# Hard or soft floating point?
+EMBTK_TARGET_FLOAT_CFLAGS := $(strip $(if $(CONFIG_EMBTK_SOFTFLOAT),		\
+					-mfloat-abi=soft,-mfloat-abi=softfp))
 
 # Some other flags for TARGET_CFLAGS
-EMBTK_TARGET_MCPU := -mcpu=$(EMBTK_MCU_FLAG)
-EMBTK_TARGET_MARCH :=
+EMBTK_TARGET_MCPU	:= -mcpu=$(EMBTK_MCU_FLAG)
+EMBTK_TARGET_MARCH	:=
