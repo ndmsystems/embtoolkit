@@ -54,7 +54,7 @@ $(UCLIBC_BUILD_DIR)/.installed:
 $(UCLIBC_BUILD_DIR)/.headers_installed: uclibc_download \
 	$(UCLIBC_BUILD_DIR)/.decompressed $(UCLIBC_BUILD_DIR)/.configured
 	$(call embtk_generic_msg,"Install uClibc-$(UCLIBC_VERSION) headers ...")
-	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) oldconfig
+	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) silentoldconfig
 	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/			\
 		CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
 		SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"				\

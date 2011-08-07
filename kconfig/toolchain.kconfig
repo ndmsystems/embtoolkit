@@ -48,8 +48,9 @@ endchoice
 if EMBTK_CLIB_EGLIBC
 source "kconfig/eglibc.kconfig"
 endif
+
 if EMBTK_CLIB_UCLIBC
-source "kconfig/uclibc-kconfigs/uclibc.kconfig"
+source "kconfig/uclibc-kconfigs/embtk-uclibc.kconfig"
 endif
 
 endmenu

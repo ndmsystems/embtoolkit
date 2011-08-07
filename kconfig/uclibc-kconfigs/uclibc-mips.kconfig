@@ -1,29 +1,7 @@
-################################################################################
-# Embtoolkit
-# Copyright(C) 2009-2011 GAYE Abdoulaye Walsimou.
-# For Copyrright from linux kernel's build/configure system, see their source
-# code
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# For a description of the syntax of this configuration file,
+# see extra/config/Kconfig-language.txt
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-################################################################################
-#
-# \file         uclibc-mips.kconfig
-# \brief	uclibc-mips.kconfig of Embtoolkit, similar to
-# brief		Configs/Config.mips.
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# \date         September 2009
-################################################################################
 
 config KEMBTK_UCLIBC_TARGET_ARCH
 	string
@@ -34,60 +12,67 @@ config KEMBTK_UCLIBC_FORCE_OPTIONS_FOR_ARCH
 	default y
 	select KEMBTK_UCLIBC_ARCH_ANY_ENDIAN
 
-config KEMBTK_UCLIBC_ARCH_CFLAGS
-	string
-	default "-mno-split-addresses"
+#choice
+#	prompt "Target ABI"
+#	help
+#	  This is the ABI you wish to build use.  Choose either O32, N32
+#	  or N64.
 
 config KEMBTK_UCLIBC_CONFIG_MIPS_O32_ABI
 	bool
-	default y if EMBTK_ARCH_MIPS_ABI_O32
 	default n
 
 config KEMBTK_UCLIBC_CONFIG_MIPS_N32_ABI
 	bool
-	default y if EMBTK_ARCH_MIPS_ABI_N32
 	default n
 
 config KEMBTK_UCLIBC_CONFIG_MIPS_N64_ABI
 	bool
-	default y if EMBTK_ARCH_MIPS_ABI_N64
 	default n
+
+#endchoice
+
+#choice
+#	prompt "Target Processor Architecture"
+#	help
+#	  This selects the instruction set architecture of your MIPS CPU. This
+#	  information is used for optimizing purposes. To build a library that
+#	  will run on any MIPS CPU, you can specify "Generic (MIPS I)" here.
+#	  If you pick anything other than "Generic (MIPS I)," there is no
+#	  guarantee that uClibc will even run on anything other than the
+#	  selected processor type.
+#
+#	  You should probably select the MIPS ISA that best matches the
+#	  CPU you will be using on your device. uClibc will be tuned
+#	  for that architecture.
+#
+#	  If you don't know what to do, choose "Generic (MIPS I)"
 
 config KEMBTK_UCLIBC_CONFIG_MIPS_ISA_1
 	bool
-	default y if EMBTK_ARCH_MIPS_MIPS1_LITTLE || EMBTK_ARCH_MIPS_MIPS1_BIG
 	default n
 
 config KEMBTK_UCLIBC_CONFIG_MIPS_ISA_2
 	bool
-	default y if EMBTK_ARCH_MIPS_MIPS2_LITTLE || EMBTK_ARCH_MIPS_MIPS2_BIG
 	default n
 
 config KEMBTK_UCLIBC_CONFIG_MIPS_ISA_3
 	bool
-	default y if EMBTK_ARCH_MIPS_MIPS3_LITTLE || EMBTK_ARCH_MIPS_MIPS3_BIG
 	default n
 
 config KEMBTK_UCLIBC_CONFIG_MIPS_ISA_4
 	bool
-	default y if EMBTK_ARCH_MIPS_MIPS4_LITTLE || EMBTK_ARCH_MIPS_MIPS4_BIG
 	default n
 
 config KEMBTK_UCLIBC_CONFIG_MIPS_ISA_MIPS32
 	bool
-	default y if EMBTK_ARCH_MIPS_MIPS32_LITTLE || EMBTK_ARCH_MIPS_MIPS32_BIG
 	default n
 
 config KEMBTK_UCLIBC_CONFIG_MIPS_ISA_MIPS32R2
 	bool
-	default y if EMBTK_ARCH_MIPS_MIPS32R2_LITTLE \
-	|| EMBTK_ARCH_MIPS_MIPS32R2_BIG
-	default n
 
 config KEMBTK_UCLIBC_CONFIG_MIPS_ISA_MIPS64
 	bool
-	default y if EMBTK_ARCH_MIPS_MIPS64_LITTLE \
-	|| EMBTK_ARCH_MIPS_MIPS64_BIG || EMBTK_ARCH_MIPS_MIPS64R2_LITTLE \
-	|| EMBTK_ARCH_MIPS_MIPS64R2_BIG
 	default n
 
+#endchoice

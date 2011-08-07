@@ -1,45 +1,7 @@
-################################################################################
-# Embtoolkit
-# Copyright(C) 2009-2011 GAYE Abdoulaye Walsimou.
-# For Copyrright from linux kernel's build/configure system, see their source
-# code
 #
-# This program is free software; you can distribute it and/or modify it
-# under the terms of the GNU General Public License
-# (Version 2 or later) published by the Free Software Foundation.
+# For a description of the syntax of this configuration file,
+# see extra/config/Kconfig-language.txt
 #
-# This program is distributed in the hope it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-# for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 59 Temple Place - Suite 330, Boston MA 02111-1307, USA.
-################################################################################
-#
-# \file         uclibc-arm.kconfig
-# \brief	uclibc-arm.kconfig of Embtoolkit, similar to Configs/Config.arm.
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# \date         September 2009
-################################################################################
-
-config KEMBTK_UCLIBC_CONFIG_GENERIC_ARM
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA \
-	|| EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA-1110 \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM8_ARM810 \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM11_MPCORE \
-	|| EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A8 \
-	|| EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A9 \
-	|| EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-R4 \
-	|| EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-R4F
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM610
-	bool
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
 
 config KEMBTK_UCLIBC_TARGET_ARCH
 	string
@@ -53,126 +15,25 @@ config KEMBTK_UCLIBC_FORCE_OPTIONS_FOR_ARCH
 config KEMBTK_UCLIBC_CONFIG_ARM_EABI
 	bool
 	default y
+	help
+	  If you say 'y' here, functions and constants required by the
+	  ARM EABI will be built into the library.  You should say 'y'
+	  if your compiler uses the ARM EABI, in which case you will also
+	  need a kernel supporting the EABI system call interface.
 
-config KEMBTK_UCLIBC_CONFIG_ARM_OABI
-	bool
-	default n
+	  If you say 'n' here, then the library will be built for the
+	  old Linux ABI.
+
+config KEMBTK_UCLIBC_COMPILE_IN_THUMB_MODE
+	bool "Build using Thumb mode"
+	select KEMBTK_UCLIBC_USE_BX
+	help
+	  Say 'y' here to force building uClibc in thumb mode.
+	  Say 'n' to use your compiler's default mode.
 
 config KEMBTK_UCLIBC_USE_BX
 	bool "Use BX in function return"
-	default y
-	depends on !KEMBTK_UCLIBC_CONFIG_GENERIC_ARM \
-	&& !KEMBTK_UCLIBC_CONFIG_ARM610 && !KEMBTK_UCLIBC_CONFIG_ARM710
 	help
-	  Use BX instruction for THUMB aware architectures.
-
-config KEMBTK_UCLIBC_CONFIG_ARM710
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM710T
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM7TDMI
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM7TDMI \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM7TDMI-S \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM740T
-	select KEMBTK_UCLIBC_ARCH_HAS_NO_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM720T
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_ARM7TDMI_ARM720T
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM920T
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM920T \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM9TDMI \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM940T
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM922T
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_ARM922T
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM926T
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM926EJ-S \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM946E-S \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM966E-S \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM9E_ARM968E-S
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM10T
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_ARM10E_ARM1020E \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM10E_ARM1020E \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM10E_ARM1026EJ-S
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM1136JF_S
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1136JF-S \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1136J-S \
-	|| EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1156T2-S
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM1176JZ_S
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1176JZ-S
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM1176JZF_S
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_ARM11_ARM1176JZF-S
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM_CORTEX_M3
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-M3
-	select KEMBTK_UCLIBC_ARCH_HAS_NO_MMU
-	select KEMBTK_UCLIBC_USE_BX
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM_CORTEX_M1
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-M1
-	select KEMBTK_UCLIBC_ARCH_HAS_NO_MMU
-	select KEMBTK_UCLIBC_USE_BX
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM_SA110
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA-110
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM_SA1100
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_STRONGARM_SA-1100
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM_XSCALE
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_XSCALE_XSCALE
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
-config KEMBTK_UCLIBC_CONFIG_ARM_IWMMXT
-	bool
-	default y if EMBTK_ARCH_ARM_FAMILY_IWMMXT_IWMMXT \
-	|| EMBTK_ARCH_ARM_FAMILY_IWMMXT_IWMMXT2
-	select KEMBTK_UCLIBC_ARCH_HAS_MMU
-	default n
-
+	  Say 'y' to use BX to return from functions on your thumb-aware
+	  processor. Say 'y' if you need to use interworking. Say 'n' if not.
+	  It is safe to say 'y' even if you're not doing interworking.
