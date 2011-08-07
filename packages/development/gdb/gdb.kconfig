@@ -51,6 +51,8 @@ choice
 		bool "Have gdbserver on target"
 		select EMBTK_HAVE_NCURSES
 		select KEMBTK_UCLIBC_PTHREADS_DEBUG_SUPPORT if EMBTK_CLIB_UCLIBC
+		select KEMBTK_UCLIBC_UCLIBC_HAS_WCHAR if EMBTK_CLIB_UCLIBC
+		select KEMBTK_UCLIBC_UCLIBC_SUSV3_LEGACY if EMBTK_CLIB_UCLIBC
 		help
 			Say yes if you want to have only gdbserver on your
 			embedded system target.
@@ -59,6 +61,8 @@ choice
 		bool "Have gdb on target"
 		select EMBTK_HAVE_NCURSES
 		select KEMBTK_UCLIBC_PTHREADS_DEBUG_SUPPORT if EMBTK_CLIB_UCLIBC
+		select KEMBTK_UCLIBC_UCLIBC_HAS_WCHAR if EMBTK_CLIB_UCLIBC
+		select KEMBTK_UCLIBC_UCLIBC_SUSV3_LEGACY if EMBTK_CLIB_UCLIBC
 		help
 			Say yes if you want to have full gdb on your embedded
 			system target.
