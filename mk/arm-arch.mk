@@ -57,7 +57,7 @@ GCC3_CONFIGURE_EXTRA_OPTIONS += $(strip $(if $(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),	
 
 # Hard or soft floating point for GCC?
 GCC_WITH_FLOAT := $(strip $(if $(CONFIG_EMBTK_SOFTFLOAT),			\
-					--with-float=softfp,--with-float=soft))
+					--with-float=soft,--with-float=softfp))
 # Hard or soft floating point?
 EMBTK_TARGET_FLOAT_CFLAGS := $(strip $(if $(CONFIG_EMBTK_SOFTFLOAT),		\
 					-mfloat-abi=soft,-mfloat-abi=softfp))
