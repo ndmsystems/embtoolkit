@@ -39,13 +39,13 @@ choice
 
 config EMBTK_SOFTFLOAT
 	bool "Soft floating point"
-	select KEMBTK_UCLIBC_UCLIBC_HAS_FPU if EMBTK_CLIB_UCLIBC
 	help
 		Select if your CPU does not have hardware floating point unit or
 		kernel floating point emulation.
 
 config EMBTK_HARDFLOAT
 	bool "Hard floating point"
+	select KEMBTK_UCLIBC_UCLIBC_HAS_FPU if EMBTK_CLIB_UCLIBC
 	help
 		Select if your CPU has a hardware floating point unit.
 endchoice
