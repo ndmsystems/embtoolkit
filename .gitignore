@@ -1,6 +1,7 @@
 .config
 .config.old
 .fakeroot*
+.ccache
 build/
 generated/
 host-tools-*
