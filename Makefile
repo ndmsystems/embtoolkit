@@ -22,40 +22,50 @@
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
-VERSION = 0
-PATCHLEVEL = 1
-SUBLEVEL = 0
-EXTRAVERSION = -rc15
-KERNELVERSION = $(shell if [ -e .git ]; then echo `scripts/setlocalversion .`; \
-	else echo $(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION); fi)
-EMBTK_VERSION = $(KERNELVERSION)
-export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION EMBTK_VERSION
+VERSION			:= 0
+PATCHLEVEL		:= 1
+SUBLEVEL		:= 0
+EXTRAVERSION		:= -rc15
+EMBTK_VERSION		:= 							\
+	$(shell									\
+	dversion=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION);		\
+	if [ -e .git ]; then							\
+		version=$$(scripts/setlocalversion .);				\
+		if [ "x$$version" = "x" ]; then					\
+			echo $$dversion;					\
+		elif [ "x$$version" = "x-dirty" ]; then				\
+			echo $$dversion$$version;				\
+		else								\
+			echo $$version;						\
+		fi;								\
+	else echo $$dversion; fi)
+EMBTK_BUGURL		= "http://www.embtoolkit.org/issues/projects/embtoolkit"
+EMBTK_HOMEURL		= "http://www.embtoolkit.org"
+export EMBTK_BUGURL EMBTK_HOMEURL EMBTK_VERSION
 
-EMBTK_BUGURL = "http://www.embtoolkit.org/issues/projects/embtoolkit"
-EMBTK_HOMEURL = "http://www.embtoolkit.org"
-export EMBTK_BUGURL EMBTK_HOMEURL
-
-EMBTK_ROOT := $(shell pwd)
-export EMBTK_ROOT
-
-EMBTK_DOTCONFIG := $(EMBTK_ROOT)/.config
-export EMBTK_DOTCONFIG
+EMBTK_ROOT		:= $(shell pwd)
+EMBTK_DOTCONFIG 	:= $(EMBTK_ROOT)/.config
+export EMBTK_ROOT EMBTK_DOTCONFIG
 
 # SHELL used by kbuild
-CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
-	  else if [ -x /bin/bash ]; then echo /bin/bash; \
-	  else echo sh; fi ; fi)
-SHELL := $(CONFIG_SHELL)
+CONFIG_SHELL		:=							\
+	$(shell									\
+	if [ -x "$$BASH" ]; then						\
+		echo $$BASH;							\
+	else									\
+		if [ -x /bin/bash ]; then echo /bin/bash; else echo sh; fi;	\
+	fi)
+SHELL			:= $(CONFIG_SHELL)
 export SHELL CONFIG_SHELL
 
-HOST_ARCH := `$(CONFIG_SHELL) $(EMBTK_ROOT)/scripts/config.guess`
-HOST_BUILD := $(HOST_ARCH)
+HOST_ARCH		:= `$(CONFIG_SHELL) $(EMBTK_ROOT)/scripts/config.guess`
+HOST_BUILD		:= $(HOST_ARCH)
 export HOST_ARCH HOST_BUILD
 
-HOSTCC       = gcc
-HOSTCXX      = g++
-HOSTCFLAGS   = -Wall
-HOSTCXXFLAGS = -O2
+HOSTCC			= gcc
+HOSTCXX			= g++
+HOSTCFLAGS		= -Wall
+HOSTCXXFLAGS		= -O2
 export HOSTCC HOSTCXX HOSTCFLAGS HOSTCXXFLAGS
 
 ifeq ($(V),)
@@ -84,26 +94,31 @@ All: $(EMBTK_BUILD)
 
 xconfig: basic
 ifeq ($(CONFIG_EMBTK_DOTCONFIG),y)
-	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig \
-	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" xconfig
+	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig			\
+	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" 					\
+	EMBTK_VERSION=$(EMBTK_VERSION) xconfig
 else
-	$(Q)if [ -e $(EMBTK_DOTCONFIG).old ]; then \
-	cp  $(EMBTK_DOTCONFIG).old  $(EMBTK_DOTCONFIG); \
-	$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig \
-	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" xconfig; \
-	else \
-	$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig \
-	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" xconfig; \
+	$(Q)if [ -e $(EMBTK_DOTCONFIG).old ]; then				\
+		cp  $(EMBTK_DOTCONFIG).old  $(EMBTK_DOTCONFIG);			\
+		make -f scripts/Makefile.build obj=scripts/kconfig		\
+		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
+		EMBTK_VERSION=$(EMBTK_VERSION) xconfig;				\
+	else									\
+		make -f scripts/Makefile.build obj=scripts/kconfig		\
+		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
+		EMBTK_VERSION=$(EMBTK_VERSION) xconfig;				\
 	fi
 endif
 
 menuconfig: basic
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig \
-	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" menuconfig
+	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig		\
+	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"					\
+	EMBTK_VERSION=$(EMBTK_VERSION) menuconfig
 
 randconfig: basic
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig \
-	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" randconfig
+	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig		\
+	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"					\
+	EMBTK_VERSION=$(EMBTK_VERSION) randconfig
 
 basic:
 	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/basic
@@ -174,4 +189,3 @@ help:
 
 distclean: clean
 	$(Q)rm -rf dl/* src/eglibc* host-tools* .config.old
-

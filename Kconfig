@@ -22,7 +22,7 @@
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
-mainmenu "Embedded systems toolkit configuration"
+mainmenu "Embedded systems toolkit - v$EMBTK_VERSION - configuration "
 
 config EMBTK_DOTCONFIG
 	bool
@@ -31,6 +31,10 @@ config EMBTK_DOTCONFIG
 config EMBTK_DEFAULT_DL
 	string
 	option env="EMBTK_DEFAULT_DL"
+
+config EMBTK_VERSION
+	string
+	option env="EMBTK_VERSION"
 
 menu "Architecture/variants/options Selection"
 source "kconfig/arch.kconfig"
