@@ -33,7 +33,7 @@ config EMBTK_HOST_HAVE_MTDUTILS
 		mtd-utils intented to run on the host development machine.
 choice
 	prompt "mtd-utils version used"
-	depends on EMBTK_HOST_HAVE_MTDUTILS || EMBTK_ROOTFS_HAVE_MTDUTILS
+	depends on EMBTK_HOST_HAVE_MTDUTILS || EMBTK_HAVE_MTDUTILS
 	help
 		mtd-utils version used
 		NOTE: This version of mtd-utils is patched to fix various issue,
