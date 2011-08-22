@@ -63,7 +63,7 @@ gdbserver_install:
 	$(MAKE) $(GDB_BUILD_DIR)/.gdbserver_installed
 
 $(GDB_BUILD_DIR)/.gdbserver_installed: $(GDB_DEPS)			\
-		download_gdb						\
+		download_gdbfull						\
 		$(GDB_BUILD_DIR)/.gdbserver_decompressed		\
 		$(GDB_BUILD_DIR)/.gdbserver_configured
 	$(Q)$(MAKE) -C $(GDB_BUILD_DIR) $(J)

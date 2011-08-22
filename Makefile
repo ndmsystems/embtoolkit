@@ -62,17 +62,17 @@ HOST_ARCH		:= `$(CONFIG_SHELL) $(EMBTK_ROOT)/scripts/config.guess`
 HOST_BUILD		:= $(HOST_ARCH)
 export HOST_ARCH HOST_BUILD
 
-HOSTCC			= gcc
-HOSTCXX			= g++
-HOSTCFLAGS		= -Wall
-HOSTCXXFLAGS		= -O2
+HOSTCC			:= gcc
+HOSTCXX			:= g++
+HOSTCFLAGS		:= -Wall
+HOSTCXXFLAGS		:= -O2
 export HOSTCC HOSTCXX HOSTCFLAGS HOSTCXXFLAGS
 
 ifeq ($(V),)
-Q = @
+Q := @
 MAKEFLAGS += --no-print-directory --silent
 else
-Q =
+Q :=
 endif
 export Q
 
