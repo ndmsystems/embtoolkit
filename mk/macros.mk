@@ -221,7 +221,10 @@ PKGV				= $(strip $(shell echo $(1) | tr a-z A-Z))
 __embtk_pkg_name		= $(strip $($(PKGV)_NAME))
 __embtk_pkg_version		= $(strip $($(PKGV)_VERSION))
 __embtk_pkg_site		= $(strip $($(PKGV)_SITE))
-__embtk_pkg_patch_site		= $(strip $($(PKGV)_PATCH_SITE))
+__embtk_patch_site		= ftp://ftp.embtoolkit.org/embtoolkit.org
+__embtk_pkg_patch_site		= $(strip $(if $($(PKGV)_PATCH_SITE),		\
+	$($(PKGV)_PATCH_SITE),							\
+	$(__embtk_patch_site)/$(__embtk_pkg_name)/$(__embtk_pkg_version)))
 __embtk_pkg_mirror1		= $(strip $($(PKGV)_MIRROR1))
 __embtk_pkg_mirror2		= $(strip $($(PKGV)_MIRROR2))
 __embtk_pkg_mirror3		= $(strip $($(PKGV)_MIRROR3))
@@ -499,7 +502,7 @@ if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" == "xy" ]; then			\
 	$(DOWNLOAD_DIR)/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch ||	\
 	$(call embtk_wget,							\
 		$(__embtk_pkg_name)-$(__embtk_pkg_version).patch,		\
-		$(__embtk_pkg_patch_site),						\
+		$(__embtk_pkg_patch_site),					\
 		$(__embtk_pkg_name)-$(__embtk_pkg_version)-*.patch);		\
 fi
 endef
