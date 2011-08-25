@@ -40,13 +40,20 @@ LINUX_PACKAGE		:= linux-$(LINUX_VERSION).tar.bz2
 LINUX_SRC_DIR		:= $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 LINUX_BUILD_DIR		:= $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 
-kernel-headers_install:  download_linux $(LINUX_BUILD_DIR)/.decompressed
+kernel-headers_install:
+	$(Q)test -e $(LINUX_BUILD_DIR)/.headers_installed ||			\
+	$(MAKE) $(LINUX_BUILD_DIR)/.headers_installed
+
+$(LINUX_BUILD_DIR)/.headers_installed: download_linux				\
+	$(LINUX_BUILD_DIR)/.decompressed
 	$(call EMBTK_INSTALL_MSG,"headers linux-$(LINUX_VERSION)")
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) \
+	$(Q)PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) \
 	headers_install ARCH=$(LINUX_ARCH) CROSS_COMPILE=$(STRICT_GNU_TARGET)- \
 	INSTALL_HDR_PATH=$(SYSROOT)/usr
 	$(MAKE) -C $(LINUX_BUILD_DIR) distclean
-	$(MAKE) -C $(LINUX_BUILD_DIR) headers_install INSTALL_HDR_PATH=$(HOSTTOOLS)/usr
+	$(MAKE) -C $(LINUX_BUILD_DIR) headers_install				\
+	INSTALL_HDR_PATH=$(HOSTTOOLS)/usr
+	$(Q)touch $@
 
 download_linux: 
 	$(call embtk_download_pkg,linux)
