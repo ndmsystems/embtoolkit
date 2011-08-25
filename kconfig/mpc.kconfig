@@ -23,26 +23,51 @@
 # \date         Jan 2010
 ################################################################################
 
+config EMBTK_HAVE_MPC
+	bool
+	select EMBTK_MPC_PKG_IS_TARGZ
+
+config EMBTK_HOST_HAVE_MPC
+	bool
+	select EMBTK_MPC_PKG_IS_TARGZ
+	default y
 choice
 	prompt "Version of mpc you wish"
+	depends on EMBTK_HOST_HAVE_MPC || EMBTK_HAVE_MPC
 	help
 		Mpc is a C library for the arithmetic of complex numbers with
 		arbitrarily high precision and correct rounding of the result.
 		MPC is mandatory to build GCC
 
-	config EMBTK_MPC_HOST_VERSION_0_8_2
+	config EMBTK_MPC_VERSION_0_8_2
 		bool "mpc-0.8.2"
-	config EMBTK_MPC_HOST_VERSION_0_8_1
+	config EMBTK_MPC_VERSION_0_8_1
 		bool "mpc-0.8.1"
 endchoice
 
-#Version string
-config EMBTK_MPC_HOST_VERSION_STRING
+config EMBTK_MPC_VERSION_STRING
 	string
-	default "0.8.2"		if EMBTK_MPC_HOST_VERSION_0_8_2
-	default "0.8.1"		if EMBTK_MPC_HOST_VERSION_0_8_1
+	default "0.8.2"		if EMBTK_MPC_VERSION_0_8_2
+	default "0.8.1"		if EMBTK_MPC_VERSION_0_8_1
 
-#Does we need patches?
 config EMBTK_MPC_NEED_PATCH
 	bool
+	select EMBTK_MPC_HOST_NEED_PATCH
+config EMBTK_MPC_NEED_AUTORECONF
+	bool
+	select EMBTK_MPC_HOST_NEED_AUTORECONF
+config EMBTK_MPC_PKG_IS_TARGZ
+	bool
+	select EMBTK_MPC_HOST_PKG_IS_TARGZ
+config EMBTK_MPC_PKG_IS_TARBZ2
+	bool
+	select EMBTK_MPC_HOST_PKG_IS_TARBZ2
 
+config EMBTK_MPC_HOST_NEED_PATCH
+	bool
+config EMBTK_MPC_HOST_NEED_AUTORECONF
+	bool
+config EMBTK_MPC_HOST_PKG_IS_TARGZ
+	bool
+config EMBTK_MPC_HOST_PKG_IS_TARBZ2
+	bool

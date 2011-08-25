@@ -21,12 +21,18 @@
 # \brief	binutils.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
-################################################################################
+###############################################################################
+
+config EMBTK_HAVE_BINUTILS
+	bool
+	select EMBTK_BINUTILS_PKG_IS_TARBZ2
+	default y
 
 choice
 	prompt "Version of binutils you wish"
+	depends on EMBTK_HAVE_BINUTILS
 	help
-		Here you can choose which version on binutils your toochain
+		Here you can choose which version of binutils your toochain
 		will use.
 	config EMBTK_BINUTILS_VERSION_2_21_1
 		bool "binutils-2.21.1"
@@ -37,6 +43,7 @@ choice
 	config EMBTK_BINUTILS_VERSION_2_20
 		bool "binutils-2.20"
 		select EMBTK_BINUTILS_PKG_IS_TARBZ2
+		depends on EMBTK_OLDPACKAGES
 	config EMBTK_BINUTILS_VERSION_2_19_1
 		bool "binutils-2.19.1"
 		select EMBTK_BINUTILS_PKG_IS_TARBZ2

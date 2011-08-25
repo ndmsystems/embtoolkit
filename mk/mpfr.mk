@@ -17,30 +17,28 @@
 #
 ################################################################################
 #
-# \file         binutils.mk
-# \brief	binutils.mk of Embtoolkit
+# \file         mpfr.mk
+# \brief	mpfr.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
 
-BINUTILS_NAME		:= binutils
-BINUTILS_VERSION	:= $(call embtk_get_pkgversion,binutils)
-BINUTILS_SITE		:= http://ftp.gnu.org/gnu/binutils
-BINUTILS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-BINUTILS_PACKAGE	:= binutils-$(BINUTILS_VERSION).tar.bz2
-BINUTILS_SRC_DIR	:= $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)
-BINUTILS_BUILD_DIR	:= $(TOOLS_BUILD)/binutils-build
+MPFR_HOST_NAME		:= mpfr
+MPFR_HOST_VERSION	:= $(call embtk_get_pkgversion,mpfr)
+MPFR_HOST_SITE		:= http://www.mpfr.org/mpfr-$(MPFR_HOST_VERSION)
+MPFR_HOST_PACKAGE	:= mpfr-$(MPFR_HOST_VERSION).tar.bz2
+MPFR_HOST_SRC_DIR	:= $(TOOLS_BUILD)/mpfr-$(MPFR_HOST_VERSION)
+MPFR_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/mpfr-build
+MPFR_HOST_DIR		:= $(HOSTTOOLS)/usr/local/mpfr-host
 
-BINUTILS_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT) --disable-werror	\
-			--disable-nls --disable-multilib		\
-			--with-gmp=$(GMP_HOST_DIR)			\
-			--with-mpfr=$(MPFR_HOST_DIR)			\
-			--with-mpc=$(MPC_HOST_DIR)			\
-			--target=$(STRICT_GNU_TARGET)
-BINUTILS_PREFIX		:= $(TOOLS)
+export MPFR_HOST_DIR
 
-binutils_install:
-	$(call embtk_install_hostpkg,binutils)
+MPFR_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
+MPFR_HOST_CONFIGURE_OPTS	+= --with-gmp=$(GMP_HOST_DIR)
+MPFR_HOST_PREFIX		:= $(MPFR_HOST_DIR)
 
-download_binutils:
-	$(call embtk_download_pkg,binutils)
+mpfr_host_install:
+	$(call embtk_install_hostpkg,mpfr_host)
+
+download_mpfr_host:
+	$(call embtk_download_pkg,mpfr_host)

@@ -17,30 +17,29 @@
 #
 ################################################################################
 #
-# \file         binutils.mk
-# \brief	binutils.mk of Embtoolkit
+# \file         mpchost.mk
+# \brief	mpchost.mk of Embtoolkit. To build gcc, we need mpc.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2009
+# \date         Jan 2010
 ################################################################################
 
-BINUTILS_NAME		:= binutils
-BINUTILS_VERSION	:= $(call embtk_get_pkgversion,binutils)
-BINUTILS_SITE		:= http://ftp.gnu.org/gnu/binutils
-BINUTILS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-BINUTILS_PACKAGE	:= binutils-$(BINUTILS_VERSION).tar.bz2
-BINUTILS_SRC_DIR	:= $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)
-BINUTILS_BUILD_DIR	:= $(TOOLS_BUILD)/binutils-build
+MPC_HOST_NAME		:= mpc
+MPC_HOST_VERSION	:= $(call embtk_get_pkgversion,mpc)
+MPC_HOST_SITE		:= http://www.multiprecision.org/mpc/download
+MPC_HOST_PACKAGE	:= mpc-$(MPC_HOST_VERSION).tar.gz
+MPC_HOST_SRC_DIR	:= $(TOOLS_BUILD)/mpc-$(MPC_HOST_VERSION)
+MPC_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/mpc-build
+MPC_HOST_DIR		:= $(HOSTTOOLS)/usr/local/mpc-host
 
-BINUTILS_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT) --disable-werror	\
-			--disable-nls --disable-multilib		\
-			--with-gmp=$(GMP_HOST_DIR)			\
-			--with-mpfr=$(MPFR_HOST_DIR)			\
-			--with-mpc=$(MPC_HOST_DIR)			\
-			--target=$(STRICT_GNU_TARGET)
-BINUTILS_PREFIX		:= $(TOOLS)
+export MPC_HOST_DIR
 
-binutils_install:
-	$(call embtk_install_hostpkg,binutils)
+MPC_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static	\
+				--with-gmp=$(GMP_HOST_DIR)	\
+				--with-mpfr=$(MPFR_HOST_DIR)
+MPC_HOST_PREFIX		:= $(MPC_HOST_DIR)
 
-download_binutils:
-	$(call embtk_download_pkg,binutils)
+mpc_host_install:
+	$(call embtk_install_hostpkg,mpc_host)
+
+download_mpc_host:
+	$(call embtk_download_pkg,mpc_host)

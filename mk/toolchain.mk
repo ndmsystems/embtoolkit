@@ -33,9 +33,9 @@ TARGETSTRIP		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip
 TARGETOBJDUMP		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-objdump
 TARGETOBJCOPY		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-objcopy
 __TARGET_CFLAGS		:= $(subst ",,$(strip $(CONFIG_EMBTK_TARGET_COMPILER_CFLAGS)))
-__TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SIZE_OPTIMIZED),-Os,)
-__TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SPEED_OPTIMIZED),-O3,)
-__TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_WITH_DEBUG_DATA),-g,)
+__TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SIZE_OPTIMIZED),-Os)
+__TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SPEED_OPTIMIZED),-O3)
+__TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_WITH_DEBUG_DATA),-g)
 TARGET_CFLAGS		:= $(strip $(__TARGET_CFLAGS))
 CROSS_COMPILE		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-
 
@@ -57,13 +57,13 @@ export LIBDIR
 include $(EMBTK_ROOT)/mk/ccache.mk
 
 #GMP on host
-include $(EMBTK_ROOT)/mk/gmphost.mk
+include $(EMBTK_ROOT)/mk/gmp.mk
 
 #MPFR
-include $(EMBTK_ROOT)/mk/mpfrhost.mk
+include $(EMBTK_ROOT)/mk/mpfr.mk
 
 #MPC
-include $(EMBTK_ROOT)/mk/mpchost.mk
+include $(EMBTK_ROOT)/mk/mpc.mk
 
 #binutils
 include $(EMBTK_ROOT)/mk/binutils.mk
@@ -91,7 +91,7 @@ include $(EMBTK_ROOT)/mk/eglibc.mk
 TOOLCHAINBUILD := mkinitialpath ccache_install					\
 		$(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL)			\
 		kernel-headers_install						\
-		gmphost_install mpfrhost_install mpchost_install		\
+		gmp_host_install mpfr_host_install mpc_host_install		\
 		binutils_install gcc1_install eglibc-headers_install		\
 		gcc2_install eglibc_install gcc3_install
 else
@@ -100,7 +100,7 @@ include $(EMBTK_ROOT)/mk/uclibc.mk
 TOOLCHAINBUILD := mkinitialpath ccache_install					\
 		$(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL)			\
 		kernel-headers_install 						\
-		gmphost_install mpfrhost_install mpchost_install		\
+		gmp_host_install mpfr_host_install mpc_host_install		\
 		binutils_install gcc1_install uclibc_headers_install		\
 		gcc2_install uclibc_install gcc3_install
 endif

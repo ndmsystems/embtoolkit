@@ -1,0 +1,82 @@
+################################################################################
+# Embtoolkit
+# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         gmp.kconfig
+# \brief	gmp.kconfig of Embtoolkit
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         May 2009
+################################################################################
+
+config EMBTK_HAVE_GMP
+	bool
+	select EMBTK_GMP_PKG_IS_TARBZ2
+
+config EMBTK_HOST_HAVE_GMP
+	bool
+	select EMBTK_GMP_PKG_IS_TARBZ2
+	default y
+
+choice
+	prompt "Version of gmp you wish"
+	depends on EMBTK_HOST_HAVE_GMP || EMBTK_HAVE_GMP
+	help
+		GMP is a free library for arbitrary precision arithmetic,
+		operating on signed integers, rational numbers, and floating
+		point numbers.
+
+	config EMBTK_GMP_VERSION_4_3_2
+		bool "gmp-4.3.2"
+	config EMBTK_GMP_VERSION_4_3_1
+		bool "gmp-4.3.1"
+		depends on EMBTK_OLDPACKAGES
+	config EMBTK_GMP_VERSION_4_3_0
+		bool "gmp-4.3.0"
+		depends on EMBTK_OLDPACKAGES
+	config EMBTK_GMP_VERSION_4_2_4
+		bool "gmp-4.2.4"
+endchoice
+
+config EMBTK_GMP_VERSION_STRING
+	string
+	default "4.3.2" if EMBTK_GMP_VERSION_4_3_2
+	default "4.3.1" if EMBTK_GMP_VERSION_4_3_1
+	default "4.3.0" if EMBTK_GMP_VERSION_4_3_0
+	default "4.2.4" if EMBTK_GMP_VERSION_4_2_4
+
+config EMBTK_GMP_NEED_PATCH
+	bool
+	select EMBTK_GMP_HOST_NEED_PATCH
+config EMBTK_GMP_NEED_AUTORECONF
+	bool
+	select EMBTK_GMP_HOST_NEED_AUTORECONF
+config EMBTK_GMP_PKG_IS_TARGZ
+	bool
+	select EMBTK_GMP_HOST_PKG_IS_TARGZ
+config EMBTK_GMP_PKG_IS_TARBZ2
+	bool
+	select EMBTK_GMP_HOST_PKG_IS_TARBZ2
+
+config EMBTK_GMP_HOST_NEED_PATCH
+	bool
+config EMBTK_GMP_HOST_NEED_AUTORECONF
+	bool
+config EMBTK_GMP_HOST_PKG_IS_TARGZ
+	bool
+config EMBTK_GMP_HOST_PKG_IS_TARBZ2
+	bool

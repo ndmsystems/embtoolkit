@@ -68,15 +68,15 @@ source "kconfig/linux.kconfig"
 endmenu
 
 menu "GMP"
-source "kconfig/gmphost.kconfig"
+source "kconfig/gmp.kconfig"
 endmenu
 
 menu "MPFR"
-source "kconfig/mpfrhost.kconfig"
+source "kconfig/mpfr.kconfig"
 endmenu
 
 menu "MPC"
-source "kconfig/mpchost.kconfig"
+source "kconfig/mpc.kconfig"
 endmenu
 
 #
