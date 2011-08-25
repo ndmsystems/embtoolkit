@@ -112,8 +112,8 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.configured:
 	CXX=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-g++ \
 	AR=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ar \
 	RANLIB=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ranlib \
-	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure --prefix=/usr \
-	--with-headers=$(SYSROOT)/usr/include \
+	$(CONFIG_SHELL) $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure	\
+	--prefix=/usr --with-headers=$(SYSROOT)/usr/include \
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) \
 	--disable-profile --without-gd --without-cvs --enable-add-ons \
 	--enable-kernel="2.6.0" $(EGLIBC_VERSIONING_OPTION) \
@@ -135,8 +135,8 @@ $(EGLIBC_BUILD_DIR)/.configured:
 	CXX=$(TARGETCXX_CACHED) \
 	AR=$(TARGETAR) \
 	RANLIB=$(TARGETRANLIB) \
-	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure --prefix=/usr \
-	--with-headers=$(SYSROOT)/usr/include \
+	$(CONFIG_SHELL) $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure	\
+	--prefix=/usr --with-headers=$(SYSROOT)/usr/include \
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) \
 	--disable-profile --without-gd --without-cvs --enable-add-ons \
 	--enable-kernel="2.6.0" $(EGLIBC_VERSIONING_OPTION) \
