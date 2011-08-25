@@ -305,7 +305,7 @@ __embtk_pkg_installed-y = $(shell						\
 # $(call embtk_configure_pkg,PACKAGE)
 #
 define __embtk_configure_autoreconfpkg
-if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_AUTORECONF)" == "xy" ]; then			\
+if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_AUTORECONF)" = "xy" ]; then			\
 	test -e $(__embtk_pkg_srcdir)/configure.ac ||				\
 	test -e $(__embtk_pkg_srcdir)/configure.in || exit 1;			\
 	cd $(__embtk_pkg_srcdir);						\
@@ -497,7 +497,7 @@ endef
 # $(call embtk_download_pkg,PACKAGE)
 #
 define __embtk_download_pkg_patches
-if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" == "xy" ]; then			\
+if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" = "xy" ]; then			\
 	test -e									\
 	$(DOWNLOAD_DIR)/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch ||	\
 	$(call embtk_wget,							\
@@ -507,7 +507,7 @@ if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" == "xy" ]; then			\
 fi
 endef
 define __embtk_download_pkg_from_mirror
-if [ "x$($(PKGV)_SITE_MIRROR$(2))" == "x" ]; then 				\
+if [ "x$($(PKGV)_SITE_MIRROR$(2))" = "x" ]; then 				\
 	false;									\
 else										\
 	$(call embtk_wget,							\
@@ -536,25 +536,25 @@ endef
 #
 define embtk_decompress_pkg
 	$(call embtk_generic_msg,"Decrompressing $(__embtk_pkg_package) ...")
-	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" == "xy" ] &&		\
+	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" = "xy" ] &&		\
 	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
 		tar -C $(PACKAGES_BUILD) -xzf					\
 		$(DOWNLOAD_DIR)/$(__embtk_pkg_package) &&			\
 		mkdir -p $(__embtk_pkg_builddir) &&				\
 		touch $(__embtk_pkg_srcdir)/.decompressed;			\
-	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" == "xy" ] &&		\
+	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" = "xy" ] &&		\
 	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
 		tar -C $(PACKAGES_BUILD) -xjf					\
 		$(DOWNLOAD_DIR)/$(__embtk_pkg_package) &&			\
 		mkdir -p $(__embtk_pkg_builddir) &&				\
 		touch $(__embtk_pkg_srcdir)/.decompressed;			\
-	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" == "x" ] &&		\
-	[ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" == "x" ] &&			\
+	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" = "x" ] &&		\
+	[ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" = "x" ] &&			\
 	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
 		echo -e "\E[1;31m!Unknown package compression type!\E[0m";	\
 		exit 1;								\
 	fi
-	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" == "xy" ] &&		\
+	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" = "xy" ] &&		\
 	[ ! -e $(__embtk_pkg_srcdir)/.patched ]; then				\
 		cd $(__embtk_pkg_srcdir);					\
 		patch -p1 <							\
@@ -572,25 +572,25 @@ endef
 #
 define embtk_decompress_hostpkg
 	$(call embtk_generic_msg,"Decrompressing $(__embtk_pkg_package) ...")
-	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" == "xy" ] &&		\
+	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" = "xy" ] &&		\
 	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
 		tar -C $(TOOLS_BUILD) -xzf					\
 		$(DOWNLOAD_DIR)/$(__embtk_pkg_package) &&			\
 		mkdir -p $(__embtk_pkg_builddir) &&				\
 		touch $(__embtk_pkg_srcdir)/.decompressed;			\
-	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" == "xy" ] &&		\
+	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" = "xy" ] &&		\
 	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
 		tar -C $(TOOLS_BUILD) -xjf					\
 		$(DOWNLOAD_DIR)/$(__embtk_pkg_package) &&			\
 		mkdir -p $(__embtk_pkg_builddir) &&				\
 		touch $(__embtk_pkg_srcdir)/.decompressed;			\
-	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" == "x" ] &&		\
-	[ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" == "x" ] &&			\
+	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" = "x" ] &&		\
+	[ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" = "x" ] &&			\
 	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
 		echo -e "\E[1;31m!Unknown package compression type!\E[0m";	\
 		exit 1;								\
 	fi
-	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" == "xy" ] &&		\
+	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" = "xy" ] &&		\
 	[ ! -e $(__embtk_pkg_srcdir)/.patched ]; then				\
 		cd $(__embtk_pkg_srcdir);					\
 		patch -p1 <							\
