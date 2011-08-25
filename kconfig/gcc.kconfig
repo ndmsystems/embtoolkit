@@ -23,8 +23,14 @@
 # \date         May 2009
 ################################################################################
 
+config EMTK_HAVE_GCC
+	bool
+	select EMBTK_GCC_PKG_IS_TARBZ2
+	default y
+
 choice
 	prompt "GCC series to use"
+	depends on EMTK_HAVE_GCC
 	help
 		Here you can choose which GCC series you want to use.
 
@@ -118,9 +124,6 @@ choice
 		select EMBTK_GCC_NEED_PATCH
 endchoice
 
-config EMBTK_GCC_NEED_PATCH
-	bool
-
 config EMBTK_GCC_HAVE_MIRROR
 	bool "Use a gcc mirror"
 	help
@@ -199,3 +202,51 @@ config EMBTK_GCC_VERSION_STRING
 	default "4.3.4"		if EMBTK_GCC_VERSION_4_3_4
 	default "4.3.3"		if EMBTK_GCC_VERSION_4_3_3
 	default "4.3.2"		if EMBTK_GCC_VERSION_4_3_2
+
+config EMBTK_GCC_NEED_PATCH
+	bool
+	select EMBTK_GCC1_NEED_PATCH
+	select EMBTK_GCC2_NEED_PATCH
+	select EMBTK_GCC3_NEED_PATCH
+config EMBTK_GCC_NEED_AUTORECONF
+	bool
+	select EMBTK_GCC1_NEED_AUTORECONF
+	select EMBTK_GCC2_NEED_AUTORECONF
+	select EMBTK_GCC3_NEED_AUTORECONF
+config EMBTK_GCC_PKG_IS_TARGZ
+	bool
+	select EMBTK_GCC1_PKG_IS_TARGZ
+	select EMBTK_GCC2_PKG_IS_TARGZ
+	select EMBTK_GCC3_PKG_IS_TARGZ
+config EMBTK_GCC_PKG_IS_TARBZ2
+	bool
+	select EMBTK_GCC1_PKG_IS_TARBZ2
+	select EMBTK_GCC2_PKG_IS_TARBZ2
+	select EMBTK_GCC3_PKG_IS_TARBZ2
+
+config EMBTK_GCC1_NEED_PATCH
+	bool
+config EMBTK_GCC1_NEED_AUTORECONF
+	bool
+config EMBTK_GCC1_PKG_IS_TARGZ
+	bool
+config EMBTK_GCC1_PKG_IS_TARBZ2
+	bool
+
+config EMBTK_GCC2_NEED_PATCH
+	bool
+config EMBTK_GCC2_NEED_AUTORECONF
+	bool
+config EMBTK_GCC2_PKG_IS_TARGZ
+	bool
+config EMBTK_GCC2_PKG_IS_TARBZ2
+	bool
+
+config EMBTK_GCC3_NEED_PATCH
+	bool
+config EMBTK_GCC3_NEED_AUTORECONF
+	bool
+config EMBTK_GCC3_PKG_IS_TARGZ
+	bool
+config EMBTK_GCC3_PKG_IS_TARBZ2
+	bool

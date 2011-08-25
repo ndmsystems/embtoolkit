@@ -23,151 +23,133 @@
 # \date         May 2009
 ################################################################################
 
-GCC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_GCC_VERSION_STRING)))
-ifeq ($(CONFIG_EMBTK_GCC_HAVE_MIRROR),y)
-GCC_SITE := $(subst ",,$(strip $(CONFIG_EMBTK_GCC_HAVE_MIRROR_SITE)))
-else
-GCC_SITE := http://ftp.gnu.org/gnu/gcc/gcc-$(GCC_VERSION)
-endif
-GCC_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/gcc/$(GCC_VERSION)
-GCC_PACKAGE := gcc-$(GCC_VERSION).tar.bz2
-GCC1_BUILD_DIR := $(TOOLS_BUILD)/gcc1
-GCC2_BUILD_DIR := $(TOOLS_BUILD)/gcc2
-GCC3_BUILD_DIR := $(TOOLS_BUILD)/gcc3
+GCC_NAME	:= gcc
+GCC_VERSION	:= $(call embtk_get_pkgversion,gcc)
+GCC_SITE	:= $(strip $(if $(CONFIG_EMBTK_GCC_HAVE_MIRROR),		\
+		$(subst ",,$(strip $(CONFIG_EMBTK_GCC_HAVE_MIRROR_SITE))),	\
+		http://ftp.gnu.org/gnu/gcc/gcc-$(GCC_VERSION)))
+GCC_PACKAGE	:= gcc-$(GCC_VERSION).tar.bz2
+GCC_SRC_DIR	:= $(TOOLS_BUILD)/gcc-$(GCC_VERSION)
 
-GCC_MULTILIB := --disable-multilib
+GCC_MULTILIB	:= --disable-multilib
 
-GCC_LANGUAGES =c
-ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_CPP),y)
-GCC_LANGUAGES +=,c++
-endif
-ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),y)
-GCC_LANGUAGES +=,java
-GCC3_CONFIGURE_EXTRA_OPTIONS += --enable-java-home
-endif
-ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC),y)
-GCC_LANGUAGES +=,objc
-endif
-ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP),y)
-GCC_LANGUAGES +=,obj-c++
-endif
-ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_FORTRAN),y)
-GCC_LANGUAGES +=,fortran
-endif
-ifeq ($(CONFIG_EMBTK_GCC_LANGUAGE_ADA),y)
-GCC_LANGUAGES +=,ada
-endif
-GCC_LANGUAGES :=$(patsubst "",,$(GCC_LANGUAGES))
+#
+# Selected languages to support in the toolchain
+#
+__GCC_LANGUAGES	:= c
+__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_CPP),c++)
+__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),java)
+__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC),objc)
+__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP),obj-c++)
+__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_FORTRAN),fortran)
+__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_ADA),ada)
+GCC_LANGUAGES	:= $(shell echo $(__GCC_LANGUAGES) | sed 's/ /,/g')
 
-#Disable tls when creating uClibc toolchain with linuxthreads
+
+#
+# Final GCC extra configure options
+#
+GCC3_CONFIGURE_EXTRA_OPTIONS += $(if $(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),		\
+						--enable-java-home)
+# Disable tls when creating uClibc toolchain with linuxthreads
 ifeq ($(CONFIG_EMBTK_CLIB_UCLIBC),y)
 GCC3_CONFIGURE_EXTRA_OPTIONS += \
 	$(if $(CONFIG_KEMBTK_UCLIBC_UCLIBC_HAS_THREADS_NATIVE),,--disable-tls)
 endif
 
-gcc1_install: $(GCC1_BUILD_DIR)/.built
+gcc%_install:
+	$(call embtk_install_hostpkg,$(patsubst %_install,%,$@))
+	$(Q)$(if $(call __embtk_mk_strcmp,$@,gcc3_install),			\
+		$(MAKE) gcc3_post_install)
 
-gcc2_install: $(GCC2_BUILD_DIR)/.built
+#
+# GCC first stage
+#
+GCC1_NAME	:= $(GCC_NAME)
+GCC1_VERSION	:= $(GCC_VERSION)
+GCC1_SITE	:= $(GCC_SITE)
+GCC1_PACKAGE	:= $(GCC_PACKAGE)
+GCC1_SRC_DIR	:= $(GCC_SRC_DIR)
+GCC1_BUILD_DIR	:= $(TOOLS_BUILD)/gcc1-build
 
-gcc3_install: $(GCC3_BUILD_DIR)/.installed
+GCC1_MAKE_ENV		:= PATH=$(PATH):$(TOOLS)/bin
+GCC1_PREFIX		:= $(TOOLS)
+GCC1_CONFIGURE_ENV	:= CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED)
+GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
+	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
+	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE)	\
+	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)			\
+	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
+	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
+	--without-headers --with-newlib --disable-shared --disable-threads	\
+	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
+	--enable-languages=c --enable-target-optspace
 
-#GCC first stage
-$(GCC1_BUILD_DIR)/.built: download_gcc $(GCC1_BUILD_DIR)/.decompressed \
-	$(GCC1_BUILD_DIR)/.configured
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC1_BUILD_DIR) $(J)
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC1_BUILD_DIR) install
-	@touch $@
-download_gcc:
-	@test -e $(DOWNLOAD_DIR)/$(GCC_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(GCC_PACKAGE) $(GCC_SITE)/$(GCC_PACKAGE)
-ifeq ($(CONFIG_EMBTK_GCC_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/gcc-$(GCC_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/gcc-$(GCC_VERSION).patch \
-	$(GCC_PATCH_SITE)/gcc-$(GCC_VERSION)-*.patch
-endif
+#
+# GCC second stage
+#
+GCC2_NAME	:= $(GCC_NAME)
+GCC2_VERSION	:= $(GCC_VERSION)
+GCC2_SITE	:= $(GCC_SITE)
+GCC2_PACKAGE	:= $(GCC_PACKAGE)
+GCC2_SRC_DIR	:= $(GCC_SRC_DIR)
+GCC2_BUILD_DIR	:= $(TOOLS_BUILD)/gcc2-build
 
-$(GCC1_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_MSG,$(GCC_PACKAGE))
-	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(GCC_PACKAGE)
-ifeq ($(CONFIG_EMBTK_GCC_NEED_PATCH),y)
-	cd $(TOOLS_BUILD)/gcc-$(GCC_VERSION); \
-	patch -p1 < $(DOWNLOAD_DIR)/gcc-$(GCC_VERSION).patch
-endif
-	@mkdir -p $(GCC1_BUILD_DIR)
-	@touch $@
+GCC2_MAKE_ENV		:= PATH=$(PATH):$(TOOLS)/bin
+GCC2_PREFIX		:= $(TOOLS)
+GCC2_CONFIGURE_ENV	:= CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED)
+GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
+	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
+	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE)	\
+	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)			\
+	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
+	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
+	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
+	--enable-languages=c --enable-target-optspace
 
-$(GCC1_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_MSG,gcc-$(GCC_VERSION))
-	cd $(GCC1_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
-	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
-	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) \
-	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH) \
-	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE) \
-	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
-	--without-headers --with-newlib --disable-shared --disable-threads \
-	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
-	--enable-languages=c --enable-target-optspace \
-	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
-	--with-mpc=$(MPC_HOST_DIR) \
-	--with-pkgversion=embtoolkit-$(EMBTK_VERSION) \
-	--with-bugurl=$(EMBTK_BUGURL)
-	@touch $@
+#
+# GCC last stage
+#
+GCC3_NAME	:= $(GCC_NAME)
+GCC3_VERSION	:= $(GCC_VERSION)
+GCC3_SITE	:= $(GCC_SITE)
+GCC3_PACKAGE	:= $(GCC_PACKAGE)
+GCC3_SRC_DIR	:= $(GCC_SRC_DIR)
+GCC3_BUILD_DIR	:= $(TOOLS_BUILD)/gcc3-build
 
-#GCC second stage
-$(GCC2_BUILD_DIR)/.built: $(GCC2_BUILD_DIR)/.configured
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC2_BUILD_DIR) $(J)
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC2_BUILD_DIR) install
-	@touch $@
+GCC3_MAKE_ENV		:= PATH=$(PATH):$(TOOLS)/bin
+GCC3_PREFIX		:= $(TOOLS)
+GCC3_CONFIGURE_ENV	:= CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED)
+GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
+	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
+	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE)	\
+	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)			\
+	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
+	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
+	--enable-languages=$(GCC_LANGUAGES) --enable-__cxa_atexit		\
+	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
+	--enable-threads --enable-shared --enable-target-optspace		\
+	$(GCC3_CONFIGURE_EXTRA_OPTIONS)
 
-$(GCC2_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_MSG,gcc-$(GCC_VERSION))
-	@mkdir -p $(GCC2_BUILD_DIR)
-	cd $(GCC2_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
-	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
-	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) \
-	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH) \
-	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE) \
-	--host=$(HOST_ARCH) --build=$(HOST_BUILD) \
-	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
-	--enable-languages=c --enable-target-optspace \
-	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
-	--with-mpc=$(MPC_HOST_DIR) \
-	--with-pkgversion=embtoolkit-$(EMBTK_VERSION) \
-	--with-bugurl=$(EMBTK_BUGURL)
-	@touch $@
+gcc3_post_install:
+	$(Q)test -e $(GCC3_BUILD_DIR)/.gcc3_post_install ||			\
+	$(MAKE) $(GCC3_BUILD_DIR)/.gcc3_post_install
 
-#GCC last stage
-$(GCC3_BUILD_DIR)/.installed: $(GCC3_BUILD_DIR)/.configured
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) $(J)
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(GCC3_BUILD_DIR) install
+$(GCC3_BUILD_DIR)/.gcc3_post_install:
 ifeq ($(CONFIG_EMBTK_32BITS_FS),y)
-	-cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/*.so* $(SYSROOT)/lib/
+	$(Q)-cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/*.so* $(SYSROOT)/lib/
 else ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
-	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib64/*.so* $(SYSROOT)/lib/
+	$(Q)cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib64/*.so* $(SYSROOT)/lib/
 else ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib32/*.so* $(SYSROOT)/lib32/
+	$(Q)cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib32/*.so* $(SYSROOT)/lib32/
 endif
 ifeq ($(CONFIG_EMBTK_64BITS_FS)$(CONFIG_EMBTK_CLIB_UCLIBC),yy)
-	$(Q)cd $(SYSROOT)/lib/; ln -s ld-uClibc.so.0 ld64-uClibc.so.0
+	$(Q)cd $(SYSROOT)/lib/; ln -sf ld-uClibc.so.0 ld64-uClibc.so.0
 endif
-	@touch $@
+	$(Q)touch $@
 
-$(GCC3_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_MSG,gcc-$(GCC_VERSION))
-	@mkdir -p $(GCC3_BUILD_DIR)
-	cd $(GCC3_BUILD_DIR); CC=$(HOSTCC_CACHED) CXX=$(HOSTCXX_CACHED) \
-	$(TOOLS_BUILD)/gcc-$(GCC_VERSION)/configure \
-	--prefix=$(TOOLS) --with-sysroot=$(SYSROOT) \
-	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH) \
-	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE) \
-	--host=$(HOST_ARCH) --build=$(HOST_BUILD) --enable-__cxa_atexit \
-	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls \
-	--enable-threads --enable-shared --enable-target-optspace \
-	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR) \
-	--with-mpc=$(MPC_HOST_DIR) \
-	--enable-languages=`echo $(GCC_LANGUAGES) | sed 's/ //g'` \
-	$(GCC3_CONFIGURE_EXTRA_OPTIONS) \
-	--with-pkgversion=embtoolkit-$(EMBTK_VERSION) \
-	--with-bugurl=$(EMBTK_BUGURL)
-	@touch $@
-
+#
+# Common gcc targets
+#
+download_gcc download_gcc1 download_gcc2 download_gcc3:
+	$(call embtk_download_pkg,gcc)
