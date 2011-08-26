@@ -25,31 +25,31 @@
 
 ROOTFS_COMPONENTS-y		:=
 HOSTTOOLS_COMPONENTS-y		:= mkimage_install pkgconfig_install
-################################################################################
-#################### Common include for target and host ########################
-################################################################################
+#
+# Common include for target and host
+#
 include $(EMBTK_ROOT)/mk/mkimage.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
 include $(EMBTK_ROOT)/mk/pkgconfig.mk
 
-################################################################################
-######################### Packages for TARGET and HOST #########################
-################################################################################
+#
+# Packages for TARGET and HOST
+#
 
-#strace
+# strace
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_STRACE) += strace_install
 include $(EMBTK_ROOT)/mk/strace.mk
 
 # Flash manipulation tools: mtd-utils
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MTDUTILS) += mtdutils_install
 
-#Compression packages
+# Compression packages
 include $(EMBTK_ROOT)/packages/compression/compression.mk
 
-#Database packages/libraries
+# Database packages/libraries
 include $(EMBTK_ROOT)/packages/database/database.mk
 
-#Development libraries/packages
+# Development libraries/packages
 include $(EMBTK_ROOT)/packages/development/development.mk
 
 # Graphics packages
@@ -66,22 +66,22 @@ include $(EMBTK_ROOT)/packages/security/security.mk
 # System packages
 include $(EMBTK_ROOT)/packages/system/system.mk
 
-#X window system packages
+# X window system packages
 include $(EMBTK_ROOT)/packages/x11/x11.mk
 
 # Miscellaneous packages
 include $(EMBTK_ROOT)/packages/misc/misc.mk
 
-#Busybox
+# Busybox
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_BB) += busybox_install
 include $(EMBTK_ROOT)/packages/busybox/busybox.mk
 
-#Clean for all unselected packages
+# Clean for all unselected packages
 ROOTFS_COMPONENTS_CLEAN := $(subst install,clean,$(ROOTFS_COMPONENTS-))
 
-################################################################################
-########################### Targets for HOST MACHINE ###########################
-################################################################################
+#
+# Targets for host machine
+#
 host_packages_build:
 ifeq ($(HOSTTOOLS_COMPONENTS-y),)
 else
@@ -90,3 +90,18 @@ else
 	@$(MAKE) $(HOSTTOOLS_COMPONENTS-y)
 endif
 
+#
+# Generic implicite rules
+#
+
+# This install implicit rule is intended for autotool'ed packages
+%_install:
+	$(call embtk_install_$(findstring host,$@)pkg,$(patsubst %_install,%,$@))
+
+# Download generic implicit rule
+download_%:
+	$(call embtk_download_pkg,$(patsubst download_%,%,$@))
+
+# clean generic implicit rule
+%_clean:
+	$(call embtk_cleanup_pkg,$(patsubst %_clean,%,$@))
