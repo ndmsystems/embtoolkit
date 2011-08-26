@@ -33,19 +33,19 @@ __embtk_no_color	= "\E[0m"
 # echo colored text
 #usage $(call embtk_echo_red,$(TEXT))
 define embtk_echo_red
-	@echo -e $(__embtk_color_red)$(1)$(__embtk_no_color)
+	echo -e $(__embtk_color_red)$(1)$(__embtk_no_color)
 endef
 #usage $(call embtk_echo_green,$(TEXT))
 define embtk_echo_green
-	@echo -e $(__embtk_color_green)$(1)$(__embtk_no_color)
+	echo -e $(__embtk_color_green)$(1)$(__embtk_no_color)
 endef
 #usage $(call echo_yellow,$(TEXT))
 define echo_yellow
-	@echo -e $(__embtk_color_yellow)$(1)$(__embtk_no_color)
+	echo -e $(__embtk_color_yellow)$(1)$(__embtk_no_color)
 endef
 #usage $(call embtk_echo_blue,$(TEXT))
 define embtk_echo_blue
-	@echo -e $(__embtk_color_blue)$(1)$(__embtk_no_color)
+	echo -e $(__embtk_color_blue)$(1)$(__embtk_no_color)
 endef
 
 #
