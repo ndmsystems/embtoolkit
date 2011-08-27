@@ -218,6 +218,7 @@ endef
 # Get passed package variables prefix and set some helpers macros.
 #
 PKGV				= $(strip $(shell echo $(1) | tr a-z A-Z))
+pkgv				= $(strip $(shell echo $(1) | tr A-Z a-z))
 __embtk_pkg_name		= $(strip $($(PKGV)_NAME))
 __embtk_pkg_version		= $(strip $($(PKGV)_VERSION))
 __embtk_pkg_site		= $(strip $($(PKGV)_SITE))
