@@ -59,8 +59,6 @@ endif
 
 gcc%_install:
 	$(call embtk_install_hostpkg,$(patsubst %_install,%,$@))
-	$(Q)$(if $(call __embtk_mk_strcmp,$@,gcc3_install),			\
-		$(MAKE) gcc3_post_install)
 
 #
 # GCC first stage
@@ -128,9 +126,10 @@ GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--enable-threads --enable-shared --enable-target-optspace		\
 	$(GCC3_CONFIGURE_EXTRA_OPTIONS)
 
-gcc3_post_install:
+define embtk_postinstall_gcc3
 	$(Q)test -e $(GCC3_BUILD_DIR)/.gcc3_post_install ||			\
 	$(MAKE) $(GCC3_BUILD_DIR)/.gcc3_post_install
+endef
 
 $(GCC3_BUILD_DIR)/.gcc3_post_install:
 ifeq ($(CONFIG_EMBTK_32BITS_FS),y)
