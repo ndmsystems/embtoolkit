@@ -50,8 +50,11 @@ EGLIBC_VERSIONING_OPTION := \
 
 OPTION_GROUPS_FILE = $(EMBTK_ROOT)/mk/eglibc/eglibc-$(EGLIBC_VERSION)-options.mk
 
-eglibc-headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
+eglibc_headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
+	$(call embtk_generic_msg,"eglibc headers installed")
+
 eglibc_install: $(EGLIBC_BUILD_DIR)/.installed
+	$(call embtk_generic_msg,"eglibc lbraries and headers installed")
 
 $(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download \
 	$(EGLIBC_HEADERS_BUILD_DIR)/.decompressed \
