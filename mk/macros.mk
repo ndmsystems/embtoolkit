@@ -455,8 +455,9 @@ endef
 # $(call embtk_install_pkg,package)
 #
 define embtk_install_pkg
-	$(Q)$(if $(__embtk_pkg_installed-y),					\
+	$(if $(__embtk_pkg_installed-y),					\
 		true,$(call __embtk_install_pkg_make,$(1),autotools))
+	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
 
 #
@@ -466,8 +467,9 @@ endef
 # $(call embtk_makeinstall_pkg,package)
 #
 define embtk_makeinstall_pkg
-	$(Q)$(if $(__embtk_pkg_installed-y),					\
+	$(if $(__embtk_pkg_installed-y),					\
 		true,$(call __embtk_install_pkg_make,$(1)))
+	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
 
 #
@@ -477,8 +479,9 @@ endef
 # $(call embtk_install_hostpkg,package)
 #
 define embtk_install_hostpkg
-	$(Q)$(if $(__embtk_pkg_installed-y),true,				\
+	$(if $(__embtk_pkg_installed-y),true,				\
 		$(call __embtk_install_hostpkg_make,$(1),autotools))
+	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
 
 #
@@ -488,8 +491,9 @@ endef
 # $(call embtk_makeinstall_hostpkg,package)
 #
 define embtk_makeinstall_hostpkg
-	$(Q)$(if $(__embtk_pkg_installed-y),true,				\
+	$(if $(__embtk_pkg_installed-y),true,				\
 		$(call __embtk_install_hostpkg_make,$(1)))
+	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
 
 #
