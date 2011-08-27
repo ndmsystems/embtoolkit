@@ -36,9 +36,3 @@ export MPFR_HOST_DIR
 MPFR_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
 MPFR_HOST_CONFIGURE_OPTS	+= --with-gmp=$(GMP_HOST_DIR)
 MPFR_HOST_PREFIX		:= $(MPFR_HOST_DIR)
-
-mpfr_host_install:
-	$(call embtk_install_hostpkg,mpfr_host)
-
-download_mpfr_host:
-	$(call embtk_download_pkg,mpfr_host)

@@ -37,9 +37,3 @@ MPC_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static	\
 				--with-gmp=$(GMP_HOST_DIR)	\
 				--with-mpfr=$(MPFR_HOST_DIR)
 MPC_HOST_PREFIX		:= $(MPC_HOST_DIR)
-
-mpc_host_install:
-	$(call embtk_install_hostpkg,mpc_host)
-
-download_mpc_host:
-	$(call embtk_download_pkg,mpc_host)

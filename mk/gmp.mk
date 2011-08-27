@@ -35,9 +35,3 @@ export GMP_HOST_DIR
 
 GMP_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
 GMP_HOST_PREFIX		:= $(GMP_HOST_DIR)
-
-gmp_host_install:
-	$(call embtk_install_hostpkg,gmp_host)
-
-download_gmp_host:
-	$(call embtk_download_pkg,gmp_host)
