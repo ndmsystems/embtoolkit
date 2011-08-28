@@ -23,45 +23,18 @@
 # \date         June 2010
 ################################################################################
 
-LIBXFIXES_NAME := libXfixes
-LIBXFIXES_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBXFIXES_VERSION_STRING)))
-LIBXFIXES_SITE := http://xorg.freedesktop.org/archive/individual/lib
-LIBXFIXES_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBXFIXES_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxfixes/$(LIBXFIXES_VERSION)
-LIBXFIXES_PACKAGE := libXfixes-$(LIBXFIXES_VERSION).tar.bz2
-LIBXFIXES_SRC_DIR := $(PACKAGES_BUILD)/libXfixes-$(LIBXFIXES_VERSION)
-LIBXFIXES_BUILD_DIR := $(PACKAGES_BUILD)/libXfixes-$(LIBXFIXES_VERSION)
+LIBXFIXES_NAME		:= libXfixes
+LIBXFIXES_VERSION	:= $(call embtk_get_pkgversion,libxfixes)
+LIBXFIXES_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
+LIBXFIXES_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBXFIXES_PACKAGE	:= libXfixes-$(LIBXFIXES_VERSION).tar.bz2
+LIBXFIXES_SRC_DIR	:= $(PACKAGES_BUILD)/libXfixes-$(LIBXFIXES_VERSION)
+LIBXFIXES_BUILD_DIR	:= $(PACKAGES_BUILD)/libXfixes-$(LIBXFIXES_VERSION)
 
-LIBXFIXES_BINS =
-LIBXFIXES_SBINS =
-LIBXFIXES_INCLUDES = X11/extensions/Xfixes.h
-LIBXFIXES_LIBS = libXfixes.*
-LIBXFIXES_PKGCONFIGS =xfixes.pc
+LIBXFIXES_BINS		=
+LIBXFIXES_SBINS		=
+LIBXFIXES_INCLUDES	= X11/extensions/Xfixes.h
+LIBXFIXES_LIBS		= libXfixes.*
+LIBXFIXES_PKGCONFIGS	=xfixes.pc
 
-LIBXFIXES_DEPS = xproto_install fixesproto_install
-
-libxfixes_install:
-	@test -e $(LIBXFIXES_BUILD_DIR)/.installed || \
-	$(MAKE) $(LIBXFIXES_BUILD_DIR)/.installed
-
-$(LIBXFIXES_BUILD_DIR)/.installed: $(LIBXFIXES_DEPS) download_libxfixes \
-	$(LIBXFIXES_BUILD_DIR)/.decompressed $(LIBXFIXES_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	libxfixes-$(LIBXFIXES_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(LIBXFIXES_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBXFIXES_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_libxfixes:
-	$(call embtk_download_pkg,LIBXFIXES)
-
-$(LIBXFIXES_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,LIBXFIXES)
-
-$(LIBXFIXES_BUILD_DIR)/.configured:
-	$(call embtk_configure_pkg,LIBXFIXES)
-
-libxfixes_clean:
-	$(call embtk_cleanup_pkg,LIBXFIXES)
+LIBXFIXES_DEPS		= xproto_install fixesproto_install

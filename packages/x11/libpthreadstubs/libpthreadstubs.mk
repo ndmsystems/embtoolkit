@@ -23,43 +23,16 @@
 # \date         March 2010
 ################################################################################
 
-LIBPTHREADSTUBS_NAME := libpthread-stubs
-LIBPTHREADSTUBS_VERSION := $(call embtk_get_pkgversion,LIBPTHREADSTUBS)
-LIBPTHREADSTUBS_SITE := http://xcb.freedesktop.org/dist
-LIBPTHREADSTUBS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBPTHREADSTUBS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libpthreadstubs/$(LIBPTHREADSTUBS_VERSION)
-LIBPTHREADSTUBS_PACKAGE := libpthread-stubs-$(LIBPTHREADSTUBS_VERSION).tar.bz2
-LIBPTHREADSTUBS_SRC_DIR := $(PACKAGES_BUILD)/libpthread-stubs-$(LIBPTHREADSTUBS_VERSION)
-LIBPTHREADSTUBS_BUILD_DIR := $(PACKAGES_BUILD)/libpthread-stubs-$(LIBPTHREADSTUBS_VERSION)
+LIBPTHREADSTUBS_NAME		:= libpthread-stubs
+LIBPTHREADSTUBS_VERSION		:= $(call embtk_get_pkgversion,libpthreadstubs)
+LIBPTHREADSTUBS_SITE		:= http://xcb.freedesktop.org/dist
+LIBPTHREADSTUBS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBPTHREADSTUBS_PACKAGE		:= libpthread-stubs-$(LIBPTHREADSTUBS_VERSION).tar.bz2
+LIBPTHREADSTUBS_SRC_DIR		:= $(PACKAGES_BUILD)/libpthread-stubs-$(LIBPTHREADSTUBS_VERSION)
+LIBPTHREADSTUBS_BUILD_DIR	:= $(PACKAGES_BUILD)/libpthread-stubs-$(LIBPTHREADSTUBS_VERSION)
 
-LIBPTHREADSTUBS_BINS =
-LIBPTHREADSTUBS_SBINS =
-LIBPTHREADSTUBS_INCLUDES =
-LIBPTHREADSTUBS_LIBS =
-LIBPTHREADSTUBS_PKGCONFIGS = pthread-stubs.pc
-
-libpthreadstubs_install:
-	@test -e $(LIBPTHREADSTUBS_BUILD_DIR)/.installed || \
-	$(MAKE) $(LIBPTHREADSTUBS_BUILD_DIR)/.installed
-
-$(LIBPTHREADSTUBS_BUILD_DIR)/.installed: download_libpthreadstubs \
-	$(LIBPTHREADSTUBS_BUILD_DIR)/.decompressed $(LIBPTHREADSTUBS_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	libpthreadstubs-$(LIBPTHREADSTUBS_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(LIBPTHREADSTUBS_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBPTHREADSTUBS_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_libpthreadstubs:
-	$(call embtk_download_pkg,LIBPTHREADSTUBS)
-
-$(LIBPTHREADSTUBS_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,LIBPTHREADSTUBS)
-
-$(LIBPTHREADSTUBS_BUILD_DIR)/.configured:
-	$(call embtk_configure_pkg,LIBPTHREADSTUBS)
-
-libpthreadstubs_clean:
-	$(call embtk_cleanup_pkg,LIBPTHREADSTUBS)
+LIBPTHREADSTUBS_BINS		=
+LIBPTHREADSTUBS_SBINS		=
+LIBPTHREADSTUBS_INCLUDES	=
+LIBPTHREADSTUBS_LIBS		=
+LIBPTHREADSTUBS_PKGCONFIGS	= pthread-stubs.pc

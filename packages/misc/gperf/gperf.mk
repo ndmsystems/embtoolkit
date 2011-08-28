@@ -24,10 +24,9 @@
 ################################################################################
 
 GPERF_NAME		:= gperf
-GPERF_VERSION		:= $(call embtk_get_pkgversion,GPERF)
+GPERF_VERSION		:= $(call embtk_get_pkgversion,gperf)
 GPERF_SITE		:= http://ftp.gnu.org/gnu/gperf
 GPERF_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-GPERF_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/gperf/$(GPERF_VERSION)
 GPERF_PACKAGE		:= gperf-$(GPERF_VERSION).tar.gz
 GPERF_SRC_DIR		:= $(PACKAGES_BUILD)/gperf-$(GPERF_VERSION)
 GPERF_BUILD_DIR		:= $(PACKAGES_BUILD)/gperf-$(GPERF_VERSION)
@@ -47,12 +46,6 @@ GPERF_CONFIGURE_OPTS	:=
 
 GPERF_DEPS :=
 
-gperf_install:
-	$(call embtk_install_pkg,GPERF)
-
-gperf_clean:
-	$(call embtk_cleanup_pkg,GPERF)
-
 #
 # gperf for for host
 #
@@ -62,16 +55,7 @@ GPERF_HOST_SITE		:= $(GPERF_SITE)
 GPERF_HOST_SITE_MIRROR1	:= $(GPERF_SITE_MIRROR1)
 GPERF_HOST_SITE_MIRROR2	:= $(GPERF_SITE_MIRROR2)
 GPERF_HOST_SITE_MIRROR3	:= $(GPERF_SITE_MIRROR3)
-GPERF_HOST_PATCH_SITE	:= $(GPERF_PATCH_SITE)
 GPERF_HOST_PACKAGE	:= $(GPERF_PACKAGE)
 GPERF_HOST_SRC_DIR	:= $(TOOLS_BUILD)/gperf-$(GPERF_VERSION)
 GPERF_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/gperf-$(GPERF_VERSION)
 
-#
-# common targets
-#
-gperf_host_install:
-	$(call embtk_install_hostpkg,GPERF_HOST)
-
-download_gperf download_gperf_host:
-	$(call embtk_download_pkg,GPERF)

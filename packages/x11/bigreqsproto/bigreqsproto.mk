@@ -23,26 +23,16 @@
 # \date         February 2010
 ################################################################################
 
-BIGREQSPROTO_NAME := bigreqsproto
-BIGREQSPROTO_VERSION := $(call embtk_get_pkgversion,BIGREQSPROTO)
-BIGREQSPROTO_SITE := http://xorg.freedesktop.org/archive/individual/proto
-BIGREQSPROTO_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-BIGREQSPROTO_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/bigreqsprot/$(BIGREQSPROTO_VERSION)
-BIGREQSPROTO_PACKAGE := bigreqsproto-$(BIGREQSPROTO_VERSION).tar.bz2
-BIGREQSPROTO_SRC_DIR := $(PACKAGES_BUILD)/bigreqsproto-$(BIGREQSPROTO_VERSION)
-BIGREQSPROTO_BUILD_DIR := $(PACKAGES_BUILD)/bigreqsproto-$(BIGREQSPROTO_VERSION)
+BIGREQSPROTO_NAME		:= bigreqsproto
+BIGREQSPROTO_VERSION		:= $(call embtk_get_pkgversion,BIGREQSPROTO)
+BIGREQSPROTO_SITE		:= http://xorg.freedesktop.org/archive/individual/proto
+BIGREQSPROTO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+BIGREQSPROTO_PACKAGE		:= bigreqsproto-$(BIGREQSPROTO_VERSION).tar.bz2
+BIGREQSPROTO_SRC_DIR		:= $(PACKAGES_BUILD)/bigreqsproto-$(BIGREQSPROTO_VERSION)
+BIGREQSPROTO_BUILD_DIR		:= $(PACKAGES_BUILD)/bigreqsproto-$(BIGREQSPROTO_VERSION)
 
-BIGREQSPROTO_BINS =
-BIGREQSPROTO_SBINS =
-BIGREQSPROTO_INCLUDES = X11/extensions/bigreqsproto.h X11/extensions/bigreqstr.h
-BIGREQSPROTO_LIBS =
-BIGREQSPROTO_PKGCONFIGS = bigreqsproto.pc
-
-bigreqsproto_install:
-	$(call embtk_install_pkg,BIGREQSPROTO)
-
-download_bigreqsproto:
-	$(call embtk_download_pkg,BIGREQSPROTO)
-
-bigreqsproto_clean:
-	$(call embtk_cleanup_pkg,BIGREQSPROTO)
+BIGREQSPROTO_BINS	=
+BIGREQSPROTO_SBINS	=
+BIGREQSPROTO_INCLUDES	= X11/extensions/bigreqsproto.h X11/extensions/bigreqstr.h
+BIGREQSPROTO_LIBS	=
+BIGREQSPROTO_PKGCONFIGS	= bigreqsproto.pc

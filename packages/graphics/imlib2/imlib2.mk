@@ -27,7 +27,6 @@ IMLIB2_NAME		:= imlib2
 IMLIB2_VERSION		:= $(call embtk_get_pkgversion,imlib2)
 IMLIB2_SITE		:= http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
 IMLIB2_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-IMLIB2_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/imlib2/$(IMLIB2_VERSION)
 IMLIB2_PACKAGE		:= imlib2-$(IMLIB2_VERSION).tar.gz
 IMLIB2_SRC_DIR		:= $(PACKAGES_BUILD)/imlib2-$(IMLIB2_VERSION)
 IMLIB2_BUILD_DIR	:= $(PACKAGES_BUILD)/imlib2-$(IMLIB2_VERSION)
@@ -42,21 +41,9 @@ IMLIB2_PKGCONFIGS	= imlib2.pc
 
 IMLIB2_DEPS		:= libpng_install freetype_install libjpeg_install
 
-imlib2_install:
-	$(call embtk_install_pkg,imlib2)
-	$(Q)$(MAKE) $(IMLIB2_BUILD_DIR)/.special
-
-download_imlib2:
-	$(call embtk_download_pkg,imlib2)
-
-imlib2_clean:
-	$(call embtk_cleanup_pkg,imlib2)
-
-.PHONY: $(IMLIB2_BUILD_DIR)/.special
-
-$(IMLIB2_BUILD_DIR)/.special:
+define embtk_postinstall_imlib2
 	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
 	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/imlib2 $(ROOTFS)/usr/$(LIBDIR)
 	$(Q)-mkdir -p $(ROOTFS)/usr/share
 	$(Q)-cp -R $(SYSROOT)/usr/share/imlib2 $(ROOTFS)/usr/share
-	@touch $@
+endef

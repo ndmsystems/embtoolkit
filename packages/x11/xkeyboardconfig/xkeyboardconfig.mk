@@ -24,36 +24,17 @@
 ################################################################################
 
 XKEYBOARDCONFIG_NAME		:= xkeyboard-config
-XKEYBOARDCONFIG_VERSION		:= $(call embtk_get_pkgversion,XKEYBOARDCONFIG)
+XKEYBOARDCONFIG_VERSION		:= $(call embtk_get_pkgversion,xkeyboardconfig)
 XKEYBOARDCONFIG_SITE		:= http://www.x.org/releases/individual/data/xkeyboard-config
 XKEYBOARDCONFIG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-XKEYBOARDCONFIG_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/xkeyboard-config/$(XKEYBOARDCONFIG_VERSION)
 XKEYBOARDCONFIG_PACKAGE		:= xkeyboard-config-$(XKEYBOARDCONFIG_VERSION).tar.bz2
 XKEYBOARDCONFIG_SRC_DIR		:= $(PACKAGES_BUILD)/xkeyboard-config-$(XKEYBOARDCONFIG_VERSION)
 XKEYBOARDCONFIG_BUILD_DIR	:= $(PACKAGES_BUILD)/xkeyboard-config-$(XKEYBOARDCONFIG_VERSION)
 
-XKEYBOARDCONFIG_BINS =
-XKEYBOARDCONFIG_SBINS =
-XKEYBOARDCONFIG_INCLUDES =
-XKEYBOARDCONFIG_LIBS =
-XKEYBOARDCONFIG_PKGCONFIGS =
+XKEYBOARDCONFIG_DEPS		:= intltool_host_install xkbcomp_install
 
-XKEYBOARDCONFIG_DEPS = intltool_host_install xkbcomp_install
-
-xkeyboardconfig_install:
-	$(call embtk_install_pkg,XKEYBOARDCONFIG)
-	$(Q)$(MAKE) $(XKEYBOARDCONFIG_BUILD_DIR)/.special
-
-download_xkeyboardconfig:
-	$(call embtk_download_pkg,XKEYBOARDCONFIG)
-
-xkeyboardconfig_clean:
-	$(call embtk_cleanup_pkg,XKEYBOARDCONFIG)
-
-.PHONY: $(XKEYBOARDCONFIG_BUILD_DIR)/.special
-
-$(XKEYBOARDCONFIG_BUILD_DIR)/.special:
+define embtk_postinstall_xkeyboardconfig
 	$(Q)-mkdir -p $(ROOTFS)/usr/share
 	$(Q)-mkdir -p $(ROOTFS)/usr/share/X11
 	$(Q)-cp -R $(SYSROOT)/usr/share/X11/xkb $(ROOTFS)/usr/share/X11/
-	@touch $@
+endef

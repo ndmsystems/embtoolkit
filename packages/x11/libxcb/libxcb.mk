@@ -23,54 +23,32 @@
 # \date         March 2010
 ################################################################################
 
-LIBXCB_NAME := libxcb
-LIBXCB_VERSION := $(call embtk_get_pkgversion,LIBXCB)
-LIBXCB_SITE := http://xcb.freedesktop.org/dist
-LIBXCB_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBXCB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxcb/$(LIBXCB_VERSION)
-LIBXCB_PACKAGE := libxcb-$(LIBXCB_VERSION).tar.gz
-LIBXCB_SRC_DIR := $(PACKAGES_BUILD)/libxcb-$(LIBXCB_VERSION)
-LIBXCB_BUILD_DIR := $(PACKAGES_BUILD)/libxcb-$(LIBXCB_VERSION)
+LIBXCB_NAME		:= libxcb
+LIBXCB_VERSION		:= $(call embtk_get_pkgversion,libxcb)
+LIBXCB_SITE		:= http://xcb.freedesktop.org/dist
+LIBXCB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBXCB_PACKAGE		:= libxcb-$(LIBXCB_VERSION).tar.gz
+LIBXCB_SRC_DIR		:= $(PACKAGES_BUILD)/libxcb-$(LIBXCB_VERSION)
+LIBXCB_BUILD_DIR	:= $(PACKAGES_BUILD)/libxcb-$(LIBXCB_VERSION)
 
-LIBXCB_BINS =
-LIBXCB_SBINS =
-LIBXCB_INCLUDES = xcb
-LIBXCB_LIBS = libxcb*
-LIBXCB_PKGCONFIGS = xcb*.pc
+LIBXCB_BINS		=
+LIBXCB_SBINS		=
+LIBXCB_INCLUDES 	= xcb
+LIBXCB_LIBS		= libxcb*
+LIBXCB_PKGCONFIGS	= xcb*.pc
 
-LIBXCB_CONFIGURE_OPTS := --enable-xinput
+LIBXCB_CONFIGURE_OPTS	:= --enable-xinput
 
-LIBXCB_DEPS = xcbproto_install libpthreadstubs_install libxau_install
+LIBXCB_DEPS		:= xcbproto_install libpthreadstubs_install libxau_install
 
-libxcb_install:
-	@test -e $(LIBXCB_BUILD_DIR)/.installed || \
-	$(MAKE) $(LIBXCB_BUILD_DIR)/.installed
+define embtk_postinstall_libxcb
+	$(Q)test -e $(LIBXCB_BUILD_DIR)/.patchlibtool ||			\
+	$(MAKE) $(LIBXCB_BUILD_DIR)/.patchlibtool
+endef
 
-$(LIBXCB_BUILD_DIR)/.installed: $(LIBXCB_DEPS) download_libxcb \
-	$(LIBXCB_BUILD_DIR)/.decompressed $(LIBXCB_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	libxcb-$(LIBXCB_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(LIBXCB_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBXCB_BUILD_DIR) DESTDIR=$(SYSROOT)/ install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	$(Q)$(MAKE) $(LIBXCB_BUILD_DIR)/.patchlibtool
-	@touch $@
-
-download_libxcb:
-	$(call embtk_download_pkg,LIBXCB)
-
-$(LIBXCB_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,LIBXCB)
-
-$(LIBXCB_BUILD_DIR)/.configured:
-	$(call embtk_configure_pkg,LIBXCB)
-
-libxcb_clean:
-	$(call embtk_cleanup_pkg,LIBXCB)
 
 $(LIBXCB_BUILD_DIR)/.patchlibtool:
-	@LIBXCB_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \
+	$(Q)LIBXCB_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \
 	for i in $$LIBXCB_LT_FILES; \
 	do \
 	sed \

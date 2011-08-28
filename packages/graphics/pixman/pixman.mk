@@ -23,26 +23,16 @@
 # \date         December 2009
 ################################################################################
 
-PIXMAN_NAME := pixman
-PIXMAN_VERSION := $(call embtk_get_pkgversion,PIXMAN)
-PIXMAN_SITE := http://www.cairographics.org/releases
-PIXMAN_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-PIXMAN_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/pixman/$(PIXMAN_VERSION)
-PIXMAN_PACKAGE := pixman-$(PIXMAN_VERSION).tar.gz
-PIXMAN_SRC_DIR := $(PACKAGES_BUILD)/pixman-$(PIXMAN_VERSION)
-PIXMAN_BUILD_DIR := $(PACKAGES_BUILD)/pixman-$(PIXMAN_VERSION)
+PIXMAN_NAME		:= pixman
+PIXMAN_VERSION		:= $(call embtk_get_pkgversion,pixman)
+PIXMAN_SITE		:= http://www.cairographics.org/releases
+PIXMAN_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+PIXMAN_PACKAGE		:= pixman-$(PIXMAN_VERSION).tar.gz
+PIXMAN_SRC_DIR		:= $(PACKAGES_BUILD)/pixman-$(PIXMAN_VERSION)
+PIXMAN_BUILD_DIR	:= $(PACKAGES_BUILD)/pixman-$(PIXMAN_VERSION)
 
-PIXMAN_BINS =
-PIXMAN_SBINS =
-PIXMAN_INCLUDES = pixman-*
-PIXMAN_LIBS = libpixman-*
-PIXMAN_PKGCONFIGS = pixman-*.pc
-
-pixman_install:
-	$(call embtk_install_pkg,PIXMAN)
-
-download_pixman:
-	$(call embtk_download_pkg,PIXMAN)
-
-pixman_clean:
-	$(call embtk_cleanup_pkg,PIXMAN)
+PIXMAN_BINS		=
+PIXMAN_SBINS		=
+PIXMAN_INCLUDES		= pixman-*
+PIXMAN_LIBS		= libpixman-*
+PIXMAN_PKGCONFIGS	= pixman-*.pc

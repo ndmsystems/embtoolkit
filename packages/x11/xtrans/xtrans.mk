@@ -23,30 +23,26 @@
 # \date         March 2010
 ################################################################################
 
-XTRANS_NAME := xtrans
-XTRANS_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_XTRANS_VERSION_STRING)))
-XTRANS_SITE := http://xorg.freedesktop.org/archive/individual/lib
-XTRANS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-XTRANS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/xtrans/$(XTRANS_VERSION)
-XTRANS_PACKAGE := xtrans-$(XTRANS_VERSION).tar.bz2
-XTRANS_SRC_DIR := $(PACKAGES_BUILD)/xtrans-$(XTRANS_VERSION)
-XTRANS_BUILD_DIR := $(PACKAGES_BUILD)/xtrans-$(XTRANS_VERSION)
+XTRANS_NAME		:= xtrans
+XTRANS_VERSION		:= $(call embtk_get_pkgversion,xtrans)
+XTRANS_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
+XTRANS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+XTRANS_PACKAGE		:= xtrans-$(XTRANS_VERSION).tar.bz2
+XTRANS_SRC_DIR		:= $(PACKAGES_BUILD)/xtrans-$(XTRANS_VERSION)
+XTRANS_BUILD_DIR	:= $(PACKAGES_BUILD)/xtrans-$(XTRANS_VERSION)
 
-XTRANS_BINS =
-XTRANS_SBINS =
-XTRANS_INCLUDES = X11/xtrans
-XTRANS_LIBS =
-XTRANS_PKGCONFIGS =
+XTRANS_BINS		=
+XTRANS_SBINS		=
+XTRANS_INCLUDES		= X11/xtrans
+XTRANS_LIBS		=
+XTRANS_PKGCONFIGS	=
 
 XTRANS_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
-xtrans_install:
-	$(call embtk_install_pkg,XTRANS) && 				\
-	cp $(SYSROOT)/usr/share/pkgconfig/xtrans.pc $(EMBTK_PKG_CONFIG_PATH)	\
-	&& $(MAKE) pkgconfig_files_adapt
-
-download_xtrans:
-	$(call embtk_download_pkg,XTRANS)
-
-xtrans_clean:
-	$(call embtk_cleanup_pkg,XTRANS)
+define embtk_postinstall_xtrans
+	$(Q)if [ ! -e $(XTRANS_BUILD_DIR)/.installed]; then			\
+		cp $(SYSROOT)/usr/share/pkgconfig/xtrans.pc			\
+						$(EMBTK_PKG_CONFIG_PATH);	\
+		$(MAKE) pkgconfig_files_adapt;					\
+	fi
+endef

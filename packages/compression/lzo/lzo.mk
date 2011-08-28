@@ -24,7 +24,7 @@
 ################################################################################
 
 LZO_NAME		:= lzo
-LZO_VERSION		:= $(call embtk_get_pkgversion,LZO)
+LZO_VERSION		:= $(call embtk_get_pkgversion,lzo)
 LZO_SITE		:= http://www.oberhumer.com/opensource/lzo/download
 LZO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LZO_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/lzo/$(LZO_VERSION)
@@ -32,30 +32,12 @@ LZO_PACKAGE		:= lzo-$(LZO_VERSION).tar.gz
 LZO_SRC_DIR		:= $(PACKAGES_BUILD)/lzo-$(LZO_VERSION)
 LZO_BUILD_DIR		:= $(PACKAGES_BUILD)/lzo-$(LZO_VERSION)
 
-LZO_BINS =
-LZO_SBINS =
-LZO_INCLUDES = lzo
-LZO_LIBS = liblzo2.*
-LZO_LIBEXECS =
-LZO_PKGCONFIGS =
-
-LZO_CONFIGURE_ENV :=
-LZO_CONFIGURE_OPTS :=
-
-LZO_DEPS :=
-
-lzo_install:
-	$(call embtk_install_pkg,LZO)
-
-lzo_clean:
-	$(call embtk_cleanup_pkg,LZO)
-
-#
-# lzo common targets
-#
-
-download_lzo download_lzo_host:
-	$(call embtk_download_pkg,LZO)
+LZO_BINS	=
+LZO_SBINS	=
+LZO_INCLUDES	= lzo
+LZO_LIBS	= liblzo2.*
+LZO_LIBEXECS	=
+LZO_PKGCONFIGS	=
 
 #
 # LZO for host development machine
@@ -66,10 +48,7 @@ LZO_HOST_SITE		:= $(LZO_SITE)
 LZO_HOST_SITE_MIRROR1	:= $(LZO_SITE_MIRROR1)
 LZO_HOST_SITE_MIRROR2	:= $(LZO_SITE_MIRROR2)
 LZO_HOST_SITE_MIRROR3	:= $(LZO_SITE_MIRROR3)
-LZO_HOST_PATCH_SITE	:= $(LZO_PATCH_SITE)
 LZO_HOST_PACKAGE	:= $(LZO_PACKAGE)
 LZO_HOST_SRC_DIR	:= $(TOOLS_BUILD)/lzo-$(LZO_VERSION)
 LZO_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/lzo-$(LZO_VERSION)
 
-lzo_host_install:
-	$(call embtk_install_hostpkg,LZO_HOST)

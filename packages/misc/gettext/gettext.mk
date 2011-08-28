@@ -27,7 +27,6 @@ GETTEXT_NAME		:= gettext
 GETTEXT_VERSION		:= $(call embtk_get_pkgversion,gettext)
 GETTEXT_SITE		:= http://ftp.gnu.org/pub/gnu/gettext
 GETTEXT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-GETTEXT_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/gettext/$(GETTEXT_VERSION)
 GETTEXT_PACKAGE		:= gettext-$(GETTEXT_VERSION).tar.gz
 GETTEXT_SRC_DIR		:= $(PACKAGES_BUILD)/gettext-$(GETTEXT_VERSION)
 GETTEXT_BUILD_DIR	:= $(PACKAGES_BUILD)/gettext-$(GETTEXT_VERSION)
@@ -53,13 +52,11 @@ GETTEXT_CONFIGURE_OPTS	:= --enable-relocatable --with-included-gettext	\
 
 GETTEXT_DEPS = ncurses_install libxml2_install
 
-gettext_install:
-	$(call embtk_install_pkg,gettext)
-	@test -e $(GETTEXT_BUILD_DIR)/.patchlibtool || \
-	$(MAKE) $(GETTEXT_BUILD_DIR)/.patchlibtool
 
-gettext_clean:
-	$(call embtk_cleanup_pkg,gettext)
+define embtk_postinstall_gettext
+	$(Q)test -e $(GETTEXT_BUILD_DIR)/.patchlibtool || \
+	$(MAKE) $(GETTEXT_BUILD_DIR)/.patchlibtool
+endef
 
 #FIXME: this should be fixed in gettext project
 $(GETTEXT_BUILD_DIR)/.patchlibtool:
@@ -89,9 +86,3 @@ GETTEXT_HOST_CONFIGURE_OPTS	:= --disable-java --disable-native-java	\
 	--disable-openmp --with-included-gettext --with-included-glib	\
 	--with-included-libcroco --with-included-libxml
 
-gettext_host_install:
-	$(call embtk_install_hostpkg,gettext_host)
-
-# common tagets
-download_gettext download_gettext_host:
-	$(call embtk_download_pkg,gettext)

@@ -23,14 +23,13 @@
 # \date         January 2010
 ################################################################################
 
-NCURSES_NAME := ncurses
-NCURSES_VERSION := $(call embtk_get_pkgversion,NCURSES)
-NCURSES_SITE := http://ftp.gnu.org/pub/gnu/ncurses
-NCURSES_PACKAGE := ncurses-$(NCURSES_VERSION).tar.gz
-NCURSES_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-NCURSES_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/ncurses/$(NCURSES_VERSION)
-NCURSES_SRC_DIR := $(PACKAGES_BUILD)/ncurses-$(NCURSES_VERSION)
-NCURSES_BUILD_DIR := $(PACKAGES_BUILD)/ncurses-$(NCURSES_VERSION)
+NCURSES_NAME		:= ncurses
+NCURSES_VERSION		:= $(call embtk_get_pkgversion,ncurses)
+NCURSES_SITE		:= http://ftp.gnu.org/pub/gnu/ncurses
+NCURSES_PACKAGE		:= ncurses-$(NCURSES_VERSION).tar.gz
+NCURSES_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+NCURSES_SRC_DIR		:= $(PACKAGES_BUILD)/ncurses-$(NCURSES_VERSION)
+NCURSES_BUILD_DIR	:= $(PACKAGES_BUILD)/ncurses-$(NCURSES_VERSION)
 
 NCURSES_BINS = captoinfo clear infocmp infotocap ncurses5-config reset tic toe \
 		tput tset
@@ -50,19 +49,7 @@ NCURSES_CONFIGURE_OPTS	:= --disable-rpath --without-cxx-binding	\
 			--enable-termcap --without-progs		\
 			--program-prefix=""
 
-ncurses_install:
-	$(call embtk_install_pkg,NCURSES)
-	$(Q)$(MAKE) $(NCURSES_BUILD_DIR)/.special
-
-download_ncurses:
-	$(call embtk_download_pkg,NCURSES)
-
-ncurses_clean:
-	$(call embtk_cleanup_pkg,NCURSES)
-
-.PHONY: $(NCURSES_BUILD_DIR)/.special ncurses_clean
-
-$(NCURSES_BUILD_DIR)/.special:
+define embtk_postinstall_ncurses
 	$(Q)mkdir -p $(ROOTFS)/usr/share
 	$(Q)-cp -R $(SYSROOT)/usr/share/tabset $(ROOTFS)/usr/share/
-	@touch $@
+endef

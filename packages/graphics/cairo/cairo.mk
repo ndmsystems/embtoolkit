@@ -24,23 +24,23 @@
 ################################################################################
 
 CAIRO_NAME		:= cairo
-CAIRO_VERSION		:= $(call embtk_get_pkgversion,CAIRO)
+CAIRO_VERSION		:= $(call embtk_get_pkgversion,cairo)
 CAIRO_SITE		:= http://www.cairographics.org/releases
 CAIRO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-CAIRO_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/cairo/$(CAIRO_VERSION)
 CAIRO_PACKAGE		:= cairo-$(CAIRO_VERSION).tar.gz
 CAIRO_SRC_DIR		:= $(PACKAGES_BUILD)/cairo-$(CAIRO_VERSION)
 CAIRO_BUILD_DIR		:= $(PACKAGES_BUILD)/cairo-$(CAIRO_VERSION)
 
-CAIRO_BINS =
-CAIRO_SBINS =
-CAIRO_INCLUDES = cairo
-CAIRO_LIBS = libcairo*
-CAIRO_PKGCONFIGS = cairo*.pc
+CAIRO_BINS		=
+CAIRO_SBINS		=
+CAIRO_INCLUDES		= cairo
+CAIRO_LIBS		= libcairo*
+CAIRO_PKGCONFIGS	= cairo*.pc
 
-CAIRO_CONFIG_OPTS-y :=
-CAIRO_CONFIG_OPTS-n :=
-CAIRO_DEPS := pixman_install libpng_install freetype_install fontconfig_install
+CAIRO_CONFIG_OPTS-y	:=
+CAIRO_CONFIG_OPTS-n	:=
+CAIRO_DEPS		:= pixman_install libpng_install freetype_install	\
+			fontconfig_install
 
 ifeq ($(CONFIG_EMBTK_HAVE_CAIRO_WITH_DIRECTFB),y)
 CAIRO_DEPS += directfb_install
@@ -68,11 +68,3 @@ CAIRO_CONFIGURE_ENV	:= png_CFLAGS=`$(PKGCONFIG_BIN) libpng --cflags`
 CAIRO_CONFIGURE_ENV	+= png_LIBS=`$(PKGCONFIG_BIN) libpng --libs`
 CAIRO_CONFIGURE_ENV	+= png_REQUIRES=libpng
 
-cairo_install:
-	$(call embtk_install_pkg,CAIRO)
-
-download_cairo:
-	$(call embtk_download_pkg,CAIRO)
-
-cairo_clean:
-	$(call embtk_cleanup_pkg,CAIRO)

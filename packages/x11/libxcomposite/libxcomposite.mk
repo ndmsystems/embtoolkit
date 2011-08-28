@@ -23,45 +23,18 @@
 # \date         June 2010
 ################################################################################
 
-LIBXCOMPOSITE_NAME := libXcomposite
-LIBXCOMPOSITE_VERSION := $(call embtk_get_pkgversion,LIBXCOMPOSITE)
-LIBXCOMPOSITE_SITE := http://xorg.freedesktop.org/archive/individual/lib
-LIBXCOMPOSITE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxcomposite/$(LIBXCOMPOSITE_VERSION)
-LIBXCOMPOSITE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBXCOMPOSITE_PACKAGE := libXcomposite-$(LIBXCOMPOSITE_VERSION).tar.bz2
-LIBXCOMPOSITE_SRC_DIR := $(PACKAGES_BUILD)/libXcomposite-$(LIBXCOMPOSITE_VERSION)
-LIBXCOMPOSITE_BUILD_DIR := $(PACKAGES_BUILD)/libXcomposite-$(LIBXCOMPOSITE_VERSION)
+LIBXCOMPOSITE_NAME		:= libXcomposite
+LIBXCOMPOSITE_VERSION		:= $(call embtk_get_pkgversion,libxcomposite)
+LIBXCOMPOSITE_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
+LIBXCOMPOSITE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBXCOMPOSITE_PACKAGE		:= libXcomposite-$(LIBXCOMPOSITE_VERSION).tar.bz2
+LIBXCOMPOSITE_SRC_DIR		:= $(PACKAGES_BUILD)/libXcomposite-$(LIBXCOMPOSITE_VERSION)
+LIBXCOMPOSITE_BUILD_DIR		:= $(PACKAGES_BUILD)/libXcomposite-$(LIBXCOMPOSITE_VERSION)
 
-LIBXCOMPOSITE_BINS =
-LIBXCOMPOSITE_SBINS =
-LIBXCOMPOSITE_INCLUDES = X11/extensions/Xcomposite.h
-LIBXCOMPOSITE_LIBS = libXcomposite.*
-LIBXCOMPOSITE_PKGCONFIGS = xcomposite.pc
+LIBXCOMPOSITE_BINS		=
+LIBXCOMPOSITE_SBINS		=
+LIBXCOMPOSITE_INCLUDES		= X11/extensions/Xcomposite.h
+LIBXCOMPOSITE_LIBS		= libXcomposite.*
+LIBXCOMPOSITE_PKGCONFIGS	= xcomposite.pc
 
 LIBXCOMPOSITE_DEPS = xproto_install libxfixes_install compositeproto_install
-
-libxcomposite_install:
-	@test -e $(LIBXCOMPOSITE_BUILD_DIR)/.installed || \
-	$(MAKE) $(LIBXCOMPOSITE_BUILD_DIR)/.installed
-
-$(LIBXCOMPOSITE_BUILD_DIR)/.installed: $(LIBXCOMPOSITE_DEPS) download_libxcomposite \
-	$(LIBXCOMPOSITE_BUILD_DIR)/.decompressed $(LIBXCOMPOSITE_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	libxcomposite-$(LIBXCOMPOSITE_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(LIBXCOMPOSITE_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBXCOMPOSITE_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_libxcomposite:
-	$(call embtk_download_pkg,LIBXCOMPOSITE)
-
-$(LIBXCOMPOSITE_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,LIBXCOMPOSITE)
-
-$(LIBXCOMPOSITE_BUILD_DIR)/.configured:
-	$(call embtk_configure_pkg,LIBXCOMPOSITE)
-
-libxcomposite_clean:
-	$(call embtk_cleanup_pkg,LIBXCOMPOSITE)

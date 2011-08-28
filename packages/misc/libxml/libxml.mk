@@ -24,10 +24,9 @@
 ################################################################################
 
 LIBXML2_NAME		:= libxml2
-LIBXML2_VERSION		:= $(call embtk_get_pkgversion,LIBXML2)
+LIBXML2_VERSION		:= $(call embtk_get_pkgversion,libxml2)
 LIBXML2_SITE		:= ftp://xmlsoft.org/libxml2
 LIBXML2_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBXML2_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/libxml2/$(LIBXML2_VERSION)
 LIBXML2_PACKAGE		:= libxml2-$(LIBXML2_VERSION).tar.gz
 LIBXML2_SRC_DIR		:= $(PACKAGES_BUILD)/libxml2-$(LIBXML2_VERSION)
 LIBXML2_BUILD_DIR	:= $(PACKAGES_BUILD)/libxml2-$(LIBXML2_VERSION)
@@ -40,11 +39,3 @@ LIBXML2_PKGCONFIGS	= libxml*.pc
 
 LIBXML2_CONFIGURE_OPTS	:= --without-python
 
-libxml2_install:
-	$(call embtk_install_pkg,LIBXML2)
-
-download_libxml2:
-	$(call embtk_download_pkg,LIBXML2)
-
-libxml2_clean:
-	$(call embtk_cleanup_pkg,LIBXML2)

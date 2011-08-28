@@ -23,30 +23,20 @@
 # \date         March 2010
 ################################################################################
 
-LIBXRENDER_NAME := libXrender
-LIBXRENDER_VERSION := $(call embtk_get_pkgversion,LIBXRENDER)
-LIBXRENDER_SITE := http://xorg.freedesktop.org/archive/individual/lib
-LIBXRENDER_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBXRENDER_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxrender/$(LIBXI_VERSION)
-LIBXRENDER_PACKAGE := libXrender-$(LIBXRENDER_VERSION).tar.bz2
-LIBXRENDER_SRC_DIR := $(PACKAGES_BUILD)/libXrender-$(LIBXRENDER_VERSION)
-LIBXRENDER_BUILD_DIR := $(PACKAGES_BUILD)/libXrender-$(LIBXRENDER_VERSION)
+LIBXRENDER_NAME		:= libXrender
+LIBXRENDER_VERSION	:= $(call embtk_get_pkgversion,libxrender)
+LIBXRENDER_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
+LIBXRENDER_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBXRENDER_PACKAGE	:= libXrender-$(LIBXRENDER_VERSION).tar.bz2
+LIBXRENDER_SRC_DIR	:= $(PACKAGES_BUILD)/libXrender-$(LIBXRENDER_VERSION)
+LIBXRENDER_BUILD_DIR	:= $(PACKAGES_BUILD)/libXrender-$(LIBXRENDER_VERSION)
 
-LIBXRENDER_BINS =
-LIBXRENDER_SBINS =
-LIBXRENDER_INCLUDES = X11/extensions/Xrender.h
-LIBXRENDER_LIBS = libXrender.*
-LIBXRENDER_PKGCONFIGS = xrender.pc
+LIBXRENDER_BINS		=
+LIBXRENDER_SBINS	=
+LIBXRENDER_INCLUDES	= X11/extensions/Xrender.h
+LIBXRENDER_LIBS		= libXrender.*
+LIBXRENDER_PKGCONFIGS	= xrender.pc
 
 LIBXRENDER_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
 LIBXRENDER_DEPS = renderproto_install libx11_install
-
-libxrender_install:
-	$(call embtk_install_pkg,LIBXRENDER)
-
-download_libxrender:
-	$(call embtk_download_pkg,LIBXRENDER)
-
-libxrender_clean:
-	$(call embtk_cleanup_pkg,LIBXRENDER)

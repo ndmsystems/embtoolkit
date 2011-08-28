@@ -24,32 +24,17 @@
 ################################################################################
 
 LIBSIGSEGV_NAME		:= libsigsegv
-LIBSIGSEGV_VERSION	:= $(call embtk_get_pkgversion,LIBSIGSEGV)
+LIBSIGSEGV_VERSION	:= $(call embtk_get_pkgversion,libsigsegv)
 LIBSIGSEGV_SITE		:= ftp://ftp.gnu.org/pub/gnu/libsigsegv
-LIBSIGSEGV_SITE_MIRROR3	:= http://ftp.gnu.org/gnu/libsigsegv
+LIBSIGSEGV_SITE_MIRROR1	:= http://ftp.gnu.org/gnu/libsigsegv
 LIBSIGSEGV_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBSIGSEGV_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/libsigsegv/$(LIBSIGSEGV_VERSION)
 LIBSIGSEGV_PACKAGE	:= libsigsegv-$(LIBSIGSEGV_VERSION).tar.gz
 LIBSIGSEGV_SRC_DIR	:= $(PACKAGES_BUILD)/libsigsegv-$(LIBSIGSEGV_VERSION)
 LIBSIGSEGV_BUILD_DIR	:= $(PACKAGES_BUILD)/libsigsegv-$(LIBSIGSEGV_VERSION)
 
-LIBSIGSEGV_BINS =
-LIBSIGSEGV_SBINS =
-LIBSIGSEGV_INCLUDES = sigsegv.h
-LIBSIGSEGV_LIBS = libsigsegv.*
-LIBSIGSEGV_LIBEXECS =
-LIBSIGSEGV_PKGCONFIGS =
-
-LIBSIGSEGV_CONFIGURE_ENV :=
-LIBSIGSEGV_CONFIGURE_OPTS :=
-
-LIBSIGSEGV_DEPS :=
-
-libsigsegv_install:
-	$(call embtk_install_pkg,LIBSIGSEGV)
-
-download_libsigsegv:
-	$(call embtk_download_pkg,LIBSIGSEGV)
-
-libsigsegv_clean:
-	$(call embtk_cleanup_pkg,LIBSIGSEGV)
+LIBSIGSEGV_BINS		=
+LIBSIGSEGV_SBINS	=
+LIBSIGSEGV_INCLUDES	= sigsegv.h
+LIBSIGSEGV_LIBS		= libsigsegv.*
+LIBSIGSEGV_LIBEXECS	=
+LIBSIGSEGV_PKGCONFIGS	=

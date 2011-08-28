@@ -23,28 +23,16 @@
 # \date         December 2009
 ################################################################################
 
-LIBEVENT_NAME := libevent
-LIBEVENT_VERSION := $(call embtk_get_pkgversion,LIBEVENT)
-LIBEVENT_SITE := http://www.monkey.org/~provos
-LIBEVENT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBEVENT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libevent/$(LIBEVENT_VERSION)
-LIBEVENT_PACKAGE := libevent-$(LIBEVENT_VERSION).tar.gz
-LIBEVENT_SRC_DIR := $(PACKAGES_BUILD)/libevent-$(LIBEVENT_VERSION)
-LIBEVENT_BUILD_DIR := $(PACKAGES_BUILD)/libevent-$(LIBEVENT_VERSION)
+LIBEVENT_NAME		:= libevent
+LIBEVENT_VERSION	:= $(call embtk_get_pkgversion,LIBEVENT)
+LIBEVENT_SITE		:= http://www.monkey.org/~provos
+LIBEVENT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBEVENT_PACKAGE	:= libevent-$(LIBEVENT_VERSION).tar.gz
+LIBEVENT_SRC_DIR	:= $(PACKAGES_BUILD)/libevent-$(LIBEVENT_VERSION)
+LIBEVENT_BUILD_DIR	:= $(PACKAGES_BUILD)/libevent-$(LIBEVENT_VERSION)
 
-LIBEVENT_BINS = event_rpcgen.py
-LIBEVENT_SBINS =
-LIBEVENT_INCLUDES = evdns.h event-config.h event.h evhttp.h evrpc.h evutil.h
-LIBEVENT_LIBS = libevent*
-LIBEVENT_PKGCONFIGS =
-
-LIBEVENT_DEPS :=
-
-libevent_install:
-	$(call embtk_install_pkg,LIBEVENT)
-
-download_libevent:
-	$(call embtk_download_pkg,LIBEVENT)
-
-libevent_clean:
-	$(call embtk_cleanup_pkg,LIBEVENT)
+LIBEVENT_BINS		= event_rpcgen.py
+LIBEVENT_SBINS		=
+LIBEVENT_INCLUDES	= evdns.h event-config.h event.h evhttp.h evrpc.h evutil.h
+LIBEVENT_LIBS		= libevent*
+LIBEVENT_PKGCONFIGS	=

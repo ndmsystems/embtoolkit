@@ -28,7 +28,6 @@ GTK_MAJOR_VERSION	:= $(call embtk_get_pkgversion,gtk_major)
 GTK_VERSION		:= $(call embtk_get_pkgversion,gtk)
 GTK_SITE		:= http://ftp.gnome.org/pub/gnome/sources/gtk+/$(GTK_MAJOR_VERSION)
 GTK_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-GTK_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/gtk/$(GTK_VERSION)
 GTK_PACKAGE		:= gtk+-$(GTK_VERSION).tar.bz2
 GTK_SRC_DIR		:= $(PACKAGES_BUILD)/gtk+-$(GTK_VERSION)
 GTK_BUILD_DIR		:= $(PACKAGES_BUILD)/gtk+-$(GTK_VERSION)
@@ -56,17 +55,11 @@ GTK_CONFIGURE_OPTS	:= $(GTK_BACKEND)
 GTK_CONFIGURE_OPTS	+= --disable-cups --disable-gtk-doc --disable-glibtest
 GTK_CONFIGURE_OPTS	+= LIBPNG=-lpng
 
-gtk_install:
-	$(call embtk_install_pkg,gtk)
+define embtk_postinstall_gtk
 	$(Q)test -e $(GTK_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(GTK_BUILD_DIR)/.patchlibtool
-	$(Q)$(MAKE) $(GTK_BUILD_DIR)/.special
-
-download_gtk:
-	$(call embtk_download_pkg,gtk)
-
-gtk_clean:
-	$(call embtk_cleanup_pkg,gtk)
+	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/gtk-* $(ROOTFS)/usr/$(LIBDIR)/
+endef
 
 $(GTK_BUILD_DIR)/.patchlibtool:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
@@ -96,10 +89,3 @@ else
 	mv $$i.new $$i; \
 	done
 endif
-
-
-.PHONY: gtk_clean $(GTK_BUILD_DIR)/.special
-
-$(GTK_BUILD_DIR)/.special:
-	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/gtk-* $(ROOTFS)/usr/$(LIBDIR)/
-	@touch $@

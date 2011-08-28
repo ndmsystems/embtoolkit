@@ -27,7 +27,6 @@ FONTCONFIG_NAME		:= fontconfig
 FONTCONFIG_VERSION	:= $(call embtk_get_pkgversion,fontconfig)
 FONTCONFIG_SITE		:= http://fontconfig.org/release
 FONTCONFIG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-FONTCONFIG_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/fontconfig/$(FONTCONFIG_VERSION)
 FONTCONFIG_PACKAGE	:= fontconfig-$(FONTCONFIG_VERSION).tar.gz
 FONTCONFIG_SRC_DIR	:= $(PACKAGES_BUILD)/fontconfig-$(FONTCONFIG_VERSION)
 FONTCONFIG_BUILD_DIR	:= $(PACKAGES_BUILD)/fontconfig-$(FONTCONFIG_VERSION)
@@ -66,19 +65,6 @@ FONTCONFIG_MAKE_OPTS		+= FREETYPE_LIBS="$(FREETYPE_LIBS-y)"
 
 FONTCONFIG_DEPS			:= libxml2_install freetype_install
 
-fontconfig_install:
-	$(call embtk_install_pkg,fontconfig)
-	$(MAKE) $(FONTCONFIG_BUILD_DIR)/.special
-
-download_fontconfig:
-	$(call embtk_download_pkg,fontconfig)
-
-.PHONY: $(FONTCONFIG_BUILD_DIR)/.special fontconfig_clean
-
-fontconfig_clean:
-	$(call embtk_cleanup_pkg,fontconfig)
-
-$(FONTCONFIG_BUILD_DIR)/.special:
+define embtk_postinstall_fontconfig
 	$(Q)-cp -R $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc/
-	@touch $@
-
+endef

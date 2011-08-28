@@ -27,7 +27,6 @@ LIBJPEG_NAME		:= jpeg
 LIBJPEG_VERSION		:= $(call embtk_get_pkgversion,libjpeg)
 LIBJPEG_SITE		:= http://www.ijg.org/files
 LIBJPEG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBJPEG_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/jpeg/$(LIBJPEG_VERSION)
 LIBJPEG_PACKAGE		:= jpegsrc.v$(LIBJPEG_VERSION).tar.gz
 LIBJPEG_SRC_DIR		:= $(PACKAGES_BUILD)/jpeg-$(LIBJPEG_VERSION)
 LIBJPEG_BUILD_DIR	:= $(PACKAGES_BUILD)/jpeg-$(LIBJPEG_VERSION)
@@ -39,12 +38,6 @@ LIBJPEG_INCLUDES	:= jconfig.h jerror.h jmorecfg.h jpeglib.h
 
 LIBJPEG_CONFIGURE_OPTS := --program-suffix=""
 
-libjpeg_install:
-	$(call embtk_install_pkg,libjpeg)
-
-libjpeg_clean:
-	$(call embtk_cleanup_pkg,libjpeg)
-
 #
 # libjpeg for host development machine
 #
@@ -54,18 +47,9 @@ LIBJPEG_HOST_SITE		:= $(LIBJPEG_SITE)
 LIBJPEG_HOST_SITE_MIRROR1	:= $(LIBJPEG_SITE_MIRROR1)
 LIBJPEG_HOST_SITE_MIRROR2	:= $(LIBJPEG_SITE_MIRROR2)
 LIBJPEG_HOST_SITE_MIRROR3	:= $(LIBJPEG_SITE_MIRROR3)
-LIBJPEG_HOST_PATCH_SITE		:= $(LIBJPEG_PATCH_SITE)
 LIBJPEG_HOST_PACKAGE		:= $(LIBJPEG_PACKAGE)
 LIBJPEG_HOST_SRC_DIR		:= $(TOOLS_BUILD)/jpeg-$(LIBJPEG_VERSION)
 LIBJPEG_HOST_BUILD_DIR		:= $(TOOLS_BUILD)/jpeg-$(LIBJPEG_VERSION)
 
 LIBJPEG_HOST_CONFIGURE_OPTS	:= --program-suffix=""
 
-libjpeg_host_install:
-	$(call embtk_install_hostpkg,libjpeg_host)
-
-#
-# Common for host and target
-#
-download_libjpeg download_libjpeg_host:
-	$(call embtk_download_pkg,libjpeg)

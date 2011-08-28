@@ -28,7 +28,6 @@ PANGO_MAJOR_VERSION	:= $(call embtk_get_pkgversion,pango_major)
 PANGO_VERSION		:= $(call embtk_get_pkgversion,pango)
 PANGO_SITE		:= http://ftp.gnome.org/pub/gnome/sources/pango/$(PANGO_MAJOR_VERSION)
 PANGO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-PANGO_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/pango/$(PANGO_VERSION)
 PANGO_PACKAGE		:= pango-$(PANGO_VERSION).tar.bz2
 PANGO_SRC_DIR		:= $(PACKAGES_BUILD)/pango-$(PANGO_VERSION)
 PANGO_BUILD_DIR		:= $(PACKAGES_BUILD)/pango-$(PANGO_VERSION)
@@ -49,17 +48,11 @@ PANGO_CONFIGURE_OPTS	:= $(PANGO_CONFIGURE_OPTS-y)
 PANGO_DEPS		:= glib_install fontconfig_install $(PANGO_DEPS-y)	\
 			cairo_install
 
-pango_install:
-	$(call embtk_install_pkg,pango)
+define embtk_postinstall_pango
 	$(Q)test -e $(PANGO_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(PANGO_BUILD_DIR)/.patchlibtool
-	$(Q)$(MAKE) $(PANGO_BUILD_DIR)/.special
-
-download_pango:
-	$(call embtk_download_pkg,pango)
-
-pango_clean:
-	$(call embtk_cleanup_pkg,pango)
+	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/pango $(ROOTFS)/usr/$(LIBDIR)/
+endef
 
 $(PANGO_BUILD_DIR)/.patchlibtool:
 	$(Q)PANGO_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/* -type f -name *.la`; \
@@ -71,10 +64,4 @@ $(PANGO_BUILD_DIR)/.patchlibtool:
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done
-	@touch $@
-
-.PHONY: pango_clean $(PANGO_BUILD_DIR)/.special
-
-$(PANGO_BUILD_DIR)/.special:
-	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/pango $(ROOTFS)/usr/$(LIBDIR)/
 	@touch $@

@@ -23,30 +23,26 @@
 # \date         March 2010
 ################################################################################
 
-UTILMACROS_NAME := util-macro
-UTILMACROS_VERSION := $(call embtk_get_pkgversion,UTILMACROS)
-UTILMACROS_SITE := http://xorg.freedesktop.org/archive/individual/util
-UTILMACROS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-UTILMACROS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/util-macro/$(UTILMACROS_VERSION)
-UTILMACROS_PACKAGE := util-macros-$(UTILMACROS_VERSION).tar.bz2
-UTILMACROS_SRC_DIR := $(PACKAGES_BUILD)/util-macros-$(UTILMACROS_VERSION)
-UTILMACROS_BUILD_DIR := $(PACKAGES_BUILD)/util-macros-$(UTILMACROS_VERSION)
+UTILMACROS_NAME		:= util-macro
+UTILMACROS_VERSION	:= $(call embtk_get_pkgversion,utilmacros)
+UTILMACROS_SITE		:= http://xorg.freedesktop.org/archive/individual/util
+UTILMACROS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+UTILMACROS_PACKAGE	:= util-macros-$(UTILMACROS_VERSION).tar.bz2
+UTILMACROS_SRC_DIR	:= $(PACKAGES_BUILD)/util-macros-$(UTILMACROS_VERSION)
+UTILMACROS_BUILD_DIR	:= $(PACKAGES_BUILD)/util-macros-$(UTILMACROS_VERSION)
 
-UTILMACROS_BINS =
-UTILMACROS_SBINS =
-UTILMACROS_INCLUDES =
-UTILMACROS_LIBS =
-UTILMACROS_PKGCONFIGS = xorg-macros.pc
+UTILMACROS_BINS		=
+UTILMACROS_SBINS	=
+UTILMACROS_INCLUDES	=
+UTILMACROS_LIBS		=
+UTILMACROS_PKGCONFIGS	= xorg-macros.pc
 
 UTILMACROS_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
-utilmacros_install:
-	$(call embtk_install_pkg,UTILMACROS) && \
-	cp $(SYSROOT)/usr/share/pkgconfig/xorg-macros.pc $(EMBTK_PKG_CONFIG_PATH) \
-	&& $(MAKE) pkgconfig_files_adapt
-
-download_utilmacros:
-	$(call embtk_download_pkg,UTILMACROS)
-
-utilmacros_clean:
-	$(call embtk_cleanup_pkg,UTILMACROS)
+define embtk_postinstall_utilmacros
+	$(Q)if [ ! -e $(UTILMACROS_BUILD_DIR)/.installed]; then			\
+		cp $(SYSROOT)/usr/share/pkgconfig/xorg-macros.pc		\
+						$(EMBTK_PKG_CONFIG_PATH);	\
+		$(MAKE) pkgconfig_files_adapt;					\
+	fi
+endef

@@ -23,28 +23,18 @@
 # \date         March 2010
 ################################################################################
 
-XKBCOMP_NAME := xkbcomp
-XKBCOMP_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_XKBCOMP_VERSION_STRING)))
-XKBCOMP_SITE := http://xorg.freedesktop.org/archive/individual/app
-XKBCOMP_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-XKBCOMP_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/xkbcomp/$(XKBCOMP_VERSION)
-XKBCOMP_PACKAGE := xkbcomp-$(XKBCOMP_VERSION).tar.bz2
-XKBCOMP_SRC_DIR := $(PACKAGES_BUILD)/xkbcomp-$(XKBCOMP_VERSION)
-XKBCOMP_BUILD_DIR := $(PACKAGES_BUILD)/xkbcomp-$(XKBCOMP_VERSION)
+XKBCOMP_NAME		:= xkbcomp
+XKBCOMP_VERSION		:= $(call embtk_get_pkgversion,xkbcomp)
+XKBCOMP_SITE		:= http://xorg.freedesktop.org/archive/individual/app
+XKBCOMP_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+XKBCOMP_PACKAGE		:= xkbcomp-$(XKBCOMP_VERSION).tar.bz2
+XKBCOMP_SRC_DIR		:= $(PACKAGES_BUILD)/xkbcomp-$(XKBCOMP_VERSION)
+XKBCOMP_BUILD_DIR	:= $(PACKAGES_BUILD)/xkbcomp-$(XKBCOMP_VERSION)
 
-XKBCOMP_BINS = xkbcomp
-XKBCOMP_SBINS =
-XKBCOMP_INCLUDES =
-XKBCOMP_LIBS =
-XKBCOMP_PKGCONFIGS =
+XKBCOMP_BINS		= xkbcomp
+XKBCOMP_SBINS		=
+XKBCOMP_INCLUDES	=
+XKBCOMP_LIBS 		=
+XKBCOMP_PKGCONFIGS	=
 
-XKBCOMP_DEPS = libxkbfile_install
-
-xkbcomp_install:
-	$(call embtk_install_pkg,XKBCOMP)
-
-download_xkbcomp:
-	$(call embtk_cleanup_pkg,XKBCOMP)
-
-xkbcomp_clean:
-	$(call embtk_cleanup_pkg,XKBCOMP)
+XKBCOMP_DEPS		= libxkbfile_install

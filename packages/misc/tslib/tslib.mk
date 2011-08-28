@@ -24,10 +24,9 @@
 ################################################################################
 
 TSLIB_NAME		:= tslib
-TSLIB_VERSION		:= $(call embtk_get_pkgversion,TSLIB)
+TSLIB_VERSION		:= $(call embtk_get_pkgversion,tslib)
 TSLIB_SITE		:= http://download.berlios.de/tslib
 TSLIB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-TSLIB_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/tslib/$(TSLIB_VERSION)
 TSLIB_PACKAGE		:= tslib-$(TSLIB_VERSION).tar.bz2
 TSLIB_SRC_DIR		:= $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION)
 TSLIB_BUILD_DIR		:= $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION)
@@ -40,18 +39,6 @@ TSLIB_PKGCONFIGS	= tslib*.pc
 
 TSLIB_DEPS =
 
-tslib_install:
-	$(call embtk_install_pkg,TSLIB)
-	$(Q)$(MAKE) $(TSLIB_BUILD_DIR)/.special
-
-download_tslib:
-	$(call embtk_download_pkg,TSLIB)
-
-tslib_clean:
-	$(call embtk_cleanup_pkg,TSLIB)
-
-.PHONY: $(TSLIB_BUILD_DIR)/.special
-
-$(TSLIB_BUILD_DIR)/.special:
+define embtk_postinstall_tslib
 	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/ts $(ROOTFS)/usr/$(LIBDIR)/
-	@touch $@
+endef

@@ -28,7 +28,6 @@ LIBPNG_VERSION		:= $(call embtk_get_pkgversion,libpng)
 LIBPNG_SITE		:= http://download.sourceforge.net/libpng
 LIBPNG_PACKAGE		:= libpng-$(LIBPNG_VERSION).tar.gz
 LIBPNG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBPNG_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/libpng/$(LIBPNG_VERSION)
 LIBPNG_SRC_DIR		:= $(PACKAGES_BUILD)/libpng-$(LIBPNG_VERSION)
 LIBPNG_BUILD_DIR	:= $(PACKAGES_BUILD)/libpng-$(LIBPNG_VERSION)
 
@@ -41,12 +40,6 @@ LIBPNG_PKGCONFIGS	= libpng*
 LIBPNG_CONFIGURE_OPTS	:= --with-libpng-compat=no
 LIBPNG_DEPS		:= zlib_install
 
-libpng_install:
-	$(call embtk_install_pkg,libpng)
-
-libpng_clean:
-	$(call embtk_cleanup_pkg,libpng)
-
 #
 # libpng for host development machine
 #
@@ -58,18 +51,9 @@ LIBPNG_HOST_PACKAGE		:= $(LIBPNG_PACKAGE)
 LIBPNG_HOST_SITE_MIRROR1	:= $(LIBPNG_SITE_MIRROR1)
 LIBPNG_HOST_SITE_MIRROR2	:= $(LIBPNG_SITE_MIRROR2)
 LIBPNG_HOST_SITE_MIRROR3	:= $(LIBPNG_SITE_MIRROR3)
-LIBPNG_HOST_PATCH_SITE		:= $(LIBPNG_PATCH_SITE)
 LIBPNG_HOST_SRC_DIR		:= $(TOOLS_BUILD)/libpng-$(LIBPNG_VERSION)
 LIBPNG_HOST_BUILD_DIR		:= $(TOOLS_BUILD)/libpng-$(LIBPNG_VERSION)
 
 LIBPNG_HOST_CONFIGURE_OPTS	:= --with-libpng-compat=no
 LIBPNG_HOST_DEPS		:= zlib_host_install
 
-libpng_host_install:
-	$(call embtk_install_hostpkg,libpng_host)
-
-#
-# Common for target and host
-#
-download_libpng download_libpng_host:
-	$(call embtk_download_pkg,libpng)

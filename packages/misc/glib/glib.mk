@@ -47,15 +47,14 @@ GLIB_CONFIGURE_ENV	:= glib_cv_stack_grows=no			\
 			ac_cv_func_posix_getpwuid_r=yes			\
 			ac_cv_func_nonposix_getpwuid_r=no		\
 			ac_cv_func_posix_getgrgid_r=yes
-
 GLIB_CONFIGURE_OPTS	:= --disable-fam
 
 GLIB_DEPS		:= zlib_install gettext_install glib_host_install
 
-glib_install:
-	$(call embtk_install_pkg,glib)
-	@test -e $(GLIB_BUILD_DIR)/.patchlibtool || \
+define embtk_postinstall_glib
+	$(Q)test -e $(GLIB_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(GLIB_BUILD_DIR)/.patchlibtool
+endef
 
 #FIXME: this should be fixed in glib2 project
 $(GLIB_BUILD_DIR)/.patchlibtool:
@@ -81,9 +80,6 @@ $(GLIB_BUILD_DIR)/.patchlibtool:
 	mv libgthread-2.0.la.new $(SYSROOT)/usr/$(LIBDIR)/libgthread-2.0.la
 	@touch $@
 
-glib_clean:
-	$(call embtk_cleanup_pkg,glib)
-
 #
 # glib for host
 #
@@ -103,11 +99,3 @@ GLIB_HOST_SET_RPATH		:= y
 GLIB_HOST_CONFIGURE_OPTS	:= --disable-fam
 GLIB_HOST_DEPS			:= gettext_host_install
 
-glib_host_install:
-	$(call embtk_install_hostpkg,glib_host)
-
-#
-# Common for target and host
-#
-download_glib download_glib_host:
-	$(call embtk_download_pkg,glib)

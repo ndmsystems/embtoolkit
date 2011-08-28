@@ -23,40 +23,27 @@
 # \date         July 2010
 ################################################################################
 
-DBUS_NAME := dbus
-DBUS_VERSION := $(call embtk_get_pkgversion,DBUS)
-DBUS_SITE := http://dbus.freedesktop.org/releases/dbus
-DBUS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-DBUS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/dbus/$(DBUS_VERSION)
-DBUS_PACKAGE := dbus-$(DBUS_VERSION).tar.gz
-DBUS_SRC_DIR := $(PACKAGES_BUILD)/dbus-$(DBUS_VERSION)
-DBUS_BUILD_DIR := $(PACKAGES_BUILD)/dbus-$(DBUS_VERSION)
+DBUS_NAME		:= dbus
+DBUS_VERSION		:= $(call embtk_get_pkgversion,dbus)
+DBUS_SITE		:= http://dbus.freedesktop.org/releases/dbus
+DBUS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+DBUS_PACKAGE		:= dbus-$(DBUS_VERSION).tar.gz
+DBUS_SRC_DIR		:= $(PACKAGES_BUILD)/dbus-$(DBUS_VERSION)
+DBUS_BUILD_DIR		:= $(PACKAGES_BUILD)/dbus-$(DBUS_VERSION)
 
-DBUS_BINS = dbus-cleanup-sockets dbus-daemon dbus-launch dbus-monitor \
-		dbus-send dbus-uuidgen
-DBUS_SBINS =
-DBUS_INCLUDES = dbus-*
-DBUS_LIBS = dbus-* libdbus*
-DBUS_PKGCONFIGS = dbus*.pc
+DBUS_BINS		= dbus-cleanup-sockets dbus-daemon dbus-launch		\
+			dbus-monitor dbus-send dbus-uuidgen
+DBUS_SBINS		=
+DBUS_INCLUDES		= dbus-*
+DBUS_LIBS		= dbus-* libdbus*
+DBUS_PKGCONFIGS		= dbus*.pc
 
-DBUS_DEPS = expat_install \
-	$(if $(CONFIG_EMBTK_HAVE_LIBX11),libx11_install,)
+DBUS_DEPS = expat_install $(if $(CONFIG_EMBTK_HAVE_LIBX11),libx11_install)
 
 DBUS_CONFIGURE_OPTS := --enable-abstract-sockets \
 	$(if $(CONFIG_EMBTK_HAVE_LIBX11),--with-x,--without-x)
 
-dbus_install:
-	$(call embtk_install_pkg,DBUS)
-	$(Q)$(MAKE) $(DBUS_BUILD_DIR)/.special
-
-download_dbus:
-	$(call embtk_download_pkg,DBUS)
-
-dbus_clean:
-	$(call embtk_cleanup_pkg,DBUS)
-
-.PHONY: $(DBUS_BUILD_DIR)/.special dbus_clean
-
-$(DBUS_BUILD_DIR)/.special:
+define embtk_postinstall_dbus
 	$(Q)-mkdir -p $(ROOTFS)/usr/libexec
 	$(Q)-cp -R $(SYSROOT)/usr/libexec/dbus* $(ROOTFS)/usr/libexec/
+endef

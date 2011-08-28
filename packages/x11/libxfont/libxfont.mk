@@ -23,14 +23,13 @@
 # \date         March 2010
 ################################################################################
 
-LIBXFONT_NAME := libXfont
-LIBXFONT_VERSION := $(call embtk_get_pkgversion,LIBXFONT)
-LIBXFONT_SITE := http://xorg.freedesktop.org/archive/individual/lib
-LIBXFONT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBXFONT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxfont/$(LIBXFONT_VERSION)
-LIBXFONT_PACKAGE := libXfont-$(LIBXFONT_VERSION).tar.bz2
-LIBXFONT_SRC_DIR := $(PACKAGES_BUILD)/libXfont-$(LIBXFONT_VERSION)
-LIBXFONT_BUILD_DIR := $(PACKAGES_BUILD)/libXfont-$(LIBXFONT_VERSION)
+LIBXFONT_NAME		:= libXfont
+LIBXFONT_VERSION	:= $(call embtk_get_pkgversion,libxfont)
+LIBXFONT_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
+LIBXFONT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBXFONT_PACKAGE	:= libXfont-$(LIBXFONT_VERSION).tar.bz2
+LIBXFONT_SRC_DIR	:= $(PACKAGES_BUILD)/libXfont-$(LIBXFONT_VERSION)
+LIBXFONT_BUILD_DIR	:= $(PACKAGES_BUILD)/libXfont-$(LIBXFONT_VERSION)
 
 LIBXFONT_BINS =
 LIBXFONT_SBINS =
@@ -45,12 +44,3 @@ LIBXFONT_PKGCONFIGS = xfont.pc
 LIBXFONT_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
 LIBXFONT_DEPS = libfontenc_install freetype_install
-
-libxfont_install:
-	$(call embtk_install_pkg,LIBXFONT)
-
-download_libxfont:
-	$(call embtk_download_pkg,LIBXFONT)
-
-libxfont_clean:
-	$(call embtk_cleanup_pkg,LIBXFONT)

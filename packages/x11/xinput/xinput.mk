@@ -23,29 +23,19 @@
 # \date         September 2010
 ################################################################################
 
-XINPUT_NAME := xinput
-XINPUT_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_XINPUT_VERSION_STRING)))
-XINPUT_SITE := http://xorg.freedesktop.org/archive/individual/app
-XINPUT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-XINPUT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/xinput/$(XINPUT_VERSION)
-XINPUT_PACKAGE := xinput-$(XINPUT_VERSION).tar.bz2
-XINPUT_SRC_DIR := $(PACKAGES_BUILD)/xinput-$(XINPUT_VERSION)
-XINPUT_BUILD_DIR := $(PACKAGES_BUILD)/xinput-$(XINPUT_VERSION)
+XINPUT_NAME		:= xinput
+XINPUT_VERSION		:= $(call embtk_get_pkgversion,xinput)
+XINPUT_SITE		:= http://xorg.freedesktop.org/archive/individual/app
+XINPUT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+XINPUT_PACKAGE		:= xinput-$(XINPUT_VERSION).tar.bz2
+XINPUT_SRC_DIR		:= $(PACKAGES_BUILD)/xinput-$(XINPUT_VERSION)
+XINPUT_BUILD_DIR	:= $(PACKAGES_BUILD)/xinput-$(XINPUT_VERSION)
 
-XINPUT_BINS = xinput
-XINPUT_SBINS =
-XINPUT_INCLUDES =
-XINPUT_LIBS =
-XINPUT_PKGCONFIGS =
+XINPUT_BINS		= xinput
+XINPUT_SBINS		=
+XINPUT_INCLUDES		=
+XINPUT_LIBS		=
+XINPUT_PKGCONFIGS	=
 
 XINPUT_DEPS := xproto_install inputproto_install libx11_install \
 	libxext_install libxi_install
-
-xinput_install:
-	$(call embtk_install_pkg,XINPUT)
-
-download_xinput:
-	$(call embtk_download_pkg,XINPUT)
-
-xinput_clean:
-	$(call embtk_cleanup_pkg,XINPUT)

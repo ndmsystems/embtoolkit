@@ -23,14 +23,13 @@
 # \date         March 2010
 ################################################################################
 
-LIBXEXT_NAME := libXext
-LIBXEXT_VERSION := $(call embtk_get_pkgversion,LIBXEXT)
-LIBXEXT_SITE := http://xorg.freedesktop.org/archive/individual/lib
-LIBXEXT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBXEXT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/expat/$(LIBXEXT_VERSION)
-LIBXEXT_PACKAGE := libXext-$(LIBXEXT_VERSION).tar.bz2
-LIBXEXT_SRC_DIR := $(PACKAGES_BUILD)/libXext-$(LIBXEXT_VERSION)
-LIBXEXT_BUILD_DIR := $(PACKAGES_BUILD)/libXext-$(LIBXEXT_VERSION)
+LIBXEXT_NAME		:= libXext
+LIBXEXT_VERSION		:= $(call embtk_get_pkgversion,libxext)
+LIBXEXT_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
+LIBXEXT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBXEXT_PACKAGE		:= libXext-$(LIBXEXT_VERSION).tar.bz2
+LIBXEXT_SRC_DIR		:= $(PACKAGES_BUILD)/libXext-$(LIBXEXT_VERSION)
+LIBXEXT_BUILD_DIR	:= $(PACKAGES_BUILD)/libXext-$(LIBXEXT_VERSION)
 
 LIBXEXT_BINS =
 LIBXEXT_SBINS =
@@ -49,29 +48,3 @@ LIBXEXT_PKGCONFIGS =
 LIBXEXT_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
 LIBXEXT_DEPS = libx11_install
-
-libxext_install:
-	@test -e $(LIBXEXT_BUILD_DIR)/.installed || \
-	$(MAKE) $(LIBXEXT_BUILD_DIR)/.installed
-
-$(LIBXEXT_BUILD_DIR)/.installed: $(LIBXEXT_DEPS) download_libxext \
-	$(LIBXEXT_BUILD_DIR)/.decompressed $(LIBXEXT_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	libxext-$(LIBXEXT_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(LIBXEXT_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBXEXT_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_libxext:
-	$(call embtk_download_pkg,LIBXEXT)
-
-$(LIBXEXT_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,LIBXEXT)
-
-$(LIBXEXT_BUILD_DIR)/.configured:
-	$(call embtk_configure_pkg,LIBXEXT)
-
-libxext_clean:
-	$(call embtk_cleanup_pkg,LIBXEXT)

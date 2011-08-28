@@ -27,7 +27,6 @@ SQLITE_NAME		:= sqlite
 SQLITE_VERSION		:= $(call embtk_get_pkgversion,sqlite)
 SQLITE_SITE		:= http://www.sqlite.org
 SQLITE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-SQLITE_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/sqlite/$(SQLITE_VERSION)
 # Please sqlite people stop changing the way packages are named and packaged
 SQLITE_PACKAGE		:= $(if $(CONFIG_EMBTK_SQLITE_VERSION_3_7_3),		\
 				sqlite-amalgamation-$(SQLITE_VERSION).tar.gz,	\
@@ -48,11 +47,3 @@ SQLITE_PKGCONFIGS	= sqlite3.pc
 SQLITE_CONFIGURE_OPTS	:= --enable-threadsafe --enable-readline 		\
 			--enable-dynamic-extensions
 
-sqlite_install:
-	$(call embtk_install_pkg,sqlite)
-
-download_sqlite:
-	$(call embtk_download_pkg,sqlite)
-
-sqlite_clean:
-	$(call embtk_cleanup_pkg,sqlite)

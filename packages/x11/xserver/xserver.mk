@@ -23,37 +23,32 @@
 # \date         March 2010
 ################################################################################
 
-XSERVER_NAME := xorg-server
-XSERVER_VERSION := $(call embtk_get_pkgversion,XSERVER)
-XSERVER_SITE := http://ftp.x.org/pub/individual/xserver
-XSERVER_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-XSERVER_PACKAGE := xorg-server-$(XSERVER_VERSION).tar.bz2
-XSERVER_SRC_DIR := $(PACKAGES_BUILD)/xorg-server-$(XSERVER_VERSION)
-XSERVER_BUILD_DIR := $(PACKAGES_BUILD)/xorg-server-$(XSERVER_VERSION)
+XSERVER_NAME		:= xorg-server
+XSERVER_VERSION		:= $(call embtk_get_pkgversion,xserver)
+XSERVER_SITE		:= http://ftp.x.org/pub/individual/xserver
+XSERVER_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+XSERVER_PACKAGE		:= xorg-server-$(XSERVER_VERSION).tar.bz2
+XSERVER_SRC_DIR		:= $(PACKAGES_BUILD)/xorg-server-$(XSERVER_VERSION)
+XSERVER_BUILD_DIR	:= $(PACKAGES_BUILD)/xorg-server-$(XSERVER_VERSION)
 
-XSERVER_BINS = Xfbdev X Xorg
-XSERVER_SBINS =
-XSERVER_INCLUDES = xorg
-XSERVER_LIBS = xorg
-XSERVER_PKGCONFIGS = xorg-server.pc
+XSERVER_BINS		= Xfbdev X Xorg
+XSERVER_SBINS		=
+XSERVER_INCLUDES	= xorg
+XSERVER_LIBS		= xorg
+XSERVER_PKGCONFIGS	= xorg-server.pc
 
-ifeq ($(CONFIG_EMBTK_HAVE_XSERVER_KDRIVE),y)
-XSERVER_VARIANT := --enable-kdrive --disable-xorg
-else
-XSERVER_VARIANT := --disable-kdrive --enable-xorg
-endif
+XSERVER_VARIANT := $(if $(CONFIG_EMBTK_HAVE_XSERVER_KDRIVE),			\
+			--enable-kdrive --disable-xorg,				\
+			--disable-kdrive --enable-xorg)
 
-XSERVER_DEPS := utilmacros_install bigreqsproto_install compositeproto_install \
-		damageproto_install fixesproto_install fontsproto_install \
-		inputproto_install kbproto_install randrproto_install \
-		recordproto_install renderproto_install resourceproto_install \
-		videoproto_install xcbproto_install xcmiscproto_install \
-		xextproto_install xproto_install libxfont_install \
+XSERVER_DEPS := utilmacros_install bigreqsproto_install compositeproto_install	\
+		damageproto_install fixesproto_install fontsproto_install	\
+		inputproto_install kbproto_install randrproto_install		\
+		recordproto_install renderproto_install resourceproto_install	\
+		videoproto_install xcbproto_install xcmiscproto_install		\
+		xextproto_install xproto_install libxfont_install		\
 		libxkbfile_install xtrans_install openssl_install
-
-ifeq ($(CONFIG_EMBTK_HAVE_XSERVER_XORG),y)
-XSERVER_DEPS += libpciaccess_install
-endif
+XSERVER_DEPS += $(if $(CONFIG_EMBTK_HAVE_XSERVER_XORG),libpciaccess_install)
 
 XSERVER_CONFIGURE_OPTS := $(XSERVER_VARIANT) --with-sha1=libcrypto \
 		--disable-dga --disable-dri --disable-xvmc --disable-fontserver \
@@ -74,10 +69,10 @@ XSERVER_CONFIGURE_OPTS := $(XSERVER_VARIANT) --with-sha1=libcrypto \
 		--with-os-name=$(STRICT_GNU_TARGET) \
 		--with-os-vendor="embtoolkit.org"
 
-XSERVER_CONFIGURE_ENV := XLIB_CFLAGS=`$(PKGCONFIG_BIN) xcb --cflags`
-XSERVER_CONFIGURE_ENV += XLIB_LIBS=`$(PKGCONFIG_BIN) xcb --libs`
-XSERVER_CONFIGURE_ENV += TSLIB_CFLAGS=`$(PKGCONFIG_BIN) tslib --cflags`
-XSERVER_CONFIGURE_ENV += TSLIB_LIBS=`$(PKGCONFIG_BIN) tslib --libs`
+XSERVER_CONFIGURE_ENV = XLIB_CFLAGS=$(call embtk_pkgconfig_getcflags,xcb)
+XSERVER_CONFIGURE_ENV += XLIB_LIBS=$(call embtk_pkgconfig_getlibs,xcb)
+XSERVER_CONFIGURE_ENV += TSLIB_CFLAGS=$(call embtk_pkgconfig_getcflags,tslib)
+XSERVER_CONFIGURE_ENV += TSLIB_LIBS=$(call embtk_pkgconfig_getlibs,tslib)
 
 ifeq ($(CONFIG_EMBTK_HAVE_XSERVER_WITH_TSLIB),y)
 XSERVER_DEPS += tslib_install
@@ -86,18 +81,6 @@ else
 XSERVER_CONFIGURE_OPTS += --disable-tslib
 endif
 
-xserver_install:
-	$(call embtk_install_pkg,XSERVER)
-	$(Q)$(MAKE) $(XSERVER_BUILD_DIR)/.special
-
-download_xserver:
-	$(call embtk_download_pkg,XSERVER)
-
-xserver_clean:
-	$(call embtk_cleanup_pkg,XSERVER)
-
-.PHONY: $(XSERVER_BUILD_DIR)/.special
-
-$(XSERVER_BUILD_DIR)/.special:
+define embtk_postinstall_xserver
 	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/xorg $(ROOTFS)/usr/$(LIBDIR)/
-	@touch $@
+endef

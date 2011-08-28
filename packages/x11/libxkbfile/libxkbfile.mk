@@ -23,14 +23,13 @@
 # \date         February 2010
 ################################################################################
 
-LIBXKBFILE_NAME := libxkbfile
-LIBXKBFILE_VERSION := $(call embtk_get_pkgversion,LIBXKBFILE)
-LIBXKBFILE_SITE := http://xorg.freedesktop.org/archive/individual/lib
-LIBXKBFILE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBXKBFILE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libxkbfile/$(LIBXKBFILE_VERSION)
-LIBXKBFILE_PACKAGE := libxkbfile-$(LIBXKBFILE_VERSION).tar.bz2
-LIBXKBFILE_SRC_DIR := $(PACKAGES_BUILD)/libxkbfile-$(LIBXKBFILE_VERSION)
-LIBXKBFILE_BUILD_DIR := $(PACKAGES_BUILD)/libxkbfile-$(LIBXKBFILE_VERSION)
+LIBXKBFILE_NAME		:= libxkbfile
+LIBXKBFILE_VERSION	:= $(call embtk_get_pkgversion,libxkbfile)
+LIBXKBFILE_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
+LIBXKBFILE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBXKBFILE_PACKAGE	:= libxkbfile-$(LIBXKBFILE_VERSION).tar.bz2
+LIBXKBFILE_SRC_DIR	:= $(PACKAGES_BUILD)/libxkbfile-$(LIBXKBFILE_VERSION)
+LIBXKBFILE_BUILD_DIR	:= $(PACKAGES_BUILD)/libxkbfile-$(LIBXKBFILE_VERSION)
 
 LIBXKBFILE_BINS =
 LIBXKBFILE_SBINS =
@@ -41,12 +40,3 @@ LIBXKBFILE_LIBS = libxkbfile.*
 LIBXKBFILE_PKGCONFIGS =
 
 LIBXKBFILE_DEPS = kbproto_install libx11_install
-
-libxkbfile_install:
-	$(call embtk_install_pkg,LIBXKBFILE)
-
-download_libxkbfile:
-	$(call embtk_download_pkg,LIBXKBFILE)
-
-libxkbfile_clean:
-	$(call embtk_cleanup_pkg,LIBXKBFILE)

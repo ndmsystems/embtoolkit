@@ -23,28 +23,16 @@
 # \date         July 2010
 ################################################################################
 
-EXPAT_NAME := expat
-EXPAT_VERSION := $(call embtk_get_pkgversion,EXPAT)
-EXPAT_SITE := http://downloads.sourceforge.net/expat
-EXPAT_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-EXPAT_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/expat/$(EXPAT_VERSION)
-EXPAT_PACKAGE := expat-$(EXPAT_VERSION).tar.gz
-EXPAT_SRC_DIR := $(PACKAGES_BUILD)/expat-$(EXPAT_VERSION)
-EXPAT_BUILD_DIR := $(PACKAGES_BUILD)/expat-$(EXPAT_VERSION)
+EXPAT_NAME		:= expat
+EXPAT_VERSION		:= $(call embtk_get_pkgversion,expat)
+EXPAT_SITE		:= http://downloads.sourceforge.net/expat
+EXPAT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+EXPAT_PACKAGE		:= expat-$(EXPAT_VERSION).tar.gz
+EXPAT_SRC_DIR		:= $(PACKAGES_BUILD)/expat-$(EXPAT_VERSION)
+EXPAT_BUILD_DIR		:= $(PACKAGES_BUILD)/expat-$(EXPAT_VERSION)
 
-EXPAT_BINS = xmlwf
-EXPAT_SBINS =
-EXPAT_INCLUDES = expat_external.h expat.h
-EXPAT_LIBS = libexpat.*
-EXPAT_PKGCONFIGS =
-
-EXPAT_DEPS =
-
-expat_install:
-	$(call embtk_install_pkg,EXPAT)
-
-download_expat:
-	$(call embtk_download_pkg,EXPAT)
-
-expat_clean:
-	$(call embtk_cleanup_pkg,EXPAT)
+EXPAT_BINS		= xmlwf
+EXPAT_SBINS		=
+EXPAT_INCLUDES		= expat_external.h expat.h
+EXPAT_LIBS		= libexpat.*
+EXPAT_PKGCONFIGS	=

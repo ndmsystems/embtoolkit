@@ -24,10 +24,9 @@
 ################################################################################
 
 E2FSPROGS_NAME		:= e2fsprogs
-E2FSPROGS_VERSION	:= $(call embtk_get_pkgversion,E2FSPROGS)
+E2FSPROGS_VERSION	:= $(call embtk_get_pkgversion,e2fsprogs)
 E2FSPROGS_SITE		:= http://sourceforge.net/projects/e2fsprogs/files/e2fsprogs/$(E2FSPROGS_VERSION)
 E2FSPROGS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-E2FSPROGS_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/e2fsprogs/$(E2FSPROGS_VERSION)
 E2FSPROGS_PACKAGE	:= e2fsprogs-$(E2FSPROGS_VERSION).tar.gz
 E2FSPROGS_SRC_DIR	:= $(PACKAGES_BUILD)/e2fsprogs-$(E2FSPROGS_VERSION)
 E2FSPROGS_BUILD_DIR	:= $(PACKAGES_BUILD)/e2fsprogs-$(E2FSPROGS_VERSION)
@@ -48,17 +47,8 @@ E2FSPROGS_CONFIGURE_OPTS := --disable-compression --disable-htree	\
 		--disable-blkid-debug --disable-testio-debug		\
 		--enable-libuuid --enable-libblkid --disable-debugfs	\
 		--disable-imager --disable-resizer --disable-fsck	\
-		--disable-e2initrd-helper --disable-tls --disable-tls	\
-		--disable-nls --disable-rpath --with-included-gettext
-
-e2fsprogs_install:
-	$(call embtk_install_pkg,E2FSPROGS)
-
-download_e2fsprogs:
-	$(call embtk_download_pkg,E2FSPROGS)
-
-e2fsprogs_clean:
-	$(call embtk_cleanup_pkg,E2FSPROGS)
+		--disable-e2initrd-helper --disable-tls --disable-nls	\
+		--disable-rpath --with-included-gettext
 
 #
 # E2FSPROGS for host development machine
@@ -67,19 +57,11 @@ E2FSPROGS_HOST_NAME		:= $(E2FSPROGS_NAME)
 E2FSPROGS_HOST_VERSION		:= $(E2FSPROGS_VERSION)
 E2FSPROGS_HOST_SITE		:= $(E2FSPROGS_SITE)
 E2FSPROGS_HOST_SITE_MIRROR3	:= $(E2FSPROGS_SITE_MIRROR3)
-E2FSPROGS_HOST_PATCH_SITE	:= $(E2FSPROGS_PATCH_SITE)
 E2FSPROGS_HOST_PACKAGE		:= $(E2FSPROGS_PACKAGE)
 E2FSPROGS_HOST_SRC_DIR		:= $(TOOLS_BUILD)/e2fsprogs-$(E2FSPROGS_VERSION)
 E2FSPROGS_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/e2fsprogs-$(E2FSPROGS_VERSION)
 
-E2FSPROGS_HOST_MAKE_OPTS := LDCONFIG=true
-E2FSPROGS_HOST_MAKE_DIRS := $(E2FSPROGS_MAKE_DIRS)
-E2FSPROGS_CONFIGURE_OPTS := $(E2FSPROGS_CONFIGURE_OPTS)
+E2FSPROGS_HOST_MAKE_OPTS	:= LDCONFIG=true
+E2FSPROGS_HOST_MAKE_DIRS	:= $(E2FSPROGS_MAKE_DIRS)
+E2FSPROGS_HOST_CONFIGURE_OPTS	:= $(E2FSPROGS_CONFIGURE_OPTS)
 
-e2fsprogs_host_install:
-	$(call embtk_install_hostpkg,E2FSPROGS_HOST)
-
-download_e2fsprogs_host:
-	$(call embtk_download_pkg,E2FSPROGS_HOST)
-
-e2fsprogs_host_clean:

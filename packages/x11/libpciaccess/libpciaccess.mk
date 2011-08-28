@@ -23,46 +23,17 @@
 # \date         March 2010
 ################################################################################
 
-LIBPCIACCESS_NAME := libpciaccess
-LIBPCIACCESS_VERSION := $(call embtk_get_pkgversion,LIBPCIACCESS)
-LIBPCIACCESS_SITE := http://xorg.freedesktop.org/archive/individual/lib
-LIBPCIACCESS_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libpciaccess/$(LIBPCIACCESS_VERSION)
-LIBPCIACCESS_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-LIBPCIACCESS_PACKAGE := libpciaccess-$(LIBPCIACCESS_VERSION).tar.gz
-LIBPCIACCESS_SRC_DIR := $(PACKAGES_BUILD)/libpciaccess-$(LIBPCIACCESS_VERSION)
-LIBPCIACCESS_BUILD_DIR := $(PACKAGES_BUILD)/libpciaccess-$(LIBPCIACCESS_VERSION)
+LIBPCIACCESS_NAME		:= libpciaccess
+LIBPCIACCESS_VERSION		:= $(call embtk_get_pkgversion,libpciaccess)
+LIBPCIACCESS_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
+LIBPCIACCESS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBPCIACCESS_PACKAGE		:= libpciaccess-$(LIBPCIACCESS_VERSION).tar.gz
+LIBPCIACCESS_SRC_DIR		:= $(PACKAGES_BUILD)/libpciaccess-$(LIBPCIACCESS_VERSION)
+LIBPCIACCESS_BUILD_DIR		:= $(PACKAGES_BUILD)/libpciaccess-$(LIBPCIACCESS_VERSION)
 
-LIBPCIACCESS_BINS =
-LIBPCIACCESS_SBINS =
-LIBPCIACCESS_INCLUDES = pciaccess.h
-LIBPCIACCESS_LIBS = libpciaccess.*
-LIBPCIACCESS_PKGCONFIGS = pciaccess.pc
+LIBPCIACCESS_BINS	=
+LIBPCIACCESS_SBINS	=
+LIBPCIACCESS_INCLUDES	= pciaccess.h
+LIBPCIACCESS_LIBS	= libpciaccess.*
+LIBPCIACCESS_PKGCONFIGS	= pciaccess.pc
 
-LIBPCIACCESS_DEPS =
-
-libpciaccess_install:
-	@test -e $(LIBPCIACCESS_BUILD_DIR)/.installed || \
-	$(MAKE) $(LIBPCIACCESS_BUILD_DIR)/.installed
-
-$(LIBPCIACCESS_BUILD_DIR)/.installed: $(LIBPCIACCESS_DEPS) \
-	download_libpciaccess $(LIBPCIACCESS_BUILD_DIR)/.decompressed \
-	$(LIBPCIACCESS_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	libpciaccess-$(LIBPCIACCESS_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(LIBPCIACCESS_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBPCIACCESS_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_libpciaccess:
-	$(call embtk_download_pkg,LIBPCIACCESS)
-
-$(LIBPCIACCESS_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,LIBPCIACCESS)
-
-$(LIBPCIACCESS_BUILD_DIR)/.configured:
-	$(call embtk_configure_pkg,LIBPCIACCESS)
-
-libpciaccess_clean:
-	$(call embtk_cleanup_pkg,LIBPCIACCESS)

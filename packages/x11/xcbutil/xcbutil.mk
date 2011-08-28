@@ -23,14 +23,13 @@
 # \date         March 2009
 ################################################################################
 
-XCBUTIL_NAME := xcb-util
-XCBUTIL_VERSION := $(call embtk_get_pkgversion,XCBUTIL)
-XCBUTIL_SITE := http://xcb.freedesktop.org/dist
-XCBUTIL_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-XCBUTIL_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/xcb-util/$(XCBUTIL_VERSION)
-XCBUTIL_PACKAGE := xcb-util-$(XCBUTIL_VERSION).tar.bz2
-XCBUTIL_SRC_DIR := $(PACKAGES_BUILD)/xcb-util-$(XCBUTIL_VERSION)
-XCBUTIL_BUILD_DIR := $(PACKAGES_BUILD)/xcb-util-$(XCBUTIL_VERSION)
+XCBUTIL_NAME		:= xcb-util
+XCBUTIL_VERSION		:= $(call embtk_get_pkgversion,xcbutil)
+XCBUTIL_SITE		:= http://xcb.freedesktop.org/dist
+XCBUTIL_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+XCBUTIL_PACKAGE		:= xcb-util-$(XCBUTIL_VERSION).tar.bz2
+XCBUTIL_SRC_DIR		:= $(PACKAGES_BUILD)/xcb-util-$(XCBUTIL_VERSION)
+XCBUTIL_BUILD_DIR	:= $(PACKAGES_BUILD)/xcb-util-$(XCBUTIL_VERSION)
 
 XCBUTIL_BINS =
 XCBUTIL_SBINS =
@@ -47,18 +46,13 @@ XCBUTIL_PKGCONFIGS = xcb-atom.pc xcb-aux.pc xcb-event.pc xcb-icccm.pc \
 
 XCBUTIL_DEPS = gperf_host_install libxcb_install
 
-xcbutil_install:
-	$(call embtk_install_pkg,XCBUTIL)
-	$(Q)$(MAKE) $(XCBUTIL_BUILD_DIR)/.patchlibtool
-
-download_xcbutil:
-	$(call embtk_download_pkg,XCBUTIL)
-
-xcbutil_clean:
-	$(call embtk_cleanup_pkg,XCBUTIL)
+define embtk_postinstall_xcbutil
+	$(Q)test -e $(XCBUTIL_BUILD_DIR)/.patchlibtool ||			\
+	$(MAKE) $(XCBUTIL_BUILD_DIR)/.patchlibtool
+endef
 
 $(XCBUTIL_BUILD_DIR)/.patchlibtool:
-	@XCBUTIL_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \
+	$(Q)XCBUTIL_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \
 	for i in $$XCBUTIL_LT_FILES; \
 	do \
 	sed \
@@ -70,3 +64,4 @@ $(XCBUTIL_BUILD_DIR)/.patchlibtool:
 	sed \
 	-i "s; /usr/$(LIBDIR)/libxcb-atom.la ; $(SYSROOT)/usr/$(LIBDIR)/libxcb-atom.la ;" $$i; \
 	done
+	$(Q)touch $@
