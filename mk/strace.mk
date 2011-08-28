@@ -23,26 +23,16 @@
 # \date         August 2009
 ################################################################################
 
-STRACE_NAME := strace
-STRACE_VERSION:= $(call embtk_get_pkgversion,STRACE)
-STRACE_SITE:=http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
-STRACE_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-STRACE_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/strace/$(STRACE_VERSION)
-STRACE_PACKAGE := strace-$(STRACE_VERSION).tar.bz2
-STRACE_SRC_DIR := $(PACKAGES_BUILD)/strace-$(STRACE_VERSION)
-STRACE_BUILD_DIR := $(PACKAGES_BUILD)/strace
+STRACE_NAME		:= strace
+STRACE_VERSION		:= $(call embtk_get_pkgversion,strace)
+STRACE_SITE		:= http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
+STRACE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+STRACE_PACKAGE		:= strace-$(STRACE_VERSION).tar.bz2
+STRACE_SRC_DIR		:= $(PACKAGES_BUILD)/strace-$(STRACE_VERSION)
+STRACE_BUILD_DIR	:= $(PACKAGES_BUILD)/strace
 
-STRACE_BINS = strace strace-graph
-STRACE_SBINS =
-STRACE_INCLUDES =
-STRACE_LIBS =
-STRACE_PKGCONFIGS =
-
-strace_install:
-	$(call embtk_install_pkg,STRACE)
-
-download_strace:
-	$(call embtk_download_pkg,STRACE)
-
-strace_clean:
-	$(call embtk_cleanup_pkg,STRACE)
+STRACE_BINS		:= strace strace-graph
+STRACE_SBINS		:=
+STRACE_INCLUDES		:=
+STRACE_LIBS		:=
+STRACE_PKGCONFIGS	:=

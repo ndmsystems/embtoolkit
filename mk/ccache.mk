@@ -48,6 +48,3 @@ CCACHE_PREFIX		:= $(CCACHE_HOST_DIR)
 
 ccache_install:
 	$(call embtk_install_hostpkg,ccache)
-
-download_ccache:
-	$(call embtk_download_pkg,ccache)

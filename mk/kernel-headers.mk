@@ -55,9 +55,6 @@ $(LINUX_BUILD_DIR)/.headers_installed: download_linux				\
 	INSTALL_HDR_PATH=$(HOSTTOOLS)/usr
 	$(Q)touch $@
 
-download_linux: 
-	$(call embtk_download_pkg,linux)
-
 $(LINUX_BUILD_DIR)/.decompressed:
 	$(call embtk_decompress_hostpkg,linux)
 

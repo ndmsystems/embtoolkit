@@ -41,6 +41,3 @@ BINUTILS_PREFIX		:= $(TOOLS)
 
 binutils_install:
 	$(call embtk_install_hostpkg,binutils)
-
-download_binutils:
-	$(call embtk_download_pkg,binutils)

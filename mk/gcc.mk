@@ -144,8 +144,3 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS)$(CONFIG_EMBTK_CLIB_UCLIBC),yy)
 endif
 	$(Q)touch $@
 
-#
-# Common gcc targets
-#
-download_gcc download_gcc1 download_gcc2 download_gcc3:
-	$(call embtk_download_pkg,gcc)

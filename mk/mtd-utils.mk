@@ -53,9 +53,6 @@ MTDUTILS_MAKE_ENV	+= PATH=$(PATH):$(TOOLS)/bin CROSS=$(CROSS_COMPILE)
 mtdutils_install:
 	$(call embtk_makeinstall_pkg,mtdutils)
 
-mtdutils_clean:
-	$(call embtk_cleanup_pkg,mtdutils)
-
 #
 # mtd-utils for host development machine.
 #
@@ -65,7 +62,6 @@ MTDUTILS_HOST_SITE		:= $(MTDUTILS_SITE)
 MTDUTILS_HOST_SITE_MIRROR1	:= $(MTDUTILS_SITE_MIRROR1)
 MTDUTILS_SITE_MIRROR2		:= $(MTDUTILS_SITE_MIRROR2)
 MTDUTILS_HOST_SITE_MIRROR3	:= $(MTDUTILS_SITE_MIRROR3)
-MTDUTILS_HOST_PATCH_SITE	:= $(MTDUTILS_PATCH_SITE)
 MTDUTILS_HOST_PACKAGE		:= $(MTDUTILS_PACKAGE)
 MTDUTILS_HOST_SRC_DIR		:= $(TOOLS_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
 MTDUTILS_HOST_BUILD_DIR		:= $(TOOLS_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
@@ -80,12 +76,3 @@ MTDUTILS_HOST_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR)
 
 mtdutils_host_install:
 	$(call embtk_makeinstall_hostpkg,mtdutils_host)
-
-mtdutils_host_clean:
-	$(call embtk_generic_msg,"Cleaning mtd-utils on host ...")
-
-#
-# Common for host and target.
-#
-download_mtdutils download_mtdutils_host:
-	$(call embtk_download_pkg,mtdutils)
