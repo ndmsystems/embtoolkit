@@ -226,10 +226,12 @@ __embtk_patch_site		= ftp://ftp.embtoolkit.org/embtoolkit.org
 __embtk_pkg_patch_site		= $(strip $(if $($(PKGV)_PATCH_SITE),		\
 	$($(PKGV)_PATCH_SITE),							\
 	$(__embtk_patch_site)/$(__embtk_pkg_name)/$(__embtk_pkg_version)))
+__embtk_pkg_patch_f		= $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch
 __embtk_pkg_mirror1		= $(strip $($(PKGV)_MIRROR1))
 __embtk_pkg_mirror2		= $(strip $($(PKGV)_MIRROR2))
 __embtk_pkg_mirror3		= $(strip $($(PKGV)_MIRROR3))
 __embtk_pkg_package		= $(strip $($(PKGV)_PACKAGE))
+__embtk_pkg_package_f		= $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_package)
 __embtk_pkg_srcdir		= $(strip $($(PKGV)_SRC_DIR))
 __embtk_pkg_builddir		= $(strip $($(PKGV)_BUILD_DIR))
 
@@ -258,6 +260,7 @@ __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))
 # usage: $(call embtk_get_pkgversion,PACKAGE)
 #
 embtk_get_pkgversion = $(subst ",,$(strip $(CONFIG_EMBTK_$(PKGV)_VERSION_STRING)))
+
 
 #
 # A macro to test if a package is already decompressed.
@@ -511,8 +514,7 @@ endef
 #
 define __embtk_download_pkg_patches
 if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" = "xy" ]; then			\
-	test -e									\
-	$(DOWNLOAD_DIR)/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch ||	\
+	test -e	$(__embtk_pkg_patch_f) ||					\
 	$(call embtk_wget,							\
 		$(__embtk_pkg_name)-$(__embtk_pkg_version).patch,		\
 		$(__embtk_pkg_patch_site),					\
@@ -529,17 +531,25 @@ else										\
 		$(__embtk_pkg_package)); 					\
 fi
 endef
+
+define __embtk_download_pkg_exitfailure
+	(echo -e "\E[1;31m!Error on $(notdir $(1)) download!\E[0m";rm -rf $(1);	\
+	exit 1)
+endef
+
 define embtk_download_pkg
-	$(call embtk_generic_msg,"Download $(__embtk_pkg_package) if necessary...")
-	$(Q)test -e $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_package) ||		\
+	$(call embtk_generic_msg,"Download $(__embtk_pkg_package) if needed...")
+	$(Q)test -e $(__embtk_pkg_package_f) ||					\
 	$(call embtk_wget,							\
 		$(__embtk_pkg_package),						\
 		$(__embtk_pkg_site),						\
-		$(__embtk_pkg_package))||					\
+		$(__embtk_pkg_package)) ||					\
 	$(call __embtk_download_pkg_from_mirror,$(1),1) ||			\
 	$(call __embtk_download_pkg_from_mirror,$(1),2) ||			\
-	$(call __embtk_download_pkg_from_mirror,$(1),3) || exit 1
-	$(call __embtk_download_pkg_patches,$(1))
+	$(call __embtk_download_pkg_from_mirror,$(1),3) ||			\
+	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_package_f))
+	$(call __embtk_download_pkg_patches,$(1)) ||				\
+	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
 endef
 
 #
@@ -571,8 +581,7 @@ define embtk_decompress_pkg
 	[ ! -e $(__embtk_pkg_srcdir)/.patched ]; then				\
 		cd $(__embtk_pkg_srcdir);					\
 		patch -p1 <							\
-		$(DOWNLOAD_DIR)/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch &&	\
-		touch $(__embtk_pkg_srcdir)/.patched;				\
+		$(__embtk_pkg_patch_f) && touch $(__embtk_pkg_srcdir)/.patched;	\
 	fi
 	$(Q)mkdir -p $(__embtk_pkg_builddir)
 endef
@@ -607,8 +616,7 @@ define embtk_decompress_hostpkg
 	[ ! -e $(__embtk_pkg_srcdir)/.patched ]; then				\
 		cd $(__embtk_pkg_srcdir);					\
 		patch -p1 <							\
-		$(DOWNLOAD_DIR)/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch &&	\
-		touch $(__embtk_pkg_srcdir)/.patched;				\
+		$(__embtk_pkg_patch_f) && touch $(__embtk_pkg_srcdir)/.patched;	\
 	fi
 	$(Q)mkdir -p $(__embtk_pkg_builddir)
 endef
