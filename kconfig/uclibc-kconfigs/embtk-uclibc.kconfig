@@ -68,6 +68,13 @@ config	 EMBTK_UCLIBC_GIT_REVISION
 
 config EMBTK_UCLIBC_NEED_PATCH
 	bool
+config EMBTK_UCLIBC_NEED_AUTORECONF
+	bool
+config EMBTK_UCLIBC_PKG_IS_TARGZ
+	bool
+config EMBTK_UCLIBC_PKG_IS_TARBZ2
+	bool
+	default y
 
 #
 # uClibc specific
