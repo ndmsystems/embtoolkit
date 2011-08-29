@@ -232,8 +232,8 @@ __embtk_pkg_mirror2		= $(strip $($(PKGV)_MIRROR2))
 __embtk_pkg_mirror3		= $(strip $($(PKGV)_MIRROR3))
 __embtk_pkg_package		= $(strip $($(PKGV)_PACKAGE))
 __embtk_pkg_package_f		= $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_package)
-__embtk_pkg_srcdir		= $(strip $($(PKGV)_SRC_DIR))
-__embtk_pkg_builddir		= $(strip $($(PKGV)_BUILD_DIR))
+__embtk_pkg_srcdir		= $(patsubst %/,%,$(strip $($(PKGV)_SRC_DIR)))
+__embtk_pkg_builddir		= $(patsubst %/,%,$(strip $($(PKGV)_BUILD_DIR)))
 
 __embtk_pkg_etc			= $(strip $($(PKGV)_ETC))
 __embtk_pkg_bins		= $(strip $($(PKGV)_BINS))
@@ -555,55 +555,20 @@ endef
 #
 # A macro to decompress packages tarball intended to run on target.
 # Usage:
-# $(call embtk_decompress_pkg,PACKAGE)
+# $(call embtk_decompress_pkg,pkgname)
 #
 define embtk_decompress_pkg
 	$(call embtk_generic_msg,"Decrompressing $(__embtk_pkg_package) ...")
 	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" = "xy" ] &&		\
 	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
-		tar -C $(PACKAGES_BUILD) -xzf					\
-		$(DOWNLOAD_DIR)/$(__embtk_pkg_package) &&			\
+		tar -C $(dir $(__embtk_pkg_srcdir)) -xzf			\
+				$(__embtk_pkg_package_f) &&			\
 		mkdir -p $(__embtk_pkg_builddir) &&				\
 		touch $(__embtk_pkg_srcdir)/.decompressed;			\
 	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" = "xy" ] &&		\
 	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
-		tar -C $(PACKAGES_BUILD) -xjf					\
-		$(DOWNLOAD_DIR)/$(__embtk_pkg_package) &&			\
-		mkdir -p $(__embtk_pkg_builddir) &&				\
-		touch $(__embtk_pkg_srcdir)/.decompressed;			\
-	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" = "x" ] &&		\
-	[ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" = "x" ] &&			\
-	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
-		echo -e "\E[1;31m!Unknown package compression type!\E[0m";	\
-		exit 1;								\
-	fi
-	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" = "xy" ] &&		\
-	[ ! -e $(__embtk_pkg_srcdir)/.patched ]; then				\
-		cd $(__embtk_pkg_srcdir);					\
-		patch -p1 <							\
-		$(__embtk_pkg_patch_f) && touch $(__embtk_pkg_srcdir)/.patched;	\
-	fi
-	$(Q)mkdir -p $(__embtk_pkg_builddir)
-endef
-
-#
-# A macro to decompress packages tarball intended to run on host development
-# machine.
-# Usage:
-# $(call embtk_decompress_hostpkg,PACKAGE)
-#
-define embtk_decompress_hostpkg
-	$(call embtk_generic_msg,"Decrompressing $(__embtk_pkg_package) ...")
-	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" = "xy" ] &&		\
-	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
-		tar -C $(TOOLS_BUILD) -xzf					\
-		$(DOWNLOAD_DIR)/$(__embtk_pkg_package) &&			\
-		mkdir -p $(__embtk_pkg_builddir) &&				\
-		touch $(__embtk_pkg_srcdir)/.decompressed;			\
-	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" = "xy" ] &&		\
-	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
-		tar -C $(TOOLS_BUILD) -xjf					\
-		$(DOWNLOAD_DIR)/$(__embtk_pkg_package) &&			\
+		tar -C $(dir $(__embtk_pkg_srcdir)) -xjf			\
+				$(__embtk_pkg_package_f) &&			\
 		mkdir -p $(__embtk_pkg_builddir) &&				\
 		touch $(__embtk_pkg_srcdir)/.decompressed;			\
 	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" = "x" ] &&		\
