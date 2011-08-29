@@ -72,7 +72,7 @@ include $(EMBTK_ROOT)/mk/binutils.mk
 include $(EMBTK_ROOT)/mk/gcc.mk
 
 #linux kernel headers
-include $(EMBTK_ROOT)/mk/kernel-headers.mk
+include $(EMBTK_ROOT)/mk/linux.mk
 
 #Autotools
 include $(EMBTK_ROOT)/mk/libtool.mk
@@ -90,7 +90,7 @@ ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 include $(EMBTK_ROOT)/mk/eglibc.mk
 TOOLCHAINBUILD := mkinitialpath ccache_install					\
 		$(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL)			\
-		kernel-headers_install						\
+		linux_headers_install						\
 		gmp_host_install mpfr_host_install mpc_host_install		\
 		binutils_install gcc1_install eglibc_headers_install		\
 		gcc2_install eglibc_install gcc3_install
@@ -99,7 +99,7 @@ else
 include $(EMBTK_ROOT)/mk/uclibc.mk
 TOOLCHAINBUILD := mkinitialpath ccache_install					\
 		$(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL)			\
-		kernel-headers_install 						\
+		linux_headers_install 						\
 		gmp_host_install mpfr_host_install mpc_host_install		\
 		binutils_install gcc1_install uclibc_headers_install		\
 		gcc2_install uclibc_install gcc3_install

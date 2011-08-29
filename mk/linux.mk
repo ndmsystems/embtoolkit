@@ -17,8 +17,8 @@
 #
 ################################################################################
 #
-# \file         kernel-headers.mk
-# \brief	kernel-headers.mk of Embtoolkit
+# \file         linux.mk
+# \brief	linux.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
@@ -40,7 +40,7 @@ LINUX_PACKAGE		:= linux-$(LINUX_VERSION).tar.bz2
 LINUX_SRC_DIR		:= $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 LINUX_BUILD_DIR		:= $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 
-kernel-headers_install:
+linux_headers_install:
 	$(Q)test -e $(LINUX_BUILD_DIR)/.headers_installed ||			\
 	$(MAKE) $(LINUX_BUILD_DIR)/.headers_installed
 
@@ -58,3 +58,5 @@ $(LINUX_BUILD_DIR)/.headers_installed: download_linux				\
 $(LINUX_BUILD_DIR)/.decompressed:
 	$(call embtk_decompress_pkg,linux)
 
+download_linux download_linux_headers:
+	$(call embtk_download_pkg,linux)
