@@ -56,5 +56,5 @@ $(LINUX_BUILD_DIR)/.headers_installed: download_linux				\
 	$(Q)touch $@
 
 $(LINUX_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_hostpkg,linux)
+	$(call embtk_decompress_pkg,linux)
 

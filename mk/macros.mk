@@ -440,7 +440,7 @@ define __embtk_install_hostpkg_make
 	$(call embtk_generic_msg,"Compiling and installing $(__embtk_pkg_name)-$(__embtk_pkg_version) for host...")
 	$(Q)$(if $(strip $(__embtk_pkg_deps)),$(MAKE) $(__embtk_pkg_deps))
 	$(Q)$(call embtk_download_pkg,$(1))
-	$(Q)$(call embtk_decompress_hostpkg,$(1))
+	$(Q)$(call embtk_decompress_pkg,$(1))
 	$(Q)$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_hostpkg,$(1)))
 	$(Q)$(if $(__embtk_pkg_makedirs),					\
 		$(__embtk_multi_make),						\

@@ -118,7 +118,7 @@ $(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib \
 	@touch $@
 
 $(ZLIB_HOST_SRC_DIR)/.decompressed:
-	$(call embtk_decompress_hostpkg,ZLIB_HOST)
+	$(call embtk_decompress_pkg,ZLIB_HOST)
 
 $(ZLIB_HOST_BUILD_DIR)/.configured:
 	$(call embtk_generic_msg,"Configure $(ZLIB_HOST_PACKAGE) for host...")

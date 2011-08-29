@@ -97,7 +97,7 @@ else
 endif
 
 $(UCLIBC_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_hostpkg,uClibc)
+	$(call embtk_decompress_pkg,uClibc)
 
 #
 # uClibc configuration macros and target
