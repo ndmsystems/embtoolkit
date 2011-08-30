@@ -23,10 +23,12 @@
 # \date         March 2010
 ################################################################################
 
-XEXTPROTO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_XEXTPROTO_VERSION_STRING)))
-XEXTPROTO_SITE := http://xorg.freedesktop.org/archive/individual/proto
-XEXTPROTO_PACKAGE := xextproto-$(XEXTPROTO_VERSION).tar.bz2
-XEXTPROTO_BUILD_DIR := $(PACKAGES_BUILD)/xextproto-$(XEXTPROTO_VERSION)
+XEXTPROTO_NAME		:= xextproto
+XEXTPROTO_VERSION	:= $(call embtk_get_pkgversion,xextproto)
+XEXTPROTO_SITE		:= http://xorg.freedesktop.org/archive/individual/proto
+XEXTPROTO_PACKAGE	:= xextproto-$(XEXTPROTO_VERSION).tar.bz2
+XEXTPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/xextproto-$(XEXTPROTO_VERSION)
+XEXTPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/xextproto-$(XEXTPROTO_VERSION)
 
 XEXTPROTO_BINS =
 XEXTPROTO_SBINS =
@@ -47,62 +49,4 @@ XEXTPROTO_INCLUDES = X11/extensions/ag.h X11/extensions/cupproto.h \
 		X11/extensions/xtestconst.h X11/extensions/xtestproto.h
 XEXTPROTO_LIBS =
 XEXTPROTO_PKGCONFIGS = xextproto.pc
-
-xextproto_install:
-	@test -e $(XEXTPROTO_BUILD_DIR)/.installed || \
-	$(MAKE) $(XEXTPROTO_BUILD_DIR)/.installed
-
-$(XEXTPROTO_BUILD_DIR)/.installed: download_xextproto \
-	$(XEXTPROTO_BUILD_DIR)/.decompressed $(XEXTPROTO_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	xextproto-$(XEXTPROTO_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(XEXTPROTO_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(XEXTPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_xextproto:
-	$(call embtk_generic_message,"Downloading $(XEXTPROTO_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(XEXTPROTO_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(XEXTPROTO_PACKAGE) \
-	$(XEXTPROTO_SITE)/$(XEXTPROTO_PACKAGE)
-
-$(XEXTPROTO_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(XEXTPROTO_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(XEXTPROTO_PACKAGE)
-	@touch $@
-
-$(XEXTPROTO_BUILD_DIR)/.configured:
-	$(Q)cd $(XEXTPROTO_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --prefix=/usr --libdir=/usr/$(LIBDIR) \
-	--disable-malloc0returnsnull
-	@touch $@
-
-xextproto_clean:
-	$(call embtk_generic_message,"cleanup xextproto-$(XEXTPROTO_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XEXTPROTO_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XEXTPROTO_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XEXTPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XEXTPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XEXTPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(XEXTPROTO_BUILD_DIR)*
 

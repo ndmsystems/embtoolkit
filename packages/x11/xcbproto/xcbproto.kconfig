@@ -24,6 +24,7 @@
 
 config EMBTK_HAVE_XCBPROTO
 	bool "Have xcbproto"
+	select EMBTK_XCBPROTO_PKG_IS_TARGZ
 	help
 		xcbproto for X windowing system
 choice
@@ -40,3 +41,11 @@ config EMBTK_XCBPROTO_VERSION_STRING
 	string
 	default "1.6"	if EMBTK_XCBPROTO_VERSION_1_6
 
+config EMBTK_XCBPROTO_NEED_PATCH
+	bool
+config EMBTK_XCBPROTO_NEED_AUTORECONF
+	bool
+config EMBTK_XCBPROTO_PKG_IS_TARGZ
+	bool
+config EMBTK_XCBPROTO_PKG_IS_TARBZ2
+	bool

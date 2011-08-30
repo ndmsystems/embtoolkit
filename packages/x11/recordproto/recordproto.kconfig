@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_RECORDPROTO
 	bool "Have recordproto"
+	select EMBTK_RECORDPROTO_PKG_IS_TARBZ2
 	help
 		recordproto for X windowing system.
 		This extension defines a protocol for the recording and playback
@@ -48,3 +49,11 @@ config EMBTK_RECORDPROTO_VERSION_STRING
 	default "1.14.1"	if EMBTK_RECORDPROTO_VERSION_1_14_1
 	default "1.14"		if EMBTK_RECORDPROTO_VERSION_1_14
 
+config EMBTK_RECORDPROTO_NEED_PATCH
+	bool
+config EMBTK_RECORDPROTO_NEED_AUTORECONF
+	bool
+config EMBTK_RECORDPROTO_PKG_IS_TARGZ
+	bool
+config EMBTK_RECORDPROTO_PKG_IS_TARBZ2
+	bool

@@ -24,6 +24,7 @@
 
 config EMBTK_HAVE_DAMAGEPROTO
 	bool "Have damageproto"
+	select EMBTK_DAMAGEPROTO_PKG_IS_TARBZ2
 	help
 		damageproto for X windowing system
 choice
@@ -44,3 +45,11 @@ config EMBTK_DAMAGEPROTO_VERSION_STRING
 	default "1.2.1"	if EMBTK_DAMAGEPROTO_VERSION_1_2_1
 	default "1.2.0"	if EMBTK_DAMAGEPROTO_VERSION_1_2_0
 
+config EMBTK_DAMAGEPROTO_NEED_PATCH
+	bool
+config EMBTK_DAMAGEPROTO_NEED_AUTORECONF
+	bool
+config EMBTK_DAMAGEPROTO_PKG_IS_TARGZ
+	bool
+config EMBTK_DAMAGEPROTO_PKG_IS_TARBZ2
+	bool

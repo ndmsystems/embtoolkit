@@ -24,10 +24,9 @@
 ################################################################################
 
 ZLIB_NAME		:= zlib
-ZLIB_VERSION		:= $(call embtk_get_pkgversion,ZLIB)
+ZLIB_VERSION		:= $(call embtk_get_pkgversion,zlib)
 ZLIB_SITE		:= http://zlib.net
 ZLIB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-ZLIB_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/zlib/$(ZLIB_VERSION)
 ZLIB_PACKAGE		:= zlib-$(ZLIB_VERSION).tar.bz2
 ZLIB_SRC_DIR		:= $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)
 ZLIB_BUILD_DIR		:= $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)
@@ -48,7 +47,7 @@ ZLIB_CONFIGURE_OPTS	:= $(ZLIB_LINUX_ARCH) --enable-shared
 
 
 zlib_install:
-	@test -e $(ZLIB_BUILD_DIR)/.installed || \
+	$(Q)test -e $(ZLIB_BUILD_DIR)/.installed || \
 	$(MAKE) $(ZLIB_BUILD_DIR)/.installed
 
 $(ZLIB_BUILD_DIR)/.installed: download_zlib \
@@ -56,15 +55,15 @@ $(ZLIB_BUILD_DIR)/.installed: download_zlib \
 	$(ZLIB_BUILD_DIR)/.configured
 	$(Q)$(MAKE) -C $(ZLIB_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(ZLIB_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	@touch $@
+	$(Q)touch $@
 
 $(ZLIB_SRC_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,ZLIB)
+	$(call embtk_decompress_pkg,zlib)
 
 $(ZLIB_BUILD_DIR)/.configured:
 	$(call embtk_generic_msg,"Configure $(ZLIB_PACKAGE)...")
 	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$(ZLIB_CONFIGURE_OPTS)")
-	@cd $(ZLIB_BUILD_DIR);						\
+	$(Q)cd $(ZLIB_BUILD_DIR);					\
 	CC=$(TARGETCC_CACHED)						\
 	CXX=$(TARGETCXX_CACHED)						\
 	AR=$(TARGETAR)							\
@@ -80,7 +79,7 @@ $(ZLIB_BUILD_DIR)/.configured:
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"	\
 	CPPFLAGS="-I$(SYSROOT)/usr/include"				\
 	PKG_CONFIG=$(PKGCONFIG_BIN)					\
-	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)				\
+	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
 	$(ZLIB_CONFIGURE_ENV)						\
 	$(CONFIG_SHELL) $(ZLIB_SRC_DIR)/configure			\
 	--libdir=/usr/$(LIBDIR)	--prefix=/usr --sysconfdir=/etc		\
@@ -88,7 +87,7 @@ $(ZLIB_BUILD_DIR)/.configured:
 	@touch $@
 
 zlib_clean:
-	$(call embtk_cleanup_pkg,ZLIB)
+	$(call embtk_cleanup_pkg,zlib)
 
 ########################
 # zlib on host machine #
@@ -99,7 +98,6 @@ ZLIB_HOST_SITE		:= $(ZLIB_SITE)
 ZLIB_HOST_SITE_MIRROR1	:= $(ZLIB_SITE_MIRROR1)
 ZLIB_HOST_SITE_MIRROR2	:= $(ZLIB_SITE_MIRROR2)
 ZLIB_HOST_SITE_MIRROR3	:= $(ZLIB_SITE_MIRROR3)
-ZLIB_HOST_PATCH_SITE	:= $(ZLIB_PATCH_SITE)
 ZLIB_HOST_PACKAGE	:= $(ZLIB_PACKAGE)
 ZLIB_HOST_SRC_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_VERSION)
 ZLIB_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_VERSION)
@@ -107,7 +105,7 @@ ZLIB_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_VERSION)
 ZLIB_HOST_CONFIGURE_ENV	:= CC=$(HOSTCC_CACHED)
 
 zlib_host_install:
-	@test -e $(ZLIB_HOST_BUILD_DIR)/.installed || \
+	$(Q)test -e $(ZLIB_HOST_BUILD_DIR)/.installed || \
 	$(MAKE) $(ZLIB_HOST_BUILD_DIR)/.installed
 
 $(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib \
@@ -115,21 +113,21 @@ $(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib \
 	$(ZLIB_HOST_BUILD_DIR)/.configured
 	$(Q)$(MAKE) -C $(ZLIB_HOST_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(ZLIB_HOST_BUILD_DIR) install
-	@touch $@
+	$(Q)touch $@
 
 $(ZLIB_HOST_SRC_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,ZLIB_HOST)
+	$(call embtk_decompress_pkg,zlib_host)
 
 $(ZLIB_HOST_BUILD_DIR)/.configured:
 	$(call embtk_generic_msg,"Configure $(ZLIB_HOST_PACKAGE) for host...")
 	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$(ZLIB_HOST_CONFIGURE_OPTS)")
-	@cd $(ZLIB_HOST_BUILD_DIR);					\
+	$(Q)cd $(ZLIB_HOST_BUILD_DIR);					\
 	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\
 	LDFLAGS="-L$(HOSTTOOLS)/$(LIBDIR) -L$(HOSTTOOLS)/usr/$(LIBDIR)"	\
 	$(ZLIB_HOST_CONFIGURE_ENV)					\
 	$(CONFIG_SHELL) $(ZLIB_HOST_SRC_DIR)/configure			\
 	--prefix=$(HOSTTOOLS)/usr $(ZLIB_HOST_CONFIGURE_OPTS)
-	@touch $@
+	$(Q)touch $@
 
 zlib_host_clean:
 
@@ -139,4 +137,4 @@ zlib_host_clean:
 
 #zlib download
 download_zlib download_zlib_host:
-	$(call embtk_download_pkg,ZLIB)
+	$(call embtk_download_pkg,zlib)

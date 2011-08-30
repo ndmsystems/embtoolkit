@@ -23,14 +23,13 @@
 # \date         May 2009
 ################################################################################
 
-BB_NAME := busybox
-BB_VERSION := $(call embtk_get_pkgversion,BB)
-BB_SITE := http://www.busybox.net/downloads
-BB_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-BB_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/busybox/$(BB_VERSION)
-BB_PACKAGE := busybox-$(BB_VERSION).tar.bz2
-BB_SRC_DIR := $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
-BB_BUILD_DIR := $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
+BB_NAME		:= busybox
+BB_VERSION	:= $(call embtk_get_pkgversion,bb)
+BB_SITE		:= http://www.busybox.net/downloads
+BB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+BB_PACKAGE	:= busybox-$(BB_VERSION).tar.bz2
+BB_SRC_DIR	:= $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
+BB_BUILD_DIR	:= $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
 
 busybox_install: $(BB_BUILD_DIR)/.installed
 
@@ -41,17 +40,17 @@ $(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed \
 	$(Q)$(MAKE) -C $(BB_BUILD_DIR) \
 	CROSS_COMPILE="$(CCACHE_HOST_DIR)/bin/ccache $(TOOLS)/bin/$(STRICT_GNU_TARGET)-" \
 	CONFIG_PREFIX=$(ROOTFS) oldconfig
-	@CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing" \
+	$(Q)CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing" \
 	$(MAKE) -C $(BB_BUILD_DIR) \
 	CROSS_COMPILE="$(CCACHE_HOST_DIR)/bin/ccache $(TOOLS)/bin/$(STRICT_GNU_TARGET)-" \
 	CONFIG_PREFIX=$(ROOTFS) install
-	@touch $@
+	$(Q)touch $@
 
 download_busybox:
-	$(call embtk_download_pkg,BB)
+	$(call embtk_download_pkg,bb)
 
 $(BB_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,BB)
+	$(call embtk_decompress_pkg,bb)
 
 $(BB_BUILD_DIR)/.configured:
 	$(call embtk_generic_message,"Configuring busybox...")

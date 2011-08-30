@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_INPUTPROTO
 	bool "Have inputproto"
+	select EMBTK_INPUTPROTO_PKG_IS_TARBZ2
 	help
 		inputproto for X windowing system
 choice
@@ -44,3 +45,11 @@ config EMBTK_INPUTPROTO_VERSION_STRING
 	default "2.0.1"		if EMBTK_INPUTPROTO_VERSION_2_0_1
 	default "2.0"		if EMBTK_INPUTPROTO_VERSION_2_0
 
+config EMBTK_INPUTPROTO_NEED_PATCH
+	bool
+config EMBTK_INPUTPROTO_NEED_AUTORECONF
+	bool
+config EMBTK_INPUTPROTO_PKG_IS_TARGZ
+	bool
+config EMBTK_INPUTPROTO_PKG_IS_TARBZ2
+	bool

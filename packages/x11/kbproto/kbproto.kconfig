@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_KBPROTO
 	bool "Have kbproto"
+	select EMBTK_KBPROTO_PKG_IS_TARBZ2
 	help
 		kbproto for X windowing system
 choice
@@ -44,3 +45,11 @@ config EMBTK_KBPROTO_VERSION_STRING
 	default "1.0.5"		if EMBTK_KBPROTO_VERSION_1_0_5
 	default "1.0.4"		if EMBTK_KBPROTO_VERSION_1_0_4
 
+config EMBTK_KBPROTO_NEED_PATCH
+	bool
+config EMBTK_KBPROTO_NEED_AUTORECONF
+	bool
+config EMBTK_KBPROTO_PKG_IS_TARGZ
+	bool
+config EMBTK_KBPROTO_PKG_IS_TARBZ2
+	bool

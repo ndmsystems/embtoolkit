@@ -23,72 +23,16 @@
 # \date         February 2010
 ################################################################################
 
-RANDRPROTO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_RANDRPROTO_VERSION_STRING)))
-RANDRPROTO_SITE := http://xorg.freedesktop.org/archive/individual/proto
-RANDRPROTO_PACKAGE := randrproto-$(RANDRPROTO_VERSION).tar.bz2
-RANDRPROTO_BUILD_DIR := $(PACKAGES_BUILD)/randrproto-$(RANDRPROTO_VERSION)
+RANDRPROTO_NAME		:= randrproto
+RANDRPROTO_VERSION	:= $(call embtk_get_pkgversion,randrproto)
+RANDRPROTO_SITE		:= http://xorg.freedesktop.org/archive/individual/proto
+RANDRPROTO_PACKAGE	:= randrproto-$(RANDRPROTO_VERSION).tar.bz2
+RANDRPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/randrproto-$(RANDRPROTO_VERSION)
+RANDRPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/randrproto-$(RANDRPROTO_VERSION)
 
 RANDRPROTO_BINS =
 RANDRPROTO_SBINS =
 RANDRPROTO_INCLUDES = X11/extensions/randr.h X11/extensions/randrproto.h
 RANDRPROTO_LIBS =
 RANDRPROTO_PKGCONFIGS = randrproto.pc
-
-randrproto_install:
-	@test -e $(RANDRPROTO_BUILD_DIR)/.installed || \
-	$(MAKE) $(RANDRPROTO_BUILD_DIR)/.installed
-
-$(RANDRPROTO_BUILD_DIR)/.installed: download_randrproto \
-	$(RANDRPROTO_BUILD_DIR)/.decompressed $(RANDRPROTO_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	randrproto-$(RANDRPROTO_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(RANDRPROTO_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(RANDRPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_randrproto:
-	$(call embtk_generic_message,"Downloading $(RANDRPROTO_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(RANDRPROTO_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(RANDRPROTO_PACKAGE) \
-	$(RANDRPROTO_SITE)/$(RANDRPROTO_PACKAGE)
-
-$(RANDRPROTO_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(RANDRPROTO_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(RANDRPROTO_PACKAGE)
-	@touch $@
-
-$(RANDRPROTO_BUILD_DIR)/.configured:
-	$(Q)cd $(RANDRPROTO_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --prefix=/usr --libdir=/usr/$(LIBDIR) \
-	--disable-malloc0returnsnull
-	@touch $@
-
-randrproto_clean:
-	$(call embtk_generic_message,"cleanup randrproto-$(RANDRPROTO_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RANDRPROTO_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RANDRPROTO_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RANDRPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RANDRPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RANDRPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(RANDRPROTO_BUILD_DIR)*
 

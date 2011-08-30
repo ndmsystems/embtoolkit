@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_RENDERPROTO
 	bool "Have renderproto"
+	select EMBTK_RENDERPROTO_PKG_IS_TARBZ2
 	help
 		renderproto for X windowing system
 choice
@@ -44,3 +45,11 @@ config EMBTK_RENDERPROTO_VERSION_STRING
 	default "0.11.1"		if EMBTK_RENDERPROTO_VERSION_0_11_1
 	default "0.11"			if EMBTK_RENDERPROTO_VERSION_0_11
 
+config EMBTK_RENDERPROTO_NEED_PATCH
+	bool
+config EMBTK_RENDERPROTO_NEED_AUTORECONF
+	bool
+config EMBTK_RENDERPROTO_PKG_IS_TARGZ
+	bool
+config EMBTK_RENDERPROTO_PKG_IS_TARBZ2
+	bool

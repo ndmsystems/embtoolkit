@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_FONTSPROTO
 	bool "Have fontsproto"
+	select EMBTK_FONTSPROTO_PKG_IS_TARBZ2
 	help
 		fontsproto for X windowing system
 choice
@@ -44,3 +45,11 @@ config EMBTK_FONTSPROTO_VERSION_STRING
 	default "2.1.1"	if EMBTK_FONTSPROTO_VERSION_2_1_1
 	default "2.1.0"	if EMBTK_FONTSPROTO_VERSION_2_1_0
 
+config EMBTK_FONTSPROTO_NEED_PATCH
+	bool
+config EMBTK_FONTSPROTO_NEED_AUTORECONF
+	bool
+config EMBTK_FONTSPROTO_PKG_IS_TARGZ
+	bool
+config EMBTK_FONTSPROTO_PKG_IS_TARBZ2
+	bool

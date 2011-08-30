@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_XCMISCPROTO
 	bool "Have xcmiscproto"
+	select EMBTK_XCMISCPROTO_PKG_IS_TARBZ2
 	help
 		xcmiscproto for X windowing system.
 		XC-MISC Extension: This extension defines a protocol that
@@ -48,3 +49,11 @@ config EMBTK_XCMISCPROTO_VERSION_STRING
 	default "1.2.1"		if EMBTK_XCMISCPROTO_VERSION_1_2_1
 	default "1.2.0"		if EMBTK_XCMISCPROTO_VERSION_1_2_0
 
+config EMBTK_XCMISCPROTO_NEED_PATCH
+	bool
+config EMBTK_XCMISCPROTO_NEED_AUTORECONF
+	bool
+config EMBTK_XCMISCPROTO_PKG_IS_TARGZ
+	bool
+config EMBTK_XCMISCPROTO_PKG_IS_TARBZ2
+	bool

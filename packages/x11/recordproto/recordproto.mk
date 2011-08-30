@@ -23,72 +23,17 @@
 # \date         June 2010
 ################################################################################
 
-RECORDPROTO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_RECORDPROTO_VERSION_STRING)))
-RECORDPROTO_SITE := http://ftp.x.org/pub/individual/proto
-RECORDPROTO_PACKAGE := recordproto-$(RECORDPROTO_VERSION).tar.bz2
-RECORDPROTO_BUILD_DIR := $(PACKAGES_BUILD)/recordproto-$(RECORDPROTO_VERSION)
+RECORDPROTO_NAME	:= recordproto
+RECORDPROTO_VERSION	:= $(call embtk_get_pkgversion,recordproto)
+RECORDPROTO_SITE	:= http://ftp.x.org/pub/individual/proto
+RECORDPROTO_PACKAGE	:= recordproto-$(RECORDPROTO_VERSION).tar.bz2
+RECORDPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/recordproto-$(RECORDPROTO_VERSION)
+RECORDPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/recordproto-$(RECORDPROTO_VERSION)
 
-RECORDPROTO_BINS =
-RECORDPROTO_SBINS =
-RECORDPROTO_INCLUDES = X11/extensions/recordconst.h \
+RECORDPROTO_BINS	=
+RECORDPROTO_SBINS	=
+RECORDPROTO_INCLUDES	= X11/extensions/recordconst.h				\
 			X11/extensions/recordproto.h X11/extensions/recordstr.h
-RECORDPROTO_LIBS =
-RECORDPROTO_PKGCONFIGS = recordproto.pc
-
-recordproto_install:
-	@test -e $(RECORDPROTO_BUILD_DIR)/.installed || \
-	$(MAKE) $(RECORDPROTO_BUILD_DIR)/.installed
-
-$(RECORDPROTO_BUILD_DIR)/.installed: download_recordproto \
-	$(RECORDPROTO_BUILD_DIR)/.decompressed $(RECORDPROTO_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	recordproto-$(RECORDPROTO_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(RECORDPROTO_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(RECORDPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_recordproto:
-	$(call embtk_generic_message,"Downloading $(RECORDPROTO_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(RECORDPROTO_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(RECORDPROTO_PACKAGE) \
-	$(RECORDPROTO_SITE)/$(RECORDPROTO_PACKAGE)
-
-$(RECORDPROTO_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(RECORDPROTO_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(RECORDPROTO_PACKAGE)
-	@touch $@
-
-$(RECORDPROTO_BUILD_DIR)/.configured:
-	$(Q)cd $(RECORDPROTO_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --prefix=/usr --libdir=/usr/$(LIBDIR)
-	@touch $@
-
-recordproto_clean:
-	$(call embtk_generic_message,"cleanup recordproto-$(RECORDPROTO_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RECORDPROTO_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RECORDPROTO_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RECORDPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RECORDPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RECORDPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(RECORDPROTO_BUILD_DIR)*
+RECORDPROTO_LIBS	=
+RECORDPROTO_PKGCONFIGS	= recordproto.pc
 

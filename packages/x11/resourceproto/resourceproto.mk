@@ -23,72 +23,16 @@
 # \date         March 2010
 ################################################################################
 
-RESOURCEPROTO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_RESOURCEPROTO_VERSION_STRING)))
-RESOURCEPROTO_SITE := http://ftp.x.org/pub/individual/proto
-RESOURCEPROTO_PACKAGE := resourceproto-$(RESOURCEPROTO_VERSION).tar.bz2
-RESOURCEPROTO_BUILD_DIR := $(PACKAGES_BUILD)/resourceproto-$(RESOURCEPROTO_VERSION)
+RESOURCEPROTO_NAME	:= resourceproto
+RESOURCEPROTO_VERSION	:= $(call embtk_get_pkgversion,resourceproto)
+RESOURCEPROTO_SITE	:= http://ftp.x.org/pub/individual/proto
+RESOURCEPROTO_PACKAGE	:= resourceproto-$(RESOURCEPROTO_VERSION).tar.bz2
+RESOURCEPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/resourceproto-$(RESOURCEPROTO_VERSION)
+RESOURCEPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/resourceproto-$(RESOURCEPROTO_VERSION)
 
 RESOURCEPROTO_BINS =
 RESOURCEPROTO_SBINS =
 RESOURCEPROTO_INCLUDES = X11/extensions/XResproto.h
 RESOURCEPROTO_LIBS =
 RESOURCEPROTO_PKGCONFIGS = resourceproto.pc
-
-resourceproto_install:
-	@test -e $(RESOURCEPROTO_BUILD_DIR)/.installed || \
-	$(MAKE) $(RESOURCEPROTO_BUILD_DIR)/.installed
-
-$(RESOURCEPROTO_BUILD_DIR)/.installed: download_resourceproto \
-	$(RESOURCEPROTO_BUILD_DIR)/.decompressed $(RESOURCEPROTO_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	resourceproto-$(RESOURCEPROTO_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(RESOURCEPROTO_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(RESOURCEPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_resourceproto:
-	$(call embtk_generic_message,"Downloading $(RESOURCEPROTO_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(RESOURCEPROTO_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(RESOURCEPROTO_PACKAGE) \
-	$(RESOURCEPROTO_SITE)/$(RESOURCEPROTO_PACKAGE)
-
-$(RESOURCEPROTO_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(RESOURCEPROTO_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(RESOURCEPROTO_PACKAGE)
-	@touch $@
-
-$(RESOURCEPROTO_BUILD_DIR)/.configured:
-	$(Q)cd $(RESOURCEPROTO_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR) --prefix=/usr \
-	--disable-malloc0returnsnull
-	@touch $@
-
-resourceproto_clean:
-	$(call embtk_generic_message,"cleanup resourceproto-$(RESOURCEPROTO_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RESOURCEPROTO_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RESOURCEPROTO_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RESOURCEPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RESOURCEPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RESOURCEPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(RESOURCEPROTO_BUILD_DIR)*
 

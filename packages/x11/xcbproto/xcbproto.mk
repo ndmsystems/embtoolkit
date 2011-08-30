@@ -22,72 +22,16 @@
 # \date         March 2010
 ################################################################################
 
-XCBPROTO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_XCBPROTO_VERSION_STRING)))
-XCBPROTO_SITE := http://xcb.freedesktop.org/dist
-XCBPROTO_PACKAGE := xcb-proto-$(XCBPROTO_VERSION).tar.gz
-XCBPROTO_BUILD_DIR := $(PACKAGES_BUILD)/xcb-proto-$(XCBPROTO_VERSION)
+XCBPROTO_NAME		:= xcb-proto
+XCBPROTO_VERSION	:= $(call embtk_get_pkgversion,xcbproto)
+XCBPROTO_SITE		:= http://xcb.freedesktop.org/dist
+XCBPROTO_PACKAGE	:= xcb-proto-$(XCBPROTO_VERSION).tar.gz
+XCBPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/xcb-proto-$(XCBPROTO_VERSION)
+XCBPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/xcb-proto-$(XCBPROTO_VERSION)
 
 XCBPROTO_BINS =
 XCBPROTO_SBINS =
 XCBPROTO_INCLUDES =
 XCBPROTO_LIBS = python2.6/dist-packages/xcbgen
 XCBPROTO_PKGCONFIGS = xcb-proto.pc
-
-xcbproto_install:
-	@test -e $(XCBPROTO_BUILD_DIR)/.installed || \
-	$(MAKE) $(XCBPROTO_BUILD_DIR)/.installed
-
-$(XCBPROTO_BUILD_DIR)/.installed: download_xcbproto \
-	$(XCBPROTO_BUILD_DIR)/.decompressed $(XCBPROTO_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	xcbproto-$(XCBPROTO_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(XCBPROTO_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(XCBPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_xcbproto:
-	$(call embtk_generic_message,"Downloading $(XCBPROTO_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(XCBPROTO_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(XCBPROTO_PACKAGE) \
-	$(XCBPROTO_SITE)/$(XCBPROTO_PACKAGE)
-
-$(XCBPROTO_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(XCBPROTO_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(XCBPROTO_PACKAGE)
-	@touch $@
-
-$(XCBPROTO_BUILD_DIR)/.configured:
-	$(Q)cd $(XCBPROTO_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) \
-	--prefix=/usr --libdir=/usr/$(LIBDIR)
-	@touch $@
-
-xcbproto_clean:
-	$(call embtk_generic_message,"cleanup xcbproto-$(XCBPROTO_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(XCBPROTO_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(XCBPROTO_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(XCBPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(XCBPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(XCBPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(XCBPROTO_BUILD_DIR)*
 

@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_XEXTPROTO
 	bool "Have xextproto"
+	select EMBTK_XEXTPROTO_PKG_IS_TARBZ2
 	help
 		xextproto for X window system
 choice
@@ -44,3 +45,11 @@ config EMBTK_XEXTPROTO_VERSION_STRING
 	default "7.1.2"		if EMBTK_XEXTPROTO_VERSION_7_1_2
 	default "7.1.1"		if EMBTK_XEXTPROTO_VERSION_7_1_1
 
+config EMBTK_XEXTPROTO_NEED_PATCH
+	bool
+config EMBTK_XEXTPROTO_NEED_AUTORECONF
+	bool
+config EMBTK_XEXTPROTO_PKG_IS_TARGZ
+	bool
+config EMBTK_XEXTPROTO_PKG_IS_TARBZ2
+	bool

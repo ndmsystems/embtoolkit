@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_FIXESPROTO
 	bool "Have fixesproto"
+	select EMBTK_FIXESPROTO_PKG_IS_TARBZ2
 	help
 		fixesproto for X windowing system
 choice
@@ -44,3 +45,11 @@ config EMBTK_FIXESPROTO_VERSION_STRING
 	default "4.1.2"		if EMBTK_FIXESPROTO_VERSION_4_1_2
 	default "4.1"		if EMBTK_FIXESPROTO_VERSION_4_1
 
+config EMBTK_FIXESPROTO_NEED_PATCH
+	bool
+config EMBTK_FIXESPROTO_NEED_AUTORECONF
+	bool
+config EMBTK_FIXESPROTO_PKG_IS_TARGZ
+	bool
+config EMBTK_FIXESPROTO_PKG_IS_TARBZ2
+	bool

@@ -23,72 +23,16 @@
 # \date         March 2010
 ################################################################################
 
-RENDERPROTO_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_RENDERPROTO_VERSION_STRING)))
-RENDERPROTO_SITE := http://xorg.freedesktop.org/archive/individual/proto
-RENDERPROTO_PACKAGE := renderproto-$(RENDERPROTO_VERSION).tar.bz2
-RENDERPROTO_BUILD_DIR := $(PACKAGES_BUILD)/renderproto-$(RENDERPROTO_VERSION)
+RENDERPROTO_NAME	:= renderproto
+RENDERPROTO_VERSION	:= $(call embtk_get_pkgversion,renderproto)
+RENDERPROTO_SITE	:= http://xorg.freedesktop.org/archive/individual/proto
+RENDERPROTO_PACKAGE	:= renderproto-$(RENDERPROTO_VERSION).tar.bz2
+RENDERPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/renderproto-$(RENDERPROTO_VERSION)
+RENDERPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/renderproto-$(RENDERPROTO_VERSION)
 
-RENDERPROTO_BINS =
-RENDERPROTO_SBINS =
-RENDERPROTO_INCLUDES = X11/extensions/render.h X11/extensions/renderproto.h
-RENDERPROTO_LIBS =
-RENDERPROTO_PKGCONFIGS = renderproto.pc
-
-renderproto_install:
-	@test -e $(RENDERPROTO_BUILD_DIR)/.installed || \
-	$(MAKE) $(RENDERPROTO_BUILD_DIR)/.installed
-
-$(RENDERPROTO_BUILD_DIR)/.installed: download_renderproto \
-	$(RENDERPROTO_BUILD_DIR)/.decompressed $(RENDERPROTO_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	renderproto-$(RENDERPROTO_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(RENDERPROTO_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(RENDERPROTO_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_renderproto:
-	$(call embtk_generic_message,"Downloading $(RENDERPROTO_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(RENDERPROTO_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(RENDERPROTO_PACKAGE) \
-	$(RENDERPROTO_SITE)/$(RENDERPROTO_PACKAGE)
-
-$(RENDERPROTO_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(RENDERPROTO_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjvf $(DOWNLOAD_DIR)/$(RENDERPROTO_PACKAGE)
-	@touch $@
-
-$(RENDERPROTO_BUILD_DIR)/.configured:
-	$(Q)cd $(RENDERPROTO_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLGAS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) --prefix=/usr --libdir=/usr/$(LIBDIR) \
-	--disable-malloc0returnsnull
-	@touch $@
-
-renderproto_clean:
-	$(call embtk_generic_message,"cleanup renderproto-$(RENDERPROTO_VERSION)...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(RENDERPROTO_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(RENDERPROTO_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(RENDERPROTO_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(RENDERPROTO_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(RENDERPROTO_PKGCONFIGS)
-	$(Q)-rm -rf $(RENDERPROTO_BUILD_DIR)*
+RENDERPROTO_BINS	=
+RENDERPROTO_SBINS	=
+RENDERPROTO_INCLUDES	= X11/extensions/render.h X11/extensions/renderproto.h
+RENDERPROTO_LIBS	=
+RENDERPROTO_PKGCONFIGS	= renderproto.pc
 
