@@ -23,22 +23,24 @@
 # \date         October 2009
 ################################################################################
 
-DIRECTFB_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_DIRECTFB_VERSION_STRING)))
-DIRECTFB_BRANCH := $(subst ",,$(strip $(CONFIG_EMBTK_DIRECTFB_BRANCH_STRING)))
-DIRECTFB_SITE := http://www.directfb.org/downloads/Core/$(DIRECTFB_BRANCH)
-DIRECTFB_PACKAGE := DirectFB-$(DIRECTFB_VERSION).tar.gz
-DIRECTFB_BUILD_DIR := $(PACKAGES_BUILD)/DirectFB-$(DIRECTFB_VERSION)
+DIRECTFB_NAME		:= directfb
+DIRECTFB_VERSION	:= $(call embtk_get_pkgversion,directfb)
+DIRECTFB_BRANCH		:= $(call embtk_get_pkgversion,directfb_branch)
+DIRECTFB_SITE		:= http://www.directfb.org/downloads/Core/$(DIRECTFB_BRANCH)
+DIRECTFB_PACKAGE	:= DirectFB-$(DIRECTFB_VERSION).tar.gz
+DIRECTFB_SRC_DIR	:= $(PACKAGES_BUILD)/DirectFB-$(DIRECTFB_VERSION)
+DIRECTFB_BUILD_DIR	:= $(PACKAGES_BUILD)/DirectFB-$(DIRECTFB_VERSION)
 
-DIRECTFB_BINS = c64xdump dfbfx dfbinfo dfbinspector dfbmaster dfbscreen \
-	directfb-csource mkdgiff dfbdump dfbg dfbinput dfblayer dfbpenmount \
-	directfb-config mkdfiff pxa3xx_dump
-DIRECTFB_SBINS =
-DIRECTFB_LIBS = directfb* libdavinci_c64x* libdirect* libdirectfb* libfusion*
-DIRECTFB_INCLUDES = directfb*
+DIRECTFB_BINS		= c64xdump dfbfx dfbinfo dfbinspector dfbmaster		\
+			dfbscreen directfb-csource mkdgiff dfbdump dfbg		\
+			dfbinput dfblayer dfbpenmount directfb-config mkdfiff	\
+			pxa3xx_dump
+DIRECTFB_SBINS		=
+DIRECTFB_LIBS		= directfb* libdavinci_c64x* libdirect* libdirectfb*	\
+			libfusion*
+DIRECTFB_INCLUDES	= directfb*
 
-CONFIG_DIRECTFB_OPTS :=	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
-			--target=$(STRICT_GNU_TARGET) --prefix=/usr \
-			--program-suffix="" --disable-x11
+DIRECTFB_CONFIGURE_OPTS	:= --program-suffix="" --disable-x11
 
 #Graphics
 CONFIG_DIRECTFB_GRAPHICS-y := --with-gfxdrivers="
@@ -90,49 +92,23 @@ CONFIG_DIRECTFB_INPUTS-$(CONFIG_EMBTK_DIRECTFB_INPUT_WM97XX) += , wm97xx
 CONFIG_DIRECTFB_INPUTS-$(CONFIG_EMBTK_DIRECTFB_INPUT_ZYTRONIC) += , zytronic
 CONFIG_DIRECTFB_INPUTS-y +="
 
-#directfb deps
-DIRECTFB_DEPS := libpng_install freetype_install libjpeg_install
-ifeq ($(CONFIG_EMBTK_DIRECTFB_INPUT_TSLIB),y)
-DIRECTFB_DEPS += tslib_install
-endif
+DIRECTFB_CONFIGURE_OPTS	+= $(CONFIG_DIRECTFB_GRAPHICS-y)
+DIRECTFB_CONFIGURE_OPTS	+= $(CONFIG_DIRECTFB_INPUTS-y)
 
-directfb_install:
-	@test -e $(DIRECTFB_BUILD_DIR)/.installed || \
-	$(MAKE) $(DIRECTFB_BUILD_DIR)/.installed
-	$(Q)$(MAKE) $(DIRECTFB_BUILD_DIR)/.special
+# directfb deps
+DIRECTFB_DEPS	:= libpng_install freetype_install libjpeg_install
+DIRECTFB_DEPS	+= $(if $(CONFIG_EMBTK_DIRECTFB_INPUT_TSLIB),tslib_install)
 
-$(DIRECTFB_BUILD_DIR)/.installed:  $(DIRECTFB_DEPS) download_directfb \
-	$(DIRECTFB_BUILD_DIR)/.decompressed $(DIRECTFB_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	DirectFB-$(DIRECTFB_VERSION) in your root filesystem...")
-	$(call __embtk_kill_lt_rpath, $(DIRECTFB_BUILD_DIR))
-	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(DIRECTFB_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	$(Q)$(MAKE) $(DIRECTFB_BUILD_DIR)/.patchlibtool
-	@touch $@
-
-download_directfb:
-	$(call embtk_generic_message,"Downloading $(DIRECTFB_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(DIRECTFB_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(DIRECTFB_PACKAGE) \
-	$(DIRECTFB_SITE)/$(DIRECTFB_PACKAGE)
-
-$(DIRECTFB_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(DIRECTFB_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzvf $(DOWNLOAD_DIR)/$(DIRECTFB_PACKAGE)
-	@touch $@
-
-$(DIRECTFB_BUILD_DIR)/.configured:
-	cd $(DIRECTFB_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) CFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	./configure $(CONFIG_DIRECTFB_OPTS) $(CONFIG_DIRECTFB_GRAPHICS-y) \
-	$(CONFIG_DIRECTFB_INPUTS-y) --libdir=/usr/$(LIBDIR)
-	@touch $@
+define embtk_postinstall_directfb
+	$(Q)test -e $(DIRECTFB_BUILD_DIR)/.patchlibtool ||			\
+	$(MAKE) $(DIRECTFB_BUILD_DIR)/.patchlibtool
+	$(Q)mkdir -p $(ROOTFS)
+	$(Q)mkdir -p $(ROOTFS)/etc
+	$(Q)-cp $(DIRECTFB_BUILD_DIR)/fb.modes $(ROOTFS)/etc
+	$(Q)mkdir -p $(ROOTFS)/usr
+	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
+	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/$(LIBDIR)
+endef
 
 $(DIRECTFB_BUILD_DIR)/.patchlibtool:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
@@ -182,24 +158,3 @@ else
 	< $(SYSROOT)/usr/lib/libdirectfb.la > libdirectfb.la.new; \
 	mv libdirectfb.la.new $(SYSROOT)/usr/lib/libdirectfb.la
 endif
-
-.PHONY: $(DIRECTFB_BUILD_DIR)/.special directfb_clean
-
-$(DIRECTFB_BUILD_DIR)/.special:
-	$(Q)-cp $(DIRECTFB_BUILD_DIR)/fb.modes $(ROOTFS)/etc/
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)-cp -R $(SYSROOT)/usr/lib32/directfb-*-* $(ROOTFS)/usr/lib32
-	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/lib
-else
-	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/lib
-endif
-	@touch $@
-
-directfb_clean:
-	$(call embtk_generic_message,"cleanup directfb...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(DIRECTFB_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(DIRECTFB_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(DIRECTFB_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(DIRECTFB_LIBS)
-	$(Q)-rm -rf $(DIRECTFB_BUILD_DIR)*
-
