@@ -57,3 +57,11 @@ help:
 	@echo "                 of the root filesystem, use this target to"
 	@echo "                 rebuild it."
 	@echo
+	@echo " ---------------"
+	@echo "| miscellaneous |"
+	@echo " ---------------"
+	@echo "make packages_fetch:"
+	@echo "                 This will download all needed packages tarball."
+	@echo "                 This should be used after configuration and if"
+	@echo "                 you want to do an offline build."
+	@echo

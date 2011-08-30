@@ -105,3 +105,6 @@ download_%:
 # clean generic implicit rule
 %_clean:
 	$(call embtk_cleanup_pkg,$(patsubst %_clean,%,$@))
+
+# Download target for offline build
+packages_fetch:: $(patsubst %_install,download_%,$(ROOTFS_COMPONENTS-y) $(HOSTTOOLS_COMPONENTS-y))

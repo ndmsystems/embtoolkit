@@ -120,3 +120,5 @@ symlink_tools:
 	ln -sf $(STRICT_GNU_TARGET)-$$i $(GNU_TARGET)-$$i; \
 	done
 
+# Download target for offline build
+packages_fetch:: $(patsubst %_install,download_%,$(TOOLCHAINBUILD))
