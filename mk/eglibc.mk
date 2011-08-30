@@ -56,7 +56,7 @@ eglibc_headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
 eglibc_install: $(EGLIBC_BUILD_DIR)/.installed
 	$(call embtk_generic_msg,"eglibc lbraries and headers installed")
 
-$(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download \
+$(EGLIBC_HEADERS_BUILD_DIR)/.installed: download_eglibc \
 	$(EGLIBC_HEADERS_BUILD_DIR)/.decompressed \
 	EGLIBC_OPTIONS_PARSE $(EGLIBC_HEADERS_BUILD_DIR)/.configured
 	$(call EMBTK_INSTALL_MSG,"headers eglibc-$(EGLIBC_VERSION)")
@@ -70,7 +70,7 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.installed: eglibc_download \
 	-shared -x c /dev/null -o $(SYSROOT)/usr/lib/libc.so
 	@touch $@
 
-eglibc_download:
+download_eglibc download_eglibc_headers:
 	$(call embtk_generic_message,"downloading eglibc-$(EGLIBC_VERSION) \
 	if necessary ...")
 ifeq ($(CONFIG_EMBTK_EGLIBC_VERSION_STRING),"trunk")
