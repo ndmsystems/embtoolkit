@@ -33,9 +33,6 @@ ROOTFS			:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 HOSTTOOLS		:= $(EMBTK_ROOT)/host-tools-$(EMBTK_MCU_FLAG)
 DOWNLOAD_DIR		:= $(patsubst %/,%,$(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR))))
 
-export SYSROOT TOOLS TOOLS_BUILD PACKAGES_BUILD EMBTK_GENERATED ROOTFS
-export HOSTTOOLS DOWNLOAD_DIR
-
 mkinitialpath:
 	$(Q)mkdir -p $(SYSROOT)
 	$(Q)mkdir -p $(SYSROOT)/lib
