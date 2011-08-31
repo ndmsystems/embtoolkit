@@ -24,9 +24,9 @@
 ################################################################################
 
 #Busybox
-config EMBTK_ROOTFS_HAVE_BB
+config EMBTK_HAVE_BB
 	bool "Have Busybox in your root filesystem"
-if EMBTK_ROOTFS_HAVE_BB
+if EMBTK_HAVE_BB
 menu "Busybox configuration"
 source packages/busybox/busybox.kconfig
 endmenu

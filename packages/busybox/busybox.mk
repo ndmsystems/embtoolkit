@@ -31,32 +31,32 @@ BB_PACKAGE	:= busybox-$(BB_VERSION).tar.bz2
 BB_SRC_DIR	:= $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
 BB_BUILD_DIR	:= $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
 
-busybox_install: $(BB_BUILD_DIR)/.installed
+BB_NODESTDIR	:= y
+BB_MAKE_ENV	= CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"
+BB_MAKE_OPTS	= CROSS_COMPILE="$(CCACHE_BIN) $(TOOLS)/bin/$(STRICT_GNU_TARGET)-"
+BB_MAKE_OPTS	+= CONFIG_PREFIX=$(ROOTFS)
 
-$(BB_BUILD_DIR)/.installed: download_busybox $(BB_BUILD_DIR)/.decompressed \
-	$(BB_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
-	busybox-$(BB_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(BB_BUILD_DIR) \
-	CROSS_COMPILE="$(CCACHE_HOST_DIR)/bin/ccache $(TOOLS)/bin/$(STRICT_GNU_TARGET)-" \
+bb_install:
+	$(call embtk_makeinstall_pkg,bb)
+
+define embtk_beforeinstall_pkg
+	$(embtk_configure_bb)
+	$(Q)$(MAKE) -C $(BB_BUILD_DIR)						\
+	CROSS_COMPILE="$(CCACHE_BIN) $(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
 	CONFIG_PREFIX=$(ROOTFS) oldconfig
-	$(Q)CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing" \
-	$(MAKE) -C $(BB_BUILD_DIR) \
-	CROSS_COMPILE="$(CCACHE_HOST_DIR)/bin/ccache $(TOOLS)/bin/$(STRICT_GNU_TARGET)-" \
+endef
+
+define embtk_postinstall_bb
+	$(Q)CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"		\
+	$(MAKE) -C $(BB_BUILD_DIR)						\
+	CROSS_COMPILE="$(CCACHE_BIN) $(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
 	CONFIG_PREFIX=$(ROOTFS) install
-	$(Q)touch $@
+endef
 
-download_busybox:
-	$(call embtk_download_pkg,bb)
-
-$(BB_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,bb)
-
-$(BB_BUILD_DIR)/.configured:
-	$(call embtk_generic_message,"Configuring busybox...")
-	@grep "CONFIG_KEMBTK_BUSYB_" $(EMBTK_ROOT)/.config | \
-	sed -e 's/CONFIG_KEMBTK_BUSYB_*/CONFIG_/g' > $(BB_BUILD_DIR)/.config
-	@sed -i 's/_1_13_X_1_14_X//g' $(BB_BUILD_DIR)/.config
-
-busybox_clean:
-	$(call embtk_generic_message,"cleanup busybox...")
+define embtk_configure_bb
+	$(call embtk_generic_msg,"Configuring busybox...")
+	$(Q)grep "CONFIG_KEMBTK_BUSYB_" $(EMBTK_ROOT)/.config |			\
+		sed -e 's/CONFIG_KEMBTK_BUSYB_*/CONFIG_/g'			\
+						> $(BB_BUILD_DIR)/.config
+	$(Q)sed -i 's/_1_13_X_1_14_X//g' $(BB_BUILD_DIR)/.config
+endef

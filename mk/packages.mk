@@ -73,7 +73,7 @@ include $(EMBTK_ROOT)/packages/x11/x11.mk
 include $(EMBTK_ROOT)/packages/misc/misc.mk
 
 # Busybox
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_BB) += busybox_install
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_BB) += bb_install
 include $(EMBTK_ROOT)/packages/busybox/busybox.mk
 
 # Clean for all unselected packages
