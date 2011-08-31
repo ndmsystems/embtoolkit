@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_LUA
 	bool "Have lua"
+	select EMBTK_LUA_PKG_IS_TARBZ2
 	help
 		Lua is a powerful, light-weight programming language designed
 		for extending applications. Lua is also frequently used as a
@@ -45,5 +46,9 @@ config EMBTK_LUA_VERSION_STRING
 
 config EMBTK_LUA_NEED_PATCH
 	bool
-
-
+config EMBTK_LUA_NEED_AUTORECONF
+	bool
+config EMBTK_LUA_PKG_IS_TARGZ
+	bool
+config EMBTK_LUA_PKG_IS_TARBZ2
+	bool

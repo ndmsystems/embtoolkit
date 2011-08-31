@@ -23,64 +23,26 @@
 # \date         June 2010
 ################################################################################
 
-LUA_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LUA_VERSION_STRING)))
-LUA_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/lua
-LUA_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/lua/$(LUA_VERSION)
-LUA_PACKAGE := lua-$(LUA_VERSION).tar.bz2
-LUA_BUILD_DIR := $(PACKAGES_BUILD)/lua-$(LUA_VERSION)
+LUA_NAME	:= lua
+LUA_VERSION	:= $(call embtk_get_pkgversion,lua)
+LUA_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/lua
+LUA_PACKAGE	:= lua-$(LUA_VERSION).tar.bz2
+LUA_SRC_DIR	:= $(PACKAGES_BUILD)/lua-$(LUA_VERSION)
+LUA_BUILD_DIR	:= $(PACKAGES_BUILD)/lua-$(LUA_VERSION)
 
-LUA_BINS = lua luac
-LUA_SBINS =
-LUA_INCLUDES = lauxlib.h luaconf.h lua.h lua.hpp lualib.h
-LUA_LIBS = lua liblua.*
-LUA_PKGCONFIGS =
+LUA_BINS	= lua luac
+LUA_SBINS	=
+LUA_INCLUDES	= lauxlib.h luaconf.h lua.h lua.hpp lualib.h
+LUA_LIBS	= lua liblua.*
+LUA_PKGCONFIGS	=
 
-LUA_DEPS =
+LUA_DEPS	=
 
-lua_install:
-	@test -e $(LUA_BUILD_DIR)/.installed || \
-	$(MAKE) $(LUA_BUILD_DIR)/.installed
+LUA_MAKE_OPTS	= INSTALL_TOP=$(SYSROOT)/usr/ LIBDIR=$(LIBDIR)
 
-$(LUA_BUILD_DIR)/.installed: $(LUA_DEPS) download_lua \
-	$(LUA_BUILD_DIR)/.decompressed
-	$(call embtk_generic_message,"Compiling and installing \
-	lua-$(LUA_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(LUA_BUILD_DIR) CC=$(TARGETCC_CACHED) \
-	AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB) \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include" ansi
-	$(Q)$(MAKE) -C $(LUA_BUILD_DIR) INSTALL_TOP=$(SYSROOT)/usr/ LIBDIR=$(LIBDIR) install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_lua:
-	$(call embtk_generic_message,"Downloading $(LUA_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(LUA_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LUA_PACKAGE) \
-	$(LUA_SITE)/$(LUA_PACKAGE)
-ifeq ($(CONFIG_EMBTK_LUA_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/lua-$(LUA_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/lua-$(LUA_VERSION).patch \
-	$(LUA_PATCH_SITE)/lua-$(LUA_VERSION)-*.patch
-endif
-
-$(LUA_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(LUA_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xjf $(DOWNLOAD_DIR)/$(LUA_PACKAGE)
-ifeq ($(CONFIG_EMBTK_LUA_NEED_PATCH),y)
-	@cd $(LUA_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/lua-$(LUA_VERSION).patch
-endif
-	@touch $@
-
-lua_clean:
-	$(call embtk_generic_message,"cleanup lua...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LUA_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LUA_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LUA_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LUA_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LUA_PKGCONFIGS)
-	$(Q)-rm -rf $(LUA_BUILD_DIR)*
-
+define embtk_beforeinstall_lua
+	$(Q)$(MAKE) -C $(LUA_BUILD_DIR) CC=$(TARGETCC_CACHED)			\
+		AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB)			\
+		LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"	\
+		CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include" ansi
+endef
