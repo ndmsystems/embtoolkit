@@ -37,6 +37,7 @@ CCACHE_BUILD_DIR	:= $(TOOLS_BUILD)/ccachehost-build
 
 CCACHE_HOST_DIR		:= $(HOSTTOOLS)/usr/local/ccachehost
 CCACHE_DIR		:= $(EMBTK_ROOT)/.ccache
+CCACHE_BIN		:= $(CCACHE_HOST_DIR)/bin/ccache
 HOSTCC_CACHED		:= "$(CCACHE_HOST_DIR)/bin/ccache $(HOSTCC)"
 HOSTCXX_CACHED		:= "$(CCACHE_HOST_DIR)/bin/ccache $(HOSTCXX)"
 TARGETCC_CACHED		:= "$(CCACHE_HOST_DIR)/bin/ccache $(TARGETCC)"
