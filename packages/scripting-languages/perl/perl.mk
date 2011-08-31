@@ -22,49 +22,40 @@
 # \date         December 2009
 ################################################################################
 
-PERL_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_PERL_VERSION_STRING)))
-PERL_SITE := http://www.cpan.org/src
-PERL_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/perl/$(PERL_VERSION)
-PERL_PACKAGE := perl-$(PERL_VERSION).tar.gz
-PERL_BUILD_DIR := $(PACKAGES_BUILD)/perl-$(PERL_VERSION)
-MICROPERL_BUILD_DIR := $(PACKAGES_BUILD)/perl-$(PERL_VERSION)-micro
+PERL_NAME	:= perl
+PERL_VERSION	:= $(call embtk_get_pkgversion,perl)
+PERL_SITE	:= http://www.cpan.org/src
+PERL_PACKAGE	:= perl-$(PERL_VERSION).tar.gz
+PERL_SRC_DIR	:= $(PACKAGES_BUILD)/perl-$(PERL_VERSION)
+PERL_BUILD_DIR	:= $(PACKAGES_BUILD)/perl-$(PERL_VERSION)
+
+
+#
+# microperl
+#
+MICROPERL_NAME		:= $(PERL_NAME)
+MICROPERL_VERSION	:= $(PERL_VERSION)
+MICROPERL_SITE		:= $(PERL_SITE)
+MICROPERL_PACKAGE	:= $(PERL_PACKAGE)
+MICROPERL_SRC_DIR	:= $(PERL_SRC_DIR)
+MICROPERL_BUILD_DIR	:= $(PACKAGES_BUILD)/perl-$(PERL_VERSION)-micro
 
 microperl_install: $(MICROPERL_BUILD_DIR)/.installed
 
-$(MICROPERL_BUILD_DIR)/.installed: download_perl \
+$(MICROPERL_BUILD_DIR)/.installed: download_microperl \
 	$(PERL_BUILD_DIR)/.decompressed
-	$(call embtk_generic_message,"Compiling and installing \
+	$(call embtk_generic_msg,"Compiling and installing \
 	microperl-$(PERL_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(MICROPERL_BUILD_DIR) -f Makefile.micro \
-	OPTIMIZE="$(TARGET_CFLAGS)" CC=$(TARGETCC_CACHED)
+		OPTIMIZE="$(TARGET_CFLAGS)" CC=$(TARGETCC_CACHED)
+	$(Q)mkdir -p $(ROOTFS)
+	$(Q)mkdir -p $(ROOTFS)/usr
+	$(Q)mkdir -p $(ROOTFS)/usr/bin
 	$(Q)cp $(MICROPERL_BUILD_DIR)/microperl $(ROOTFS)/usr/bin
-	$(Q)cd $(ROOTFS)/usr/bin; \
-	ln -s microperl perl
-	@touch $@
-
-download_perl download_microperl:
-	$(call embtk_generic_message,"Downloading $(PERL_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(PERL_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(PERL_PACKAGE) \
-	$(PERL_SITE)/$(PERL_PACKAGE)
-ifeq ($(CONFIG_EMBTK_PERL_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/perl-$(PERL_VERSION).patch || \
-	wget $(PERL_PATCH_SITE)/perl-$(PERL_VERSION)-*.patch \
-	-O $(DOWNLOAD_DIR)/perl-$(PERL_VERSION).patch
-endif
+	$(Q)cd $(ROOTFS)/usr/bin; ln -sf microperl perl
 
 $(PERL_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(PERL_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzvf $(DOWNLOAD_DIR)/$(PERL_PACKAGE)
-ifeq ($(CONFIG_EMBTK_PERL_NEED_PATCH),y)
-	@cd $(PERL_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/perl-$(PERL_VERSION).patch
-endif
-ifeq ($(CONFIG_EMBTK_HAVE_MICROPERL),y)
-	@cp -R $(PERL_BUILD_DIR) $(MICROPERL_BUILD_DIR)
-endif
-	@touch $@
+	$(call embtk_decompress_pkg,perl)
 
 microperl_clean:
 	$(call embtk_generic_message,"Clean microperl for target...")
