@@ -45,7 +45,7 @@ endchoice
 
 config EMBTK_PERL_VERSION_STRING
 	string
-	default "5.10.1"	if EMBTK_MICROPERL_VERSION_5_10_1
+	default "5.10.1"	if EMBTK_PERL_VERSION_5_10_1
 
 config EMBTK_PERL_NEED_PATCH
 	bool
