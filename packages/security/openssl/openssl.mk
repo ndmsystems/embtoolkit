@@ -23,24 +23,25 @@
 # \date         February 2010
 ################################################################################
 
-OPENSSL_NAME := openssl
-OPENSSL_VERSION := $(call embtk_get_pkgversion,OPENSSL)
-OPENSSL_SITE := ftp://ftp.openssl.org/source
-OPENSSL_SITE_MIRROR3 := ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-OPENSSL_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/openssl/$(OPENSSL_VERSION)
-OPENSSL_PACKAGE := openssl-$(OPENSSL_VERSION).tar.gz
-OPENSSL_SRC_DIR := $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
-OPENSSL_BUILD_DIR := $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
+OPENSSL_NAME		:= openssl
+OPENSSL_VERSION		:= $(call embtk_get_pkgversion,openssl)
+OPENSSL_SITE		:= ftp://ftp.openssl.org/source
+OPENSSL_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+OPENSSL_PACKAGE		:= openssl-$(OPENSSL_VERSION).tar.gz
+OPENSSL_SRC_DIR		:= $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
+OPENSSL_BUILD_DIR	:= $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
 
-OPENSSL_ETC = ssl
-OPENSSL_BINS = c_rehash openssl
-OPENSSL_SBINS =
-OPENSSL_INCLUDES = openssl
-OPENSSL_LIBS = engines/lib4758cca.so engines/libaep.so engines/libatalla.so \
-		engines/libcapi.so engines/libchil.so engines/libcswift.so \
-		engines/libgmp.so engines/libnuron.so engines/libsureware.so \
-		engines/libubsec.so libcrypto.* libssl.*
-OPENSSL_PKGCONFIGS = libcrypto.pc libssl.pc openssl.pc
+OPENSSL_ETC		= ssl
+OPENSSL_BINS		= c_rehash openssl
+OPENSSL_SBINS		=
+OPENSSL_INCLUDES	= openssl
+OPENSSL_PKGCONFIGS	= libcrypto.pc libssl.pc openssl.pc
+OPENSSL_LIBS		= engines/lib4758cca.so engines/libaep.so		\
+			engines/libatalla.so engines/libcapi.so			\
+			engines/libchil.so engines/libcswift.so			\
+			engines/libgmp.so engines/libnuron.so			\
+			engines/libsureware.so engines/libubsec.so libcrypto.*	\
+			libssl.*
 
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 OPENSSL_LINUX_TARGET := linux-generic32
@@ -60,22 +61,17 @@ $(OPENSSL_BUILD_DIR)/.installed: download_openssl \
 	$(call embtk_generic_message,"Compiling and installing \
 	openssl-$(OPENSSL_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(OPENSSL_BUILD_DIR) CC=$(TARGETCC_CACHED)
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)$(MAKE) -C $(OPENSSL_BUILD_DIR) \
-	INSTALL_PREFIX=$(SYSROOT)/ LIBDIR=lib32 MANDIR=/usr/share/man install
-else
-	$(Q)$(MAKE) -C $(OPENSSL_BUILD_DIR) \
-	INSTALL_PREFIX=$(SYSROOT) LIBDIR=lib MANDIR=/usr/share/man install
-endif
+	$(Q)$(MAKE) -C $(OPENSSL_BUILD_DIR) INSTALL_PREFIX=$(SYSROOT)		\
+		LIBDIR=$(LIBDIR) MANDIR=/usr/share/man install
 	$(Q)$(MAKE) libtool_files_adapt
 	$(Q)$(MAKE) pkgconfig_files_adapt
 	@touch $@
 
 download_openssl:
-	$(call embtk_download_pkg,OPENSSL)
+	$(call embtk_download_pkg,openssl)
 
 $(OPENSSL_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,OPENSSL)
+	$(call embtk_decompress_pkg,openssl)
 
 $(OPENSSL_BUILD_DIR)/.configured:
 	$(Q)cd $(OPENSSL_BUILD_DIR); \
@@ -84,10 +80,12 @@ $(OPENSSL_BUILD_DIR)/.configured:
 	@touch $@
 
 openssl_clean:
-	$(call embtk_cleanup_pkg,OPENSSL)
+	$(call embtk_cleanup_pkg,openssl)
 
 .PHONY: $(OPENSSL_BUILD_DIR)/.special
 
 $(OPENSSL_BUILD_DIR)/.special:
+	$(Q)mkdir -p $(ROOTFS)
+	$(Q)mkdir -p $(ROOTFS)/etc
 	$(Q)-cp -R $(SYSROOT)/etc/ssl $(ROOTFS)/etc/
 	@touch $@
