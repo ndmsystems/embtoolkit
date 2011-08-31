@@ -249,6 +249,7 @@ __embtk_pkg_configureopts	= $(strip $($(PKGV)_CONFIGURE_OPTS))
 __embtk_pkg_sysrootsuffix	= $(strip $($(PKGV)_SYSROOT_SUFFIX))
 __embtk_pkg_prefix		= $(strip $($(PKGV)_PREFIX))
 __embtk_pkg_destdir		= $(strip $($(PKGV)_DESTDIR))
+__embtk_pkg_nodestdir		= $(strip $($(PKGV)_NODESTDIR))
 __embtk_pkg_deps		= $(strip $($(PKGV)_DEPS))
 
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
@@ -400,12 +401,14 @@ __embtk_single_make = $(__embtk_pkg_makeenv) $(MAKE) -C $(__embtk_pkg_builddir)	
 
 __embtk_multi_make_install = $(foreach builddir,$(__embtk_pkg_makedirs),	\
 	$(__embtk_pkg_makeenv) $(MAKE) -C $(__embtk_pkg_builddir)/$(builddir)	\
-	DESTDIR=$(SYSROOT)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix)) \
+	$(if $(__embtk_pkg_nodestdir),,						\
+		DESTDIR=$(SYSROOT)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix))) \
 	$(__embtk_pkg_makeopts) install;)
 
 __embtk_single_make_install = $(__embtk_pkg_makeenv)				\
 	$(MAKE) -C $(__embtk_pkg_builddir)					\
-	DESTDIR=$(SYSROOT)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix)) \
+	$(if $(__embtk_pkg_nodestdir),,						\
+		DESTDIR=$(SYSROOT)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix))) \
 	$(__embtk_pkg_makeopts) install
 
 __embtk_multi_make_hostinstall = $(foreach builddir,$(__embtk_pkg_makedirs),	\
