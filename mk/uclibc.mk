@@ -40,8 +40,10 @@ EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
 EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_MARCH) -pipe
 
 uclibc_install: $(UCLIBC_BUILD_DIR)/.installed
+	$(call embtk_generic_msg,"Successfully installed uClibc")
 
 uclibc_headers_install: $(UCLIBC_BUILD_DIR)/.headers_installed
+	$(call embtk_generic_msg,"Successfully installed uClibc headers")
 
 $(UCLIBC_BUILD_DIR)/.installed:
 	$(call embtk_generic_msg,"Build and install uClibc-$(UCLIBC_VERSION) ...")
