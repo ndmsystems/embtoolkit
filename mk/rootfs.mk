@@ -25,9 +25,9 @@
 
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 
-ROOTFS_HOSTTOOLS-y :=
-ROOTFS_HOSTTOOLS_CLEAN-y :=
-FILESYSTEMS-y :=
+ROOTFS_HOSTTOOLS-y		:=
+ROOTFS_HOSTTOOLS_CLEAN-y	:=
+FILESYSTEMS-y			:=
 
 #include various filesystems targets
 include $(EMBTK_ROOT)/mk/fs.mk
@@ -131,4 +131,6 @@ rootfs_build:
 	@echo "################################################################"
 rootfs_clean: $(ROOTFS_HOSTTOOLS_CLEAN)
 
+# Download target for offline build
+packages_fetch:: $(patsubst %_install,download_%,$(ROOTFS_HOSTTOOLS-y))
 endif
