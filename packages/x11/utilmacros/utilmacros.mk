@@ -40,7 +40,7 @@ UTILMACROS_PKGCONFIGS	= xorg-macros.pc
 UTILMACROS_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
 define embtk_postinstall_utilmacros
-	$(Q)if [ ! -e $(UTILMACROS_BUILD_DIR)/.installed]; then			\
+	$(Q)if [ ! -e $(UTILMACROS_BUILD_DIR)/.installed ]; then		\
 		cp $(SYSROOT)/usr/share/pkgconfig/xorg-macros.pc		\
 						$(EMBTK_PKG_CONFIG_PATH);	\
 		$(MAKE) pkgconfig_files_adapt;					\
