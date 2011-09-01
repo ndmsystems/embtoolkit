@@ -40,9 +40,10 @@ XTRANS_PKGCONFIGS	=
 XTRANS_CONFIGURE_OPTS := --disable-malloc0returnsnull
 
 define embtk_postinstall_xtrans
-	$(Q)if [ ! -e $(XTRANS_BUILD_DIR)/.installed]; then			\
+	$(Q)if [ ! -e $(XTRANS_BUILD_DIR)/.postinstalled ]; then		\
 		cp $(SYSROOT)/usr/share/pkgconfig/xtrans.pc			\
 						$(EMBTK_PKG_CONFIG_PATH);	\
 		$(MAKE) pkgconfig_files_adapt;					\
+		touch $(XTRANS_BUILD_DIR)/.postinstalled;			\
 	fi
 endef
