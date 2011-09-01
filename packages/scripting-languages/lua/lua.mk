@@ -40,6 +40,9 @@ LUA_DEPS	=
 
 LUA_MAKE_OPTS	= INSTALL_TOP=$(SYSROOT)/usr/ LIBDIR=$(LIBDIR)
 
+lua_install:
+	$(call embtk_makeinstall_pkg,lua)
+
 define embtk_beforeinstall_lua
 	$(Q)$(MAKE) -C $(LUA_BUILD_DIR) CC=$(TARGETCC_CACHED)			\
 		AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB)			\
