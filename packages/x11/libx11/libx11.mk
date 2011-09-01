@@ -48,8 +48,8 @@ LIBX11_DEPS	= utilmacros_install inputproto_install kbproto_install		\
 
 define embtk_beforeinstall_libx11
 	$(Q)cd $(LIBX11_BUILD_DIR)/src/util;					\
-	$(HOSTCC_CACHED) makekeys.c -c -o makekeys-makekeys.o;			\
-	$(HOSTCC_CACHED) makekeys.c -o makekeys
+	$(hostcc_cached) makekeys.c -c -o makekeys-makekeys.o;			\
+	$(hostcc_cached) makekeys.c -o makekeys
 endef
 
 define embtk_postinstall_libx11
