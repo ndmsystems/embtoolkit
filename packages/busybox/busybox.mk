@@ -39,7 +39,7 @@ BB_MAKE_OPTS	+= CONFIG_PREFIX=$(ROOTFS)
 bb_install:
 	$(call embtk_makeinstall_pkg,bb)
 
-define embtk_beforeinstall_pkg
+define embtk_beforeinstall_bb
 	$(embtk_configure_bb)
 	$(Q)$(MAKE) -C $(BB_BUILD_DIR)						\
 	CROSS_COMPILE="$(CCACHE_BIN) $(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
