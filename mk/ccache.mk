@@ -38,10 +38,18 @@ CCACHE_BUILD_DIR	:= $(TOOLS_BUILD)/ccachehost-build
 CCACHE_HOST_DIR		:= $(HOSTTOOLS)/usr/local/ccachehost
 CCACHE_DIR		:= $(EMBTK_ROOT)/.ccache
 CCACHE_BIN		:= $(CCACHE_HOST_DIR)/bin/ccache
-HOSTCC_CACHED		:= "$(CCACHE_HOST_DIR)/bin/ccache $(HOSTCC)"
-HOSTCXX_CACHED		:= "$(CCACHE_HOST_DIR)/bin/ccache $(HOSTCXX)"
-TARGETCC_CACHED		:= "$(CCACHE_HOST_DIR)/bin/ccache $(TARGETCC)"
-TARGETCXX_CACHED	:= "$(CCACHE_HOST_DIR)/bin/ccache $(TARGETCXX)"
+
+# Variables for use in env
+HOSTCC_CACHED		:= "$(CCACHE_BIN) $(HOSTCC)"
+HOSTCXX_CACHED		:= "$(CCACHE_BIN) $(HOSTCXX)"
+TARGETCC_CACHED		:= "$(CCACHE_BIN) $(TARGETCC)"
+TARGETCXX_CACHED	:= "$(CCACHE_BIN) $(TARGETCXX)"
+
+# Variables for use directly
+hostcc_cached		:= $(CCACHE_BIN) $(HOSTCC)
+hostcxx_cached		:= $(CCACHE_BIN) $(HOSTCXX)
+targetcc_cached		:= $(CCACHE_BIN) $(TARGETCC)
+targetcxx_cached	:= $(CCACHE_BIN) $(TARGETCXX)
 
 export CCACHE_DIR HOSTCC_CACHED HOSTCXX_CACHED TARGETCC_CACHED TARGETCXX_CACHED
 
