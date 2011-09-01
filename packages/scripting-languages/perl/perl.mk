@@ -38,9 +38,10 @@ MICROPERL_VERSION	:= $(PERL_VERSION)
 MICROPERL_SITE		:= $(PERL_SITE)
 MICROPERL_PACKAGE	:= $(PERL_PACKAGE)
 MICROPERL_SRC_DIR	:= $(PERL_SRC_DIR)
-MICROPERL_BUILD_DIR	:= $(PACKAGES_BUILD)/perl-$(PERL_VERSION)-micro
+MICROPERL_BUILD_DIR	:= $(PACKAGES_BUILD)/perl-$(PERL_VERSION)
 
 microperl_install: $(MICROPERL_BUILD_DIR)/.installed
+	$(call embtk_generic_msg,"Successfully installed microperl")
 
 $(MICROPERL_BUILD_DIR)/.installed: download_microperl \
 	$(PERL_BUILD_DIR)/.decompressed
@@ -53,9 +54,13 @@ $(MICROPERL_BUILD_DIR)/.installed: download_microperl \
 	$(Q)mkdir -p $(ROOTFS)/usr/bin
 	$(Q)cp $(MICROPERL_BUILD_DIR)/microperl $(ROOTFS)/usr/bin
 	$(Q)cd $(ROOTFS)/usr/bin; ln -sf microperl perl
+	$(Q)touch $@
 
 $(PERL_BUILD_DIR)/.decompressed:
 	$(call embtk_decompress_pkg,perl)
 
 microperl_clean:
 	$(call embtk_generic_message,"Clean microperl for target...")
+
+download_microperl download_perl:
+	$(call embtk_download_pkg,perl)
