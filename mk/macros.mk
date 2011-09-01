@@ -428,6 +428,7 @@ define __embtk_install_pkg_make
 	$(Q)$(if $(strip $(__embtk_pkg_deps)),$(MAKE) $(__embtk_pkg_deps))
 	$(Q)$(call embtk_download_pkg,$(1))
 	$(Q)$(call embtk_decompress_pkg,$(1))
+	$(Q)$(if $(embtk_beforeinstall_$(pkgv)),$(embtk_beforeinstall_$(pkgv)))
 	$(Q)$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_pkg,$(1)))
 	$(Q)$(if $(__embtk_pkg_makedirs),					\
 		$(__embtk_multi_make),						\
@@ -444,6 +445,7 @@ define __embtk_install_hostpkg_make
 	$(Q)$(if $(strip $(__embtk_pkg_deps)),$(MAKE) $(__embtk_pkg_deps))
 	$(Q)$(call embtk_download_pkg,$(1))
 	$(Q)$(call embtk_decompress_pkg,$(1))
+	$(if $(embtk_beforeinstall_$(pkgv)),$(embtk_beforeinstall_$(pkgv)))
 	$(Q)$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_hostpkg,$(1)))
 	$(Q)$(if $(__embtk_pkg_makedirs),					\
 		$(__embtk_multi_make),						\
@@ -462,8 +464,6 @@ endef
 #
 define embtk_install_pkg
 	$(if $(__embtk_pkg_installed-y),true,
-		$(if $(embtk_beforeinstall_$(pkgv)),
-			$(embtk_beforeinstall_$(pkgv)))
 		$(call __embtk_install_pkg_make,$(1),autotools))
 	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
@@ -476,8 +476,6 @@ endef
 #
 define embtk_makeinstall_pkg
 	$(if $(__embtk_pkg_installed-y),true,
-		$(if $(embtk_beforeinstall_$(pkgv)),
-			$(embtk_beforeinstall_$(pkgv)))
 		$(call __embtk_install_pkg_make,$(1)))
 	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
@@ -490,8 +488,6 @@ endef
 #
 define embtk_install_hostpkg
 	$(if $(__embtk_pkg_installed-y),true,
-		$(if $(embtk_beforeinstall_$(pkgv)),
-			$(embtk_beforeinstall_$(pkgv)))
 		$(call __embtk_install_hostpkg_make,$(1),autotools))
 	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
@@ -504,8 +500,6 @@ endef
 #
 define embtk_makeinstall_hostpkg
 	$(if $(__embtk_pkg_installed-y),true,
-		$(if $(embtk_beforeinstall_$(pkgv)),
-			$(embtk_beforeinstall_$(pkgv)))
 		$(call __embtk_install_hostpkg_make,$(1)))
 	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
