@@ -30,8 +30,8 @@ INITRAMFS_ROOTFS	:= $(EMBTK_GENERATED)/initramfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 
 build_rootfs_devnodes:
 	$(call embtk_generic_msg,"Populating device nodes of the rootfs...")
-	@$(FAKEROOT_BIN) -s $(FAKEROOT_ENV_FILE) -- $(MAKEDEVS_DIR)/makedevs \
-	-d $(EMBTK_ROOT)/src/devices_table.txt $(ROOTFS)
+	$(Q)$(FAKEROOT_BIN) -s $(FAKEROOT_ENV_FILE) -- $(MAKEDEVS_BIN)		\
+			-d $(EMBTK_ROOT)/src/devices_table.txt $(ROOTFS)
 
 build_tarbz2_rootfs:
 	$(call embtk_generic_msg,"Generating TAR.BZ2 file of the rootfs...")

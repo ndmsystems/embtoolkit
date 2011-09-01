@@ -22,12 +22,19 @@
 # \date         May 2009
 #########################################################################################
 
-MAKEDEVS_DIR := $(HOSTTOOLS)/usr/local/makedevs
+MAKEDEVS_SRC	:= $(EMBTK_ROOT)/src/makedevs/makedevs.c
+MAKEDEVS_DIR	:= $(HOSTTOOLS)/usr/bin
+MAKEDEVS_BIN	:= $(MAKEDEVS_DIR)/makedevs
 
 makedevs_install: $(MAKEDEVS_DIR)/.installed
+	$(call embtk_generic_msg,"Successfully installed makedevs")
 
 $(MAKEDEVS_DIR)/.installed:
-	$(call embtk_generic_message,"Installing makedevs...")
-	@mkdir -p $(MAKEDEVS_DIR)
-	$(subst ",,$(strip $(HOSTCC_CACHED))) -o $(MAKEDEVS_DIR)/makedevs $(EMBTK_ROOT)/src/makedevs/makedevs.c
-	@touch $@
+	$(call embtk_generic_msg,"Installing makedevs...")
+	$(Q)mkdir -p $(MAKEDEVS_DIR)/usr
+	$(Q)mkdir -p $(MAKEDEVS_DIR)/usr/bin
+	$(hostcc_cached) -o $(MAKEDEVS_BIN) $(MAKEDEVS_SRC)
+	$(Q)touch $@
+
+download_makedevs:
+	$(call embtk_generic_msg,"makedevs is in embtk source, download not needed...")
