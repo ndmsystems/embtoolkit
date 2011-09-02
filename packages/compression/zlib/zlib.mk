@@ -61,7 +61,7 @@ $(ZLIB_SRC_DIR)/.decompressed:
 	$(call embtk_decompress_pkg,zlib)
 
 $(ZLIB_BUILD_DIR)/.configured:
-	$(call embtk_generic_msg,"Configure $(ZLIB_PACKAGE)...")
+	$(call embtk_pinfo,"Configure $(ZLIB_PACKAGE)...")
 	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$(ZLIB_CONFIGURE_OPTS)")
 	$(Q)cd $(ZLIB_BUILD_DIR);					\
 	CC=$(TARGETCC_CACHED)						\
@@ -119,7 +119,7 @@ $(ZLIB_HOST_SRC_DIR)/.decompressed:
 	$(call embtk_decompress_pkg,zlib_host)
 
 $(ZLIB_HOST_BUILD_DIR)/.configured:
-	$(call embtk_generic_msg,"Configure $(ZLIB_HOST_PACKAGE) for host...")
+	$(call embtk_pinfo,"Configure $(ZLIB_HOST_PACKAGE) for host...")
 	$(call EMBTK_PRINT_CONFIGURE_OPTS,"$(ZLIB_HOST_CONFIGURE_OPTS)")
 	$(Q)cd $(ZLIB_HOST_BUILD_DIR);					\
 	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\

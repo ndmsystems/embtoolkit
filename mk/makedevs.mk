@@ -27,14 +27,14 @@ MAKEDEVS_DIR	:= $(HOSTTOOLS)/usr/bin
 MAKEDEVS_BIN	:= $(MAKEDEVS_DIR)/makedevs
 
 makedevs_install: $(MAKEDEVS_DIR)/.installed
-	$(call embtk_generic_msg,"Successfully installed makedevs")
+	$(call embtk_pinfo,"Successfully installed makedevs")
 
 $(MAKEDEVS_DIR)/.installed:
-	$(call embtk_generic_msg,"Installing makedevs...")
+	$(call embtk_pinfo,"Installing makedevs...")
 	$(Q)mkdir -p $(MAKEDEVS_DIR)/usr
 	$(Q)mkdir -p $(MAKEDEVS_DIR)/usr/bin
 	$(hostcc_cached) -o $(MAKEDEVS_BIN) $(MAKEDEVS_SRC)
 	$(Q)touch $@
 
 download_makedevs:
-	$(call embtk_generic_msg,"makedevs is in embtk source, download not needed...")
+	$(call embtk_pinfo,"makedevs is in embtk source, download not needed...")

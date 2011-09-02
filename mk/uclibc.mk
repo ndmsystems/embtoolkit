@@ -40,13 +40,13 @@ EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
 EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_MARCH) -pipe
 
 uclibc_install: $(UCLIBC_BUILD_DIR)/.installed
-	$(call embtk_generic_msg,"Successfully installed uClibc")
+	$(call embtk_pinfo,"Successfully installed uClibc")
 
 uclibc_headers_install: $(UCLIBC_BUILD_DIR)/.headers_installed
-	$(call embtk_generic_msg,"Successfully installed uClibc headers")
+	$(call embtk_pinfo,"Successfully installed uClibc headers")
 
 $(UCLIBC_BUILD_DIR)/.installed:
-	$(call embtk_generic_msg,"Build and install uClibc-$(UCLIBC_VERSION) ...")
+	$(call embtk_pinfo,"Build and install uClibc-$(UCLIBC_VERSION) ...")
 	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/			\
 		CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
 		SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"				\
@@ -58,7 +58,7 @@ $(UCLIBC_BUILD_DIR)/.installed:
 
 $(UCLIBC_BUILD_DIR)/.headers_installed: download_uclibc \
 	$(UCLIBC_BUILD_DIR)/.decompressed $(UCLIBC_BUILD_DIR)/.configured
-	$(call embtk_generic_msg,"Install uClibc-$(UCLIBC_VERSION) headers ...")
+	$(call embtk_pinfo,"Install uClibc-$(UCLIBC_VERSION) headers ...")
 	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) silentoldconfig
 	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/			\
 		CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
@@ -80,7 +80,7 @@ $(UCLIBC_BUILD_DIR)/.headers_installed: download_uclibc \
 
 download_uclibc download_uclibc_headers:
 ifeq ($(CONFIG_EMBTK_UCLIBC_VERSION_GIT),y)
-	$(call embtk_generic_msg,"downloading uClibc using GIT")
+	$(call embtk_pinfo,"downloading uClibc using GIT")
 	@test -e $(EMBTK_ROOT)/src/uClibc-git || \
 	git clone $(UCLIBC_GIT_SITE) $(EMBTK_ROOT)/src/uClibc-git
 ifneq ($(UCLIBC_GIT_BRANCH),master)
@@ -110,5 +110,5 @@ define embtk_configure_uclibc
 	$(shell  $(__embtk_get_uclibc_config) | $(__embtk_set_uclibc_config))
 endef
 $(UCLIBC_BUILD_DIR)/.configured:
-	$(call embtk_generic_msg,"Configure uClibc-$(UCLIBC_VERSION) ...")
+	$(call embtk_pinfo,"Configure uClibc-$(UCLIBC_VERSION) ...")
 	$(Q)$(call embtk_configure_uclibc)

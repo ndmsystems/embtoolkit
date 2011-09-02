@@ -51,10 +51,10 @@ EGLIBC_VERSIONING_OPTION := \
 OPTION_GROUPS_FILE = $(EMBTK_ROOT)/mk/eglibc/eglibc-$(EGLIBC_VERSION)-options.mk
 
 eglibc_headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
-	$(call embtk_generic_msg,"eglibc headers installed")
+	$(call embtk_pinfo,"eglibc headers installed")
 
 eglibc_install: $(EGLIBC_BUILD_DIR)/.installed
-	$(call embtk_generic_msg,"eglibc lbraries and headers installed")
+	$(call embtk_pinfo,"eglibc lbraries and headers installed")
 
 $(EGLIBC_HEADERS_BUILD_DIR)/.installed: download_eglibc \
 	$(EGLIBC_HEADERS_BUILD_DIR)/.decompressed \
@@ -71,7 +71,7 @@ $(EGLIBC_HEADERS_BUILD_DIR)/.installed: download_eglibc \
 	@touch $@
 
 download_eglibc download_eglibc_headers:
-	$(call embtk_generic_message,"downloading eglibc-$(EGLIBC_VERSION) \
+	$(call embtk_pinfo,"downloading eglibc-$(EGLIBC_VERSION) \
 	if necessary ...")
 ifeq ($(CONFIG_EMBTK_EGLIBC_VERSION_STRING),"trunk")
 	@cd $(EMBTK_ROOT)/src; \
@@ -148,7 +148,7 @@ $(EGLIBC_BUILD_DIR)/.configured:
 	@touch $@
 
 EGLIBC_OPTIONS_PARSE:
-	$(call embtk_generic_message,"Parsing \
+	$(call embtk_pinfo,"Parsing \
 	eglibc-$(EGLIBC_VERSION) option groups...")
 	@cat $(OPTION_GROUPS_FILE) > $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
 	@echo "#######################################################" >> $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config

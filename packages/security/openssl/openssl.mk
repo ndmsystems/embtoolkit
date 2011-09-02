@@ -58,7 +58,7 @@ openssl_install:
 
 $(OPENSSL_BUILD_DIR)/.installed: download_openssl \
 	$(OPENSSL_BUILD_DIR)/.decompressed $(OPENSSL_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
+	$(call embtk_pinfo,"Compiling and installing \
 	openssl-$(OPENSSL_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(OPENSSL_BUILD_DIR) CC=$(TARGETCC_CACHED)
 	$(Q)$(MAKE) -C $(OPENSSL_BUILD_DIR) INSTALL_PREFIX=$(SYSROOT)		\

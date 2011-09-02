@@ -54,7 +54,7 @@ define embtk_postinstall_bb
 endef
 
 define embtk_configure_bb
-	$(call embtk_generic_msg,"Configuring busybox...")
+	$(call embtk_pinfo,"Configuring busybox...")
 	$(Q)grep "CONFIG_KEMBTK_BUSYB_" $(EMBTK_ROOT)/.config |			\
 		sed -e 's/CONFIG_KEMBTK_BUSYB_*/CONFIG_/g'			\
 						> $(BB_BUILD_DIR)/.config

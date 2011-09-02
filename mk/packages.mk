@@ -85,7 +85,7 @@ ROOTFS_COMPONENTS_CLEAN := $(subst install,clean,$(ROOTFS_COMPONENTS-))
 host_packages_build:
 ifeq ($(HOSTTOOLS_COMPONENTS-y),)
 else
-	$(call embtk_generic_msg,"Building extra packages intended to run \
+	$(call embtk_pinfo,"Building extra packages intended to run \
 	on your host machine ...")
 	@$(MAKE) $(HOSTTOOLS_COMPONENTS-y)
 endif

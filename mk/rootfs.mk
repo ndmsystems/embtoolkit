@@ -67,12 +67,12 @@ ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/usr/libexec ] && find $$ROOTFS/usr/libex
 endif
 
 rootfs_build:
-	$(call embtk_generic_message,"Building selected root filesystems...")
+	$(call embtk_pinfo,"Building selected root filesystems...")
 	@$(MAKE) rootfs_clean mkinitialrootfs $(ROOTFS_HOSTTOOLS-y) \
 	$(ROOTFS_COMPONENTS-y) build_rootfs_devnodes rootfs_fill \
 	build_tarbz2_rootfs $(FILESYSTEMS-y)
 	$(Q)rm -rf $(ROOTFS)
-	$(call embtk_generic_message,"Build of selected root filesystems \
+	$(call embtk_pinfo,"Build of selected root filesystems \
 	ended successfully!")
 
 rootfs_fill:
@@ -102,7 +102,7 @@ endif
 	@-cp -R $(SYSROOT)/etc/* $(ROOTFS)/etc/ >/dev/null 2>/dev/null
 	@cp -R $(SYSROOT)/root $(ROOTFS)/
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
-	$(call embtk_generic_message,"Stripping binaries as specified...")
+	$(call embtk_pinfo,"Stripping binaries as specified...")
 	@-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- \
 	$(TARGETSTRIP) $(ROOTFS_STRIPPED_FILES) >/dev/null 2>&1
 endif

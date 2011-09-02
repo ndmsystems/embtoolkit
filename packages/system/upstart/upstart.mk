@@ -42,7 +42,7 @@ upstart_install: $(UPSTART_BUILD_DIR)/.installed
 
 $(UPSTART_BUILD_DIR)/.installed: $(UPSTART_DEPS) download_upstart \
 	$(UPSTART_BUILD_DIR)/.decompressed $(UPSTART_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
+	$(call embtk_pinfo,"Compiling and installing \
 	upstart-$(UPSTART_VERSION) in your root filesystem...")
 	$(call __embtk_kill_lt_rpath,$(UPSTART_BUILD_DIR))
 	$(Q)$(MAKE) -C $(UPSTART_BUILD_DIR) $(J)
@@ -51,7 +51,7 @@ $(UPSTART_BUILD_DIR)/.installed: $(UPSTART_DEPS) download_upstart \
 	@touch $@
 
 download_upstart:
-	$(call embtk_generic_message,"Downloading $(UPSTART_PACKAGE) \
+	$(call embtk_pinfo,"Downloading $(UPSTART_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(UPSTART_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(UPSTART_PACKAGE) \
@@ -63,7 +63,7 @@ ifeq ($(CONFIG_EMBTK_UPSTART_NEED_PATCH),y)
 endif
 
 $(UPSTART_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(UPSTART_PACKAGE) ...")
+	$(call embtk_pinfo,"Decompressing $(UPSTART_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(UPSTART_PACKAGE)
 ifeq ($(CONFIG_EMBTK_UPSTART_NEED_PATCH),y)
 	@cd $(UPSTART_BUILD_DIR); \
@@ -95,7 +95,7 @@ $(UPSTART_BUILD_DIR)/.configured:
 	@touch $@
 
 upstart_clean:
-	$(call embtk_generic_message,"cleanup upstart...")
+	$(call embtk_pinfo,"cleanup upstart...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(UPSTART_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(UPSTART_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(UPSTART_INCLUDES)

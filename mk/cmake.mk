@@ -43,21 +43,21 @@ $(CMAKE_BUILD_DIR)/.installed: download_cmake \
 	@touch $@
 
 download_cmake:
-	$(call embtk_generic_message,"Downloading $(CMAKE_PACKAGE) if \
+	$(call embtk_pinfo,"Downloading $(CMAKE_PACKAGE) if \
 	necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(CMAKE_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(CMAKE_PACKAGE) \
 	$(CMAKE_SITE)/$(CMAKE_PACKAGE)
 
 $(CMAKE_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(CMAKE_PACKAGE)...")
+	$(call embtk_pinfo,"Decompressing $(CMAKE_PACKAGE)...")
 	@tar -C $(TOOLS_BUILD) -xzf $(DOWNLOAD_DIR)/$(CMAKE_PACKAGE)
 	@mkdir -p $(CMAKE_BUILD_DIR)
 	@mkdir -p $(CMAKE_DIR)
 	@touch $@
 
 $(CMAKE_BUILD_DIR)/.configured:
-	$(call embtk_generic_message,"Configuring \
+	$(call embtk_pinfo,"Configuring \
 	cmake_$(CMAKE_VERSION)...")
 	@cd $(CMAKE_BUILD_DIR); \
 	$(TOOLS_BUILD)/cmake-$(CMAKE_VERSION)/configure \

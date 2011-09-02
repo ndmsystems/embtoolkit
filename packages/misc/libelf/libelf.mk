@@ -43,7 +43,7 @@ libelf_install:
 
 $(LIBELF_BUILD_DIR)/.installed: $(LIBELF_DEPS) download_libelf \
 	$(LIBELF_BUILD_DIR)/.decompressed $(LIBELF_BUILD_DIR)/.configured
-	$(call embtk_generic_message,"Compiling and installing \
+	$(call embtk_pinfo,"Compiling and installing \
 	libelf-$(LIBELF_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(LIBELF_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(LIBELF_BUILD_DIR) install
@@ -51,7 +51,7 @@ $(LIBELF_BUILD_DIR)/.installed: $(LIBELF_DEPS) download_libelf \
 	@touch $@
 
 download_libelf:
-	$(call embtk_generic_message,"Downloading $(LIBELF_PACKAGE) \
+	$(call embtk_pinfo,"Downloading $(LIBELF_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(LIBELF_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(LIBELF_PACKAGE) \
@@ -63,7 +63,7 @@ ifeq ($(CONFIG_EMBTK_LIBELF_NEED_PATCH),y)
 endif
 
 $(LIBELF_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(LIBELF_PACKAGE) ...")
+	$(call embtk_pinfo,"Decompressing $(LIBELF_PACKAGE) ...")
 	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(LIBELF_PACKAGE)
 ifeq ($(CONFIG_EMBTK_LIBELF_NEED_PATCH),y)
 	cd $(LIBELF_BUILD_DIR); \
@@ -96,7 +96,7 @@ $(LIBELF_BUILD_DIR)/.configured:
 	@touch $@
 
 libelf_clean:
-	$(call embtk_generic_message,"cleanup libelf...")
+	$(call embtk_pinfo,"cleanup libelf...")
 	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBELF_BINS)
 	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBELF_SBINS)
 	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBELF_INCLUDES)

@@ -24,7 +24,7 @@
 ################################################################################
 
 help:
-	$(call embtk_generic_msg,"Embedded systems Toolkit help. Please \
+	$(call embtk_pinfo,"Embedded systems Toolkit help. Please \
 	visit - http://embtoolkit.org - for more details")
 	@echo " ---------------------------"
 	@echo "| Building and configuring: |"

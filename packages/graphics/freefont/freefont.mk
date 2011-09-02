@@ -49,7 +49,7 @@ $(TTMKFDIR_BUILD_DIR)/.installed: download_ttmkfdir \
 	@touch $@
 
 $(TTMKFDIR_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(TTMKFDIR_PACKAGE)...")
+	$(call embtk_pinfo,"Decompressing $(TTMKFDIR_PACKAGE)...")
 	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(TTMKFDIR_PACKAGE)
 	$(Q)cd $(TTMKFDIR_BUILD_DIR); \
 	patch -p1 < $(DOWNLOAD_DIR)/ttmkfdir-$(TTMKFDIR_VERSION).patch
@@ -59,7 +59,7 @@ ttmkfdir_clean:
 	$(Q)rm -rf $(SYSROOT)/usr/bin/ttmkfdir
 
 download_ttmkfdir:
-	$(call embtk_generic_message,"Downloading ttmkfdir-$(TTMKFDIR_VERSION) \
+	$(call embtk_pinfo,"Downloading ttmkfdir-$(TTMKFDIR_VERSION) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(TTMKFDIR_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(TTMKFDIR_PACKAGE) \
@@ -70,7 +70,7 @@ download_ttmkfdir:
 
 $(FREEFONT_TTF_BUILD_DIR)/.installed: freetype_install \
 	download_freefont_ttf $(FREEFONT_TTF_BUILD_DIR)/.decompressed
-	$(call embtk_generic_message,"Installing \
+	$(call embtk_pinfo,"Installing \
 	freefont-$(FREEFONT_TTF_VERSION) in your root filesystem...")
 	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts
 	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts/truetype
@@ -80,16 +80,16 @@ $(FREEFONT_TTF_BUILD_DIR)/.installed: freetype_install \
 	@touch $@
 
 download_freefont_ttf:
-	$(call embtk_generic_message,"Downloading $(FREEFONT_TTF_PACKAGE) \
+	$(call embtk_pinfo,"Downloading $(FREEFONT_TTF_PACKAGE) \
 	if necessary...")
 	@test -e $(DOWNLOAD_DIR)/$(FREEFONT_TTF_PACKAGE) || \
 	wget -O $(DOWNLOAD_DIR)/$(FREEFONT_TTF_PACKAGE) \
 	$(FREEFONT_SITE)/$(FREEFONT_TTF_PACKAGE)
 
 $(FREEFONT_TTF_BUILD_DIR)/.decompressed:
-	$(call embtk_generic_message,"Decompressing $(FREEFONT_TTF_PACKAGE)...")
+	$(call embtk_pinfo,"Decompressing $(FREEFONT_TTF_PACKAGE)...")
 	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(FREEFONT_TTF_PACKAGE)
 	@touch $@
 
 freefont_ttf_clean:
-	$(call embtk_generic_message,"Cleanup freefont...")
+	$(call embtk_pinfo,"Cleanup freefont...")

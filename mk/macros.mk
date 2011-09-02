@@ -39,8 +39,8 @@ endef
 define embtk_echo_green
 	echo -e $(__embtk_color_green)$(1)$(__embtk_no_color)
 endef
-#usage $(call echo_yellow,$(TEXT))
-define echo_yellow
+#usage $(call embtk_echo_yellow,$(TEXT))
+define embtk_echo_yellow
 	echo -e $(__embtk_color_yellow)$(1)$(__embtk_no_color)
 endef
 #usage $(call embtk_echo_blue,$(TEXT))
@@ -105,23 +105,25 @@ define EMBTK_INSTALL_MSG
 	$(call embtk_echo_blue,"################################################################################")
 endef
 
-#Install message
-#usage $(call embtk_error_msg,$(MESSAGE))
-define embtk_error_msg
+# Print warning message
+define embtk_pwarning
+	$(call embtk_echo_yellow,"################################################################################")
+	$(call embtk_echo_yellow,"# EmbToolkit # WARNING: $(1)")
+	$(call embtk_echo_yellow,"################################################################################")
+endef
+
+# Print error message
+define embtk_perror
 	$(call embtk_echo_red,"################################################################################")
 	$(call embtk_echo_red,"# EmbToolkit # ERROR: $(1)")
 	$(call embtk_echo_red,"################################################################################")
 endef
 
-#Generic message
-#usage $(call embtk_generic_message,$(GENERIC_MESSAGE))
-define embtk_generic_message
+# Print info message
+define embtk_pinfo
 	$(call embtk_echo_blue,"################################################################################")
 	$(call embtk_echo_blue,"# EmbToolkit # $(1)")
 	$(call embtk_echo_blue,"################################################################################")
-endef
-define embtk_generic_msg
-	$(call embtk_generic_message,$(1))
 endef
 
 #Successful build of EmbToolkit message
@@ -323,7 +325,7 @@ define __embtk_print_configure_opts
 	do echo -e $(__embtk_color_blue)$$i$(__embtk_no_color); done
 endef
 define embtk_configure_pkg
-	$(call embtk_generic_msg,"Configure $(__embtk_pkg_package)...")
+	$(call embtk_pinfo,"Configure $(__embtk_pkg_package)...")
 	$(call __embtk_configure_autoreconfpkg,$(1))
 	$(Q)test -e $(__embtk_pkg_srcdir)/configure || exit 1
 	$(call __embtk_print_configure_opts,"$(__embtk_pkg_configureopts)")
@@ -368,7 +370,7 @@ __embtk_hostpkg_rpathldflags="-Wl,-rpath,$(HOSTTOOLS)/usr/lib"
 __embtk_hostpkg_rpath=$(strip $(if $(__embtk_pkg_setrpath),			\
 				$(__embtk_hostpkg_rpathldflags)))
 define embtk_configure_hostpkg
-	$(call embtk_generic_msg,"Configure $(__embtk_pkg_package) for host...")
+	$(call embtk_pinfo,"Configure $(__embtk_pkg_package) for host...")
 	$(call __embtk_configure_autoreconfpkg,$(1))
 	$(Q)test -e $(__embtk_pkg_srcdir)/configure || exit 1
 	$(call __embtk_print_configure_opts,"$(__embtk_pkg_configureopts)")
@@ -424,7 +426,7 @@ __embtk_single_make_hostinstall = $(__embtk_pkg_makeenv)			\
 
 __embtk_autotoolspkg-y=$(2)
 define __embtk_install_pkg_make
-	$(call embtk_generic_msg,"Compiling and installing $(__embtk_pkg_name)-$(__embtk_pkg_version) in your root filesystem...")
+	$(call embtk_pinfo,"Compiling and installing $(__embtk_pkg_name)-$(__embtk_pkg_version) in your root filesystem...")
 	$(Q)$(if $(strip $(__embtk_pkg_deps)),$(MAKE) $(__embtk_pkg_deps))
 	$(Q)$(call embtk_download_pkg,$(1))
 	$(Q)$(call embtk_decompress_pkg,$(1))
@@ -441,7 +443,7 @@ define __embtk_install_pkg_make
 	$(Q)touch $(__embtk_pkg_builddir)/.installed
 endef
 define __embtk_install_hostpkg_make
-	$(call embtk_generic_msg,"Compiling and installing $(__embtk_pkg_name)-$(__embtk_pkg_version) for host...")
+	$(call embtk_pinfo,"Compiling and installing $(__embtk_pkg_name)-$(__embtk_pkg_version) for host...")
 	$(Q)$(if $(strip $(__embtk_pkg_deps)),$(MAKE) $(__embtk_pkg_deps))
 	$(Q)$(call embtk_download_pkg,$(1))
 	$(Q)$(call embtk_decompress_pkg,$(1))
@@ -535,7 +537,7 @@ define __embtk_download_pkg_exitfailure
 endef
 
 define embtk_download_pkg
-	$(call embtk_generic_msg,"Download $(__embtk_pkg_package) if needed...")
+	$(call embtk_pinfo,"Download $(__embtk_pkg_package) if needed...")
 	$(Q)test -e $(__embtk_pkg_package_f) ||					\
 	$(call embtk_wget,							\
 		$(__embtk_pkg_package),						\
@@ -555,7 +557,7 @@ endef
 # $(call embtk_decompress_pkg,pkgname)
 #
 define embtk_decompress_pkg
-	$(call embtk_generic_msg,"Decrompressing $(__embtk_pkg_package) ...")
+	$(call embtk_pinfo,"Decrompressing $(__embtk_pkg_package) ...")
 	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" = "xy" ] &&		\
 	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
 		tar -C $(dir $(__embtk_pkg_srcdir)) -xzf			\
@@ -589,7 +591,7 @@ endef
 # $(call embtk_cleanup_pkg,PACKAGE)
 #
 define embtk_cleanup_pkg
-	$(call embtk_generic_message,"Cleanup $(__embtk_pkg_name)...")
+	$(call embtk_pinfo,"Cleanup $(__embtk_pkg_name)...")
 	$(Q)-if [ "x$(__embtk_pkg_etc)" != "x" ] && [ -e $(SYSROOT)/etc ];	\
 		then								\
 		cd $(SYSROOT)/etc; rm -rf $(__embtk_pkg_etc);			\
