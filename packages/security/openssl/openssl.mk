@@ -31,6 +31,10 @@ OPENSSL_PACKAGE		:= openssl-$(OPENSSL_VERSION).tar.gz
 OPENSSL_SRC_DIR		:= $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
 OPENSSL_BUILD_DIR	:= $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
 
+OPENSSL_NODESTDIR	:= y
+OPENSSL_MAKE_OPTS	:= CC=$(TARGETCC_CACHED) INSTALL_PREFIX=$(SYSROOT)
+OPENSSL_MAKE_OPTS	+= LIBDIR=$(LIBDIR) MANDIR=/usr/share/man -j1
+
 OPENSSL_ETC		= ssl
 OPENSSL_BINS		= c_rehash openssl
 OPENSSL_SBINS		=
@@ -52,40 +56,22 @@ OPENSSL_LINUX_TARGET := linux-generic32
 endif
 
 openssl_install:
-	@test -e $(OPENSSL_BUILD_DIR)/.installed || \
-	$(MAKE) $(OPENSSL_BUILD_DIR)/.installed
-	$(Q)$(MAKE) $(OPENSSL_BUILD_DIR)/.special
+	$(call embtk_makeinstall_pkg,openssl)
 
-$(OPENSSL_BUILD_DIR)/.installed: download_openssl \
-	$(OPENSSL_BUILD_DIR)/.decompressed $(OPENSSL_BUILD_DIR)/.configured
-	$(call embtk_pinfo,"Compiling and installing \
-	openssl-$(OPENSSL_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(OPENSSL_BUILD_DIR) CC=$(TARGETCC_CACHED)
-	$(Q)$(MAKE) -C $(OPENSSL_BUILD_DIR) INSTALL_PREFIX=$(SYSROOT)		\
-		LIBDIR=$(LIBDIR) MANDIR=/usr/share/man install
-	$(Q)$(MAKE) libtool_files_adapt
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
-
-download_openssl:
-	$(call embtk_download_pkg,openssl)
-
-$(OPENSSL_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,openssl)
-
-$(OPENSSL_BUILD_DIR)/.configured:
-	$(Q)cd $(OPENSSL_BUILD_DIR); \
-	./Configure $(OPENSSL_LINUX_TARGET) \
+define embtk_beforeinstall_openssl
+	$(Q)rm -rf $(OPENSSL_BUILD_DIR)/.postinstalled
+	$(Q)cd $(OPENSSL_BUILD_DIR);						\
+	$(CONFIG_SHELL) $(OPENSSL_SRC_DIR)/Configure $(OPENSSL_LINUX_TARGET)	\
 	--openssldir=/etc/ssl --prefix=/usr shared
-	@touch $@
+endef
 
-openssl_clean:
-	$(call embtk_cleanup_pkg,openssl)
-
-.PHONY: $(OPENSSL_BUILD_DIR)/.special
-
-$(OPENSSL_BUILD_DIR)/.special:
+define embtk_postinstall_openssl
+	$(Q)if [ -e $(OPENSSL_BUILD_DIR)/.postinstalled ]; then			\
+		$(MAKE) libtool_files_adapt;					\
+		$(MAKE) pkgconfig_files_adapt;					\
+		touch $(OPENSSL_BUILD_DIR)/.postinstalled;			\
+	fi
 	$(Q)mkdir -p $(ROOTFS)
 	$(Q)mkdir -p $(ROOTFS)/etc
 	$(Q)-cp -R $(SYSROOT)/etc/ssl $(ROOTFS)/etc/
-	@touch $@
+endef
