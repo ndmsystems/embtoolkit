@@ -459,15 +459,31 @@ define __embtk_install_hostpkg_make
 endef
 
 #
+# A macro to exit with error when needed package variables not define.
+# Usage:
+# $(call __embtk_install_paramsfailure,pkgname)
+#
+define __embtk_install_paramsfailure
+	$(call embtk_perror,"!Not all needed variables defined for $(1)!")
+	exit 1
+endef
+
+__embtk_xinstall_xpkg_allvarset-y = $(and $(__embtk_pkg_name),			\
+					$(__embtk_pkg_version),			\
+					$(__embtk_pkg_site))
+
+#
 # A macro to install automatically a package, using autotools scripts, intended
 # to run on the target
 # Usage:
 # $(call embtk_install_pkg,package)
 #
 define embtk_install_pkg
-	$(if $(__embtk_pkg_installed-y),true,
-		$(call __embtk_install_pkg_make,$(1),autotools))
-	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
+	$(if $(__embtk_xinstall_xpkg_allvarset-y),
+		$(if $(__embtk_pkg_installed-y),true,
+			$(call __embtk_install_pkg_make,$(1),autotools))
+		$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv))),
+		$(call __embtk_install_paramsfailure,$(1)))
 endef
 
 #
@@ -477,9 +493,11 @@ endef
 # $(call embtk_makeinstall_pkg,package)
 #
 define embtk_makeinstall_pkg
-	$(if $(__embtk_pkg_installed-y),true,
-		$(call __embtk_install_pkg_make,$(1)))
-	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
+	$(if $(__embtk_xinstall_xpkg_allvarset-y),
+		$(if $(__embtk_pkg_installed-y),true,
+			$(call __embtk_install_pkg_make,$(1)))
+		$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv))),
+		$(call __embtk_install_paramsfailure,$(1)))
 endef
 
 #
@@ -489,9 +507,11 @@ endef
 # $(call embtk_install_hostpkg,package)
 #
 define embtk_install_hostpkg
-	$(if $(__embtk_pkg_installed-y),true,
-		$(call __embtk_install_hostpkg_make,$(1),autotools))
-	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
+	$(if $(__embtk_xinstall_xpkg_allvarset-y),
+		$(if $(__embtk_pkg_installed-y),true,
+			$(call __embtk_install_hostpkg_make,$(1),autotools))
+		$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv))),
+		$(call __embtk_install_paramsfailure,$(1)))
 endef
 
 #
@@ -501,9 +521,11 @@ endef
 # $(call embtk_makeinstall_hostpkg,package)
 #
 define embtk_makeinstall_hostpkg
-	$(if $(__embtk_pkg_installed-y),true,
-		$(call __embtk_install_hostpkg_make,$(1)))
-	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
+	$(if $(__embtk_xinstall_xpkg_allvarset-y),
+		$(if $(__embtk_pkg_installed-y),true,
+			$(call __embtk_install_hostpkg_make,$(1)))
+		$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv))),
+		$(call __embtk_install_paramsfailure,$(1)))
 endef
 
 #
