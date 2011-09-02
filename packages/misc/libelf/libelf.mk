@@ -23,84 +23,33 @@
 # \date         January 2010
 ################################################################################
 
-LIBELF_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_LIBELF_VERSION_STRING)))
-LIBELF_SITE := http://www.mr511.de/software
-LIBELF_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/libelf/$(LIBELF_VERSION)
-LIBELF_PACKAGE := libelf-$(LIBELF_VERSION).tar.gz
-LIBELF_BUILD_DIR := $(PACKAGES_BUILD)/libelf-$(LIBELF_VERSION)
+LIBELF_NAME		:= libelf
+LIBELF_VERSION		:= $(call embtk_get_pkgversion,libelf)
+LIBELF_SITE		:= http://www.mr511.de/software
+LIBELF_PACKAGE		:= libelf-$(LIBELF_VERSION).tar.gz
+LIBELF_SRC_DIR		:= $(PACKAGES_BUILD)/libelf-$(LIBELF_VERSION)
+LIBELF_BUILD_DIR	:= $(PACKAGES_BUILD)/libelf-$(LIBELF_VERSION)
 
-LIBELF_BINS =
-LIBELF_SBINS =
-LIBELF_INCLUDES = libelf gelf.h libelf.h nlist.h
-LIBELF_LIBS = libelf.a
-LIBELF_PKGCONFIGS = libelf.pc
+LIBELF_BINS		:=
+LIBELF_SBINS		:=
+LIBELF_INCLUDES		:= libelf gelf.h libelf.h nlist.h
+LIBELF_LIBS		:= libelf.a
+LIBELF_PKGCONFIGS	:= libelf.pc
 
-LIBELF_DEPS := gettext_install
+LIBELF_CONFIGURE_OPTS	:= --enable-elf64
+LIBELF_DEPS		:= gettext_install
 
-libelf_install:
-	@test -e $(LIBELF_BUILD_DIR)/.installed || \
-	$(MAKE) $(LIBELF_BUILD_DIR)/.installed
 
-$(LIBELF_BUILD_DIR)/.installed: $(LIBELF_DEPS) download_libelf \
-	$(LIBELF_BUILD_DIR)/.decompressed $(LIBELF_BUILD_DIR)/.configured
-	$(call embtk_pinfo,"Compiling and installing \
-	libelf-$(LIBELF_VERSION) in your root filesystem...")
-	$(Q)$(MAKE) -C $(LIBELF_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(LIBELF_BUILD_DIR) install
-	$(Q)$(MAKE) pkgconfig_files_adapt
-	@touch $@
+#
+# libelf for host development machine
+#
 
-download_libelf:
-	$(call embtk_pinfo,"Downloading $(LIBELF_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(LIBELF_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(LIBELF_PACKAGE) \
-	$(LIBELF_SITE)/$(LIBELF_PACKAGE)
-ifeq ($(CONFIG_EMBTK_LIBELF_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/libelf-$(LIBELF_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/libelf-$(LIBELF_VERSION).patch \
-	$(LIBELF_PATCH_SITE)/libelf-$(LIBELF_VERSION)-*.patch
-endif
+LIBELF_HOST_NAME	:= $(LIBELF_NAME)
+LIBELF_HOST_VERSION	:= $(LIBELF_VERSION)
+LIBELF_HOST_SITE	:= $(LIBELF_SITE)
+LIBELF_HOST_PACKAGE	:= $(LIBELF_PACKAGE)
+LIBELF_HOST_SRC_DIR	:= $(TOOLS_BUILD)/libelf-$(LIBELF_VERSION)
+LIBELF_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/libelf-$(LIBELF_VERSION)
 
-$(LIBELF_BUILD_DIR)/.decompressed:
-	$(call embtk_pinfo,"Decompressing $(LIBELF_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(LIBELF_PACKAGE)
-ifeq ($(CONFIG_EMBTK_LIBELF_NEED_PATCH),y)
-	cd $(LIBELF_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/libelf-$(LIBELF_VERSION).patch
-endif
-	@touch $@
-
-$(LIBELF_BUILD_DIR)/.configured:
-	$(Q)cd $(LIBELF_BUILD_DIR); \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	AS=$(CROSS_COMPILE)as \
-	LD=$(TARGETLD) \
-	NM=$(TARGETNM) \
-	STRIP=$(TARGETSTRIP) \
-	OBJDUMP=$(TARGETOBJDUMP) \
-	OBJCOPY=$(TARGETOBJCOPY) \
-	CFLAGS="$(TARGET_CFLAGS)" \
-	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
-	PKG_CONFIG=$(PKGCONFIG_BIN) \
-	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH) \
-	./configure --build=$(HOST_BUILD) \
-	--host=$(STRICT_GNU_TARGET) \
-	--target=$(STRICT_GNU_TARGET) \
-	--prefix=$(SYSROOT)/usr --enable-elf64 --libdir=$(SYSROOT)/usr/$(LIBDIR)
-	@touch $@
-
-libelf_clean:
-	$(call embtk_pinfo,"cleanup libelf...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(LIBELF_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(LIBELF_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(LIBELF_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(LIBELF_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(LIBELF_PKGCONFIGS)
-	$(Q)-rm -rf $(LIBELF_BUILD_DIR)*
-
+LIBELF_HOST_CONFIGURE_OPTS	:= --enable-elf64
+LIBELF_HOST_DEPS		:= gettext_host_install

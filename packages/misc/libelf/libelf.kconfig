@@ -22,8 +22,16 @@
 # \date         January 2010
 ################################################################################
 
+config EMBTK_HOST_HAVE_LIBELF
+	bool
+	select EMBTK_LIBELF_PKG_IS_TARGZ
+	select EMBTK_HOST_HAVE_GETTEXT
+	help
+		libelf for host development machine
+
 config EMBTK_HAVE_LIBELF
 	bool "Have libelf"
+	select EMBTK_LIBELF_PKG_IS_TARGZ
 	select EMBTK_HAVE_GETTEXT
 	help
 		libelf lets you read, modify or create ELF files in an
@@ -32,7 +40,7 @@ config EMBTK_HAVE_LIBELF
 		on an Intel-based system.
 choice
 	prompt "libelf version you wish"
-	depends on EMBTK_HAVE_LIBELF
+	depends on EMBTK_HAVE_LIBELF || EMBTK_HOST_HAVE_LIBELF
 	help
 		Here you can choose which version of libelf you want to use.
 
@@ -47,4 +55,22 @@ config EMBTK_LIBELF_VERSION_STRING
 
 config EMBTK_LIBELF_NEED_PATCH
 	bool
+	select EMBTK_LIBELF_HOST_NEED_PATCH
+config EMBTK_LIBELF_NEED_AUTORECONF
+	bool
+	select EMBTK_LIBELF_HOST_NEED_AUTORECONF
+config EMBTK_LIBELF_PKG_IS_TARGZ
+	bool
+	select EMBTK_LIBELF_HOST_PKG_IS_TARGZ
+config EMBTK_LIBELF_PKG_IS_TARBZ2
+	bool
+	select EMBTK_LIBELF_HOST_PKG_IS_TARBZ2
 
+config EMBTK_LIBELF_HOST_NEED_PATCH
+	bool
+config EMBTK_LIBELF_HOST_NEED_AUTORECONF
+	bool
+config EMBTK_LIBELF_HOST_PKG_IS_TARGZ
+	bool
+config EMBTK_LIBELF_HOST_PKG_IS_TARBZ2
+	bool

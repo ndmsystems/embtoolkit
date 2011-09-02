@@ -47,6 +47,7 @@ HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_INTLTOOL) += intltool_host_install
 #libelf
 include $(EMBTK_ROOT)/packages/misc/libelf/libelf.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBELF) += libelf_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBELF) += libelf_host_install
 
 #libxml2
 include $(EMBTK_ROOT)/packages/misc/libxml/libxml.mk
