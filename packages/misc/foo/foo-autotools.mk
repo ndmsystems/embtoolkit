@@ -26,7 +26,6 @@
 FOO_NAME		:= foo
 FOO_VERSION		:= $(call embtk_get_pkgversion,foo)
 FOO_SITE		:= http://www.foo.org/download
-FOO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 FOO_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/foo/$(FOO_VERSION)
 FOO_PACKAGE		:= foo-$(FOO_VERSION).tar.gz
 FOO_SRC_DIR		:= $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
@@ -45,12 +44,3 @@ FOO_MAKE_OPTS		:=
 FOO_MAKE_DIRS		:=
 
 FOO_DEPS		:=
-
-foo_install:
-	$(call embtk_install_pkg,foo)
-
-download_foo:
-	$(call embtk_download_pkg,foo)
-
-foo_clean:
-	$(call embtk_cleanup_pkg,foo)
