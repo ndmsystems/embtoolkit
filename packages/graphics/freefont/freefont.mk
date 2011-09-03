@@ -23,73 +23,31 @@
 # \date         January 2010
 ################################################################################
 
-TTMKFDIR_SITE := http://ftp.de.debian.org/debian/pool/main/t/ttmkfdir
-TTMKFDIR_VERSION := 3.0.9
-TTMKFDIR_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/ttmkfdir/$(TTMKFDIR_VERSION)
-TTMKFDIR_PACKAGE := ttmkfdir_$(TTMKFDIR_VERSION).orig.tar.gz
-TTMKFDIR_BUILD_DIR := $(PACKAGES_BUILD)/ttmkfdir-$(TTMKFDIR_VERSION)
+FREEFONT_TTF_NAME	:= freefont-ttf
+FREEFONT_TTF_SITE	:= http://ftp.gnu.org/gnu/freefont
+FREEFONT_TTF_VERSION	:= $(call embtk_get_pkgversion,freefont_ttf)
+FREEFONT_TTF_PACKAGE	:= freefont-ttf-$(FREEFONT_TTF_VERSION).tar.gz
+FREEFONT_TTF_SRC_DIR	:= $(PACKAGES_BUILD)/freefont-$(FREEFONT_TTF_VERSION)
+FREEFONT_TTF_BUILD_DIR	:= $(PACKAGES_BUILD)/freefont-$(FREEFONT_TTF_VERSION)
 
-FREEFONT_SITE := http://ftp.gnu.org/gnu/freefont
-FREEFONT_TTF_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_FREEFONT_TTF_VERSION_STRING)))
-FREEFONT_TTF_PACKAGE := freefont-ttf-$(FREEFONT_TTF_VERSION).tar.gz
-FREEFONT_TTF_BUILD_DIR := $(PACKAGES_BUILD)/freefont-$(FREEFONT_TTF_VERSION)
-
-FREEFONT_OTF_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_FREEFONT_OTF_VERSION_STRING)))
-FREEFONT_OTF_PACKAGE := freefont-otf-$(FREEFONT_OTF_VERSION).zip
-FREEFONT_OTF_BUILD_DIR := $(PACKAGES_BUILD)/freefont-otf-$(FREEFONT_OTF_VERSION)
+FREEFONT_TTF_DEPS := freetype_install
+FREEFONT_TTF_DEPS += download_freefont_ttf
+FREEFONT_TTF_DEPS += $(FREEFONT_TTF_BUILD_DIR)/.decompressed
 
 freefont_ttf_install: $(FREEFONT_TTF_BUILD_DIR)/.installed
-ttmkfdir_install: $(TTMKFDIR_BUILD_DIR)/.installed
+	$(call embtk_pinfo,"Successfully installed GNU FreeFont: TrueType")
 
-$(TTMKFDIR_BUILD_DIR)/.installed: download_ttmkfdir \
-	$(TTMKFDIR_BUILD_DIR)/.decompressed
-	$(Q)$(MAKE) -C $(TTMKFDIR_BUILD_DIR) CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) DEBUG=""
-	$(Q)$(MAKE) -C $(TTMKFDIR_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	@touch $@
-
-$(TTMKFDIR_BUILD_DIR)/.decompressed:
-	$(call embtk_pinfo,"Decompressing $(TTMKFDIR_PACKAGE)...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(TTMKFDIR_PACKAGE)
-	$(Q)cd $(TTMKFDIR_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/ttmkfdir-$(TTMKFDIR_VERSION).patch
-	@touch $@
-
-ttmkfdir_clean:
-	$(Q)rm -rf $(SYSROOT)/usr/bin/ttmkfdir
-
-download_ttmkfdir:
-	$(call embtk_pinfo,"Downloading ttmkfdir-$(TTMKFDIR_VERSION) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(TTMKFDIR_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(TTMKFDIR_PACKAGE) \
-	$(TTMKFDIR_SITE)/$(TTMKFDIR_PACKAGE)
-	@test -e $(DOWNLOAD_DIR)/ttmkfdir-$(TTMKFDIR_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/ttmkfdir-$(TTMKFDIR_VERSION).patch \
-	$(TTMKFDIR_PATCH_SITE)/ttmkfdir-$(TTMKFDIR_VERSION)-*.patch
-
-$(FREEFONT_TTF_BUILD_DIR)/.installed: freetype_install \
-	download_freefont_ttf $(FREEFONT_TTF_BUILD_DIR)/.decompressed
-	$(call embtk_pinfo,"Installing \
-	freefont-$(FREEFONT_TTF_VERSION) in your root filesystem...")
+$(FREEFONT_TTF_BUILD_DIR)/.installed: $(FREEFONT_TTF_DEPS)
+	$(call embtk_pinfo,"Installing freefont-$(FREEFONT_TTF_VERSION) in your root filesystem...")
+	$(Q)mkdir -p $(ROOTFS)
+	$(Q)mkdir -p $(ROOTFS)/usr
+	$(Q)mkdir -p $(ROOTFS)/usr/share
 	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts
 	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts/truetype
 	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts/truetype/freefont
-	$(Q)cp $(FREEFONT_TTF_BUILD_DIR)/*.ttf \
-	$(ROOTFS)/usr/share/fonts/truetype/freefont/
-	@touch $@
-
-download_freefont_ttf:
-	$(call embtk_pinfo,"Downloading $(FREEFONT_TTF_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(FREEFONT_TTF_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(FREEFONT_TTF_PACKAGE) \
-	$(FREEFONT_SITE)/$(FREEFONT_TTF_PACKAGE)
+	$(Q)cp $(FREEFONT_TTF_BUILD_DIR)/*.ttf					\
+				$(ROOTFS)/usr/share/fonts/truetype/freefont/
 
 $(FREEFONT_TTF_BUILD_DIR)/.decompressed:
-	$(call embtk_pinfo,"Decompressing $(FREEFONT_TTF_PACKAGE)...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(FREEFONT_TTF_PACKAGE)
-	@touch $@
+	$(call embtk_decompress_pkg,freefont_ttf)
 
-freefont_ttf_clean:
-	$(call embtk_pinfo,"Cleanup freefont...")

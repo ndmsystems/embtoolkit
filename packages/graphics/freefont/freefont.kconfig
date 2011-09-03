@@ -22,11 +22,12 @@
 # \date         January 2010
 ################################################################################
 
-#####################
-#FreeFont: TrueType #
-#####################
+#
+# FreeFont: TrueType
+#
 config EMBTK_HAVE_FREEFONT_TTF
 	bool "Have GNU FreeFont: TrueType format"
+	select EMBTK_FREEFONT_TTF_PKG_IS_TARGZ
 	select EMBTK_HAVE_FREETYPE
 	help
 		GNU FreeFont is a free family of scalable outline fonts,
@@ -39,36 +40,19 @@ choice
 	help
 	 Here you can choose which version of FreeFont you want to use.
 
-	config  EMBTK_FREEFONT_TTF_VERSION_20090104
-		bool "freefont-ttf-20090104"
+	config  EMBTK_FREEFONT_TTF_VERSION_20100919
+		bool "freefont-ttf-20100919"
 endchoice
 
 config EMBTK_FREEFONT_TTF_VERSION_STRING
 	string
-	default "20090104"	if EMBTK_FREEFONT_TTF_VERSION_20090104
+	default "20100919"	if EMBTK_FREEFONT_TTF_VERSION_20100919
 
-#####################
-#FreeFont: OpenType #
-#####################
-#config EMBTK_HAVE_FREEFONT_OTF
-#	bool "Have GNU FreeFont: OpenType format"
-#	select EMBTK_HAVE_FREETYPE
-#	help
-#		GNU FreeFont is a free family of scalable outline fonts,
-#		suitable for general use on computers and for desktop
-#		publishing. It is Unicode-encoded for compatability with all
-#		modern operating systems.
-#choice
-#	prompt "FreeFont version you wish: OpenType format"
-#	depends on EMBTK_HAVE_FREEFONT_OTF
-#	help
-#	 Here you can choose which version of FreeFont you want to use.
-#
-#	config  EMBTK_FREEFONT_OTF_VERSION_20090104
-#		bool "freefont-otf-20090104"
-#endchoice
-#
-#config EMBTK_FREEFONT_OTF_VERSION_STRING
-#	string
-#	default "20090104"	if EMBTK_FREEFONT_TTF_VERSION_20090104
-
+config EMBTK_FREEFONT_TTF_NEED_PATCH
+	bool
+config EMBTK_FREEFONT_TTF_NEED_AUTORECONF
+	bool
+config EMBTK_FREEFONT_TTF_PKG_IS_TARGZ
+	bool
+config EMBTK_FREEFONT_TTF_PKG_IS_TARBZ2
+	bool
