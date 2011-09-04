@@ -51,13 +51,13 @@ menu "Toolchain configuration"
 source "kconfig/toolchain.kconfig"
 endmenu
 
-menu "Target build options"
-source kconfig/targetbuildopts.kconfig
-endmenu
-
-menu "Debugging system"
+menu "Debugging systems (GDB, strace, etc.)"
 source "packages/development/gdb/gdb.kconfig"
 source "kconfig/strace.kconfig"
+endmenu
+
+menu "Target build options"
+source kconfig/targetbuildopts.kconfig
 endmenu
 
 menu "Embtoolkit build options and host tools"
