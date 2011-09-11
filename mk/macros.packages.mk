@@ -115,8 +115,16 @@ __embtk_pkg_mirror1		= $(strip $($(PKGV)_MIRROR1))
 __embtk_pkg_mirror2		= $(strip $($(PKGV)_MIRROR2))
 __embtk_pkg_mirror3		= $(strip $($(PKGV)_MIRROR3))
 __embtk_pkg_package		= $(strip $($(PKGV)_PACKAGE))
+__embtk_pkg_usegit		= $(CONFIG_EMBTK_$(PKGV)_VERSION_GIT)
+__embtk_pkg_gitsite		= $(strip $($(PKGV)_GIT_SITE))
+__embtk_pkg_gitbranch		= $(or $(subst "",,$(strip $(CONFIG_EMBTK_$(PKGV)_GIT_BRANCH))),master)
+__embtk_pkg_gitrev		= $(or $(subst "",,$(strip $(CONFIG_EMBTK_$(PKGV)_GIT_REVISION))),HEAD)
+__embtk_pkg_refspec		= $(subst "",,$(strip $(CONFIG_EMBTK_$(PKGV)_REFSPEC)))
+__embtk_pkg_localgit		= $(EMBTK_ROOT)/src/$(__embtk_pkg_refspec)/$(__embtk_pkg_name).git
 __embtk_pkg_package_f		= $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_package)
-__embtk_pkg_srcdir		= $(patsubst %/,%,$(strip $($(PKGV)_SRC_DIR)))
+__embtk_pkg_srcdir		= $(strip $(if $(__embtk_pkg_usegit),		\
+				$(__embtk_pkg_localgit),			\
+				$(patsubst %/,%,$(strip $($(PKGV)_SRC_DIR)))))
 __embtk_pkg_builddir		= $(patsubst %/,%,$(strip $($(PKGV)_BUILD_DIR)))
 
 __embtk_pkg_etc			= $(strip $($(PKGV)_ETC))
@@ -440,8 +448,27 @@ define __embtk_download_pkg_exitfailure
 	exit 1)
 endef
 
+define __embtk_download_pkg_from_git
+	$(call embtk_echo_blue,"$(__embtk_pkg_name) using GIT")
+	$(call embtk_echo_blue,"\tBranch    : $(__embtk_pkg_gitbranch)")
+	$(call embtk_echo_blue,"\tRevision  : $(__embtk_pkg_gitrev)")
+	$(call embtk_echo_blue,"\tIn        : $(__embtk_pkg_refspec)")
+	$(call embtk_echo_blue,"\tClone URL : $(__embtk_pkg_gitsite)")
+	test -e $(__embtk_pkg_localgit) ||					\
+	git clone $(__embtk_pkg_gitsite) $(__embtk_pkg_localgit)
+	$(if $(findstring master,$(__embtk_pkg_gitbranch)),,
+		cd $(__embtk_pkg_localgit);					\
+		git checkout -b $(__embtk_pkg_gitbranch)			\
+					origin/$(__embtk_pkg_gitbranch))
+	$(if $(findstring HEAD,$(__embtk_pkg_gitrev)),,
+		cd $(__embtk_pkg_localgit);					\
+		git reset --hard $(__embtk_pkg_gitrev))
+endef
+
 define embtk_download_pkg
-	$(call embtk_pinfo,"Download $(__embtk_pkg_package) if needed...")
+	$(call embtk_pinfo,"Download $(__embtk_pkg_name) if needed...")
+	$(if $(__embtk_pkg_usegit),
+	$(Q)$(call __embtk_download_pkg_from_git,$(1)),
 	$(Q)test -e $(__embtk_pkg_package_f) ||					\
 	$(call embtk_wget,							\
 		$(__embtk_pkg_package),						\
@@ -452,7 +479,7 @@ define embtk_download_pkg
 	$(call __embtk_download_pkg_from_mirror,$(1),3) ||			\
 	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_package_f))
 	$(call __embtk_download_pkg_patches,$(1)) ||				\
-	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
+	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f)))
 endef
 
 #
@@ -461,6 +488,7 @@ endef
 # $(call embtk_decompress_pkg,pkgname)
 #
 define embtk_decompress_pkg
+	$(if $(__embtk_pkg_usegit),,
 	$(call embtk_pinfo,"Decrompressing $(__embtk_pkg_package) ...")
 	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" = "xy" ] &&		\
 	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
@@ -485,7 +513,7 @@ define embtk_decompress_pkg
 		cd $(__embtk_pkg_srcdir);					\
 		patch -p1 <							\
 		$(__embtk_pkg_patch_f) && touch $(__embtk_pkg_srcdir)/.patched;	\
-	fi
+	fi)
 	$(Q)mkdir -p $(__embtk_pkg_builddir)
 endef
 
