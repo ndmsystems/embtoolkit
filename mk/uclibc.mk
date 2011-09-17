@@ -56,11 +56,12 @@ $(UCLIBC_BUILD_DIR)/.installed:
 		RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"				\
 		KERNEL_HEADERS="$(SYSROOT)/usr/include/"			\
 		UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install
-	$(Q)touch $@
 
 $(UCLIBC_BUILD_DIR)/.headers_installed: download_uclibc \
-	$(UCLIBC_BUILD_DIR)/.decompressed $(UCLIBC_BUILD_DIR)/.configured
+	$(UCLIBC_BUILD_DIR)/.decompressed
 	$(call embtk_pinfo,"Install uClibc-$(UCLIBC_VERSION) headers ...")
+	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) distclean
+	$(Q)$(embtk_configure_uclibc)
 	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) silentoldconfig
 	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/			\
 		CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
@@ -78,7 +79,6 @@ $(UCLIBC_BUILD_DIR)/.headers_installed: download_uclibc \
 		UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install_startfiles
 	$(Q)$(TARGETCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
 					-o $(SYSROOT)/usr/$(LIBDIR)/libc.so
-	$(Q)touch $@
 
 download_uclibc_headers:
 	$(call embtk_download_pkg,uClibc)
@@ -92,9 +92,6 @@ $(UCLIBC_BUILD_DIR)/.decompressed:
 __embtk_get_uclibc_config=grep "CONFIG_KEMBTK_UCLIBC_" $(EMBTK_DOTCONFIG)
 __embtk_set_uclibc_config=sed -e 's/CONFIG_KEMBTK_UCLIBC_*//g' > $(UCLIBC_DOTCONFIG)
 define embtk_configure_uclibc
-	$(shell  $(__embtk_get_uclibc_config) | $(__embtk_set_uclibc_config))
+	$(call embtk_pinfo,"Configure uClibc")
+	$(__embtk_get_uclibc_config) | $(__embtk_set_uclibc_config)
 endef
-
-$(UCLIBC_BUILD_DIR)/.configured:
-	$(call embtk_pinfo,"Configure uClibc-$(UCLIBC_VERSION)...")
-	$(Q)$(call embtk_configure_uclibc)
