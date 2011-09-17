@@ -36,6 +36,8 @@ choice
 	help
 	 Here you can choose which version of libxfont you want to use.
 
+	config  EMBTK_LIBXFONT_VERSION_1_4_4
+		bool "libXfont-1.4.4"
 	config  EMBTK_LIBXFONT_VERSION_1_4_3
 		bool "libXfont-1.4.3"
 	config  EMBTK_LIBXFONT_VERSION_1_4_2
@@ -46,6 +48,7 @@ endchoice
 
 config EMBTK_LIBXFONT_VERSION_STRING
 	string
+	default "1.4.4"		if EMBTK_LIBXFONT_VERSION_1_4_4
 	default "1.4.3"		if EMBTK_LIBXFONT_VERSION_1_4_3
 	default "1.4.2"		if EMBTK_LIBXFONT_VERSION_1_4_2
 	default "1.4.1"		if EMBTK_LIBXFONT_VERSION_1_4_1
