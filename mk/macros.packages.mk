@@ -210,9 +210,8 @@ if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_AUTORECONF)" = "xy" ]; then			\
 fi
 endef
 define __embtk_print_configure_opts
-	$(call embtk_echo_blue,"Configure options:")
-	for i in `echo $(1) | tr " " "\n"`; \
-	do echo -e $(__embtk_color_blue)$$i$(__embtk_no_color); done
+	$(if $(strip $(1)),
+	$(call embtk_echo_blue,"Configure options:$(strip $(1))") | sed "s/\(--\)/\n\t\1/g")
 endef
 define embtk_configure_pkg
 	$(call embtk_pinfo,"Configure $(__embtk_pkg_package)...")
