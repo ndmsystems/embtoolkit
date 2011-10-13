@@ -36,6 +36,8 @@ choice
 	help
 	 Here you can choose which version of libXrandr you want to use.
 
+	config  EMBTK_LIBXRANDR_VERSION_1_3_2
+		bool "libXrandr-1.3.2"
 	config  EMBTK_LIBXRANDR_VERSION_1_3_1
 		bool "libXrandr-1.3.1"
 	config  EMBTK_LIBXRANDR_VERSION_1_3_0
@@ -44,6 +46,7 @@ endchoice
 
 config EMBTK_LIBXRANDR_VERSION_STRING
 	string
+	default "1.3.2"		if EMBTK_LIBXRANDR_VERSION_1_3_2
 	default "1.3.1"		if EMBTK_LIBXRANDR_VERSION_1_3_1
 	default "1.3.0"		if EMBTK_LIBXRANDR_VERSION_1_3_0
 
