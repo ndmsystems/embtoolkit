@@ -45,7 +45,7 @@ help:
 	@echo "make clean:      Remove all built files, but keep downloaded"
 	@echo "                 packages."
 	@echo
-	@echo "make distclean:  Same as clean, but remove all downloaded"
+	@echo "make distclean:  WARNING: like clean, but remove all downloaded"
 	@echo "                 packages and .config.old files."
 	@echo
 	@echo " -----------------"
