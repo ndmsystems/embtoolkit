@@ -45,6 +45,8 @@ choice
 	help
 		Here you can choose which version of libpng you want to use.
 
+	config  EMBTK_LIBPNG_VERSION_1_5_5
+		bool "libpng-1.5.5"
 	config  EMBTK_LIBPNG_VERSION_1_5_4
 		bool "libpng-1.5.4"
 	config  EMBTK_LIBPNG_VERSION_1_4_8
@@ -71,6 +73,7 @@ endchoice
 
 config EMBTK_LIBPNG_VERSION_STRING
 	string
+	default "1.5.5"		if EMBTK_LIBPNG_VERSION_1_5_5
 	default "1.5.4"		if EMBTK_LIBPNG_VERSION_1_5_4
 	default "1.4.8"		if EMBTK_LIBPNG_VERSION_1_4_8
 	default "1.4.7"		if EMBTK_LIBPNG_VERSION_1_4_7
