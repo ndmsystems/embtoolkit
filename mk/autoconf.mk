@@ -26,8 +26,6 @@
 AUTOCONF_NAME		:= autoconf
 AUTOCONF_VERSION	:= $(call embtk_get_pkgversion,autoconf)
 AUTOCONF_SITE		:= http://ftp.gnu.org/gnu/autoconf
-AUTOCONF_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-AUTOCONF_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/autoconf/$(AUTOCONF_VERSION)
 AUTOCONF_PACKAGE	:= autoconf-$(AUTOCONF_VERSION).tar.bz2
 AUTOCONF_SRC_DIR	:= $(TOOLS_BUILD)/autoconf-$(AUTOCONF_VERSION)
 AUTOCONF_BUILD_DIR	:= $(TOOLS_BUILD)/autoconf-$(AUTOCONF_VERSION)
