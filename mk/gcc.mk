@@ -80,7 +80,7 @@ GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
 	--without-headers --with-newlib --disable-shared --disable-threads	\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
-	--enable-languages=c --enable-target-optspace
+	--enable-languages=c --enable-target-optspace --disable-libquadmath
 
 #
 # GCC second stage
@@ -101,7 +101,7 @@ GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
-	--enable-languages=c --enable-target-optspace
+	--enable-languages=c --enable-target-optspace --disable-libquadmath
 
 #
 # GCC last stage
@@ -124,7 +124,7 @@ GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--enable-languages=$(GCC_LANGUAGES) --enable-__cxa_atexit		\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
 	--enable-threads --enable-shared --enable-target-optspace		\
-	$(GCC3_CONFIGURE_EXTRA_OPTIONS)
+	--disable-libquadmath $(GCC3_CONFIGURE_EXTRA_OPTIONS)
 
 define embtk_postinstall_gcc3
 	$(Q)test -e $(GCC3_BUILD_DIR)/.gcc3_post_install ||			\
