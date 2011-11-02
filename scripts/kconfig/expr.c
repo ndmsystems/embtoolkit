@@ -77,6 +77,8 @@ struct expr *expr_copy(const struct expr *org)
 		break;
 	case E_EQUAL:
 	case E_UNEQUAL:
+	case E_STRICT_GREATER_THAN:
+	case E_STRICT_LESS_THAN:
 		e->left.sym = org->left.sym;
 		e->right.sym = org->right.sym;
 		break;
@@ -109,6 +111,8 @@ void expr_free(struct expr *e)
 		return;
 	case E_EQUAL:
 	case E_UNEQUAL:
+	case E_STRICT_GREATER_THAN:
+	case E_STRICT_LESS_THAN:
 		break;
 	case E_OR:
 	case E_AND:
@@ -195,6 +199,8 @@ int expr_eq(struct expr *e1, struct expr *e2)
 	switch (e1->type) {
 	case E_EQUAL:
 	case E_UNEQUAL:
+	case E_STRICT_GREATER_THAN:
+	case E_STRICT_LESS_THAN:
 		return e1->left.sym == e2->left.sym && e1->right.sym == e2->right.sym;
 	case E_SYMBOL:
 		return e1->left.sym == e2->left.sym;
@@ -350,13 +356,27 @@ static struct expr *expr_join_or(struct expr *e1, struct expr *e2)
 
 	if (expr_eq(e1, e2))
 		return expr_copy(e1);
-	if (e1->type != E_EQUAL && e1->type != E_UNEQUAL && e1->type != E_SYMBOL && e1->type != E_NOT)
+	if (e1->type != E_EQUAL
+		&& e1->type != E_UNEQUAL
+		&& e1->type != E_STRICT_GREATER_THAN
+		&& e1->type != E_STRICT_LESS_THAN
+		&& e1->type != E_SYMBOL
+		&& e1->type != E_NOT)
 		return NULL;
-	if (e2->type != E_EQUAL && e2->type != E_UNEQUAL && e2->type != E_SYMBOL && e2->type != E_NOT)
+	if (e2->type != E_EQUAL
+		&& e2->type != E_UNEQUAL
+		&& e2->type != E_STRICT_GREATER_THAN
+		&& e2->type != E_STRICT_LESS_THAN
+		&& e2->type != E_SYMBOL
+		&& e2->type != E_NOT)
 		return NULL;
 	if (e1->type == E_NOT) {
 		tmp = e1->left.expr;
-		if (tmp->type != E_EQUAL && tmp->type != E_UNEQUAL && tmp->type != E_SYMBOL)
+		if (tmp->type != E_EQUAL
+			&& tmp->type != E_UNEQUAL
+			&& tmp->type != E_STRICT_GREATER_THAN
+			&& tmp->type != E_STRICT_LESS_THAN
+			&& tmp->type != E_SYMBOL)
 			return NULL;
 		sym1 = tmp->left.sym;
 	} else
@@ -414,13 +434,27 @@ static struct expr *expr_join_and(struct expr *e1, struct expr *e2)
 
 	if (expr_eq(e1, e2))
 		return expr_copy(e1);
-	if (e1->type != E_EQUAL && e1->type != E_UNEQUAL && e1->type != E_SYMBOL && e1->type != E_NOT)
+	if (e1->type != E_EQUAL
+		&& e1->type != E_UNEQUAL
+		&& e1->type != E_STRICT_GREATER_THAN
+		&& e1->type != E_STRICT_LESS_THAN
+		&& e1->type != E_SYMBOL
+		&& e1->type != E_NOT)
 		return NULL;
-	if (e2->type != E_EQUAL && e2->type != E_UNEQUAL && e2->type != E_SYMBOL && e2->type != E_NOT)
+	if (e1->type != E_EQUAL
+		&& e1->type != E_UNEQUAL
+		&& e1->type != E_STRICT_GREATER_THAN
+		&& e1->type != E_STRICT_LESS_THAN
+		&& e1->type != E_SYMBOL
+		&& e1->type != E_NOT)
 		return NULL;
 	if (e1->type == E_NOT) {
 		tmp = e1->left.expr;
-		if (tmp->type != E_EQUAL && tmp->type != E_UNEQUAL && tmp->type != E_SYMBOL)
+		if (tmp->type != E_EQUAL
+			&& tmp->type != E_UNEQUAL
+			&& tmp->type != E_STRICT_GREATER_THAN
+			&& tmp->type != E_STRICT_LESS_THAN
+			&& tmp->type != E_SYMBOL)
 			return NULL;
 		sym1 = tmp->left.sym;
 	} else
@@ -642,6 +676,8 @@ struct expr *expr_transform(struct expr *e)
 	switch (e->type) {
 	case E_EQUAL:
 	case E_UNEQUAL:
+	case E_STRICT_GREATER_THAN:
+	case E_STRICT_LESS_THAN:
 	case E_SYMBOL:
 	case E_LIST:
 		break;
@@ -784,6 +820,8 @@ int expr_contains_symbol(struct expr *dep, struct symbol *sym)
 		return dep->left.sym == sym;
 	case E_EQUAL:
 	case E_UNEQUAL:
+	case E_STRICT_GREATER_THAN:
+	case E_STRICT_LESS_THAN:
 		return dep->left.sym == sym ||
 		       dep->right.sym == sym;
 	case E_NOT:
@@ -930,6 +968,8 @@ struct expr *expr_trans_compare(struct expr *e, enum expr_type type, struct symb
 	case E_LIST:
 	case E_RANGE:
 	case E_NONE:
+	case E_STRICT_GREATER_THAN:
+	case E_STRICT_LESS_THAN:
 		/* panic */;
 	}
 	return NULL;
@@ -970,6 +1010,20 @@ tristate expr_calc_value(struct expr *e)
 		str1 = sym_get_string_value(e->left.sym);
 		str2 = sym_get_string_value(e->right.sym);
 		return !strcmp(str1, str2) ? no : yes;
+	case E_STRICT_GREATER_THAN:
+		sym_calc_value(e->left.sym);
+		sym_calc_value(e->right.sym);
+		str1 = sym_get_string_value(e->left.sym);
+		str2 = sym_get_string_value(e->right.sym);
+		return strtol(str1, NULL, 10) > strtol(str2, NULL, 10) ?
+								yes : no;
+	case E_STRICT_LESS_THAN:
+		sym_calc_value(e->left.sym);
+		sym_calc_value(e->right.sym);
+		str1 = sym_get_string_value(e->left.sym);
+		str2 = sym_get_string_value(e->right.sym);
+		return strtol(str1, NULL, 10) < strtol(str2, NULL, 10) ?
+								yes : no;
 	default:
 		printf("expr_calc_value: %d?\n", e->type);
 		return no;

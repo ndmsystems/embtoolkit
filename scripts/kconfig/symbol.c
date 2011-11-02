@@ -1097,6 +1097,8 @@ static struct symbol *sym_check_expr_deps(struct expr *e)
 		return sym_check_expr_deps(e->left.expr);
 	case E_EQUAL:
 	case E_UNEQUAL:
+	case E_STRICT_GREATER_THAN:
+	case E_STRICT_LESS_THAN:
 		sym = sym_check_deps(e->left.sym);
 		if (sym)
 			return sym;

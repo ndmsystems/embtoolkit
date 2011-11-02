@@ -123,6 +123,8 @@ n	[A-Za-z0-9_]
 	"!"	return T_NOT;
 	"="	return T_EQUAL;
 	"!="	return T_UNEQUAL;
+	">"	return T_STRICT_GREATER_THAN;
+	"<"	return T_STRICT_LESS_THAN;
 	\"|\'	{
 		str = yytext[0];
 		new_string();
