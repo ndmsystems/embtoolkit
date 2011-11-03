@@ -35,9 +35,9 @@ mkimage_install:
 	@test -e $(MAKEIMAGE_BUILD_DIR)/.installed || \
 	$(MAKE) $(MAKEIMAGE_BUILD_DIR)/.installed
 
-$(MAKEIMAGE_BUILD_DIR)/.installed:
+$(MAKEIMAGE_BUILD_DIR)/.installed: zlib_host_install
 	$(Q)cp -R $(EMBTK_ROOT)/src/mkimage $(TOOLS_BUILD)/
-	$(MAKE) -C $(MAKEIMAGE_BUILD_DIR)
+	$(MAKE) -C $(MAKEIMAGE_BUILD_DIR) CPPFLAGS="-I$(HOSTTOOLS)/usr/include"
 	$(MAKE) -C $(MAKEIMAGE_BUILD_DIR) DESTDIR=$(HOSTTOOLS) install
 	@touch $@
 

@@ -68,6 +68,13 @@ comment "-----------------------------"
 config EMBTK_HOST_HAVE_CMAKE
 	bool "Build cmake for the host development machine"
 
+config EMBTK_HAVE_MKIMAGE
+	bool
+	select EMBTK_HOST_HAVE_ZLIB
+	default y
+	help
+		u-boot mkimage tool.
+
 comment "-----------------------------"
 comment "Build options"
 comment "-----------------------------"

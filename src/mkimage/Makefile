@@ -1,7 +1,11 @@
+CFLAGS		?= -O2
+CPPFLAGS	?=
+LDFLAGS		?=
+
 build:
-	$(CC) -c crc32.c -o crc32.o
-	$(CC) -c mkimage.c -o mkimage.o
-	$(CC) -o mkimage *.o
+	$(CC) -c $(CPPFLAGS) $(CPPFLAGS) crc32.c -o crc32.o
+	$(CC) -c $(CPPFLAGS) $(CPPFLAGS) mkimage.c -o mkimage.o
+	$(CC) -o $(LDFLAGS) mkimage *.o
 
 clean:
 	rm -f mkimage *.o
