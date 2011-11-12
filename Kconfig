@@ -120,5 +120,6 @@ config EMBTK_HAVE_ROOTFS
 if EMBTK_HAVE_ROOTFS
 source kconfig/fs.kconfig
 source kconfig/mtdutils.kconfig
+source kconfig/squashfs.kconfig
 source kconfig/packages.kconfig
 endif

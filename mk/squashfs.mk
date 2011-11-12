@@ -23,60 +23,37 @@
 # \date         August 2009
 ################################################################################
 
-SQUASHFS_VERSION		:= 4.0
-SQUASHFS_SITE			:= http://downloads.sourceforge.net/project/squashfs/squashfs
-SQUASHFS_PACKAGE		:= squashfs$(SQUASHFS_VERSION).tar.gz
-SQUASHFS_HOST_BUILD_DIR		:= $(TOOLS_BUILD)/squashfs-build
-SQUASHFS_TARGET_BUILD_DIR	:= $(PACKAGES_BUILD)/squashfs-build
+SQUASHFS_TOOLS_NAME		:= squashfs
+SQUASHFS_TOOLS_VERSION		:= $(call embtk_get_pkgversion,squashfs_tools)
+SQUASHFS_TOOLS_SITE		:= http://sourceforge.net/projects/squashfs/files/squashfs/squashfs$(SQUASHFS_TOOLS_VERSION)
+SQUASHFS_TOOLS_PACKAGE		:= squashfs$(SQUASHFS_TOOLS_VERSION).tar.gz
+SQUASHFS_TOOLS_SRC_DIR		:= $(TOOLS_BUILD)/squashfs$(SQUASHFS_TOOLS_VERSION)
+SQUASHFS_TOOLS_BUILD_DIR	:= $(SQUASHFS_TOOLS_SRC_DIR)/squashfs-tools
 
-MKSQUASHFS_BIN			:= $(HOSTTOOLS)/usr/bin/mksquashfs
-UNSQUASHFS_BIN			:= $(HOSTTOOLS)/usr/bin/unsquashfs
+MKSQUASHFS_BIN	:= $(HOSTTOOLS)/usr/bin/mksquashfs
+UNSQUASHFS_BIN	:= $(HOSTTOOLS)/usr/bin/unsquashfs
 
-squashfs_host_install:
-	@test -e $(SQUASHFS_HOST_BUILD_DIR)/.installed || \
-	$(MAKE) $(SQUASHFS_HOST_BUILD_DIR)/.installed
+SQUASHFS_TOOLS_DEPS := zlib_host_install
 
-squashfs_target_install: $(SQUASHFS_TARGET_BUILD_DIR)/.installed
+squashfs_tools_install: $(SQUASHFS_TOOLS_DEPS)
+	$(Q)test -e $(SQUASHFS_TOOLS_BUILD_DIR)/.installed || 			\
+	$(MAKE) $(SQUASHFS_TOOLS_BUILD_DIR)/.installed
 
-#squashfs for host
-$(SQUASHFS_HOST_BUILD_DIR)/.installed: download_squashfs \
-	$(SQUASHFS_HOST_BUILD_DIR)/.decompressed
-	@CC=$(HOSTCC_CACHED) \
-	$(MAKE) -C $(TOOLS_BUILD)/squashfs$(SQUASHFS_VERSION)/squashfs-tools
-	test -z $(HOSTTOOLS)/usr/bin || mkdir -p $(HOSTTOOLS)/usr/bin
-	@install $(TOOLS_BUILD)/squashfs$(SQUASHFS_VERSION)/squashfs-tools/\
-	mksquashfs $(HOSTTOOLS)/usr/bin/
-	@install $(TOOLS_BUILD)/squashfs$(SQUASHFS_VERSION)/squashfs-tools/\
-	unsquashfs $(HOSTTOOLS)/usr/bin/
-	@touch $@
+$(SQUASHFS_TOOLS_BUILD_DIR)/.installed: download_squashfs_tools			\
+	$(SQUASHFS_TOOLS_BUILD_DIR)/.decompressed
+	$(Q)$(MAKE) -C $(SQUASHFS_TOOLS_BUILD_DIR)				\
+		CC=$(HOSTCC_CACHED)						\
+		CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\
+		LDFLAGS="-L$(HOSTTOOLS)/usr/lib"
+	$(Q)mkdir -p $(HOSTTOOLS)
+	$(Q)mkdir -p $(HOSTTOOLS)/usr
+	$(Q)mkdir -p $(HOSTTOOLS)/usr/bin
+	$(Q)install $(SQUASHFS_TOOLS_BUILD_DIR)/mksquashfs $(HOSTTOOLS)/usr/bin
+	$(Q)install $(SQUASHFS_TOOLS_BUILD_DIR)/unsquashfs $(HOSTTOOLS)/usr/bin
+	$(Q)touch $@
 
-$(SQUASHFS_HOST_BUILD_DIR)/.decompressed:
-	$(call embtk_pinfo,"Decompressing $(SQUASHFS_PACKAGE)...")
-	@tar -C $(TOOLS_BUILD) -xzvf $(DOWNLOAD_DIR)/$(SQUASHFS_PACKAGE)
-	@mkdir -p $(SQUASHFS_HOST_BUILD_DIR)
-	@touch $@
+$(SQUASHFS_TOOLS_BUILD_DIR)/.decompressed:
+	$(call embtk_decompress_pkg,squashfs_tools)
 
-squashfs_host_clean:
+squashfs_tools_clean:
 	$(call embtk_pinfo,"Cleaning squashfs in host ...")
-
-#squashfs for target
-$(SQUASHFS_TARGET_BUILD_DIR)/.installed: download_squashfs \
-	$(SQUASHFS_TARGET_BUILD_DIR)/.decompressed
-	@touch $@
-
-$(SQUASHFS_TARGET_BUILD_DIR)/.decompressed:
-	$(call embtk_pinfo,"Decompressing $(SQUASHFS_PACKAGE)...")
-	@tar -C $(PACKAGES_BUILD) -xzvf $(DOWNLOAD_DIR)/$(SQUASHFS_PACKAGE)
-	@mkdir -p $(SQUASHFS_TARGET_BUILD_DIR)
-	@touch $@
-
-squashfs_target_clean:
-	$(call embtk_pinfo,"Cleaning squashfs in target ...")
-
-download_squashfs:
-	$(call embtk_pinfo,"Downloading $(SQUASHFS_PACKAGE) \
-	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(SQUASHFS_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(SQUASHFS_PACKAGE) \
-	$(SQUASHFS_SITE)/squashfs$(SQUASHFS_VERSION)/$(SQUASHFS_PACKAGE)
-
