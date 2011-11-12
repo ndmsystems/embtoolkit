@@ -59,12 +59,16 @@ build_jffs2_rootfs:
 	-n -p -i $(JFFS2_ROOTFS).temp -o $(JFFS2_ROOTFS)
 	@rm -rf $(JFFS2_ROOTFS).temp
 
+squashfs_rootfs_opts := $(ROOTFS) $(SQUASHFS_ROOTFS)
+ifeq ($(CONFIG_EMBTK_SQUASHFS_TOOLS_VERSION_3_4),y)
+squashfs_rootfs_opts += $(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),-le,-be)
+endif
+squashfs_rootfs_opts += -all-root
+
 build_squashfs_rootfs:
 	$(call embtk_pinfo,"Generating SQUASHFS rootfs...")
 	$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- \
-	$(MKSQUASHFS_BIN) $(ROOTFS) $(SQUASHFS_ROOTFS) \
-		$(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),-le,-be) \
-		-all-root
+	$(MKSQUASHFS_BIN) $(squashfs_rootfs_opts)
 
 build_initramfs_archive:
 	$(call embtk_pinfo,"Generating cpio archive for INITRAMFS...")
