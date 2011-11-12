@@ -522,7 +522,8 @@ endef
 # $(call embtk_cleanup_pkg,PACKAGE)
 #
 define embtk_cleanup_pkg
-	$(call embtk_pinfo,"Cleanup $(__embtk_pkg_name)...")
+	$(if $(EMBTK_BUILDSYS_DEBUG),
+		$(call embtk_pinfo,"Cleanup $(__embtk_pkg_name)..."))
 	$(Q)-if [ "x$(__embtk_pkg_etc)" != "x" ] && [ -e $(SYSROOT)/etc ];	\
 		then								\
 		cd $(SYSROOT)/etc; rm -rf $(__embtk_pkg_etc);			\
