@@ -32,6 +32,9 @@ MTDUTILS_PACKAGE		:= mtd-utils-$(MTDUTILS_VERSION).tar.bz2
 MTDUTILS_SRC_DIR		:= $(PACKAGES_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
 MTDUTILS_BUILD_DIR		:= $(PACKAGES_BUILD)/mtd-utils-$(MTDUTILS_VERSION)
 
+#
+# make these binaries selectable from kconfig after version 1.4.6
+#
 MTDUTILS_SBINS := bin2nand flash_eraseall flash_unlock mkfs.jffs2 nand2bin \
 		nftl_format rfddump ubicrc32 ubimirror ubirmvol docfdisk \
 		flash_info ftl_check mkfs.ubifs nanddump pddcustomize \
