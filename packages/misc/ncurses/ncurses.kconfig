@@ -40,13 +40,13 @@ choice
 	help
 	 Here you can choose which version of ncurses you want to use.
 
-	config  EMBTK_NCURSES_VERSION_5_7
-		bool "ncurses-5.7"
+	config  EMBTK_NCURSES_VERSION_5_9
+		bool "ncurses-5.9"
 endchoice
 
 config EMBTK_NCURSES_VERSION_STRING
 	string
-	default "5.7"	if EMBTK_NCURSES_VERSION_5_7
+	default "5.9"	if EMBTK_NCURSES_VERSION_5_9
 
 config EMBTK_NCURSES_NEED_PATCH
 	bool
