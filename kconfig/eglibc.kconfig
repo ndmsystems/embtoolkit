@@ -28,6 +28,8 @@ choice
 	help
 	 EGLIBC branch to use.
 
+	config EMBTK_EGLIBC_VERSION_2_13
+		bool "eglibc-2.13"
 	config EMBTK_EGLIBC_VERSION_2_12
 		bool "eglibc-2.12"
 	config EMBTK_EGLIBC_VERSION_2_11
@@ -48,6 +50,7 @@ config EMBTK_EGLIBC_SVN_REVISION
 		moment you build your toolchain new revision is available,
 		you can increase this value.
 
+	default 15871	if EMBTK_EGLIBC_VERSION_2_13
 	default 15872	if EMBTK_EGLIBC_VERSION_2_12
 	default 15873	if EMBTK_EGLIBC_VERSION_2_11
 	default 10152	if EMBTK_EGLIBC_VERSION_2_10
@@ -55,6 +58,7 @@ config EMBTK_EGLIBC_SVN_REVISION
 	default 15869	if EMBTK_EGLIBC_VERSION_TRUNK
 
 comment "At EmbToolkit release, valid eglibc svn revisions are:"
+comment "svn revision 15871	for eglibc-2.13"
 comment "svn revision 14665	for eglibc-2.12"
 comment "svn revision 14666	for eglibc-2.11"
 comment "svn revision 10152	for eglibc-2.10"
@@ -64,6 +68,7 @@ comment ""
 
 config EMBTK_EGLIBC_BRANCH_STRING
 	string
+	default "2_13"		if EMBTK_EGLIBC_VERSION_2_13
 	default "2_12"		if EMBTK_EGLIBC_VERSION_2_12
 	default "2_11"		if EMBTK_EGLIBC_VERSION_2_11
 	default "2_10"		if EMBTK_EGLIBC_VERSION_2_10
@@ -71,6 +76,7 @@ config EMBTK_EGLIBC_BRANCH_STRING
 
 config EMBTK_EGLIBC_VERSION_STRING
 	string
+	default "2.13"		if EMBTK_EGLIBC_VERSION_2_13
 	default "2.12"		if EMBTK_EGLIBC_VERSION_2_12
 	default "2.11"		if EMBTK_EGLIBC_VERSION_2_11
 	default "2.10"		if EMBTK_EGLIBC_VERSION_2_10
@@ -98,6 +104,10 @@ config EMBTK_EGLIBC_DISABLE_VERSIONING
 		To build EGLIBC without compatibility code and symbol
 		versioning, answer yes here.
 
+
+if EMBTK_EGLIBC_VERSION_2_13
+source "kconfig/eglibc-kconfigs/eglibc-2.13.kconfig"
+endif
 if EMBTK_EGLIBC_VERSION_2_12
 source "kconfig/eglibc-kconfigs/eglibc-2.12.kconfig"
 endif
