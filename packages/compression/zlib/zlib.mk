@@ -40,10 +40,8 @@ ZLIB_INCLUDES		= zconf.h zlib.h
 ZLIB_LIBS		= libz.*
 ZLIB_PKGCONFIGS		= zlib.pc
 
-ZLIB_LINUX_ARCH		:= $(if $(CONFIG_EMBTK_64BITS_FS),--64,)
-
 ZLIB_CONFIGURE_ENV	:=
-ZLIB_CONFIGURE_OPTS	:= $(ZLIB_LINUX_ARCH) --enable-shared
+ZLIB_CONFIGURE_OPTS	:= --enable-shared
 
 
 zlib_install:
