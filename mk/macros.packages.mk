@@ -467,11 +467,12 @@ define __embtk_download_pkg_from_git
 	test -e $(__embtk_pkg_localgit) || $(call __embtk_gitclone_pkg,$(1))
 endef
 
-define embtk_download_pkg
-	$(call embtk_pinfo,"Download $(__embtk_pkg_name) if needed...")
-	$(if $(__embtk_pkg_usegit),
-	$(Q)$(call __embtk_download_pkg_from_git,$(1)),
-	$(Q)test -e $(__embtk_pkg_package_f) ||					\
+define __embtk_download_pkg_from_tarball
+	$(call embtk_echo_blue,"$(__embtk_pkg_name) using tarball")
+	$(call embtk_echo_blue,"\tVersion : $(__embtk_pkg_version)")
+	$(call embtk_echo_blue,"\tFrom    : $(__embtk_pkg_site)")
+	$(call embtk_echo_blue,"\tIn      : $(__embtk_pkg_package_f)")
+	test -e $(__embtk_pkg_package_f) ||					\
 	$(call embtk_wget,							\
 		$(__embtk_pkg_package),						\
 		$(__embtk_pkg_site),						\
@@ -481,7 +482,14 @@ define embtk_download_pkg
 	$(call __embtk_download_pkg_from_mirror,$(1),3) ||			\
 	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_package_f))
 	$(call __embtk_download_pkg_patches,$(1)) ||				\
-	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f)))
+	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
+endef
+
+define embtk_download_pkg
+	$(call embtk_pinfo,"Download $(__embtk_pkg_name) if needed...")
+	$(if $(__embtk_pkg_usegit),
+		$(Q)$(call __embtk_download_pkg_from_git,$(1)),
+		$(Q)$(call __embtk_download_pkg_from_tarball,$(1)))
 endef
 
 #
