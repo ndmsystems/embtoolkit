@@ -447,13 +447,7 @@ define __embtk_download_pkg_exitfailure
 	exit 1)
 endef
 
-define __embtk_download_pkg_from_git
-	$(call embtk_echo_blue,"$(__embtk_pkg_name) using GIT")
-	$(call embtk_echo_blue,"\tBranch    : $(__embtk_pkg_gitbranch)")
-	$(call embtk_echo_blue,"\tRevision  : $(__embtk_pkg_gitrev)")
-	$(call embtk_echo_blue,"\tIn        : $(__embtk_pkg_refspec)")
-	$(call embtk_echo_blue,"\tClone URL : $(__embtk_pkg_gitsite)")
-	test -e $(__embtk_pkg_localgit) ||					\
+define __embtk_gitclone_pkg
 	git clone $(__embtk_pkg_gitsite) $(__embtk_pkg_localgit)
 	$(if $(findstring master,$(__embtk_pkg_gitbranch)),,
 		cd $(__embtk_pkg_localgit);					\
@@ -462,6 +456,15 @@ define __embtk_download_pkg_from_git
 	$(if $(findstring HEAD,$(__embtk_pkg_gitrev)),,
 		cd $(__embtk_pkg_localgit);					\
 		git reset --hard $(__embtk_pkg_gitrev))
+endef
+
+define __embtk_download_pkg_from_git
+	$(call embtk_echo_blue,"$(__embtk_pkg_name) using GIT")
+	$(call embtk_echo_blue,"\tBranch    : $(__embtk_pkg_gitbranch)")
+	$(call embtk_echo_blue,"\tRevision  : $(__embtk_pkg_gitrev)")
+	$(call embtk_echo_blue,"\tIn        : $(__embtk_pkg_refspec)")
+	$(call embtk_echo_blue,"\tClone URL : $(__embtk_pkg_gitsite)")
+	test -e $(__embtk_pkg_localgit) || $(call __embtk_gitclone_pkg,$(1))
 endef
 
 define embtk_download_pkg
