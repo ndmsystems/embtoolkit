@@ -368,9 +368,24 @@ define __embtk_install_paramsfailure
 	exit 1
 endef
 
+__embtk_xinstall_xgitpkg_allvarset-y	= 					\
+		$(strip $(if $(__embtk_pkg_usegit),$(__embtk_pkg_gitsite)))
+
+__embtk_xinstall_xsvnpkg_allvarset-y	= $(strip 				\
+	$(if $(__embtk_pkg_usesvn),						\
+		$(and $(__embtk_pkg_svnsite),$(__embtk_pkg_svnbranch),		\
+			$(__embtk_pkg_svnrev))))
+
+__embtk_xinstall_xtarbpkg_allvarset-y	= $(strip				\
+	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),,			\
+		$(and $(__embtk_pkg_site),$(__embtk_pkg_version),		\
+			$(__embtk_pkg_package))))
+
 __embtk_xinstall_xpkg_allvarset-y = $(and $(__embtk_pkg_name),			\
-					$(__embtk_pkg_version),			\
-					$(__embtk_pkg_site))
+	$(__embtk_pkg_srcdir),$(__embtk_pkg_builddir),				\
+	$(or $(__embtk_xinstall_xgitpkg_allvarset-y),				\
+		$(__embtk_xinstall_xtarbpkg_allvarset-y),			\
+		$(__embtk_xinstall_xsvnpkg_allvarset-y)))
 
 #
 # A macro to install automatically a package, using autotools scripts, intended
