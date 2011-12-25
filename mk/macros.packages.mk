@@ -548,6 +548,14 @@ endef
 # Usage:
 # $(call embtk_decompress_pkg,pkgname)
 #
+define __embtk_applypatch_pkg
+	$(if $(and $(CONFIG_EMBTK_$(PKGV)_NEED_PATCH),				\
+		$(call __embtk_mk_pathnotexist,$(__embtk_pkg_srcdir)/.patched)),\
+		cd $(__embtk_pkg_srcdir);					\
+		patch --silent -p1 < $(__embtk_pkg_patch_f) &&			\
+		touch $(__embtk_pkg_srcdir)/.patched)
+endef
+
 define embtk_decompress_pkg
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),,
 	$(if $(EMBTK_BUILDSYS_DEBUG),
@@ -570,12 +578,7 @@ define embtk_decompress_pkg
 		echo -e "\E[1;31m!Unknown package compression type!\E[0m";	\
 		exit 1;								\
 	fi
-	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" = "xy" ] &&		\
-	[ ! -e $(__embtk_pkg_srcdir)/.patched ]; then				\
-		cd $(__embtk_pkg_srcdir);					\
-		patch --silent -p1 <							\
-		$(__embtk_pkg_patch_f) && touch $(__embtk_pkg_srcdir)/.patched;	\
-	fi)
+	$(Q)$(call __embtk_applypatch_pkg,$(1)))
 	$(Q)mkdir -p $(__embtk_pkg_builddir)
 endef
 
