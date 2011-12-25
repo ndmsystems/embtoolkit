@@ -56,7 +56,23 @@ endef
 # Usage:
 # $(call __embtk_mk_strcmp,str1,str2)
 #
-__embtk_mk_strcmp=$(shell [ $(strip $(1)) = $(strip $(2)) ] && echo y)
+__embtk_mk_strcmp = $(shell [ $(strip $(1)) = $(strip $(2)) ] && echo y)
+
+#
+# __embtk_mk_pathexist
+# A macro to test if a path exists. It returns y if the path exists and nothing
+# if not.
+# Usage: $(call __embtk_mk_pathexist,/path/to/test)
+#
+__embtk_mk_pathexist = $(shell test -e $(1) && echo y)
+
+#
+# __embtk_mk_pathnotexist
+# A macro to test if a path does not exist. It returns y if the path does not
+# exist and nothing if it exists.
+# Usage: $(call __embtk_mk_pathnotexist,/path/to/test)
+#
+__embtk_mk_pathnotexist = $(shell test -e $(1) || echo y)
 
 #Decompress message
 #usage $(call EMBTK_DECOMPRESS_MSG,$(NAME_PACKAGE))
