@@ -23,6 +23,14 @@
 # \date         May 2009
 ################################################################################
 
+config EMBTK_EGLIBC_VERSION_SVN
+	bool
+	default y
+
+config EMBTK_EGLIBC_REFSPEC
+	string
+	default "toolchain"
+
 choice
 	prompt "EGLIBC branch to checkout"
 	help
@@ -66,13 +74,14 @@ comment "svn revision 10153	for eglibc-2.9"
 comment "svn revision 14703	for eglibc-trunk (development version)"
 comment ""
 
-config EMBTK_EGLIBC_BRANCH_STRING
+config EMBTK_EGLIBC_SVN_BRANCH
 	string
-	default "2_13"		if EMBTK_EGLIBC_VERSION_2_13
-	default "2_12"		if EMBTK_EGLIBC_VERSION_2_12
-	default "2_11"		if EMBTK_EGLIBC_VERSION_2_11
-	default "2_10"		if EMBTK_EGLIBC_VERSION_2_10
-	default "2_9"		if EMBTK_EGLIBC_VERSION_2_9
+	default "branches/eglibc-2_13"		if EMBTK_EGLIBC_VERSION_2_13
+	default "branches/eglibc-2_12"		if EMBTK_EGLIBC_VERSION_2_12
+	default "branches/eglibc-2_11"		if EMBTK_EGLIBC_VERSION_2_11
+	default "branches/eglibc-2_10"		if EMBTK_EGLIBC_VERSION_2_10
+	default "branches/eglibc-2_9"		if EMBTK_EGLIBC_VERSION_2_9
+	default "trunk"				if EMBTK_EGLIBC_VERSION_TRUNK
 
 config EMBTK_EGLIBC_VERSION_STRING
 	string

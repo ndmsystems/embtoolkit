@@ -23,141 +23,142 @@
 # \date         May 2009
 ################################################################################
 
-EGLIBC_VERSION := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_VERSION_STRING)))
-EGLIBC_BRANCH := $(subst ",,$(strip $(CONFIG_EMBTK_EGLIBC_BRANCH_STRING)))
-EGLIBC_SVN_REVISION := $(CONFIG_EMBTK_EGLIBC_SVN_REVISION)
-EGLIBC_SITE := http://www.eglibc.org
-EGLIBC_SVN_SITE := http://www.eglibc.org/svn
-EGLIBC_PATCHES_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/eglibc/patches
-EGLIBC_PACKAGE := eglibc-$(EGLIBC_VERSION).tar.bz2
-EGLIBC_HEADERS_BUILD_DIR := $(TOOLS_BUILD)/eglibc-headers
-EGLIBC_BUILD_DIR := $(TOOLS_BUILD)/eglibc
+EGLIBC_NAME			:= eglibc
+EGLIBC_HEADERS_NAME		:= eglibc_headers
+EGLIBC_VERSION			:= $(call embtk_get_pkgversion,eglibc)
+EGLIBC_SVN_SITE			:= http://www.eglibc.org/svn
+EGLIBC_BUILD_DIR 		:= $(TOOLS_BUILD)/eglibc
+EGLIBC_SRC_DIR			:= $(call __embtk_pkg_localsvn,eglibc)
+EGLIBC_HEADERS_BUILD_DIR	:= $(TOOLS_BUILD)/eglibc-headers
+EGLIBC_HEADERS_SRC_DIR		:= $(call __embtk_pkg_localsvn,eglibc)
 
-EMBTK_EGLIBC_CFLAGS := $(TARGET_CFLAGS) $(EMBTK_TARGET_MCPU)
-EMBTK_EGLIBC_CFLAGS += $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
-EMBTK_EGLIBC_CFLAGS += $(EMBTK_TARGET_MARCH) -pipe
+embtk_eglibc_cflags := $(TARGET_CFLAGS) $(EMBTK_TARGET_MCPU)
+embtk_eglibc_cflags += $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
+embtk_eglibc_cflags += $(EMBTK_TARGET_MARCH) -pipe
 
-#Hard or soft floating point in eglibc?
-ifeq ($(CONFIG_EMBTK_SOFTFLOAT),y)
-EGLIBC_FLOAT_TYPE := --with-fp=no
-else
-EGLIBC_FLOAT_TYPE := --with-fp=yes
-endif
+# Hard or soft floating point in eglibc?
+embtk_eglibc_floattype := $(if $(CONFIG_EMBTK_SOFTFLOAT),			\
+				--with-fp=no,--with-fp=yes)
 
 # Versioning in eglibc
-EGLIBC_VERSIONING_OPTION := \
-	$(if $(CONFIG_EMBTK_EGLIBC_DISABLE_VERSIONING),--disable-versioning,)
+embtk_eglibc_versioning-$(CONFIG_EMBTK_EGLIBC_DISABLE_VERSIONING) :=		\
+							--disable-versioning
 
-OPTION_GROUPS_FILE = $(EMBTK_ROOT)/mk/eglibc/eglibc-$(EGLIBC_VERSION)-options.mk
+embtk_eglibc_optgroups_f	:= $(EMBTK_ROOT)/mk/eglibc/eglibc-$(EGLIBC_VERSION)-options.mk
+eglibc_optgroups_f		:= $(EGLIBC_BUILD_DIR)/option-groups.config
+eglibc_headers_optgroups_f	:= $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
+embtk_eglibc_h_kconfigs_f	:= $(EMBTK_ROOT)/.eglibc_headers.config
 
-eglibc_headers_install: $(EGLIBC_HEADERS_BUILD_DIR)/.installed
-	$(call embtk_pinfo,"eglibc headers installed")
+#
+# eglibc headers install
+#
+define __embtk_eglibc_headers_install
+	$(call embtk_pinfo,"Installing eglibc headers")
+	$(MAKE) download_eglibc
+	$(embtk_parse_eglibc_optgroups)
+	$(embtk_configure_eglibc_headers)
+	$(embtk_install_eglibc_headers)
+endef
 
-eglibc_install: $(EGLIBC_BUILD_DIR)/.installed
-	$(call embtk_pinfo,"eglibc lbraries and headers installed")
+eglibc_headers_postinstall:
+	$(__embtk_get_eglibc_h_kconfigs)
 
-$(EGLIBC_HEADERS_BUILD_DIR)/.installed: download_eglibc \
-	$(EGLIBC_HEADERS_BUILD_DIR)/.decompressed \
-	EGLIBC_OPTIONS_PARSE $(EGLIBC_HEADERS_BUILD_DIR)/.configured
-	$(call EMBTK_INSTALL_MSG,"headers eglibc-$(EGLIBC_VERSION)")
-	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) install-headers \
-	install_root=$(SYSROOT) install-bootstrap-headers=yes && \
-	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) csu/subdir_lib
-	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crt1.o $(SYSROOT)/usr/lib/
-	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crti.o $(SYSROOT)/usr/lib/
-	@cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(SYSROOT)/usr/lib/
-	$(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc -nostdlib -nostartfiles \
-	-shared -x c /dev/null -o $(SYSROOT)/usr/lib/libc.so
-	@touch $@
+eglibc_headers_install: eglibc_headers_postinstall
+	$(if $(call __embtk_pkg_installed-y,eglibc_headers,$(embtk_eglibc_h_kconfigs_f)),\
+		true,$(__embtk_eglibc_headers_install))
+	rm -rf $(embtk_eglibc_h_kconfigs_f)
 
+#
+# eglibc install
+#
+define __embtk_eglibc_install
+	$(call embtk_pinfo,"Installing eglibc")
+	$(MAKE) download_eglibc
+	$(embtk_parse_eglibc_optgroups)
+	$(embtk_configure_eglibc)
+	$(embtk_install_eglibc)
+endef
+eglibc_install:
+	$(Q)$(if $(call __embtk_pkg_installed-y,eglibc),			\
+		true,$(__embtk_eglibc_install))
+
+#
+# download and macros
+#
 download_eglibc download_eglibc_headers:
-	$(call embtk_pinfo,"downloading eglibc-$(EGLIBC_VERSION) \
-	if necessary ...")
-ifeq ($(CONFIG_EMBTK_EGLIBC_VERSION_STRING),"trunk")
-	@cd $(EMBTK_ROOT)/src; \
-	svn co $(EGLIBC_SVN_SITE)/trunk \
-	-r$(EGLIBC_SVN_REVISION) eglibc-$(EGLIBC_VERSION)
-else
-	@cd $(EMBTK_ROOT)/src; \
-	svn co $(EGLIBC_SVN_SITE)/branches/eglibc-$(EGLIBC_BRANCH) \
-	-r$(EGLIBC_SVN_REVISION) eglibc-$(EGLIBC_VERSION)
-endif
-	@cd $(EMBTK_ROOT)/src; \
-	cd eglibc-$(EGLIBC_VERSION); touch `find . -name configure`; cd ../;\
-	test -e $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE) || \
-	tar cjvf $(EGLIBC_PACKAGE) eglibc-$(EGLIBC_VERSION); \
-	test -e $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE) || \
-	mv $(EGLIBC_PACKAGE) $(DOWNLOAD_DIR)
-ifeq	($(CONFIG_EMBTK_EGLIBC_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/eglibc-$(EGLIBC_VERSION).patch || \
-	wget $(EGLIBC_PATCHES_SITE)/eglibc-$(EGLIBC_VERSION)-*.patch \
-	-O $(DOWNLOAD_DIR)/eglibc-$(EGLIBC_VERSION).patch
-endif
+	$(call embtk_download_pkg,eglibc)
+	$(Q)$(call __embtk_download_pkg_patches,eglibc)
+	$(Q)$(call  __embtk_applypatch_pkg,eglibc)
+	$(Q)cd $(EGLIBC_SRC_DIR); touch `find . -name configure`
+	$(Q)ln -sf $(EGLIBC_SRC_DIR)/ports $(EGLIBC_SRC_DIR)/libc/ports
 
-$(EGLIBC_HEADERS_BUILD_DIR)/.decompressed:
-	$(call EMBTK_DECOMPRESS_MSG,$(EGLIBC_PACKAGE))
-	@tar -C $(TOOLS_BUILD) -xjf $(DOWNLOAD_DIR)/$(EGLIBC_PACKAGE)
-ifeq	($(CONFIG_EMBTK_EGLIBC_NEED_PATCH),y)
-	cd $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION); \
-	patch -p1 < $(DOWNLOAD_DIR)/eglibc-$(EGLIBC_VERSION).patch
-endif
-	@cp -R $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/ports \
-	$(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/
-	@mkdir -p $(EGLIBC_HEADERS_BUILD_DIR)
-	@mkdir -p $(EGLIBC_BUILD_DIR)
-	@touch $@
-
-$(EGLIBC_HEADERS_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_MSG,eglibc-$(EGLIBC_VERSION))
-	cd $(EGLIBC_HEADERS_BUILD_DIR); BUILD_CC=$(HOSTCC_CACHED) \
-	CFLAGS="$(EMBTK_EGLIBC_CFLAGS)" \
-	CC=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc \
-	CXX=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-g++ \
-	AR=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ar \
-	RANLIB=$(TOOLS)/bin/$(STRICT_GNU_TARGET)-ranlib \
-	$(CONFIG_SHELL) $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure	\
-	--prefix=/usr --with-headers=$(SYSROOT)/usr/include \
-	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) \
-	--disable-profile --without-gd --without-cvs --enable-add-ons \
-	--enable-kernel="2.6.0" $(EGLIBC_VERSIONING_OPTION) \
-	--with-bugurl=$(EMBTK_BUGURL)
-	@touch $@
-
-$(EGLIBC_BUILD_DIR)/.installed: $(EGLIBC_BUILD_DIR)/.configured
-	$(call EMBTK_INSTALL_MSG,eglibc-$(EGLIBC_VERSION))
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) $(J)
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) install \
-	install_root=$(SYSROOT)
-	@touch $@
-
-$(EGLIBC_BUILD_DIR)/.configured:
-	$(call EMBTK_CONFIGURE_MSG,eglibc-$(EGLIBC_VERSION))
-	cd $(EGLIBC_BUILD_DIR); BUILD_CC=$(HOSTCC_CACHED) \
-	CFLAGS="$(EMBTK_EGLIBC_CFLAGS)" \
-	CC=$(TARGETCC_CACHED) \
-	CXX=$(TARGETCXX_CACHED) \
-	AR=$(TARGETAR) \
-	RANLIB=$(TARGETRANLIB) \
-	$(CONFIG_SHELL) $(TOOLS_BUILD)/eglibc-$(EGLIBC_VERSION)/libc/configure	\
-	--prefix=/usr --with-headers=$(SYSROOT)/usr/include \
-	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD) $(EGLIBC_FLOAT_TYPE) \
-	--disable-profile --without-gd --without-cvs --enable-add-ons \
-	--enable-kernel="2.6.0" $(EGLIBC_VERSIONING_OPTION) \
-	--with-bugurl=$(EMBTK_BUGURL) \
+define embtk_configure_eglibc
+	cd $(EGLIBC_BUILD_DIR);							\
+	BUILD_CC=$(HOSTCC_CACHED)						\
+	CFLAGS="$(embtk_eglibc_cflags)"						\
+	CC=$(TARGETCC)								\
+	CXX=$(TARGETCXX)							\
+	AR=$(TARGETAR)								\
+	RANLIB=$(TARGETRANLIB)							\
+	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
+	--prefix=/usr --with-headers=$(SYSROOT)/usr/include			\
+	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
+	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
+	--enable-add-ons --enable-kernel="2.6.0" $(embtk_eglibc_versioning-y)	\
+	--with-bugurl=$(EMBTK_BUGURL)						\
 	--with-pkgversion="EGLIBC from embtoolkit-$(EMBTK_VERSION)"
-	@touch $@
+	touch $(EGLIBC_BUILD_DIR)/.conifgured
+endef
 
-EGLIBC_OPTIONS_PARSE:
-	$(call embtk_pinfo,"Parsing \
-	eglibc-$(EGLIBC_VERSION) option groups...")
-	@cat $(OPTION_GROUPS_FILE) > $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
-	@echo "#######################################################" >> $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
-	@echo "# From embtoolkit-$(EMBTK_VERSION) configuration menu #" >> $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
-	@echo "#######################################################" >> $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
-	@grep "CONFIG_KEMBTK_EGLIBC_" $(EMBTK_ROOT)/.config | \
-	sed -e 's/CONFIG_KEMBTK_EGLIBC_*//g' \
-	>> $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
-	@sed -i 's/"//g' $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
-	@cp $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config \
-	$(EGLIBC_BUILD_DIR)/option-groups.config
+define embtk_configure_eglibc_headers
+	cd $(EGLIBC_HEADERS_BUILD_DIR);						\
+	BUILD_CC=$(HOSTCC_CACHED)						\
+	CFLAGS="$(embtk_eglibc_cflags)"						\
+	CC=$(TARGETCC)								\
+	CXX=$(TARGETCXX)							\
+	AR=$(TARGETAR)								\
+	RANLIB=$(TARGETRANLIB)							\
+	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
+	--prefix=/usr --with-headers=$(SYSROOT)/usr/include			\
+	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
+	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
+	--enable-add-ons --enable-kernel="2.6.0" $(embtk_eglibc_versioning-y)	\
+	--with-bugurl=$(EMBTK_BUGURL)
+	touch $(EGLIBC_HEADERS_BUILD_DIR)/.configured
+endef
 
+define embtk_install_eglibc
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) $(J)
+	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) install	\
+							install_root=$(SYSROOT)
+	touch $(EGLIBC_BUILD_DIR)/.installed
+endef
+
+define embtk_install_eglibc_headers
+	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) install-headers			\
+		install_root=$(SYSROOT) install-bootstrap-headers=yes &&	\
+		$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) csu/subdir_lib
+	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crt1.o $(SYSROOT)/usr/lib/
+	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crti.o $(SYSROOT)/usr/lib/
+	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(SYSROOT)/usr/lib/
+	$(TARGETCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
+						-o $(SYSROOT)/usr/lib/libc.so
+	touch $(EGLIBC_HEADERS_BUILD_DIR)/.installed
+endef
+
+__embtk_get_eglibc_h_kconfigs = cat $(EMBTK_DOTCONFIG) | 			\
+	sed -e 's/CONFIG_KEMBTK_EGLIBC_/CONFIG_KEMBTK_EGLIBC_HEADERS_/g'	\
+		-e 's/CONFIG_EMBTK_EGLIBC_/CONFIG_EMBTK_EGLIBC_HEADERS_/g'	\
+						> $(embtk_eglibc_h_kconfigs_f)
+__embtk_get_eglibc_optgroups = grep "CONFIG_KEMBTK_EGLIBC_" $(EMBTK_DOTCONFIG)	\
+	| sed -e 's/CONFIG_KEMBTK_EGLIBC_*//g' | sed -e 's/"//g'
+define embtk_parse_eglibc_optgroups
+	mkdir -p $(EGLIBC_BUILD_DIR)
+	mkdir -p $(EGLIBC_HEADERS_BUILD_DIR)
+	cat $(embtk_eglibc_optgroups_f) > $(eglibc_headers_optgroups_f)
+	echo "###############################" >> $(eglibc_headers_optgroups_f)
+	echo "# From embtk-$(EMBTK_VERSION) #" >> $(eglibc_headers_optgroups_f)
+	echo "###############################" >> $(eglibc_headers_optgroups_f)
+	$(__embtk_get_eglibc_optgroups) >> $(eglibc_headers_optgroups_f)
+	cp $(eglibc_headers_optgroups_f) $(eglibc_optgroups_f)
+endef
