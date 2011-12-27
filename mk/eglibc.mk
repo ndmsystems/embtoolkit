@@ -96,8 +96,8 @@ define embtk_configure_eglibc
 	cd $(EGLIBC_BUILD_DIR);							\
 	BUILD_CC=$(HOSTCC_CACHED)						\
 	CFLAGS="$(embtk_eglibc_cflags)"						\
-	CC=$(TARGETCC)								\
-	CXX=$(TARGETCXX)							\
+	CC=$(TARGETCC_CACHED)							\
+	CXX=$(TARGETCXX_CACHED)							\
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
