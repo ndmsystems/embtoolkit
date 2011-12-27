@@ -189,10 +189,11 @@ __embtk_pkg_configured-y = $(shell test -e $(__embtk_pkg_builddir)/.configured &
 __installed_f=$(__embtk_pkg_builddir)/.installed
 __pkgkconfig_f=$(__embtk_pkg_builddir)/.embtk.$(__embtk_pkg_name).kconfig
 __pkgkconfig_f_old=$(__embtk_pkg_builddir)/.embtk.$(__embtk_pkg_name).kconfig.old
+__gdotconfig_f=$(if $(2),$(2),$(EMBTK_DOTCONFIG))
 __embtk_pkg_installed-y = $(shell						\
 	if [ -e $(__installed_f) ] && [ -e $(__pkgkconfig_f) ]; then		\
 		cp $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
-		grep 'CONFIG_EMBTK_.*$(PKGV)_.*' $(EMBTK_DOTCONFIG)		\
+		grep 'CONFIG_K*EMBTK_.*$(PKGV)_.*' $(__gdotconfig_f)		\
 							> $(__pkgkconfig_f);	\
 		cmp -s $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
 		if [ "x$$?" = "x0" ]; then					\
@@ -200,7 +201,7 @@ __embtk_pkg_installed-y = $(shell						\
 		fi;								\
 	else									\
 		mkdir -p $(__embtk_pkg_builddir);				\
-		grep 'CONFIG_EMBTK_.*$(PKGV)_.*' $(EMBTK_DOTCONFIG)		\
+		grep 'CONFIG_K*EMBTK_.*$(PKGV)_.*' $(__gdotconfig_f)		\
 							> $(__pkgkconfig_f);	\
 	fi;)
 
