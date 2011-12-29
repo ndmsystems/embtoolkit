@@ -79,6 +79,7 @@ config EMBTK_ROOTFS_HAVE_JFFS2_CLEANMARKERSIZE
 ############################
 config EMBTK_ROOTFS_HAVE_SQUASHFS
 	bool "Build a squashfs root filesystem image"
+	select EMBTK_HAVE_SQUASHFS_TOOLS
 	help
 	 Build a squashfs root filesystem image for your target
 
