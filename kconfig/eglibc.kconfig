@@ -60,18 +60,18 @@ config EMBTK_EGLIBC_SVN_REVISION
 
 	default 15871	if EMBTK_EGLIBC_VERSION_2_13
 	default 15872	if EMBTK_EGLIBC_VERSION_2_12
-	default 15873	if EMBTK_EGLIBC_VERSION_2_11
+	default 16334	if EMBTK_EGLIBC_VERSION_2_11
 	default 10152	if EMBTK_EGLIBC_VERSION_2_10
 	default 10153	if EMBTK_EGLIBC_VERSION_2_9
-	default 15869	if EMBTK_EGLIBC_VERSION_TRUNK
+	default 16333	if EMBTK_EGLIBC_VERSION_TRUNK
 
 comment "At EmbToolkit release, valid eglibc svn revisions are:"
 comment "svn revision 15871	for eglibc-2.13"
 comment "svn revision 14665	for eglibc-2.12"
-comment "svn revision 14666	for eglibc-2.11"
+comment "svn revision 16334	for eglibc-2.11"
 comment "svn revision 10152	for eglibc-2.10"
 comment "svn revision 10153	for eglibc-2.9"
-comment "svn revision 14703	for eglibc-trunk (development version)"
+comment "svn revision 16333	for eglibc-trunk (development version)"
 comment ""
 
 config EMBTK_EGLIBC_SVN_BRANCH
