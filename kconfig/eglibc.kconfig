@@ -44,8 +44,6 @@ choice
 		bool "eglibc-2.11"
 	config EMBTK_EGLIBC_VERSION_2_10
 		bool "eglibc-2.10"
-	config EMBTK_EGLIBC_VERSION_2_9
-		bool "eglibc-2.9"
 	config EMBTK_EGLIBC_VERSION_TRUNK
 		bool "trunk (development version)"
 endchoice
@@ -62,7 +60,6 @@ config EMBTK_EGLIBC_SVN_REVISION
 	default 15872	if EMBTK_EGLIBC_VERSION_2_12
 	default 16334	if EMBTK_EGLIBC_VERSION_2_11
 	default 10152	if EMBTK_EGLIBC_VERSION_2_10
-	default 10153	if EMBTK_EGLIBC_VERSION_2_9
 	default 16333	if EMBTK_EGLIBC_VERSION_TRUNK
 
 comment "At EmbToolkit release, valid eglibc svn revisions are:"
@@ -70,7 +67,6 @@ comment "svn revision 15871	for eglibc-2.13"
 comment "svn revision 14665	for eglibc-2.12"
 comment "svn revision 16334	for eglibc-2.11"
 comment "svn revision 10152	for eglibc-2.10"
-comment "svn revision 10153	for eglibc-2.9"
 comment "svn revision 16333	for eglibc-trunk (development version)"
 comment ""
 
@@ -80,7 +76,6 @@ config EMBTK_EGLIBC_SVN_BRANCH
 	default "branches/eglibc-2_12"		if EMBTK_EGLIBC_VERSION_2_12
 	default "branches/eglibc-2_11"		if EMBTK_EGLIBC_VERSION_2_11
 	default "branches/eglibc-2_10"		if EMBTK_EGLIBC_VERSION_2_10
-	default "branches/eglibc-2_9"		if EMBTK_EGLIBC_VERSION_2_9
 	default "trunk"				if EMBTK_EGLIBC_VERSION_TRUNK
 
 config EMBTK_EGLIBC_VERSION_STRING
@@ -89,7 +84,6 @@ config EMBTK_EGLIBC_VERSION_STRING
 	default "2.12"		if EMBTK_EGLIBC_VERSION_2_12
 	default "2.11"		if EMBTK_EGLIBC_VERSION_2_11
 	default "2.10"		if EMBTK_EGLIBC_VERSION_2_10
-	default "2.9"		if EMBTK_EGLIBC_VERSION_2_9
 	default "trunk"		if EMBTK_EGLIBC_VERSION_TRUNK
 
 #Does we need patches?
@@ -103,7 +97,7 @@ comment "------------------------------------"
 
 config EMBTK_EGLIBC_DISABLE_VERSIONING
 	bool "Build EGLIBC without compatibility code and symbol versioning"
-	depends on !EMBTK_EGLIBC_VERSION_2_10 && !EMBTK_EGLIBC_VERSION_2_9
+	depends on !EMBTK_EGLIBC_VERSION_2_10
 	default y
 	help
 		EGLIBC supports building the library without compatibility code
@@ -127,10 +121,6 @@ endif
 
 if EMBTK_EGLIBC_VERSION_2_10
 source "kconfig/eglibc-kconfigs/eglibc-2.10.kconfig"
-endif
-
-if EMBTK_EGLIBC_VERSION_2_9
-source "kconfig/eglibc-kconfigs/eglibc-2.9.kconfig"
 endif
 
 if EMBTK_EGLIBC_VERSION_TRUNK
