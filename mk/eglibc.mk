@@ -88,7 +88,7 @@ eglibc_install:
 download_eglibc download_eglibc_headers:
 	$(call embtk_download_pkg,eglibc)
 	$(Q)$(call __embtk_download_pkg_patches,eglibc)
-	$(Q)$(call  __embtk_applypatch_pkg,eglibc)
+	$(Q)$(call __embtk_applypatch_pkg,eglibc)
 	$(Q)cd $(EGLIBC_SRC_DIR); touch `find . -name configure`
 	$(Q)[ -e $(EGLIBC_SRC_DIR)/libc/ports ] ||				\
 		ln -sf $(EGLIBC_SRC_DIR)/ports $(EGLIBC_SRC_DIR)/libc/ports
