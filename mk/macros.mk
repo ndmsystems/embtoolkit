@@ -30,23 +30,16 @@ __embtk_color_yellow	= "\E[1;33m"
 __embtk_color_blue	= "\E[1;34m"
 __embtk_no_color	= "\E[0m"
 
+#
 # echo colored text
-#usage $(call embtk_echo_red,$(TEXT))
-define embtk_echo_red
-	echo -e $(__embtk_color_red)$(1)$(__embtk_no_color)
-endef
-#usage $(call embtk_echo_green,$(TEXT))
-define embtk_echo_green
-	echo -e $(__embtk_color_green)$(1)$(__embtk_no_color)
-endef
-#usage $(call embtk_echo_yellow,$(TEXT))
-define embtk_echo_yellow
-	echo -e $(__embtk_color_yellow)$(1)$(__embtk_no_color)
-endef
-#usage $(call embtk_echo_blue,$(TEXT))
-define embtk_echo_blue
-	echo -e $(__embtk_color_blue)$(1)$(__embtk_no_color)
-endef
+# usage: $(call embtk_echo_{color},msg)
+#
+embtk_echo_red		= echo -e $(__embtk_color_red)$(1)$(__embtk_no_color)
+embtk_echo_green	= echo -e $(__embtk_color_green)$(1)$(__embtk_no_color)
+embtk_echo_yellow	= echo -e $(__embtk_color_yellow)$(1)$(__embtk_no_color)
+embtk_echo_blue		= echo -e $(__embtk_color_blue)$(1)$(__embtk_no_color)
+
+__embtk_msg_h = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 #
 # __embtk_mk_strcmp:
@@ -106,26 +99,10 @@ define EMBTK_INSTALL_MSG
 	$(call embtk_echo_blue,"################################################################################")
 endef
 
-# Print warning message
-define embtk_pwarning
-	$(call embtk_echo_yellow,"################################################################################")
-	$(call embtk_echo_yellow,"# EmbToolkit # WARNING: $(1)")
-	$(call embtk_echo_yellow,"################################################################################")
-endef
-
-# Print error message
-define embtk_perror
-	$(call embtk_echo_red,"################################################################################")
-	$(call embtk_echo_red,"# EmbToolkit # ERROR: $(1)")
-	$(call embtk_echo_red,"################################################################################")
-endef
-
-# Print info message
-define embtk_pinfo
-	$(call embtk_echo_blue,"################################################################################")
-	$(call embtk_echo_blue,"# EmbToolkit # $(1)")
-	$(call embtk_echo_blue,"################################################################################")
-endef
+# Macro to print messages
+embtk_pwarning	= $(call embtk_echo_yellow,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ WARNING: $(1)\\n$(__embtk_msg_h)")
+embtk_perror	= $(call embtk_echo_red,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ ERROR: $(1)\\n$(__embtk_msg_h)")
+embtk_pinfo	= $(call embtk_echo_blue,"$(__embtk_msg_h)\n~~ EmbToolkit ~~ $(1)\n$(__embtk_msg_h)")
 
 # Successful build of EmbToolkit message
 successful_build:
@@ -155,7 +132,7 @@ endif
 	$(call embtk_echo_blue,"You can also visit the wiki at:")
 	$(call embtk_echo_blue,"   http://www.embtoolkit.org")
 	@echo
-	$(call embtk_echo_blue,"################################################################################")
+	$(call embtk_echo_blue,$(__embtk_msg_h))
 
 # Packages management macros
 include $(EMBTK_ROOT)/mk/macros.packages.mk
