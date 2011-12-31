@@ -105,6 +105,7 @@ PKGV				= $(strip $(shell echo $(1) | tr a-z A-Z))
 pkgv				= $(strip $(shell echo $(1) | tr A-Z a-z))
 __embtk_pkg_name		= $(strip $($(PKGV)_NAME))
 __embtk_pkg_version		= $(strip $($(PKGV)_VERSION))
+__embtk_pkg_needpatch		= $(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)
 __embtk_pkg_site		= $(strip $($(PKGV)_SITE))
 __embtk_patch_site		= ftp://ftp.embtoolkit.org/embtoolkit.org
 __embtk_pkg_patch_site		= $(strip $(if $($(PKGV)_PATCH_SITE),		\
@@ -460,7 +461,7 @@ endef
 #
 
 define __embtk_download_pkg_patches
-if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)" = "xy" ]; then			\
+if [ "x$(__embtk_pkg_needpatch)" = "xy" ]; then					\
 	test -e	$(__embtk_pkg_patch_f) ||					\
 	$(call embtk_wget,							\
 		$(__embtk_pkg_name)-$(__embtk_pkg_version).patch,		\
@@ -558,37 +559,54 @@ endef
 # Usage:
 # $(call embtk_decompress_pkg,pkgname)
 #
-define __embtk_applypatch_pkg
-	$(if $(and $(CONFIG_EMBTK_$(PKGV)_NEED_PATCH),				\
-		$(call __embtk_mk_pathnotexist,$(__embtk_pkg_srcdir)/.patched)),\
+__embtk_applypatch_pkg =							\
+	$(if $(and $(__embtk_pkg_needpatch),$(__embtk_pkg_notpatched-y)),	\
 		cd $(__embtk_pkg_srcdir);					\
 		patch --silent -p1 < $(__embtk_pkg_patch_f) &&			\
-		touch $(__embtk_pkg_srcdir)/.patched)
-endef
+		touch $(__embtk_pkg_dotpatched_f))
+
+__embtk_decompress_pkg_exitfailure =						\
+	$(call embtk_perror,"!Compression unknown for $(__embtk_pkg_name)!");	\
+	exit 1
+
+__embtk_decompress_pkg =							\
+	case $(__embtk_pkg_package_f) in					\
+		*.tar.bz2 | *.tbz2)						\
+			tar -C $(dir $(__embtk_pkg_srcdir)) -xjf		\
+						$(__embtk_pkg_package_f) &&	\
+			mkdir -p $(__embtk_pkg_builddir) &&			\
+			touch $(__embtk_pkg_dotdecompressed_f)			\
+			;;							\
+		*.tar.gz | *.tgz)						\
+			tar -C $(dir $(__embtk_pkg_srcdir)) -xzf		\
+						$(__embtk_pkg_package_f) &&	\
+			mkdir -p $(__embtk_pkg_builddir) &&			\
+			touch $(__embtk_pkg_dotdecompressed_f)			\
+			;;							\
+		*.tar.xz)							\
+			tar -C $(dir $(__embtk_pkg_srcdir)) -xJf		\
+						$(__embtk_pkg_package_f) &&	\
+			mkdir -p $(__embtk_pkg_builddir) &&			\
+			touch $(__embtk_pkg_dotdecompressed_f)			\
+			;;							\
+		*.tar)								\
+			tar -C $(dir $(__embtk_pkg_srcdir)) -xf			\
+						$(__embtk_pkg_package_f) &&	\
+			mkdir -p $(__embtk_pkg_builddir) &&			\
+			touch $(__embtk_pkg_dotdecompressed_f)			\
+			;;							\
+		*)								\
+			$(call __embtk_decompress_pkg_exitfailure,$(1))		\
+			;;							\
+	esac
 
 define embtk_decompress_pkg
-	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),,
+	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),true,
 	$(if $(EMBTK_BUILDSYS_DEBUG),
 		$(call embtk_pinfo,"Decrompressing $(__embtk_pkg_package) ..."))
-	$(Q)if [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" = "xy" ] &&		\
-	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
-		tar -C $(dir $(__embtk_pkg_srcdir)) -xzf			\
-				$(__embtk_pkg_package_f) &&			\
-		mkdir -p $(__embtk_pkg_builddir) &&				\
-		touch $(__embtk_pkg_srcdir)/.decompressed;			\
-	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" = "xy" ] &&		\
-	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
-		tar -C $(dir $(__embtk_pkg_srcdir)) -xjf			\
-				$(__embtk_pkg_package_f) &&			\
-		mkdir -p $(__embtk_pkg_builddir) &&				\
-		touch $(__embtk_pkg_srcdir)/.decompressed;			\
-	elif [ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARBZ2)" = "x" ] &&		\
-	[ "x$(CONFIG_EMBTK_$(PKGV)_PKG_IS_TARGZ)" = "x" ] &&			\
-	[ ! -e $(__embtk_pkg_srcdir)/.decompressed ]; then			\
-		echo -e "\E[1;31m!Unknown package compression type!\E[0m";	\
-		exit 1;								\
-	fi
-	$(Q)$(call __embtk_applypatch_pkg,$(1)))
+	$(if $(__embtk_pkg_notdecompressed-y),
+		$(Q)$(__embtk_decompress_pkg)
+		$(Q)$(__embtk_applypatch_pkg)))
 	$(Q)mkdir -p $(__embtk_pkg_builddir)
 endef
 
