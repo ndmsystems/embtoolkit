@@ -157,6 +157,14 @@ __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
 __embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
 __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))
 
+# Some embtoolkit insternal files for packages
+__embtk_pkg_dotdecompressed_f	= $(__embtk_pkg_srcdir)/.decompressed
+__embtk_pkg_dotpatched_f	= $(__embtk_pkg_srcdir)/.patched
+__embtk_pkg_dotconfigured_f	= $(__embtk_pkg_builddir)/.configured
+__embtk_pkg_dotinstalled_f	= $(__embtk_pkg_builddir)/.installed
+__embtk_pkg_dotpkgkconfig_f	= $(__embtk_pkg_builddir)/.embtk.$(__embtk_pkg_name).kconfig
+
+
 #
 # A macro to get packages version from .config file.
 # usage: $(call embtk_get_pkgversion,PACKAGE)
@@ -166,30 +174,31 @@ embtk_get_pkgversion = $(subst ",,$(strip $(CONFIG_EMBTK_$(PKGV)_VERSION_STRING)
 
 #
 # A macro to test if a package is already decompressed.
-# It returns y if decompressed and nothing if not.
 #
-__embtk_pkg_decompressed-y = $(shell test -e $(__embtk_pkg_srcdir)/.decompressed && echo y)
+__embtk_pkg_decompressed-y	= $(call __embtk_mk_pathexist,$(__embtk_pkg_dotdecompressed_f))
+__embtk_pkg_notdecompressed-y	= $(call __embtk_mk_pathnotexist,$(__embtk_pkg_dotdecompressed_f))
 
 #
 # A macro to test if a package is already patched.
-# It returns y if patched and nothing if not.
 #
-__embtk_pkg_patched-y = $(shell test -e $(__embtk_pkg_srcdir)/.patched && echo y)
+__embtk_pkg_patched-y		= $(call __embtk_mk_pathexist,$(__embtk_pkg_dotpatched_f))
+__embtk_pkg_notpatched-y	= $(call __embtk_mk_pathnotexist,$(__embtk_pkg_dotpatched_f))
 
 #
 # A macro to test if a package is already configured using autotools configure
-# script. It returns y if configured and nothing if not.
+# script.
 #
-__embtk_pkg_configured-y = $(shell test -e $(__embtk_pkg_builddir)/.configured && echo y)
+__embtk_pkg_configured-y	= $(call __embtk_mk_pathexist,$(__embtk_pkg_dotconfigured_f))
+__embtk_pkg_notconfigured-y	= $(call __embtk_mk_pathnotexist,$(__embtk_pkg_dotconfigured_f))
 
 #
 # A macro to test if a package is already installed.
 # It returns y if installed and nothing if not.
 #
-__installed_f=$(__embtk_pkg_builddir)/.installed
-__pkgkconfig_f=$(__embtk_pkg_builddir)/.embtk.$(__embtk_pkg_name).kconfig
-__pkgkconfig_f_old=$(__embtk_pkg_builddir)/.embtk.$(__embtk_pkg_name).kconfig.old
-__gdotconfig_f=$(if $(2),$(2),$(EMBTK_DOTCONFIG))
+__installed_		= $(__embtk_pkg_dotinstalled_f)
+__pkgkconfig_f		= $(__embtk_pkg_dotpkgkconfig_f)
+__pkgkconfig_f_old	= $(__embtk_pkg_dotpkgkconfig_f).old
+__gdotconfig_f		= $(if $(2),$(2),$(EMBTK_DOTCONFIG))
 __embtk_pkg_installed-y = $(shell						\
 	if [ -e $(__installed_f) ] && [ -e $(__pkgkconfig_f) ]; then		\
 		cp $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
@@ -255,7 +264,7 @@ define embtk_configure_pkg
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)			\
 	--prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-rpath	\
 	$(__embtk_pkg_configureopts)
-	$(Q)touch $(__embtk_pkg_builddir)/.configured
+	$(Q)touch $(__embtk_pkg_dotconfigured_f)
 	$(Q)$(call __embtk_kill_lt_rpath,$(__embtk_pkg_builddir))
 endef
 
@@ -288,7 +297,7 @@ define embtk_configure_hostpkg
 	--prefix=$(strip $(if $(__embtk_pkg_prefix),				\
 				$(__embtk_pkg_prefix),$(HOSTTOOLS)/usr))	\
 	$(__embtk_pkg_configureopts)
-	$(Q)touch $(__embtk_pkg_builddir)/.configured
+	$(Q)touch $(__embtk_pkg_dotconfigured_f)
 endef
 
 #
@@ -341,7 +350,7 @@ define __embtk_install_pkg_make
 		$(__embtk_single_make_install))
 	$(Q)$(if $(__embtk_autotoolspkg-y),$(call __embtk_fix_libtool_files))
 	$(Q)$(if $(__embtk_autotoolspkg-y),$(call __embtk_fix_pkgconfig_files))
-	$(Q)touch $(__embtk_pkg_builddir)/.installed
+	$(Q)touch $(__embtk_pkg_dotinstalled_f)
 endef
 define __embtk_install_hostpkg_make
 	$(call embtk_pinfo,"Compiling and installing $(__embtk_pkg_name)-$(__embtk_pkg_version) for host...")
@@ -356,7 +365,7 @@ define __embtk_install_hostpkg_make
 	$(Q)$(if $(__embtk_pkg_makedirs),					\
 		$(__embtk_multi_make_hostinstall),				\
 		$(__embtk_single_make_hostinstall))
-	$(Q)touch $(__embtk_pkg_builddir)/.installed
+	$(Q)touch $(__embtk_pkg_dotinstalled_f)
 endef
 
 #
