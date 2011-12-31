@@ -67,22 +67,6 @@ __embtk_mk_pathexist = $(shell test -e $(1) && echo y)
 #
 __embtk_mk_pathnotexist = $(shell test -e $(1) || echo y)
 
-#Decompress message
-#usage $(call EMBTK_DECOMPRESS_MSG,$(NAME_PACKAGE))
-define EMBTK_DECOMPRESS_MSG
-	$(call embtk_echo_blue,"################################################################################")
-	$(call embtk_echo_blue,"# EmbToolkit # Decompressing $(1)")
-	$(call embtk_echo_blue,"################################################################################")
-endef
-
-#Configure message
-#usage $(call EMBTK_CONFIGURE_MSG,$(NAME_PACKAGE))
-define EMBTK_CONFIGURE_MSG
-	$(call embtk_echo_blue,"################################################################################")
-	$(call embtk_echo_blue,"# EmbToolkit # Configuring $(1)")
-	$(call embtk_echo_blue,"################################################################################")
-endef
-
 #Build message
 #usage $(call EMBTK_BUILD_MSG,$(NAME_PACKAGE))
 define EMBTK_BUILD_MSG
