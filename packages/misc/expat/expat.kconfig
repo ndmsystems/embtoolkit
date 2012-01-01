@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_EXPAT
 	bool "Have Expat"
-	select EMBTK_EXPAT_PKG_IS_TARGZ
 	help
 		 Expat is an XML parser library written in C. It is a
 		 stream-oriented parser in which an application registers

@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_LIBXRENDER
 	bool "Have libxrender"
-	select EMBTK_LIBXRENDER_PKG_IS_TARBZ2
 	select EMBTK_HAVE_RENDERPROTO
 	select EMBTK_HAVE_LIBX11
 	help

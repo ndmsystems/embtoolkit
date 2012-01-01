@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_RENDERPROTO
 	bool "Have renderproto"
-	select EMBTK_RENDERPROTO_PKG_IS_TARBZ2
 	help
 		renderproto for X windowing system
 choice

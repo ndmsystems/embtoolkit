@@ -27,7 +27,6 @@
 #
 config EMBTK_HAVE_FREEFONT_TTF
 	bool "Have GNU FreeFont: TrueType format"
-	select EMBTK_FREEFONT_TTF_PKG_IS_TARGZ
 	select EMBTK_HAVE_FREETYPE
 	help
 		GNU FreeFont is a free family of scalable outline fonts,

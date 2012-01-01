@@ -24,7 +24,6 @@
 
 config EMBTK_HAVE_XCBPROTO
 	bool "Have xcbproto"
-	select EMBTK_XCBPROTO_PKG_IS_TARGZ
 	help
 		xcbproto for X windowing system
 choice

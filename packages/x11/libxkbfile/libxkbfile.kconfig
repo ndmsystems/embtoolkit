@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_LIBXKBFILE
 	bool "Have libxkbfile"
-	select EMBTK_LIBXKBFILE_PKG_IS_TARBZ2
 	select EMBTK_HAVE_KBPROTO
 	select EMBTK_HAVE_LIBX11
 	help

@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_LIBXFIXES
 	bool "Have libXfixes"
-	select EMBTK_LIBXFIXES_PKG_IS_TARBZ2
 	select EMBTK_HAVE_FIXESPROTO
 	select EMBTK_HAVE_XPROTO
 	help

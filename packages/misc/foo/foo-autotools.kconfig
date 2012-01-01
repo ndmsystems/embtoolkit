@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_FOO
 	bool "Have foo"
-	select EMBTK_FOO_PKG_IS_TARGZ
 	help
 		foo description
 choice

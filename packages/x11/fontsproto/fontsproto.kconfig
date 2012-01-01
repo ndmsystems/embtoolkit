@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_FONTSPROTO
 	bool "Have fontsproto"
-	select EMBTK_FONTSPROTO_PKG_IS_TARBZ2
 	help
 		fontsproto for X windowing system
 choice

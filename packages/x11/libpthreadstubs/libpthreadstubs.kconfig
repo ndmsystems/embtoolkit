@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_LIBPTHREADSTUBS
 	bool "Have libpthreadstubs"
-	select EMBTK_LIBPTHREADSTUBS_PKG_IS_TARBZ2
 	help
 		libpthreadstubs for X windowing system
 choice

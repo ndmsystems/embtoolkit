@@ -47,7 +47,6 @@ config EMBTK_HAVE_XSERVER
 	select EMBTK_HAVE_XTRANS
 	select EMBTK_HAVE_OPENSSL
 	select EMBTK_HAVE_PIXMAN
-	select EMBTK_XSERVER_PKG_IS_TARBZ2
 	help
 		Have a X server in your root file system
 choice

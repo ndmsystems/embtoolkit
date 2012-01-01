@@ -28,7 +28,6 @@ config EMBTK_HAVE_DIRECTFB
 	select EMBTK_HAVE_LIBPNG
 	select EMBTK_HAVE_LIBJPEG
 	select EMBTK_HAVE_FREETYPE
-	select EMBTK_DIRECTFB_PKG_IS_TARGZ
 	help
 		DirectFB is a graphics library which was designed with embedded
 		systems in mind. It offers maximum hardware accelerated

@@ -44,7 +44,6 @@ choice
 
 	config  EMBTK_LIBSIGSEGV_VERSION_2_6
 		bool "libsigsegv-2.6"
-		select EMBTK_LIBSIGSEGV_PKG_IS_TARGZ
 endchoice
 
 config EMBTK_LIBSIGSEGV_VERSION_STRING

@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_DBUS
 	bool "Have D-bus"
-	select EMBTK_DBUS_PKG_IS_TARGZ
 	select EMBTK_HAVE_LIBXML2
 	help
 		D-Bus is a message bus system, a simple way for applications to

@@ -26,7 +26,6 @@
 config EMBTK_HAVE_LIBNIH
 	bool "Have libnih"
 	select EMBTK_HAVE_DBUS
-	select EMBTK_LIBNIH_PKG_IS_TARGZ
 	help
 		libnih is a small library for C application development
 		containing functions that, despite its name, are not implemented

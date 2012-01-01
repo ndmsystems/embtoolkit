@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_PIXMAN
 	bool "Have pixman"
-	select EMBTK_PIXMAN_PKG_IS_TARGZ
 	help
 		pixman is a library that provides low-level pixel manipulation
 		features such as image compositing and trapezoid rasterization.

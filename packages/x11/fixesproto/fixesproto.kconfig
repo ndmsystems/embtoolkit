@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_FIXESPROTO
 	bool "Have fixesproto"
-	select EMBTK_FIXESPROTO_PKG_IS_TARBZ2
 	help
 		fixesproto for X windowing system
 choice

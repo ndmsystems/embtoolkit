@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_XEXTPROTO
 	bool "Have xextproto"
-	select EMBTK_XEXTPROTO_PKG_IS_TARBZ2
 	help
 		xextproto for X window system
 choice

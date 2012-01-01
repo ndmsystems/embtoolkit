@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_GDB_SYSTEM
 	bool "Have GDB: Gnu debugging system"
-	select EMBTK_GDB_PKG_IS_TARBZ2
 	help
 		Have GNU debugger components on your embedded target and/or on
 		your development machine.
@@ -92,10 +91,8 @@ config EMBTK_GDB_NEED_AUTORECONF
 	select EMBTK_GDB_HOST_NEED_AUTORECONF
 config EMBTK_GDB_PKG_IS_TARGZ
 	bool
-	select EMBTK_GDB_HOST_PKG_IS_TARGZ
 config EMBTK_GDB_PKG_IS_TARBZ2
 	bool
-	select EMBTK_GDB_HOST_PKG_IS_TARBZ2
 
 config EMBTK_GDB_HOST_NEED_PATCH
 	bool

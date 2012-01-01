@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_LIBXAU
 	bool "Have libxau"
-	select EMBTK_LIBXAU_PKG_IS_TARBZ2
 	select EMBTK_HAVE_XPROTO
 	help
 		X authorization file management libary

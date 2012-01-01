@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_XINPUT
 	bool "Have xinput"
-	select EMBTK_XINPUT_PKG_IS_TARBZ2
 	select EMBTK_HAVE_XPROTO
 	select EMBTK_HAVE_INPUTPROTO
 	select EMBTK_HAVE_LIBX11

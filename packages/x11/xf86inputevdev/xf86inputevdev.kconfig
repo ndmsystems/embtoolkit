@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_XF86INPUTEVDEV
 	bool "Have xf86-input-evdev"
-	select EMBTK_XF86INPUTEVDEV_PKG_IS_TARBZ2
 	depends on EMBTK_HAVE_XSERVER_XORG
 	help
 		X.Org evdev input driver.

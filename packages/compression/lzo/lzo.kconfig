@@ -25,13 +25,11 @@
 
 config EMBTK_HOST_HAVE_LZO
 	bool
-	select EMBTK_LZO_PKG_IS_TARGZ
 	help
 		lzo host development machine.
 
 config EMBTK_HAVE_LZO
 	bool "Have lzo for the target"
-	select EMBTK_LZO_PKG_IS_TARGZ
 	select KEMBTK_UCLIBC_UCLIBC_SUSV4_LEGACY if EMBTK_CLIB_UCLIBC
 	help
 		LZO is a data compression library which is suitable for data
@@ -82,10 +80,8 @@ config EMBTK_LZO_NEED_AUTORECONF
 	select EMBTK_LZO_HOST_NEED_AUTORECONF
 config EMBTK_LZO_PKG_IS_TARGZ
 	bool
-	select EMBTK_LZO_HOST_PKG_IS_TARGZ
 config EMBTK_LZO_PKG_IS_TARBZ2
 	bool
-	select EMBTK_LZO_HOST_PKG_IS_TARBZ2
 
 config EMBTK_LZO_HOST_NEED_PATCH
 	bool

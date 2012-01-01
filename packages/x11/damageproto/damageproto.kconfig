@@ -24,7 +24,6 @@
 
 config EMBTK_HAVE_DAMAGEPROTO
 	bool "Have damageproto"
-	select EMBTK_DAMAGEPROTO_PKG_IS_TARBZ2
 	help
 		damageproto for X windowing system
 choice

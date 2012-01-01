@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_VIDEOPROTO
 	bool "Have videoproto"
-	select EMBTK_VIDEOPROTO_PKG_IS_TARBZ2
 	help
 		videoproto for X windowing system
 choice

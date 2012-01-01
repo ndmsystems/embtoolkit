@@ -25,7 +25,6 @@
 
 config EMBTK_HOST_HAVE_E2FSPROGS
 	bool
-	select EMBTK_E2FSPROGS_PKG_IS_TARGZ
 	help
 		NOTE: used only to have libuuid
 
@@ -33,7 +32,6 @@ config EMBTK_HOST_HAVE_E2FSPROGS
 
 config EMBTK_HAVE_E2FSPROGS
 	bool "Have e2fsprogs/libuuid"
-	select EMBTK_E2FSPROGS_PKG_IS_TARGZ
 	help
 		NOTE: used only to have libuuid
 
@@ -60,10 +58,8 @@ config EMBTK_E2FSPROGS_NEED_AUTORECONF
 	select EMBTK_E2FSPROGS_HOST_NEED_AUTORECONF
 config EMBTK_E2FSPROGS_PKG_IS_TARGZ
 	bool
-	select EMBTK_E2FSPROGS_HOST_PKG_IS_TARGZ
 config EMBTK_E2FSPROGS_PKG_IS_TARBZ2
 	bool
-	select EMBTK_E2FSPROGS_HOST_PKG_IS_TARBZ2
 
 config EMBTK_E2FSPROGS_HOST_NEED_PATCH
 	bool

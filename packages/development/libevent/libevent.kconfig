@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_LIBEVENT
 	bool "Have libevent"
-	select EMBTK_LIBEVENT_PKG_IS_TARGZ
 	help
 		The libevent API provides a mechanism to execute a callback
 		function when a specific event occurs on a file descriptor or

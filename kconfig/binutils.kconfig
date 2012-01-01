@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_BINUTILS
 	bool
-	select EMBTK_BINUTILS_PKG_IS_TARBZ2
 	default y
 
 choice
@@ -36,17 +35,13 @@ choice
 		will use.
 	config EMBTK_BINUTILS_VERSION_2_21_1
 		bool "binutils-2.21.1"
-		select EMBTK_BINUTILS_PKG_IS_TARBZ2
 	config EMBTK_BINUTILS_VERSION_2_20_1
 		bool "binutils-2.20.1"
-		select EMBTK_BINUTILS_PKG_IS_TARBZ2
 	config EMBTK_BINUTILS_VERSION_2_20
 		bool "binutils-2.20"
-		select EMBTK_BINUTILS_PKG_IS_TARBZ2
 		depends on EMBTK_OLDPACKAGES
 	config EMBTK_BINUTILS_VERSION_2_19_1
 		bool "binutils-2.19.1"
-		select EMBTK_BINUTILS_PKG_IS_TARBZ2
 		select EMBTK_BINUTILS_NEED_PATCH
 
 endchoice

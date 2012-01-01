@@ -25,13 +25,11 @@
 
 config EMBTK_HOST_HAVE_LIBTIFF
 	bool
-	select EMBTK_LIBTIFF_PKG_IS_TARGZ
 	help
 		libtiff for host development machine.
 
 config EMBTK_HAVE_LIBTIFF
 	bool "Have libtiff"
-	select EMBTK_LIBTIFF_PKG_IS_TARGZ
 	help
 		libtiff provides support for the Tag Image File Format (TIFF), a
 		widely used format for storing image data.
@@ -62,10 +60,8 @@ config EMBTK_LIBTIFF_NEED_AUTORECONF
 	select EMBTK_LIBTIFF_HOST_NEED_AUTORECONF
 config EMBTK_LIBTIFF_PKG_IS_TARGZ
 	bool
-	select EMBTK_LIBTIFF_HOST_PKG_IS_TARGZ
 config EMBTK_LIBTIFF_PKG_IS_TARBZ2
 	bool
-	select EMBTK_LIBTIFF_HOST_PKG_IS_TARBZ2
 
 config EMBTK_LIBTIFF_HOST_NEED_PATCH
 	bool

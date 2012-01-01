@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_LIBXFONT
 	bool "Have libxfont"
-	select EMBTK_LIBXFONT_PKG_IS_TARBZ2
 	select EMBTK_HAVE_LIBFONTENC
 	select EMBTK_HAVE_FREETYPE
 	help

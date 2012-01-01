@@ -25,7 +25,6 @@
 
 config EMBTK_ROOTFS_HAVE_STRACE
 	depends on EMBTK_HAVE_ROOTFS
-	select EMBTK_STRACE_PKG_IS_TARBZ2
 	bool "Have strace in target"
 	help
 	 strace is a system call tracer, i.e. a debugging tool which prints out

@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_XKEYBOARDCONFIG
 	bool "Have xkeyboard-config"
-	select EMBTK_XKEYBOARDCONFIG_PKG_IS_TARBZ2
 	select EMBTK_HAVE_XKBCOMP
 	select EMBTK_HOST_HAVE_INTLTOOL
 	help

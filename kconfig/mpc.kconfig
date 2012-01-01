@@ -25,11 +25,9 @@
 
 config EMBTK_HAVE_MPC
 	bool
-	select EMBTK_MPC_PKG_IS_TARGZ
 
 config EMBTK_HOST_HAVE_MPC
 	bool
-	select EMBTK_MPC_PKG_IS_TARGZ
 	default y
 choice
 	prompt "Version of mpc you wish"
@@ -58,10 +56,8 @@ config EMBTK_MPC_NEED_AUTORECONF
 	select EMBTK_MPC_HOST_NEED_AUTORECONF
 config EMBTK_MPC_PKG_IS_TARGZ
 	bool
-	select EMBTK_MPC_HOST_PKG_IS_TARGZ
 config EMBTK_MPC_PKG_IS_TARBZ2
 	bool
-	select EMBTK_MPC_HOST_PKG_IS_TARBZ2
 
 config EMBTK_MPC_HOST_NEED_PATCH
 	bool

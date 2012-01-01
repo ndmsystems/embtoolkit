@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_RESOURCEPROTO
 	bool "Have resourceproto"
-	select EMBTK_RESOURCEPROTO_PKG_IS_TARBZ2
 	help
 		resourceproto for X windowing system.
 		This extension defines a protocol that allows a client to query

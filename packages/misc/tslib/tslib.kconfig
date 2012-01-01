@@ -37,7 +37,6 @@ choice
 		bool "tslib-1.0"
 		select EMBTK_TSLIB_NEED_PATCH
 		select EMBTK_TSLIB_NEED_AUTORECONF
-		select EMBTK_TSLIB_PKG_IS_TARBZ2
 endchoice
 
 config EMBTK_TSLIB_VERSION_STRING

@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_SQUASHFS_TOOLS
 	bool "Have squashfs host tools"
-	select EMBTK_SQUASHFS_TOOLS_PKG_IS_TARGZ
 	select EMBK_HOST_HAVE_ZLIB
 	help
 		Say Y to build host tools needed to generate squashfs

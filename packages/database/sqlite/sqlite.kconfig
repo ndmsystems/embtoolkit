@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_SQLITE
 	bool "Have sqlite"
-	select EMBTK_SQLITE_PKG_IS_TARGZ
 	help
 		sqlite description
 choice

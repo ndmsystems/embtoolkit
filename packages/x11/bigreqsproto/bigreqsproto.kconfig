@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_BIGREQSPROTO
 	bool "Have bigreqsproto"
-	select EMBTK_BIGREQSPROTO_PKG_IS_TARBZ2
 	help
 		bigreqsproto for X windowing system
 choice

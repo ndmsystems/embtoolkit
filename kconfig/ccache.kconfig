@@ -27,7 +27,6 @@
 
 config EMBTK_HAVE_CCACHE
 	bool
-	select EMBTK_CCACHE_PKG_IS_TARBZ2
 	default y
 	help
 		ccache is a compiler cache. It speeds up recompilation by

@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_LIBXRANDR
 	bool "Have libXrandr"
-	select EMBTK_LIBXRANDR_PKG_IS_TARBZ2
 	select EMBTK_HAVE_XPROTO
 	select EMBTK_HAVE_RANDRPROTO
 	help

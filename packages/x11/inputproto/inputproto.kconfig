@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_INPUTPROTO
 	bool "Have inputproto"
-	select EMBTK_INPUTPROTO_PKG_IS_TARBZ2
 	help
 		inputproto for X windowing system
 choice

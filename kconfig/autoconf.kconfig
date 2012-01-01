@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_AUTOCONF
 	bool
-	select EMBTK_AUTOCONF_PKG_IS_TARBZ2
 	default y
 	help
 		autoconf for autotools.

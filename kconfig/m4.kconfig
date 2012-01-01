@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_M4
 	bool
-	select EMBTK_M4_PKG_IS_TARBZ2
 	default y
 	help
 		m4 for autotools.

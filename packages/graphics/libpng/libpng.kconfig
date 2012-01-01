@@ -25,14 +25,12 @@
 
 config EMBTK_HOST_HAVE_LIBPNG
 	bool
-	select EMBTK_LIBPNG_PKG_IS_TARGZ
 	select EMBTK_HOST_HAVE_ZLIB
 	help
 		libpng for host development machine.
 
 config EMBTK_HAVE_LIBPNG
 	bool "Have libpng"
-	select EMBTK_LIBPNG_PKG_IS_TARGZ
 	select EMBTK_HAVE_ZLIB
 	help
 		libpng is the reference library for use in applications that
@@ -94,10 +92,8 @@ config EMBTK_LIBPNG_NEED_AUTORECONF
 	select EMBTK_LIBPNG_HOST_NEED_AUTORECONF
 config EMBTK_LIBPNG_PKG_IS_TARGZ
 	bool
-	select EMBTK_LIBPNG_HOST_PKG_IS_TARGZ
 config EMBTK_LIBPNG_PKG_IS_TARBZ2
 	bool
-	select EMBTK_LIBPNG_HOST_PKG_IS_TARBZ2
 
 config EMBTK_LIBPNG_HOST_NEED_PATCH
 	bool

@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_XF86VIDEOFBDEV
 	bool "Have xf86-video-fbdev"
-	select EMBTK_XF86VIDEOFBDEV_PKG_IS_TARBZ2
 	help
 		Xorg server framebuffer video driver
 choice

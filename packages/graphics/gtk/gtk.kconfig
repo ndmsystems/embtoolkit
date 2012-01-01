@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_GTK
 	bool "Have gtk+"
-	select EMBTK_GTK_PKG_IS_TARBZ2
 	select EMBTK_HOST_HAVE_GDKPIXBUF
 	select EMBTK_HAVE_GLIB
 	select EMBTK_HAVE_PANGO

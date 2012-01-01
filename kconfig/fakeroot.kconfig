@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_FAKEROOT
 	bool
-	select EMBTK_FAKEROOT_PKG_IS_TARGZ
 	default y
 	help
 		fakeroot for host tools.

@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_RANDRPROTO
 	bool "Have randrproto"
-	select EMBTK_RANDRPROTO_PKG_IS_TARBZ2
 	help
 		randrproto for X windowing system.
 		This extension defines a protocol for clients to dynamically

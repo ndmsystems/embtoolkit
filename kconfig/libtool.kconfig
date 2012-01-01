@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_LIBTOOL
 	bool
-	select EMBTK_LIBTOOL_PKG_IS_TARGZ
 	default y
 	help
 		libtool for autotools.

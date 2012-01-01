@@ -25,14 +25,12 @@
 
 config EMBTK_HOST_HAVE_GLIB
 	bool
-	select EMBTK_GLIB_PKG_IS_TARBZ2
 	select EMBTK_HOST_HAVE_GETTEXT
 	help
 		Have glib for host development machine.
 
 config EMBTK_HAVE_GLIB
 	bool "Have GLib"
-	select EMBTK_GLIB_PKG_IS_TARBZ2
 	select EMBTK_HOST_HAVE_GLIB
 	select EMBTK_HAVE_GETTEXT
 	select EMBTK_HAVE_ZLIB
@@ -88,10 +86,8 @@ config EMBTK_GLIB_NEED_AUTORECONF
 	select EMBTK_GLIB_HOST_NEED_AUTORECONF
 config EMBTK_GLIB_PKG_IS_TARGZ
 	bool
-	select EMBTK_GLIB_HOST_PKG_IS_TARGZ
 config EMBTK_GLIB_PKG_IS_TARBZ2
 	bool
-	select EMBTK_GLIB_HOST_PKG_IS_TARBZ2
 
 config EMBTK_GLIB_HOST_NEED_PATCH
 	bool

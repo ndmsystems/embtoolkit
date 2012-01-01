@@ -25,13 +25,11 @@
 
 config EMBTK_HOST_HAVE_INTLTOOL
 	bool
-	select EMBTK_INTLTOOL_PKG_IS_TARBZ2
 	help
 		intltool for host development machine.
 
 config EMBTK_HAVE_INTLTOOL
 	bool
-	select EMBTK_INTLTOOL_PKG_IS_TARBZ2
 	help
 		intltool description
 choice
@@ -60,10 +58,8 @@ config EMBTK_INTLTOOL_NEED_AUTORECONF
 	select EMBTK_INTLTOOL_HOST_NEED_AUTORECONF
 config EMBTK_INTLTOOL_PKG_IS_TARGZ
 	bool
-	select EMBTK_INTLTOOL_HOST_PKG_IS_TARGZ
 config EMBTK_INTLTOOL_PKG_IS_TARBZ2
 	bool
-	select EMBTK_INTLTOOL_HOST_PKG_IS_TARBZ2
 
 config EMBTK_INTLTOOL_HOST_NEED_PATCH
 	bool

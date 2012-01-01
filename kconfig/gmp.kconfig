@@ -25,11 +25,9 @@
 
 config EMBTK_HAVE_GMP
 	bool
-	select EMBTK_GMP_PKG_IS_TARBZ2
 
 config EMBTK_HOST_HAVE_GMP
 	bool
-	select EMBTK_GMP_PKG_IS_TARBZ2
 	default y
 
 choice
@@ -67,10 +65,8 @@ config EMBTK_GMP_NEED_AUTORECONF
 	select EMBTK_GMP_HOST_NEED_AUTORECONF
 config EMBTK_GMP_PKG_IS_TARGZ
 	bool
-	select EMBTK_GMP_HOST_PKG_IS_TARGZ
 config EMBTK_GMP_PKG_IS_TARBZ2
 	bool
-	select EMBTK_GMP_HOST_PKG_IS_TARBZ2
 
 config EMBTK_GMP_HOST_NEED_PATCH
 	bool

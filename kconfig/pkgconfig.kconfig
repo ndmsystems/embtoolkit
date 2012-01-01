@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_PKGCONFIG
 	bool
-	select EMBTK_PKGCONFIG_PKG_IS_TARGZ
 	default y
 	help
 		pkgconfig for host tools.

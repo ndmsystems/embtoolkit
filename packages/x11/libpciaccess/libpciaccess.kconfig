@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_LIBPCIACCESS
 	bool "Have libpciaccess"
-	select EMBTK_LIBPCIACCESS_PKG_IS_TARGZ
 	help
 		Library providing generic access to the PCI bus and devices.
 choice

@@ -25,7 +25,6 @@
 
 config EMBTK_HAVE_OPENSSL
 	bool "Have OpenSSL"
-	select EMBTK_OPENSSL_PKG_IS_TARGZ
 	help
 		The OpenSSL Project is a collaborative effort to develop a
 		robust, commercial-grade, full-featured, and Open Source toolkit
