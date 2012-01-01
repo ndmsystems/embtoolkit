@@ -51,6 +51,7 @@ GTK_DEPS	+= libx11_install libxext_install libxrender_install xinput_install
 endif
 
 GTK_CONFIGURE_ENV	:= gio_can_sniff=yes
+GTK_CONFIGURE_ENV	+= ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOSTTOOLS)/usr/bin/gdk-pixbuf-csource
 GTK_CONFIGURE_OPTS	:= $(GTK_BACKEND)
 GTK_CONFIGURE_OPTS	+= --disable-cups --disable-gtk-doc --disable-glibtest
 GTK_CONFIGURE_OPTS	+= LIBPNG=-lpng
