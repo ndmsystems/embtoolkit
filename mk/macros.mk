@@ -67,22 +67,6 @@ __embtk_mk_pathexist = $(shell test -e $(1) && echo y)
 #
 __embtk_mk_pathnotexist = $(shell test -e $(1) || echo y)
 
-#Build message
-#usage $(call EMBTK_BUILD_MSG,$(NAME_PACKAGE))
-define EMBTK_BUILD_MSG
-	$(call embtk_echo_blue,"################################################################################")
-	$(call embtk_echo_blue,"# EmbToolkit # Building $(1)")
-	$(call embtk_echo_blue,"################################################################################")
-endef
-
-#Install message
-#usage $(call EMBTK_INSTALL_MSG,$(NAME_PACKAGE))
-define EMBTK_INSTALL_MSG
-	$(call embtk_echo_blue,"################################################################################")
-	$(call embtk_echo_blue,"# EmbToolkit # Installing $(1)")
-	$(call embtk_echo_blue,"################################################################################")
-endef
-
 # Macro to print messages
 embtk_pwarning	= $(call embtk_echo_yellow,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ WARNING: $(1)\\n$(__embtk_msg_h)")
 embtk_perror	= $(call embtk_echo_red,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ ERROR: $(1)\\n$(__embtk_msg_h)")
