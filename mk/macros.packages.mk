@@ -153,6 +153,9 @@ __embtk_pkg_prefix		= $(strip $($(PKGV)_PREFIX))
 __embtk_pkg_destdir		= $(strip $($(PKGV)_DESTDIR))
 __embtk_pkg_nodestdir		= $(strip $($(PKGV)_NODESTDIR))
 __embtk_pkg_deps		= $(strip $($(PKGV)_DEPS))
+__embtk_pkg_depspkgv		= $(sort $(patsubst %_install,%,$(__embtk_pkg_deps)))
+___embtk_pkg_kconfigsname	= $(strip $(if $($(PKGV)_KCONFIGS_NAME),$($(PKGV)_KCONFIGS_NAME),$(PKGV)))
+__embtk_pkg_kconfigsname	= $(patsubst %_HOST,%,$(___embtk_pkg_kconfigsname))
 
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
 __embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
@@ -193,26 +196,31 @@ __embtk_pkg_configured-y	= $(call __embtk_mk_pathexist,$(__embtk_pkg_dotconfigur
 __embtk_pkg_notconfigured-y	= $(call __embtk_mk_pathnotexist,$(__embtk_pkg_dotconfigured_f))
 
 #
+# A macro to print kconfig entries of a package
+#
+__embtk_pkg_printkconfigs	=						\
+	grep 'CONFIG_K*EMBTK_.*$(__embtk_pkg_kconfigsname)_.*'			\
+	$(EMBTK_DOTCONFIG)
+
+#
 # A macro to test if a package is already installed.
 # It returns y if installed and nothing if not.
 #
-__installed_		= $(__embtk_pkg_dotinstalled_f)
+__installed_f		= $(__embtk_pkg_dotinstalled_f)
 __pkgkconfig_f		= $(__embtk_pkg_dotpkgkconfig_f)
 __pkgkconfig_f_old	= $(__embtk_pkg_dotpkgkconfig_f).old
-__gdotconfig_f		= $(if $(2),$(2),$(EMBTK_DOTCONFIG))
+__installed-y-makecmd	= $(MAKE) __embtk_$(1)_printmetakconfigs
 __embtk_pkg_installed-y = $(shell						\
 	if [ -e $(__installed_f) ] && [ -e $(__pkgkconfig_f) ]; then		\
 		cp $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
-		grep 'CONFIG_K*EMBTK_.*$(PKGV)_.*' $(__gdotconfig_f)		\
-							> $(__pkgkconfig_f);	\
+		$(__installed-y-makecmd) > $(__pkgkconfig_f);			\
 		cmp -s $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
 		if [ "x$$?" = "x0" ]; then					\
 			echo y;							\
 		fi;								\
 	else									\
 		mkdir -p $(__embtk_pkg_builddir);				\
-		grep 'CONFIG_K*EMBTK_.*$(PKGV)_.*' $(__gdotconfig_f)		\
-							> $(__pkgkconfig_f);	\
+		$(__installed-y-makecmd) > $(__pkgkconfig_f);			\
 	fi;)
 
 #
@@ -238,7 +246,7 @@ define embtk_configure_pkg
 		$(call embtk_pinfo,"Configure $(__embtk_pkg_package)..."))
 	$(call __embtk_configure_autoreconfpkg,$(1))
 	$(Q)test -e $(__embtk_pkg_srcdir)/configure || exit 1
-	$(call __embtk_print_configure_opts,"$(__embtk_pkg_configureopts)")
+	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
 	$(Q)cd $(__embtk_pkg_builddir);						\
 	CC=$(TARGETCC_CACHED)							\
 	CXX=$(TARGETCXX_CACHED)							\
@@ -284,7 +292,7 @@ define embtk_configure_hostpkg
 	$(call embtk_pinfo,"Configure $(__embtk_pkg_package) for host..."))
 	$(call __embtk_configure_autoreconfpkg,$(1))
 	$(Q)test -e $(__embtk_pkg_srcdir)/configure || exit 1
-	$(call __embtk_print_configure_opts,"$(__embtk_pkg_configureopts)")
+	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
 	$(Q)cd $(__embtk_pkg_builddir);						\
 	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"					\
 	LDFLAGS="-L$(HOSTTOOLS)/usr/lib $(__embtk_hostpkg_rpath)"		\
@@ -655,3 +663,11 @@ define embtk_cleanup_pkg
 	fi
 	$(Q)-rm -rf $(__embtk_pkg_builddir)*
 endef
+
+#
+# Implicit rule to print a package and its dependencies kconfig entries.
+#
+__embtk_%_printmetakconfigs:
+	$(call __embtk_pkg_printkconfigs,$*)
+	$(foreach dep,$(call __embtk_pkg_depspkgv,$*),				\
+		$(call __embtk_pkg_printkconfigs,$(dep));)
