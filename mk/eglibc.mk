@@ -31,6 +31,7 @@ EGLIBC_BUILD_DIR 		:= $(TOOLS_BUILD)/eglibc
 EGLIBC_SRC_DIR			:= $(call __embtk_pkg_localsvn,eglibc)
 EGLIBC_HEADERS_BUILD_DIR	:= $(TOOLS_BUILD)/eglibc-headers
 EGLIBC_HEADERS_SRC_DIR		:= $(call __embtk_pkg_localsvn,eglibc)
+EGLIBC_HEADERS_KCONFIGS_NAME	:= EGLIBC
 
 embtk_eglibc_cflags := $(TARGET_CFLAGS) $(EMBTK_TARGET_MCPU)
 embtk_eglibc_cflags += $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
@@ -47,7 +48,6 @@ embtk_eglibc_versioning-$(CONFIG_EMBTK_EGLIBC_DISABLE_VERSIONING) :=		\
 embtk_eglibc_optgroups_f	:= $(EMBTK_ROOT)/mk/eglibc/eglibc-$(EGLIBC_VERSION)-options.mk
 eglibc_optgroups_f		:= $(EGLIBC_BUILD_DIR)/option-groups.config
 eglibc_headers_optgroups_f	:= $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
-embtk_eglibc_h_kconfigs_f	:= $(EMBTK_ROOT)/.eglibc_headers.config
 
 #
 # eglibc headers install
@@ -60,13 +60,9 @@ define __embtk_eglibc_headers_install
 	$(embtk_install_eglibc_headers)
 endef
 
-eglibc_headers_postinstall:
-	$(__embtk_get_eglibc_h_kconfigs)
-
-eglibc_headers_install: eglibc_headers_postinstall
-	$(if $(call __embtk_pkg_installed-y,eglibc_headers,$(embtk_eglibc_h_kconfigs_f)),\
-		true,$(__embtk_eglibc_headers_install))
-	rm -rf $(embtk_eglibc_h_kconfigs_f)
+eglibc_headers_install:
+	$(if $(call __embtk_pkg_installed-y,eglibc_headers),true,		\
+					$(__embtk_eglibc_headers_install))
 
 #
 # eglibc install
@@ -147,10 +143,6 @@ define embtk_install_eglibc_headers
 	touch $(EGLIBC_HEADERS_BUILD_DIR)/.installed
 endef
 
-__embtk_get_eglibc_h_kconfigs = cat $(EMBTK_DOTCONFIG) | 			\
-	sed -e 's/CONFIG_KEMBTK_EGLIBC_/CONFIG_KEMBTK_EGLIBC_HEADERS_/g'	\
-		-e 's/CONFIG_EMBTK_EGLIBC_/CONFIG_EMBTK_EGLIBC_HEADERS_/g'	\
-						> $(embtk_eglibc_h_kconfigs_f)
 __embtk_get_eglibc_optgroups = grep "CONFIG_KEMBTK_EGLIBC_" $(EMBTK_DOTCONFIG)	\
 	| sed -e 's/CONFIG_KEMBTK_EGLIBC_*//g' | sed -e 's/"//g'
 define embtk_parse_eglibc_optgroups
