@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,6 +32,93 @@ EMBTK_GENERATED 	:= $(EMBTK_ROOT)/generated
 ROOTFS			:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 HOSTTOOLS		:= $(EMBTK_ROOT)/host-tools-$(EMBTK_MCU_FLAG)
 DOWNLOAD_DIR		:= $(patsubst %/,%,$(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR))))
+J			:= -j$(CONFIG_EMBTK_NUMBER_BUILD_JOBS)
+
+xconfig: basic
+ifeq ($(CONFIG_EMBTK_DOTCONFIG),y)
+	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig			\
+	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" 					\
+	EMBTK_VERSION=$(EMBTK_VERSION) xconfig
+else
+	$(Q)if [ -e $(EMBTK_DOTCONFIG).old ]; then				\
+		cp  $(EMBTK_DOTCONFIG).old  $(EMBTK_DOTCONFIG);			\
+		make -f scripts/Makefile.build obj=scripts/kconfig		\
+		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
+		EMBTK_VERSION=$(EMBTK_VERSION) xconfig;				\
+	else									\
+		make -f scripts/Makefile.build obj=scripts/kconfig		\
+		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
+		EMBTK_VERSION=$(EMBTK_VERSION) xconfig;				\
+	fi
+endif
+
+menuconfig: basic
+	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig		\
+	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"					\
+	EMBTK_VERSION=$(EMBTK_VERSION) menuconfig
+
+randconfig: basic
+	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig		\
+	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"					\
+	EMBTK_VERSION=$(EMBTK_VERSION) randconfig
+
+basic:
+	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/basic
+
+clean: rmallpath
+	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/kconfig
+	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/basic
+	$(Q)rm -rf .config kbuild.log .fakeroot*
+
+distclean: clean
+	$(Q)rm -rf dl/* src/eglibc* host-tools* .config.old
+
+startbuild:
+	@if [ -e $(GCC3_BUILD_DIR)/.installed ]; then \
+	echo "#################### Embtoolkit Warning ######################"; \
+	echo "# Warning trying to restart all the build while it is already"; \
+	echo "# done. Please use the correct make target !!!"; \
+	echo "##############################################################"; \
+	echo; \
+	make -s help; \
+	else \
+	echo "################## Embtoolkit build start ####################"; \
+	echo "# Starting build of selected features.."; \
+	echo "##############################################################"; \
+	echo; \
+	make buildtoolchain host_packages_build symlink_tools rootfs_build \
+	successful_build; \
+	fi
+
+# Successful build of EmbToolkit message
+successful_build:
+	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"| Toolchain build log |")
+	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"You successfully build your toolchain for $(GNU_TARGET)")
+	$(call embtk_echo_blue,"Tools built (GCC compiler, Binutils, etc.) are located in:")
+	$(call embtk_echo_blue,"    $(TOOLS)/bin")
+	@echo
+	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"| Root file system build log |")
+	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
+ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
+	$(call embtk_echo_blue,"You also successfully build root filesystem(s) located in the")
+	$(call embtk_echo_blue,"'generated' sub-directory of EmbToolkit.")
+else
+	$(call embtk_echo_green,"Build of root filesystem not selected.")
+endif
+	@echo
+	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"| Embedded systems Toolkit   |")
+	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"Hope that EmbToolkit will be useful for your project !!!")
+	$(call embtk_echo_blue,"Please report any bugs/suggestion at:")
+	$(call embtk_echo_blue,"   http://www.embtoolkit.org/issues/projects/show/embtoolkit")
+	$(call embtk_echo_blue,"You can also visit the wiki at:")
+	$(call embtk_echo_blue,"   http://www.embtoolkit.org")
+	@echo
+	$(call embtk_echo_blue,$(__embtk_msg_h))
 
 mkinitialpath:
 	$(Q)mkdir -p $(SYSROOT)

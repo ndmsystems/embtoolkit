@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -71,36 +71,6 @@ __embtk_mk_pathnotexist = $(shell test -e $(1) || echo y)
 embtk_pwarning	= $(call embtk_echo_yellow,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ WARNING: $(1)\\n$(__embtk_msg_h)")
 embtk_perror	= $(call embtk_echo_red,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ ERROR: $(1)\\n$(__embtk_msg_h)")
 embtk_pinfo	= $(call embtk_echo_blue,"$(__embtk_msg_h)\n~~ EmbToolkit ~~ $(1)\n$(__embtk_msg_h)")
-
-# Successful build of EmbToolkit message
-successful_build:
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"| Toolchain build log |")
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"You successfully build your toolchain for $(GNU_TARGET)")
-	$(call embtk_echo_blue,"Tools built (GCC compiler, Binutils, etc.) are located in:")
-	$(call embtk_echo_blue,"    $(TOOLS)/bin")
-	@echo
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"| Root file system build log |")
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-	$(call embtk_echo_blue,"You also successfully build root filesystem(s) located in the")
-	$(call embtk_echo_blue,"'generated' sub-directory of EmbToolkit.")
-else
-	$(call embtk_echo_green,"Build of root filesystem not selected.")
-endif
-	@echo
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"| Embedded systems Toolkit   |")
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"Hope that EmbToolkit will be useful for your project !!!")
-	$(call embtk_echo_blue,"Please report any bugs/suggestion at:")
-	$(call embtk_echo_blue,"   http://www.embtoolkit.org/issues/projects/show/embtoolkit")
-	$(call embtk_echo_blue,"You can also visit the wiki at:")
-	$(call embtk_echo_blue,"   http://www.embtoolkit.org")
-	@echo
-	$(call embtk_echo_blue,$(__embtk_msg_h))
 
 # Packages management macros
 include $(EMBTK_ROOT)/mk/macros.packages.mk

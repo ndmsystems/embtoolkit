@@ -1,6 +1,6 @@
 ################################################################################
 # EmbToolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -78,80 +78,14 @@ export Q
 
 -include .config
 
-J := -j$(CONFIG_EMBTK_NUMBER_BUILD_JOBS)
-
-ifeq ($(CONFIG_EMBTK_DOWNLOAD_DIR),)
-DOWNLOAD_DIR := $(EMBTK_ROOT)/dl
-endif
-
-ifeq ($(CONFIG_EMBTK_DOTCONFIG),)
-EMBTK_BUILD := xconfig
-else
-EMBTK_BUILD := startbuild
-endif
+EMBTK_BUILD := $(if $(CONFIG_EMBTK_DOTCONFIG),startbuild,xconfig)
 
 All: $(EMBTK_BUILD)
 
-xconfig: basic
-ifeq ($(CONFIG_EMBTK_DOTCONFIG),y)
-	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig			\
-	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" 					\
-	EMBTK_VERSION=$(EMBTK_VERSION) xconfig
-else
-	$(Q)if [ -e $(EMBTK_DOTCONFIG).old ]; then				\
-		cp  $(EMBTK_DOTCONFIG).old  $(EMBTK_DOTCONFIG);			\
-		make -f scripts/Makefile.build obj=scripts/kconfig		\
-		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
-		EMBTK_VERSION=$(EMBTK_VERSION) xconfig;				\
-	else									\
-		make -f scripts/Makefile.build obj=scripts/kconfig		\
-		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
-		EMBTK_VERSION=$(EMBTK_VERSION) xconfig;				\
-	fi
-endif
-
-menuconfig: basic
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig		\
-	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"					\
-	EMBTK_VERSION=$(EMBTK_VERSION) menuconfig
-
-randconfig: basic
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig		\
-	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"					\
-	EMBTK_VERSION=$(EMBTK_VERSION) randconfig
-
-basic:
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/basic
-
-clean: rmallpath
-	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/kconfig
-	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/basic
-	$(Q)rm -rf .config kbuild.log .fakeroot*
-
-startbuild:
-	@if [ -e $(GCC3_BUILD_DIR)/.installed ]; then \
-	echo "#################### Embtoolkit Warning ######################"; \
-	echo "# Warning trying to restart all the build while it is already"; \
-	echo "# done. Please use the correct make target !!!"; \
-	echo "##############################################################"; \
-	echo; \
-	make -s help; \
-	else \
-	echo "################## Embtoolkit build start ####################"; \
-	echo "# Starting build of selected features.."; \
-	echo "##############################################################"; \
-	echo; \
-	make buildtoolchain host_packages_build symlink_tools rootfs_build \
-	successful_build; \
-	fi
-
+include mk/buildsystem.mk
 include mk/macros.mk
 include mk/target-mcu.mk
-include mk/buildsystem.mk
 include mk/toolchain.mk
 include mk/packages.mk
 include mk/rootfs.mk
 include mk/help.mk
-
-distclean: clean
-	$(Q)rm -rf dl/* src/eglibc* host-tools* .config.old
