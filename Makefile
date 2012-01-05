@@ -147,7 +147,7 @@ startbuild:
 
 include mk/macros.mk
 include mk/target-mcu.mk
-include mk/initialpath.mk
+include mk/buildsystem.mk
 include mk/toolchain.mk
 include mk/packages.mk
 include mk/rootfs.mk
