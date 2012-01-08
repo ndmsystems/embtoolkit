@@ -86,8 +86,7 @@ startbuild:
 	echo "# Starting build of selected features.."; \
 	echo "##############################################################"; \
 	echo; \
-	make buildtoolchain host_packages_build symlink_tools rootfs_build \
-	successful_build; \
+	$(MAKE) buildtoolchain host_packages_build rootfs_build successful_build; \
 	fi
 
 # Successful build of EmbToolkit message

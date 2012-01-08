@@ -1,6 +1,6 @@
 ################################################################################
 # Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -98,17 +98,16 @@ TOOLCHAIN_DEPS		+= gcc2_install $(TOOLCHAIN_CLIB)_install gcc3_install
 include $(EMBTK_ROOT)/mk/$(TOOLCHAIN_CLIB).mk
 
 buildtoolchain: $(TOOLCHAIN_POST_DEPS) $(TOOLCHAIN_DEPS)
+	$(Q)$(__embtk_toolchain_symlinktools)
 	$(call embtk_pinfo,"$(STRICT_GNU_TARGET) toolchain successfully built!")
 
-symlink_tools:
-	@cd $(TOOLS)/bin/; export TOOLS_LIST="`ls $(STRICT_GNU_TARGET)-*`"; \
-	for i in $$TOOLS_LIST;do \
-	TOOLS_NAME=$$TOOLS_NAME" ""`echo $$i | sed 's/$(STRICT_GNU_TARGET)-*//'`" ; \
-	done; \
-	export TOOLS_NAME; \
-	for i in $$TOOLS_NAME;do \
-	ln -sf $(STRICT_GNU_TARGET)-$$i $(GNU_TARGET)-$$i; \
-	done
+__embtk_toolchain_symlinktools = $(shell					\
+	cd $(TOOLS)/bin;							\
+	tools=$$(ls $(STRICT_GNU_TARGET)-*);					\
+	toolsnames=$$(echo $$tools | sed 's/$(STRICT_GNU_TARGET)-*//g');	\
+	for tool in $$toolsnames; do						\
+		ln -sf $(STRICT_GNU_TARGET)-$$tool $(GNU_TARGET)-$$tool;	\
+	done)
 
 # Download target for offline build
 packages_fetch:: $(patsubst %_install,download_%,$(TOOLCHAINBUILD))
