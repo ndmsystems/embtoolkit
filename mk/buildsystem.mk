@@ -120,31 +120,46 @@ endif
 	@echo
 	$(call embtk_echo_blue,$(__embtk_msg_h))
 
-mkinitialpath:
-	$(Q)mkdir -p $(SYSROOT)
-	$(Q)mkdir -p $(SYSROOT)/lib
-	$(Q)mkdir -p $(SYSROOT)/usr
-	$(Q)mkdir -p $(SYSROOT)/usr/etc
-	$(Q)mkdir -p $(SYSROOT)/root
-	$(Q)mkdir -p $(SYSROOT)/usr/lib
-	$(Q)$(if $(CONFIG_EMBTK_32BITS_FS),,cd $(SYSROOT);			\
+define __embtk_mk_initsysrootdirs
+	mkdir -p $(SYSROOT)
+	mkdir -p $(SYSROOT)/lib
+	mkdir -p $(SYSROOT)/usr
+	mkdir -p $(SYSROOT)/usr/etc
+	mkdir -p $(SYSROOT)/root
+	mkdir -p $(SYSROOT)/usr/lib
+	$(if $(CONFIG_EMBTK_32BITS_FS),,cd $(SYSROOT);				\
 		ln -sf lib lib64; cd $(SYSROOT)/usr;ln -sf lib lib64)
 	$(Q)$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
 		cd $(SYSROOT); ln -sf lib lib64; mkdir -p lib32;		\
 		cd $(SYSROOT)/usr; ln -sf lib lib64; mkdir -p lib32)
-	$(Q)mkdir -p $(TOOLS)
-	$(Q)mkdir -p $(TOOLS_BUILD)
-	$(Q)mkdir -p $(HOSTTOOLS)
-	$(Q)mkdir -p $(HOSTTOOLS)/usr
-	$(Q)mkdir -p $(HOSTTOOLS)/usr/include
-	$(Q)mkdir -p $(HOSTTOOLS)/usr/local
-	$(Q)$(if $(CONFIG_EMBTK_HAVE_ROOTFS),					\
+endef
+
+define __embtk_mk_inittoolsdirs
+	mkdir -p $(TOOLS)
+	mkdir -p $(TOOLS_BUILD)
+endef
+
+define __embtk_mk_inithosttoolsdirs
+	mkdir -p $(HOSTTOOLS)
+	mkdir -p $(HOSTTOOLS)/usr
+	mkdir -p $(HOSTTOOLS)/usr/include
+	mkdir -p $(HOSTTOOLS)/usr/local
+endef
+
+define __embtk_mk_initrootfsdirs
+	$(if $(CONFIG_EMBTK_HAVE_ROOTFS),					\
 		mkdir -p $(ROOTFS);						\
 		cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(ROOTFS)/;		\
 		mkdir -p $(PACKAGES_BUILD))
+endef
+
+mkinitialpath:
+	$(Q)$(__embtk_mk_initsysrootdirs)
+	$(Q)$(__embtk_mk_inittoolsdirs)
+	$(Q)$(__embtk_mk_inithosttoolsdirs)
+	$(Q)$(__embtk_mk_initrootfsdirs)
 
 rmallpath:
 	$(Q)rm -rf $(PACKAGES_BUILD) $(ROOTFS) $(TOOLS) $(TOOLS_BUILD)
 	$(Q)rm -rf $(SYSROOT) $(EMBTK_GENERATED) $(HOSTTOOLS)
-	$(Q)rm -rf $(DOWNLOAD_DIR)/eglibc-*.tar.bz2
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(DOWNLOAD_DIR)/*.patch)
