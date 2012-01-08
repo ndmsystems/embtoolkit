@@ -79,36 +79,26 @@ include $(EMBTK_ROOT)/mk/libtool.mk
 include $(EMBTK_ROOT)/mk/autoconf.mk
 include $(EMBTK_ROOT)/mk/automake.mk
 include $(EMBTK_ROOT)/mk/m4.mk
-AUTOTOOLS_INSTALL := m4_install libtool_install autoconf_install \
-			automake_install
+AUTOTOOLS_INSTALL	:= m4_install libtool_install autoconf_install
+AUTOTOOLS_INSTALL	+= automake_install
+
 #cmake
 include $(EMBTK_ROOT)/mk/cmake.mk
-EMBTK_CMAKE_INSTALL := $(if $(CONFIG_EMBTK_HOST_HAVE_CMAKE),cmake_install)
+EMBTK_CMAKE_INSTALL	:= $(if $(CONFIG_EMBTK_HOST_HAVE_CMAKE),cmake_install)
 
-ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
-#EGLIBC
-include $(EMBTK_ROOT)/mk/eglibc.mk
-TOOLCHAINBUILD := mkinitialpath ccache_install					\
-		$(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL)			\
-		linux_headers_install						\
-		gmp_host_install mpfr_host_install mpc_host_install		\
-		binutils_install gcc1_install eglibc_headers_install		\
-		gcc2_install eglibc_install gcc3_install
-else
-#uClibc
-include $(EMBTK_ROOT)/mk/uclibc.mk
-TOOLCHAINBUILD := mkinitialpath ccache_install					\
-		$(AUTOTOOLS_INSTALL) $(EMBTK_CMAKE_INSTALL)			\
-		linux_headers_install 						\
-		gmp_host_install mpfr_host_install mpc_host_install		\
-		binutils_install gcc1_install uclibc_headers_install		\
-		gcc2_install uclibc_install gcc3_install
-endif
+TOOLCHAIN_CLIB		:= $(if $(CONFIG_EMBTK_CLIB_EGLIBC),eglibc,uclibc)
+TOOLCHAIN_POST_DEPS	:= mkinitialpath ccache_install $(AUTOTOOLS_INSTALL)
+TOOLCHAIN_POST_DEPS	+= $(EMBTK_CMAKE_INSTALL)
 
-#targets
-buildtoolchain: $(TOOLCHAINBUILD)
-	$(call embtk_pinfo,"You successfully build a toolchain for \
-	$(STRICT_GNU_TARGET) !!!")
+TOOLCHAIN_DEPS		:= linux_headers_install gmp_host_install
+TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
+TOOLCHAIN_DEPS		+= gcc1_install $(TOOLCHAIN_CLIB)_headers_install
+TOOLCHAIN_DEPS		+= gcc2_install $(TOOLCHAIN_CLIB)_install gcc3_install
+
+include $(EMBTK_ROOT)/mk/$(TOOLCHAIN_CLIB).mk
+
+buildtoolchain: $(TOOLCHAIN_POST_DEPS) $(TOOLCHAIN_DEPS)
+	$(call embtk_pinfo,"$(STRICT_GNU_TARGET) toolchain successfully built!")
 
 symlink_tools:
 	@cd $(TOOLS)/bin/; export TOOLS_LIST="`ls $(STRICT_GNU_TARGET)-*`"; \
