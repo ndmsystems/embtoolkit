@@ -209,7 +209,7 @@ __embtk_pkg_printkconfigs	=						\
 __installed_f		= $(__embtk_pkg_dotinstalled_f)
 __pkgkconfig_f		= $(__embtk_pkg_dotpkgkconfig_f)
 __pkgkconfig_f_old	= $(__embtk_pkg_dotpkgkconfig_f).old
-__installed-y-makecmd	= $(MAKE) __embtk_$(1)_printmetakconfigs
+__installed-y-makecmd	= $(MAKE) -i __embtk_$(1)_printmetakconfigs
 __embtk_pkg_installed-y = $(shell						\
 	if [ -e $(__installed_f) ] && [ -e $(__pkgkconfig_f) ]; then		\
 		cp $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
