@@ -168,6 +168,9 @@ __embtk_pkg_dotconfigured_f	= $(__embtk_pkg_builddir)/.configured
 __embtk_pkg_dotinstalled_f	= $(__embtk_pkg_builddir)/.installed
 __embtk_pkg_dotpkgkconfig_f	= $(__embtk_pkg_builddir)/.embtk.$(__embtk_pkg_name).kconfig
 
+# Some useful macros about packages
+__embtk_rootfs_packages		= $(patsubst %_install,%,$(ROOTFS_COMPONENTS-y))
+__embtk_hosttools_packages	= $(patsubst %_install,%,$(HOSTTOOLS_COMPONENTS-y))
 
 #
 # A macro to get packages version from .config file.

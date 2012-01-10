@@ -86,6 +86,11 @@ AUTOTOOLS_INSTALL	+= automake_install
 include $(EMBTK_ROOT)/mk/cmake.mk
 EMBTK_CMAKE_INSTALL	:= $(if $(CONFIG_EMBTK_HOST_HAVE_CMAKE),cmake_install)
 
+TOOLCHAIN_NAME		:= toolchain
+TOOLCHAIN_PACKAGE	:= toolchain-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).tar.bz2
+TOOLCHAIN_DIR		:= $(EMBTK_GENERATED)/toolchain-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
+
 TOOLCHAIN_CLIB		:= $(if $(CONFIG_EMBTK_CLIB_EGLIBC),eglibc,uclibc)
 TOOLCHAIN_POST_DEPS	:= mkinitialpath ccache_install $(AUTOTOOLS_INSTALL)
 TOOLCHAIN_POST_DEPS	+= $(EMBTK_CMAKE_INSTALL)
@@ -97,17 +102,42 @@ TOOLCHAIN_DEPS		+= gcc2_install $(TOOLCHAIN_CLIB)_install gcc3_install
 
 include $(EMBTK_ROOT)/mk/$(TOOLCHAIN_CLIB).mk
 
-buildtoolchain: $(TOOLCHAIN_POST_DEPS) $(TOOLCHAIN_DEPS)
-	$(Q)$(__embtk_toolchain_symlinktools)
-	$(call embtk_pinfo,"$(STRICT_GNU_TARGET) toolchain successfully built!")
-
-__embtk_toolchain_symlinktools = $(shell					\
+define __embtk_toolchain_symlinktools
 	cd $(TOOLS)/bin;							\
 	tools=$$(ls $(STRICT_GNU_TARGET)-*);					\
 	toolsnames=$$(echo $$tools | sed 's/$(STRICT_GNU_TARGET)-*//g');	\
 	for tool in $$toolsnames; do						\
 		ln -sf $(STRICT_GNU_TARGET)-$$tool $(GNU_TARGET)-$$tool;	\
-	done)
+	done
+endef
+
+define __embtk_toolchain_compress
+	tar -cjf $(TOOLCHAIN_PACKAGE)						\
+		$(notdir $(SYSROOT)) $(notdir $(TOOLS)) &&			\
+	mv $(TOOLCHAIN_PACKAGE) $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
+endef
+
+define __embtk_toolchain_decompress
+	cd $(EMBTK_ROOT) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
+endef
+
+define __embtk_toolchain_build
+	$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
+	$(foreach dep,$(patsubst %_install,%,$(TOOLCHAIN_DEPS)),		\
+				rm -rf $(call __embtk_pkg_builddir,$(dep));)
+	$(foreach pkg,$(__embtk_rootfs_packages),$(MAKE) $(pkg)_clean;)
+	rm -rf $(SYSROOT)
+	$(__embtk_mk_initsysrootdirs)
+	$(MAKE) $(TOOLCHAIN_POST_DEPS) $(TOOLCHAIN_DEPS)
+	$(__embtk_toolchain_symlinktools)
+	$(__embtk_toolchain_compress)
+	touch $(TOOLCHAIN_DIR)/.installed
+	$(call embtk_pinfo,"New $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain successfully built!")
+endef
+
+buildtoolchain:
+	$(Q)$(if $(call __embtk_pkg_installed-y,toolchain),true,		\
+						$(__embtk_toolchain_build))
 
 # Download target for offline build
 packages_fetch:: $(patsubst %_install,download_%,$(TOOLCHAINBUILD))
