@@ -26,7 +26,7 @@
 # Embtoolkit colors
 __embtk_color_red	= "\E[1;31m"
 __embtk_color_green	= "\E[1;32m"
-__embtk_color_yellow	= "\E[1;33m"
+__embtk_color_yellow	= "\E[0;33m"
 __embtk_color_blue	= "\E[1;34m"
 __embtk_no_color	= "\E[0m"
 

@@ -74,51 +74,26 @@ distclean: clean
 	$(Q)rm -rf dl/* src/*.git src/*.svn .config.old
 	$(Q)rm -rf $(EMBTK_GENERATED)
 
-startbuild:
-	@if [ -e $(GCC3_BUILD_DIR)/.installed ]; then \
-	echo "#################### Embtoolkit Warning ######################"; \
-	echo "# Warning trying to restart all the build while it is already"; \
-	echo "# done. Please use the correct make target !!!"; \
-	echo "##############################################################"; \
-	echo; \
-	make -s help; \
-	else \
-	echo "################## Embtoolkit build start ####################"; \
-	echo "# Starting build of selected features.."; \
-	echo "##############################################################"; \
-	echo; \
-	$(MAKE) buildtoolchain host_packages_build rootfs_build successful_build; \
-	fi
+define __embtk_mk_pwarning_restartbuild
+	$(call embtk_pwarning,"Wrong make target - Use correct make target")
+	$(call embtk_echo_yellow,"You are trying to restart all the build while it is already")
+	$(call embtk_echo_yellow,"done. Please use the correct make target!!!")
+	echo
+	$(MAKE) help
+endef
 
-# Successful build of EmbToolkit message
-successful_build:
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"| Toolchain build log |")
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"You successfully build your toolchain for $(GNU_TARGET)")
-	$(call embtk_echo_blue,"Tools built (GCC compiler, Binutils, etc.) are located in:")
-	$(call embtk_echo_blue,"    $(TOOLS)/bin")
-	@echo
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"| Root file system build log |")
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-	$(call embtk_echo_blue,"You also successfully build root filesystem(s) located in the")
-	$(call embtk_echo_blue,"'generated' sub-directory of EmbToolkit.")
-else
-	$(call embtk_echo_green,"Build of root filesystem not selected.")
-endif
-	@echo
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"| Embedded systems Toolkit   |")
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"Hope that EmbToolkit will be useful for your project !!!")
-	$(call embtk_echo_blue,"Please report any bugs/suggestion at:")
-	$(call embtk_echo_blue,"   http://www.embtoolkit.org/issues/projects/show/embtoolkit")
-	$(call embtk_echo_blue,"You can also visit the wiki at:")
-	$(call embtk_echo_blue,"   http://www.embtoolkit.org")
-	@echo
-	$(call embtk_echo_blue,$(__embtk_msg_h))
+define __embtk_mk_print_selectedfeatures
+	$(call embtk_pinfo,"Starting build of selected features...")
+endef
+
+define __embtk_mk_startbuild
+	$(__embtk_mk_print_selectedfeatures)
+	$(MAKE) buildtoolchain host_packages_build rootfs_build successful_build
+endef
+
+startbuild:
+	$(if $(call __embtk_mk_pathexist,$(GCC3_BUILD_DIR)/.installed),		\
+		$(__embtk_mk_pwarning_restartbuild),$(__embtk_mk_startbuild))
 
 define __embtk_mk_initsysrootdirs
 	mkdir -p $(SYSROOT)
