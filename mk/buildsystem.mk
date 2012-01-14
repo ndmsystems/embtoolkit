@@ -88,6 +88,33 @@ endef
 
 define __embtk_mk_startbuild
 	$(__embtk_mk_print_selectedfeatures)
+	$(call embtk_echo_blue," ~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"| Toolchain |")
+	$(call embtk_echo_blue," ~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"\tLinux kernel headers: linux-$(call embtk_get_pkgversion,linux)")
+	$(call embtk_echo_blue,"\tC library           :")
+	$(call embtk_echo_blue,"\tBinutils            : binutils-$(call embtk_get_pkgversion,binutils)")
+	$(call embtk_echo_blue,"\tGCC                 : gcc-$(call embtk_get_pkgversion,gcc)")
+	$(if $(CONFIG_EMBTK_HAVE_GDB_SYSTEM),
+	$(call embtk_echo_blue,"\tGDB                 : gdb-$(call embtk_get_pkgversion,gdb)"))
+	$(if $(CONFIG_EMBTK_ROOTFS_HAVE_STRACE),
+	$(call embtk_echo_blue,"\tStrace              : strace-$(call embtk_get_pkgversion,strace)"))
+	$(call embtk_echo_blue," ~~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"| Host tools |")
+	$(call embtk_echo_blue," ~~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"\tNumber of host tools packages needed:$(__embtk_hosttools_nrpackages)")
+	$(if $(CONFIG_EMBTK_HAVE_ROOTFS),
+		$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~ ")
+		$(call embtk_echo_blue,"| Root FS packages |")
+		$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~ ")
+		$(call embtk_echo_blue,"\tNumber of root FS packages:$(__embtk_rootfs_nrpackages)")
+		$(call embtk_echo_blue," ~~~~~~~~~~~~~~~ ")
+		$(call embtk_echo_blue,"| Root FS types |")
+		$(call embtk_echo_blue," ~~~~~~~~~~~~~~~ ")
+		$(call embtk_echo_blue,"\tTAR.BZ2   : Yes")
+		$(call embtk_echo_blue,"\tInitramfs : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),Yes,No)")
+		$(call embtk_echo_blue,"\tsqashFS   : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),Yes,No)")
+		$(call embtk_echo_blue,"\tJFFS2     : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),Yes,No)"))
 	$(MAKE) buildtoolchain host_packages_build rootfs_build successful_build
 endef
 

@@ -170,7 +170,14 @@ __embtk_pkg_dotpkgkconfig_f	= $(__embtk_pkg_builddir)/.embtk.$(__embtk_pkg_name)
 
 # Some useful macros about packages
 __embtk_rootfs_packages		= $(patsubst %_install,%,$(ROOTFS_COMPONENTS-y))
+__embtk_rootfs_nrpackages	= $(if $(__embtk_rootfs_packages),		\
+					$(shell echo $(__embtk_rootfs_packages)	\
+								| wc -w),	\
+					0)
 __embtk_hosttools_packages	= $(patsubst %_install,%,$(HOSTTOOLS_COMPONENTS-y))
+__embtk_hosttools_nrpackages	= $(if $(__embtk_hosttools_packages),		\
+				$(shell echo $(__embtk_hosttools_packages)	\
+								| wc -w),0)
 
 #
 # A macro to get packages version from .config file.
