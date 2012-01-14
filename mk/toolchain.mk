@@ -121,6 +121,11 @@ define __embtk_toolchain_decompress
 	$(call embtk_pinfo,"Decompressing $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
 	cd $(EMBTK_ROOT) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 	$(MAKE) $(TOOLCHAIN_POST_DEPS)
+	mkdir -p $(GCC3_BUILD_DIR)
+	touch $(GCC3_BUILD_DIR)/.installed
+	touch $(GCC3_BUILD_DIR)/.gcc3_post_install
+	$(MAKE) __embtk_gcc3_printmetakconfigs > 				\
+					$(call __embtk_pkg_dotpkgkconfig_f,gcc3)
 endef
 
 define __embtk_toolchain_build
