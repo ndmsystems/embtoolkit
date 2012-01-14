@@ -118,7 +118,9 @@ define __embtk_toolchain_compress
 endef
 
 define __embtk_toolchain_decompress
+	$(call embtk_pinfo,"Decompressing $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
 	cd $(EMBTK_ROOT) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
+	$(MAKE) $(TOOLCHAIN_POST_DEPS)
 endef
 
 define __embtk_toolchain_build
@@ -136,8 +138,8 @@ define __embtk_toolchain_build
 endef
 
 buildtoolchain:
-	$(Q)$(if $(call __embtk_pkg_installed-y,toolchain),true,		\
-						$(__embtk_toolchain_build))
+	$(Q)$(if $(call __embtk_pkg_installed-y,toolchain),			\
+		$(__embtk_toolchain_decompress),$(__embtk_toolchain_build))
 
 # Download target for offline build
 packages_fetch:: $(patsubst %_install,download_%,$(TOOLCHAINBUILD))

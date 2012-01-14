@@ -71,7 +71,8 @@ clean: rmallpath
 	$(Q)rm -rf .config kbuild.log .fakeroot*
 
 distclean: clean
-	$(Q)rm -rf dl/* src/eglibc* host-tools* .config.old
+	$(Q)rm -rf dl/* src/*.git src/*.svn .config.old
+	$(Q)rm -rf $(EMBTK_GENERATED)
 
 startbuild:
 	@if [ -e $(GCC3_BUILD_DIR)/.installed ]; then \
@@ -152,13 +153,18 @@ define __embtk_mk_initrootfsdirs
 		mkdir -p $(PACKAGES_BUILD))
 endef
 
+define __embtk_mk_initialpath
+	$(__embtk_mk_initsysrootdirs)
+	$(__embtk_mk_inittoolsdirs)
+	$(__embtk_mk_inithosttoolsdirs)
+	$(__embtk_mk_initrootfsdirs)
+endef
+
 mkinitialpath:
-	$(Q)$(__embtk_mk_initsysrootdirs)
-	$(Q)$(__embtk_mk_inittoolsdirs)
-	$(Q)$(__embtk_mk_inithosttoolsdirs)
-	$(Q)$(__embtk_mk_initrootfsdirs)
+	$(Q)$(__embtk_mk_initialpath)
 
 rmallpath:
-	$(Q)rm -rf $(PACKAGES_BUILD) $(ROOTFS) $(TOOLS) $(TOOLS_BUILD)
-	$(Q)rm -rf $(SYSROOT) $(EMBTK_GENERATED) $(HOSTTOOLS)
+	$(Q)rm -rf $(PACKAGES_BUILD)* $(ROOTFS)* $(TOOLS)* $(TOOLS_BUILD)*
+	$(Q)rm -rf $(SYSROOT)* $(HOSTTOOLS)* $(EMBTK_GENERATED)/rootfs-*
+	$(Q)rm -rf $(EMBTK_GENERATED)/initramfs-*
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(DOWNLOAD_DIR)/*.patch)
