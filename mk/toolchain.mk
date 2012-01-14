@@ -92,8 +92,8 @@ TOOLCHAIN_DIR		:= $(EMBTK_GENERATED)/toolchain-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
 
 TOOLCHAIN_CLIB		:= $(if $(CONFIG_EMBTK_CLIB_EGLIBC),eglibc,uclibc)
-TOOLCHAIN_POST_DEPS	:= mkinitialpath ccache_install $(AUTOTOOLS_INSTALL)
-TOOLCHAIN_POST_DEPS	+= $(EMBTK_CMAKE_INSTALL)
+TOOLCHAIN_PRE_DEPS	:= mkinitialpath ccache_install $(AUTOTOOLS_INSTALL)
+TOOLCHAIN_PRE_DEPS	+= $(EMBTK_CMAKE_INSTALL)
 
 TOOLCHAIN_DEPS		:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
@@ -120,7 +120,7 @@ endef
 define __embtk_toolchain_decompress
 	$(call embtk_pinfo,"Decompressing $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
 	cd $(EMBTK_ROOT) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
-	$(MAKE) $(TOOLCHAIN_POST_DEPS)
+	$(MAKE) $(TOOLCHAIN_PRE_DEPS)
 	mkdir -p $(GCC3_BUILD_DIR)
 	touch $(GCC3_BUILD_DIR)/.installed
 	touch $(GCC3_BUILD_DIR)/.gcc3_post_install
@@ -135,7 +135,7 @@ define __embtk_toolchain_build
 	$(foreach pkg,$(__embtk_rootfs_packages),$(MAKE) $(pkg)_clean;)
 	rm -rf $(SYSROOT)
 	$(__embtk_mk_initsysrootdirs)
-	$(MAKE) $(TOOLCHAIN_POST_DEPS) $(TOOLCHAIN_DEPS)
+	$(MAKE) $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_DEPS)
 	$(__embtk_toolchain_symlinktools)
 	$(__embtk_toolchain_compress)
 	touch $(TOOLCHAIN_DIR)/.installed
