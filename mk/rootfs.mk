@@ -66,14 +66,15 @@ ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/usr/sbin ] && find $$ROOTFS/usr/sbin -ty
 ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/usr/libexec ] && find $$ROOTFS/usr/libexec -type f`
 endif
 
+ROOTFS_BUILD_DEPS	:= rootfs_clean mkinitialrootfs $(ROOTFS_HOSTTOOLS-y)
+ROOTFS_BUILD_DEPS	+= $(ROOTFS_COMPONENTS-y) build_rootfs_devnodes
+ROOTFS_BUILD_DEPS	+= rootfs_fill build_tarbz2_rootfs $(FILESYSTEMS-y)
+
 rootfs_build:
 	$(call embtk_pinfo,"Building selected root filesystems...")
-	@$(MAKE) rootfs_clean mkinitialrootfs $(ROOTFS_HOSTTOOLS-y) \
-	$(ROOTFS_COMPONENTS-y) build_rootfs_devnodes rootfs_fill \
-	build_tarbz2_rootfs $(FILESYSTEMS-y)
+	$(Q)$(MAKE) $(ROOTFS_BUILD_DEPS)
 	$(Q)rm -rf $(ROOTFS)
-	$(call embtk_pinfo,"Build of selected root filesystems \
-	ended successfully!")
+	$(call embtk_pinfo,"Selected root filesystems built successfully!")
 
 rootfs_fill:
 	@mkdir -p $(ROOTFS)/$(LIBDIR)
