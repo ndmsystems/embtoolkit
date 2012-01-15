@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,8 +23,7 @@
 # \date         August 2009
 ################################################################################
 
-config EMBTK_ROOTFS_HAVE_STRACE
-	depends on EMBTK_HAVE_ROOTFS
+config EMBTK_HAVE_STRACE
 	bool "Have strace in target"
 	help
 	 strace is a system call tracer, i.e. a debugging tool which prints out
@@ -32,7 +31,7 @@ config EMBTK_ROOTFS_HAVE_STRACE
 
 choice
 	prompt "starce version to use"
-	depends on EMBTK_ROOTFS_HAVE_STRACE
+	depends on EMBTK_HAVE_STRACE
 
 	config EMBTK_STRACE_VERSION_4_5_20
 		bool "strace-4.5.20"
@@ -54,8 +53,4 @@ config EMBTK_STRACE_VERSION_STRING
 config EMBTK_STRACE_NEED_PATCH
 	bool
 config EMBTK_STRACE_NEED_AUTORECONF
-	bool
-config EMBTK_STRACE_PKG_IS_TARGZ
-	bool
-config EMBTK_STRACE_PKG_IS_TARBZ2
 	bool

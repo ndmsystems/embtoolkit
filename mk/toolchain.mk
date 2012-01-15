@@ -74,6 +74,10 @@ include $(EMBTK_ROOT)/mk/gcc.mk
 #linux kernel headers
 include $(EMBTK_ROOT)/mk/linux.mk
 
+# strace toolchain addon
+include $(EMBTK_ROOT)/mk/strace.mk
+TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_STRACE) += strace_install
+
 #Autotools
 include $(EMBTK_ROOT)/mk/libtool.mk
 include $(EMBTK_ROOT)/mk/autoconf.mk
@@ -92,13 +96,17 @@ TOOLCHAIN_DIR		:= $(EMBTK_GENERATED)/toolchain-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
 
 TOOLCHAIN_CLIB		:= $(if $(CONFIG_EMBTK_CLIB_EGLIBC),eglibc,uclibc)
-TOOLCHAIN_PRE_DEPS	:= mkinitialpath ccache_install $(AUTOTOOLS_INSTALL)
+TOOLCHAIN_PRE_DEPS	:= ccache_install $(AUTOTOOLS_INSTALL)
 TOOLCHAIN_PRE_DEPS	+= $(EMBTK_CMAKE_INSTALL)
 
 TOOLCHAIN_DEPS		:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
 TOOLCHAIN_DEPS		+= gcc1_install $(TOOLCHAIN_CLIB)_headers_install
 TOOLCHAIN_DEPS		+= gcc2_install $(TOOLCHAIN_CLIB)_install gcc3_install
+
+TOOLCHAIN_ADDONS_NAME		:= toolchain-addons
+TOOLCHAIN_ADDONS_DEPS		:= $(TOOLCHAIN_ADDONS-y)
+TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_BUILD_DIR)/.addons
 
 include $(EMBTK_ROOT)/mk/$(TOOLCHAIN_CLIB).mk
 
@@ -117,10 +125,9 @@ define __embtk_toolchain_compress
 	mv $(TOOLCHAIN_PACKAGE) $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 endef
 
-define __embtk_toolchain_decompress
-	$(call embtk_pinfo,"Decompressing $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
+define ___embtk_toolchain_decompress
 	cd $(EMBTK_ROOT) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
-	$(MAKE) $(TOOLCHAIN_PRE_DEPS)
+	$(MAKE) mkinitialpath $(TOOLCHAIN_PRE_DEPS)
 	mkdir -p $(GCC3_BUILD_DIR)
 	touch $(GCC3_BUILD_DIR)/.installed
 	touch $(GCC3_BUILD_DIR)/.gcc3_post_install
@@ -128,23 +135,50 @@ define __embtk_toolchain_decompress
 					$(call __embtk_pkg_dotpkgkconfig_f,gcc3)
 endef
 
-define __embtk_toolchain_build
-	$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
-	$(foreach dep,$(patsubst %_install,%,$(TOOLCHAIN_DEPS)),		\
-				rm -rf $(call __embtk_pkg_builddir,$(dep));)
-	$(foreach pkg,$(__embtk_rootfs_packages),$(MAKE) $(pkg)_clean;)
-	rm -rf $(SYSROOT)
-	$(__embtk_mk_initsysrootdirs)
-	$(MAKE) $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_DEPS)
-	$(__embtk_toolchain_symlinktools)
-	$(__embtk_toolchain_compress)
-	touch $(TOOLCHAIN_DIR)/.installed
-	$(call embtk_pinfo,"New $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain successfully built!")
+define __embtk_toolchain_decompress
+	$(call embtk_pinfo,"Decompressing $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
+	$(___embtk_toolchain_decompress)
 endef
 
+define __embtk_toolchain_build
+	$(if $(findstring core,$(1)),
+		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) CORE toolchain - please wait...")
+		$(foreach dep,$(patsubst %_install,%,$(TOOLCHAIN_DEPS)),
+				rm -rf $(call __embtk_pkg_builddir,$(dep));)
+		$(foreach pkg,$(__embtk_rootfs_packages),$(MAKE) $(pkg)_clean;)
+		rm -rf $(SYSROOT)
+		$(__embtk_mk_initsysrootdirs)
+		$(MAKE) mkinitialpath $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_DEPS)
+		touch $(TOOLCHAIN_DIR)/.installed)
+	$(if $(findstring addons,$(1)),
+		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain ADDONS - please wait...")
+		$(if $(findstring core,$(1)),,$(___embtk_toolchain_decompress))
+		$(if $(findstring core,$(1)),
+			$(foreach addon,
+				$(patsubst %_install,%,$(TOOLCHAIN_ADDONS-y)),
+				$(MAKE) $(addon)_clean;))
+		$(foreach addon,$(patsubst %_install,%,$(TOOLCHAIN_ADDONS-)),
+						$(MAKE) $(addon)_clean;)
+		$(if $(TOOLCHAIN_ADDONS-y),
+			$(MAKE) $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_ADDONS-y))
+		touch $(TOOLCHAIN_ADDONS_BUILD_DIR)/.installed)
+	$(if $(findstring core,$(1))$(findstring addons,$(1)),
+		$(__embtk_toolchain_symlinktools)
+		$(__embtk_toolchain_compress)
+		$(call embtk_pinfo,"New $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain successfully built!"),
+		$(__embtk_toolchain_decompress))
+endef
+
+__embtk_toolchain_core_inst	= $(strip $(if $(call __embtk_pkg_installed-y,toolchain),,core))
+__embtk_toolchain_addons_inst	= $(strip $(if $(call __embtk_pkg_installed-y,toolchain_addons),,addons))
+__embtk_toolchain_buildargs	= $(__embtk_toolchain_core_inst)
+__embtk_toolchain_buildargs	+= $(__embtk_toolchain_addons_inst)
+
 buildtoolchain:
-	$(Q)$(if $(call __embtk_pkg_installed-y,toolchain),			\
-		$(__embtk_toolchain_decompress),$(__embtk_toolchain_build))
+	$(Q)$(call __embtk_toolchain_build,$(__embtk_toolchain_buildargs))
 
 # Download target for offline build
-packages_fetch:: $(patsubst %_install,download_%,$(TOOLCHAINBUILD))
+TOOLCHAIN_ALL_DEPS := $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_DEPS)
+TOOLCHAIN_ALL_DEPS += $(TOOLCHAIN_ADDONS_DEPS)
+
+packages_fetch:: $(patsubst %_install,download_%,$(TOOLCHAIN_ALL_DEPS))

@@ -41,10 +41,6 @@ HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_ZLIB) += zlib_host_install
 # Packages for TARGET and HOST
 #
 
-# strace
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_STRACE) += strace_install
-include $(EMBTK_ROOT)/mk/strace.mk
-
 # Flash manipulation tools: mtd-utils
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MTDUTILS) += mtdutils_install
 

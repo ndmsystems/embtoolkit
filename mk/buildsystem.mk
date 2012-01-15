@@ -97,7 +97,7 @@ define __embtk_mk_startbuild
 	$(call embtk_echo_blue,"\tGCC                 : gcc-$(call embtk_get_pkgversion,gcc)")
 	$(if $(CONFIG_EMBTK_HAVE_GDB_SYSTEM),
 	$(call embtk_echo_blue,"\tGDB                 : gdb-$(call embtk_get_pkgversion,gdb)"))
-	$(if $(CONFIG_EMBTK_ROOTFS_HAVE_STRACE),
+	$(if $(CONFIG_EMBTK_HAVE_STRACE),
 	$(call embtk_echo_blue,"\tStrace              : strace-$(call embtk_get_pkgversion,strace)"))
 	$(call embtk_echo_blue," ~~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"| Host tools |")
