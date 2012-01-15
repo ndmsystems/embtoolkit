@@ -32,6 +32,11 @@ include $(EMBTK_ROOT)/mk/mkimage.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
 include $(EMBTK_ROOT)/mk/pkgconfig.mk
 
+include $(EMBTK_ROOT)/mk/zlib_host.mk
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_ZLIB) += zlib_host_install
+
+
+
 #
 # Packages for TARGET and HOST
 #

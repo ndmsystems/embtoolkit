@@ -250,6 +250,7 @@ endef
 define __embtk_print_configure_opts
 	$(if $(strip $(1)),
 	$(call embtk_echo_blue,"Configure options:$(strip $(1))") | sed "s/\(--\)/\n\t\1/g")
+	echo
 endef
 define embtk_configure_pkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
