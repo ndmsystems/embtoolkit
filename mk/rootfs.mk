@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -123,14 +123,12 @@ rootfs_clean: $(ROOTFS_HOSTTOOLS_CLEAN) $(ROOTFS_COMPONENTS_CLEAN)
 	@rm -rf $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
 	@rm -rf $(EMBTK_GENERATED)/initramfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
 
-else
-rootfs_build:
-	@echo "############### Root filesystem build not selected #############"
-	@echo "# Root filesystem build not selected in the configuration      #"
-	@echo "# interface. If you want to build one please select it.        #"
-	@echo "################################################################"
-rootfs_clean: $(ROOTFS_HOSTTOOLS_CLEAN)
-
 # Download target for offline build
 packages_fetch:: $(patsubst %_install,download_%,$(ROOTFS_HOSTTOOLS-y))
+else
+rootfs_build:
+	$(call embtk_pinfo,"Build of root filesystem not selected")
+
+rootfs_clean: $(ROOTFS_HOSTTOOLS_CLEAN)
+	true
 endif
