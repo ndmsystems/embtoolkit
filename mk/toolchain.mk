@@ -143,6 +143,7 @@ endef
 define __embtk_toolchain_build
 	$(if $(findstring core,$(1)),
 		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) CORE toolchain - please wait...")
+		rm -rf $(TOOLCHAIN_DIR)/.installed
 		$(foreach dep,$(patsubst %_install,%,$(TOOLCHAIN_DEPS)),
 				rm -rf $(call __embtk_pkg_builddir,$(dep));)
 		$(foreach pkg,$(__embtk_rootfs_packages),$(MAKE) $(pkg)_clean;)
@@ -152,6 +153,7 @@ define __embtk_toolchain_build
 		touch $(TOOLCHAIN_DIR)/.installed)
 	$(if $(findstring addons,$(1)),
 		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain ADDONS - please wait...")
+		rm -rf $(TOOLCHAIN_ADDONS_BUILD_DIR)/.installed
 		$(if $(findstring core,$(1)),,$(___embtk_toolchain_decompress))
 		$(if $(findstring core,$(1)),
 			$(foreach addon,
