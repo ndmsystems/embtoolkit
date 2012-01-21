@@ -148,7 +148,7 @@ define __embtk_toolchain_build
 		rm -rf $(TOOLCHAIN_DIR)/.installed
 		$(foreach dep,$(patsubst %_install,%,$(TOOLCHAIN_DEPS)),
 				rm -rf $(call __embtk_pkg_builddir,$(dep));)
-		$(foreach pkg,$(__embtk_rootfs_packages),$(MAKE) $(pkg)_clean;)
+		$(foreach pkg,$(__embtk_rootfs_pkgs-y),$(MAKE) $(pkg)_clean;)
 		rm -rf $(SYSROOT)
 		$(__embtk_mk_initsysrootdirs)
 		$(MAKE) mkinitialpath $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_DEPS)
