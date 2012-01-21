@@ -170,6 +170,3 @@ rmallpath:
 	$(Q)rm -rf $(SYSROOT)* $(HOSTTOOLS)* $(EMBTK_GENERATED)/rootfs-*
 	$(Q)rm -rf $(EMBTK_GENERATED)/initramfs-*
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(DOWNLOAD_DIR)/*.patch)
-
-EMBTK_PHONIES += xconfig menuconfig randconfig basic clean distclean startbuild
-EMBTK_PHONIES += mkinitialpath rmallpath

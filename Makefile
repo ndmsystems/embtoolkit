@@ -78,7 +78,6 @@ export Q
 
 -include .config
 
-EMBTK_PHONIES := All
 EMBTK_BUILD := $(if $(CONFIG_EMBTK_DOTCONFIG),startbuild,xconfig)
 
 All: $(EMBTK_BUILD)
@@ -90,6 +89,3 @@ include mk/toolchain.mk
 include mk/packages.mk
 include mk/rootfs.mk
 include mk/help.mk
-
-.PHONY: $(EMBTK_PHONIES)
-FORCE:
