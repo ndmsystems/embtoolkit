@@ -90,25 +90,25 @@ AUTOTOOLS_INSTALL	+= automake_install
 include $(EMBTK_ROOT)/mk/cmake.mk
 EMBTK_CMAKE_INSTALL	:= $(if $(CONFIG_EMBTK_HOST_HAVE_CMAKE),cmake_install)
 
+__embtk_toolchain_clib	= $(if $(CONFIG_EMBTK_CLIB_EGLIBC),eglibc,uclibc)
 TOOLCHAIN_NAME		:= toolchain
-TOOLCHAIN_PACKAGE	:= toolchain-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).tar.bz2
-TOOLCHAIN_DIR		:= $(EMBTK_GENERATED)/toolchain-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+TOOLCHAIN_PACKAGE	:= toolchain-$(GNU_TARGET)-$(__embtk_toolchain_clib)-$(EMBTK_MCU_FLAG).tar.bz2
+TOOLCHAIN_DIR		:= $(EMBTK_GENERATED)/toolchain-$(GNU_TARGET)-$(__embtk_toolchain_clib)-$(EMBTK_MCU_FLAG)
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
 
-TOOLCHAIN_CLIB		:= $(if $(CONFIG_EMBTK_CLIB_EGLIBC),eglibc,uclibc)
 TOOLCHAIN_PRE_DEPS	:= ccache_install $(AUTOTOOLS_INSTALL)
 TOOLCHAIN_PRE_DEPS	+= $(EMBTK_CMAKE_INSTALL)
 
 TOOLCHAIN_DEPS		:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
-TOOLCHAIN_DEPS		+= gcc1_install $(TOOLCHAIN_CLIB)_headers_install
-TOOLCHAIN_DEPS		+= gcc2_install $(TOOLCHAIN_CLIB)_install gcc3_install
+TOOLCHAIN_DEPS		+= gcc1_install $(__embtk_toolchain_clib)_headers_install
+TOOLCHAIN_DEPS		+= gcc2_install $(__embtk_toolchain_clib)_install gcc3_install
 
 TOOLCHAIN_ADDONS_NAME		:= toolchain-addons
 TOOLCHAIN_ADDONS_DEPS		:= $(TOOLCHAIN_ADDONS-y)
 TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_BUILD_DIR)/.addons
 
-include $(EMBTK_ROOT)/mk/$(TOOLCHAIN_CLIB).mk
+include $(EMBTK_ROOT)/mk/$(__embtk_toolchain_clib).mk
 
 define __embtk_toolchain_symlinktools
 	cd $(TOOLS)/bin;							\
