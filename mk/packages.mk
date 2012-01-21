@@ -96,16 +96,19 @@ endif
 #
 
 # This install implicit rule is intended for autotool'ed packages
-%_install:
+%_install: FORCE
 	$(call embtk_install_$(findstring host,$@)pkg,$*)
 
 # Download generic implicit rule
-download_%:
+download_%: FORCE
 	$(call embtk_download_pkg,$*)
 
 # clean generic implicit rule
-%_clean:
+%_clean: FORCE
 	$(call embtk_cleanup_pkg,$*)
 
 # Download target for offline build
 packages_fetch:: $(patsubst %_install,download_%,$(ROOTFS_COMPONENTS-y) $(HOSTTOOLS_COMPONENTS-y))
+
+EMBTK_PHONIES += $(ROOTFS_COMPONENTS-y) $(HOSTTOOLS_COMPONENTS-y)
+EMBTK_PHONIES += $(ROOTFS_COMPONENTS_CLEAN)

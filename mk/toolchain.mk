@@ -178,7 +178,7 @@ __embtk_toolchain_addons_inst	= $(strip $(if $(call __embtk_pkg_installed-y,tool
 __embtk_toolchain_buildargs	= $(__embtk_toolchain_core_inst)
 __embtk_toolchain_buildargs	+= $(__embtk_toolchain_addons_inst)
 
-buildtoolchain:
+buildtoolchain: FORCE
 	$(Q)$(call __embtk_toolchain_build,$(__embtk_toolchain_buildargs))
 
 # Download target for offline build
@@ -186,3 +186,6 @@ TOOLCHAIN_ALL_DEPS := $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_DEPS)
 TOOLCHAIN_ALL_DEPS += $(TOOLCHAIN_ADDONS_DEPS)
 
 packages_fetch:: $(patsubst %_install,download_%,$(TOOLCHAIN_ALL_DEPS))
+
+EMBTK_PHONIES += buildtoolchain $(TOOLCHAIN_PRE_DEPS)
+EMBTK_PHONIES += $(TOOLCHAIN_ADDONS-y) $(TOOLCHAIN_ADDONS-)
