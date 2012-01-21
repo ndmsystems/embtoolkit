@@ -140,6 +140,8 @@ define __embtk_toolchain_decompress
 	$(___embtk_toolchain_decompress)
 endef
 
+__embtk_toolchain_addons-y = $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-y))
+__embtk_toolchain_addons-n = $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-))
 define __embtk_toolchain_build
 	$(if $(findstring core,$(1)),
 		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) CORE toolchain - please wait...")
@@ -156,11 +158,11 @@ define __embtk_toolchain_build
 		rm -rf $(TOOLCHAIN_ADDONS_BUILD_DIR)/.installed
 		$(if $(findstring core,$(1)),,$(___embtk_toolchain_decompress))
 		$(if $(findstring core,$(1)),
-			$(foreach addon,
-				$(patsubst %_install,%,$(TOOLCHAIN_ADDONS-y)),
+			$(foreach addon,$(__embtk_toolchain_addons-y),
 				$(MAKE) $(addon)_clean;))
-		$(foreach addon,$(patsubst %_install,%,$(TOOLCHAIN_ADDONS-)),
-						$(MAKE) $(addon)_clean;)
+		$(if $(TOOLCHAIN_ADDONS-),
+			$(foreach addon,$(__embtk_toolchain_addons-n),
+				$(MAKE) $(addon)_clean;))
 		$(if $(TOOLCHAIN_ADDONS-y),
 			$(MAKE) $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_ADDONS-y))
 		touch $(TOOLCHAIN_ADDONS_BUILD_DIR)/.installed)
