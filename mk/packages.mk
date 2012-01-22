@@ -77,9 +77,6 @@ include $(EMBTK_ROOT)/packages/misc/misc.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_BB) += bb_install
 include $(EMBTK_ROOT)/packages/busybox/busybox.mk
 
-# Clean for all unselected packages
-ROOTFS_COMPONENTS_CLEAN := $(subst install,clean,$(ROOTFS_COMPONENTS-))
-
 #
 # Targets for host machine
 #
