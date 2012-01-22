@@ -1,6 +1,6 @@
 #########################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -22,18 +22,23 @@
 # \date         May 2009
 #########################################################################################
 
-MAKEDEVS_SRC	:= $(EMBTK_ROOT)/src/makedevs/makedevs.c
-MAKEDEVS_DIR	:= $(HOSTTOOLS)/usr/bin
-MAKEDEVS_BIN	:= $(MAKEDEVS_DIR)/makedevs
+MAKEDEVS_NAME		:= makedevs
+MAKEDEVS_BUILD_DIR	:= $(TOOLS_BUILD)/makedevs-build
+MAKEDEVS_SRC		:= $(EMBTK_ROOT)/src/makedevs
 
-makedevs_install: $(MAKEDEVS_DIR)/.installed
-	$(call embtk_pinfo,"Successfully installed makedevs")
+MAKEDEVS_DIR		:= $(HOSTTOOLS)/usr/bin
+MAKEDEVS_BIN		:= $(MAKEDEVS_DIR)/makedevs
 
-$(MAKEDEVS_DIR)/.installed:
+makedevs_install:
+	[ -e $(MAKEDEVS_BUILD_DIR)/.installed ] || 				\
+				$(MAKE) $(MAKEDEVS_BUILD_DIR)/.installed
+
+$(MAKEDEVS_BUILD_DIR)/.installed:
 	$(call embtk_pinfo,"Installing makedevs...")
-	$(Q)mkdir -p $(MAKEDEVS_DIR)/usr
-	$(Q)mkdir -p $(MAKEDEVS_DIR)/usr/bin
-	$(hostcc_cached) -o $(MAKEDEVS_BIN) $(MAKEDEVS_SRC)
+	$(Q)mkdir -p $(MAKEDEVS_BUILD_DIR)
+	$(Q)mkdir -p $(HOSTTOOLS)/usr
+	$(Q)mkdir -p $(HOSTTOOLS)/usr/bin
+	$(hostcc_cached) -o $(MAKEDEVS_BIN) $(wildcard $(MAKEDEVS_SRC)/*.c)
 	$(Q)touch $@
 
 download_makedevs:
