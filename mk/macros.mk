@@ -57,7 +57,7 @@ __embtk_mk_strcmp = $(shell [ $(strip $(1)) = $(strip $(2)) ] && echo y)
 # if not.
 # Usage: $(call __embtk_mk_pathexist,/path/to/test)
 #
-__embtk_mk_pathexist = $(if $(wildcard $(1)),y)
+__embtk_mk_pathexist = $(shell test -e $(1) && echo y)
 
 #
 # __embtk_mk_pathnotexist
@@ -65,7 +65,7 @@ __embtk_mk_pathexist = $(if $(wildcard $(1)),y)
 # exist and nothing if it exists.
 # Usage: $(call __embtk_mk_pathnotexist,/path/to/test)
 #
-__embtk_mk_pathnotexist = $(if $(wildcard $(1)),,y)
+__embtk_mk_pathnotexist = $(shell test -e $(1) || echo y)
 
 # Macro to print messages
 embtk_pwarning	= $(call embtk_echo_yellow,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ WARNING: $(1)\\n$(__embtk_msg_h)")
