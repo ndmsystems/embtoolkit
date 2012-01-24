@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,8 +31,11 @@ HOSTTOOLS_COMPONENTS-y		:= mkimage_install pkgconfig_install
 include $(EMBTK_ROOT)/mk/mkimage.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
 include $(EMBTK_ROOT)/mk/pkgconfig.mk
-
+include $(EMBTK_ROOT)/mk/fakeroot.mk
+include $(EMBTK_ROOT)/mk/makedevs.mk
+include $(EMBTK_ROOT)/mk/squashfs.mk
 include $(EMBTK_ROOT)/mk/zlib_host.mk
+
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_ZLIB) += zlib_host_install
 
 
@@ -80,13 +83,11 @@ include $(EMBTK_ROOT)/packages/busybox/busybox.mk
 #
 # Targets for host machine
 #
+define __embtk_hostpkgs_build
+	$(if $(HOSTTOOLS_COMPONENTS-y),$(MAKE) $(HOSTTOOLS_COMPONENTS-y),true)
+endef
 host_packages_build:
-ifeq ($(HOSTTOOLS_COMPONENTS-y),)
-else
-	$(call embtk_pinfo,"Building extra packages intended to run \
-	on your host machine ...")
-	@$(MAKE) $(HOSTTOOLS_COMPONENTS-y)
-endif
+	$(Q)$(__embtk_hostpkgs_build)
 
 #
 # Generic implicite rules

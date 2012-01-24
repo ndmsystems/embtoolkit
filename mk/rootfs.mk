@@ -30,27 +30,16 @@ FILESYSTEMS-y			:=
 
 #include various filesystems targets
 include $(EMBTK_ROOT)/mk/fs.mk
+ROOTFS_JFFS2		:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(__embtk_toolchain_clib).jffs2
+ROOTFS_TARBZ2		:= rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(__embtk_toolchain_clib).tar.bz2
+ROOTFS_SQUASHFS		:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(__embtk_toolchain_clib).squashfs
+ROOTFS_INITRAMFS	:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(__embtk_toolchain_clib).initramfs
 
-#host tools in order to build root filesystems: fakeroot and makedevs.
-include $(EMBTK_ROOT)/mk/fakeroot.mk
-include $(EMBTK_ROOT)/mk/makedevs.mk
-ROOTFS_HOSTTOOLS-y += makedevs_install fakeroot_install
+HOSTTOOLS_COMPONENTS-y += makedevs_install fakeroot_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += mtdutils_host_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS) += squashfs_tools_install
 
-#Does CPIO archive for initramfs selected?
-FILESYSTEMS-$(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO) += build_initramfs_archive
-
-#Does jffs2 filesystem selected?
-ROOTFS_HOSTTOOLS-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += mtdutils_host_install
-FILESYSTEMS-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += build_jffs2_rootfs
-
-#Does squashfs filesystem selected?
-ROOTFS_HOSTTOOLS-$(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS) += squashfs_tools_install
-FILESYSTEMS-$(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS) += build_squashfs_rootfs
-ifeq ($(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),y)
-include $(EMBTK_ROOT)/mk/squashfs.mk
-endif
-
-#Files to strip if requested
+# Files to strip if requested
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
 ROOTFS_STRIPPED_FILES := `find $$ROOTFS/lib -type f -name *.so*`
 ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/lib -type f -name *.so*`
@@ -74,7 +63,6 @@ endef
 define __embtk_rootfs_cleanup
 	$(foreach pkg-n,$(__embtk_rootfs_pkgs-n),$(MAKE) $(pkg-n)_clean;)
 	rm -rf $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
-	rm -rf $(EMBTK_GENERATED)/initramfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
 endef
 
 define __embtk_rootfs_mkinitpath
@@ -124,16 +112,19 @@ define __embtk_rootfs_build
 	$(MAKE) $(ROOTFS_HOSTTOOLS-y) $(ROOTFS_COMPONENTS-y)
 	$(__embtk_rootfs_mkdevnodes)
 	$(__embtk_rootfs_fill)
-	$(MAKE) build_tarbz2_rootfs $(FILESYSTEMS-y)
+	$(call embtk_rootfs_mktarbz2,$(ROOTFS),$(ROOTFS_TARBZ2))
+	$(if $(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),
+		$(call embtk_rootfs_mkinitramfs,$(ROOTFS),$(ROOTFS_INITRAMFS)))
+	$(if $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),
+		$(call embtk_rootfs_mkjffs2,$(ROOTFS),$(ROOTFS_JFFS2)))
+	$(if $(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),
+		$(call embtk_rootfs_mksquashfs,$(ROOTFS),$(ROOTFS_SQUASHFS)))
 	rm -rf $(ROOTFS)
 	$(call embtk_pinfo,"Selected root filesystems built successfully!")
 endef
 
-rootfs_build:
+rootfs_build: host_packages_build
 	$(Q)$(__embtk_rootfs_build)
-
-# Download target for offline build
-packages_fetch:: $(patsubst %_install,download_%,$(ROOTFS_HOSTTOOLS-y))
 else
 rootfs_build:
 	$(call embtk_pinfo,"Build of root filesystem not selected")

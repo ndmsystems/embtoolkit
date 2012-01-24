@@ -115,7 +115,7 @@ define __embtk_mk_startbuild
 		$(call embtk_echo_blue,"\tInitramfs : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),Yes,No)")
 		$(call embtk_echo_blue,"\tsqashFS   : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),Yes,No)")
 		$(call embtk_echo_blue,"\tJFFS2     : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),Yes,No)"))
-	$(MAKE) buildtoolchain host_packages_build rootfs_build successful_build
+	$(MAKE) buildtoolchain rootfs_build successful_build
 endef
 
 startbuild:
@@ -168,5 +168,4 @@ mkinitialpath:
 rmallpath:
 	$(Q)rm -rf $(PACKAGES_BUILD)* $(ROOTFS)* $(TOOLS)* $(TOOLS_BUILD)*
 	$(Q)rm -rf $(SYSROOT)* $(HOSTTOOLS)* $(EMBTK_GENERATED)/rootfs-*
-	$(Q)rm -rf $(EMBTK_GENERATED)/initramfs-*
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(DOWNLOAD_DIR)/*.patch)

@@ -45,11 +45,11 @@ fi
 if [ "$2" = "gzip" ]
 then
 	echo "creating $3.cpio.gz from $1"
-	(cd "$1"; find . | cpio -o -H newc | gzip) > "$3.cpio.gz"
+	(cd "$1"; find . | cpio -o -H newc | gzip) > "$3.gz.cpio"
 elif [ "$2" = "bzip2" ]
 then
 	echo "creating $3.cpio.bz2 from $1"
-	(cd "$1"; find . | cpio -o -H newc | bzip2) > "$3.cpio.bz2"	
+	(cd "$1"; find . | cpio -o -H newc | bzip2) > "$3.bz2.cpio"
 else
 	echo "Error while using mkinitramfs!!!"
 	usage

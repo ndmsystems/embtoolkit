@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,62 +18,82 @@
 ################################################################################
 #
 # \file         fs.mk
-# \brief	fs.mk of Embtoolkit, targets for sereval filesystems build.
+# \brief	fs.mk of Embtoolkit, macros for sereval filesystems build.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         August 2009
 ################################################################################
 
-JFFS2_ROOTFS		:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).jffs2
-BZIP2_ROOTFS		:= rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).tar.bz2
-SQUASHFS_ROOTFS		:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).squashfs
-INITRAMFS_ROOTFS	:= $(EMBTK_GENERATED)/initramfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-
-build_rootfs_devnodes:
-	$(call embtk_pinfo,"Populating device nodes of the rootfs...")
-	$(Q)$(FAKEROOT_BIN) -s $(FAKEROOT_ENV_FILE) -- $(MAKEDEVS_BIN)		\
-			-d $(EMBTK_ROOT)/src/devices_table.txt $(ROOTFS)
-
-build_tarbz2_rootfs:
+#
+# TAR.BZ2 rootfs macro
+#
+__embtk_tarbz2_rootdir	= $(strip $(1))
+__embtk_tarbz2_rootfs	= $(strip $(2))
+define embtk_rootfs_mktarbz2
 	$(call embtk_pinfo,"Generating TAR.BZ2 file of the rootfs...")
-	@cd $(ROOTFS) ; $(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- \
-	tar cjf rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG).tar.bz2 * ; \
-	mv $(BZIP2_ROOTFS) $(EMBTK_GENERATED)/
+	cd $(__embtk_tarbz2_rootdir);						\
+	$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) --				\
+	tar cjf $(__embtk_tarbz2_rootfs) *;					\
+	mv $(__embtk_tarbz2_rootfs) $(EMBTK_GENERATED)/
+endef
 
-build_jffs2_rootfs:
+#
+# JFFS2 rootfs macro
+#
+__embtk_mkjffs2			:= $(HOSTTOOLS)/usr/sbin/mkfs.jffs2
+__embtk_sumtool			:= $(HOSTTOOLS)/usr/sbin/sumtool
+__embtk_jffs2_eraseblksz	:= $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE)
+__embtk_jffs2_pad		:= $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE)
+__embtk_jffs2_pagesz		:= $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_PAGESIZE)
+__embtk_jffs2_cleanmarkersz	:= $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_CLEANMARKERSIZE)
+__embtk_jffs2_rootdir		= $(strip $(1))
+__embtk_jffs2_rootfs		= $(strip $(2))
+define embtk_rootfs_mkjffs2
 	$(call embtk_pinfo,"Generating JFFS2 rootfs..")
-	@$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- \
-	$(HOSTTOOLS)/usr/sbin/mkfs.jffs2 \
-	--eraseblock=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE) \
-	--pad=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE) \
-	--pagesize=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_PAGESIZE) \
-	--cleanmarker=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_CLEANMARKERSIZE) \
-	$(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN), \
-		--little-endian, --big-endian) \
-	-n --root=$(ROOTFS) -o $(JFFS2_ROOTFS).temp
-	@$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- \
-	$(HOSTTOOLS)/usr/sbin/sumtool \
-	--eraseblock=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE) \
-	--cleanmarker=$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_CLEANMARKERSIZE) \
-	$(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN), \
-		--littleendian, --bigendian) \
-	-n -p -i $(JFFS2_ROOTFS).temp -o $(JFFS2_ROOTFS)
-	@rm -rf $(JFFS2_ROOTFS).temp
+	$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) --				\
+	$(__embtk_mkjffs2)							\
+		--eraseblock=$(__embtk_jffs2_eraseblksz)			\
+		--pad=$(__embtk_jffs2_pad)					\
+		--pagesize=$(__embtk_jffs2_pagesz)				\
+		--cleanmarker=$(__embtk_jffs2_cleanmarkersz)			\
+		$(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),			\
+					--little-endian,--big-endian)		\
+		-n --root=$(__embtk_jffs2_rootdir)				\
+		-o $(__embtk_jffs2_rootfs).temp
+	$(__embtk_sumtool)							\
+		--eraseblock=$(__embtk_jffs2_eraseblksz)			\
+		--cleanmarker=$(__embtk_jffs2_cleanmarkersz)			\
+		$(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),			\
+					--littleendian,--bigendian)		\
+		-n -p -i $(__embtk_jffs2_rootfs).temp -o $(__embtk_jffs2_rootfs)
+	rm -rf $(__embtk_jffs2_rootfs).temp
+endef
 
-squashfs_rootfs_opts := $(ROOTFS) $(SQUASHFS_ROOTFS)
-ifeq ($(CONFIG_EMBTK_SQUASHFS_TOOLS_VERSION_3_4),y)
-squashfs_rootfs_opts += $(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),-le,-be)
-endif
-squashfs_rootfs_opts += -all-root
-
-build_squashfs_rootfs:
+#
+# SQUASHFS rootfs macro
+#
+__embtk_mksquashfs		:= $(MKSQUASHFS_BIN)
+__embtk_squashfs_rootdir	= $(strip $(1))
+__embtk_squashfs_rootfs		= $(strip $(2))
+define embtk_rootfs_mksquashfs
 	$(call embtk_pinfo,"Generating SQUASHFS rootfs...")
-	$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- \
-	$(MKSQUASHFS_BIN) $(squashfs_rootfs_opts)
+	$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) --				\
+	$(__embtk_mksquashfs)							\
+		$(__embtk_squashfs_rootdir) $(__embtk_squashfs_rootfs)		\
+		$(if $(CONFIG_EMBTK_SQUASHFS_TOOLS_VERSION_3_4),		\
+			$(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),-le,-be))\
+		-all-root
+endef
 
-build_initramfs_archive:
-	$(call embtk_pinfo,"Generating cpio archive for INITRAMFS...")
-	@$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- \
-	$(EMBTK_ROOT)/scripts/mkinitramfs $(ROOTFS) \
-	$(if $(EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO_GZIPED),gzip,bzip2) \
-	$(INITRAMFS_ROOTFS)
-
+#
+# CPIO (initramfs) rootfs macro
+#
+__embtk_mkinitramfs		:= $(EMBTK_ROOT)/scripts/mkinitramfs
+__embtk_initramfs_rootdir	= $(strip $(1))
+__embtk_initramfs_rootfs	= $(strip $(2))
+define embtk_rootfs_mkinitramfs
+	$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) --				\
+	$(__embtk_mkinitramfs)							\
+		$(__embtk_initramfs_rootdir)					\
+		$(if $(EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO_GZIPED),gzip,bzip2)	\
+		$(__embtk_initramfs_rootfs)
+endef
