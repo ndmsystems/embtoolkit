@@ -91,6 +91,7 @@ __embtk_mkinitramfs		:= $(EMBTK_ROOT)/scripts/mkinitramfs
 __embtk_initramfs_rootdir	= $(strip $(1))
 __embtk_initramfs_rootfs	= $(strip $(2))
 define embtk_rootfs_mkinitramfs
+	$(call embtk_pinfo,"Generating INITRAMFS rootfs...")
 	$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) --				\
 	$(__embtk_mkinitramfs)							\
 		$(__embtk_initramfs_rootdir)					\
