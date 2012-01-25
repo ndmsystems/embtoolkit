@@ -25,7 +25,6 @@
 
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 
-ROOTFS_HOSTTOOLS-y		:=
 FILESYSTEMS-y			:=
 
 #include various filesystems targets
@@ -109,7 +108,7 @@ define __embtk_rootfs_build
 	$(call embtk_pinfo,"Building selected root filesystems - please wait...")
 	$(__embtk_rootfs_cleanup)
 	$(__embtk_rootfs_mkinitpath)
-	$(MAKE) $(ROOTFS_HOSTTOOLS-y) $(ROOTFS_COMPONENTS-y)
+	$(MAKE) $(ROOTFS_COMPONENTS-y)
 	$(__embtk_rootfs_mkdevnodes)
 	$(__embtk_rootfs_fill)
 	$(call embtk_rootfs_mktarbz2,$(ROOTFS),$(ROOTFS_TARBZ2))
