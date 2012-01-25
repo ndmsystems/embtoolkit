@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -46,7 +46,6 @@ endchoice
 
 choice
 	prompt "GDB on your target embedded system"
-	depends on EMBTK_HAVE_ROOTFS
 	depends on EMBTK_HAVE_GDB_SYSTEM
 	config EMBTK_HAVE_GDBSERVER
 		bool "Have gdbserver on target"
@@ -89,16 +88,8 @@ config EMBTK_GDB_NEED_PATCH
 config EMBTK_GDB_NEED_AUTORECONF
 	bool
 	select EMBTK_GDB_HOST_NEED_AUTORECONF
-config EMBTK_GDB_PKG_IS_TARGZ
-	bool
-config EMBTK_GDB_PKG_IS_TARBZ2
-	bool
 
 config EMBTK_GDB_HOST_NEED_PATCH
 	bool
 config EMBTK_GDB_HOST_NEED_AUTORECONF
-	bool
-config EMBTK_GDB_HOST_PKG_IS_TARGZ
-	bool
-config EMBTK_GDB_HOST_PKG_IS_TARBZ2
 	bool

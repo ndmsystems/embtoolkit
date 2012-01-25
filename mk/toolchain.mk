@@ -78,6 +78,12 @@ include $(EMBTK_ROOT)/mk/linux.mk
 include $(EMBTK_ROOT)/mk/strace.mk
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_STRACE) += strace_install
 
+# gdb toolchain addon
+include $(EMBTK_ROOT)/packages/development/gdb/gdb.mk
+TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDB) += gdbfull_install
+TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDBSERVER) += gdbserver_install
+TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HOST_HAVE_GDB) += gdb_host_install
+
 #Autotools
 include $(EMBTK_ROOT)/mk/libtool.mk
 include $(EMBTK_ROOT)/mk/autoconf.mk

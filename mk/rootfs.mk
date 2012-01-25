@@ -40,7 +40,7 @@ HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS) += squashfs_tools_inst
 
 # Files to strip if requested
 ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
-ROOTFS_STRIPPED_FILES := `find $$ROOTFS/lib -type f -name *.so*`
+ROOTFS_STRIPPED_FILES = `find $$ROOTFS/lib -type f -name *.so*`
 ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/lib -type f -name *.so*`
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
 ROOTFS_STRIPPED_FILES += `find $$ROOTFS/lib32 -type f -name *.so*`

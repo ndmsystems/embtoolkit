@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 GDB_NAME		:= gdb
 GDB_VERSION		:= $(call embtk_get_pkgversion,gdb)
 GDB_SITE		:= http://ftp.gnu.org/gnu/gdb
-GDB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GDB_PACKAGE		:= gdb-$(GDB_VERSION).tar.bz2
 GDB_SRC_DIR		:= $(PACKAGES_BUILD)/gdb-$(GDB_VERSION)
 GDB_BUILD_DIR		:= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),		\
