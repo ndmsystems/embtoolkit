@@ -53,6 +53,7 @@ endmenu
 
 menu "Debugging systems (GDB, strace, etc.)"
 source "packages/development/gdb/gdb.kconfig"
+source "packages/misc/ncurses/ncurses.kconfig"
 source "kconfig/strace.kconfig"
 endmenu
 
