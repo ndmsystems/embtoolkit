@@ -101,7 +101,7 @@ define embtk_configure_eglibc
 	--prefix=/usr --with-headers=$(SYSROOT)/usr/include			\
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
-	--enable-add-ons --enable-kernel="2.6.0" $(embtk_eglibc_versioning-y)	\
+	--enable-add-ons --enable-kernel="2.6.27" $(embtk_eglibc_versioning-y)	\
 	--with-bugurl=$(EMBTK_BUGURL)						\
 	--with-pkgversion="EGLIBC from embtoolkit-$(EMBTK_VERSION)"
 	touch $(EGLIBC_BUILD_DIR)/.conifgured
@@ -119,7 +119,7 @@ define embtk_configure_eglibc_headers
 	--prefix=/usr --with-headers=$(SYSROOT)/usr/include			\
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
-	--enable-add-ons --enable-kernel="2.6.0" $(embtk_eglibc_versioning-y)	\
+	--enable-add-ons --enable-kernel="2.6.27" $(embtk_eglibc_versioning-y)	\
 	--with-bugurl=$(EMBTK_BUGURL)
 	touch $(EGLIBC_HEADERS_BUILD_DIR)/.configured
 endef
