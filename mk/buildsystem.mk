@@ -113,7 +113,7 @@ define __embtk_mk_startbuild
 		$(call embtk_echo_blue," ~~~~~~~~~~~~~~~ ")
 		$(call embtk_echo_blue,"\tTAR.BZ2   : Yes")
 		$(call embtk_echo_blue,"\tInitramfs : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),Yes,No)")
-		$(call embtk_echo_blue,"\tsqashFS   : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),Yes,No)")
+		$(call embtk_echo_blue,"\tsquashFS   : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),Yes,No)")
 		$(call embtk_echo_blue,"\tJFFS2     : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),Yes,No)"))
 	$(MAKE) buildtoolchain rootfs_build successful_build
 endef
