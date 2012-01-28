@@ -25,9 +25,7 @@
 
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 
-FILESYSTEMS-y			:=
-
-#include various filesystems targets
+# Include various filesystems macros
 include $(EMBTK_ROOT)/mk/fs.mk
 ROOTFS_JFFS2		:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(__embtk_toolchain_clib).jffs2
 ROOTFS_TARBZ2		:= rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(__embtk_toolchain_clib).tar.bz2
@@ -39,19 +37,51 @@ HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += mtdutils_host_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS) += squashfs_tools_install
 
 # Files to strip if requested
-ifeq ($(CONFIG_EMBTK_TARGET_STRIPPED),y)
-ROOTFS_STRIPPED_FILES = `find $$ROOTFS/lib -type f -name *.so*`
-ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/lib -type f -name *.so*`
-ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-ROOTFS_STRIPPED_FILES += `find $$ROOTFS/lib32 -type f -name *.so*`
-ROOTFS_STRIPPED_FILES += `find $$ROOTFS/usr/lib32 -type f -name *.so*`
-endif
-ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/bin ] && find $$ROOTFS/bin -type f`
-ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/sbin ] && find $$ROOTFS/sbin -type f`
-ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/usr/bin ] && find $$ROOTFS/usr/bin -type f`
-ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/usr/sbin ] && find $$ROOTFS/usr/sbin -type f`
-ROOTFS_STRIPPED_FILES += `[ -d $$ROOTFS/usr/libexec ] && find $$ROOTFS/usr/libexec -type f`
-endif
+
+__embtk_rootfs/libso		= $(shell [ -d $(ROOTFS)/lib ] && find $(ROOTFS)/lib -type f -name *.so*)
+__embtk_rootfs/lib32so		= $(shell [ -d $(ROOTFS)/lib32 ] && find $(ROOTFS)/lib32 -type f -name *.so*)
+__embtk_rootfs/usr/libso	= $(shell [ -d $(ROOTFS)/usr/lib ] && find $(ROOTFS)/usr/lib -type f -name *.so*)
+__embtk_rootfs/usr/lib32so	= $(shell [ -d $(ROOTFS)/usr/lib32 ] && find $(ROOTFS)/usr/lib32 -type f -name *.so*)
+__embtk_rootfs/usr/libexec	= $(shell [ -d $(ROOTFS)/usr/libexec ] && find $(ROOTFS)/usr/libexec -type f)
+__embtk_rootfs/bins		= $(shell [ -d $(ROOTFS)/bin ] && find $(ROOTFS)/bin -type f)
+__embtk_rootfs/sbins		= $(shell [ -d $(ROOTFS)/sbin ] && find $(ROOTFS)/sbin -type f)
+__embtk_rootfs/usr/bins		= $(shell [ -d $(ROOTFS)/usr/bin ] && find $(ROOTFS)/usr/bin -type f)
+__embtk_rootfs/usr/sbins	= $(shell [ -d $(ROOTFS)/usr/sbin ] && find $(ROOTFS)/usr/sbin -type f)
+
+define __embtk_rootfs_strip_f
+	-$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) --				\
+					$(TARGETSTRIP) $(1) >/dev/null 2>&1
+endef
+
+define __embtk_rootfs_stripbins
+	$(if $(__embtk_rootfs/libso),
+		$(foreach bin,$(__embtk_rootfs/libso),
+				$(call __embtk_rootfs_strip_f,$(bin));))
+	$(if $(__embtk_rootfs/lib32so),
+		$(foreach bin,$(__embtk_rootfs/lib32so),
+				$(call __embtk_rootfs_strip_f,$(bin));))
+	$(if $(__embtk_rootfs/usr/libso),
+		$(foreach bin,$(__embtk_rootfs/usr/libso),
+				$(call __embtk_rootfs_strip_f,$(bin));))
+	$(if $(__embtk_rootfs/usr/lib32so),
+		$(foreach bin,$(__embtk_rootfs/usr/lib32so),
+				$(call __embtk_rootfs_strip_f,$(bin));))
+	$(if $(__embtk_rootfs/usr/libexec),
+		$(foreach bin,$(__embtk_rootfs/usr/libexec),
+				$(call __embtk_rootfs_strip_f,$(bin));))
+	$(if $(__embtk_rootfs/bins),
+		$(foreach bin,$(__embtk_rootfs/bins),
+				$(call __embtk_rootfs_strip_f,$(bin));))
+	$(if $(__embtk_rootfs/sbins),
+		$(foreach bin,$(__embtk_rootfs/sbins),
+				$(call __embtk_rootfs_strip_f,$(bin));))
+	$(if $(__embtk_rootfs/usr/bins),
+		$(foreach bin,$(__embtk_rootfs/usr/bins),
+				$(call __embtk_rootfs_strip_f,$(bin));))
+	$(if $(__embtk_rootfs/usr/sbins),
+		$(foreach bin,$(__embtk_rootfs/usr/sbins),
+				$(call __embtk_rootfs_strip_f,$(bin));))
+endef
 
 define __embtk_rootfs_mkdevnodes
 	$(call embtk_pinfo,"Populating devices nodes of the rootfs...")
@@ -98,10 +128,9 @@ define __embtk_rootfs_fill
 	cp -R $(SYSROOT)/root $(ROOTFS)/
 	$(if $(CONFIG_EMBTK_TARGET_STRIPPED),
 		$(call embtk_pinfo,"Stripping binaries as specified...")
-		-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 --		\
-			$(TARGETSTRIP) $(ROOTFS_STRIPPED_FILES) >/dev/null 2>&1)
-	-$(FAKEROOT_BIN) -i $(EMBTK_ROOT)/.fakeroot.001 -- 			\
-		rm -rf `find $$ROOTFS -type f -name *.la`
+		-$(__embtk_rootfs_stripbins))
+	-$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- 				\
+				rm -rf `find $(ROOTFS) -type f -name *.la`
 endef
 
 define __embtk_rootfs_build
@@ -125,6 +154,7 @@ endef
 rootfs_build: buildtoolchain host_packages_build
 	$(Q)$(__embtk_rootfs_build)
 else
+# Build of root file system not selected
 rootfs_build:
 	$(call embtk_pinfo,"Build of root filesystem not selected")
 endif
