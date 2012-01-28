@@ -122,7 +122,7 @@ define __embtk_rootfs_build
 	$(call embtk_pinfo,"Selected root filesystems built successfully!")
 endef
 
-rootfs_build: host_packages_build
+rootfs_build: buildtoolchain host_packages_build
 	$(Q)$(__embtk_rootfs_build)
 else
 rootfs_build:
