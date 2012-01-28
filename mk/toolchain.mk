@@ -142,8 +142,10 @@ define ___embtk_toolchain_decompress
 endef
 
 define __embtk_toolchain_decompress
-	$(call embtk_pinfo,"Decompressing $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
-	$(___embtk_toolchain_decompress)
+	$(if $(call __embtk_mk_pathnotexist,$(TOOLCHAIN_DIR)/.decompressed),
+		$(call embtk_pinfo,"Decompressing $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
+		$(___embtk_toolchain_decompress)
+		touch $(TOOLCHAIN_DIR)/.decompressed)
 endef
 
 __embtk_toolchain_addons-y = $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-y))
@@ -186,6 +188,13 @@ __embtk_toolchain_buildargs	+= $(__embtk_toolchain_addons_inst)
 
 buildtoolchain:
 	$(Q)$(call __embtk_toolchain_build,$(__embtk_toolchain_buildargs))
+
+define __embtk_toolchain_clean
+	rm -rf $(TOOLCHAIN_DIR)/.decompressed
+endef
+
+toolchain_clean:
+	$(Q)$(__embtk_toolchain_clean)
 
 # Download target for offline build
 TOOLCHAIN_ALL_DEPS := $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_DEPS)

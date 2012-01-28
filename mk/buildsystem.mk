@@ -65,7 +65,7 @@ randconfig: basic
 basic:
 	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/basic
 
-clean: rmallpath
+clean: toolchain_clean rmallpath
 	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/kconfig
 	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/basic
 	$(Q)rm -rf .config kbuild.log .fakeroot*
