@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,8 +39,10 @@ squashfs_tools_install: $(SQUASHFS_TOOLS_DEPS)
 	$(Q)test -e $(SQUASHFS_TOOLS_BUILD_DIR)/.installed || 			\
 	$(MAKE) $(SQUASHFS_TOOLS_BUILD_DIR)/.installed
 
-$(SQUASHFS_TOOLS_BUILD_DIR)/.installed: download_squashfs_tools			\
-	$(SQUASHFS_TOOLS_BUILD_DIR)/.decompressed
+$(SQUASHFS_TOOLS_BUILD_DIR)/.installed:
+	$(call embtk_pinfo,"Compile/Install squashFS host tools")
+	$(call embtk_download_pkg,squashfs_tools)
+	$(call embtk_decompress_pkg,squashfs_tools)
 	$(Q)$(MAKE) -C $(SQUASHFS_TOOLS_BUILD_DIR)				\
 		CC=$(HOSTCC_CACHED)						\
 		CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\
@@ -51,9 +53,6 @@ $(SQUASHFS_TOOLS_BUILD_DIR)/.installed: download_squashfs_tools			\
 	$(Q)install $(SQUASHFS_TOOLS_BUILD_DIR)/mksquashfs $(HOSTTOOLS)/usr/bin
 	$(Q)install $(SQUASHFS_TOOLS_BUILD_DIR)/unsquashfs $(HOSTTOOLS)/usr/bin
 	$(Q)touch $@
-
-$(SQUASHFS_TOOLS_BUILD_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,squashfs_tools)
 
 squashfs_tools_clean:
 	$(call embtk_pinfo,"Cleaning squashfs in host ...")
