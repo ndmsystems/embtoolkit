@@ -83,6 +83,9 @@ define __embtk_rootfs_stripbins
 				$(call __embtk_rootfs_strip_f,$(bin));))
 endef
 
+__embtk_rootfs_strip:
+	$(__embtk_rootfs_stripbins)
+
 define __embtk_rootfs_mkdevnodes
 	$(call embtk_pinfo,"Populating devices nodes of the rootfs...")
 	$(FAKEROOT_BIN) -s $(FAKEROOT_ENV_FILE) -- $(MAKEDEVS_BIN)		\
@@ -128,7 +131,7 @@ define __embtk_rootfs_fill
 	cp -R $(SYSROOT)/root $(ROOTFS)/
 	$(if $(CONFIG_EMBTK_TARGET_STRIPPED),
 		$(call embtk_pinfo,"Stripping binaries as specified...")
-		-$(__embtk_rootfs_stripbins))
+		$(MAKE) __embtk_rootfs_strip)
 	-$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- 				\
 				rm -rf `find $(ROOTFS) -type f -name *.la`
 endef
