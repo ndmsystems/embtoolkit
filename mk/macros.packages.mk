@@ -112,6 +112,7 @@ __embtk_pkg_patch_site		= $(strip $(if $($(PKGV)_PATCH_SITE),		\
 	$($(PKGV)_PATCH_SITE),							\
 	$(__embtk_patch_site)/$(__embtk_pkg_name)/$(__embtk_pkg_version)))
 __embtk_pkg_patch_f		= $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch
+__embtk_pkg_mirror		= $(__embtk_patch_site)/packages-mirror
 __embtk_pkg_mirror1		= $(strip $($(PKGV)_MIRROR1))
 __embtk_pkg_mirror2		= $(strip $($(PKGV)_MIRROR2))
 __embtk_pkg_mirror3		= $(strip $($(PKGV)_MIRROR3))
@@ -497,16 +498,6 @@ if [ "x$(__embtk_pkg_needpatch)" = "xy" ]; then					\
 		$(__embtk_pkg_name)-$(__embtk_pkg_version)-*.patch);		\
 fi
 endef
-define __embtk_download_pkg_from_mirror
-if [ "x$($(PKGV)_SITE_MIRROR$(2))" = "x" ]; then 				\
-	false;									\
-else										\
-	$(call embtk_wget,							\
-		$(__embtk_pkg_package),						\
-		$($(PKGV)_SITE_MIRROR$(2)),					\
-		$(__embtk_pkg_package)); 					\
-fi
-endef
 
 define __embtk_download_pkg_exitfailure
 	(echo -e "\E[1;31m!Error on $(notdir $(1)) download!\E[0m";rm -rf $(1);	\
@@ -559,9 +550,26 @@ define __embtk_download_pkg_from_tarball
 		$(__embtk_pkg_package),						\
 		$(__embtk_pkg_site),						\
 		$(__embtk_pkg_package)) ||					\
-	$(call __embtk_download_pkg_from_mirror,$(1),1) ||			\
-	$(call __embtk_download_pkg_from_mirror,$(1),2) ||			\
-	$(call __embtk_download_pkg_from_mirror,$(1),3) ||			\
+	$(if $(__embtk_pkg_mirror1),						\
+		$(call embtk_wget,						\
+			$(__embtk_pkg_package),					\
+			$(__embtk_pkg_mirror1),					\
+			$(__embtk_pkg_package)),false) ||			\
+	$(if $(__embtk_pkg_mirror2),						\
+		$(call embtk_wget,						\
+			$(__embtk_pkg_package),					\
+			$(__embtk_pkg_mirror2),					\
+			$(__embtk_pkg_package)),false) ||			\
+	$(if $(__embtk_pkg_mirror3),						\
+		$(call embtk_wget,						\
+			$(__embtk_pkg_package),					\
+			$(__embtk_pkg_mirror3),					\
+			$(__embtk_pkg_package)),false) ||			\
+	$(if $(__embtk_pkg_mirror),						\
+		$(call embtk_wget,						\
+			$(__embtk_pkg_package),					\
+			$(__embtk_pkg_mirror),					\
+			$(__embtk_pkg_package)),false) ||			\
 	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_package_f))
 	$(call __embtk_download_pkg_patches,$(1)) ||				\
 	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
