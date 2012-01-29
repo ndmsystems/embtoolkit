@@ -177,12 +177,23 @@ define __embtk_toolchain_build
 	$(if $(findstring core,$(1))$(findstring addons,$(1)),
 		$(__embtk_toolchain_symlinktools)
 		$(__embtk_toolchain_compress)
+		touch $(TOOLCHAIN_DIR)/.decompressed
 		$(call embtk_pinfo,"New $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain successfully built!"),
 		$(__embtk_toolchain_decompress))
 endef
 
-__embtk_toolchain_core_inst	= $(strip $(if $(call __embtk_pkg_installed-y,toolchain),,core))
-__embtk_toolchain_addons_inst	= $(strip $(if $(call __embtk_pkg_installed-y,toolchain_addons),,addons))
+define __embtk_toolchain_core_inst-y
+	 $(and $(call __embtk_pkg_installed-y,toolchain),
+	 $(call __embtk_mk_pathexist,$(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)))
+endef
+__embtk_toolchain_core_inst = $(if $(strip $(__embtk_toolchain_core_inst-y)),,core)
+
+define __embtk_toolchain_addons_inst-y
+	$(and $(call __embtk_pkg_installed-y,toolchain_addons),
+	$(call __embtk_mk_pathexist,$(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)))
+endef
+__embtk_toolchain_addons_inst = $(if $(strip $(__embtk_toolchain_addons_inst-y)),,addons)
+
 __embtk_toolchain_buildargs	= $(__embtk_toolchain_core_inst)
 __embtk_toolchain_buildargs	+= $(__embtk_toolchain_addons_inst)
 
