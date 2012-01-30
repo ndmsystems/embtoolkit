@@ -36,8 +36,10 @@ config EMBTK_HAVE_MKIMAGE
 	help
 		u-boot mkimage tool.
 
+# zlib for host
 source kconfig/zlib_host.kconfig
-
+# gperf for host
+source kconfig/gperf_host.kconfig
 
 comment "-----------------------------"
 comment "Build options"

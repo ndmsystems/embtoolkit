@@ -102,8 +102,10 @@ TOOLCHAIN_PACKAGE	:= toolchain-$(GNU_TARGET)-$(__embtk_toolchain_clib)-$(EMBTK_M
 TOOLCHAIN_DIR		:= $(EMBTK_GENERATED)/toolchain-$(GNU_TARGET)-$(__embtk_toolchain_clib)-$(EMBTK_MCU_FLAG)
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
 
-TOOLCHAIN_PRE_DEPS	:= ccache_install $(AUTOTOOLS_INSTALL)
-TOOLCHAIN_PRE_DEPS	+= $(EMBTK_CMAKE_INSTALL)
+TOOLCHAIN_PRE_DEPS-y	:= ccache_install $(AUTOTOOLS_INSTALL)
+TOOLCHAIN_PRE_DEPS-y	+= $(EMBTK_CMAKE_INSTALL)
+TOOLCHAIN_PRE_DEPS-y	+= $(if $(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST),	\
+				gperf_host_install)
 
 TOOLCHAIN_DEPS		:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
@@ -133,7 +135,7 @@ endef
 
 define ___embtk_toolchain_decompress
 	cd $(EMBTK_ROOT) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
-	$(MAKE) mkinitialpath $(TOOLCHAIN_PRE_DEPS)
+	$(MAKE) mkinitialpath $(TOOLCHAIN_PRE_DEPS-y)
 	mkdir -p $(GCC3_BUILD_DIR)
 	touch $(GCC3_BUILD_DIR)/.installed
 	touch $(GCC3_BUILD_DIR)/.gcc3_post_install
@@ -159,7 +161,7 @@ define __embtk_toolchain_build
 		$(foreach pkg,$(__embtk_rootfs_pkgs-y),$(MAKE) $(pkg)_clean;)
 		rm -rf $(SYSROOT)
 		$(__embtk_mk_initsysrootdirs)
-		$(MAKE) mkinitialpath $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_DEPS)
+		$(MAKE) mkinitialpath $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
 		touch $(TOOLCHAIN_DIR)/.installed)
 	$(if $(findstring addons,$(1)),
 		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain ADDONS - please wait...")
@@ -172,7 +174,7 @@ define __embtk_toolchain_build
 			$(foreach addon,$(__embtk_toolchain_addons-n),
 				$(MAKE) $(addon)_clean;))
 		$(if $(TOOLCHAIN_ADDONS-y),
-			$(MAKE) $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_ADDONS-y))
+			$(MAKE) $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_ADDONS-y))
 		touch $(TOOLCHAIN_ADDONS_BUILD_DIR)/.installed)
 	$(if $(findstring core,$(1))$(findstring addons,$(1)),
 		$(__embtk_toolchain_symlinktools)
@@ -208,7 +210,7 @@ toolchain_clean:
 	$(Q)$(__embtk_toolchain_clean)
 
 # Download target for offline build
-TOOLCHAIN_ALL_DEPS := $(TOOLCHAIN_PRE_DEPS) $(TOOLCHAIN_DEPS)
+TOOLCHAIN_ALL_DEPS := $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
 TOOLCHAIN_ALL_DEPS += $(TOOLCHAIN_ADDONS_DEPS)
 
 packages_fetch:: $(patsubst %_install,download_%,$(TOOLCHAIN_ALL_DEPS))

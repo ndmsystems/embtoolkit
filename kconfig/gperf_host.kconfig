@@ -17,18 +17,13 @@
 #
 ################################################################################
 #
-# \file         gperf.kconfig
-# \brief	gperf.kconfig of Embtoolkit
+# \file         gperf_host.kconfig
+# \brief	gperf_host.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         June 2011
 ################################################################################
 
 config EMBTK_HOST_HAVE_GPERF
-	bool
-	help
-		gperf for host development machine.
-
-config EMBTK_HAVE_GPERF
 	bool
 	help
 		This is GNU gperf. It is a program that generates perfect hash
@@ -37,36 +32,13 @@ config EMBTK_HAVE_GPERF
 			A hash function and a data structure that allows
 			recognition of a key word in a set of words using
 			exactly 1 probe into the data structure.
-choice
-	prompt "gperf version you wish"
-	depends on EMBTK_HAVE_GPERF || EMBTK_HOST_HAVE_GPERF
-	help
-		Here you can choose which version of gperf you want to use.
 
-	config  EMBTK_GPERF_VERSION_3_0_4
-		bool "gperf-3.0.4"
-endchoice
-
-config EMBTK_GPERF_VERSION_STRING
+if EMBTK_HOST_HAVE_GPERF
+config EMBTK_GPERF_HOST_VERSION_STRING
 	string
-	default "3.0.4"		if EMBTK_GPERF_VERSION_3_0_4
-
-config EMBTK_GPERF_NEED_PATCH
-	bool
-	select EMBTK_GPERF_HOST_NEED_PATCH
-config EMBTK_GPERF_NEED_AUTORECONF
-	bool
-	select EMBTK_GPERF_HOST_NEED_AUTORECONF
-config EMBTK_GPERF_PKG_IS_TARGZ
-	bool
-config EMBTK_GPERF_PKG_IS_TARBZ2
-	bool
-
+	default "3.0.4"
 config EMBTK_GPERF_HOST_NEED_PATCH
 	bool
 config EMBTK_GPERF_HOST_NEED_AUTORECONF
 	bool
-config EMBTK_GPERF_HOST_PKG_IS_TARGZ
-	bool
-config EMBTK_GPERF_HOST_PKG_IS_TARBZ2
-	bool
+endif

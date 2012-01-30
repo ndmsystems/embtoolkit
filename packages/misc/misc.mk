@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -35,10 +35,6 @@ HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GETTEXT) += gettext_host_install
 include $(EMBTK_ROOT)/packages/misc/glib/glib.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GLIB) += glib_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GLIB) += glib_host_install
-
-#gperf
-include $(EMBTK_ROOT)/packages/misc/gperf/gperf.mk
-HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GPERF) += gperf_host_install
 
 # intltool
 include $(EMBTK_ROOT)/packages/misc/intltool/intltool.mk

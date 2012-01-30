@@ -101,3 +101,19 @@ source kconfig/pkgconfig.kconfig
 # fakeroot
 #
 source kconfig/fakeroot.kconfig
+
+#
+# gperf for host
+#
+source kconfig/gperf_host.kconfig
+
+#
+# Select of optional features
+#
+config EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST
+	bool
+	default y	if KEMBTK_EGLIBC_OPTION_EGLIBC_LOCALE_CODE
+	select EMBTK_HOST_HAVE_GPERF
+	help
+		select gperf for host if needed to build the toolchain.
+

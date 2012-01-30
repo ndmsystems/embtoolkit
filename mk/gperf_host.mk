@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2012 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2011-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,17 +17,18 @@
 #
 ################################################################################
 #
-# \file         misc.kconfig
-# \brief	misc.kconfig of Embtoolkit
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# \date         February 2010
+# \file         gperf_host.mk
+# \brief	gperf_host.mk of Embtoolkit
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         June 2011
 ################################################################################
 
-source packages/misc/expat/expat.kconfig
-source packages/misc/gettext/gettext.kconfig
-source packages/misc/glib/glib.kconfig
-source packages/misc/intltool/intltool.kconfig
-source packages/misc/libelf/libelf.kconfig
-source packages/misc/libxml/libxml.kconfig
-# ncurses included in main Kconfig
-source packages/misc/tslib/tslib.kconfig
+GPERF_HOST_NAME		:= gperf
+GPERF_HOST_VERSION	:= $(call embtk_get_pkgversion,gperf_host)
+GPERF_HOST_SITE		:= http://ftp.gnu.org/gnu/gperf
+GPERF_HOST_PACKAGE	:= gperf-$(GPERF_HOST_VERSION).tar.gz
+GPERF_HOST_SRC_DIR	:= $(TOOLS_BUILD)/gperf-$(GPERF_HOST_VERSION)
+GPERF_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/gperf-$(GPERF_HOST_VERSION)
+
+gperf_host_clean:
+	$(embtk_pinfo,"Clean up gperf for host...")
