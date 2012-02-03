@@ -26,9 +26,7 @@
 AUTOMAKE_NAME		:= automake
 AUTOMAKE_VERSION	:= $(call embtk_get_pkgversion,AUTOMAKE)
 AUTOMAKE_SITE		:= http://ftp.gnu.org/gnu/automake
-AUTOMAKE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-AUTOMAKE_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/automake/$(AUTOMAKE_VERSION)
-AUTOMAKE_PACKAGE	:= automake-$(AUTOMAKE_VERSION).tar.bz2
+AUTOMAKE_PACKAGE	:= automake-$(AUTOMAKE_VERSION).tar.xz
 AUTOMAKE_SRC_DIR	:= $(TOOLS_BUILD)/automake-$(AUTOMAKE_VERSION)
 AUTOMAKE_BUILD_DIR	:= $(TOOLS_BUILD)/automake-$(AUTOMAKE_VERSION)
 
