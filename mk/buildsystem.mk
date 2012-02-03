@@ -131,7 +131,7 @@ define __embtk_mk_initsysrootdirs
 	mkdir -p $(SYSROOT)/usr/lib
 	$(if $(CONFIG_EMBTK_32BITS_FS),,cd $(SYSROOT);				\
 		ln -sf lib lib64; cd $(SYSROOT)/usr;ln -sf lib lib64)
-	$(Q)$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
+	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
 		cd $(SYSROOT); ln -sf lib lib64; mkdir -p lib32;		\
 		cd $(SYSROOT)/usr; ln -sf lib lib64; mkdir -p lib32)
 endef
@@ -147,23 +147,6 @@ define __embtk_mk_inithosttoolsdirs
 	mkdir -p $(HOSTTOOLS)/usr/include
 	mkdir -p $(HOSTTOOLS)/usr/local
 endef
-
-define __embtk_mk_initrootfsdirs
-	$(if $(CONFIG_EMBTK_HAVE_ROOTFS),					\
-		mkdir -p $(ROOTFS);						\
-		cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(ROOTFS)/;		\
-		mkdir -p $(PACKAGES_BUILD))
-endef
-
-define __embtk_mk_initialpath
-	$(__embtk_mk_initsysrootdirs)
-	$(__embtk_mk_inittoolsdirs)
-	$(__embtk_mk_inithosttoolsdirs)
-	$(__embtk_mk_initrootfsdirs)
-endef
-
-mkinitialpath:
-	$(Q)$(__embtk_mk_initialpath)
 
 rmallpath:
 	$(Q)rm -rf $(PACKAGES_BUILD)* $(ROOTFS)* $(TOOLS)* $(TOOLS_BUILD)*

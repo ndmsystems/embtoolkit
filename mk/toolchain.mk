@@ -118,6 +118,12 @@ TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_BUILD_DIR)/.addons
 
 include $(EMBTK_ROOT)/mk/$(__embtk_toolchain_clib).mk
 
+define __embtk_toolchain_mkinitdirs
+	$(__embtk_mk_initsysrootdirs)
+	$(__embtk_mk_inittoolsdirs)
+	$(__embtk_mk_inithosttoolsdirs)
+endef
+
 define __embtk_toolchain_symlinktools
 	cd $(TOOLS)/bin;							\
 	tools=$$(ls $(STRICT_GNU_TARGET)-*);					\
@@ -135,7 +141,8 @@ endef
 
 define ___embtk_toolchain_decompress
 	cd $(EMBTK_ROOT) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
-	$(MAKE) mkinitialpath $(TOOLCHAIN_PRE_DEPS-y)
+	$(__embtk_toolchain_mkinitdirs)
+	$(MAKE) $(TOOLCHAIN_PRE_DEPS-y)
 	mkdir -p $(GCC3_BUILD_DIR)
 	touch $(GCC3_BUILD_DIR)/.installed
 	touch $(GCC3_BUILD_DIR)/.gcc3_post_install
@@ -160,8 +167,8 @@ define __embtk_toolchain_build
 				rm -rf $(call __embtk_pkg_builddir,$(dep));)
 		$(foreach pkg,$(__embtk_rootfs_pkgs-y),$(MAKE) $(pkg)_clean;)
 		rm -rf $(SYSROOT)
-		$(__embtk_mk_initsysrootdirs)
-		$(MAKE) mkinitialpath $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
+		$(__embtk_toolchain_mkinitdirs)
+		$(MAKE) $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
 		touch $(TOOLCHAIN_DIR)/.installed)
 	$(if $(findstring addons,$(1)),
 		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain ADDONS - please wait...")
