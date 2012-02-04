@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2010-2012 GAYE Abdoulaye Walsimou.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -24,49 +24,30 @@
 
 config EMBTK_HOST_HAVE_LIBELF
 	bool
-	select EMBTK_HOST_HAVE_GETTEXT
+	select EMBTK_LIBELF_HOST_NEED_PATCH
 	help
 		libelf for host development machine
 
 config EMBTK_HAVE_LIBELF
-	bool "Have libelf"
-	select EMBTK_HAVE_GETTEXT
+	bool
+	select EMBTK_LIBELF_NEED_PATCH
 	help
 		libelf lets you read, modify or create ELF files in an
 		architecture-independent way. The library takes care of size and
 		endian issues, e.g. you can process a file for SPARC processors
 		on an Intel-based system.
-choice
-	prompt "libelf version you wish"
-	depends on EMBTK_HAVE_LIBELF || EMBTK_HOST_HAVE_LIBELF
-	help
-		Here you can choose which version of libelf you want to use.
-
-	config  EMBTK_LIBELF_VERSION_0_8_13
-		bool "libelf-0.8.13"
-		select EMBTK_LIBELF_NEED_PATCH
-endchoice
 
 config EMBTK_LIBELF_VERSION_STRING
 	string
-	default "0.8.13"	if EMBTK_LIBELF_VERSION_0_8_13
+	depends on EMBTK_HOST_HAVE_LIBELF || EMBTK_HAVE_LIBELF
+	default "0.8.13"
 
 config EMBTK_LIBELF_NEED_PATCH
 	bool
-	select EMBTK_LIBELF_HOST_NEED_PATCH
 config EMBTK_LIBELF_NEED_AUTORECONF
-	bool
-	select EMBTK_LIBELF_HOST_NEED_AUTORECONF
-config EMBTK_LIBELF_PKG_IS_TARGZ
-	bool
-config EMBTK_LIBELF_PKG_IS_TARBZ2
 	bool
 
 config EMBTK_LIBELF_HOST_NEED_PATCH
 	bool
 config EMBTK_LIBELF_HOST_NEED_AUTORECONF
-	bool
-config EMBTK_LIBELF_HOST_PKG_IS_TARGZ
-	bool
-config EMBTK_LIBELF_HOST_PKG_IS_TARBZ2
 	bool

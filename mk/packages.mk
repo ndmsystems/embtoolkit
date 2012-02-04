@@ -28,14 +28,26 @@ HOSTTOOLS_COMPONENTS-y		:= mkimage_install pkgconfig_install
 #
 # Common include for target and host
 #
+
+# fakeroot
 include $(EMBTK_ROOT)/mk/fakeroot.mk
+
+# gperf
 include $(EMBTK_ROOT)/mk/gperf_host.mk
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GPERF) += gperf_host_install
+
+# libelf
+include $(EMBTK_ROOT)/packages/misc/libelf/libelf.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBELF) += libelf_install
+HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBELF) += libelf_host_install
+
 include $(EMBTK_ROOT)/mk/makedevs.mk
 include $(EMBTK_ROOT)/mk/mkimage.mk
 include $(EMBTK_ROOT)/mk/mtd-utils.mk
 include $(EMBTK_ROOT)/mk/pkgconfig.mk
 include $(EMBTK_ROOT)/mk/squashfs.mk
+
+# zlib_host
 include $(EMBTK_ROOT)/mk/zlib_host.mk
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_ZLIB) += zlib_host_install
 
