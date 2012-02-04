@@ -108,6 +108,11 @@ source kconfig/fakeroot.kconfig
 source kconfig/gperf_host.kconfig
 
 #
+# libelf
+#
+source packages/misc/libelf/libelf.kconfig
+
+#
 # Select of optional features
 #
 config EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST
