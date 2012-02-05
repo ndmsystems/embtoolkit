@@ -109,6 +109,8 @@ GDB_HOST_CONFIGURE_OPTS	:= --disable-werror --disable-sim		\
 			--target=$(STRICT_GNU_TARGET)
 GDB_HOST_PREFIX		:= $(TOOLS)
 
+gdb_host_clean:
+	$(Q)rm -rf $(GDB_HOST_BUILD_DIR)
 #
 # Common for target and host development machine
 #
