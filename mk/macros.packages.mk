@@ -649,50 +649,33 @@ endef
 #
 # A macro to clean installed packages from sysroot.
 # Usage:
-# $(call embtk_cleanup_pkg,PACKAGE)
+# $(call embtk_cleanup_pkg,pkgname)
 #
-define embtk_cleanup_pkg
-	$(if $(EMBTK_BUILDSYS_DEBUG),
-		$(call embtk_pinfo,"Cleanup $(__embtk_pkg_name)..."))
-	$(Q)-if [ "x$(__embtk_pkg_etc)" != "x" ] && [ -e $(SYSROOT)/etc ];	\
-		then								\
-		cd $(SYSROOT)/etc; rm -rf $(__embtk_pkg_etc);			\
-	fi
-	$(Q)-if [ "x$(__embtk_pkg_bins)" != "x" ] && [ -e $(SYSROOT)/usr/bin ];	\
-		then								\
-		cd $(SYSROOT)/usr/bin; rm -rf $(__embtk_pkg_bins);		\
-	fi
-	$(Q)-if [ "x$(__embtk_pkg_sbins)" != "x" ] &&				\
-	[ -e $(SYSROOT)/usr/sbin ];						\
-		then								\
-		cd $(SYSROOT)/usr/sbin; rm -rf $(__embtk_pkg_sbins);		\
-	fi
-	$(Q)-if [ "x$(__embtk_pkg_includes)" != "x" ] &&			\
-	[ -e $(SYSROOT)/usr/include ];						\
-		then								\
-		cd $(SYSROOT)/usr/include; rm -rf $(__embtk_pkg_includes);	\
-	fi
-	$(Q)-if [ "x$(__embtk_pkg_libs)" != "x" ] &&				\
-	[ -e $(SYSROOT)/usr/$(LIBDIR) ];					\
-		then								\
-		cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(__embtk_pkg_libs);	\
-	fi
-	$(Q)-if [ "x$(__embtk_pkg_libexecs)" != "x" ] &&			\
-	[ -e $(SYSROOT)/usr/$(LIBDIR)/libexec ];				\
-		then								\
-		cd $(SYSROOT)/usr/$(LIBDIR)/libexec;				\
-		rm -rf $(__embtk_pkg_libexecs);					\
-	fi
-	$(Q)-if [ "x$(__embtk_pkg_pkgconfigs)" != "x" ] &&			\
-	[ -e $(SYSROOT)/usr/$(LIBDIR)/pkgconfig ];				\
-		then								\
-		cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig;				\
-		rm -rf $(__embtk_pkg_pkgconfigs);				\
-	fi
-	$(Q)$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),
+define __embtk_cleanup_pkg
+	$(if $(__embtk_pkg_etc),
+		rm -rf $(addprefix $(SYSROOT)/etc/,$(__embtk_pkg_etc)))
+	$(if $(__embtk_pkg_bins),
+		rm -rf $(addprefix $(SYSROOT)/usr/bin/,$(__embtk_pkg_bins)))
+	$(if $(__embtk_pkg_sbins),
+		rm -rf $(addprefix $(SYSROOT)/usr/sbin/,$(__embtk_pkg_sbins)))
+	$(if $(__embtk_pkg_includes),
+		rm -rf $(addprefix $(SYSROOT)/usr/include/,$(__embtk_pkg_includes)))
+	$(if $(__embtk_pkg_libs),
+		rm -rf $(addprefix $(SYSROOT)/usr/$(LIBDIR)/,$(__embtk_pkg_libs)))
+	$(if $(__embtk_pkg_libexecs),
+		rm -rf $(addprefix $(SYSROOT)/usr/libexec/,$(__embtk_pkg_libexecs)))
+	$(if $(__embtk_pkg_pkgconfigs),
+		rm -rf $(addprefix $(SYSROOT)/usr/$(LIBDIR)/pkgconfig/,$(__embtk_pkg_pkgconfigs)))
+	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),
 		rm -rf $(__embtk_pkg_dotconfigured_f)
 		rm -rf $(__embtk_pkg_dotinstalled_f),
 		rm -rf $(__embtk_pkg_builddir)*)
+endef
+
+define embtk_cleanup_pkg
+	$(if $(EMBTK_BUILDSYS_DEBUG),
+		$(call embtk_pinfo,"Cleanup $(__embtk_pkg_name)..."))
+	$(Q)$(call __embtk_cleanup_pkg,$(1))
 endef
 
 #
