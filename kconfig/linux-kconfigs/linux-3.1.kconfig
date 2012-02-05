@@ -47,7 +47,7 @@ choice
 	config EMBTK_LINUX_VERSION_3_1_2
 		bool "linux-3.1.2"
 	config EMBTK_LINUX_VERSION_3_1_1
-		bool "linux-3.0.1"
+		bool "linux-3.1.1"
 	config EMBTK_LINUX_VERSION_3_1
 		bool "linux-3.1"
 endchoice
