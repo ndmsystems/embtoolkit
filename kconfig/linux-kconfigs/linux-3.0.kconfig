@@ -28,6 +28,26 @@ choice
 	help
 		Linux v3.0.x series exact version to use.
 
+	config EMBTK_LINUX_VERSION_3_0_19
+		bool "linux-3.0.19"
+	config EMBTK_LINUX_VERSION_3_0_18
+		bool "linux-3.0.18"
+	config EMBTK_LINUX_VERSION_3_0_17
+		bool "linux-3.0.17"
+	config EMBTK_LINUX_VERSION_3_0_16
+		bool "linux-3.0.16"
+	config EMBTK_LINUX_VERSION_3_0_15
+		bool "linux-3.0.15"
+	config EMBTK_LINUX_VERSION_3_0_14
+		bool "linux-3.0.14"
+	config EMBTK_LINUX_VERSION_3_0_13
+		bool "linux-3.0.13"
+	config EMBTK_LINUX_VERSION_3_0_12
+		bool "linux-3.0.12"
+	config EMBTK_LINUX_VERSION_3_0_11
+		bool "linux-3.0.11"
+	config EMBTK_LINUX_VERSION_3_0_10
+		bool "linux-3.0.10"
 	config EMBTK_LINUX_VERSION_3_0_9
 		bool "linux-3.0.9"
 	config EMBTK_LINUX_VERSION_3_0_8
@@ -52,6 +72,16 @@ endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "3.0.19"	if EMBTK_LINUX_VERSION_3_0_19
+	default "3.0.18"	if EMBTK_LINUX_VERSION_3_0_18
+	default "3.0.17"	if EMBTK_LINUX_VERSION_3_0_17
+	default "3.0.16"	if EMBTK_LINUX_VERSION_3_0_16
+	default "3.0.15"	if EMBTK_LINUX_VERSION_3_0_15
+	default "3.0.14"	if EMBTK_LINUX_VERSION_3_0_14
+	default "3.0.13"	if EMBTK_LINUX_VERSION_3_0_13
+	default "3.0.12"	if EMBTK_LINUX_VERSION_3_0_12
+	default "3.0.11"	if EMBTK_LINUX_VERSION_3_0_11
+	default "3.0.10"	if EMBTK_LINUX_VERSION_3_0_10
 	default "3.0.9"		if EMBTK_LINUX_VERSION_3_0_9
 	default "3.0.8"		if EMBTK_LINUX_VERSION_3_0_8
 	default "3.0.7"		if EMBTK_LINUX_VERSION_3_0_7
