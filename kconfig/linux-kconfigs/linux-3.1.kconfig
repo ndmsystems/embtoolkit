@@ -1,0 +1,72 @@
+################################################################################
+# Embtoolkit
+# Copyright(C) 2012 Abdoulaye Walsimou GAYE.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         linux-3.1.kconfig
+# \brief	linux v3.1.x series
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         February 2012
+################################################################################
+
+choice
+	prompt "Linux v3.1.x series exact version to use."
+	help
+		Linux v3.1.x series exact version to use.
+
+	config EMBTK_LINUX_VERSION_3_1_10
+		bool "linux-3.1.10"
+	config EMBTK_LINUX_VERSION_3_1_9
+		bool "linux-3.1.9"
+	config EMBTK_LINUX_VERSION_3_1_8
+		bool "linux-3.1.8"
+	config EMBTK_LINUX_VERSION_3_1_7
+		bool "linux-3.1.7"
+	config EMBTK_LINUX_VERSION_3_1_6
+		bool "linux-3.1.6"
+	config EMBTK_LINUX_VERSION_3_1_5
+		bool "linux-3.1.5"
+	config EMBTK_LINUX_VERSION_3_1_4
+		bool "linux-3.1.4"
+	config EMBTK_LINUX_VERSION_3_1_3
+		bool "linux-3.1.3"
+	config EMBTK_LINUX_VERSION_3_1_2
+		bool "linux-3.1.2"
+	config EMBTK_LINUX_VERSION_3_1_1
+		bool "linux-3.0.1"
+	config EMBTK_LINUX_VERSION_3_1
+		bool "linux-3.1"
+endchoice
+
+config EMBTK_LINUX_VERSION_STRING
+	string
+	default "3.1.10"	if EMBTK_LINUX_VERSION_3_1_10
+	default "3.1.9"		if EMBTK_LINUX_VERSION_3_1_9
+	default "3.1.8"		if EMBTK_LINUX_VERSION_3_1_8
+	default "3.1.7"		if EMBTK_LINUX_VERSION_3_1_7
+	default "3.1.6"		if EMBTK_LINUX_VERSION_3_1_6
+	default "3.1.5"		if EMBTK_LINUX_VERSION_3_1_5
+	default "3.1.4"		if EMBTK_LINUX_VERSION_3_1_4
+	default "3.1.3"		if EMBTK_LINUX_VERSION_3_1_3
+	default "3.1.2"		if EMBTK_LINUX_VERSION_3_1_2
+	default "3.1.1"		if EMBTK_LINUX_VERSION_3_1_1
+	default "3.1"		if EMBTK_LINUX_VERSION_3_1
+
+config EMBTK_LINUX_MAJOR_VERSION_STRING
+	string
+	default "v3.0"
+

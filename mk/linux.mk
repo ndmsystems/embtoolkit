@@ -38,6 +38,7 @@ LINUX_SITE		:= $(call __LINUX_SITE)
 LINUX_PACKAGE		:= linux-$(LINUX_VERSION).tar.bz2
 LINUX_SRC_DIR		:= $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 LINUX_BUILD_DIR		:= $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
+LINUX_HEADERS_KCONFIGS_NAME := LINUX
 
 linux_headers_install:
 	$(Q)test -e $(LINUX_BUILD_DIR)/.headers_installed ||			\
