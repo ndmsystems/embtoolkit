@@ -35,3 +35,6 @@ export GMP_HOST_DIR
 
 GMP_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
 GMP_HOST_PREFIX		:= $(GMP_HOST_DIR)
+
+gmp_host_clean:
+	$(Q)rm -rf $(GMP_HOST_BUILD_DIR)

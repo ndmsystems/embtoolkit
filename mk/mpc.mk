@@ -37,3 +37,6 @@ MPC_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static	\
 				--with-gmp=$(GMP_HOST_DIR)	\
 				--with-mpfr=$(MPFR_HOST_DIR)
 MPC_HOST_PREFIX		:= $(MPC_HOST_DIR)
+
+mpc_host_clean:
+	$(Q)rm -rf $(MPC_HOST_BUILD_DIR)

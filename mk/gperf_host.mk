@@ -31,4 +31,4 @@ GPERF_HOST_SRC_DIR	:= $(TOOLS_BUILD)/gperf-$(GPERF_HOST_VERSION)
 GPERF_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/gperf-$(GPERF_HOST_VERSION)
 
 gperf_host_clean:
-	$(embtk_pinfo,"Clean up gperf for host...")
+	$(Q)rm -rf $(GPERF_HOST_BUILD_DIR)

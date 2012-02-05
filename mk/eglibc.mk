@@ -79,6 +79,15 @@ eglibc_install:
 		true,$(__embtk_eglibc_install))
 
 #
+# clean targets
+#
+eglibc_clean:
+	$(Q)rm -rf $(EGLIBC_BUILD_DIR)
+
+eglibc_headers_clean:
+	$(Q)rm -rf $(EGLIBC_HEADERS_BUILD_DIR)
+
+#
 # download and macros
 #
 download_eglibc download_eglibc_headers:

@@ -36,3 +36,6 @@ export MPFR_HOST_DIR
 MPFR_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
 MPFR_HOST_CONFIGURE_OPTS	+= --with-gmp=$(GMP_HOST_DIR)
 MPFR_HOST_PREFIX		:= $(MPFR_HOST_DIR)
+
+mpfr_host_clean:
+	$(Q)rm -rf $(MPFR_HOST_BUILD_DIR)

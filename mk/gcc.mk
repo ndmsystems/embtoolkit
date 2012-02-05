@@ -60,6 +60,8 @@ endif
 gcc%_install:
 	$(call embtk_install_hostpkg,$(patsubst %_install,%,$@))
 
+gcc%_clean:
+	$(Q)rm -rf $(GCC$*_BUILD_DIR)
 #
 # GCC first stage
 #

@@ -164,9 +164,9 @@ define __embtk_toolchain_build
 		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) CORE toolchain - please wait...")
 		rm -rf $(TOOLCHAIN_DIR)/.installed
 		$(foreach dep,$(patsubst %_install,%,$(TOOLCHAIN_DEPS)),
-				rm -rf $(call __embtk_pkg_builddir,$(dep));)
+			$(MAKE) $(dep)_clean;)
 		$(foreach pkg,$(__embtk_rootfs_pkgs-y),$(MAKE) $(pkg)_clean;)
-		rm -rf $(SYSROOT)
+		rm -rf $(SYSROOT) $(TOOLS)
 		$(__embtk_toolchain_mkinitdirs)
 		$(MAKE) $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
 		touch $(TOOLCHAIN_DIR)/.installed)

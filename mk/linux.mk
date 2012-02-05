@@ -35,7 +35,6 @@ LINUX_MAJORV		:= $(call embtk_get_pkgversion,linux_major)
 LINUX_LONGTERMV		:= $(call embtk_get_pkgversion,linux_longterm)
 LINUX_VERSION		:= $(call embtk_get_pkgversion,linux)
 LINUX_SITE		:= $(call __LINUX_SITE)
-LINUX_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LINUX_PACKAGE		:= linux-$(LINUX_VERSION).tar.bz2
 LINUX_SRC_DIR		:= $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
 LINUX_BUILD_DIR		:= $(TOOLS_BUILD)/linux-$(LINUX_VERSION)
@@ -59,3 +58,16 @@ $(LINUX_BUILD_DIR)/.headers_installed:
 
 download_linux download_linux_headers:
 	$(call embtk_download_pkg,linux)
+
+#
+# clean target
+#
+define embtk_linux_clean
+	if [ -d $(LINUX_BUILD_DIR) ]; then					\
+		$(MAKE) -C $(LINUX_BUILD_DIR) distclean;			\
+		rm -rf $(LINUX_BUILD_DIR)/.headers_installed;			\
+	fi
+endef
+
+linux_clean linux_headers_clean:
+	$(embtk_linux_clean)
