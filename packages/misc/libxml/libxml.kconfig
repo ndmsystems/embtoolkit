@@ -25,6 +25,8 @@
 
 config EMBTK_HAVE_LIBXML2
 	bool "Have libxml2"
+	select KEMBTK_UCLIBC_UCLIBC_HAS_FLOATS if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_DO_C99_MATH if EMBTK_CLIB_UCLIBC
 	help
 		libxml2
 choice
