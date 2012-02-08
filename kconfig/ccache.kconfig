@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2011-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 ##
@@ -36,13 +36,9 @@ config EMBTK_HAVE_CCACHE
 
 config EMBTK_CCACHE_VERSION_STRING
 	string
-	default "3.1.6"
+	default "3.1.7"
 
 config EMBTK_CCACHE_NEED_PATCH
 	bool
 config EMBTK_CCACHE_NEED_AUTORECONF
-	bool
-config EMBTK_CCACHE_PKG_IS_TARGZ
-	bool
-config EMBTK_CCACHE_PKG_IS_TARBZ2
 	bool
