@@ -28,6 +28,26 @@ choice
 	help
 		Linux v2.6.32.x series exact version to use.
 
+	config EMBTK_LINUX_VERSION_2_6_32_56
+		bool "linux-2.6.32.56"
+	config EMBTK_LINUX_VERSION_2_6_32_55
+		bool "linux-2.6.32.55"
+	config EMBTK_LINUX_VERSION_2_6_32_54
+		bool "linux-2.6.32.54"
+	config EMBTK_LINUX_VERSION_2_6_32_53
+		bool "linux-2.6.32.53"
+	config EMBTK_LINUX_VERSION_2_6_32_52
+		bool "linux-2.6.32.52"
+	config EMBTK_LINUX_VERSION_2_6_32_51
+		bool "linux-2.6.32.51"
+	config EMBTK_LINUX_VERSION_2_6_32_50
+		bool "linux-2.6.32.50"
+	config EMBTK_LINUX_VERSION_2_6_32_49
+		bool "linux-2.6.32.49"
+	config EMBTK_LINUX_VERSION_2_6_32_48
+		bool "linux-2.6.32.48"
+	config EMBTK_LINUX_VERSION_2_6_32_47
+		bool "linux-2.6.32.47"
 	config EMBTK_LINUX_VERSION_2_6_32_46
 		bool "linux-2.6.32.46"
 	config EMBTK_LINUX_VERSION_2_6_32_45
@@ -126,6 +146,16 @@ endchoice
 
 config EMBTK_LINUX_LONGTERM_VERSION_STRING
 	string
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_56
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_55
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_54
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_53
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_52
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_51
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_50
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_49
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_48
+	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_47
 	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_46
 	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_45
 	default "v2.6.32"		if EMBTK_LINUX_VERSION_2_6_32_44
@@ -148,6 +178,16 @@ config EMBTK_LINUX_LONGTERM_VERSION_STRING
 
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "2.6.32.56"		if EMBTK_LINUX_VERSION_2_6_32_56
+	default "2.6.32.55"		if EMBTK_LINUX_VERSION_2_6_32_55
+	default "2.6.32.54"		if EMBTK_LINUX_VERSION_2_6_32_54
+	default "2.6.32.53"		if EMBTK_LINUX_VERSION_2_6_32_53
+	default "2.6.32.52"		if EMBTK_LINUX_VERSION_2_6_32_52
+	default "2.6.32.51"		if EMBTK_LINUX_VERSION_2_6_32_51
+	default "2.6.32.50"		if EMBTK_LINUX_VERSION_2_6_32_50
+	default "2.6.32.49"		if EMBTK_LINUX_VERSION_2_6_32_49
+	default "2.6.32.48"		if EMBTK_LINUX_VERSION_2_6_32_48
+	default "2.6.32.47"		if EMBTK_LINUX_VERSION_2_6_32_47
 	default "2.6.32.46"		if EMBTK_LINUX_VERSION_2_6_32_46
 	default "2.6.32.45"		if EMBTK_LINUX_VERSION_2_6_32_45
 	default "2.6.32.44"		if EMBTK_LINUX_VERSION_2_6_32_44
