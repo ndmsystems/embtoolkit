@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,59 +18,20 @@
 ################################################################################
 #
 # \file         mpfr.kconfig
-# \brief	mpfr.kconfig of Embtoolkit
+# \brief	mpfr.kconfig of Embtoolkit for toolchain
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
-
-config EMBTK_HAVE_MPFR
-	bool
 
 config EMBTK_HOST_HAVE_MPFR
 	bool
 	default y
 
-choice
-	prompt "Version of mpfr you wish"
-	depends on EMBTK_HAVE_MPFR || EMBTK_HOST_HAVE_MPFR
-	help
-		The MPFR library is a C library for multiple-precision
-		floating-point computations with correct rounding.
-		MPFR is mandatory to build GCC
-
-	config EMBTK_MPFR_VERSION_2_4_2
-		bool "mpfr-2.4.2"
-		select EMBTK_MPFR_NEED_PATCH
-	config EMBTK_MPFR_HOST_VERSION_2_4_1
-		bool "mpfr-2.4.1"
-		select EMBTK_MPFR_NEED_PATCH
-	config EMBTK_MPFR_VERSION_2_4_0
-		bool "mpfr-2.4.0"
-		select EMBTK_MPFR_NEED_PATCH
-endchoice
-
-config EMBTK_MPFR_VERSION_STRING
+config EMBTK_MPFR_HOST_VERSION_STRING
 	string
-	default "2.4.2"		if EMBTK_MPFR_VERSION_2_4_2
-	default "2.4.1"		if EMBTK_MPFR_VERSION_2_4_1
-	default "2.4.0"		if EMBTK_MPFR_VERSION_2_4_0
-
-config EMBTK_MPFR_NEED_PATCH
-	bool
-	select EMBTK_MPFR_HOST_NEED_PATCH
-config EMBTK_MPFR_NEED_AUTORECONF
-	bool
-	select EMBTK_MPFR_HOST_NEED_AUTORECONF
-config EMBTK_MPFR_PKG_IS_TARGZ
-	bool
-config EMBTK_MPFR_PKG_IS_TARBZ2
-	bool
+	default "2.4.2"
 
 config EMBTK_MPFR_HOST_NEED_PATCH
 	bool
 config EMBTK_MPFR_HOST_NEED_AUTORECONF
-	bool
-config EMBTK_MPFR_HOST_PKG_IS_TARGZ
-	bool
-config EMBTK_MPFR_HOST_PKG_IS_TARBZ2
 	bool

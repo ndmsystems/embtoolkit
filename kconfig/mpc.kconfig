@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,53 +17,21 @@
 #
 ################################################################################
 #
-# \file         mpchost.kconfig
-# \brief	mpchost.kconfig of Embtoolkit
+# \file         mpc.kconfig
+# \brief	mpc.kconfig of Embtoolkit for toolchain
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         Jan 2010
 ################################################################################
 
-config EMBTK_HAVE_MPC
-	bool
-
 config EMBTK_HOST_HAVE_MPC
 	bool
 	default y
-choice
-	prompt "Version of mpc you wish"
-	depends on EMBTK_HOST_HAVE_MPC || EMBTK_HAVE_MPC
-	help
-		Mpc is a C library for the arithmetic of complex numbers with
-		arbitrarily high precision and correct rounding of the result.
-		MPC is mandatory to build GCC
 
-	config EMBTK_MPC_VERSION_0_8_2
-		bool "mpc-0.8.2"
-	config EMBTK_MPC_VERSION_0_8_1
-		bool "mpc-0.8.1"
-endchoice
-
-config EMBTK_MPC_VERSION_STRING
+config EMBTK_MPC_HOST_VERSION_STRING
 	string
-	default "0.8.2"		if EMBTK_MPC_VERSION_0_8_2
-	default "0.8.1"		if EMBTK_MPC_VERSION_0_8_1
-
-config EMBTK_MPC_NEED_PATCH
-	bool
-	select EMBTK_MPC_HOST_NEED_PATCH
-config EMBTK_MPC_NEED_AUTORECONF
-	bool
-	select EMBTK_MPC_HOST_NEED_AUTORECONF
-config EMBTK_MPC_PKG_IS_TARGZ
-	bool
-config EMBTK_MPC_PKG_IS_TARBZ2
-	bool
+	default "0.8.2"
 
 config EMBTK_MPC_HOST_NEED_PATCH
 	bool
 config EMBTK_MPC_HOST_NEED_AUTORECONF
-	bool
-config EMBTK_MPC_HOST_PKG_IS_TARGZ
-	bool
-config EMBTK_MPC_HOST_PKG_IS_TARBZ2
 	bool

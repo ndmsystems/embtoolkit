@@ -18,13 +18,13 @@
 ################################################################################
 #
 # \file         gmp.mk
-# \brief	gmp.mk of Embtoolkit
+# \brief	gmp.mk of Embtoolkit for toolchain
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
 
 GMP_HOST_NAME		:= gmp
-GMP_HOST_VERSION	:= $(call embtk_get_pkgversion,gmp)
+GMP_HOST_VERSION	:= $(call embtk_get_pkgversion,gmp_host)
 GMP_HOST_SITE		:= ftp://ftp.gmplib.org/pub/gmp-$(GMP_HOST_VERSION)
 GMP_HOST_PACKAGE	:= gmp-$(GMP_HOST_VERSION).tar.bz2
 GMP_HOST_SRC_DIR	:= $(TOOLS_BUILD)/gmp-$(GMP_HOST_VERSION)

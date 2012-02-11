@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,14 +17,14 @@
 #
 ################################################################################
 #
-# \file         mpchost.mk
-# \brief	mpchost.mk of Embtoolkit. To build gcc, we need mpc.
+# \file         mpc.mk
+# \brief	mpch.mk of Embtoolkit for toolchain
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         Jan 2010
 ################################################################################
 
 MPC_HOST_NAME		:= mpc
-MPC_HOST_VERSION	:= $(call embtk_get_pkgversion,mpc)
+MPC_HOST_VERSION	:= $(call embtk_get_pkgversion,mpc_host)
 MPC_HOST_SITE		:= http://www.multiprecision.org/mpc/download
 MPC_HOST_PACKAGE	:= mpc-$(MPC_HOST_VERSION).tar.gz
 MPC_HOST_SRC_DIR	:= $(TOOLS_BUILD)/mpc-$(MPC_HOST_VERSION)

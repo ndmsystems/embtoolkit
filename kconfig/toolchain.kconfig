@@ -67,17 +67,20 @@ menu "Linux kernel headers"
 source "kconfig/linux.kconfig"
 endmenu
 
-menu "GMP"
-source "kconfig/gmp.kconfig"
-endmenu
+#
+# GMP
+#
+source kconfig/gmp.kconfig
 
-menu "MPFR"
-source "kconfig/mpfr.kconfig"
-endmenu
+#
+# MPFR
+#
+source kconfig/mpfr.kconfig
 
-menu "MPC"
-source "kconfig/mpc.kconfig"
-endmenu
+#
+# MPC
+#
+source kconfig/mpc.kconfig
 
 #
 # ccache
