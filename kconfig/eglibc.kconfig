@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,14 +60,14 @@ config EMBTK_EGLIBC_SVN_REVISION
 	default 15872	if EMBTK_EGLIBC_VERSION_2_12
 	default 16334	if EMBTK_EGLIBC_VERSION_2_11
 	default 10152	if EMBTK_EGLIBC_VERSION_2_10
-	default 16333	if EMBTK_EGLIBC_VERSION_TRUNK
+	default 17195	if EMBTK_EGLIBC_VERSION_TRUNK
 
 comment "At EmbToolkit release, valid eglibc svn revisions are:"
 comment "svn revision 15871	for eglibc-2.13"
 comment "svn revision 14665	for eglibc-2.12"
 comment "svn revision 16334	for eglibc-2.11"
 comment "svn revision 10152	for eglibc-2.10"
-comment "svn revision 16333	for eglibc-trunk (development version)"
+comment "svn revision 17195	for eglibc-trunk (development version)"
 comment ""
 
 config EMBTK_EGLIBC_SVN_BRANCH
