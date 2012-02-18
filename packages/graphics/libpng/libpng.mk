@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,8 +26,7 @@
 LIBPNG_NAME		:= libpng
 LIBPNG_VERSION		:= $(call embtk_get_pkgversion,libpng)
 LIBPNG_SITE		:= http://download.sourceforge.net/libpng
-LIBPNG_PACKAGE		:= libpng-$(LIBPNG_VERSION).tar.gz
-LIBPNG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBPNG_PACKAGE		:= libpng-$(LIBPNG_VERSION).tar.xz
 LIBPNG_SRC_DIR		:= $(PACKAGES_BUILD)/libpng-$(LIBPNG_VERSION)
 LIBPNG_BUILD_DIR	:= $(PACKAGES_BUILD)/libpng-$(LIBPNG_VERSION)
 

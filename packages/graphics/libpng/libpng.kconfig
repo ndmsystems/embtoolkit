@@ -43,19 +43,19 @@ choice
 	help
 		Here you can choose which version of libpng you want to use.
 
-	config  EMBTK_LIBPNG_VERSION_1_5_8
-		bool "libpng-1.5.8"
-	config  EMBTK_LIBPNG_VERSION_1_4_8
-		bool "libpng-1.4.8"
-	config  EMBTK_LIBPNG_VERSION_1_2_45
-		bool "libpng-1.2.45"
+	config  EMBTK_LIBPNG_VERSION_1_5_9
+		bool "libpng-1.5.9"
+	config  EMBTK_LIBPNG_VERSION_1_4_9
+		bool "libpng-1.4.9"
+	config  EMBTK_LIBPNG_VERSION_1_2_47
+		bool "libpng-1.2.47"
 endchoice
 
 config EMBTK_LIBPNG_VERSION_STRING
 	string
-	default "1.5.8"		if EMBTK_LIBPNG_VERSION_1_5_8
-	default "1.4.8"		if EMBTK_LIBPNG_VERSION_1_4_8
-	default "1.2.45"	if EMBTK_LIBPNG_VERSION_1_2_45
+	default "1.5.9"		if EMBTK_LIBPNG_VERSION_1_5_9
+	default "1.4.9"		if EMBTK_LIBPNG_VERSION_1_4_9
+	default "1.2.47"	if EMBTK_LIBPNG_VERSION_1_2_47
 
 config EMBTK_LIBPNG_NEED_PATCH
 	bool
