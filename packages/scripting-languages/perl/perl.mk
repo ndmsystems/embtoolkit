@@ -60,7 +60,7 @@ $(PERL_BUILD_DIR)/.decompressed:
 	$(call embtk_decompress_pkg,perl)
 
 microperl_clean:
-	$(call embtk_pinfo,"Clean microperl for target...")
+	$(call embtk_cleanup_pkg,perl)
 
 download_microperl download_perl:
 	$(call embtk_download_pkg,perl)
