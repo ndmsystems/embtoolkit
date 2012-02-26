@@ -64,7 +64,7 @@ config EMBTK_EGLIBC_SVN_REVISION
 
 comment "At EmbToolkit release, valid eglibc svn revisions are:"
 comment "svn revision 15871	for eglibc-2.13"
-comment "svn revision 14665	for eglibc-2.12"
+comment "svn revision 15872	for eglibc-2.12"
 comment "svn revision 16334	for eglibc-2.11"
 comment "svn revision 10152	for eglibc-2.10"
 comment "svn revision 17195	for eglibc-trunk (development version)"
