@@ -33,29 +33,22 @@ ZLIB_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_HOST_VERSION)
 ZLIB_HOST_CONFIGURE_ENV	:= CC=$(HOSTCC_CACHED)
 
 zlib_host_install:
-	$(Q)test -e $(ZLIB_HOST_BUILD_DIR)/.installed || \
-	$(MAKE) $(ZLIB_HOST_BUILD_DIR)/.installed
+	echo "Install zlib host"
+	$(call embtk_makeinstall_hostpkg,zlib_host)
 
-$(ZLIB_HOST_BUILD_DIR)/.installed: download_zlib_host \
-	$(ZLIB_HOST_SRC_DIR)/.decompressed \
-	$(ZLIB_HOST_BUILD_DIR)/.configured
-	$(embtk_pinfo,"Compile/Install $(ZLIB_HOST_PACKAGE) for host")
-	$(Q)$(MAKE) -C $(ZLIB_HOST_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(ZLIB_HOST_BUILD_DIR) install
-	$(Q)touch $@
-
-$(ZLIB_HOST_SRC_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,zlib_host)
-
-$(ZLIB_HOST_BUILD_DIR)/.configured:
-	$(call embtk_pinfo,"Configure $(ZLIB_HOST_PACKAGE) for host...")
+define embtk_configure_zlib_host
 	$(Q)cd $(ZLIB_HOST_BUILD_DIR);					\
 	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\
 	LDFLAGS="-L$(HOSTTOOLS)/$(LIBDIR) -L$(HOSTTOOLS)/usr/$(LIBDIR)"	\
 	$(ZLIB_HOST_CONFIGURE_ENV)					\
 	$(CONFIG_SHELL) $(ZLIB_HOST_SRC_DIR)/configure			\
-	--prefix=$(HOSTTOOLS)/usr $(ZLIB_HOST_CONFIGURE_OPTS)
-	$(Q)touch $@
+		--prefix=$(HOSTTOOLS)/usr $(ZLIB_HOST_CONFIGURE_OPTS)
+	$(Q)touch $(ZLIB_HOST_BUILD_DIR)/.configured
+endef
+
+define embtk_beforeinstall_zlib_host
+	$(embtk_configure_zlib_host)
+endef
 
 zlib_host_clean:
 	$(call embtk_pinfo,"Clean up zlib for host")

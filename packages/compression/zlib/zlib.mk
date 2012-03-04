@@ -41,21 +41,9 @@ ZLIB_CONFIGURE_ENV	:=
 ZLIB_CONFIGURE_OPTS	:= --enable-shared
 
 zlib_install:
-	$(Q)test -e $(ZLIB_BUILD_DIR)/.installed || \
-	$(MAKE) $(ZLIB_BUILD_DIR)/.installed
+	$(call embtk_makeinstall_pkg,zlib)
 
-$(ZLIB_BUILD_DIR)/.installed: download_zlib \
-	$(ZLIB_SRC_DIR)/.decompressed \
-	$(ZLIB_BUILD_DIR)/.configured
-	$(call embtk_pinfo,"Compile/Install $(ZLIB_PACKAGE) for target")
-	$(Q)$(MAKE) -C $(ZLIB_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(ZLIB_BUILD_DIR) DESTDIR=$(SYSROOT) install
-	$(Q)touch $@
-
-$(ZLIB_SRC_DIR)/.decompressed:
-	$(call embtk_decompress_pkg,zlib)
-
-$(ZLIB_BUILD_DIR)/.configured:
+define embtk_configure_zlib
 	$(Q)cd $(ZLIB_BUILD_DIR);					\
 	CC=$(TARGETCC_CACHED)						\
 	CXX=$(TARGETCXX_CACHED)						\
@@ -75,6 +63,11 @@ $(ZLIB_BUILD_DIR)/.configured:
 	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
 	$(ZLIB_CONFIGURE_ENV)						\
 	$(CONFIG_SHELL) $(ZLIB_SRC_DIR)/configure			\
-	--libdir=/usr/$(LIBDIR)	--prefix=/usr --sysconfdir=/etc		\
-	$(ZLIB_CONFIGURE_OPTS)
-	@touch $@
+		--libdir=/usr/$(LIBDIR)	--prefix=/usr --sysconfdir=/etc	\
+		$(ZLIB_CONFIGURE_OPTS)
+	$(Q)touch $(ZLIB_BUILD_DIR)/.configured
+endef
+
+define embtk_beforeinstall_zlib
+	$(embtk_configure_zlib)
+endef
