@@ -31,7 +31,6 @@ ZLIB_HOST_SRC_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_HOST_VERSION)
 ZLIB_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_HOST_VERSION)
 
 ZLIB_HOST_CONFIGURE_ENV		:= CC=$(HOSTCC_CACHED)
-ZLIB_HOST_CONFIGURE_OPTS	:= --static
 
 zlib_host_install:
 	$(call embtk_makeinstall_hostpkg,zlib_host)
