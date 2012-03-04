@@ -30,10 +30,10 @@ ZLIB_HOST_PACKAGE	:= zlib-$(ZLIB_HOST_VERSION).tar.bz2
 ZLIB_HOST_SRC_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_HOST_VERSION)
 ZLIB_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_HOST_VERSION)
 
-ZLIB_HOST_CONFIGURE_ENV	:= CC=$(HOSTCC_CACHED)
+ZLIB_HOST_CONFIGURE_ENV		:= CC=$(HOSTCC_CACHED)
+ZLIB_HOST_CONFIGURE_OPTS	:= --static
 
 zlib_host_install:
-	echo "Install zlib host"
 	$(call embtk_makeinstall_hostpkg,zlib_host)
 
 define embtk_configure_zlib_host
