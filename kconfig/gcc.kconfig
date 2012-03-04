@@ -187,11 +187,6 @@ config EMBTK_GCC_VERSION_STRING
 	default "4.4.3"		if EMBTK_GCC_VERSION_4_4_3
 	default "4.4.2"		if EMBTK_GCC_VERSION_4_4_2
 	default "4.4.1"		if EMBTK_GCC_VERSION_4_4_1
-	default "4.3.6"		if EMBTK_GCC_VERSION_4_3_6
-	default "4.3.5"		if EMBTK_GCC_VERSION_4_3_5
-	default "4.3.4"		if EMBTK_GCC_VERSION_4_3_4
-	default "4.3.3"		if EMBTK_GCC_VERSION_4_3_3
-	default "4.3.2"		if EMBTK_GCC_VERSION_4_3_2
 
 config EMBTK_GCC_NEED_PATCH
 	bool
