@@ -28,6 +28,7 @@ GCC_VERSION	:= $(call embtk_get_pkgversion,gcc)
 GCC_SITE	:= $(strip $(if $(CONFIG_EMBTK_GCC_HAVE_MIRROR),		\
 		$(subst ",,$(strip $(CONFIG_EMBTK_GCC_HAVE_MIRROR_SITE))),	\
 		http://ftp.gnu.org/gnu/gcc/gcc-$(GCC_VERSION)))
+GCC_GIT_SITE	:= git://gcc.gnu.org/git/gcc.git
 GCC_PACKAGE	:= gcc-$(GCC_VERSION).tar.bz2
 GCC_SRC_DIR	:= $(TOOLS_BUILD)/gcc-$(GCC_VERSION)
 
@@ -68,6 +69,7 @@ gcc%_clean:
 GCC1_NAME		:= $(GCC_NAME)
 GCC1_VERSION		:= $(GCC_VERSION)
 GCC1_SITE		:= $(GCC_SITE)
+GCC1_GIT_SITE		:= $(GCC_GIT_SITE)
 GCC1_PACKAGE		:= $(GCC_PACKAGE)
 GCC1_SRC_DIR		:= $(GCC_SRC_DIR)
 GCC1_BUILD_DIR		:= $(TOOLS_BUILD)/gcc1-build
@@ -85,12 +87,16 @@ GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
 	--enable-languages=c --enable-target-optspace --disable-libquadmath
 
+CONFIG_EMBTK_GCC1_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
+CONFIG_EMBTK_GCC1_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
+
 #
 # GCC second stage
 #
 GCC2_NAME		:= $(GCC_NAME)
 GCC2_VERSION		:= $(GCC_VERSION)
 GCC2_SITE		:= $(GCC_SITE)
+GCC2_GIT_SITE		:= $(GCC_GIT_SITE)
 GCC2_PACKAGE		:= $(GCC_PACKAGE)
 GCC2_SRC_DIR		:= $(GCC_SRC_DIR)
 GCC2_BUILD_DIR		:= $(TOOLS_BUILD)/gcc2-build
@@ -107,12 +113,16 @@ GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
 	--enable-languages=c --enable-target-optspace --disable-libquadmath
 
+CONFIG_EMBTK_GCC2_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
+CONFIG_EMBTK_GCC2_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
+
 #
 # GCC last stage
 #
 GCC3_NAME		:= $(GCC_NAME)
 GCC3_VERSION		:= $(GCC_VERSION)
 GCC3_SITE		:= $(GCC_SITE)
+GCC3_GIT_SITE		:= $(GCC_GIT_SITE)
 GCC3_PACKAGE		:= $(GCC_PACKAGE)
 GCC3_SRC_DIR		:= $(GCC_SRC_DIR)
 GCC3_BUILD_DIR		:= $(TOOLS_BUILD)/gcc3-build
@@ -130,6 +140,9 @@ GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
 	--enable-threads --enable-shared --enable-target-optspace		\
 	--disable-libquadmath $(GCC3_CONFIGURE_EXTRA_OPTIONS)
+
+CONFIG_EMBTK_GCC3_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
+CONFIG_EMBTK_GCC3_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
 define embtk_postinstall_gcc3
 	$(Q)test -e $(GCC3_BUILD_DIR)/.gcc3_post_install ||			\

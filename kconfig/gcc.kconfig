@@ -39,6 +39,12 @@ choice
 		bool "gcc-4.5.x"
 	config EMBTK_GCC_VERSION_4_4_X
 		bool "gcc-4.4.x"
+	config EMBTK_GCC_VERSION_GIT
+		bool "Use GCC git repository"
+		help
+			Answer Y here if you want to build your toolchain based
+			on GCC sources from its GIT repository.
+			See http://gcc.gnu.org/git/?p=gcc.git
 endchoice
 
 # GCC-4.6.x
@@ -112,10 +118,34 @@ choice
 		select EMBTK_GCC_NEED_PATCH
 endchoice
 
+#
+# GIT repository options
+#
+config EMBTK_GCC_GIT_BRANCH
+	string "Branch to use"
+	default "master"
+	depends on EMBTK_GCC_VERSION_GIT
+	help
+		The branch of the git repository to use, the default is master.
+
+config EMBTK_GCC_GIT_REVISION
+	string "Checkout a specific revision instead of the latest"
+	depends on EMBTK_GCC_VERSION_GIT
+	help
+		Chechout a specific revision instead of the latest.
+
+config EMBTK_GCC_REFSPEC
+	string
+	default "toolchain"
+
+#
+# Use a specific GCC mirror
+#
 config EMBTK_GCC_HAVE_MIRROR
 	bool "Use a gcc mirror"
+	depends on !EMBTK_GCC_VERSION_GIT
 	help
-	 specify an alternate location where to download gcc sources
+		specify an alternate location where to download gcc sources.
 config EMBTK_GCC_HAVE_MIRROR_SITE
 	depends on EMBTK_GCC_HAVE_MIRROR
 	string "Mirror site"
@@ -123,56 +153,9 @@ config EMBTK_GCC_HAVE_MIRROR_SITE
 	help
 		specify an alternate location where to download gcc sources.
 
-config EMBTK_GCC_MORE_LANGUAGES
-	bool "Support additional languages"
-	help
-	 Additional languages that you wish your toolchain generates binaries.
-
-config EMBTK_GCC_LANGUAGE_CPP
-	bool "Support C++"
-	depends on EMBTK_GCC_MORE_LANGUAGES
-	select KEMBTK_UCLIBC_UCLIBC_HAS_FLOATS if EMBTK_CLIB_UCLIBC
-	select KEMBTK_UCLIBC_UCLIBC_SUSV3_LEGACY if EMBTK_CLIB_UCLIBC
-	select KEMBTK_UCLIBC_UCLIBC_CTOR_DTOR if EMBTK_CLIB_UCLIBC
-	select KEMBTK_UCLIBC_UCLIBC_DYNAMIC_ATEXIT if EMBTK_CLIB_UCLIBC
-	select KEMBTK_EGLIBC_OPTION_EGLIBC_LIBM if EMBTK_CLIB_EGLIBC
-	select KEMBTK_EGLIBC_OPTION_POSIX_C_LANG_WIDE_CHAR if EMBTK_CLIB_EGLIBC
-	select KEMBTK_EGLIBC_OPTION_POSIX_WIDE_CHAR_DEVICE_IO if EMBTK_CLIB_EGLIBC
-	help
-	 Your toolchain will be able to build C++ source code
-
-#config EMBTK_GCC_LANGUAGE_JAVA
-#	bool "Support Java"
-#	depends on EMBTK_GCC_MORE_LANGUAGES
-#	help
-#	 Your toolchain will be able to build Java source code
-
-config EMBTK_GCC_LANGUAGE_OBJECTIVEC
-	bool "Support Objective-C"
-	depends on EMBTK_GCC_MORE_LANGUAGES
-	depends on !EMBTK_CLIB_UCLIBC
-	help
-	 Your toolchain will be able to build Objective-C source code
-
-config EMBTK_GCC_LANGUAGE_OBJECTIVECPP
-	bool "Support Objective-C++"
-	depends on EMBTK_GCC_MORE_LANGUAGES
-	depends on !EMBTK_CLIB_UCLIBC
-	help
-	 Your toolchain will be able to build Objective-C source code
-
-config EMBTK_GCC_LANGUAGE_FORTRAN
-	bool "Support Fortran"
-	depends on EMBTK_GCC_MORE_LANGUAGES
-	help
-	 Your toolchain will be able to build fortran source code
-
-#config EMBTK_GCC_LANGUAGE_ADA
-#	bool "Support Ada"
-#	depends on EMBTK_GCC_MORE_LANGUAGES
-#	help
-#	 Your toolchain will be able to build Ada source code
-
+#
+# Versions strings for tarball packages.
+#
 config EMBTK_GCC_VERSION_STRING
 	string
 	default "4.6.3"		if EMBTK_GCC_VERSION_4_6_3
@@ -187,6 +170,7 @@ config EMBTK_GCC_VERSION_STRING
 	default "4.4.3"		if EMBTK_GCC_VERSION_4_4_3
 	default "4.4.2"		if EMBTK_GCC_VERSION_4_4_2
 	default "4.4.1"		if EMBTK_GCC_VERSION_4_4_1
+	default "git"		if EMBTK_GCC_VERSION_GIT
 
 config EMBTK_GCC_NEED_PATCH
 	bool
@@ -214,3 +198,8 @@ config EMBTK_GCC3_NEED_PATCH
 	bool
 config EMBTK_GCC3_NEED_AUTORECONF
 	bool
+
+#
+# GCC various options (languages to support, etc.)
+#
+source kconfig/gcc-options.kconfig

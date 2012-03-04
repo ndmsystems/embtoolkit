@@ -1,0 +1,76 @@
+################################################################################
+# Embtoolkit
+# Copyright(C) 2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         gcc-options.kconfig
+# \brief	gcc-options.kconfig of Embtoolkit
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         February 2012
+################################################################################
+
+config EMBTK_GCC_MORE_LANGUAGES
+	bool "Support additional languages"
+	help
+		Additional languages that you wish your toolchain generates
+		binaries.
+
+config EMBTK_GCC_LANGUAGE_CPP
+	bool "Support C++"
+	depends on EMBTK_GCC_MORE_LANGUAGES
+	select KEMBTK_UCLIBC_UCLIBC_HAS_FLOATS if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_SUSV3_LEGACY if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_CTOR_DTOR if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_DYNAMIC_ATEXIT if EMBTK_CLIB_UCLIBC
+	select KEMBTK_EGLIBC_OPTION_EGLIBC_LIBM if EMBTK_CLIB_EGLIBC
+	select KEMBTK_EGLIBC_OPTION_POSIX_C_LANG_WIDE_CHAR if EMBTK_CLIB_EGLIBC
+	select KEMBTK_EGLIBC_OPTION_POSIX_WIDE_CHAR_DEVICE_IO if EMBTK_CLIB_EGLIBC
+	help
+	 Your toolchain will be able to build C++ source code
+
+#config EMBTK_GCC_LANGUAGE_JAVA
+#	bool "Support Java"
+#	depends on EMBTK_GCC_MORE_LANGUAGES
+#	help
+#	 Your toolchain will be able to build Java source code
+
+config EMBTK_GCC_LANGUAGE_OBJECTIVEC
+	bool "Support Objective-C"
+	depends on EMBTK_GCC_MORE_LANGUAGES
+	depends on !EMBTK_CLIB_UCLIBC
+	help
+	 Your toolchain will be able to build Objective-C source code
+
+config EMBTK_GCC_LANGUAGE_OBJECTIVECPP
+	bool "Support Objective-C++"
+	depends on EMBTK_GCC_MORE_LANGUAGES
+	depends on !EMBTK_CLIB_UCLIBC
+	help
+	 Your toolchain will be able to build Objective-C source code
+
+config EMBTK_GCC_LANGUAGE_FORTRAN
+	bool "Support Fortran"
+	depends on EMBTK_GCC_MORE_LANGUAGES
+	help
+	 Your toolchain will be able to build fortran source code
+
+#config EMBTK_GCC_LANGUAGE_ADA
+#	bool "Support Ada"
+#	depends on EMBTK_GCC_MORE_LANGUAGES
+#	help
+#	 Your toolchain will be able to build Ada source code
+
