@@ -39,9 +39,6 @@ choice
 		bool "gcc-4.5.x"
 	config EMBTK_GCC_VERSION_4_4_X
 		bool "gcc-4.4.x"
-	config EMBTK_GCC_VERSION_4_3_X
-		bool "gcc-4.3.x"
-		depends on EMBTK_OLDPACKAGES
 endchoice
 
 # GCC-4.6.x
@@ -112,29 +109,6 @@ choice
 	config EMBTK_GCC_VERSION_4_4_1
 		depends on EMBTK_OLDPACKAGES
 		bool "gcc-4.4.1"
-		select EMBTK_GCC_NEED_PATCH
-endchoice
-
-# GCC-4.3.x
-choice
-	prompt "Version of gcc-4.3.x you wish"
-	depends on EMBTK_GCC_VERSION_4_3_X
-	help
-		Here you can choose which version of gcc-4.3.x you want to use
-
-	config EMBTK_GCC_VERSION_4_3_6
-		bool "gcc-4.3.6"
-	config EMBTK_GCC_VERSION_4_3_5
-		bool "gcc-4.3.5"
-		select EMBTK_GCC_NEED_PATCH
-	config EMBTK_GCC_VERSION_4_3_4
-		bool "gcc-4.3.4"
-		select EMBTK_GCC_NEED_PATCH
-	config EMBTK_GCC_VERSION_4_3_3
-		bool "gcc-4.3.3"
-		select EMBTK_GCC_NEED_PATCH
-	config EMBTK_GCC_VERSION_4_3_2
-		bool "gcc-4.3.2"
 		select EMBTK_GCC_NEED_PATCH
 endchoice
 
