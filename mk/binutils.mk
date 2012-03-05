@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,16 +26,13 @@
 BINUTILS_NAME		:= binutils
 BINUTILS_VERSION	:= $(call embtk_get_pkgversion,binutils)
 BINUTILS_SITE		:= http://ftp.gnu.org/gnu/binutils
-BINUTILS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+BINUTILS_GIT_SITE	:= git://sourceware.org/git/binutils.git
 BINUTILS_PACKAGE	:= binutils-$(BINUTILS_VERSION).tar.bz2
 BINUTILS_SRC_DIR	:= $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)
 BINUTILS_BUILD_DIR	:= $(TOOLS_BUILD)/binutils-build
 
 BINUTILS_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT) --disable-werror	\
 			--disable-nls --disable-multilib		\
-			--with-gmp=$(GMP_HOST_DIR)			\
-			--with-mpfr=$(MPFR_HOST_DIR)			\
-			--with-mpc=$(MPC_HOST_DIR)			\
 			--target=$(STRICT_GNU_TARGET)
 BINUTILS_PREFIX		:= $(TOOLS)
 
