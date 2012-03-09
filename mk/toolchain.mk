@@ -205,8 +205,8 @@ define __embtk_toolchain_addons_inst-y
 endef
 __embtk_toolchain_addons_inst = $(if $(strip $(__embtk_toolchain_addons_inst-y)),,addons)
 
-__embtk_toolchain_buildargs	= $(__embtk_toolchain_core_inst)
-__embtk_toolchain_buildargs	+= $(__embtk_toolchain_addons_inst)
+__embtk_toolchain_buildargs = $(if $(__embtk_toolchain_core_inst),core-addons)
+__embtk_toolchain_buildargs += $(__embtk_toolchain_addons_inst)
 
 buildtoolchain:
 	$(Q)$(call __embtk_toolchain_build,$(__embtk_toolchain_buildargs))
