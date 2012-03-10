@@ -104,7 +104,6 @@ endef
 PKGV				= $(strip $(shell echo $(1) | tr a-z A-Z))
 pkgv				= $(strip $(shell echo $(1) | tr A-Z a-z))
 __embtk_pkg_name		= $(strip $($(PKGV)_NAME))
-__embtk_pkg_version		= $(strip $($(PKGV)_VERSION))
 __embtk_pkg_needpatch		= $(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)
 __embtk_pkg_site		= $(strip $($(PKGV)_SITE))
 __embtk_patch_site		= ftp://ftp.embtoolkit.org/embtoolkit.org
@@ -120,19 +119,21 @@ __embtk_pkg_package		= $(strip $($(PKGV)_PACKAGE))
 
 __embtk_pkg_refspec		= $(subst ",,$(strip $(CONFIG_EMBTK_$(PKGV)_REFSPEC)))
 
-__embtk_pkg_usesvn		= $(CONFIG_EMBTK_$(PKGV)_VERSION_SVN)
+__embtk_pkg_usesvn		= $(if $(CONFIG_EMBTK_$(PKGV)_VERSION_SVN),svn)
 __embtk_pkg_svnsite		= $(strip $($(PKGV)_SVN_SITE))
 __embtk_pkg_svnbranch		= $(subst ",,$(strip $(CONFIG_EMBTK_$(PKGV)_SVN_BRANCH)))
 __embtk_pkg_svnrev		= $(subst ",,$(strip $(CONFIG_EMBTK_$(PKGV)_SVN_REVISION)))
 __embtk_pkg_localsvn		= $(strip $(if $(__embtk_pkg_usesvn),		\
 	$(EMBTK_ROOT)/src/$(__embtk_pkg_refspec)/$(__embtk_pkg_name)-$(notdir $(__embtk_pkg_svnbranch)).svn))
 
-__embtk_pkg_usegit		= $(CONFIG_EMBTK_$(PKGV)_VERSION_GIT)
+__embtk_pkg_usegit		= $(if $(CONFIG_EMBTK_$(PKGV)_VERSION_GIT),git)
 __embtk_pkg_gitsite		= $(strip $($(PKGV)_GIT_SITE))
 __embtk_pkg_gitbranch		= $(or $(subst ",,$(strip $(CONFIG_EMBTK_$(PKGV)_GIT_BRANCH))),master)
 __embtk_pkg_gitrev		= $(or $(subst ",,$(strip $(CONFIG_EMBTK_$(PKGV)_GIT_REVISION))),HEAD)
 __embtk_pkg_localgit		= $(strip $(if $(__embtk_pkg_usegit),		\
 	$(EMBTK_ROOT)/src/$(__embtk_pkg_refspec)/$(__embtk_pkg_name).git))
+
+__embtk_pkg_version		= $(or $(__embtk_pkg_usegit),$(__embtk_pkg_usesvn),$(strip $($(PKGV)_VERSION)))
 
 __embtk_pkg_package_f		= $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_package)
 __embtk_pkg_srcdir		= $(or $(__embtk_pkg_localgit),$(__embtk_pkg_localsvn),$(patsubst %/,%,$(strip $($(PKGV)_SRC_DIR))))
@@ -575,15 +576,7 @@ define __embtk_download_pkg_from_tarball
 	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
 endef
 
-__embtk_pkgdl_src = $(shell							\
-	if [ x$(__embtk_pkg_usegit) = xy ]; then				\
-		echo git;							\
-	elif [ x$(__embtk_pkg_usesvn) = xy ]; then				\
-		echo svn;							\
-	else									\
-		echo tarball;							\
-	fi;)
-
+__embtk_pkgdl_src = $(or $(__embtk_pkg_usegit),$(__embtk_pkg_usesvn),tarball)
 define embtk_download_pkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
 		$(call embtk_pinfo,"Download $(__embtk_pkg_name) if needed..."))
