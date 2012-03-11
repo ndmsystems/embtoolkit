@@ -506,27 +506,18 @@ define __embtk_download_pkg_exitfailure
 	exit 1)
 endef
 
-define __embtk_svncheckout_pkg
+define __embtk_download_pkg_from_svn
 	$(call embtk_echo_blue,"$(__embtk_pkg_name) using SVN")
 	$(call embtk_echo_blue,"\tBranch       : $(notdir $(__embtk_pkg_svnbranch))")
 	$(call embtk_echo_blue,"\tRevision     : $(__embtk_pkg_svnrev)")
 	$(call embtk_echo_blue,"\tIn           : $(__embtk_pkg_refspec)")
 	$(call embtk_echo_blue,"\tCheckout URL : $(__embtk_pkg_svnsite)")
+	test -e $(__embtk_pkg_localsvn) ||					\
 	svn co $(__embtk_pkg_svnsite)/$(__embtk_pkg_svnbranch)			\
 				-r$(__embtk_pkg_svnrev)	$(__embtk_pkg_localsvn)
 endef
 
-define __embtk_download_pkg_from_svn
-	$(if $(call __embtk_mk_pathnotexist,$(__embtk_pkg_localsvn)),
-		$(call __embtk_svncheckout_pkg,$(1)))
-endef
-
 define __embtk_gitclone_pkg
-	$(call embtk_echo_blue,"$(__embtk_pkg_name) using GIT")
-	$(call embtk_echo_blue,"\tBranch    : $(__embtk_pkg_gitbranch)")
-	$(call embtk_echo_blue,"\tRevision  : $(__embtk_pkg_gitrev)")
-	$(call embtk_echo_blue,"\tIn        : $(__embtk_pkg_refspec)")
-	$(call embtk_echo_blue,"\tClone URL : $(__embtk_pkg_gitsite)")
 	git clone $(__embtk_pkg_gitsite) $(__embtk_pkg_localgit)
 	$(if $(findstring master,$(__embtk_pkg_gitbranch)),,
 		cd $(__embtk_pkg_localgit);					\
@@ -538,8 +529,12 @@ define __embtk_gitclone_pkg
 endef
 
 define __embtk_download_pkg_from_git
-	$(if $(call __embtk_mk_pathnotexist,$(__embtk_pkg_localgit)),
-		$(call __embtk_gitclone_pkg,$(1)))
+	$(call embtk_echo_blue,"$(__embtk_pkg_name) using GIT")
+	$(call embtk_echo_blue,"\tBranch    : $(__embtk_pkg_gitbranch)")
+	$(call embtk_echo_blue,"\tRevision  : $(__embtk_pkg_gitrev)")
+	$(call embtk_echo_blue,"\tIn        : $(__embtk_pkg_refspec)")
+	$(call embtk_echo_blue,"\tClone URL : $(__embtk_pkg_gitsite)")
+	test -e $(__embtk_pkg_localgit) || $(call __embtk_gitclone_pkg,$(1))
 endef
 
 define __embtk_download_pkg_from_tarball
