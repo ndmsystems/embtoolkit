@@ -173,23 +173,24 @@ __embtk_pkg_dotpkgkconfig_f	= $(__embtk_pkg_builddir)/.embtk.$(__embtk_pkg_name)
 # Some useful macros about packages
 __embtk_rootfs_pkgs-y		= $(patsubst %_install,%,$(ROOTFS_COMPONENTS-y))
 __embtk_rootfs_nrpkgs-y		= $(if $(__embtk_rootfs_pkgs-y),		\
-					$(shell echo $(__embtk_rootfs_pkgs-y)	\
-								| wc -w),0)
+				$(shell echo $(__embtk_rootfs_pkgs-y) | wc -w),0)
 
 __embtk_hosttools_pkgs-y	= $(patsubst %_install,%,$(HOSTTOOLS_COMPONENTS-y))
 __embtk_hosttools_nrpkgs-y	= $(if $(__embtk_hosttools_pkgs-y),		\
-				$(shell echo $(__embtk_hosttools_pkgs-y)	\
-								| wc -w),0)
+				$(shell echo $(__embtk_hosttools_pkgs-y) | wc -w),0)
 
 __embtk_rootfs_pkgs-n		= $(patsubst %_install,%,$(ROOTFS_COMPONENTS-))
 __embtk_rootfs_nrpkgs-n		= $(if $(__embtk_rootfs_pkgs-n),		\
-					$(shell echo $(__embtk_rootfs_pkgs-n)	\
-								| wc -w),0)
+				$(shell echo $(__embtk_rootfs_pkgs-n) | wc -w),0)
 
 __embtk_hosttools_pkgs-n	= $(patsubst %_install,%,$(HOSTTOOLS_COMPONENTS-))
 __embtk_hosttools_nrpkgs-n	= $(if $(__embtk_hosttools_pkgs-n),		\
-				$(shell echo $(__embtk_hosttools_pkgs-n)	\
-								| wc -w),0)
+				$(shell echo $(__embtk_hosttools_pkgs-n) | wc -w),0)
+
+__embtk_pkgs_all-y		= $(__embtk_rootfs_pkgs-y) $(__embtk_hosttools_pkgs-y)
+__embtk_pkgs_nrall-y		= $(if $(strip $(__embtk_pkgs_all-y)),		\
+				$(shell echo $(__embtk_pkgs_all-y) | wc -w),0)
+
 #
 # A macro to get packages version from .config file.
 # usage: $(call embtk_get_pkgversion,PACKAGE)
