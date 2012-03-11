@@ -491,6 +491,11 @@ endef
 # $(call embtk_download_pkg,PACKAGE)
 #
 
+__embtk_pkg_depof = $(strip $(foreach p,$(__embtk_pkgs_all-y),			\
+		$(if $(findstring $(pkgv),$($(call PKGV,$(p)_deps))),$(p))))
+
+__embtk_pkg_needpatch_yesno = $(if $(__embtk_pkg_needpatch),Yes,No)
+
 define __embtk_download_pkg_patches
 if [ "x$(__embtk_pkg_needpatch)" = "xy" ]; then					\
 	test -e	$(__embtk_pkg_patch_f) ||					\
@@ -508,10 +513,12 @@ endef
 
 define __embtk_download_pkg_from_svn
 	$(call embtk_echo_blue,"$(__embtk_pkg_name) using SVN")
-	$(call embtk_echo_blue,"\tBranch       : $(notdir $(__embtk_pkg_svnbranch))")
-	$(call embtk_echo_blue,"\tRevision     : $(__embtk_pkg_svnrev)")
-	$(call embtk_echo_blue,"\tIn           : $(__embtk_pkg_refspec)")
-	$(call embtk_echo_blue,"\tCheckout URL : $(__embtk_pkg_svnsite)")
+	$(call embtk_echo_blue,"\tBranch        : $(notdir $(__embtk_pkg_svnbranch))")
+	$(call embtk_echo_blue,"\tRevision      : $(__embtk_pkg_svnrev)")
+	$(call embtk_echo_blue,"\tIn            : $(__embtk_pkg_refspec)")
+	$(call embtk_echo_blue,"\tCheckout URL  : $(__embtk_pkg_svnsite)")
+	$(call embtk_echo_blue,"\tPatched       : $(__embtk_pkg_needpatch_yesno)")
+	$(call embtk_echo_blue,"\tDependency of : $(or $(__embtk_pkg_depof),N/A)")
 	test -e $(__embtk_pkg_localsvn) ||					\
 	svn co $(__embtk_pkg_svnsite)/$(__embtk_pkg_svnbranch)			\
 				-r$(__embtk_pkg_svnrev)	$(__embtk_pkg_localsvn)
@@ -530,18 +537,22 @@ endef
 
 define __embtk_download_pkg_from_git
 	$(call embtk_echo_blue,"$(__embtk_pkg_name) using GIT")
-	$(call embtk_echo_blue,"\tBranch    : $(__embtk_pkg_gitbranch)")
-	$(call embtk_echo_blue,"\tRevision  : $(__embtk_pkg_gitrev)")
-	$(call embtk_echo_blue,"\tIn        : $(__embtk_pkg_refspec)")
-	$(call embtk_echo_blue,"\tClone URL : $(__embtk_pkg_gitsite)")
+	$(call embtk_echo_blue,"\tBranch        : $(__embtk_pkg_gitbranch)")
+	$(call embtk_echo_blue,"\tRevision      : $(__embtk_pkg_gitrev)")
+	$(call embtk_echo_blue,"\tIn            : $(__embtk_pkg_refspec)")
+	$(call embtk_echo_blue,"\tClone URL     : $(__embtk_pkg_gitsite)")
+	$(call embtk_echo_blue,"\tPatched       : $(__embtk_pkg_needpatch_yesno)")
+	$(call embtk_echo_blue,"\tDependency of : $(or $(__embtk_pkg_depof),N/A)")
 	test -e $(__embtk_pkg_localgit) || $(call __embtk_gitclone_pkg,$(1))
 endef
 
 define __embtk_download_pkg_from_tarball
 	$(call embtk_echo_blue,"$(__embtk_pkg_name) using tarball")
-	$(call embtk_echo_blue,"\tVersion : $(__embtk_pkg_version)")
-	$(call embtk_echo_blue,"\tFrom    : $(__embtk_pkg_site)")
-	$(call embtk_echo_blue,"\tIn      : $(__embtk_pkg_package_f)")
+	$(call embtk_echo_blue,"\tVersion       : $(__embtk_pkg_version)")
+	$(call embtk_echo_blue,"\tFrom          : $(__embtk_pkg_site)")
+	$(call embtk_echo_blue,"\tIn            : $(__embtk_pkg_package_f)")
+	$(call embtk_echo_blue,"\tPatched       : $(__embtk_pkg_needpatch_yesno)")
+	$(call embtk_echo_blue,"\tDependency of : $(or $(__embtk_pkg_depof),N/A)")
 	test -e $(__embtk_pkg_package_f) ||					\
 	$(call embtk_wget,							\
 		$(__embtk_pkg_package),						\
