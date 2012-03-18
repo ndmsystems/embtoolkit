@@ -491,7 +491,7 @@ endef
 # $(call embtk_download_pkg,PACKAGE)
 #
 
-__embtk_pkg_depof = $(strip $(foreach p,$(__embtk_pkgs_all-y),			\
+__embtk_pkg_depof = $(strip $(foreach p,$(__embtk_pkgs_all-y) toolchain,	\
 		$(if $(findstring $(pkgv),$($(call PKGV,$(p)_deps))),$(p))))
 
 __embtk_pkg_needpatch_yesno = $(if $(__embtk_pkg_needpatch),Yes,No)
