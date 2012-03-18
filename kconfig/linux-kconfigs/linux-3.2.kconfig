@@ -28,6 +28,10 @@ choice
 	help
 		Linux v3.2.x series exact version to use.
 
+	config EMBTK_LINUX_VERSION_3_2_11
+		bool "linux-3.2.11"
+	config EMBTK_LINUX_VERSION_3_2_10
+		bool "linux-3.2.10"
 	config EMBTK_LINUX_VERSION_3_2_9
 		bool "linux-3.2.9"
 	config EMBTK_LINUX_VERSION_3_2_8
@@ -52,6 +56,8 @@ endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "3.2.11"	if EMBTK_LINUX_VERSION_3_2_11
+	default "3.2.10"	if EMBTK_LINUX_VERSION_3_2_10
 	default "3.2.9"		if EMBTK_LINUX_VERSION_3_2_9
 	default "3.2.8"		if EMBTK_LINUX_VERSION_3_2_8
 	default "3.2.7"		if EMBTK_LINUX_VERSION_3_2_7

@@ -28,6 +28,8 @@ choice
 	help
 		Linux v3.0.x series exact version to use.
 
+	config EMBTK_LINUX_VERSION_3_0_24
+		bool "linux-3.0.24"
 	config EMBTK_LINUX_VERSION_3_0_23
 		bool "linux-3.0.23"
 	config EMBTK_LINUX_VERSION_3_0_22
@@ -80,6 +82,7 @@ endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "3.0.24"	if EMBTK_LINUX_VERSION_3_0_24
 	default "3.0.23"	if EMBTK_LINUX_VERSION_3_0_23
 	default "3.0.22"	if EMBTK_LINUX_VERSION_3_0_22
 	default "3.0.21"	if EMBTK_LINUX_VERSION_3_0_21
