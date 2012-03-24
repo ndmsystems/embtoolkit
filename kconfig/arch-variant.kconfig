@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,11 +25,11 @@
 ################################################################################
 
 if EMBTK_ARCH_ARM
-source kconfig/arch-variant-arm.kconfig
+source kconfig/arch/arm/arm.kconfig
 endif
 
 if EMBTK_ARCH_MIPS
-source kconfig/arch-variant-mips.kconfig
+source kconfig/arch/mips/mips.kconfig
 endif
 
 choice

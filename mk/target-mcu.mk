@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -25,14 +25,12 @@
 
 #ARM
 ifeq ($(CONFIG_EMBTK_ARCH_ARM),y)
-include $(EMBTK_ROOT)/mk/arm-arch.mk
+include $(EMBTK_ROOT)/mk/arch/arm/arm.mk
 endif
 
 #M68K
 
 #MIPS
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS),y)
-include $(EMBTK_ROOT)/mk/mips-arch.mk
+include $(EMBTK_ROOT)/mk/arch/mips/mips.mk
 endif
-
-
