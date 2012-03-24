@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -79,7 +79,8 @@ GCC1_MAKE_ENV		:= PATH=$(PATH):$(TOOLS)/bin
 GCC1_PREFIX		:= $(TOOLS)
 GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
-	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE)	\
+	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
+	$(GCC_MULTILIB)								\
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)			\
 	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
@@ -106,7 +107,8 @@ GCC2_MAKE_ENV		:= PATH=$(PATH):$(TOOLS)/bin
 GCC2_PREFIX		:= $(TOOLS)
 GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
-	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE)	\
+	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
+	$(GCC_MULTILIB)								\
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)			\
 	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
@@ -132,7 +134,8 @@ GCC3_MAKE_ENV		:= PATH=$(PATH):$(TOOLS)/bin
 GCC3_PREFIX		:= $(TOOLS)
 GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
-	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_MULTILIB) $(GCC_WITH_TUNE)	\
+	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
+	$(GCC_MULTILIB)								\
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)			\
 	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
