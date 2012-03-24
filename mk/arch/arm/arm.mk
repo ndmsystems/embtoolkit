@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -56,8 +56,25 @@ GCC3_CONFIGURE_EXTRA_OPTIONS += $(strip $(if $(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),	
 					--enable-sjlj-exceptions))
 
 # Hard or soft floating point for GCC?
-GCC_WITH_FLOAT := $(strip $(if $(CONFIG_EMBTK_SOFTFLOAT),			\
-					--with-float=soft,--with-float=softfp))
+GCC_WITH_FLOAT-$(CONFIG_EMBTK_SOFTFLOAT)		:= soft
+GCC_WITH_FLOAT-$(CONFIG_EMBTK_HARDFLOAT)		:= softfp
+GCC_WITH_FLOAT	:= --with-float=$(GCC_WITH_FLOAT-y)
+
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_VFP)		:= vfp
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_VFPV3)		:= vfpv3
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_VFPV3_D16)	:= vfpv3-d16
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_VFPV3_FP16)	:= vfpv3-fp16
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_VFPV3_D16FP16)	:= vfpv3-d16-fp16
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_VFPV3_XD)	:= vfpv3xd
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_VFPV3_XDFP16)	:= vfpv3xd-fp16
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_VFPV4)		:= vfpv4
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_VFPV4_D16)	:= vfpv3-d16
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_FPV4_SPD16)	:= fpv4-sp-d16
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_NEON)		:= neon
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_NEON_FP16)	:= neon-fp16
+GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_NEON_VFPV4)	:= neon-vfpv4
+GCC_WITH_FPU	:= $(if $(GCC_WITH_FPU-y),--with-fpu=$(GCC_WITH_FPU-y))
+
 # Hard or soft floating point?
 EMBTK_TARGET_FLOAT_CFLAGS := $(strip $(if $(CONFIG_EMBTK_SOFTFLOAT),		\
 					-mfloat-abi=soft,-mfloat-abi=softfp))
