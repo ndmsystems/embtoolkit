@@ -93,8 +93,11 @@ choice
 	help
 		Here you can choose which version of gcc-4.4.x you want to use
 
+	config EMBTK_GCC_VERSION_4_4_7
+		bool "gcc-4.4.7"
 	config EMBTK_GCC_VERSION_4_4_6
 		bool "gcc-4.4.6"
+		depends on EMBTK_OLDPACKAGES
 		select EMBTK_GCC_NEED_PATCH
 	config EMBTK_GCC_VERSION_4_4_5
 		bool "gcc-4.4.5"
@@ -164,6 +167,7 @@ config EMBTK_GCC_VERSION_STRING
 	default "4.5.2"		if EMBTK_GCC_VERSION_4_5_2
 	default "4.5.1"		if EMBTK_GCC_VERSION_4_5_1
 	default "4.5.0"		if EMBTK_GCC_VERSION_4_5_0
+	default "4.4.7"		if EMBTK_GCC_VERSION_4_4_7
 	default "4.4.6"		if EMBTK_GCC_VERSION_4_4_6
 	default "4.4.5"		if EMBTK_GCC_VERSION_4_4_5
 	default "4.4.4"		if EMBTK_GCC_VERSION_4_4_4
