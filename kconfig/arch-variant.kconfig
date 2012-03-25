@@ -45,8 +45,12 @@ config EMBTK_SOFTFLOAT
 
 config EMBTK_HARDFLOAT
 	bool "Hard floating point"
+	depends on EMBTK_TARGET_ARCH_MAYUSE_FPU
 	select KEMBTK_UCLIBC_UCLIBC_HAS_FPU if EMBTK_CLIB_UCLIBC
 	help
 		Select if your CPU has a hardware floating point unit.
 endchoice
 
+if EMBTK_ARCH_ARM && EMBTK_HARDFLOAT
+source kconfig/arch/arm/fpu.kconfig
+endif
