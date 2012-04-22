@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2010 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,29 +25,31 @@
 
 config EMBTK_HAVE_LUA
 	bool "Have lua"
+	select EMBTK_LUA_NEED_PATCH
 	help
-		Lua is a powerful, light-weight programming language designed
-		for extending applications. Lua is also frequently used as a
-		general-purpose, stand-alone language. Lua is free software.
+		Lua is a powerful, fast, lightweight, embeddable scripting
+		language.
+		Lua combines simple procedural syntax with powerful data
+		description constructs based on associative arrays and
+		extensible semantics. Lua is dynamically typed, runs by
+		interpreting bytecode for a register-based virtual machine,
+		and has automatic memory management with incremental garbage
+		collection, making it ideal for configuration, scripting, and
+		rapid prototyping.
+
 choice
 	prompt "lua version you wish"
 	depends on EMBTK_HAVE_LUA
 	help
 	 Here you can choose which version of lua you want to use.
 
-	config  EMBTK_LUA_VERSION_5_1
-		bool "lua-5.1"
+	config  EMBTK_LUA_VERSION_5_1_5
+		bool "lua-5.1.5"
 endchoice
 
 config EMBTK_LUA_VERSION_STRING
 	string
-	default "5.1"		if EMBTK_LUA_VERSION_5_1
+	default "5.1.5"		if EMBTK_LUA_VERSION_5_1_5
 
 config EMBTK_LUA_NEED_PATCH
-	bool
-config EMBTK_LUA_NEED_AUTORECONF
-	bool
-config EMBTK_LUA_PKG_IS_TARGZ
-	bool
-config EMBTK_LUA_PKG_IS_TARBZ2
 	bool

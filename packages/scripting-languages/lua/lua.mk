@@ -25,8 +25,8 @@
 
 LUA_NAME	:= lua
 LUA_VERSION	:= $(call embtk_get_pkgversion,lua)
-LUA_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/lua
-LUA_PACKAGE	:= lua-$(LUA_VERSION).tar.bz2
+LUA_SITE	:= http://www.lua.org/ftp
+LUA_PACKAGE	:= lua-$(LUA_VERSION).tar.gz
 LUA_SRC_DIR	:= $(PACKAGES_BUILD)/lua-$(LUA_VERSION)
 LUA_BUILD_DIR	:= $(PACKAGES_BUILD)/lua-$(LUA_VERSION)
 
@@ -34,18 +34,30 @@ LUA_BINS	= lua luac
 LUA_SBINS	=
 LUA_INCLUDES	= lauxlib.h luaconf.h lua.h lua.hpp lualib.h
 LUA_LIBS	= lua liblua.*
-LUA_PKGCONFIGS	=
+LUA_PKGCONFIGS	= lua.pc
+LUA_SHARES	= lua
 
 LUA_DEPS	=
+LUACONF_H_OPTS	= -DCONFIG_LUA_ROOT="/usr/" -DCONFIG_SYSTEM_LIBDIR="$(LIBDIR)/"
 
-LUA_MAKE_OPTS	= INSTALL_TOP=$(SYSROOT)/usr/ LIBDIR=$(LIBDIR)
+LUA_MAKE_OPTS	= INSTALL_TOP=$(SYSROOT)/usr/ LIBDIR=$(LIBDIR) PLAT=ansi
 
 lua_install:
 	$(call embtk_makeinstall_pkg,lua)
 
 define embtk_beforeinstall_lua
 	$(Q)$(MAKE) -C $(LUA_BUILD_DIR) CC=$(TARGETCC_CACHED)			\
-		AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB)			\
-		LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"	\
-		CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include" ansi
+	AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB)				\
+	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"		\
+	CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include $(LUACONF_H_OPTS)"	\
+	PLAT=ansi
+endef
+
+define embtk_postinstall_lua
+	$(Q)mkdir -p $(ROOTFS)
+	$(Q)mkdir -p $(ROOTFS)/usr
+	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
+	$(Q)mkdir -p $(ROOTFS)/usr/share
+	$(Q)cp -R $(SYSROOT)/usr/$(LIBDIR)/lua $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)cp -R $(SYSROOT)/usr/share/lua $(ROOTFS)/usr/share/
 endef
