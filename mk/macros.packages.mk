@@ -146,6 +146,7 @@ __embtk_pkg_includes		= $(strip $($(PKGV)_INCLUDES))
 __embtk_pkg_libs		= $(strip $($(PKGV)_LIBS))
 __embtk_pkg_libexecs		= $(strip $($(PKGV)_LIBEXECS))
 __embtk_pkg_pkgconfigs		= $(strip $($(PKGV)_PKGCONFIGS))
+__embtk_pkg_shares		= $(strip $($(PKGV)_SHARES))
 
 __embtk_pkg_configureenv 	= $(strip $($(PKGV)_CONFIGURE_ENV))
 __embtk_pkg_setrpath		= $(strip $($(PKGV)_SET_RPATH))
@@ -666,6 +667,8 @@ define __embtk_cleanup_pkg
 		rm -rf $(addprefix $(SYSROOT)/usr/libexec/,$(__embtk_pkg_libexecs)))
 	$(if $(__embtk_pkg_pkgconfigs),
 		rm -rf $(addprefix $(SYSROOT)/usr/$(LIBDIR)/pkgconfig/,$(__embtk_pkg_pkgconfigs)))
+	$(if $(__embtk_pkg_shares),
+		rm -rf $(addprefix $(SYSROOT)/usr/share/,$(__embtk_pkg_shares)))
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),
 		rm -rf $(__embtk_pkg_dotconfigured_f)
 		rm -rf $(__embtk_pkg_dotinstalled_f),
