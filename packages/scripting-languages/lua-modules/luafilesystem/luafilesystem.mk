@@ -1,0 +1,50 @@
+################################################################################
+# Embtoolkit
+# Copyright(C) 2012 Abdoulaye Walsimou GAYE.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         luafilesystem.mk
+# \brief	luafilesystem.mk of Embtoolkit
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         April 2012
+################################################################################
+
+LUAFILESYSTEM_NAME	:= luafilesystem
+LUAFILESYSTEM_VERSION	:= $(call embtk_get_pkgversion,luafilesystem)
+LUAFILESYSTEM_SITE	:= https://github.com/downloads/keplerproject/luafilesystem
+LUAFILESYSTEM_PACKAGE	:= luafilesystem-$(LUAFILESYSTEM_VERSION).tar.gz
+LUAFILESYSTEM_SRC_DIR	:= $(PACKAGES_BUILD)/luafilesystem-$(LUAFILESYSTEM_VERSION)
+LUAFILESYSTEM_BUILD_DIR	:= $(PACKAGES_BUILD)/luafilesystem-$(LUAFILESYSTEM_VERSION)
+
+LUAFILESYSTEM_LIBS		=
+
+LUAFILESYSTEM_DEPS		= lua_install
+
+LUAFILESYSTEM_MAKE_OPTS		= PREFIX=$(SYSROOT)/usr/ LIBDIR=$(LIBDIR)
+LUAFILESYSTEM_MAKE_OPTS		+= CC=$(TARGETCC_CACHED)
+LUAFILESYSTEM_MAKE_OPTS		+= LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"
+LUAFILESYSTEM_MAKE_OPTS		+= CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include"
+
+luafilesystem_install:
+	$(call embtk_makeinstall_pkg,luafilesystem)
+
+define embtk_postinstall_luafilesystem
+	$(Q)mkdir -p $(ROOTFS)
+	$(Q)mkdir -p $(ROOTFS)/usr
+	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
+	$(Q)cp -R $(SYSROOT)/usr/$(LIBDIR)/lua $(ROOTFS)/usr/$(LIBDIR)/
+endef

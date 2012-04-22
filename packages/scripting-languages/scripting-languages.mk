@@ -23,9 +23,12 @@
 # \date         February 2010
 ################################################################################
 
-#lua
+# LUA and modules
 include $(EMBTK_ROOT)/packages/scripting-languages/lua/lua.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LUA) += lua_install
+
+include $(EMBTK_ROOT)/packages/scripting-languages/lua-modules/luafilesystem/luafilesystem.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LUAFILESYSTEM) += luafilesystem_install
 
 #microperl
 include $(EMBTK_ROOT)/packages/scripting-languages/perl/perl.mk
