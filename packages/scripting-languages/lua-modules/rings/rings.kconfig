@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,23 +17,34 @@
 #
 ################################################################################
 #
-# \file         scripting-languages.mk
-# \brief	scripting-languages.mk of Embtoolkit
+# \file         rings.kconfig
+# \brief	rings.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \date         April 2012
 ################################################################################
 
-# LUA and modules
-include $(EMBTK_ROOT)/packages/scripting-languages/lua/lua.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LUA) += lua_install
+config EMBTK_HAVE_RINGS
+	bool "Have Rings module"
+	depends on EMBTK_HAVE_LUA
+	select EMBTK_RINGS_NEED_PATCH
+	help
+		Rings is a library which provides a way to create new Lua states
+		from within Lua. It also offers a simple way to communicate
+		between the creator (master) and the created (slave) states.
 
-include $(EMBTK_ROOT)/packages/scripting-languages/lua-modules/luafilesystem/luafilesystem.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LUAFILESYSTEM) += luafilesystem_install
+choice
+	prompt "Rings version you wish"
+	depends on EMBTK_HAVE_RINGS
+	help
+	 Here you can choose which version of Rings you want to use.
 
-include $(EMBTK_ROOT)/packages/scripting-languages/lua-modules/rings/rings.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_RINGS) += rings_install
+	config  EMBTK_RINGS_VERSION_1_2_3
+		bool "rings-1.2.3"
+endchoice
 
-#microperl
-include $(EMBTK_ROOT)/packages/scripting-languages/perl/perl.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MICROPERL) += microperl_install
+config EMBTK_RINGS_VERSION_STRING
+	string
+	default "1.2.3"		if EMBTK_RINGS_VERSION_1_2_3
 
+config EMBTK_RINGS_NEED_PATCH
+	bool
