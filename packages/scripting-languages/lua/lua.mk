@@ -49,7 +49,7 @@ lua_install:
 define embtk_beforeinstall_lua
 	$(Q)$(MAKE) -C $(LUA_BUILD_DIR) CC=$(TARGETCC_CACHED)			\
 	AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB)				\
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR) -ldl"	\
+	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR) -lm -ldl"	\
 	CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include $(LUACONF_H_OPTS)"	\
 	PLAT=ansi
 endef
