@@ -25,6 +25,9 @@
 
 config EMBTK_HAVE_LUA
 	bool "Have lua"
+	select KEMBTK_EGLIBC_OPTION_POSIX_C_LANG_WIDE_CHAR if EMBTK_CLIB_EGLIBC
+	select KEMBTK_EGLIBC_OPTION_EGLIBC_LOCALE_CODE if EMBTK_CLIB_EGLIBC
+	select KEMBTK_UCLIBC_UCLIBC_HAS_WCHAR if EMBTK_CLIB_UCLIBC
 	select EMBTK_LUA_NEED_PATCH
 	help
 		Lua is a powerful, fast, lightweight, embeddable scripting
