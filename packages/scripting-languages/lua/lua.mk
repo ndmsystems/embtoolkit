@@ -47,11 +47,10 @@ lua_install:
 	$(call embtk_makeinstall_pkg,lua)
 
 define embtk_beforeinstall_lua
-	$(Q)$(MAKE) -C $(LUA_BUILD_DIR) CC=$(TARGETCC_CACHED)			\
+	$(Q)$(MAKE) -C $(LUA_BUILD_DIR) PLAT=ansi CC=$(TARGETCC_CACHED)		\
 	AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB)				\
 	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR) -lm -ldl"	\
-	CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include $(LUACONF_H_OPTS)"	\
-	PLAT=ansi
+	CFLAGS="-fPIC $(TARGET_CFLAGS) -I$(SYSROOT)/usr/include $(LUACONF_H_OPTS)"
 endef
 
 define embtk_postinstall_lua
