@@ -30,6 +30,7 @@ comment "---- Lua Modules"
 comment "------------------------------------"
 source packages/scripting-languages/lua-modules/luafilesystem/luafilesystem.kconfig
 source packages/scripting-languages/lua-modules/rings/rings.kconfig
+source packages/scripting-languages/lua-modules/cgilua/cgilua.kconfig
 
 # microperl
 source packages/scripting-languages/perl/perl.kconfig
