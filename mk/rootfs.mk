@@ -93,7 +93,8 @@ define __embtk_rootfs_mkdevnodes
 endef
 
 define __embtk_rootfs_cleanup
-	$(foreach pkg-n,$(__embtk_rootfs_pkgs-n),$(MAKE) $(pkg-n)_clean;)
+	$(foreach pkg-n,$(__embtk_rootfs_pkgs-n),
+		$(call __embtk_cleanup_pkg,$(pkg-n));)
 	rm -rf $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
 endef
 
