@@ -28,6 +28,8 @@ choice
 	help
 		Linux v2.6.27.x series exact version to use.
 
+	config EMBTK_LINUX_VERSION_2_6_27_62
+		bool "linux-2.6.27.62"
 	config EMBTK_LINUX_VERSION_2_6_27_61
 		bool "linux-2.6.27.61"
 	config EMBTK_LINUX_VERSION_2_6_27_60
@@ -154,6 +156,7 @@ endchoice
 
 config EMBTK_LINUX_LONGTERM_VERSION_STRING
 	string
+	default "v2.6.27"		if EMBTK_LINUX_VERSION_2_6_27_62
 	default "v2.6.27"		if EMBTK_LINUX_VERSION_2_6_27_61
 	default "v2.6.27"		if EMBTK_LINUX_VERSION_2_6_27_60
 	default "v2.6.27"		if EMBTK_LINUX_VERSION_2_6_27_59
@@ -161,6 +164,7 @@ config EMBTK_LINUX_LONGTERM_VERSION_STRING
 
 config EMBTK_LINUX_VERSION_STRING
 	string
+	default "2.6.27.62"		if EMBTK_LINUX_VERSION_2_6_27_62
 	default "2.6.27.61"		if EMBTK_LINUX_VERSION_2_6_27_61
 	default "2.6.27.60"		if EMBTK_LINUX_VERSION_2_6_27_60
 	default "2.6.27.59"		if EMBTK_LINUX_VERSION_2_6_27_59
