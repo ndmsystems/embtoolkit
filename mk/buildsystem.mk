@@ -66,8 +66,7 @@ basic:
 	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/basic
 
 clean: toolchain_clean rmallpath
-	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/kconfig
-	$(Q)$(MAKE) -f scripts/Makefile.clean obj=scripts/basic
+	$(Q)$(__embtk_kconfig_clean)
 	$(Q)rm -rf .config kbuild.log .fakeroot*
 
 distclean: clean
@@ -146,6 +145,27 @@ define __embtk_mk_inithosttoolsdirs
 	mkdir -p $(HOSTTOOLS)/usr
 	mkdir -p $(HOSTTOOLS)/usr/include
 	mkdir -p $(HOSTTOOLS)/usr/local
+endef
+
+define __embtk_kconfig_clean
+	$(MAKE) -f scripts/Makefile.clean obj=scripts/kconfig
+	$(MAKE) -f scripts/Makefile.clean obj=scripts/basic
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'config*')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'lex.*.c')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'zconf.lex.c')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name '*.tab.c')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name '*.tab.h')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'zconf.hash.c')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name '*.moc')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'lkc_defs.h')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name '*.cmd')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name '*.o')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name '*.tmp_qtcheck')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'conf')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'mconf')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'qconf')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'gconf')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'kxgettext')
 endef
 
 rmallpath:
