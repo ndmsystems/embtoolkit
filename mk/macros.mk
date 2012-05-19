@@ -79,5 +79,9 @@ embtk_pwarning	= $(call embtk_echo_yellow,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ W
 embtk_perror	= $(call embtk_echo_red,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ ERROR: $(1)\\n$(__embtk_msg_h)")
 embtk_pinfo	= $(call embtk_echo_blue,"$(__embtk_msg_h)\n~~ EmbToolkit ~~ $(1)\n$(__embtk_msg_h)")
 
+# Macros for emmpty and space
+__embtk_empty	:=
+__embtk_space	:=$(__embtk_empty) $(__embtk_empty)
+
 # Packages management macros
 include $(EMBTK_ROOT)/mk/macros.packages.mk

@@ -26,15 +26,25 @@
 PKGCONFIG_NAME		:= pkg-config
 PKGCONFIG_VERSION	:= $(call embtk_get_pkgversion,pkgconfig)
 PKGCONFIG_SITE		:= http://pkgconfig.freedesktop.org/releases
-PKGCONFIG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 PKGCONFIG_PACKAGE	:= pkg-config-$(PKGCONFIG_VERSION).tar.gz
 PKGCONFIG_SRC_DIR	:= $(TOOLS_BUILD)/pkg-config-$(PKGCONFIG_VERSION)
 PKGCONFIG_BUILD_DIR	:= $(TOOLS_BUILD)/pkg-config-$(PKGCONFIG_VERSION)
 
 PKGCONFIG_BIN			:= $(HOSTTOOLS)/usr/bin/pkg-config
-EMBTK_PKG_CONFIG_PATH		:= $(SYSROOT)/usr/$(LIBDIR)/pkgconfig
-EMBTK_PKG_CONFIG_LIBDIR		:= $(SYSROOT)/usr/$(LIBDIR)/pkgconfig
-EMBTK_HOST_PKG_CONFIG_PATH	:= $(HOSTTOOLS)/usr/lib/pkgconfig:/usr/lib/pkgconfig
+
+__EMBTK_PKG_CONFIG_PATH		:= $(SYSROOT)/usr/$(LIBDIR)/pkgconfig
+__EMBTK_PKG_CONFIG_PATH		+= $(SYSROOT)/usr/share/pkgconfig
+EMBTK_PKG_CONFIG_PATH		:= $(subst $(__embtk_space),:,$(__EMBTK_PKG_CONFIG_PATH))
+EMBTK_PKG_CONFIG_LIBDIR		:= $(EMBTK_PKG_CONFIG_PATH)
+
+__EMBTK_HOST_PKG_CONFIG_PATH	:= $(HOSTTOOLS)/usr/lib/pkgconfig/
+__EMBTK_HOST_PKG_CONFIG_PATH	+= /usr/lib/pkgconfig/ /usr/share/pkgconfig/
+__EMBTK_HOST_PKG_CONFIG_PATH	+= /usr/local/lib/pkgconfig/ /usr/local/share/pkgconfig/
+__EMBTK_HOST_PKG_CONFIG_PATH	+= $(dir $(shell find /usr/lib -type f -name '*.pc'))
+__EMBTK_HOST_PKG_CONFIG_PATH	+= $(dir $(shell find /usr/local/lib -type f -name '*.pc'))
+EMBTK_HOST_PKG_CONFIG_PATH	:= $(subst $(__embtk_space),:,$(sort $(__EMBTK_HOST_PKG_CONFIG_PATH)))
+
+PKGCONFIG_CONFIGURE_OPTS	:= --with-pc-path="$(EMBTK_HOST_PKG_CONFIG_PATH)"
 
 export PKGCONFIG_BIN EMBTK_PKG_CONFIG_PATH EMBTK_PKG_CONFIG_LIBDIR
 export EMBTK_HOST_PKG_CONFIG_PATH
