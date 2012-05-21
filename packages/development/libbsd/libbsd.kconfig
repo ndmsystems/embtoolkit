@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,20 +17,35 @@
 #
 ################################################################################
 #
-# \file         development.kconfig
-# \brief	development.kconfig of Embtoolkit
+# \file         libbsd.kconfig
+# \brief	libbsd.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         October 2010
+# \date         May 2012
 ################################################################################
 
-# libbsd
-source packages/development/libbsd/libbsd.kconfig
+config EMBTK_HAVE_LIBBSD
+	bool "Have libbsd"
+	select KEMBTK_UCLIBC_UCLIBC_HAS_PROGRAM_INVOCATION_NAME if EMBTK_CLIB_UCLIBC
+	help
+		This library provides useful functions commonly found on BSD
+		systems, and lacking on others like GNU systems, thus making it
+		easier to port projects with strong BSD origins, without needing
+		to embed the same code over and over again on each project.
 
-#libevent
-source packages/development/libevent/libevent.kconfig
+choice
+	prompt "libbsd version you wish"
+	depends on EMBTK_HAVE_LIBBSD
+	help
+	 Here you can choose which version of libbsd you want to use.
 
-#libnih
-source packages/development/libnih/libnih.kconfig
+	config  EMBTK_LIBBSD_VERSION_0_3_0
+		bool "libbsd-0.3.0"
+		select EMBTK_LIBBSD_NEED_PATCH
+endchoice
 
-#libsigsegv
-source packages/development/libsigsegv/libsigsegv.kconfig
+config EMBTK_LIBBSD_VERSION_STRING
+	string
+	default "0.3.0"		if EMBTK_LIBBSD_VERSION_0_3_0
+
+config EMBTK_LIBBSD_NEED_PATCH
+	bool

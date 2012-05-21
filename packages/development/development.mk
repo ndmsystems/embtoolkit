@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,6 +22,10 @@
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         February 2010
 ################################################################################
+
+#libevent
+include $(EMBTK_ROOT)/packages/development/libbsd/libbsd.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBBSD) += libbsd_install
 
 #libevent
 include $(EMBTK_ROOT)/packages/development/libevent/libevent.mk
