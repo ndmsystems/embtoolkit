@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 FOO_NAME		:= foo
 FOO_VERSION		:= $(call embtk_get_pkgversion,foo)
 FOO_SITE		:= http://www.foo.org/download
-FOO_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/foo/$(FOO_VERSION)
 FOO_PACKAGE		:= foo-$(FOO_VERSION).tar.gz
 FOO_SRC_DIR		:= $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
 FOO_BUILD_DIR		:= $(PACKAGES_BUILD)/foo-$(FOO_VERSION)

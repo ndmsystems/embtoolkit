@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,8 +44,4 @@ config EMBTK_FOO_VERSION_STRING
 config EMBTK_FOO_NEED_PATCH
 	bool
 config EMBTK_FOO_NEED_AUTORECONF
-	bool
-config EMBTK_FOO_PKG_IS_TARGZ
-	bool
-config EMBTK_FOO_PKG_IS_TARBZ2
 	bool
