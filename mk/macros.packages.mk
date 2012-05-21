@@ -88,8 +88,6 @@ define __embtk_fix_pkgconfig_files
 		mv $$i.new $$i;							\
 	done
 endef
-pkgconfig_files_adapt:
-	$(Q)$(call __embtk_fix_pkgconfig_files)
 
 #A macro to remove rpath in packages that use libtool -rpath
 define __embtk_kill_lt_rpath
