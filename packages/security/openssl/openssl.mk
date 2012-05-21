@@ -66,9 +66,8 @@ define embtk_beforeinstall_openssl
 endef
 
 define embtk_postinstall_openssl
-	$(Q)if [ -e $(OPENSSL_BUILD_DIR)/.postinstalled ]; then			\
+	$(Q)if [ ! -e $(OPENSSL_BUILD_DIR)/.postinstalled ]; then		\
 		$(MAKE) libtool_files_adapt;					\
-		$(MAKE) pkgconfig_files_adapt;					\
 		touch $(OPENSSL_BUILD_DIR)/.postinstalled;			\
 	fi
 	$(Q)mkdir -p $(ROOTFS)
