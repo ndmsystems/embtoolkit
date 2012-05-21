@@ -376,8 +376,9 @@ define __embtk_install_pkg_make
 	$(Q)$(if $(__embtk_pkg_makedirs),					\
 		$(__embtk_multi_make_install),					\
 		$(__embtk_single_make_install))
-	$(Q)$(if $(__embtk_autotoolspkg-y),$(call __embtk_fix_libtool_files))
-	$(Q)$(if $(__embtk_autotoolspkg-y),$(call __embtk_fix_pkgconfig_files))
+	$(Q)$(if $(__embtk_autotoolspkg-y)$(__embtk_pkg_pkgconfigs),
+		$(call __embtk_fix_libtool_files)
+		$(call __embtk_fix_pkgconfig_files))
 	$(Q)touch $(__embtk_pkg_dotinstalled_f)
 endef
 define __embtk_install_hostpkg_make
