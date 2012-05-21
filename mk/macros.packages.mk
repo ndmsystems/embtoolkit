@@ -74,14 +74,18 @@ endef
 libtool_files_adapt:
 	$(Q)$(call __embtk_fix_libtool_files)
 
-#Macro to adapt pkg-config files for cross compiling
+# Macro to adapt pkg-config files for cross compiling
+__pkgconfig_includedir	= includedir=$(SYSROOT)/usr/include
+__pkgconfig_prefix	= prefix=$(SYSROOT)/usr
+__pkgconfig_libdir	= libdir=$(SYSROOT)/usr/$(LIBDIR)
 define __embtk_fix_pkgconfig_files
-	PKGCONFIG_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/pkgconfig -name *.pc`;	\
-	for i in $$PKGCONFIG_FILES; do						\
-	sed -e 's;prefix=.*;prefix=$(SYSROOT)/usr;'				\
-	-e 's;includedir=$${prefix}/include;includedir=$(SYSROOT)/usr/include;'	\
-	-e 's;libdir=.*;libdir=$(SYSROOT)/usr/$(LIBDIR);' < $$i > $$i.new;	\
-	mv $$i.new $$i;								\
+	__conf_files0=$$(find $(SYSROOT)/usr/$(LIBDIR)/pkgconfig -name *.pc);	\
+	__conf_files1=$$(find $(SYSROOT)/usr/share/pkgconfig -name *.pc);	\
+	for i in $$__conf_files0 $$__conf_files1; do				\
+		sed -e 's;prefix=.*;$(__pkgconfig_prefix);'			\
+		-e 's;includedir=$${prefix}/include;$(__pkgconfig_includedir);'	\
+		-e 's;libdir=.*;$(__pkgconfig_libdir);' < $$i > $$i.new;	\
+		mv $$i.new $$i;							\
 	done
 endef
 pkgconfig_files_adapt:
