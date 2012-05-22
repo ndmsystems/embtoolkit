@@ -664,7 +664,8 @@ define __embtk_cleanup_pkg
 	$(if $(__embtk_pkg_libexecs),
 		rm -rf $(addprefix $(SYSROOT)/usr/libexec/,$(__embtk_pkg_libexecs)))
 	$(if $(__embtk_pkg_pkgconfigs),
-		rm -rf $(addprefix $(SYSROOT)/usr/$(LIBDIR)/pkgconfig/,$(__embtk_pkg_pkgconfigs)))
+		rm -rf $(addprefix $(SYSROOT)/usr/$(LIBDIR)/pkgconfig/,$(__embtk_pkg_pkgconfigs))
+		rm -rf $(addprefix $(SYSROOT)/usr/share/pkgconfig/,$(__embtk_pkg_pkgconfigs)))
 	$(if $(__embtk_pkg_shares),
 		rm -rf $(addprefix $(SYSROOT)/usr/share/,$(__embtk_pkg_shares)))
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),
