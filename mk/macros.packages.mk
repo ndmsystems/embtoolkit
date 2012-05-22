@@ -671,7 +671,7 @@ define __embtk_cleanup_pkg
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),
 		rm -rf $(__embtk_pkg_dotconfigured_f)
 		rm -rf $(__embtk_pkg_dotinstalled_f),
-		rm -rf $(__embtk_pkg_builddir)*)
+		$(if $(__embtk_pkg_builddir),rm -rf $(__embtk_pkg_builddir)*))
 endef
 
 define embtk_cleanup_pkg
