@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012 Averell KINOUANI <a.kinouani@voila.fr>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,24 +25,17 @@
 
 IPTABLES_NAME		:= iptables
 IPTABLES_VERSION	:= $(call embtk_get_pkgversion,iptables)
-IPTABLES_SITE		:= ftp://ftp.netfilter.org/pub/iptables/
-#IPTABLES_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+IPTABLES_SITE		:= ftp://ftp.netfilter.org/pub/iptables
 IPTABLES_PACKAGE	:= iptables-$(IPTABLES_VERSION).tar.bz2
 IPTABLES_SRC_DIR	:= $(PACKAGES_BUILD)/iptables-$(IPTABLES_VERSION)
 IPTABLES_BUILD_DIR	:= $(PACKAGES_BUILD)/iptables-$(IPTABLES_VERSION)
 
-IPTABLES_BINS		:=
-IPTABLES_SBINS		:= iptables ip6tables ip6tables-restore ip6tables-save iptables-restore iptables-save
-IPTABLES_INCLUDES	:= ipt_kernel_headers.h  libip6tc.h  libiptc.h  libxtc.h xtables.h xtcshared.h
-IPTABLES_LIBS		:= libip4tc.so.0 libip4tc.so.0 libxtables.so.7 
-IPTABLES_LIBEXECS	:=
-IPTABLES_PKGCONFIGS	:=
+IPTABLES_SBINS		:= iptables ip6tables ip6tables-restore ip6tables-save
+IPTABLES_SBINS		+= iptables-restore iptables-save
+IPTABLES_INCLUDES	:= ipt_kernel_headers.h libip6tc.h libiptc.h
+IPTABLES_INCLUDES	+= libxtc.h xtables.h xtcshared.h
+IPTABLES_LIBS		:= libip4tc.so.0 libip4tc.so.0 libxtables.so.7
 
-IPTABLES_CONFIGURE_ENV	:=
 ifeq ($(CONFIG_EMBTK_IPTABLES_HAVE_LIBIPQ),y)
 IPTABLES_CONFIGURE_OPTS	:= --enable-libipq
 endif
-IPTABLES_MAKE_OPTS	:=
-IPTABLES_MAKE_DIRS	:=
-
-IPTABLES_DEPS		:=

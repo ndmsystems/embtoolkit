@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2010-2012 GAYE Abdoulaye Walsimou.
 # For Copyrright from linux kernel's build/configure system, see their source
 # code.
 #
@@ -24,5 +24,8 @@
 # \date         February 2010
 ################################################################################
 
-source packages/security/openssl/openssl.kconfig
+# Iptables
+source packages/security/iptables/iptables.kconfig
 
+# OpenSSL
+source packages/security/openssl/openssl.kconfig

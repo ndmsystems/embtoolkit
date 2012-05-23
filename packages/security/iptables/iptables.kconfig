@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 
+# Copyright(C) 2012 Averell KINOUANI <a.kinouani@voila.fr>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,30 +26,30 @@
 config EMBTK_HAVE_IPTABLES
 	bool "Have Iptables"
 	select KEMBTK_UCLIBC_UCLIBC_HAS_FLOATS if EMBTK_CLIB_UCLIBC
-    	select KEMBTK_UCLIBC_DO_C99_MATH if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_DO_C99_MATH if EMBTK_CLIB_UCLIBC
 	help
 		iptables is the userspace command line program used to configure
-		the Linux 2.4.x and 2.6.x IPv4 packet filtering ruleset. It is
-		target towards system administrators. Since Network Address Translation
-		is also configured from the packet filter ruleset, iptables is used for
-		this, too.
+		the Linux 2.4.x and 2.6.x IPv4 packet filtering ruleset.
+		It is target towards system administrators.
+		Since Network Address Translation is also configured from the
+		packet filter ruleset, iptables is used for Sthis, too.
+
 choice
 	prompt "Iptables version you wish"
 	depends on EMBTK_HAVE_IPTABLES
 	help
 		Here you can choose which version of iptables you want to use.
 	config  EMBTK_IPTABLES_VERSION_1_4_13
-		bool "iptables-1.4.13"	
+		bool "iptables-1.4.13"
 
 endchoice
 
-
 config EMBTK_IPTABLES_HAVE_LIBIPQ
 	bool "Have Libipq"
-	select EMBTK_HAVE_IPTABLES
+	depends on EMBTK_HAVE_IPTABLES
 	help
-		libipq is a developpement library for iptables userspace packet queuing.
-		libipq provides an API for communicating with ip_queue.
+		libipq is a developpement library for iptables userspace packet
+		queuing. libipq provides an API for communicating with ip_queue.
 
 config EMBTK_IPTABLES_VERSION_STRING
 	string
@@ -58,8 +58,4 @@ config EMBTK_IPTABLES_VERSION_STRING
 config EMBTK_IPTABLES_NEED_PATCH
 	bool
 config EMBTK_IPTABLES_NEED_AUTORECONF
-	bool
-config EMBTK_IPTABLES_PKG_IS_TARGZ
-	bool
-config EMBTK_IPTABLES_PKG_IS_TARBZ2
 	bool
