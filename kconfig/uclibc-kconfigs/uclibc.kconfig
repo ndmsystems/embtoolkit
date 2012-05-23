@@ -2079,8 +2079,7 @@ config KEMBTK_UCLIBC_DODEBUG_PT
 	  Otherwise, answer N.
 
 config KEMBTK_UCLIBC_DOSTRIP
-	bool "Strip libraries and executables"
-	default y
+	bool
 	depends on !KEMBTK_UCLIBC_DODEBUG
 	help
 	  Say Y here if you do wish to strip all uClibc libraries and
