@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,12 +17,12 @@
 #
 ################################################################################
 #
-# \file         security.mk
-# \brief	security.mk of Embtoolkit
+# \file         net.mk
+# \brief	net.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \date         May 2012
 ################################################################################
 
-# OpenSSL
-include $(EMBTK_ROOT)/packages/security/openssl/openssl.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_OPENSSL) += openssl_install
+# Iptables
+include $(EMBTK_ROOT)/packages/net/iptables/iptables.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_IPTABLES) += iptables_install
