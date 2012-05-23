@@ -18,10 +18,12 @@
 #
 # \file         target_mcu.mk
 # \brief	target_mcu.mk of Embtoolkit. Here we define LINUX_ARCH,
-# \brief	GNU_ARCH and GNU_TARGET.
+# \brief	GNU_ARCH, GNU_TARGET and EMBTK_OS
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
+
+embtk_os	:= linux
 
 #ARM
 ifeq ($(CONFIG_EMBTK_ARCH_ARM),y)

@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -28,90 +28,90 @@ ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 #we use EGLIBC C library
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1_LITTLE),y)
-GNU_TARGET := mipsel-linux
-STRICT_GNU_TARGET := mipsel-unknown-linux-gnu
+GNU_TARGET := mipsel-$(embtk_os)
+STRICT_GNU_TARGET := mipsel-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips1
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1_BIG),y)
-GNU_TARGET := mips-linux
-STRICT_GNU_TARGET := mips-unknown-linux-gnu
+GNU_TARGET := mips-$(embtk_os)
+STRICT_GNU_TARGET := mips-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips1
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS2_LITTLE),y)
-GNU_TARGET := mipsel-linux
-STRICT_GNU_TARGET := mipsel-unknown-linux-gnu
+GNU_TARGET := mipsel-$(embtk_os)
+STRICT_GNU_TARGET := mipsel-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips2
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS2_BIG),y)
-GNU_TARGET := mips-linux
-STRICT_GNU_TARGET := mips-unknown-linux-gnu
+GNU_TARGET := mips-$(embtk_os)
+STRICT_GNU_TARGET := mips-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips2
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_LITTLE),y)
-GNU_TARGET := mips64el-linux
-STRICT_GNU_TARGET := mips64el-unknown-linux-gnu
+GNU_TARGET := mips64el-$(embtk_os)
+STRICT_GNU_TARGET := mips64el-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips3
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_BIG),y)
-GNU_TARGET := mips64-linux
-STRICT_GNU_TARGET := mips64-unknown-linux-gnu
+GNU_TARGET := mips64-$(embtk_os)
+STRICT_GNU_TARGET := mips64-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips3
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS4_LITTLE),y)
-GNU_TARGET := mips64el-linux
-STRICT_GNU_TARGET := mips64el-unknown-linux-gnu
+GNU_TARGET := mips64el-$(embtk_os)
+STRICT_GNU_TARGET := mips64el-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips4
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS4_BIG),y)
-GNU_TARGET := mips64-linux
-STRICT_GNU_TARGET := mips64-unknown-linux-gnu
+GNU_TARGET := mips64-$(embtk_os)
+STRICT_GNU_TARGET := mips64-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips4
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32_LITTLE),y)
-GNU_TARGET := mipsel-linux
-STRICT_GNU_TARGET := mipsisa32el-unknown-linux-gnu
+GNU_TARGET := mipsel-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa32el-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips32
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32_BIG),y)
-GNU_TARGET := mips-linux
-STRICT_GNU_TARGET := mipsisa32-unknown-linux-gnu
+GNU_TARGET := mips-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa32-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips32
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32R2_LITTLE),y)
-GNU_TARGET := mipsel-linux
-STRICT_GNU_TARGET := mipsisa32r2el-unknown-linux-gnu
+GNU_TARGET := mipsel-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa32r2el-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips32r2
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32R2_BIG),y)
-GNU_TARGET := mips-linux
-STRICT_GNU_TARGET := mipsisa32r2-unknown-linux-gnu
+GNU_TARGET := mips-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa32r2-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips32r2
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64_LITTLE),y)
-GNU_TARGET := mips64el-linux
-STRICT_GNU_TARGET := mipsisa64el-unknown-linux-gnu
+GNU_TARGET := mips64el-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa64el-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips64
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64_BIG),y)
-GNU_TARGET := mips64-linux
-STRICT_GNU_TARGET := mipsisa64-unknown-linux-gnu
+GNU_TARGET := mips64-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa64-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips64
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64R2_LITTLE),y)
-GNU_TARGET := mips64el-linux
-STRICT_GNU_TARGET := mipsisa64r2el-unknown-linux-gnu
+GNU_TARGET := mips64el-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa64r2el-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips64r2
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64R2_BIG),y)
-GNU_TARGET := mips64-linux
-STRICT_GNU_TARGET := mipsisa64r2-unknown-linux-gnu
+GNU_TARGET := mips64-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa64r2-unknown-$(embtk_os)-gnu
 GNU_TARGET_ARCH := mips64r2
 endif
 
@@ -119,90 +119,90 @@ else
 #We use uClibc C library
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1_LITTLE),y)
-GNU_TARGET := mipsel-linux
-STRICT_GNU_TARGET := mipsel-unknown-linux-uclibc
+GNU_TARGET := mipsel-$(embtk_os)
+STRICT_GNU_TARGET := mipsel-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips1
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1_BIG),y)
-GNU_TARGET := mips-linux
-STRICT_GNU_TARGET := mips-unknown-linux-uclibc
+GNU_TARGET := mips-$(embtk_os)
+STRICT_GNU_TARGET := mips-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips1
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS2_LITTLE),y)
-GNU_TARGET := mipsel-linux
-STRICT_GNU_TARGET := mipsel-unknown-linux-uclibc
+GNU_TARGET := mipsel-$(embtk_os)
+STRICT_GNU_TARGET := mipsel-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips2
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS2_BIG),y)
-GNU_TARGET := mips-linux
-STRICT_GNU_TARGET := mips-unknown-linux-uclibc
+GNU_TARGET := mips-$(embtk_os)
+STRICT_GNU_TARGET := mips-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips2
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_LITTLE),y)
-GNU_TARGET := mips64el-linux
-STRICT_GNU_TARGET := mips64el-unknown-linux-uclibc
+GNU_TARGET := mips64el-$(embtk_os)
+STRICT_GNU_TARGET := mips64el-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips3
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3_BIG),y)
-GNU_TARGET := mips64-linux
-STRICT_GNU_TARGET := mips64-unknown-linux-uclibc
+GNU_TARGET := mips64-$(embtk_os)
+STRICT_GNU_TARGET := mips64-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips3
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS4_LITTLE),y)
-GNU_TARGET := mips64el-linux
-STRICT_GNU_TARGET := mips64el-unknown-linux-uclibc
+GNU_TARGET := mips64el-$(embtk_os)
+STRICT_GNU_TARGET := mips64el-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips4
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS4_BIG),y)
-GNU_TARGET := mips64-linux
-STRICT_GNU_TARGET := mips64-unknown-linux-uclibc
+GNU_TARGET := mips64-$(embtk_os)
+STRICT_GNU_TARGET := mips64-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips4
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32_LITTLE),y)
-GNU_TARGET := mipsel-linux
-STRICT_GNU_TARGET := mipsisa32el-unknown-linux-uclibc
+GNU_TARGET := mipsel-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa32el-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips32
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32_BIG),y)
-GNU_TARGET := mips-linux
-STRICT_GNU_TARGET := mipsisa32-unknown-linux-uclibc
+GNU_TARGET := mips-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa32-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips32
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32R2_LITTLE),y)
-GNU_TARGET := mipsel-linux
-STRICT_GNU_TARGET := mipsisa32r2el-unknown-linux-uclibc
+GNU_TARGET := mipsel-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa32r2el-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips32r2
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32R2_BIG),y)
-GNU_TARGET := mips-linux
-STRICT_GNU_TARGET := mipsisa32r2-unknown-linux-uclibc
+GNU_TARGET := mips-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa32r2-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips32r2
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64_LITTLE),y)
-GNU_TARGET := mips64el-linux
-STRICT_GNU_TARGET := mipsisa64el-unknown-linux-uclibc
+GNU_TARGET := mips64el-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa64el-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips64
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64_BIG),y)
-GNU_TARGET := mips64-linux
-STRICT_GNU_TARGET := mipsisa64-unknown-linux-uclibc
+GNU_TARGET := mips64-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa64-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips64
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64R2_LITTLE),y)
-GNU_TARGET := mips64el-linux
-STRICT_GNU_TARGET := mipsisa64r2el-unknown-linux-uclibc
+GNU_TARGET := mips64el-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa64r2el-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips64r2
 endif
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64R2_BIG),y)
-GNU_TARGET := mips64-linux
-STRICT_GNU_TARGET := mipsisa64r2-unknown-linux-uclibc
+GNU_TARGET := mips64-$(embtk_os)
+STRICT_GNU_TARGET := mipsisa64r2-unknown-$(embtk_os)-uclibc
 GNU_TARGET_ARCH := mips64r2
 endif
 

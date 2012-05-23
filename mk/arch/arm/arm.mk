@@ -24,32 +24,32 @@
 
 LINUX_ARCH		:= arm
 GNU_TARGET_ARCH		:= arm
-EMBTK_MCU_FLAG		:= $(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
+EMBTK_MCU_FLAG		:= $(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_ARM_MCU_STRING))
 
 ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 # EGLIBC C library
 ifeq ($(CONFIG_EMBTK_ARCH_ARM_BIG_ENDIAN),y)
-GNU_TARGET		:= armeb-linux
-STRICT_GNU_TARGET	:= armeb-unknown-linux-gnueabi
+GNU_TARGET		:= armeb-$(embtk_os)
+STRICT_GNU_TARGET	:= armeb-unknown-$(embtk_os)-gnueabi
 else
-GNU_TARGET		:= armel-linux
-STRICT_GNU_TARGET	:= armel-unknown-linux-gnueabi
+GNU_TARGET		:= armel-$(embtk_os)
+STRICT_GNU_TARGET	:= armel-unknown-$(embtk_os)-gnueabi
 endif
 
 else
 # uClibc C library
 ifeq ($(CONFIG_EMBTK_ARCH_ARM_BIG_ENDIAN),y)
-GNU_TARGET		:= armeb-linux
-STRICT_GNU_TARGET	:= armeb-unknown-linux-uclibceabi
+GNU_TARGET		:= armeb-$(embtk_os)
+STRICT_GNU_TARGET	:= armeb-unknown-$(embtk_os)-uclibceabi
 else
-GNU_TARGET		:= armel-linux
-STRICT_GNU_TARGET	:= armel-unknown-linux-uclibceabi
+GNU_TARGET		:= armel-$(embtk_os)
+STRICT_GNU_TARGET	:= armel-unknown-$(embtk_os)-uclibceabi
 endif
 
 endif
 
 # GCC configure options
-GCC_WITH_CPU := --with-cpu=$(subst ",,$(strip $(CONFIG_EMBTK_ARM_MCU_STRING)))
+GCC_WITH_CPU := --with-cpu=$(EMBTK_MCU_FLAG)
 
 # GCC extra configure options for arm
 GCC3_CONFIGURE_EXTRA_OPTIONS += $(strip $(if $(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),	\
