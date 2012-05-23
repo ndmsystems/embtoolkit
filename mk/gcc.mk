@@ -44,7 +44,7 @@ __GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC),objc)
 __GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP),obj-c++)
 __GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_FORTRAN),fortran)
 __GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_ADA),ada)
-GCC_LANGUAGES	:= $(shell echo $(__GCC_LANGUAGES) | sed 's/ /,/g')
+GCC_LANGUAGES	:= $(subst $(__embtk_space),$(__embtk_comma),$(strip $(__GCC_LANGUAGES)))
 
 
 #
