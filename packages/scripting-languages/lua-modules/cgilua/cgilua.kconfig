@@ -26,8 +26,8 @@
 config EMBTK_HAVE_CGILUA
 	bool "Have cgilua module"
 	depends on EMBTK_HAVE_LUA
-	depends on EMBTK_HAVE_RINGS
-	depends on EMBTK_HAVE_LUAFILESYSTEM
+	select EMBTK_HAVE_RINGS
+	select EMBTK_HAVE_LUAFILESYSTEM
 	select EMBTK_CGILUA_NEED_PATCH
 	help
 		CGILua is a tool for creating dynamic Web pages and manipulating
