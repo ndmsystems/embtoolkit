@@ -34,13 +34,13 @@ choice
 	help
 		zlib version to use
 
-	config EMBTK_ZLIB_VERSION_1_2_5
-		bool "zlib-1.2.5"
+	config EMBTK_ZLIB_VERSION_1_2_7
+		bool "zlib-1.2.7"
 endchoice
 
 config EMBTK_ZLIB_VERSION_STRING
 	string
-	default "1.2.5"		if EMBTK_ZLIB_VERSION_1_2_5
+	default "1.2.7"		if EMBTK_ZLIB_VERSION_1_2_7
 
 config EMBTK_ZLIB_NEED_PATCH
 	bool
