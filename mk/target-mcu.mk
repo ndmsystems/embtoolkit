@@ -23,16 +23,15 @@
 # \date         May 2009
 ################################################################################
 
-embtk_os	:= linux
+embtk_os-$(CONFIG_EMBTK_OS_LINUX)	:= linux
+embtk_os				:= $(or $(embtk_os-y),invalid-os)
 
-#ARM
+# ARM
 ifeq ($(CONFIG_EMBTK_ARCH_ARM),y)
 include $(EMBTK_ROOT)/mk/arch/arm/arm.mk
 endif
 
-#M68K
-
-#MIPS
+# MIPS
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS),y)
 include $(EMBTK_ROOT)/mk/arch/mips/mips.mk
 endif

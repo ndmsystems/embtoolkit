@@ -36,7 +36,16 @@ config EMBTK_VERSION
 	string
 	option env="EMBTK_VERSION"
 
-menu "Architecture/variants/options Selection"
+menu "Target OS Selection"
+choice
+	prompt "Choose target OS"
+
+	config EMBTK_OS_LINUX
+		bool "Linux"
+endchoice
+endmenu
+
+menu "Target Architecture/variants/options Selection"
 source "kconfig/arch.kconfig"
 source "kconfig/arch-variant.kconfig"
 endmenu
