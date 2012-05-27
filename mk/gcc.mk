@@ -25,9 +25,7 @@
 
 GCC_NAME	:= gcc
 GCC_VERSION	:= $(call embtk_get_pkgversion,gcc)
-GCC_SITE	:= $(strip $(if $(CONFIG_EMBTK_GCC_HAVE_MIRROR),		\
-		$(subst ",,$(strip $(CONFIG_EMBTK_GCC_HAVE_MIRROR_SITE))),	\
-		http://ftp.gnu.org/gnu/gcc/gcc-$(GCC_VERSION)))
+GCC_SITE	:= http://ftp.gnu.org/gnu/gcc/gcc-$(GCC_VERSION)
 GCC_GIT_SITE	:= git://gcc.gnu.org/git/gcc.git
 GCC_PACKAGE	:= gcc-$(GCC_VERSION).tar.bz2
 GCC_SRC_DIR	:= $(TOOLS_BUILD)/gcc-$(GCC_VERSION)

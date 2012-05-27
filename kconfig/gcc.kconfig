@@ -142,21 +142,6 @@ config EMBTK_GCC_REFSPEC
 	default "toolchain"
 
 #
-# Use a specific GCC mirror
-#
-config EMBTK_GCC_HAVE_MIRROR
-	bool "Use a gcc mirror"
-	depends on !EMBTK_GCC_VERSION_GIT
-	help
-		specify an alternate location where to download gcc sources.
-config EMBTK_GCC_HAVE_MIRROR_SITE
-	depends on EMBTK_GCC_HAVE_MIRROR
-	string "Mirror site"
-	default "ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror"
-	help
-		specify an alternate location where to download gcc sources.
-
-#
 # Versions strings for tarball packages.
 #
 config EMBTK_GCC_VERSION_STRING
