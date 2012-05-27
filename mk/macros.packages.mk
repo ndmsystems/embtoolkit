@@ -109,9 +109,8 @@ __embtk_pkg_name		= $(strip $($(PKGV)_NAME))
 __embtk_pkg_needpatch		= $(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)
 __embtk_pkg_site		= $(strip $($(PKGV)_SITE))
 __embtk_patch_site		= ftp://ftp.embtoolkit.org/embtoolkit.org
-__embtk_pkg_patch_site		= $(strip $(if $($(PKGV)_PATCH_SITE),		\
-	$($(PKGV)_PATCH_SITE),							\
-	$(__embtk_patch_site)/$(__embtk_pkg_name)/$(__embtk_pkg_version)))
+__embtk_patch_url		= $(__embtk_patch_site)/$(__embtk_pkg_name)/$(__embtk_pkg_version)
+__embtk_pkg_patch_site		= $(strip $(or $($(PKGV)_PATCH_SITE),$(__embtk_patch_url)))
 __embtk_pkg_patch_f		= $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch
 __embtk_pkg_mirror		= $(__embtk_patch_site)/packages-mirror
 __embtk_pkg_mirror1		= $(strip $($(PKGV)_MIRROR1))
