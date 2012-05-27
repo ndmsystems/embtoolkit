@@ -80,9 +80,9 @@ embtk_perror	= $(call embtk_echo_red,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ ERROR:
 embtk_pinfo	= $(call embtk_echo_blue,"$(__embtk_msg_h)\n~~ EmbToolkit ~~ $(1)\n$(__embtk_msg_h)")
 
 # Macros for emmpty, space and comma
-__embtk_empty	:=
-__embtk_space	:= $(__embtk_empty) $(__embtk_empty)
-__embtk_comma	:= ,
+embtk_empty	:=
+embtk_space	:= $(embtk_empty) $(embtk_empty)
+embtk_comma	:= ,
 
 
 # Packages management macros

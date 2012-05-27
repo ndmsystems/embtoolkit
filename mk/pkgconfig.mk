@@ -34,7 +34,7 @@ PKGCONFIG_BIN			:= $(HOSTTOOLS)/usr/bin/pkg-config
 
 __EMBTK_PKG_CONFIG_PATH		:= $(SYSROOT)/usr/$(LIBDIR)/pkgconfig
 __EMBTK_PKG_CONFIG_PATH		+= $(SYSROOT)/usr/share/pkgconfig
-EMBTK_PKG_CONFIG_PATH		:= $(subst $(__embtk_space),:,$(__EMBTK_PKG_CONFIG_PATH))
+EMBTK_PKG_CONFIG_PATH		:= $(subst $(embtk_space),:,$(__EMBTK_PKG_CONFIG_PATH))
 EMBTK_PKG_CONFIG_LIBDIR		:= $(EMBTK_PKG_CONFIG_PATH)
 
 __EMBTK_HOST_PKG_CONFIG_PATH	:= $(HOSTTOOLS)/usr/lib/pkgconfig/
@@ -42,7 +42,7 @@ __EMBTK_HOST_PKG_CONFIG_PATH	+= /usr/lib/pkgconfig/ /usr/share/pkgconfig/
 __EMBTK_HOST_PKG_CONFIG_PATH	+= /usr/local/lib/pkgconfig/ /usr/local/share/pkgconfig/
 __EMBTK_HOST_PKG_CONFIG_PATH	+= $(dir $(shell find /usr/lib -type f -name '*.pc'))
 __EMBTK_HOST_PKG_CONFIG_PATH	+= $(dir $(shell find /usr/local/lib -type f -name '*.pc'))
-EMBTK_HOST_PKG_CONFIG_PATH	:= $(subst $(__embtk_space),:,$(sort $(__EMBTK_HOST_PKG_CONFIG_PATH)))
+EMBTK_HOST_PKG_CONFIG_PATH	:= $(subst $(embtk_space),:,$(sort $(__EMBTK_HOST_PKG_CONFIG_PATH)))
 
 PKGCONFIG_CONFIGURE_OPTS	:= --with-pc-path="$(EMBTK_HOST_PKG_CONFIG_PATH)"
 
