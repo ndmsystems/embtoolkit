@@ -33,9 +33,3 @@ LIBBSD_BUILD_DIR	:= $(PACKAGES_BUILD)/libbsd-$(LIBBSD_VERSION)
 LIBBSD_INCLUDES		:= bsd
 LIBBSD_LIBS		:= libbsd*
 LIBBSD_PKGCONFIGS	:= libbsd*.pc
-
-LIBBSD_MAKE_OPTS	:= CC=$(TARGETCC_CACHED) AR=$(TARGETAR)
-LIBBSD_MAKE_OPTS	+= CFLAGS="$(TARGET_CFLAGS)"
-
-libbsd_install:
-	$(call embtk_makeinstall_pkg,libbsd)
