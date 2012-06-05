@@ -304,9 +304,12 @@ endef
 # Usage:
 # $(call embtk_configure_hostpkg,PACKAGE)
 #
-__embtk_hostpkg_rpathldflags="-Wl,-rpath,$(HOSTTOOLS)/usr/lib"
-__embtk_hostpkg_rpath=$(strip $(if $(__embtk_pkg_setrpath),			\
-				$(__embtk_hostpkg_rpathldflags)))
+__embtk_hostpkg_rpathldflags	= "-Wl,-rpath,$(HOSTTOOLS)/usr/lib"
+__embtk_hostpkg_rpath		= $(strip $(if $(__embtk_pkg_setrpath),		\
+					$(__embtk_hostpkg_rpathldflags)))
+
+__embtk_hostpkg_ldflags		= -L$(HOSTTOOLS)/usr/lib $(__embtk_hostpkg_rpath)
+__embtk_hostpkg_cppflags	= -I$(HOSTTOOLS)/usr/include
 define embtk_configure_hostpkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
 	$(call embtk_pinfo,"Configure $(__embtk_pkg_package) for host..."))
@@ -314,8 +317,8 @@ define embtk_configure_hostpkg
 	$(Q)test -e $(__embtk_pkg_srcdir)/configure || exit 1
 	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
 	$(Q)cd $(__embtk_pkg_builddir);						\
-	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"					\
-	LDFLAGS="-L$(HOSTTOOLS)/usr/lib $(__embtk_hostpkg_rpath)"		\
+	CPPFLAGS="$(__embtk_hostpkg_cppflags)"					\
+	LDFLAGS="$(__embtk_hostpkg_ldflags)"					\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
 	PKG_CONFIG_PATH="$(EMBTK_HOST_PKG_CONFIG_PATH)"				\
 	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CC=$(HOSTCC_CACHED))	\
