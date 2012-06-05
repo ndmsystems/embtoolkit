@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2011-2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,11 +33,16 @@ config EMBTK_PKGCONFIG_VERSION_STRING
 	string
 	default "0.25"
 
+config EMBTK_PKGCONFIG_VERSION_GIT
+	bool
+
+config EMBTK_PKGCONFIG_GIT_SITE
+	string
+	default "git://anongit.freedesktop.org/pkg-config"
+	depends on EMBTK_PKGCONFIG_VERSION_GIT
+
 config EMBTK_PKGCONFIG_NEED_PATCH
 	bool
 config EMBTK_PKGCONFIG_NEED_AUTORECONF
 	bool
-config EMBTK_PKGCONFIG_PKG_IS_TARGZ
-	bool
-config EMBTK_PKGCONFIG_PKG_IS_TARBZ2
-	bool
+	default y if EMBTK_PKGCONFIG_VERSION_GIT

@@ -1,6 +1,5 @@
 ################################################################################
-# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,6 +44,7 @@ __EMBTK_HOST_PKG_CONFIG_PATH	+= $(dir $(shell find /usr/local/lib -type f -name 
 EMBTK_HOST_PKG_CONFIG_PATH	:= $(subst $(embtk_space),:,$(sort $(__EMBTK_HOST_PKG_CONFIG_PATH)))
 
 PKGCONFIG_CONFIGURE_OPTS	:= --with-pc-path="$(EMBTK_HOST_PKG_CONFIG_PATH)"
+PKGCONFIG_CONFIGURE_OPTS	+= --with-internal-glib
 
 export PKGCONFIG_BIN EMBTK_PKG_CONFIG_PATH EMBTK_PKG_CONFIG_LIBDIR
 export EMBTK_HOST_PKG_CONFIG_PATH
