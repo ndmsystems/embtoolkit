@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 LIBTOOL_NAME		:= libtool
 LIBTOOL_VERSION		:= $(call embtk_get_pkgversion,libtool)
 LIBTOOL_SITE		:= http://ftp.gnu.org/gnu/libtool
-LIBTOOL_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBTOOL_PACKAGE		:= libtool-$(LIBTOOL_VERSION).tar.gz
 LIBTOOL_SRC_DIR		:= $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
 LIBTOOL_BUILD_DIR	:= $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
