@@ -92,10 +92,6 @@ include $(EMBTK_ROOT)/mk/m4.mk
 AUTOTOOLS_INSTALL	:= m4_install libtool_install autoconf_install
 AUTOTOOLS_INSTALL	+= automake_install
 
-#cmake
-include $(EMBTK_ROOT)/mk/cmake.mk
-EMBTK_CMAKE_INSTALL	:= $(if $(CONFIG_EMBTK_HOST_HAVE_CMAKE),cmake_install)
-
 __embtk_toolchain_clib	= $(if $(CONFIG_EMBTK_CLIB_EGLIBC),eglibc,uclibc)
 TOOLCHAIN_NAME		:= toolchain
 TOOLCHAIN_PACKAGE	:= toolchain-$(GNU_TARGET)-$(__embtk_toolchain_clib)-$(EMBTK_MCU_FLAG).tar.bz2
@@ -103,7 +99,6 @@ TOOLCHAIN_DIR		:= $(EMBTK_GENERATED)/toolchain-$(GNU_TARGET)-$(__embtk_toolchain
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
 
 TOOLCHAIN_PRE_DEPS-y	:= ccache_install $(AUTOTOOLS_INSTALL)
-TOOLCHAIN_PRE_DEPS-y	+= $(EMBTK_CMAKE_INSTALL)
 TOOLCHAIN_PRE_DEPS-y	+= $(if $(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST),	\
 				gperf_host_install)
 
