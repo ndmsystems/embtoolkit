@@ -482,7 +482,7 @@ define embtk_makeinstall_hostpkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
 		$(if $(__embtk_pkg_installed-y),true,
 			$(call __embtk_install_hostpkg_make,$(1)))
-		$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv))),
+		$(or $(embtk_postinstall_$(pkgv)),true),
 		$(call __embtk_install_paramsfailure,$(1)))
 endef
 
