@@ -73,6 +73,7 @@ include $(EMBTK_ROOT)/packages/development/development.mk
 include $(EMBTK_ROOT)/packages/graphics/graphics.mk
 
 # Networking packages
+include $(EMBTK_ROOT)/packages/net/net.mk
 
 # Scripting languages
 include $(EMBTK_ROOT)/packages/scripting-languages/scripting-languages.mk
