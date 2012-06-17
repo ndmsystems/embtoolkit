@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,25 +33,16 @@ choice
 	help
 		Here you can choose which version of sqlite you want to use.
 
-	config  EMBTK_SQLITE_VERSION_3_7_7_1
-		bool "sqlite-3.7.7.1"
-	config  EMBTK_SQLITE_VERSION_3_7_4
-		bool "sqlite-3.7.4"
-	config  EMBTK_SQLITE_VERSION_3_7_3
-		bool "sqlite-3.7.3"
+	config  EMBTK_SQLITE_VERSION_3_7_13
+		bool "sqlite-3.7.13"
 endchoice
 
 config EMBTK_SQLITE_VERSION_STRING
 	string
-	default "3070701"		if EMBTK_SQLITE_VERSION_3_7_7_1
-	default "3070400"		if EMBTK_SQLITE_VERSION_3_7_4
-	default "3.7.3"			if EMBTK_SQLITE_VERSION_3_7_3
+	default "3071300"	if EMBTK_SQLITE_VERSION_3_7_13
+
 
 config EMBTK_SQLITE_NEED_PATCH
 	bool
 config EMBTK_SQLITE_NEED_AUTORECONF
-	bool
-config EMBTK_SQLITE_PKG_IS_TARGZ
-	bool
-config EMBTK_SQLITE_PKG_IS_TARBZ2
 	bool

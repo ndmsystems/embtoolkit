@@ -26,24 +26,14 @@
 SQLITE_NAME		:= sqlite
 SQLITE_VERSION		:= $(call embtk_get_pkgversion,sqlite)
 SQLITE_SITE		:= http://www.sqlite.org
-SQLITE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-# Please sqlite people stop changing the way packages are named and packaged
-SQLITE_PACKAGE		:= $(if $(CONFIG_EMBTK_SQLITE_VERSION_3_7_3),		\
-				sqlite-amalgamation-$(SQLITE_VERSION).tar.gz,	\
-				sqlite-autoconf-$(SQLITE_VERSION).tar.gz)
-SQLITE_SRC_DIR		:= $(if $(CONFIG_EMBTK_SQLITE_VERSION_3_7_3),		\
-			$(PACKAGES_BUILD)/sqlite-$(SQLITE_VERSION),		\
-			$(PACKAGES_BUILD)/sqlite-autoconf-$(SQLITE_VERSION))
-SQLITE_BUILD_DIR	:= $(if $(CONFIG_EMBTK_SQLITE_VERSION_3_7_3),		\
-			$(PACKAGES_BUILD)/sqlite-$(SQLITE_VERSION),		\
-			$(PACKAGES_BUILD)/sqlite-autoconf-$(SQLITE_VERSION))
+SQLITE_PACKAGE		:= sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+SQLITE_SRC_DIR		:= $(PACKAGES_BUILD)/sqlite-autoconf-$(SQLITE_VERSION)
+SQLITE_BUILD_DIR	:= $(PACKAGES_BUILD)/sqlite-autoconf-$(SQLITE_VERSION)
 
-SQLITE_BINS		= sqlite3
-SQLITE_SBINS		=
-SQLITE_INCLUDES		= sqlite3.h sqlite3ext.h
-SQLITE_LIBS		= libsqlite3.*
-SQLITE_PKGCONFIGS	= sqlite3.pc
+SQLITE_BINS		:= sqlite3
+SQLITE_INCLUDES		:= sqlite3.h sqlite3ext.h
+SQLITE_LIBS		:= libsqlite3.*
+SQLITE_PKGCONFIGS	:= sqlite3.pc
 
-SQLITE_CONFIGURE_OPTS	:= --enable-threadsafe --enable-readline 		\
-			--enable-dynamic-extensions
-
+SQLITE_CONFIGURE_OPTS	:= --enable-threadsafe --enable-readline
+SQLITE_CONFIGURE_OPTS	+= --enable-dynamic-extensions
