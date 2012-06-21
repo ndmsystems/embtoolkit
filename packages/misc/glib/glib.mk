@@ -51,35 +51,6 @@ GLIB_CONFIGURE_OPTS	:= --disable-fam
 
 GLIB_DEPS		:= zlib_install gettext_install glib_host_install
 
-define embtk_postinstall_glib
-	$(Q)test -e $(GLIB_BUILD_DIR)/.patchlibtool || \
-	$(MAKE) $(GLIB_BUILD_DIR)/.patchlibtool
-endef
-
-#FIXME: this should be fixed in glib2 project
-$(GLIB_BUILD_DIR)/.patchlibtool:
-	$(Q)sed \
-	-e "s;\/usr\/$(LIBDIR)\/libgobject-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libgobject-2.0.la;" \
-	-e "s;\/usr\/$(LIBDIR)\/libgmodule-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libgmodule-2.0.la;" \
-	-e "s;\/usr\/$(LIBDIR)\/libglib-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libglib-2.0.la;" \
-	-e "s;\/usr\/$(LIBDIR)\/libgthread-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libgthread-2.0.la;" \
-	< $(SYSROOT)/usr/$(LIBDIR)/libgio-2.0.la > libgio-2.0.la.new; \
-	mv libgio-2.0.la.new $(SYSROOT)/usr/$(LIBDIR)/libgio-2.0.la
-	$(Q)sed \
-	-e "s;\/usr\/$(LIBDIR)\/libglib-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libglib-2.0.la;" \
-	< $(SYSROOT)/usr/$(LIBDIR)/libgmodule-2.0.la > libgmodule-2.0.la.new; \
-	mv libgmodule-2.0.la.new $(SYSROOT)/usr/$(LIBDIR)/libgmodule-2.0.la
-	$(Q)sed \
-	-e "s;\/usr\/$(LIBDIR)\/libglib-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libglib-2.0.la;" \
-	-e "s;\/usr\/$(LIBDIR)\/libgthread-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libgthread-2.0.la;" \
-	< $(SYSROOT)/usr/$(LIBDIR)/libgobject-2.0.la > libgobject-2.0.la.new; \
-	mv libgobject-2.0.la.new $(SYSROOT)/usr/$(LIBDIR)/libgobject-2.0.la
-	$(Q)sed \
-	-e "s;\/usr\/$(LIBDIR)\/libglib-2.0.la;$(SYSROOT)\/usr\/$(LIBDIR)\/libglib-2.0.la;" \
-	< $(SYSROOT)/usr/$(LIBDIR)/libgthread-2.0.la > libgthread-2.0.la.new; \
-	mv libgthread-2.0.la.new $(SYSROOT)/usr/$(LIBDIR)/libgthread-2.0.la
-	@touch $@
-
 #
 # glib for host
 #
