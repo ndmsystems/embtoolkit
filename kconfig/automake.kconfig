@@ -31,7 +31,7 @@ config EMBTK_HAVE_AUTOMAKE
 
 config EMBTK_AUTOMAKE_VERSION_STRING
 	string
-	default "1.11.5"
+	default "1.11.6"
 
 config EMBTK_AUTOMAKE_NEED_PATCH
 	bool
