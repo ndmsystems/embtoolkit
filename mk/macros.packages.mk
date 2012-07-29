@@ -63,9 +63,9 @@ define embtk_pkgconfig_getcflags
 endef
 
 #Macro to adapt libtool files (*.la) for cross compiling
-__ltlibdirold		= libdir='\/usr\/$(LIBDIR)'
-__ltlibdirnew		= libdir='$(SYSROOT)\/usr\/$(LIBDIR)'
-__lt_usr/lib		= \>$(embtk_space)\/usr\/$(LIBDIR)\/
+__ltlibdirold		= libdir='\/usr\/$(LIBDIR)\(.*\)'
+__ltlibdirnew		= libdir='$(SYSROOT)\/usr\/$(LIBDIR)\1'
+__lt_usr/lib		= $(embtk_space)\/usr\/$(LIBDIR)\/
 __lt_sysroot/usr/lib	= $(embtk_space)$(SYSROOT)\/usr\/$(LIBDIR)\/
 __lt_path		= $(addprefix $(SYSROOT)/usr/,$(or $(1),$(LIBDIR)))
 define __embtk_fix_libtool_files
