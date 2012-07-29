@@ -25,3 +25,6 @@
 
 # Iptables
 source packages/net/iptables/iptables.kconfig
+
+# LIBNL
+source packages/net/libnl/libnl.kconfig
