@@ -36,7 +36,7 @@ config EMBTK_HAVE_CCACHE
 
 config EMBTK_CCACHE_VERSION_STRING
 	string
-	default "3.1.7"
+	default "3.1.8"
 
 config EMBTK_CCACHE_NEED_PATCH
 	bool
