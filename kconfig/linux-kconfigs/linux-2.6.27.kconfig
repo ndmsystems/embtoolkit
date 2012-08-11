@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,203 +30,15 @@ choice
 
 	config EMBTK_LINUX_VERSION_2_6_27_62
 		bool "linux-2.6.27.62"
-	config EMBTK_LINUX_VERSION_2_6_27_61
-		bool "linux-2.6.27.61"
-	config EMBTK_LINUX_VERSION_2_6_27_60
-		bool "linux-2.6.27.60"
-	config EMBTK_LINUX_VERSION_2_6_27_59
-		bool "linux-2.6.27.59"
-	config EMBTK_LINUX_VERSION_2_6_27_58
-		bool "linux-2.6.27.58"
-	config EMBTK_LINUX_VERSION_2_6_27_57
-		bool "linux-2.6.27.57"
-	config EMBTK_LINUX_VERSION_2_6_27_56
-		bool "linux-2.6.27.56"
-	config EMBTK_LINUX_VERSION_2_6_27_55
-		bool "linux-2.6.27.55"
-	config EMBTK_LINUX_VERSION_2_6_27_54
-		bool "linux-2.6.27.54"
-	config EMBTK_LINUX_VERSION_2_6_27_53
-		bool "linux-2.6.27.53"
-	config EMBTK_LINUX_VERSION_2_6_27_52
-		bool "linux-2.6.27.52"
-	config EMBTK_LINUX_VERSION_2_6_27_51
-		bool "linux-2.6.27.51"
-	config EMBTK_LINUX_VERSION_2_6_27_50
-		bool "linux-2.6.27.50"
-	config EMBTK_LINUX_VERSION_2_6_27_49
-		bool "linux-2.6.27.49"
-	config EMBTK_LINUX_VERSION_2_6_27_48
-		bool "linux-2.6.27.48"
-	config EMBTK_LINUX_VERSION_2_6_27_47
-		bool "linux-2.6.27.47"
-	config EMBTK_LINUX_VERSION_2_6_27_46
-		bool "linux-2.6.27.46"
-	config EMBTK_LINUX_VERSION_2_6_27_45
-		bool "linux-2.6.27.45"
-	config EMBTK_LINUX_VERSION_2_6_27_44
-		bool "linux-2.6.27.44"
-	config EMBTK_LINUX_VERSION_2_6_27_43
-		bool "linux-2.6.27.43"
-	config EMBTK_LINUX_VERSION_2_6_27_42
-		bool "linux-2.6.27.42"
-	config EMBTK_LINUX_VERSION_2_6_27_41
-		bool "linux-2.6.27.41"
-	config EMBTK_LINUX_VERSION_2_6_27_40
-		bool "linux-2.6.27.40"
-	config EMBTK_LINUX_VERSION_2_6_27_38
-		bool "linux-2.6.27.38"
-	config EMBTK_LINUX_VERSION_2_6_27_37
-		bool "linux-2.6.27.37"
-	config EMBTK_LINUX_VERSION_2_6_27_36
-		bool "linux-2.6.27.36"
-	config EMBTK_LINUX_VERSION_2_6_27_35
-		bool "linux-2.6.27.35"
-	config EMBTK_LINUX_VERSION_2_6_27_34
-		bool "linux-2.6.27.34"
-	config EMBTK_LINUX_VERSION_2_6_27_33
-		bool "linux-2.6.27.33"
-	config EMBTK_LINUX_VERSION_2_6_27_32
-		bool "linux-2.6.27.32"
-	config EMBTK_LINUX_VERSION_2_6_27_31
-		bool "linux-2.6.27.31"
-	config EMBTK_LINUX_VERSION_2_6_27_30
-		bool "linux-2.6.27.30"
-	config EMBTK_LINUX_VERSION_2_6_27_29
-		bool "linux-2.6.27.29"
-	config EMBTK_LINUX_VERSION_2_6_27_28
-		bool "linux-2.6.27.28"
-	config EMBTK_LINUX_VERSION_2_6_27_27
-		bool "linux-2.6.27.27"
-	config EMBTK_LINUX_VERSION_2_6_27_26
-		bool "linux-2.6.27.26"
-	config EMBTK_LINUX_VERSION_2_6_27_25
-		bool "linux-2.6.27.25"
-	config EMBTK_LINUX_VERSION_2_6_27_24
-		bool "linux-2.6.27.24"
-	config EMBTK_LINUX_VERSION_2_6_27_23
-		bool "linux-2.6.27.23"
-	config EMBTK_LINUX_VERSION_2_6_27_22
-		bool "linux-2.6.27.22"
-	config EMBTK_LINUX_VERSION_2_6_27_21
-		bool "linux-2.6.27.21"
-	config EMBTK_LINUX_VERSION_2_6_27_20
-		bool "linux-2.6.27.20"
-	config EMBTK_LINUX_VERSION_2_6_27_19
-		bool "linux-2.6.27.19"
-	config EMBTK_LINUX_VERSION_2_6_27_18
-		bool "linux-2.6.27.18"
-	config EMBTK_LINUX_VERSION_2_6_27_17
-		bool "linux-2.6.27.17"
-	config EMBTK_LINUX_VERSION_2_6_27_16
-		bool "linux-2.6.27.16"
-	config EMBTK_LINUX_VERSION_2_6_27_15
-		bool "linux-2.6.27.15"
-	config EMBTK_LINUX_VERSION_2_6_27_14
-		bool "linux-2.6.27.14"
-	config EMBTK_LINUX_VERSION_2_6_27_13
-		bool "linux-2.6.27.13"
-	config EMBTK_LINUX_VERSION_2_6_27_12
-		bool "linux-2.6.27.12"
-	config EMBTK_LINUX_VERSION_2_6_27_11
-		bool "linux-2.6.27.11"
-	config EMBTK_LINUX_VERSION_2_6_27_10
-		bool "linux-2.6.27.10"
-	config EMBTK_LINUX_VERSION_2_6_27_9
-		bool "linux-2.6.27.9"
-	config EMBTK_LINUX_VERSION_2_6_27_8
-		bool "linux-2.6.27.8"
-	config EMBTK_LINUX_VERSION_2_6_27_7
-		bool "linux-2.6.27.7"
-	config EMBTK_LINUX_VERSION_2_6_27_6
-		bool "linux-2.6.27.6"
-	config EMBTK_LINUX_VERSION_2_6_27_5
-		bool "linux-2.6.27.5"
-	config EMBTK_LINUX_VERSION_2_6_27_4
-		bool "linux-2.6.27.4"
-	config EMBTK_LINUX_VERSION_2_6_27_3
-		bool "linux-2.6.27.3"
-	config EMBTK_LINUX_VERSION_2_6_27_2
-		bool "linux-2.6.27.2"
-	config EMBTK_LINUX_VERSION_2_6_27_1
-		bool "linux-2.6.27.1"
-	config EMBTK_LINUX_VERSION_2_6_27
-		bool "linux-2.6.27"
 endchoice
 
 config EMBTK_LINUX_LONGTERM_VERSION_STRING
 	string
 	default "v2.6.27"		if EMBTK_LINUX_VERSION_2_6_27_62
-	default "v2.6.27"		if EMBTK_LINUX_VERSION_2_6_27_61
-	default "v2.6.27"		if EMBTK_LINUX_VERSION_2_6_27_60
-	default "v2.6.27"		if EMBTK_LINUX_VERSION_2_6_27_59
-	default "v2.6.27"		if EMBTK_LINUX_VERSION_2_6_27_58
 
 config EMBTK_LINUX_VERSION_STRING
 	string
 	default "2.6.27.62"		if EMBTK_LINUX_VERSION_2_6_27_62
-	default "2.6.27.61"		if EMBTK_LINUX_VERSION_2_6_27_61
-	default "2.6.27.60"		if EMBTK_LINUX_VERSION_2_6_27_60
-	default "2.6.27.59"		if EMBTK_LINUX_VERSION_2_6_27_59
-	default "2.6.27.58"		if EMBTK_LINUX_VERSION_2_6_27_58
-	default "2.6.27.57"		if EMBTK_LINUX_VERSION_2_6_27_57
-	default "2.6.27.56"		if EMBTK_LINUX_VERSION_2_6_27_56
-	default "2.6.27.55"		if EMBTK_LINUX_VERSION_2_6_27_55
-	default "2.6.27.54"		if EMBTK_LINUX_VERSION_2_6_27_54
-	default "2.6.27.53"		if EMBTK_LINUX_VERSION_2_6_27_53
-	default "2.6.27.52"		if EMBTK_LINUX_VERSION_2_6_27_52
-	default "2.6.27.51"		if EMBTK_LINUX_VERSION_2_6_27_51
-	default "2.6.27.50"		if EMBTK_LINUX_VERSION_2_6_27_50
-	default "2.6.27.49"		if EMBTK_LINUX_VERSION_2_6_27_49
-	default "2.6.27.48"		if EMBTK_LINUX_VERSION_2_6_27_48
-	default "2.6.27.47"		if EMBTK_LINUX_VERSION_2_6_27_47
-	default "2.6.27.46"		if EMBTK_LINUX_VERSION_2_6_27_46
-	default "2.6.27.45"		if EMBTK_LINUX_VERSION_2_6_27_45
-	default "2.6.27.44"		if EMBTK_LINUX_VERSION_2_6_27_44
-	default "2.6.27.43"		if EMBTK_LINUX_VERSION_2_6_27_43
-	default "2.6.27.42"		if EMBTK_LINUX_VERSION_2_6_27_42
-	default "2.6.27.41"		if EMBTK_LINUX_VERSION_2_6_27_41
-	default "2.6.27.40"		if EMBTK_LINUX_VERSION_2_6_27_40
-	default "2.6.27.39"		if EMBTK_LINUX_VERSION_2_6_27_39
-	default "2.6.27.38"		if EMBTK_LINUX_VERSION_2_6_27_38
-	default "2.6.27.37"		if EMBTK_LINUX_VERSION_2_6_27_37
-	default "2.6.27.36"		if EMBTK_LINUX_VERSION_2_6_27_36
-	default "2.6.27.35"		if EMBTK_LINUX_VERSION_2_6_27_35
-	default "2.6.27.34"		if EMBTK_LINUX_VERSION_2_6_27_34
-	default "2.6.27.33"		if EMBTK_LINUX_VERSION_2_6_27_33
-	default "2.6.27.32"		if EMBTK_LINUX_VERSION_2_6_27_32
-	default "2.6.27.31"		if EMBTK_LINUX_VERSION_2_6_27_31
-	default "2.6.27.30"		if EMBTK_LINUX_VERSION_2_6_27_30
-	default "2.6.27.29"		if EMBTK_LINUX_VERSION_2_6_27_29
-	default "2.6.27.28"		if EMBTK_LINUX_VERSION_2_6_27_28
-	default "2.6.27.27"		if EMBTK_LINUX_VERSION_2_6_27_27
-	default "2.6.27.26"		if EMBTK_LINUX_VERSION_2_6_27_26
-	default "2.6.27.25"		if EMBTK_LINUX_VERSION_2_6_27_25
-	default "2.6.27.24"		if EMBTK_LINUX_VERSION_2_6_27_24
-	default "2.6.27.23"		if EMBTK_LINUX_VERSION_2_6_27_23
-	default "2.6.27.22"		if EMBTK_LINUX_VERSION_2_6_27_22
-	default "2.6.27.21"		if EMBTK_LINUX_VERSION_2_6_27_21
-	default "2.6.27.20"		if EMBTK_LINUX_VERSION_2_6_27_20
-	default "2.6.27.19"		if EMBTK_LINUX_VERSION_2_6_27_19
-	default "2.6.27.18"		if EMBTK_LINUX_VERSION_2_6_27_18
-	default "2.6.27.17"		if EMBTK_LINUX_VERSION_2_6_27_17
-	default "2.6.27.16"		if EMBTK_LINUX_VERSION_2_6_27_16
-	default "2.6.27.15"		if EMBTK_LINUX_VERSION_2_6_27_15
-	default "2.6.27.14"		if EMBTK_LINUX_VERSION_2_6_27_14
-	default "2.6.27.13"		if EMBTK_LINUX_VERSION_2_6_27_13
-	default "2.6.27.12"		if EMBTK_LINUX_VERSION_2_6_27_12
-	default "2.6.27.11"		if EMBTK_LINUX_VERSION_2_6_27_11
-	default "2.6.27.10"		if EMBTK_LINUX_VERSION_2_6_27_10
-	default "2.6.27.9"		if EMBTK_LINUX_VERSION_2_6_27_9
-	default "2.6.27.8"		if EMBTK_LINUX_VERSION_2_6_27_8
-	default "2.6.27.7"		if EMBTK_LINUX_VERSION_2_6_27_7
-	default "2.6.27.6"		if EMBTK_LINUX_VERSION_2_6_27_6
-	default "2.6.27.5"		if EMBTK_LINUX_VERSION_2_6_27_5
-	default "2.6.27.4"		if EMBTK_LINUX_VERSION_2_6_27_4
-	default "2.6.27.3"		if EMBTK_LINUX_VERSION_2_6_27_3
-	default "2.6.27.2"		if EMBTK_LINUX_VERSION_2_6_27_2
-	default "2.6.27.1"		if EMBTK_LINUX_VERSION_2_6_27_1
-	default "2.6.27"		if EMBTK_LINUX_VERSION_2_6_27
 
 config EMBTK_LINUX_MAJOR_VERSION_STRING
 	string

@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2011-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,35 +30,11 @@ choice
 
 	config EMBTK_LINUX_VERSION_2_6_38_8
 		bool "linux-2.6.38.8"
-	config EMBTK_LINUX_VERSION_2_6_38_7
-		bool "linux-2.6.38.7"
-	config EMBTK_LINUX_VERSION_2_6_38_6
-		bool "linux-2.6.38.6"
-	config EMBTK_LINUX_VERSION_2_6_38_5
-		bool "linux-2.6.38.5"
-	config EMBTK_LINUX_VERSION_2_6_38_4
-		bool "linux-2.6.38.4"
-	config EMBTK_LINUX_VERSION_2_6_38_3
-		bool "linux-2.6.38.3"
-	config EMBTK_LINUX_VERSION_2_6_38_2
-		bool "linux-2.6.38.2"
-	config EMBTK_LINUX_VERSION_2_6_38_1
-		bool "linux-2.6.38.1"
-	config EMBTK_LINUX_VERSION_2_6_38
-		bool "linux-2.6.38"
 endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
 	default "2.6.38.8"		if EMBTK_LINUX_VERSION_2_6_38_8
-	default "2.6.38.7"		if EMBTK_LINUX_VERSION_2_6_38_7
-	default "2.6.38.6"		if EMBTK_LINUX_VERSION_2_6_38_6
-	default "2.6.38.5"		if EMBTK_LINUX_VERSION_2_6_38_5
-	default "2.6.38.4"		if EMBTK_LINUX_VERSION_2_6_38_4
-	default "2.6.38.3"		if EMBTK_LINUX_VERSION_2_6_38_3
-	default "2.6.38.2"		if EMBTK_LINUX_VERSION_2_6_38_2
-	default "2.6.38.1"		if EMBTK_LINUX_VERSION_2_6_38_1
-	default "2.6.38"		if EMBTK_LINUX_VERSION_2_6_38
 
 config EMBTK_LINUX_MAJOR_VERSION_STRING
 	string

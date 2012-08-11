@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,55 +30,15 @@ choice
 
 	config EMBTK_LINUX_VERSION_2_6_34_12
 		bool "linux-2.6.34.12"
-	config EMBTK_LINUX_VERSION_2_6_34_11
-		bool "linux-2.6.34.11"
-	config EMBTK_LINUX_VERSION_2_6_34_10
-		bool "linux-2.6.34.10"
-	config EMBTK_LINUX_VERSION_2_6_34_9
-		bool "linux-2.6.34.9"
-	config EMBTK_LINUX_VERSION_2_6_34_8
-		bool "linux-2.6.34.8"
-	config EMBTK_LINUX_VERSION_2_6_34_7
-		bool "linux-2.6.34.7"
-	config EMBTK_LINUX_VERSION_2_6_34_6
-		bool "linux-2.6.34.6"
-	config EMBTK_LINUX_VERSION_2_6_34_5
-		bool "linux-2.6.34.5"
-	config EMBTK_LINUX_VERSION_2_6_34_4
-		bool "linux-2.6.34.4"
-	config EMBTK_LINUX_VERSION_2_6_34_3
-		bool "linux-2.6.34.3"
-	config EMBTK_LINUX_VERSION_2_6_34_2
-		bool "linux-2.6.34.2"
-	config EMBTK_LINUX_VERSION_2_6_34_1
-		bool "linux-2.6.34.1"
-	config EMBTK_LINUX_VERSION_2_6_34
-		bool "linux-2.6.34"
 endchoice
 
 config EMBTK_LINUX_LONGTERM_VERSION_STRING
 	string
 	default "v2.6.34"		if EMBTK_LINUX_VERSION_2_6_34_12
-	default "v2.6.34"		if EMBTK_LINUX_VERSION_2_6_34_11
-	default "v2.6.34"		if EMBTK_LINUX_VERSION_2_6_34_10
-	default "v2.6.34"		if EMBTK_LINUX_VERSION_2_6_34_9
-	default "v2.6.34"		if EMBTK_LINUX_VERSION_2_6_34_8
 
 config EMBTK_LINUX_VERSION_STRING
 	string
 	default "2.6.34.12"		if EMBTK_LINUX_VERSION_2_6_34_12
-	default "2.6.34.11"		if EMBTK_LINUX_VERSION_2_6_34_11
-	default "2.6.34.10"		if EMBTK_LINUX_VERSION_2_6_34_10
-	default "2.6.34.9"		if EMBTK_LINUX_VERSION_2_6_34_9
-	default "2.6.34.8"		if EMBTK_LINUX_VERSION_2_6_34_8
-	default "2.6.34.7"		if EMBTK_LINUX_VERSION_2_6_34_7
-	default "2.6.34.6"		if EMBTK_LINUX_VERSION_2_6_34_6
-	default "2.6.34.5"		if EMBTK_LINUX_VERSION_2_6_34_5
-	default "2.6.34.4"		if EMBTK_LINUX_VERSION_2_6_34_4
-	default "2.6.34.3"		if EMBTK_LINUX_VERSION_2_6_34_3
-	default "2.6.34.2"		if EMBTK_LINUX_VERSION_2_6_34_2
-	default "2.6.34.1"		if EMBTK_LINUX_VERSION_2_6_34_1
-	default "2.6.34"		if EMBTK_LINUX_VERSION_2_6_34
 
 config EMBTK_LINUX_MAJOR_VERSION_STRING
 	string

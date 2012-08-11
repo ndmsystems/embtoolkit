@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,53 +30,11 @@ choice
 
 	config EMBTK_LINUX_VERSION_2_6_31_14
 		bool "linux-2.6.31.14"
-	config EMBTK_LINUX_VERSION_2_6_31_13
-		bool "linux-2.6.31.13"
-	config EMBTK_LINUX_VERSION_2_6_31_12
-		bool "linux-2.6.31.12"
-	config EMBTK_LINUX_VERSION_2_6_31_11
-		bool "linux-2.6.31.11"
-	config EMBTK_LINUX_VERSION_2_6_31_10
-		bool "linux-2.6.31.10"
-	config EMBTK_LINUX_VERSION_2_6_31_9
-		bool "linux-2.6.31.9"
-	config EMBTK_LINUX_VERSION_2_6_31_8
-		bool "linux-2.6.31.8"
-	config EMBTK_LINUX_VERSION_2_6_31_7
-		bool "linux-2.6.31.7"
-	config EMBTK_LINUX_VERSION_2_6_31_6
-		bool "linux-2.6.31.6"
-	config EMBTK_LINUX_VERSION_2_6_31_5
-		bool "linux-2.6.31.5"
-	config EMBTK_LINUX_VERSION_2_6_31_4
-		bool "linux-2.6.31.4"
-	config EMBTK_LINUX_VERSION_2_6_31_3
-		bool "linux-2.6.31.3"
-	config EMBTK_LINUX_VERSION_2_6_31_2
-		bool "linux-2.6.31.2"
-	config EMBTK_LINUX_VERSION_2_6_31_1
-		bool "linux-2.6.31.1"
-	config EMBTK_LINUX_VERSION_2_6_31
-		bool "linux-2.6.31"
 endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
 	default "2.6.31.14"		if EMBTK_LINUX_VERSION_2_6_31_14
-	default "2.6.31.13"		if EMBTK_LINUX_VERSION_2_6_31_13
-	default "2.6.31.12"		if EMBTK_LINUX_VERSION_2_6_31_12
-	default "2.6.31.11"		if EMBTK_LINUX_VERSION_2_6_31_11
-	default "2.6.31.10"		if EMBTK_LINUX_VERSION_2_6_31_10
-	default "2.6.31.9"		if EMBTK_LINUX_VERSION_2_6_31_9
-	default "2.6.31.8"		if EMBTK_LINUX_VERSION_2_6_31_8
-	default "2.6.31.7"		if EMBTK_LINUX_VERSION_2_6_31_7
-	default "2.6.31.6"		if EMBTK_LINUX_VERSION_2_6_31_6
-	default "2.6.31.5"		if EMBTK_LINUX_VERSION_2_6_31_5
-	default "2.6.31.4"		if EMBTK_LINUX_VERSION_2_6_31_4
-	default "2.6.31.3"		if EMBTK_LINUX_VERSION_2_6_31_3
-	default "2.6.31.2"		if EMBTK_LINUX_VERSION_2_6_31_2
-	default "2.6.31.1"		if EMBTK_LINUX_VERSION_2_6_31_1
-	default "2.6.31"		if EMBTK_LINUX_VERSION_2_6_31
 
 config EMBTK_LINUX_MAJOR_VERSION_STRING
 	string

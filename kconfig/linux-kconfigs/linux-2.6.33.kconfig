@@ -30,87 +30,15 @@ choice
 
 	config EMBTK_LINUX_VERSION_2_6_33_20
 		bool "linux-2.6.33.20"
-	config EMBTK_LINUX_VERSION_2_6_33_19
-		bool "linux-2.6.33.19"
-	config EMBTK_LINUX_VERSION_2_6_33_18
-		bool "linux-2.6.33.18"
-	config EMBTK_LINUX_VERSION_2_6_33_17
-		bool "linux-2.6.33.17"
-	config EMBTK_LINUX_VERSION_2_6_33_16
-		bool "linux-2.6.33.16"
-	config EMBTK_LINUX_VERSION_2_6_33_15
-		bool "linux-2.6.33.15"
-	config EMBTK_LINUX_VERSION_2_6_33_14
-		bool "linux-2.6.33.14"
-	config EMBTK_LINUX_VERSION_2_6_33_13
-		bool "linux-2.6.33.13"
-	config EMBTK_LINUX_VERSION_2_6_33_12
-		bool "linux-2.6.33.12"
-	config EMBTK_LINUX_VERSION_2_6_33_11
-		bool "linux-2.6.33.11"
-	config EMBTK_LINUX_VERSION_2_6_33_10
-		bool "linux-2.6.33.10"
-	config EMBTK_LINUX_VERSION_2_6_33_9
-		bool "linux-2.6.33.9"
-	config EMBTK_LINUX_VERSION_2_6_33_8
-		bool "linux-2.6.33.8"
-	config EMBTK_LINUX_VERSION_2_6_33_7
-		bool "linux-2.6.33.7"
-	config EMBTK_LINUX_VERSION_2_6_33_6
-		bool "linux-2.6.33.6"
-	config EMBTK_LINUX_VERSION_2_6_33_5
-		bool "linux-2.6.33.5"
-	config EMBTK_LINUX_VERSION_2_6_33_4
-		bool "linux-2.6.33.4"
-	config EMBTK_LINUX_VERSION_2_6_33_3
-		bool "linux-2.6.33.3"
-	config EMBTK_LINUX_VERSION_2_6_33_2
-		bool "linux-2.6.33.2"
-	config EMBTK_LINUX_VERSION_2_6_33_1
-		bool "linux-2.6.33.1"
-	config EMBTK_LINUX_VERSION_2_6_33
-		bool "linux-2.6.33"
 endchoice
 
 config EMBTK_LINUX_LONGTERM_VERSION_STRING
 	string
 	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_20
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_19
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_18
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_17
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_16
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_15
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_14
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_13
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_12
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_11
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_10
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_9
-	default "v2.6.33"		if EMBTK_LINUX_VERSION_2_6_33_8
 
 config EMBTK_LINUX_VERSION_STRING
 	string
 	default "2.6.33.20"		if EMBTK_LINUX_VERSION_2_6_33_20
-	default "2.6.33.19"		if EMBTK_LINUX_VERSION_2_6_33_19
-	default "2.6.33.18"		if EMBTK_LINUX_VERSION_2_6_33_18
-	default "2.6.33.17"		if EMBTK_LINUX_VERSION_2_6_33_17
-	default "2.6.33.16"		if EMBTK_LINUX_VERSION_2_6_33_16
-	default "2.6.33.15"		if EMBTK_LINUX_VERSION_2_6_33_15
-	default "2.6.33.14"		if EMBTK_LINUX_VERSION_2_6_33_14
-	default "2.6.33.13"		if EMBTK_LINUX_VERSION_2_6_33_13
-	default "2.6.33.12"		if EMBTK_LINUX_VERSION_2_6_33_12
-	default "2.6.33.11"		if EMBTK_LINUX_VERSION_2_6_33_11
-	default "2.6.33.10"		if EMBTK_LINUX_VERSION_2_6_33_10
-	default "2.6.33.9"		if EMBTK_LINUX_VERSION_2_6_33_9
-	default "2.6.33.8"		if EMBTK_LINUX_VERSION_2_6_33_8
-	default "2.6.33.7"		if EMBTK_LINUX_VERSION_2_6_33_7
-	default "2.6.33.6"		if EMBTK_LINUX_VERSION_2_6_33_6
-	default "2.6.33.5"		if EMBTK_LINUX_VERSION_2_6_33_5
-	default "2.6.33.4"		if EMBTK_LINUX_VERSION_2_6_33_4
-	default "2.6.33.3"		if EMBTK_LINUX_VERSION_2_6_33_3
-	default "2.6.33.2"		if EMBTK_LINUX_VERSION_2_6_33_2
-	default "2.6.33.1"		if EMBTK_LINUX_VERSION_2_6_33_1
-	default "2.6.33"		if EMBTK_LINUX_VERSION_2_6_33
 
 config EMBTK_LINUX_MAJOR_VERSION_STRING
 	string

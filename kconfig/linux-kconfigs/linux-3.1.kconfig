@@ -30,41 +30,11 @@ choice
 
 	config EMBTK_LINUX_VERSION_3_1_10
 		bool "linux-3.1.10"
-	config EMBTK_LINUX_VERSION_3_1_9
-		bool "linux-3.1.9"
-	config EMBTK_LINUX_VERSION_3_1_8
-		bool "linux-3.1.8"
-	config EMBTK_LINUX_VERSION_3_1_7
-		bool "linux-3.1.7"
-	config EMBTK_LINUX_VERSION_3_1_6
-		bool "linux-3.1.6"
-	config EMBTK_LINUX_VERSION_3_1_5
-		bool "linux-3.1.5"
-	config EMBTK_LINUX_VERSION_3_1_4
-		bool "linux-3.1.4"
-	config EMBTK_LINUX_VERSION_3_1_3
-		bool "linux-3.1.3"
-	config EMBTK_LINUX_VERSION_3_1_2
-		bool "linux-3.1.2"
-	config EMBTK_LINUX_VERSION_3_1_1
-		bool "linux-3.1.1"
-	config EMBTK_LINUX_VERSION_3_1
-		bool "linux-3.1"
 endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
 	default "3.1.10"	if EMBTK_LINUX_VERSION_3_1_10
-	default "3.1.9"		if EMBTK_LINUX_VERSION_3_1_9
-	default "3.1.8"		if EMBTK_LINUX_VERSION_3_1_8
-	default "3.1.7"		if EMBTK_LINUX_VERSION_3_1_7
-	default "3.1.6"		if EMBTK_LINUX_VERSION_3_1_6
-	default "3.1.5"		if EMBTK_LINUX_VERSION_3_1_5
-	default "3.1.4"		if EMBTK_LINUX_VERSION_3_1_4
-	default "3.1.3"		if EMBTK_LINUX_VERSION_3_1_3
-	default "3.1.2"		if EMBTK_LINUX_VERSION_3_1_2
-	default "3.1.1"		if EMBTK_LINUX_VERSION_3_1_1
-	default "3.1"		if EMBTK_LINUX_VERSION_3_1
 
 config EMBTK_LINUX_MAJOR_VERSION_STRING
 	string

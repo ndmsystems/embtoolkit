@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 #
 # \file         linux-2.6.30.kconfig
 # \brief	linux v2.6.30.x series
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         Sept 2009
 ################################################################################
 
@@ -30,41 +30,12 @@ choice
 
 	config EMBTK_LINUX_VERSION_2_6_30_10
 		bool "linux-2.6.30.10"
-	config EMBTK_LINUX_VERSION_2_6_30_9
-		bool "linux-2.6.30.9"
-	config EMBTK_LINUX_VERSION_2_6_30_8
-		bool "linux-2.6.30.8"
-	config EMBTK_LINUX_VERSION_2_6_30_7
-		bool "linux-2.6.30.7"
-	config EMBTK_LINUX_VERSION_2_6_30_6
-		bool "linux-2.6.30.6"
-	config EMBTK_LINUX_VERSION_2_6_30_5
-		bool "linux-2.6.30.5"
-	config EMBTK_LINUX_VERSION_2_6_30_4
-		bool "linux-2.6.30.4"
-	config EMBTK_LINUX_VERSION_2_6_30_3
-		bool "linux-2.6.30.3"
-	config EMBTK_LINUX_VERSION_2_6_30_2
-		bool "linux-2.6.30.2"
-	config EMBTK_LINUX_VERSION_2_6_30_1
-		bool "linux-2.6.30.1"
-	config EMBTK_LINUX_VERSION_2_6_30
-		bool "linux-2.6.30"
+
 endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
 	default "2.6.30.10"		if EMBTK_LINUX_VERSION_2_6_30_10
-	default "2.6.30.9"		if EMBTK_LINUX_VERSION_2_6_30_9
-	default "2.6.30.8"		if EMBTK_LINUX_VERSION_2_6_30_8
-	default "2.6.30.7"		if EMBTK_LINUX_VERSION_2_6_30_7
-	default "2.6.30.6"		if EMBTK_LINUX_VERSION_2_6_30_6
-	default "2.6.30.5"		if EMBTK_LINUX_VERSION_2_6_30_5
-	default "2.6.30.4"		if EMBTK_LINUX_VERSION_2_6_30_4
-	default "2.6.30.3"		if EMBTK_LINUX_VERSION_2_6_30_3
-	default "2.6.30.2"		if EMBTK_LINUX_VERSION_2_6_30_2
-	default "2.6.30.1"		if EMBTK_LINUX_VERSION_2_6_30_1
-	default "2.6.30"		if EMBTK_LINUX_VERSION_2_6_30
 
 config EMBTK_LINUX_MAJOR_VERSION_STRING
 	string
