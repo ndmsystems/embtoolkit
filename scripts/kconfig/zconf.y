@@ -75,7 +75,7 @@ static struct menu *current_menu, *current_entry;
 
 %left T_OR
 %left T_AND
-%left T_EQUAL T_UNEQUAL T_STRICT_GREATER_THAN T_STRICT_LESS_THAN
+%left T_EQUAL T_UNEQUAL
 %nonassoc T_NOT
 
 %type <string> prompt
@@ -469,8 +469,6 @@ if_expr:  /* empty */			{ $$ = NULL; }
 expr:	  symbol				{ $$ = expr_alloc_symbol($1); }
 	| symbol T_EQUAL symbol			{ $$ = expr_alloc_comp(E_EQUAL, $1, $3); }
 	| symbol T_UNEQUAL symbol		{ $$ = expr_alloc_comp(E_UNEQUAL, $1, $3); }
-	| symbol T_STRICT_GREATER_THAN symbol	{ $$ = expr_alloc_comp(E_STRICT_GREATER_THAN, $1, $3); }
-	| symbol T_STRICT_LESS_THAN symbol	{ $$ = expr_alloc_comp(E_STRICT_LESS_THAN, $1, $3); }
 	| T_OPEN_PAREN expr T_CLOSE_PAREN	{ $$ = $2; }
 	| T_NOT expr				{ $$ = expr_alloc_one(E_NOT, $2); }
 	| expr T_OR expr			{ $$ = expr_alloc_two(E_OR, $1, $3); }
