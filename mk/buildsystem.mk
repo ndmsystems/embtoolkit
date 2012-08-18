@@ -36,34 +36,38 @@ J			:= -j$(CONFIG_EMBTK_NUMBER_BUILD_JOBS)
 
 xconfig: basic
 ifeq ($(CONFIG_EMBTK_DOTCONFIG),y)
-	$(Q)make -f scripts/Makefile.build obj=scripts/kconfig			\
-	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" 					\
-	EMBTK_VERSION=$(EMBTK_VERSION) xconfig
+	$(Q)$(MAKE) -f scripts/Makefile.build obj=$(EMBTK_ROOT)/scripts/kconfig	\
+		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/" 				\
+		EMBTK_VERSION=$(EMBTK_VERSION) xconfig
 else
 	$(Q)if [ -e $(EMBTK_DOTCONFIG).old ]; then				\
 		cp  $(EMBTK_DOTCONFIG).old  $(EMBTK_DOTCONFIG);			\
-		make -f scripts/Makefile.build obj=scripts/kconfig		\
-		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
-		EMBTK_VERSION=$(EMBTK_VERSION) xconfig;				\
+		$(MAKE) -f scripts/Makefile.build				\
+			obj=$(EMBTK_ROOT)/scripts/kconfig			\
+			EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"			\
+			EMBTK_VERSION=$(EMBTK_VERSION) xconfig;			\
 	else									\
-		make -f scripts/Makefile.build obj=scripts/kconfig		\
-		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
-		EMBTK_VERSION=$(EMBTK_VERSION) xconfig;				\
+		$(MAKE) -f scripts/Makefile.build				\
+			obj=$(EMBTK_ROOT)/scripts/kconfig			\
+			EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"			\
+			EMBTK_VERSION=$(EMBTK_VERSION) xconfig;			\
 	fi
 endif
 
 menuconfig: basic
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig		\
-	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"					\
-	EMBTK_VERSION=$(EMBTK_VERSION) menuconfig
+	$(Q)$(MAKE) -f scripts/Makefile.build					\
+		obj=$(EMBTK_ROOT)/scripts/kconfig				\
+		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
+		EMBTK_VERSION=$(EMBTK_VERSION) menuconfig
 
 randconfig: basic
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/kconfig		\
-	EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"					\
-	EMBTK_VERSION=$(EMBTK_VERSION) randconfig
+	$(Q)$(MAKE) -f scripts/Makefile.build					\
+		obj=$(EMBTK_ROOT)/scripts/kconfig				\
+		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
+		EMBTK_VERSION=$(EMBTK_VERSION) randconfig
 
 basic:
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=scripts/basic
+	$(Q)$(MAKE) -f scripts/Makefile.build obj=$(EMBTK_ROOT)/scripts/basic
 
 clean: toolchain_clean rmallpath
 	$(Q)$(__embtk_kconfig_clean)
@@ -148,8 +152,8 @@ define __embtk_mk_inithosttoolsdirs
 endef
 
 define __embtk_kconfig_clean
-	$(MAKE) -f scripts/Makefile.clean obj=scripts/kconfig
-	$(MAKE) -f scripts/Makefile.clean obj=scripts/basic
+	$(MAKE) -f scripts/Makefile.clean obj=$(EMBTK_ROOT)/scripts/kconfig
+	$(MAKE) -f scripts/Makefile.clean obj=$(EMBTK_ROOT)/scripts/basic
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'config*')
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'lex.*.c')
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'zconf.lex.c')
