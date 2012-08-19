@@ -2,6 +2,7 @@ scripts/Kbuild.include
 scripts/Makefile.build
 scripts/Makefile.clean
 scripts/Makefile.lib
+scripts/Makefile.host
 scripts/basic/Makefile
 scripts/basic/fixdep.c
 scripts/kconfig/Makefile
