@@ -54,7 +54,8 @@ endef
 	$(Q)$(call __embtk_mk_xconfig,$@)
 
 embtk_kconfig_basic:
-	$(Q)$(MAKE) -f scripts/Makefile.build obj=$(EMBTK_ROOT)/scripts/basic
+	$(Q)$(MAKE) -f scripts/Makefile.build					\
+		obj=$(EMBTK_ROOT)/scripts/basic quiet=quiet_ KBUILD_VERBOSE=0
 
 clean: toolchain_clean rmallpath
 	$(Q)$(__embtk_kconfig_clean)
