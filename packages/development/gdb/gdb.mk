@@ -44,7 +44,7 @@ GDB_LIBEXECS	:=
 GDB_PKGCONFIGS	:=
 
 GDB_CONFIGURE_ENV	:=
-GDB_CONFIGURE_OPTS	:= --disable-werror --disable-sim		\
+GDB_CONFIGURE_OPTS	:= --disable-werror --disable-sim --disable-nls	\
 			--with-bugurl="$(EMBTK_BUGURL)"			\
 			--with-pkgversion="embtk-$(EMBTK_VERSION)"
 
