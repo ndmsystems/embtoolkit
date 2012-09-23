@@ -24,17 +24,17 @@
 ################################################################################
 
 choice
-	prompt "Linux v3.4.x series exact version to use."
+	prompt "Linux v3.4.x series exact version used."
 	help
-		Linux v3.4.x series exact version to use.
+		Linux v3.4.x series exact version used.
 
-	config EMBTK_LINUX_VERSION_3_4_9
-		bool "linux-3.4.9"
+	config EMBTK_LINUX_VERSION_3_4_11
+		bool "linux-3.4.11"
 endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
-	default "3.4.9"		if EMBTK_LINUX_VERSION_3_4_9
+	default "3.4.11"
 
 config EMBTK_LINUX_MAJOR_VERSION_STRING
 	string

@@ -24,21 +24,21 @@
 ################################################################################
 
 choice
-	prompt "Linux v2.6.34.x series exact version to use."
+	prompt "Linux v2.6.34.x series exact version used."
 	help
-		Linux v2.6.34.x series exact version to use.
+		Linux v2.6.34.x series exact version used.
 
-	config EMBTK_LINUX_VERSION_2_6_34_12
-		bool "linux-2.6.34.12"
+	config EMBTK_LINUX_VERSION_2_6_34_13
+		bool "linux-2.6.34.13"
 endchoice
 
 config EMBTK_LINUX_LONGTERM_VERSION_STRING
 	string
-	default "v2.6.34"		if EMBTK_LINUX_VERSION_2_6_34_12
+	default "v2.6.34"
 
 config EMBTK_LINUX_VERSION_STRING
 	string
-	default "2.6.34.12"		if EMBTK_LINUX_VERSION_2_6_34_12
+	default "2.6.34.13"
 
 config EMBTK_LINUX_MAJOR_VERSION_STRING
 	string
