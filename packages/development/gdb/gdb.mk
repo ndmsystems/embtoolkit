@@ -103,7 +103,7 @@ GDB_HOST_CONFIGURE_ENV	+= RANLIB_FOR_TARGET=$(TARGETRANLIB)
 GDB_HOST_CONFIGURE_ENV	+= STRIP_FOR_TARGET=$(TARGETSTRIP)
 GDB_HOST_CONFIGURE_ENV	+= OBJDUMP_FOR_TARGET=$(TARGETOBJDUMP)
 
-GDB_HOST_CONFIGURE_OPTS	:= --disable-werror --disable-sim		\
+GDB_HOST_CONFIGURE_OPTS	:= --disable-werror --disable-sim --disable-nls	\
 			--with-bugurl="$(EMBTK_BUGURL)"			\
 			--with-pkgversion="embtk-$(EMBTK_VERSION)"	\
 			--target=$(STRICT_GNU_TARGET)
