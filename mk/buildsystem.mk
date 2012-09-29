@@ -50,7 +50,7 @@ define __embtk_mk_xconfig
 	$(call __embtk_kconfig_buildrun,$(1))
 endef
 
-%config: embtk_kconfig_basic
+xconfig menuconfig: embtk_kconfig_basic
 	$(Q)$(call __embtk_mk_xconfig,$@)
 
 embtk_kconfig_basic:
@@ -140,10 +140,7 @@ define __embtk_mk_inithosttoolsdirs
 endef
 
 define __embtk_kconfig_clean
-	$(MAKE) -f scripts/Makefile.clean					\
-		obj=$(EMBTK_ROOT)/scripts/basic quiet=quiet_ KBUILD_VERBOSE=0
-	$(MAKE) -f scripts/Makefile.clean					\
-		obj=$(EMBTK_ROOT)/scripts/basic quiet=quiet_ KBUILD_VERBOSE=0
+	rm -rf $(EMBTK_ROOT)/scripts/basic/fixdep
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'config*')
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'lex.*.c')
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'zconf.lex.c')
