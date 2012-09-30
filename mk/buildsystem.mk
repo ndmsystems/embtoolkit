@@ -34,6 +34,20 @@ HOSTTOOLS		:= $(EMBTK_ROOT)/host-tools-$(EMBTK_MCU_FLAG)
 DOWNLOAD_DIR		:= $(patsubst %/,%,$(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR))))
 J			:= -j$(CONFIG_EMBTK_NUMBER_BUILD_JOBS)
 
+#
+# New version of above variables names. The old names are scheduled for removal
+#
+embtk_sysroot		:= $(SYSROOT)
+embtk_tools		:= $(TOOLS)
+embtk_toolsbuild	:= $(TOOLS_BUILD)
+embtk_pkgbuild		:= $(PACKAGES_BUILD)
+embtk_generated		:= $(EMBTK_GENERATED)
+embtk_rootfs		:= $(ROOTFS)
+embtk_hosttools		:= $(HOSTTOOLS)
+__embtk_dldir		:= $(patsubst %/,%,$(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_DOWNLOAD_DIR)))
+embtk_dldir		:= $(or $(__embtk_dldir),$(EMBTK_ROOT)/dl)
+
+
 define __embtk_kconfig_buildrun
 	$(MAKE) -f scripts/Makefile.build					\
 		obj=$(EMBTK_ROOT)/scripts/kconfig				\
