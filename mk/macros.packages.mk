@@ -27,7 +27,7 @@
 # wget wrapper
 # usage: $(call embtk_wget,$(OUTPUT_FILE),$(SITE),$(FOREIGN_FILE))
 #
-__wget_outfile		= $(patsubst %/,%,$(DOWNLOAD_DIR))/$(strip $(1))
+__wget_outfile		= $(patsubst %/,%,$(embtk_dldir))/$(strip $(1))
 __wget_remotesite	= $(patsubst %/,%,$(strip $(2)))
 __wget_foreignfiles	= $(strip $(3))
 __wget_opts		= --tries=5 --timeout=10 --waitretry=5
@@ -115,7 +115,7 @@ __embtk_pkg_site		= $(strip $($(PKGV)_SITE))
 __embtk_patch_site		= ftp://ftp.embtoolkit.org/embtoolkit.org
 __embtk_patch_url		= $(__embtk_patch_site)/$(__embtk_pkg_name)/$(__embtk_pkg_version)
 __embtk_pkg_patch_site		= $(strip $(or $($(PKGV)_PATCH_SITE),$(__embtk_patch_url)))
-__embtk_pkg_patch_f		= $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch
+__embtk_pkg_patch_f		= $(strip $(embtk_dldir))/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch
 __embtk_pkg_mirror		= $(__embtk_patch_site)/packages-mirror
 __embtk_pkg_mirror1		= $(strip $($(PKGV)_MIRROR1))
 __embtk_pkg_mirror2		= $(strip $($(PKGV)_MIRROR2))
@@ -140,7 +140,7 @@ __embtk_pkg_localgit		= $(strip $(if $(__embtk_pkg_usegit),		\
 
 __embtk_pkg_version		= $(or $(strip $($(PKGV)_VERSION)),$(__embtk_pkg_usegit),$(__embtk_pkg_usesvn))
 
-__embtk_pkg_package_f		= $(strip $(DOWNLOAD_DIR))/$(__embtk_pkg_package)
+__embtk_pkg_package_f		= $(strip $(embtk_dldir))/$(__embtk_pkg_package)
 __embtk_pkg_srcdir		= $(or $(__embtk_pkg_localgit),$(__embtk_pkg_localsvn),$(patsubst %/,%,$(strip $($(PKGV)_SRC_DIR))))
 __embtk_pkg_builddir		= $(patsubst %/,%,$(strip $($(PKGV)_BUILD_DIR)))
 

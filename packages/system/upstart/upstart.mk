@@ -53,21 +53,21 @@ $(UPSTART_BUILD_DIR)/.installed: $(UPSTART_DEPS) download_upstart \
 download_upstart:
 	$(call embtk_pinfo,"Downloading $(UPSTART_PACKAGE) \
 	if necessary...")
-	@test -e $(DOWNLOAD_DIR)/$(UPSTART_PACKAGE) || \
-	wget -O $(DOWNLOAD_DIR)/$(UPSTART_PACKAGE) \
+	@test -e $(embtk_dldir)/$(UPSTART_PACKAGE) || \
+	wget -O $(embtk_dldir)/$(UPSTART_PACKAGE) \
 	$(UPSTART_SITE)/$(UPSTART_PACKAGE)
 ifeq ($(CONFIG_EMBTK_UPSTART_NEED_PATCH),y)
-	@test -e $(DOWNLOAD_DIR)/upstart-$(UPSTART_VERSION).patch || \
-	wget -O $(DOWNLOAD_DIR)/upstart-$(UPSTART_VERSION).patch \
+	@test -e $(embtk_dldir)/upstart-$(UPSTART_VERSION).patch || \
+	wget -O $(embtk_dldir)/upstart-$(UPSTART_VERSION).patch \
 	$(UPSTART_PATCH_SITE)/upstart-$(UPSTART_VERSION)-*.patch
 endif
 
 $(UPSTART_BUILD_DIR)/.decompressed:
 	$(call embtk_pinfo,"Decompressing $(UPSTART_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(DOWNLOAD_DIR)/$(UPSTART_PACKAGE)
+	@tar -C $(PACKAGES_BUILD) -xzf $(embtk_dldir)/$(UPSTART_PACKAGE)
 ifeq ($(CONFIG_EMBTK_UPSTART_NEED_PATCH),y)
 	@cd $(UPSTART_BUILD_DIR); \
-	patch -p1 < $(DOWNLOAD_DIR)/upstart-$(UPSTART_VERSION).patch
+	patch -p1 < $(embtk_dldir)/upstart-$(UPSTART_VERSION).patch
 endif
 	@touch $@
 
