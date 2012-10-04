@@ -27,8 +27,8 @@ AUTOMAKE_NAME		:= automake
 AUTOMAKE_VERSION	:= $(call embtk_get_pkgversion,AUTOMAKE)
 AUTOMAKE_SITE		:= http://ftp.gnu.org/gnu/automake
 AUTOMAKE_PACKAGE	:= automake-$(AUTOMAKE_VERSION).tar.xz
-AUTOMAKE_SRC_DIR	:= $(TOOLS_BUILD)/automake-$(AUTOMAKE_VERSION)
-AUTOMAKE_BUILD_DIR	:= $(TOOLS_BUILD)/automake-$(AUTOMAKE_VERSION)
+AUTOMAKE_SRC_DIR	:= $(embtk_toolsb)/automake-$(AUTOMAKE_VERSION)
+AUTOMAKE_BUILD_DIR	:= $(embtk_toolsb)/automake-$(AUTOMAKE_VERSION)
 
 AUTOMAKE_DIR	:= $(HOSTTOOLS)/usr
 ACLOCAL		:= $(AUTOMAKE_DIR)/bin/aclocal

@@ -26,8 +26,8 @@ PKGCONFIG_NAME		:= pkg-config
 PKGCONFIG_VERSION	:= $(call embtk_get_pkgversion,pkgconfig)
 PKGCONFIG_SITE		:= http://pkgconfig.freedesktop.org/releases
 PKGCONFIG_PACKAGE	:= pkg-config-$(PKGCONFIG_VERSION).tar.gz
-PKGCONFIG_SRC_DIR	:= $(TOOLS_BUILD)/pkg-config-$(PKGCONFIG_VERSION)
-PKGCONFIG_BUILD_DIR	:= $(TOOLS_BUILD)/pkg-config-$(PKGCONFIG_VERSION)
+PKGCONFIG_SRC_DIR	:= $(embtk_toolsb)/pkg-config-$(PKGCONFIG_VERSION)
+PKGCONFIG_BUILD_DIR	:= $(embtk_toolsb)/pkg-config-$(PKGCONFIG_VERSION)
 
 PKGCONFIG_BIN			:= $(HOSTTOOLS)/usr/bin/pkg-config
 

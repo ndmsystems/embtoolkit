@@ -27,7 +27,7 @@
 MAKEIMAGE_VERSION := 0.4
 MAKEIMAGE_SITE := http://ftp.debian.org/debian/pool/main/u/uboot-mkimage
 MAKEIMAGE_PACKAGE :=
-MAKEIMAGE_BUILD_DIR := $(TOOLS_BUILD)/mkimage
+MAKEIMAGE_BUILD_DIR := $(embtk_toolsb)/mkimage
 MAKEIMAGE_BIN := $(HOSTTOOLS)/usr/bin/mkimage
 export MAKEIMAGE_BIN
 
@@ -36,7 +36,7 @@ mkimage_install:
 	$(MAKE) $(MAKEIMAGE_BUILD_DIR)/.installed
 
 $(MAKEIMAGE_BUILD_DIR)/.installed: zlib_host_install
-	$(Q)cp -R $(EMBTK_ROOT)/src/mkimage $(TOOLS_BUILD)/
+	$(Q)cp -R $(EMBTK_ROOT)/src/mkimage $(embtk_toolsb)/
 	$(MAKE) -C $(MAKEIMAGE_BUILD_DIR) CPPFLAGS="-I$(HOSTTOOLS)/usr/include"
 	$(MAKE) -C $(MAKEIMAGE_BUILD_DIR) DESTDIR=$(HOSTTOOLS) install
 	@touch $@

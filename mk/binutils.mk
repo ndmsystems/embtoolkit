@@ -28,8 +28,8 @@ BINUTILS_VERSION	:= $(call embtk_get_pkgversion,binutils)
 BINUTILS_SITE		:= http://ftp.gnu.org/gnu/binutils
 BINUTILS_GIT_SITE	:= git://sourceware.org/git/binutils.git
 BINUTILS_PACKAGE	:= binutils-$(BINUTILS_VERSION).tar.bz2
-BINUTILS_SRC_DIR	:= $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)
-BINUTILS_BUILD_DIR	:= $(TOOLS_BUILD)/binutils-build
+BINUTILS_SRC_DIR	:= $(embtk_toolsb)/binutils-$(BINUTILS_VERSION)
+BINUTILS_BUILD_DIR	:= $(embtk_toolsb)/binutils-build
 
 BINUTILS_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot) --disable-werror	\
 			--disable-nls --disable-multilib		\

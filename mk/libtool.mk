@@ -27,8 +27,8 @@ LIBTOOL_NAME		:= libtool
 LIBTOOL_VERSION		:= $(call embtk_get_pkgversion,libtool)
 LIBTOOL_SITE		:= http://ftp.gnu.org/gnu/libtool
 LIBTOOL_PACKAGE		:= libtool-$(LIBTOOL_VERSION).tar.gz
-LIBTOOL_SRC_DIR		:= $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
-LIBTOOL_BUILD_DIR	:= $(TOOLS_BUILD)/libtool-$(LIBTOOL_VERSION)
+LIBTOOL_SRC_DIR		:= $(embtk_toolsb)/libtool-$(LIBTOOL_VERSION)
+LIBTOOL_BUILD_DIR	:= $(embtk_toolsb)/libtool-$(LIBTOOL_VERSION)
 
 LIBTOOL			:= $(HOSTTOOLS)/usr/bin/libtool
 LIBTOOLIZE		:= $(HOSTTOOLS)/usr/bin/libtoolize

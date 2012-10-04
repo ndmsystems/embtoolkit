@@ -27,8 +27,8 @@ ZLIB_HOST_NAME		:= zlib
 ZLIB_HOST_VERSION	:= $(call embtk_get_pkgversion,zlib_host)
 ZLIB_HOST_SITE		:= http://zlib.net
 ZLIB_HOST_PACKAGE	:= zlib-$(ZLIB_HOST_VERSION).tar.bz2
-ZLIB_HOST_SRC_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_HOST_VERSION)
-ZLIB_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/zlib-$(ZLIB_HOST_VERSION)
+ZLIB_HOST_SRC_DIR	:= $(embtk_toolsb)/zlib-$(ZLIB_HOST_VERSION)
+ZLIB_HOST_BUILD_DIR	:= $(embtk_toolsb)/zlib-$(ZLIB_HOST_VERSION)
 
 ZLIB_HOST_CONFIGURE_ENV		:= CC=$(HOSTCC_CACHED)
 

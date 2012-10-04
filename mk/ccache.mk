@@ -32,8 +32,8 @@ CCACHE_SITE		:= http://samba.org/ftp/ccache
 CCACHE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 CCACHE_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/ccache/$(CCACHE_VERSION)
 CCACHE_PACKAGE		:= ccache-$(CCACHE_VERSION).tar.bz2
-CCACHE_SRC_DIR		:= $(TOOLS_BUILD)/ccache-$(CCACHE_VERSION)
-CCACHE_BUILD_DIR	:= $(TOOLS_BUILD)/ccachehost-build
+CCACHE_SRC_DIR		:= $(embtk_toolsb)/ccache-$(CCACHE_VERSION)
+CCACHE_BUILD_DIR	:= $(embtk_toolsb)/ccachehost-build
 
 CCACHE_HOST_DIR		:= $(HOSTTOOLS)/usr/local/ccachehost
 CCACHE_DIR		:= $(EMBTK_ROOT)/.ccache

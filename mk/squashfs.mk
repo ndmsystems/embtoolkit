@@ -27,7 +27,7 @@ SQUASHFS_TOOLS_NAME		:= squashfs
 SQUASHFS_TOOLS_VERSION		:= $(call embtk_get_pkgversion,squashfs_tools)
 SQUASHFS_TOOLS_SITE		:= http://sourceforge.net/projects/squashfs/files/squashfs/squashfs$(SQUASHFS_TOOLS_VERSION)
 SQUASHFS_TOOLS_PACKAGE		:= squashfs$(SQUASHFS_TOOLS_VERSION).tar.gz
-SQUASHFS_TOOLS_SRC_DIR		:= $(TOOLS_BUILD)/squashfs$(SQUASHFS_TOOLS_VERSION)
+SQUASHFS_TOOLS_SRC_DIR		:= $(embtk_toolsb)/squashfs$(SQUASHFS_TOOLS_VERSION)
 SQUASHFS_TOOLS_BUILD_DIR	:= $(SQUASHFS_TOOLS_SRC_DIR)/squashfs-tools
 
 MKSQUASHFS_BIN	:= $(HOSTTOOLS)/usr/bin/mksquashfs

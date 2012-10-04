@@ -28,7 +28,7 @@ GCC_VERSION	:= $(call embtk_get_pkgversion,gcc)
 GCC_SITE	:= http://ftp.gnu.org/gnu/gcc/gcc-$(GCC_VERSION)
 GCC_GIT_SITE	:= git://gcc.gnu.org/git/gcc.git
 GCC_PACKAGE	:= gcc-$(GCC_VERSION).tar.bz2
-GCC_SRC_DIR	:= $(TOOLS_BUILD)/gcc-$(GCC_VERSION)
+GCC_SRC_DIR	:= $(embtk_toolsb)/gcc-$(GCC_VERSION)
 
 GCC_MULTILIB	:= --disable-multilib
 
@@ -70,7 +70,7 @@ GCC1_SITE		:= $(GCC_SITE)
 GCC1_GIT_SITE		:= $(GCC_GIT_SITE)
 GCC1_PACKAGE		:= $(GCC_PACKAGE)
 GCC1_SRC_DIR		:= $(GCC_SRC_DIR)
-GCC1_BUILD_DIR		:= $(TOOLS_BUILD)/gcc1-build
+GCC1_BUILD_DIR		:= $(embtk_toolsb)/gcc1-build
 GCC1_KCONFIGS_NAME	:= GCC
 
 GCC1_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
@@ -98,7 +98,7 @@ GCC2_SITE		:= $(GCC_SITE)
 GCC2_GIT_SITE		:= $(GCC_GIT_SITE)
 GCC2_PACKAGE		:= $(GCC_PACKAGE)
 GCC2_SRC_DIR		:= $(GCC_SRC_DIR)
-GCC2_BUILD_DIR		:= $(TOOLS_BUILD)/gcc2-build
+GCC2_BUILD_DIR		:= $(embtk_toolsb)/gcc2-build
 GCC2_KCONFIGS_NAME	:= GCC
 
 GCC2_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
@@ -125,7 +125,7 @@ GCC3_SITE		:= $(GCC_SITE)
 GCC3_GIT_SITE		:= $(GCC_GIT_SITE)
 GCC3_PACKAGE		:= $(GCC_PACKAGE)
 GCC3_SRC_DIR		:= $(GCC_SRC_DIR)
-GCC3_BUILD_DIR		:= $(TOOLS_BUILD)/gcc3-build
+GCC3_BUILD_DIR		:= $(embtk_toolsb)/gcc3-build
 GCC3_KCONFIGS_NAME	:= GCC
 
 GCC3_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin

@@ -27,8 +27,8 @@ GPERF_HOST_NAME		:= gperf
 GPERF_HOST_VERSION	:= $(call embtk_get_pkgversion,gperf_host)
 GPERF_HOST_SITE		:= http://ftp.gnu.org/gnu/gperf
 GPERF_HOST_PACKAGE	:= gperf-$(GPERF_HOST_VERSION).tar.gz
-GPERF_HOST_SRC_DIR	:= $(TOOLS_BUILD)/gperf-$(GPERF_HOST_VERSION)
-GPERF_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/gperf-$(GPERF_HOST_VERSION)
+GPERF_HOST_SRC_DIR	:= $(embtk_toolsb)/gperf-$(GPERF_HOST_VERSION)
+GPERF_HOST_BUILD_DIR	:= $(embtk_toolsb)/gperf-$(GPERF_HOST_VERSION)
 
 gperf_host_clean:
 	$(Q)rm -rf $(GPERF_HOST_BUILD_DIR)

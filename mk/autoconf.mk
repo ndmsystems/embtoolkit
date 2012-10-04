@@ -27,8 +27,8 @@ AUTOCONF_NAME		:= autoconf
 AUTOCONF_VERSION	:= $(call embtk_get_pkgversion,autoconf)
 AUTOCONF_SITE		:= http://ftp.gnu.org/gnu/autoconf
 AUTOCONF_PACKAGE	:= autoconf-$(AUTOCONF_VERSION).tar.bz2
-AUTOCONF_SRC_DIR	:= $(TOOLS_BUILD)/autoconf-$(AUTOCONF_VERSION)
-AUTOCONF_BUILD_DIR	:= $(TOOLS_BUILD)/autoconf-$(AUTOCONF_VERSION)
+AUTOCONF_SRC_DIR	:= $(embtk_toolsb)/autoconf-$(AUTOCONF_VERSION)
+AUTOCONF_BUILD_DIR	:= $(embtk_toolsb)/autoconf-$(AUTOCONF_VERSION)
 
 # autoconf binaries
 AUTOCONF_DIR	:= $(HOSTTOOLS)/usr

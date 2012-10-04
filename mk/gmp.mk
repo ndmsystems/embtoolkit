@@ -27,8 +27,8 @@ GMP_HOST_NAME		:= gmp
 GMP_HOST_VERSION	:= $(call embtk_get_pkgversion,gmp_host)
 GMP_HOST_SITE		:= ftp://ftp.gmplib.org/pub/gmp-$(GMP_HOST_VERSION)
 GMP_HOST_PACKAGE	:= gmp-$(GMP_HOST_VERSION).tar.bz2
-GMP_HOST_SRC_DIR	:= $(TOOLS_BUILD)/gmp-$(GMP_HOST_VERSION)
-GMP_HOST_BUILD_DIR	:= $(TOOLS_BUILD)/gmp-build
+GMP_HOST_SRC_DIR	:= $(embtk_toolsb)/gmp-$(GMP_HOST_VERSION)
+GMP_HOST_BUILD_DIR	:= $(embtk_toolsb)/gmp-build
 GMP_HOST_DIR		:= $(HOSTTOOLS)/usr/local/gmp-host
 
 export GMP_HOST_DIR

@@ -28,8 +28,8 @@ M4_VERSION	:= $(call embtk_get_pkgversion,m4)
 M4_SITE		:= http://ftp.gnu.org/gnu/m4
 M4_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 M4_PACKAGE	:= m4-$(M4_VERSION).tar.bz2
-M4_SRC_DIR	:= $(TOOLS_BUILD)/m4-$(M4_VERSION)
-M4_BUILD_DIR	:= $(TOOLS_BUILD)/m4-$(M4_VERSION)
+M4_SRC_DIR	:= $(embtk_toolsb)/m4-$(M4_VERSION)
+M4_BUILD_DIR	:= $(embtk_toolsb)/m4-$(M4_VERSION)
 
 # m4 binaries
 M4_DIR	:= $(HOSTTOOLS)/usr

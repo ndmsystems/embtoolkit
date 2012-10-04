@@ -23,7 +23,7 @@
 #########################################################################################
 
 MAKEDEVS_NAME		:= makedevs
-MAKEDEVS_BUILD_DIR	:= $(TOOLS_BUILD)/makedevs-build
+MAKEDEVS_BUILD_DIR	:= $(embtk_toolsb)/makedevs-build
 MAKEDEVS_SRC		:= $(EMBTK_ROOT)/src/makedevs
 
 MAKEDEVS_DIR		:= $(HOSTTOOLS)/usr/bin

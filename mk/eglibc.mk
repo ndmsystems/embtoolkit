@@ -27,9 +27,9 @@ EGLIBC_NAME			:= eglibc
 EGLIBC_HEADERS_NAME		:= eglibc_headers
 EGLIBC_VERSION			:= $(call embtk_get_pkgversion,eglibc)
 EGLIBC_SVN_SITE			:= http://www.eglibc.org/svn
-EGLIBC_BUILD_DIR 		:= $(TOOLS_BUILD)/eglibc
+EGLIBC_BUILD_DIR 		:= $(embtk_toolsb)/eglibc
 EGLIBC_SRC_DIR			:= $(call __embtk_pkg_localsvn,eglibc)
-EGLIBC_HEADERS_BUILD_DIR	:= $(TOOLS_BUILD)/eglibc-headers
+EGLIBC_HEADERS_BUILD_DIR	:= $(embtk_toolsb)/eglibc-headers
 EGLIBC_HEADERS_SRC_DIR		:= $(call __embtk_pkg_localsvn,eglibc)
 EGLIBC_HEADERS_KCONFIGS_NAME	:= EGLIBC
 
