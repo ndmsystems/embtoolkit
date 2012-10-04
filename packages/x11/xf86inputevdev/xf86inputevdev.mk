@@ -40,5 +40,5 @@ XF86INPUTEVDEV_PKGCONFIGS	= xorg-evdev.pc
 XF86INPUTEVDEV_DEPS		= xserver_install
 
 define embtk_postinstall_xf86inputevdev
-	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/xorg $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/xorg $(ROOTFS)/usr/$(LIBDIR)/
 endef

@@ -66,7 +66,7 @@ $(GDB_BUILD_DIR)/.gdbserver_installed: $(GDB_DEPS)				\
 		$(GDB_BUILD_DIR)/.gdbserver_configured
 	$(Q)$(MAKE) -C $(GDB_BUILD_DIR) $(J)
 	$(Q)$(MAKE) -C $(GDB_BUILD_DIR)/gdb/gdbserver				\
-		DESTDIR=$(SYSROOT)/$(GDB_SYSROOT_SUFFIX) install
+		DESTDIR=$(embtk_sysroot)/$(GDB_SYSROOT_SUFFIX) install
 	$(Q)$(MAKE) libtool_files_adapt
 	@touch $@
 

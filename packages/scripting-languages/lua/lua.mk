@@ -42,7 +42,7 @@ LUACONF_H_OPTS	= -DCONFIG_LUA_ROOT="/usr/" -DCONFIG_SYSTEM_LIBDIR="$(LIBDIR)/"
 LUACONF_H_OPTS	+= -DLUA_USE_DLOPEN -DLUA_USE_MKSTEMP -DLUA_USE_ULONGJMP
 LUACONF_H_OPTS	+= -DLUA_USE_POPEN -DLUA_USE_ISATTY
 
-LUA_MAKE_OPTS	= INSTALL_TOP=$(SYSROOT)/usr/ LIBDIR=$(LIBDIR) PLAT=ansi
+LUA_MAKE_OPTS	= INSTALL_TOP=$(embtk_sysroot)/usr/ LIBDIR=$(LIBDIR) PLAT=ansi
 
 lua_install:
 	$(call embtk_makeinstall_pkg,lua)
@@ -50,8 +50,8 @@ lua_install:
 define embtk_beforeinstall_lua
 	$(Q)$(MAKE) -C $(LUA_BUILD_DIR) PLAT=ansi CC=$(TARGETCC_CACHED)		\
 	AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB)				\
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"		\
-	CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include $(LUACONF_H_OPTS)"
+	LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"		\
+	CFLAGS="$(TARGET_CFLAGS) -I$(embtk_sysroot)/usr/include $(LUACONF_H_OPTS)"
 endef
 
 define embtk_postinstall_lua
@@ -59,6 +59,6 @@ define embtk_postinstall_lua
 	$(Q)mkdir -p $(ROOTFS)/usr
 	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
 	$(Q)mkdir -p $(ROOTFS)/usr/share
-	$(Q)cp -R $(SYSROOT)/usr/$(LIBDIR)/lua $(ROOTFS)/usr/$(LIBDIR)/
-	$(Q)cp -R $(SYSROOT)/usr/share/lua $(ROOTFS)/usr/share/
+	$(Q)cp -R $(embtk_sysroot)/usr/$(LIBDIR)/lua $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)cp -R $(embtk_sysroot)/usr/share/lua $(ROOTFS)/usr/share/
 endef

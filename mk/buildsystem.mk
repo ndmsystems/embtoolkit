@@ -128,17 +128,17 @@ startbuild:
 		$(__embtk_mk_pwarning_restartbuild),$(__embtk_mk_startbuild))
 
 define __embtk_mk_initsysrootdirs
-	mkdir -p $(SYSROOT)
-	mkdir -p $(SYSROOT)/lib
-	mkdir -p $(SYSROOT)/usr
-	mkdir -p $(SYSROOT)/usr/etc
-	mkdir -p $(SYSROOT)/root
-	mkdir -p $(SYSROOT)/usr/lib
-	$(if $(CONFIG_EMBTK_32BITS_FS),,cd $(SYSROOT);				\
-		ln -sf lib lib64; cd $(SYSROOT)/usr;ln -sf lib lib64)
+	mkdir -p $(embtk_sysroot)
+	mkdir -p $(embtk_sysroot)/lib
+	mkdir -p $(embtk_sysroot)/usr
+	mkdir -p $(embtk_sysroot)/usr/etc
+	mkdir -p $(embtk_sysroot)/root
+	mkdir -p $(embtk_sysroot)/usr/lib
+	$(if $(CONFIG_EMBTK_32BITS_FS),,cd $(embtk_sysroot);				\
+		ln -sf lib lib64; cd $(embtk_sysroot)/usr;ln -sf lib lib64)
 	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
-		cd $(SYSROOT); ln -sf lib lib64; mkdir -p lib32;		\
-		cd $(SYSROOT)/usr; ln -sf lib lib64; mkdir -p lib32)
+		cd $(embtk_sysroot); ln -sf lib lib64; mkdir -p lib32;		\
+		cd $(embtk_sysroot)/usr; ln -sf lib lib64; mkdir -p lib32)
 endef
 
 define __embtk_mk_inittoolsdirs
@@ -175,5 +175,5 @@ endef
 
 rmallpath:
 	$(Q)rm -rf $(PACKAGES_BUILD)* $(ROOTFS)* $(embtk_tools)* $(TOOLS_BUILD)*
-	$(Q)rm -rf $(SYSROOT)* $(HOSTTOOLS)* $(EMBTK_GENERATED)/rootfs-*
+	$(Q)rm -rf $(embtk_sysroot)* $(HOSTTOOLS)* $(EMBTK_GENERATED)/rootfs-*
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(embtk_dldir)/*.patch)

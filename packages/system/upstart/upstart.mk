@@ -85,8 +85,8 @@ $(UPSTART_BUILD_DIR)/.configured:
 	OBJCOPY=$(TARGETOBJCOPY) \
 	CFLAGS="$(TARGET_CFLAGS)" \
 	CXXFLAGS="$(TARGET_CFLAGS)" \
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)" \
-	CPPFLAGS="-I$(SYSROOT)/usr/include" \
+	LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)" \
+	CPPFLAGS="-I$(embtk_sysroot)/usr/include" \
 	PKG_CONFIG=$(PKGCONFIG_BIN) \
 	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH) \
 	./configure --build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET) \
@@ -96,17 +96,17 @@ $(UPSTART_BUILD_DIR)/.configured:
 
 upstart_clean:
 	$(call embtk_pinfo,"cleanup upstart...")
-	$(Q)-cd $(SYSROOT)/usr/bin; rm -rf $(UPSTART_BINS)
-	$(Q)-cd $(SYSROOT)/usr/sbin; rm -rf $(UPSTART_SBINS)
-	$(Q)-cd $(SYSROOT)/usr/include; rm -rf $(UPSTART_INCLUDES)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR); rm -rf $(UPSTART_LIBS)
-	$(Q)-cd $(SYSROOT)/usr/$(LIBDIR)/pkgconfig; rm -rf $(UPSTART_PKGCONFIGS)
+	$(Q)-cd $(embtk_sysroot)/usr/bin; rm -rf $(UPSTART_BINS)
+	$(Q)-cd $(embtk_sysroot)/usr/sbin; rm -rf $(UPSTART_SBINS)
+	$(Q)-cd $(embtk_sysroot)/usr/include; rm -rf $(UPSTART_INCLUDES)
+	$(Q)-cd $(embtk_sysroot)/usr/$(LIBDIR); rm -rf $(UPSTART_LIBS)
+	$(Q)-cd $(embtk_sysroot)/usr/$(LIBDIR)/pkgconfig; rm -rf $(UPSTART_PKGCONFIGS)
 	$(Q)-rm -rf $(UPSTART_BUILD_DIR)*
 
 $(UPSTART_BUILD_DIR)/.special:
 	$(Q)-mkdir -p $(ROOTFS)/etc
 	$(Q)-mkdir -p $(ROOTFS)/etc/dbus-1
 	$(Q)-mkdir -p $(ROOTFS)/etc/dbus-1/system.d
-	$(Q)-cp $(SYSROOT)/etc/dbus-1/system.d/Upstart.conf \
+	$(Q)-cp $(embtk_sysroot)/etc/dbus-1/system.d/Upstart.conf \
 	$(ROOTFS)/etc/dbus-1/system.d
-	$(Q)-cp -R $(SYSROOT)/etc/init $(ROOTFS)/etc/
+	$(Q)-cp -R $(embtk_sysroot)/etc/init $(ROOTFS)/etc/

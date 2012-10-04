@@ -130,7 +130,7 @@ endef
 
 define __embtk_toolchain_compress
 	tar -cjf $(TOOLCHAIN_PACKAGE)						\
-		$(notdir $(SYSROOT)) $(notdir $(embtk_tools)) &&			\
+		$(notdir $(embtk_sysroot)) $(notdir $(embtk_tools)) &&			\
 	mv $(TOOLCHAIN_PACKAGE) $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 endef
 
@@ -162,7 +162,7 @@ define __embtk_toolchain_build
 		$(foreach dep,$(patsubst %_install,%,$(TOOLCHAIN_DEPS)),
 			$(MAKE) $(dep)_clean;)
 		$(foreach pkg,$(__embtk_rootfs_pkgs-y),$(MAKE) $(pkg)_clean;)
-		rm -rf $(SYSROOT) $(embtk_tools)
+		rm -rf $(embtk_sysroot) $(embtk_tools)
 		$(__embtk_toolchain_mkinitdirs)
 		$(MAKE) $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
 		touch $(TOOLCHAIN_DIR)/.installed)

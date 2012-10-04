@@ -40,5 +40,5 @@ XF86VIDEOFBDEV_PKGCONFIGS	=
 XF86VIDEOFBDEV_DEPS = xserver_install
 
 define embtk_postinstall_xf86videofbdev
-	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/xorg $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/xorg $(ROOTFS)/usr/$(LIBDIR)/
 endef

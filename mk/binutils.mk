@@ -31,7 +31,7 @@ BINUTILS_PACKAGE	:= binutils-$(BINUTILS_VERSION).tar.bz2
 BINUTILS_SRC_DIR	:= $(TOOLS_BUILD)/binutils-$(BINUTILS_VERSION)
 BINUTILS_BUILD_DIR	:= $(TOOLS_BUILD)/binutils-build
 
-BINUTILS_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT) --disable-werror	\
+BINUTILS_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot) --disable-werror	\
 			--disable-nls --disable-multilib		\
 			--target=$(STRICT_GNU_TARGET)
 BINUTILS_PREFIX		:= $(embtk_tools)

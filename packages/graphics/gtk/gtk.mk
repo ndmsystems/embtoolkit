@@ -59,33 +59,33 @@ GTK_CONFIGURE_OPTS	+= LIBPNG=-lpng
 define embtk_postinstall_gtk
 	$(Q)test -e $(GTK_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(GTK_BUILD_DIR)/.patchlibtool
-	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/gtk-* $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/gtk-* $(ROOTFS)/usr/$(LIBDIR)/
 endef
 
 $(GTK_BUILD_DIR)/.patchlibtool:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	GTK_LT_FILES=`find $(SYSROOT)/usr/lib32/ -type f -name *.la`; \
+	GTK_LT_FILES=`find $(embtk_sysroot)/usr/lib32/ -type f -name *.la`; \
 	for i in $$GTK_LT_FILES; \
 	do \
 	sed \
-	-e "s; \/usr\/lib32\/libgtk-directfb-2.0.la ; $(SYSROOT)\/usr\/lib32\/libgtk-directfb-2.0.la ;" \
-	-e "s; \/usr\/lib32\/libgdk-directfb-2.0.la ; $(SYSROOT)\/usr\/lib32\/libgdk-directfb-2.0.la ;" \
-	-e "s; \/usr\/lib32\/libgdk_pixbuf-2.0.la ; $(SYSROOT)\/usr\/lib32\/libgdk_pixbuf-2.0.la ;" \
-	-e "s; \/usr\/lib\/libgtk-x11-2.0.la ; $(SYSROOT)\/usr\/lib\/libgtk-x11-2.0.la ;" \
-	-e "s; \/usr\/lib\/libgdk-x11-2.0.la ; $(SYSROOT)\/usr\/lib\/libgdk-x11-2.0.la ;" \
+	-e "s; \/usr\/lib32\/libgtk-directfb-2.0.la ; $(embtk_sysroot)\/usr\/lib32\/libgtk-directfb-2.0.la ;" \
+	-e "s; \/usr\/lib32\/libgdk-directfb-2.0.la ; $(embtk_sysroot)\/usr\/lib32\/libgdk-directfb-2.0.la ;" \
+	-e "s; \/usr\/lib32\/libgdk_pixbuf-2.0.la ; $(embtk_sysroot)\/usr\/lib32\/libgdk_pixbuf-2.0.la ;" \
+	-e "s; \/usr\/lib\/libgtk-x11-2.0.la ; $(embtk_sysroot)\/usr\/lib\/libgtk-x11-2.0.la ;" \
+	-e "s; \/usr\/lib\/libgdk-x11-2.0.la ; $(embtk_sysroot)\/usr\/lib\/libgdk-x11-2.0.la ;" \
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done
 else
-	GTK_LT_FILES=`find $(SYSROOT)/usr/lib/ -type f -name *.la`; \
+	GTK_LT_FILES=`find $(embtk_sysroot)/usr/lib/ -type f -name *.la`; \
 	for i in $$GTK_LT_FILES; \
 	do \
 	sed \
-	-e "s; \/usr\/lib\/libgtk-directfb-2.0.la ; $(SYSROOT)\/usr\/lib\/libgtk-directfb-2.0.la ;" \
-	-e "s; \/usr\/lib\/libgdk-directfb-2.0.la ; $(SYSROOT)\/usr\/lib\/libgdk-directfb-2.0.la ;" \
-	-e "s; \/usr\/lib\/libgdk_pixbuf-2.0.la ; $(SYSROOT)\/usr\/lib\/libgdk_pixbuf-2.0.la ;" \
-	-e "s; \/usr\/lib\/libgtk-x11-2.0.la ; $(SYSROOT)\/usr\/lib\/libgtk-x11-2.0.la ;" \
-	-e "s; \/usr\/lib\/libgdk-x11-2.0.la ; $(SYSROOT)\/usr\/lib\/libgdk-x11-2.0.la ;" \
+	-e "s; \/usr\/lib\/libgtk-directfb-2.0.la ; $(embtk_sysroot)\/usr\/lib\/libgtk-directfb-2.0.la ;" \
+	-e "s; \/usr\/lib\/libgdk-directfb-2.0.la ; $(embtk_sysroot)\/usr\/lib\/libgdk-directfb-2.0.la ;" \
+	-e "s; \/usr\/lib\/libgdk_pixbuf-2.0.la ; $(embtk_sysroot)\/usr\/lib\/libgdk_pixbuf-2.0.la ;" \
+	-e "s; \/usr\/lib\/libgtk-x11-2.0.la ; $(embtk_sysroot)\/usr\/lib\/libgtk-x11-2.0.la ;" \
+	-e "s; \/usr\/lib\/libgdk-x11-2.0.la ; $(embtk_sysroot)\/usr\/lib\/libgdk-x11-2.0.la ;" \
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done

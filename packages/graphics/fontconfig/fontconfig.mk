@@ -37,8 +37,8 @@ FONTCONFIG_INCLUDES	= fontconfig
 FONTCONFIG_LIBS		= libfontconfig*
 FONTCONFIG_PKGCONFIGS	= fontconfig.pc
 
-LIBXML2_CFLAGS-y	= -I$(SYSROOT)/usr/include/libxml2
-LIBXML2_LIBS-y		= -L$(SYSROOT)/usr/$(LIBDIR) -lxml2
+LIBXML2_CFLAGS-y	= -I$(embtk_sysroot)/usr/include/libxml2
+LIBXML2_LIBS-y		= -L$(embtk_sysroot)/usr/$(LIBDIR) -lxml2
 
 FREETYPE_CFLAGS-y	= $(shell						\
 				PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)	\
@@ -66,5 +66,5 @@ FONTCONFIG_MAKE_OPTS		+= FREETYPE_LIBS="$(FREETYPE_LIBS-y)"
 FONTCONFIG_DEPS			:= libxml2_install freetype_install
 
 define embtk_postinstall_fontconfig
-	$(Q)-cp -R $(SYSROOT)/usr/etc/fonts $(ROOTFS)/etc/
+	$(Q)-cp -R $(embtk_sysroot)/usr/etc/fonts $(ROOTFS)/etc/
 endef

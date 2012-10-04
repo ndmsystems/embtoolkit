@@ -32,7 +32,7 @@ OPENSSL_SRC_DIR		:= $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
 OPENSSL_BUILD_DIR	:= $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
 
 OPENSSL_NODESTDIR	:= y
-OPENSSL_MAKE_OPTS	:= CC=$(TARGETCC_CACHED) INSTALL_PREFIX=$(SYSROOT)
+OPENSSL_MAKE_OPTS	:= CC=$(TARGETCC_CACHED) INSTALL_PREFIX=$(embtk_sysroot)
 OPENSSL_MAKE_OPTS	+= LIBDIR=$(LIBDIR) MANDIR=/usr/share/man -j1
 
 OPENSSL_ETC		= ssl
@@ -72,5 +72,5 @@ define embtk_postinstall_openssl
 	fi
 	$(Q)mkdir -p $(ROOTFS)
 	$(Q)mkdir -p $(ROOTFS)/etc
-	$(Q)-cp -R $(SYSROOT)/etc/ssl $(ROOTFS)/etc/
+	$(Q)-cp -R $(embtk_sysroot)/etc/ssl $(ROOTFS)/etc/
 endef

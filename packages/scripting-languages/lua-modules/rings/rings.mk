@@ -34,10 +34,10 @@ RINGS_LIBS		=
 
 RINGS_DEPS		= lua_install
 
-RINGS_MAKE_OPTS		= PREFIX=$(SYSROOT)/usr/ LIBDIR=$(LIBDIR)
+RINGS_MAKE_OPTS		= PREFIX=$(embtk_sysroot)/usr/ LIBDIR=$(LIBDIR)
 RINGS_MAKE_OPTS		+= CC=$(TARGETCC_CACHED)
-RINGS_MAKE_OPTS		+= LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"
-RINGS_MAKE_OPTS		+= CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include"
+RINGS_MAKE_OPTS		+= LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"
+RINGS_MAKE_OPTS		+= CFLAGS="$(TARGET_CFLAGS) -I$(embtk_sysroot)/usr/include"
 
 rings_install:
 	$(call embtk_makeinstall_pkg,rings)
@@ -47,6 +47,6 @@ define embtk_postinstall_rings
 	$(Q)mkdir -p $(ROOTFS)/usr
 	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
 	$(Q)mkdir -p $(ROOTFS)/usr/share
-	$(Q)cp -R $(SYSROOT)/usr/$(LIBDIR)/lua $(ROOTFS)/usr/$(LIBDIR)/
-	$(Q)cp -R $(SYSROOT)/usr/share/lua $(ROOTFS)/usr/share/
+	$(Q)cp -R $(embtk_sysroot)/usr/$(LIBDIR)/lua $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)cp -R $(embtk_sysroot)/usr/share/lua $(ROOTFS)/usr/share/
 endef

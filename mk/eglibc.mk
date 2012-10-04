@@ -107,7 +107,7 @@ define embtk_configure_eglibc
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
-	--prefix=/usr --with-headers=$(SYSROOT)/usr/include			\
+	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include			\
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
 	--enable-add-ons --enable-kernel="2.6.27" $(embtk_eglibc_versioning-y)	\
@@ -125,7 +125,7 @@ define embtk_configure_eglibc_headers
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
-	--prefix=/usr --with-headers=$(SYSROOT)/usr/include			\
+	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include			\
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
 	--enable-add-ons --enable-kernel="2.6.27" $(embtk_eglibc_versioning-y)	\
@@ -136,19 +136,19 @@ endef
 define embtk_install_eglibc
 	PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) $(J)
 	PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) install	\
-							install_root=$(SYSROOT)
+							install_root=$(embtk_sysroot)
 	touch $(EGLIBC_BUILD_DIR)/.installed
 endef
 
 define embtk_install_eglibc_headers
 	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) install-headers			\
-		install_root=$(SYSROOT) install-bootstrap-headers=yes &&	\
+		install_root=$(embtk_sysroot) install-bootstrap-headers=yes &&	\
 		$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) csu/subdir_lib
-	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crt1.o $(SYSROOT)/usr/lib/
-	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crti.o $(SYSROOT)/usr/lib/
-	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(SYSROOT)/usr/lib/
+	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crt1.o $(embtk_sysroot)/usr/lib/
+	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crti.o $(embtk_sysroot)/usr/lib/
+	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(embtk_sysroot)/usr/lib/
 	$(TARGETCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
-						-o $(SYSROOT)/usr/lib/libc.so
+						-o $(embtk_sysroot)/usr/lib/libc.so
 	touch $(EGLIBC_HEADERS_BUILD_DIR)/.installed
 endef
 

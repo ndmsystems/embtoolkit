@@ -34,10 +34,10 @@ LUAFILESYSTEM_LIBS		=
 
 LUAFILESYSTEM_DEPS		= lua_install
 
-LUAFILESYSTEM_MAKE_OPTS		= PREFIX=$(SYSROOT)/usr/ LIBDIR=$(LIBDIR)
+LUAFILESYSTEM_MAKE_OPTS		= PREFIX=$(embtk_sysroot)/usr/ LIBDIR=$(LIBDIR)
 LUAFILESYSTEM_MAKE_OPTS		+= CC=$(TARGETCC_CACHED)
-LUAFILESYSTEM_MAKE_OPTS		+= LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"
-LUAFILESYSTEM_MAKE_OPTS		+= CFLAGS="$(TARGET_CFLAGS) -I$(SYSROOT)/usr/include"
+LUAFILESYSTEM_MAKE_OPTS		+= LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"
+LUAFILESYSTEM_MAKE_OPTS		+= CFLAGS="$(TARGET_CFLAGS) -I$(embtk_sysroot)/usr/include"
 
 luafilesystem_install:
 	$(call embtk_makeinstall_pkg,luafilesystem)
@@ -46,5 +46,5 @@ define embtk_postinstall_luafilesystem
 	$(Q)mkdir -p $(ROOTFS)
 	$(Q)mkdir -p $(ROOTFS)/usr
 	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
-	$(Q)cp -R $(SYSROOT)/usr/$(LIBDIR)/lua $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)cp -R $(embtk_sysroot)/usr/$(LIBDIR)/lua $(ROOTFS)/usr/$(LIBDIR)/
 endef

@@ -43,7 +43,7 @@ IMLIB2_DEPS		:= libpng_install freetype_install libjpeg_install
 
 define embtk_postinstall_imlib2
 	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
-	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/imlib2 $(ROOTFS)/usr/$(LIBDIR)
+	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/imlib2 $(ROOTFS)/usr/$(LIBDIR)
 	$(Q)-mkdir -p $(ROOTFS)/usr/share
-	$(Q)-cp -R $(SYSROOT)/usr/share/imlib2 $(ROOTFS)/usr/share
+	$(Q)-cp -R $(embtk_sysroot)/usr/share/imlib2 $(ROOTFS)/usr/share
 endef

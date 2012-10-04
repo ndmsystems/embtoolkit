@@ -58,8 +58,8 @@ define embtk_configure_zlib
 	OBJCOPY=$(TARGETOBJCOPY)					\
 	CFLAGS="$(TARGET_CFLAGS)"					\
 	CXXFLAGS="$(TARGET_CFLAGS)"					\
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"	\
-	CPPFLAGS="-I$(SYSROOT)/usr/include"				\
+	LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"	\
+	CPPFLAGS="-I$(embtk_sysroot)/usr/include"				\
 	PKG_CONFIG=$(PKGCONFIG_BIN)					\
 	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
 	$(ZLIB_CONFIGURE_ENV)						\

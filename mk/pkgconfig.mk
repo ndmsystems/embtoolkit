@@ -31,8 +31,8 @@ PKGCONFIG_BUILD_DIR	:= $(TOOLS_BUILD)/pkg-config-$(PKGCONFIG_VERSION)
 
 PKGCONFIG_BIN			:= $(HOSTTOOLS)/usr/bin/pkg-config
 
-__EMBTK_PKG_CONFIG_PATH		:= $(SYSROOT)/usr/$(LIBDIR)/pkgconfig
-__EMBTK_PKG_CONFIG_PATH		+= $(SYSROOT)/usr/share/pkgconfig
+__EMBTK_PKG_CONFIG_PATH		:= $(embtk_sysroot)/usr/$(LIBDIR)/pkgconfig
+__EMBTK_PKG_CONFIG_PATH		+= $(embtk_sysroot)/usr/share/pkgconfig
 EMBTK_PKG_CONFIG_PATH		:= $(subst $(embtk_space),:,$(__EMBTK_PKG_CONFIG_PATH))
 EMBTK_PKG_CONFIG_LIBDIR		:= $(EMBTK_PKG_CONFIG_PATH)
 

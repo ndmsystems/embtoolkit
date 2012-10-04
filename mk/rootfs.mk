@@ -119,17 +119,17 @@ define __embtk_rootfs_fill
 	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),
 		cd $(ROOTFS); ln -s lib lib64
 		cd $(ROOTFS)/usr; ln -s lib lib64)
-	-cp -d $(SYSROOT)/lib/*.so* $(ROOTFS)/lib/
-	-cp -d $(SYSROOT)/usr/lib/*.so* $(ROOTFS)/usr/lib/
+	-cp -d $(embtk_sysroot)/lib/*.so* $(ROOTFS)/lib/
+	-cp -d $(embtk_sysroot)/usr/lib/*.so* $(ROOTFS)/usr/lib/
 	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),
-		-cp -d $(SYSROOT)/lib32/*.so* $(ROOTFS)/lib32/
-		-cp -d $(SYSROOT)/usr/lib32/*.so* $(ROOTFS)/usr/lib32/)
-	-cp -R $(SYSROOT)/bin/* $(ROOTFS)/bin/ >/dev/null 2>/dev/null
-	-cp -R $(SYSROOT)/usr/bin/* $(ROOTFS)/usr/bin/
-	-cp -R $(SYSROOT)/sbin/* $(ROOTFS)/sbin/ >/dev/null 2>/dev/null
-	-cp -R $(SYSROOT)/usr/sbin/* $(ROOTFS)/usr/sbin/
-	-cp -R $(SYSROOT)/etc/* $(ROOTFS)/etc/ >/dev/null 2>/dev/null
-	cp -R $(SYSROOT)/root $(ROOTFS)/
+		-cp -d $(embtk_sysroot)/lib32/*.so* $(ROOTFS)/lib32/
+		-cp -d $(embtk_sysroot)/usr/lib32/*.so* $(ROOTFS)/usr/lib32/)
+	-cp -R $(embtk_sysroot)/bin/* $(ROOTFS)/bin/ >/dev/null 2>/dev/null
+	-cp -R $(embtk_sysroot)/usr/bin/* $(ROOTFS)/usr/bin/
+	-cp -R $(embtk_sysroot)/sbin/* $(ROOTFS)/sbin/ >/dev/null 2>/dev/null
+	-cp -R $(embtk_sysroot)/usr/sbin/* $(ROOTFS)/usr/sbin/
+	-cp -R $(embtk_sysroot)/etc/* $(ROOTFS)/etc/ >/dev/null 2>/dev/null
+	cp -R $(embtk_sysroot)/root $(ROOTFS)/
 	$(if $(CONFIG_EMBTK_TARGET_STRIPPED),
 		$(call embtk_pinfo,"Stripping binaries as specified...")
 		$(MAKE) __embtk_rootfs_strip)

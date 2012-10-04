@@ -57,14 +57,14 @@ define embtk_postinstall_libx11
 	$(MAKE) $(LIBX11_BUILD_DIR)/.patchlibtool
 	$(Q)-mkdir -p $(ROOTFS)/usr/share
 	$(Q)-mkdir -p $(ROOTFS)/usr/share/X11
-	$(Q)-cp $(SYSROOT)/usr/share/X11/XErrorDB $(ROOTFS)/usr/share/X11/
-	$(Q)-cp $(SYSROOT)/usr/share/X11/XKeysymDB $(ROOTFS)/usr/share/X11/
+	$(Q)-cp $(embtk_sysroot)/usr/share/X11/XErrorDB $(ROOTFS)/usr/share/X11/
+	$(Q)-cp $(embtk_sysroot)/usr/share/X11/XKeysymDB $(ROOTFS)/usr/share/X11/
 endef
 
 $(LIBX11_BUILD_DIR)/.patchlibtool:
-	@LIBX11_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libX11-* -type f -name *.la`; \
+	@LIBX11_LT_FILES=`find $(embtk_sysroot)/usr/$(LIBDIR)/libX11-* -type f -name *.la`; \
 	for i in $$LIBX11_LT_FILES; \
 	do \
 	sed \
-	-i "s; /usr/$(LIBDIR)/libX11.la ; $(SYSROOT)/usr/$(LIBDIR)/libX11.la ;" $$i; \
+	-i "s; /usr/$(LIBDIR)/libX11.la ; $(embtk_sysroot)/usr/$(LIBDIR)/libX11.la ;" $$i; \
 	done

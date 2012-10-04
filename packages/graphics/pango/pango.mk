@@ -51,16 +51,16 @@ PANGO_DEPS		:= glib_install fontconfig_install $(PANGO_DEPS-y)	\
 define embtk_postinstall_pango
 	$(Q)test -e $(PANGO_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(PANGO_BUILD_DIR)/.patchlibtool
-	$(Q)-cp -R $(SYSROOT)/usr/$(LIBDIR)/pango $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/pango $(ROOTFS)/usr/$(LIBDIR)/
 endef
 
 $(PANGO_BUILD_DIR)/.patchlibtool:
-	$(Q)PANGO_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/* -type f -name *.la`; \
+	$(Q)PANGO_LT_FILES=`find $(embtk_sysroot)/usr/$(LIBDIR)/* -type f -name *.la`; \
 	for i in $$PANGO_LT_FILES; \
 	do \
 	sed \
-	-e "s;\/usr\/$(LIBDIR)\/libpangoft2-1.0.la ; $(SYSROOT)\/usr\/$(LIBDIR)\/libpangoft2-1.0.la ;" \
-	-e "s;\/usr\/$(LIBDIR)\/libpango-1.0.la ; $(SYSROOT)\/usr\/$(LIBDIR)\/libpango-1.0.la ;" \
+	-e "s;\/usr\/$(LIBDIR)\/libpangoft2-1.0.la ; $(embtk_sysroot)\/usr\/$(LIBDIR)\/libpangoft2-1.0.la ;" \
+	-e "s;\/usr\/$(LIBDIR)\/libpango-1.0.la ; $(embtk_sysroot)\/usr\/$(LIBDIR)\/libpango-1.0.la ;" \
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done

@@ -36,5 +36,5 @@ XKEYBOARDCONFIG_DEPS		:= intltool_host_install xkbcomp_install
 define embtk_postinstall_xkeyboardconfig
 	$(Q)-mkdir -p $(ROOTFS)/usr/share
 	$(Q)-mkdir -p $(ROOTFS)/usr/share/X11
-	$(Q)-cp -R $(SYSROOT)/usr/share/X11/xkb $(ROOTFS)/usr/share/X11/
+	$(Q)-cp -R $(embtk_sysroot)/usr/share/X11/xkb $(ROOTFS)/usr/share/X11/
 endef

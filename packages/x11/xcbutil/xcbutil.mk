@@ -52,16 +52,16 @@ define embtk_postinstall_xcbutil
 endef
 
 $(XCBUTIL_BUILD_DIR)/.patchlibtool:
-	$(Q)XCBUTIL_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \
+	$(Q)XCBUTIL_LT_FILES=`find $(embtk_sysroot)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \
 	for i in $$XCBUTIL_LT_FILES; \
 	do \
 	sed \
-	-i "s; /usr/$(LIBDIR)/libxcb-event.la ; $(SYSROOT)/usr/$(LIBDIR)/libxcb-event.la ;" $$i; \
+	-i "s; /usr/$(LIBDIR)/libxcb-event.la ; $(embtk_sysroot)/usr/$(LIBDIR)/libxcb-event.la ;" $$i; \
 	sed \
-	-i "s; /usr/$(LIBDIR)/libxcb-aux.la ; $(SYSROOT)/usr/$(LIBDIR)/libxcb-aux.la ;" $$i; \
+	-i "s; /usr/$(LIBDIR)/libxcb-aux.la ; $(embtk_sysroot)/usr/$(LIBDIR)/libxcb-aux.la ;" $$i; \
 	sed \
-	-i "s; /usr/$(LIBDIR)/libxcb-property.la ; $(SYSROOT)/usr/$(LIBDIR)/libxcb-property.la ;" $$i; \
+	-i "s; /usr/$(LIBDIR)/libxcb-property.la ; $(embtk_sysroot)/usr/$(LIBDIR)/libxcb-property.la ;" $$i; \
 	sed \
-	-i "s; /usr/$(LIBDIR)/libxcb-atom.la ; $(SYSROOT)/usr/$(LIBDIR)/libxcb-atom.la ;" $$i; \
+	-i "s; /usr/$(LIBDIR)/libxcb-atom.la ; $(embtk_sysroot)/usr/$(LIBDIR)/libxcb-atom.la ;" $$i; \
 	done
 	$(Q)touch $@

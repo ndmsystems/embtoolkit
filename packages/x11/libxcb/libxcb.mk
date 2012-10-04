@@ -48,10 +48,10 @@ endef
 
 
 $(LIBXCB_BUILD_DIR)/.patchlibtool:
-	$(Q)LIBXCB_LT_FILES=`find $(SYSROOT)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \
+	$(Q)LIBXCB_LT_FILES=`find $(embtk_sysroot)/usr/$(LIBDIR)/libxcb-* -type f -name *.la`; \
 	for i in $$LIBXCB_LT_FILES; \
 	do \
 	sed \
-	-i "s; /usr/$(LIBDIR)/libxcb.la ; $(SYSROOT)/usr/$(LIBDIR)/libxcb.la ;" $$i; \
+	-i "s; /usr/$(LIBDIR)/libxcb.la ; $(embtk_sysroot)/usr/$(LIBDIR)/libxcb.la ;" $$i; \
 	done
 

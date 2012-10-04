@@ -64,10 +64,10 @@ endef
 
 #Macro to adapt libtool files (*.la) for cross compiling
 __ltlibdirold		= libdir='\/usr\/$(LIBDIR)\(.*\)'
-__ltlibdirnew		= libdir='$(SYSROOT)\/usr\/$(LIBDIR)\1'
+__ltlibdirnew		= libdir='$(embtk_sysroot)\/usr\/$(LIBDIR)\1'
 __lt_usr/lib		= $(embtk_space)\/usr\/$(LIBDIR)\/
-__lt_sysroot/usr/lib	= $(embtk_space)$(SYSROOT)\/usr\/$(LIBDIR)\/
-__lt_path		= $(addprefix $(SYSROOT)/usr/,$(or $(1),$(LIBDIR)))
+__lt_sysroot/usr/lib	= $(embtk_space)$(embtk_sysroot)\/usr\/$(LIBDIR)\/
+__lt_path		= $(addprefix $(embtk_sysroot)/usr/,$(or $(1),$(LIBDIR)))
 define __embtk_fix_libtool_files
 	__lt_las=`find $(__lt_path) -name *.la`;				\
 	for la in $$__lt_las; do						\
@@ -79,12 +79,12 @@ libtool_files_adapt:
 	$(Q)$(call __embtk_fix_libtool_files)
 
 # Macro to adapt pkg-config files for cross compiling
-__pkgconfig_includedir	= includedir=$(SYSROOT)/usr/include
-__pkgconfig_prefix	= prefix=$(SYSROOT)/usr
-__pkgconfig_libdir	= libdir=$(SYSROOT)/usr/$(LIBDIR)
+__pkgconfig_includedir	= includedir=$(embtk_sysroot)/usr/include
+__pkgconfig_prefix	= prefix=$(embtk_sysroot)/usr
+__pkgconfig_libdir	= libdir=$(embtk_sysroot)/usr/$(LIBDIR)
 define __embtk_fix_pkgconfig_files
-	__conf_files0=$$(find $(SYSROOT)/usr/$(LIBDIR)/pkgconfig -name *.pc);	\
-	__conf_files1=$$(find $(SYSROOT)/usr/share/pkgconfig -name *.pc);	\
+	__conf_files0=$$(find $(embtk_sysroot)/usr/$(LIBDIR)/pkgconfig -name *.pc);	\
+	__conf_files1=$$(find $(embtk_sysroot)/usr/share/pkgconfig -name *.pc);	\
 	for i in $$__conf_files0 $$__conf_files1; do				\
 		sed -e 's;prefix=.*;$(__pkgconfig_prefix);'			\
 		-e 's;includedir=$${prefix}/include;$(__pkgconfig_includedir);'	\
@@ -284,8 +284,8 @@ define embtk_configure_pkg
 	OBJCOPY=$(TARGETOBJCOPY)						\
 	CFLAGS="$(TARGET_CFLAGS)"						\
 	CXXFLAGS="$(TARGET_CFLAGS)"						\
-	LDFLAGS="-L$(SYSROOT)/$(LIBDIR) -L$(SYSROOT)/usr/$(LIBDIR)"		\
-	CPPFLAGS="-I$(SYSROOT)/usr/include"					\
+	LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"		\
+	CPPFLAGS="-I$(embtk_sysroot)/usr/include"					\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
 	PKG_CONFIG_PATH="$(EMBTK_PKG_CONFIG_PATH)"				\
 	PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"				\
@@ -350,13 +350,13 @@ __embtk_single_make = $(__embtk_pkg_makeenv) $(MAKE) -C $(__embtk_pkg_builddir)	
 __embtk_multi_make_install = $(foreach builddir,$(__embtk_pkg_makedirs),	\
 	$(__embtk_pkg_makeenv) $(MAKE) -C $(__embtk_pkg_builddir)/$(builddir)	\
 	$(if $(__embtk_pkg_nodestdir),,						\
-		DESTDIR=$(SYSROOT)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix))) \
+		DESTDIR=$(embtk_sysroot)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix))) \
 	$(__embtk_pkg_makeopts) install;)
 
 __embtk_single_make_install = $(__embtk_pkg_makeenv)				\
 	$(MAKE) -C $(__embtk_pkg_builddir)					\
 	$(if $(__embtk_pkg_nodestdir),,						\
-		DESTDIR=$(SYSROOT)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix))) \
+		DESTDIR=$(embtk_sysroot)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix))) \
 	$(__embtk_pkg_makeopts) install
 
 __embtk_multi_make_hostinstall = $(foreach builddir,$(__embtk_pkg_makedirs),	\
@@ -658,22 +658,22 @@ endef
 #
 define __embtk_cleanup_pkg
 	$(if $(__embtk_pkg_etc),
-		rm -rf $(addprefix $(SYSROOT)/etc/,$(__embtk_pkg_etc)))
+		rm -rf $(addprefix $(embtk_sysroot)/etc/,$(__embtk_pkg_etc)))
 	$(if $(__embtk_pkg_bins),
-		rm -rf $(addprefix $(SYSROOT)/usr/bin/,$(__embtk_pkg_bins)))
+		rm -rf $(addprefix $(embtk_sysroot)/usr/bin/,$(__embtk_pkg_bins)))
 	$(if $(__embtk_pkg_sbins),
-		rm -rf $(addprefix $(SYSROOT)/usr/sbin/,$(__embtk_pkg_sbins)))
+		rm -rf $(addprefix $(embtk_sysroot)/usr/sbin/,$(__embtk_pkg_sbins)))
 	$(if $(__embtk_pkg_includes),
-		rm -rf $(addprefix $(SYSROOT)/usr/include/,$(__embtk_pkg_includes)))
+		rm -rf $(addprefix $(embtk_sysroot)/usr/include/,$(__embtk_pkg_includes)))
 	$(if $(__embtk_pkg_libs),
-		rm -rf $(addprefix $(SYSROOT)/usr/$(LIBDIR)/,$(__embtk_pkg_libs)))
+		rm -rf $(addprefix $(embtk_sysroot)/usr/$(LIBDIR)/,$(__embtk_pkg_libs)))
 	$(if $(__embtk_pkg_libexecs),
-		rm -rf $(addprefix $(SYSROOT)/usr/libexec/,$(__embtk_pkg_libexecs)))
+		rm -rf $(addprefix $(embtk_sysroot)/usr/libexec/,$(__embtk_pkg_libexecs)))
 	$(if $(__embtk_pkg_pkgconfigs),
-		rm -rf $(addprefix $(SYSROOT)/usr/$(LIBDIR)/pkgconfig/,$(__embtk_pkg_pkgconfigs))
-		rm -rf $(addprefix $(SYSROOT)/usr/share/pkgconfig/,$(__embtk_pkg_pkgconfigs)))
+		rm -rf $(addprefix $(embtk_sysroot)/usr/$(LIBDIR)/pkgconfig/,$(__embtk_pkg_pkgconfigs))
+		rm -rf $(addprefix $(embtk_sysroot)/usr/share/pkgconfig/,$(__embtk_pkg_pkgconfigs)))
 	$(if $(__embtk_pkg_shares),
-		rm -rf $(addprefix $(SYSROOT)/usr/share/,$(__embtk_pkg_shares)))
+		rm -rf $(addprefix $(embtk_sysroot)/usr/share/,$(__embtk_pkg_shares)))
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),
 		rm -rf $(__embtk_pkg_dotconfigured_f)
 		rm -rf $(__embtk_pkg_dotinstalled_f),

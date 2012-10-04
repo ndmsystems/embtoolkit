@@ -47,7 +47,7 @@ GETTEXT_CONFIGURE_ENV	:= gl_cv_func_wcwidth_works=yes			\
 			gt_cv_int_divbyzero_sigfpe=no
 GETTEXT_CONFIGURE_OPTS	:= --enable-relocatable --with-included-gettext	\
 			--disable-rpath --disable-openmp --disable-java	\
-			--with-libxml2-prefix=$(SYSROOT)/usr		\
+			--with-libxml2-prefix=$(embtk_sysroot)/usr		\
 			--disable-openmp
 
 GETTEXT_DEPS = ncurses_install libxml2_install
@@ -61,13 +61,13 @@ endef
 #FIXME: this should be fixed in gettext project
 $(GETTEXT_BUILD_DIR)/.patchlibtool:
 	$(Q)sed \
-	-i "s;/usr/$(LIBDIR)/libintl.la;$(SYSROOT)/$(LIBDIR)/libintl.la;" \
-	$(SYSROOT)/usr/$(LIBDIR)/libgettextlib.la \
-	$(SYSROOT)/usr/$(LIBDIR)/libgettextpo.la \
-	$(SYSROOT)/usr/$(LIBDIR)/libgettextsrc.la
+	-i "s;/usr/$(LIBDIR)/libintl.la;$(embtk_sysroot)/$(LIBDIR)/libintl.la;" \
+	$(embtk_sysroot)/usr/$(LIBDIR)/libgettextlib.la \
+	$(embtk_sysroot)/usr/$(LIBDIR)/libgettextpo.la \
+	$(embtk_sysroot)/usr/$(LIBDIR)/libgettextsrc.la
 	$(Q)sed \
-	-i "s;/usr/$(LIBDIR)/libgettextlib.la;$(SYSROOT)/$(LIBDIR)/libgettextlib.la;" \
-	$(SYSROOT)/usr/$(LIBDIR)/libgettextsrc.la
+	-i "s;/usr/$(LIBDIR)/libgettextlib.la;$(embtk_sysroot)/$(LIBDIR)/libgettextlib.la;" \
+	$(embtk_sysroot)/usr/$(LIBDIR)/libgettextsrc.la
 	@touch $@
 
 # gettext for host development machine

@@ -107,54 +107,54 @@ define embtk_postinstall_directfb
 	$(Q)-cp $(DIRECTFB_BUILD_DIR)/fb.modes $(ROOTFS)/etc
 	$(Q)mkdir -p $(ROOTFS)/usr
 	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
-	$(Q)-cp -R $(SYSROOT)/usr/lib/directfb-*-* $(ROOTFS)/usr/$(LIBDIR)
+	$(Q)-cp -R $(embtk_sysroot)/usr/lib/directfb-*-* $(ROOTFS)/usr/$(LIBDIR)
 endef
 
 $(DIRECTFB_BUILD_DIR)/.patchlibtool:
 ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)DIRECTFB_LT_FILES=`find $(SYSROOT)/usr/lib32/directfb-* -type f -name *.la`; \
+	$(Q)DIRECTFB_LT_FILES=`find $(embtk_sysroot)/usr/lib32/directfb-* -type f -name *.la`; \
 	for i in $$DIRECTFB_LT_FILES; \
 	do \
 	sed \
-	-e "s; \/usr\/lib32\/libfusion.la ; $(SYSROOT)\/usr\/lib32\/libfusion.la ;" \
-	-e "s; \/usr\/lib32\/libdirect.la ; $(SYSROOT)\/usr\/lib32\/libdirect.la ;" \
-	-e "s; \/usr\/lib32\/libdirectfb.la ; $(SYSROOT)\/usr\/lib32\/libdirectfb.la ;" \
+	-e "s; \/usr\/lib32\/libfusion.la ; $(embtk_sysroot)\/usr\/lib32\/libfusion.la ;" \
+	-e "s; \/usr\/lib32\/libdirect.la ; $(embtk_sysroot)\/usr\/lib32\/libdirect.la ;" \
+	-e "s; \/usr\/lib32\/libdirectfb.la ; $(embtk_sysroot)\/usr\/lib32\/libdirectfb.la ;" \
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done
 	$(Q)sed \
-	-e "s; \/usr\/lib32\/libfusion.la ; $(SYSROOT)\/usr\/lib32\/libfusion.la ;" \
-	-e "s; \/usr\/lib32\/libdirect.la ; $(SYSROOT)\/usr\/lib32\/libdirect.la ;" \
-	-e "s; \/usr\/lib32\/libdirectfb.la ; $(SYSROOT)\/usr\/lib32\/libdirectfb.la ;" \
-	< $(SYSROOT)/usr/lib32/libfusion.la > libfusion.la.new; \
-	mv libfusion.la.new $(SYSROOT)/usr/lib32/libfusion.la
+	-e "s; \/usr\/lib32\/libfusion.la ; $(embtk_sysroot)\/usr\/lib32\/libfusion.la ;" \
+	-e "s; \/usr\/lib32\/libdirect.la ; $(embtk_sysroot)\/usr\/lib32\/libdirect.la ;" \
+	-e "s; \/usr\/lib32\/libdirectfb.la ; $(embtk_sysroot)\/usr\/lib32\/libdirectfb.la ;" \
+	< $(embtk_sysroot)/usr/lib32/libfusion.la > libfusion.la.new; \
+	mv libfusion.la.new $(embtk_sysroot)/usr/lib32/libfusion.la
 	$(Q)sed \
-	-e "s; \/usr\/lib32\/libfusion.la ; $(SYSROOT)\/usr\/lib32\/libfusion.la ;" \
-	-e "s; \/usr\/lib32\/libdirect.la ; $(SYSROOT)\/usr\/lib32\/libdirect.la ;" \
-	-e "s; \/usr\/lib32\/libdirectfb.la ; $(SYSROOT)\/usr\/lib32\/libdirectfb.la ;" \
-	< $(SYSROOT)/usr/lib32/libdirectfb.la > libdirectfb.la.new; \
-	mv libdirectfb.la.new $(SYSROOT)/usr/lib32/libdirectfb.la
+	-e "s; \/usr\/lib32\/libfusion.la ; $(embtk_sysroot)\/usr\/lib32\/libfusion.la ;" \
+	-e "s; \/usr\/lib32\/libdirect.la ; $(embtk_sysroot)\/usr\/lib32\/libdirect.la ;" \
+	-e "s; \/usr\/lib32\/libdirectfb.la ; $(embtk_sysroot)\/usr\/lib32\/libdirectfb.la ;" \
+	< $(embtk_sysroot)/usr/lib32/libdirectfb.la > libdirectfb.la.new; \
+	mv libdirectfb.la.new $(embtk_sysroot)/usr/lib32/libdirectfb.la
 else
-	$(Q)DIRECTFB_LT_FILES=`find $(SYSROOT)/usr/lib/directfb-* -type f -name *.la`; \
+	$(Q)DIRECTFB_LT_FILES=`find $(embtk_sysroot)/usr/lib/directfb-* -type f -name *.la`; \
 	for i in $$DIRECTFB_LT_FILES; \
 	do \
 	sed \
-	-e "s; \/usr\/lib\/libfusion.la ; $(SYSROOT)\/usr\/lib\/libfusion.la ;" \
-	-e "s; \/usr\/lib\/libdirect.la ; $(SYSROOT)\/usr\/lib\/libdirect.la ;" \
-	-e "s; \/usr\/lib\/libdirectfb.la ; $(SYSROOT)\/usr\/lib\/libdirectfb.la ;" \
+	-e "s; \/usr\/lib\/libfusion.la ; $(embtk_sysroot)\/usr\/lib\/libfusion.la ;" \
+	-e "s; \/usr\/lib\/libdirect.la ; $(embtk_sysroot)\/usr\/lib\/libdirect.la ;" \
+	-e "s; \/usr\/lib\/libdirectfb.la ; $(embtk_sysroot)\/usr\/lib\/libdirectfb.la ;" \
 	< $$i > $$i.new; \
 	mv $$i.new $$i; \
 	done
 	$(Q)sed \
-	-e "s; \/usr\/lib\/libfusion.la ; $(SYSROOT)\/usr\/lib\/libfusion.la ;" \
-	-e "s; \/usr\/lib\/libdirect.la ; $(SYSROOT)\/usr\/lib\/libdirect.la ;" \
-	-e "s; \/usr\/lib\/libdirectfb.la ; $(SYSROOT)\/usr\/lib\/libdirectfb.la ;" \
-	< $(SYSROOT)/usr/lib/libfusion.la > libfusion.la.new; \
-	mv libfusion.la.new $(SYSROOT)/usr/lib/libfusion.la
+	-e "s; \/usr\/lib\/libfusion.la ; $(embtk_sysroot)\/usr\/lib\/libfusion.la ;" \
+	-e "s; \/usr\/lib\/libdirect.la ; $(embtk_sysroot)\/usr\/lib\/libdirect.la ;" \
+	-e "s; \/usr\/lib\/libdirectfb.la ; $(embtk_sysroot)\/usr\/lib\/libdirectfb.la ;" \
+	< $(embtk_sysroot)/usr/lib/libfusion.la > libfusion.la.new; \
+	mv libfusion.la.new $(embtk_sysroot)/usr/lib/libfusion.la
 	$(Q)sed \
-	-e "s; \/usr\/lib\/libfusion.la ; $(SYSROOT)\/usr\/lib\/libfusion.la ;" \
-	-e "s; \/usr\/lib\/libdirect.la ; $(SYSROOT)\/usr\/lib\/libdirect.la ;" \
-	-e "s; \/usr\/lib\/libdirectfb.la ; $(SYSROOT)\/usr\/lib\/libdirectfb.la ;" \
-	< $(SYSROOT)/usr/lib/libdirectfb.la > libdirectfb.la.new; \
-	mv libdirectfb.la.new $(SYSROOT)/usr/lib/libdirectfb.la
+	-e "s; \/usr\/lib\/libfusion.la ; $(embtk_sysroot)\/usr\/lib\/libfusion.la ;" \
+	-e "s; \/usr\/lib\/libdirect.la ; $(embtk_sysroot)\/usr\/lib\/libdirect.la ;" \
+	-e "s; \/usr\/lib\/libdirectfb.la ; $(embtk_sysroot)\/usr\/lib\/libdirectfb.la ;" \
+	< $(embtk_sysroot)/usr/lib/libdirectfb.la > libdirectfb.la.new; \
+	mv libdirectfb.la.new $(embtk_sysroot)/usr/lib/libdirectfb.la
 endif

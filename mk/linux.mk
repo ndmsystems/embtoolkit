@@ -51,7 +51,7 @@ $(LINUX_BUILD_DIR)/.headers_installed:
 	$(Q)PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) 		\
 		headers_install ARCH=$(LINUX_ARCH)				\
 		CROSS_COMPILE=$(STRICT_GNU_TARGET)-				\
-		INSTALL_HDR_PATH=$(SYSROOT)/usr
+		INSTALL_HDR_PATH=$(embtk_sysroot)/usr
 	$(MAKE) -C $(LINUX_BUILD_DIR) distclean
 	$(MAKE) -C $(LINUX_BUILD_DIR) headers_install				\
 		INSTALL_HDR_PATH=$(HOSTTOOLS)/usr

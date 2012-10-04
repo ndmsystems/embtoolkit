@@ -34,7 +34,7 @@ CGILUA_LIBS		=
 
 CGILUA_DEPS		= lua_install luafilesystem_install rings_install
 
-CGILUA_MAKE_OPTS	= PREFIX=$(SYSROOT)/usr/
+CGILUA_MAKE_OPTS	= PREFIX=$(embtk_sysroot)/usr/
 
 cgilua_install:
 	$(call embtk_makeinstall_pkg,cgilua)
@@ -43,5 +43,5 @@ define embtk_postinstall_cgilua
 	$(Q)mkdir -p $(ROOTFS)
 	$(Q)mkdir -p $(ROOTFS)/usr
 	$(Q)mkdir -p $(ROOTFS)/usr/share
-	$(Q)cp -R $(SYSROOT)/usr/share/lua $(ROOTFS)/usr/share/
+	$(Q)cp -R $(embtk_sysroot)/usr/share/lua $(ROOTFS)/usr/share/
 endef

@@ -75,7 +75,7 @@ GCC1_KCONFIGS_NAME	:= GCC
 
 GCC1_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC1_PREFIX		:= $(embtk_tools)
-GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
+GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)				\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
 	$(GCC_MULTILIB)								\
@@ -103,7 +103,7 @@ GCC2_KCONFIGS_NAME	:= GCC
 
 GCC2_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC2_PREFIX		:= $(embtk_tools)
-GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
+GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)				\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
 	$(GCC_MULTILIB)								\
@@ -130,7 +130,7 @@ GCC3_KCONFIGS_NAME	:= GCC
 
 GCC3_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC3_PREFIX		:= $(embtk_tools)
-GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
+GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)				\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
 	$(GCC_MULTILIB)								\
@@ -152,14 +152,14 @@ endef
 
 $(GCC3_BUILD_DIR)/.gcc3_post_install:
 ifeq ($(CONFIG_EMBTK_32BITS_FS),y)
-	$(Q)-cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.so* $(SYSROOT)/lib/
+	$(Q)-cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.so* $(embtk_sysroot)/lib/
 else ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
-	$(Q)cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.so* $(SYSROOT)/lib/
+	$(Q)cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.so* $(embtk_sysroot)/lib/
 else ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.so* $(SYSROOT)/lib32/
+	$(Q)cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.so* $(embtk_sysroot)/lib32/
 endif
 ifeq ($(CONFIG_EMBTK_64BITS_FS)$(CONFIG_EMBTK_CLIB_UCLIBC),yy)
-	$(Q)cd $(SYSROOT)/lib/; ln -sf ld-uClibc.so.0 ld64-uClibc.so.0
+	$(Q)cd $(embtk_sysroot)/lib/; ln -sf ld-uClibc.so.0 ld64-uClibc.so.0
 endif
 	$(Q)touch $@
 
