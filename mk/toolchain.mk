@@ -95,7 +95,7 @@ AUTOTOOLS_INSTALL	+= automake_install
 __embtk_toolchain_clib	= $(if $(CONFIG_EMBTK_CLIB_EGLIBC),eglibc,uclibc)
 TOOLCHAIN_NAME		:= toolchain
 TOOLCHAIN_PACKAGE	:= toolchain-$(GNU_TARGET)-$(__embtk_toolchain_clib)-$(EMBTK_MCU_FLAG).tar.bz2
-TOOLCHAIN_DIR		:= $(EMBTK_GENERATED)/toolchain-$(GNU_TARGET)-$(__embtk_toolchain_clib)-$(EMBTK_MCU_FLAG)
+TOOLCHAIN_DIR		:= $(embtk_generated)/toolchain-$(GNU_TARGET)-$(__embtk_toolchain_clib)-$(EMBTK_MCU_FLAG)
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
 
 TOOLCHAIN_PRE_DEPS-y	:= ccache_install $(AUTOTOOLS_INSTALL)

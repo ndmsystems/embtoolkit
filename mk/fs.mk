@@ -33,7 +33,7 @@ define embtk_rootfs_mktarbz2
 	cd $(__embtk_tarbz2_rootdir);						\
 	$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) --				\
 	tar cjf $(__embtk_tarbz2_rootfs) *;					\
-	mv $(__embtk_tarbz2_rootfs) $(EMBTK_GENERATED)/
+	mv $(__embtk_tarbz2_rootfs) $(embtk_generated)/
 endef
 
 #

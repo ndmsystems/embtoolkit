@@ -77,7 +77,7 @@ clean: toolchain_clean rmallpath
 
 distclean: clean
 	$(Q)rm -rf dl/* src/*.git src/*.svn .config.old
-	$(Q)rm -rf $(EMBTK_GENERATED)
+	$(Q)rm -rf $(embtk_generated)
 
 define __embtk_mk_pwarning_restartbuild
 	$(call embtk_pwarning,"Wrong make target - Use correct make target")
@@ -175,5 +175,5 @@ endef
 
 rmallpath:
 	$(Q)rm -rf $(PACKAGES_BUILD)* $(ROOTFS)* $(embtk_tools)* $(embtk_toolsb)*
-	$(Q)rm -rf $(embtk_sysroot)* $(HOSTTOOLS)* $(EMBTK_GENERATED)/rootfs-*
+	$(Q)rm -rf $(embtk_sysroot)* $(HOSTTOOLS)* $(embtk_generated)/rootfs-*
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(embtk_dldir)/*.patch)
