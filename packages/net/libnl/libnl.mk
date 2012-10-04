@@ -27,8 +27,8 @@ LIBNL_NAME		:= libnl
 LIBNL_VERSION		:= $(call embtk_get_pkgversion,libnl)
 LIBNL_SITE		:= http://www.infradead.org/~tgr/libnl/files
 LIBNL_PACKAGE		:= libnl-$(LIBNL_VERSION).tar.gz
-LIBNL_SRC_DIR		:= $(PACKAGES_BUILD)/libnl-$(LIBNL_VERSION)
-LIBNL_BUILD_DIR		:= $(PACKAGES_BUILD)/libnl-$(LIBNL_VERSION)
+LIBNL_SRC_DIR		:= $(embtk_pkgb)/libnl-$(LIBNL_VERSION)
+LIBNL_BUILD_DIR		:= $(embtk_pkgb)/libnl-$(LIBNL_VERSION)
 
 LIBNL_SBINS		:= genl-ctrl-list nl-class-add nl-class-delete
 LIBNL_SBINS		+= nl-classid-lookup  nl-class-list  nl-cls-add

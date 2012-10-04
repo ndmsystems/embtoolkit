@@ -28,8 +28,8 @@ E2FSPROGS_VERSION	:= $(call embtk_get_pkgversion,e2fsprogs)
 E2FSPROGS_SITE		:= http://sourceforge.net/projects/e2fsprogs/files/e2fsprogs/$(E2FSPROGS_VERSION)
 E2FSPROGS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 E2FSPROGS_PACKAGE	:= e2fsprogs-$(E2FSPROGS_VERSION).tar.gz
-E2FSPROGS_SRC_DIR	:= $(PACKAGES_BUILD)/e2fsprogs-$(E2FSPROGS_VERSION)
-E2FSPROGS_BUILD_DIR	:= $(PACKAGES_BUILD)/e2fsprogs-$(E2FSPROGS_VERSION)
+E2FSPROGS_SRC_DIR	:= $(embtk_pkgb)/e2fsprogs-$(E2FSPROGS_VERSION)
+E2FSPROGS_BUILD_DIR	:= $(embtk_pkgb)/e2fsprogs-$(E2FSPROGS_VERSION)
 
 E2FSPROGS_BINS		:=
 E2FSPROGS_SBINS		:=

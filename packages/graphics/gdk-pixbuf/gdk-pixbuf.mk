@@ -29,8 +29,8 @@ GDKPIXBUF_VERSION	:= $(call embtk_get_pkgversion,gdkpixbuf)
 GDKPIXBUF_SITE		:= http://ftp.gnome.org/pub/GNOME/sources/gdk-pixbuf/$(GDKPIXBUF_MAJOR_VERSION)
 GDKPIXBUF_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GDKPIXBUF_PACKAGE	:= gdk-pixbuf-$(GDKPIXBUF_VERSION).tar.bz2
-GDKPIXBUF_SRC_DIR	:= $(PACKAGES_BUILD)/gdk-pixbuf-$(GDKPIXBUF_VERSION)
-GDKPIXBUF_BUILD_DIR	:= $(PACKAGES_BUILD)/gdk-pixbuf-$(GDKPIXBUF_VERSION)
+GDKPIXBUF_SRC_DIR	:= $(embtk_pkgb)/gdk-pixbuf-$(GDKPIXBUF_VERSION)
+GDKPIXBUF_BUILD_DIR	:= $(embtk_pkgb)/gdk-pixbuf-$(GDKPIXBUF_VERSION)
 
 GDKPIXBUF_BINS		:=
 GDKPIXBUF_SBINS		:=

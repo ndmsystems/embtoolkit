@@ -27,8 +27,8 @@ XEXTPROTO_NAME		:= xextproto
 XEXTPROTO_VERSION	:= $(call embtk_get_pkgversion,xextproto)
 XEXTPROTO_SITE		:= http://xorg.freedesktop.org/archive/individual/proto
 XEXTPROTO_PACKAGE	:= xextproto-$(XEXTPROTO_VERSION).tar.bz2
-XEXTPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/xextproto-$(XEXTPROTO_VERSION)
-XEXTPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/xextproto-$(XEXTPROTO_VERSION)
+XEXTPROTO_SRC_DIR	:= $(embtk_pkgb)/xextproto-$(XEXTPROTO_VERSION)
+XEXTPROTO_BUILD_DIR	:= $(embtk_pkgb)/xextproto-$(XEXTPROTO_VERSION)
 
 XEXTPROTO_BINS =
 XEXTPROTO_SBINS =

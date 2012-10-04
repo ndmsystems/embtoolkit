@@ -28,8 +28,8 @@ LIBXRANDR_VERSION	:= $(call embtk_get_pkgversion,libxrandr)
 LIBXRANDR_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 LIBXRANDR_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXRANDR_PACKAGE	:= libXrandr-$(LIBXRANDR_VERSION).tar.bz2
-LIBXRANDR_SRC_DIR	:= $(PACKAGES_BUILD)/libXrandr-$(LIBXRANDR_VERSION)
-LIBXRANDR_BUILD_DIR	:= $(PACKAGES_BUILD)/libXrandr-$(LIBXRANDR_VERSION)
+LIBXRANDR_SRC_DIR	:= $(embtk_pkgb)/libXrandr-$(LIBXRANDR_VERSION)
+LIBXRANDR_BUILD_DIR	:= $(embtk_pkgb)/libXrandr-$(LIBXRANDR_VERSION)
 
 LIBXRANDR_BINS		=
 LIBXRANDR_SBINS		=

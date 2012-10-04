@@ -27,8 +27,8 @@ RECORDPROTO_NAME	:= recordproto
 RECORDPROTO_VERSION	:= $(call embtk_get_pkgversion,recordproto)
 RECORDPROTO_SITE	:= http://ftp.x.org/pub/individual/proto
 RECORDPROTO_PACKAGE	:= recordproto-$(RECORDPROTO_VERSION).tar.bz2
-RECORDPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/recordproto-$(RECORDPROTO_VERSION)
-RECORDPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/recordproto-$(RECORDPROTO_VERSION)
+RECORDPROTO_SRC_DIR	:= $(embtk_pkgb)/recordproto-$(RECORDPROTO_VERSION)
+RECORDPROTO_BUILD_DIR	:= $(embtk_pkgb)/recordproto-$(RECORDPROTO_VERSION)
 
 RECORDPROTO_BINS	=
 RECORDPROTO_SBINS	=

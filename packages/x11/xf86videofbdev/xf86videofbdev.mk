@@ -28,8 +28,8 @@ XF86VIDEOFBDEV_VERSION		:= $(call embtk_get_pkgversion,xf86videofbdev)
 XF86VIDEOFBDEV_SITE		:= http://xorg.freedesktop.org/archive/individual/driver
 XF86VIDEOFBDEV_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XF86VIDEOFBDEV_PACKAGE		:= xf86-video-fbdev-$(XF86VIDEOFBDEV_VERSION).tar.bz2
-XF86VIDEOFBDEV_SRC_DIR		:= $(PACKAGES_BUILD)/xf86-video-fbdev-$(XF86VIDEOFBDEV_VERSION)
-XF86VIDEOFBDEV_BUILD_DIR	:= $(PACKAGES_BUILD)/xf86-video-fbdev-$(XF86VIDEOFBDEV_VERSION)
+XF86VIDEOFBDEV_SRC_DIR		:= $(embtk_pkgb)/xf86-video-fbdev-$(XF86VIDEOFBDEV_VERSION)
+XF86VIDEOFBDEV_BUILD_DIR	:= $(embtk_pkgb)/xf86-video-fbdev-$(XF86VIDEOFBDEV_VERSION)
 
 XF86VIDEOFBDEV_BINS		=
 XF86VIDEOFBDEV_SBINS		=

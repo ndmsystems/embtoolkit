@@ -27,8 +27,8 @@ DAMAGEPROTO_NAME	:= damageproto
 DAMAGEPROTO_VERSION	:= $(call embtk_get_pkgversion,damageproto)
 DAMAGEPROTO_SITE	:= http://xorg.freedesktop.org/archive/individual/proto
 DAMAGEPROTO_PACKAGE	:= damageproto-$(DAMAGEPROTO_VERSION).tar.bz2
-DAMAGEPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/damageproto-$(DAMAGEPROTO_VERSION)
-DAMAGEPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/damageproto-$(DAMAGEPROTO_VERSION)
+DAMAGEPROTO_SRC_DIR	:= $(embtk_pkgb)/damageproto-$(DAMAGEPROTO_VERSION)
+DAMAGEPROTO_BUILD_DIR	:= $(embtk_pkgb)/damageproto-$(DAMAGEPROTO_VERSION)
 
 DAMAGEPROTO_BINS =
 DAMAGEPROTO_SBINS =

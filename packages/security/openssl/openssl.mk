@@ -28,8 +28,8 @@ OPENSSL_VERSION		:= $(call embtk_get_pkgversion,openssl)
 OPENSSL_SITE		:= ftp://ftp.openssl.org/source
 OPENSSL_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 OPENSSL_PACKAGE		:= openssl-$(OPENSSL_VERSION).tar.gz
-OPENSSL_SRC_DIR		:= $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
-OPENSSL_BUILD_DIR	:= $(PACKAGES_BUILD)/openssl-$(OPENSSL_VERSION)
+OPENSSL_SRC_DIR		:= $(embtk_pkgb)/openssl-$(OPENSSL_VERSION)
+OPENSSL_BUILD_DIR	:= $(embtk_pkgb)/openssl-$(OPENSSL_VERSION)
 
 OPENSSL_NODESTDIR	:= y
 OPENSSL_MAKE_OPTS	:= CC=$(TARGETCC_CACHED) INSTALL_PREFIX=$(embtk_sysroot)

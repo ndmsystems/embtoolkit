@@ -27,10 +27,10 @@ GDB_NAME		:= gdb
 GDB_VERSION		:= $(call embtk_get_pkgversion,gdb)
 GDB_SITE		:= http://ftp.gnu.org/gnu/gdb
 GDB_PACKAGE		:= gdb-$(GDB_VERSION).tar.bz2
-GDB_SRC_DIR		:= $(PACKAGES_BUILD)/gdb-$(GDB_VERSION)
+GDB_SRC_DIR		:= $(embtk_pkgb)/gdb-$(GDB_VERSION)
 GDB_BUILD_DIR		:= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),		\
-		$(PACKAGES_BUILD)/gdb-$(GDB_VERSION)-serverbuild,	\
-		$(PACKAGES_BUILD)/gdb-$(GDB_VERSION)-build)
+		$(embtk_pkgb)/gdb-$(GDB_VERSION)-serverbuild,	\
+		$(embtk_pkgb)/gdb-$(GDB_VERSION)-build)
 
 # GDB installed files
 GDBSERVER_BIN	:= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),,gdbserver)

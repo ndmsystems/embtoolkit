@@ -28,8 +28,8 @@ LIBXML2_VERSION		:= $(call embtk_get_pkgversion,libxml2)
 LIBXML2_SITE		:= ftp://xmlsoft.org/libxml2
 LIBXML2_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXML2_PACKAGE		:= libxml2-$(LIBXML2_VERSION).tar.gz
-LIBXML2_SRC_DIR		:= $(PACKAGES_BUILD)/libxml2-$(LIBXML2_VERSION)
-LIBXML2_BUILD_DIR	:= $(PACKAGES_BUILD)/libxml2-$(LIBXML2_VERSION)
+LIBXML2_SRC_DIR		:= $(embtk_pkgb)/libxml2-$(LIBXML2_VERSION)
+LIBXML2_BUILD_DIR	:= $(embtk_pkgb)/libxml2-$(LIBXML2_VERSION)
 
 LIBXML2_BINS		= xml2-config xmlcatalog xmllint
 LIBXML2_SBINS		=

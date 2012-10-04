@@ -28,8 +28,8 @@ XINPUT_VERSION		:= $(call embtk_get_pkgversion,xinput)
 XINPUT_SITE		:= http://xorg.freedesktop.org/archive/individual/app
 XINPUT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XINPUT_PACKAGE		:= xinput-$(XINPUT_VERSION).tar.bz2
-XINPUT_SRC_DIR		:= $(PACKAGES_BUILD)/xinput-$(XINPUT_VERSION)
-XINPUT_BUILD_DIR	:= $(PACKAGES_BUILD)/xinput-$(XINPUT_VERSION)
+XINPUT_SRC_DIR		:= $(embtk_pkgb)/xinput-$(XINPUT_VERSION)
+XINPUT_BUILD_DIR	:= $(embtk_pkgb)/xinput-$(XINPUT_VERSION)
 
 XINPUT_BINS		= xinput
 XINPUT_SBINS		=

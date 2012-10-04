@@ -27,8 +27,8 @@ LUA_NAME	:= lua
 LUA_VERSION	:= $(call embtk_get_pkgversion,lua)
 LUA_SITE	:= http://www.lua.org/ftp
 LUA_PACKAGE	:= lua-$(LUA_VERSION).tar.gz
-LUA_SRC_DIR	:= $(PACKAGES_BUILD)/lua-$(LUA_VERSION)
-LUA_BUILD_DIR	:= $(PACKAGES_BUILD)/lua-$(LUA_VERSION)
+LUA_SRC_DIR	:= $(embtk_pkgb)/lua-$(LUA_VERSION)
+LUA_BUILD_DIR	:= $(embtk_pkgb)/lua-$(LUA_VERSION)
 
 LUA_BINS	= lua luac
 LUA_SBINS	=

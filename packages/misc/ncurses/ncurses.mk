@@ -28,8 +28,8 @@ NCURSES_VERSION		:= $(call embtk_get_pkgversion,ncurses)
 NCURSES_SITE		:= http://ftp.gnu.org/pub/gnu/ncurses
 NCURSES_PACKAGE		:= ncurses-$(NCURSES_VERSION).tar.gz
 NCURSES_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-NCURSES_SRC_DIR		:= $(PACKAGES_BUILD)/ncurses-$(NCURSES_VERSION)
-NCURSES_BUILD_DIR	:= $(PACKAGES_BUILD)/ncurses-$(NCURSES_VERSION)
+NCURSES_SRC_DIR		:= $(embtk_pkgb)/ncurses-$(NCURSES_VERSION)
+NCURSES_BUILD_DIR	:= $(embtk_pkgb)/ncurses-$(NCURSES_VERSION)
 
 NCURSES_BINS = captoinfo clear infocmp infotocap ncurses5-config reset tic toe \
 		tput tset

@@ -29,8 +29,8 @@ LIBNIH_MAJOR_VERSION	:= $(call embtk_get_pkgversion,libnih_major)
 LIBNIH_SITE		:= http://launchpad.net/libnih/$(LIBNIH_MAJOR_VERSION)/$(LIBNIH_VERSION)/+download
 LIBNIH_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBNIH_PACKAGE		:= libnih-$(LIBNIH_VERSION).tar.gz
-LIBNIH_SRC_DIR		:= $(PACKAGES_BUILD)/libnih-$(LIBNIH_VERSION)
-LIBNIH_BUILD_DIR	:= $(PACKAGES_BUILD)/libnih-$(LIBNIH_VERSION)
+LIBNIH_SRC_DIR		:= $(embtk_pkgb)/libnih-$(LIBNIH_VERSION)
+LIBNIH_BUILD_DIR	:= $(embtk_pkgb)/libnih-$(LIBNIH_VERSION)
 
 LIBNIH_BINS		= nih-dbus-tool
 LIBNIH_SBINS		=

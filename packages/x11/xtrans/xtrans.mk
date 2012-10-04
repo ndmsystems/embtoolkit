@@ -28,8 +28,8 @@ XTRANS_VERSION		:= $(call embtk_get_pkgversion,xtrans)
 XTRANS_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 XTRANS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XTRANS_PACKAGE		:= xtrans-$(XTRANS_VERSION).tar.bz2
-XTRANS_SRC_DIR		:= $(PACKAGES_BUILD)/xtrans-$(XTRANS_VERSION)
-XTRANS_BUILD_DIR	:= $(PACKAGES_BUILD)/xtrans-$(XTRANS_VERSION)
+XTRANS_SRC_DIR		:= $(embtk_pkgb)/xtrans-$(XTRANS_VERSION)
+XTRANS_BUILD_DIR	:= $(embtk_pkgb)/xtrans-$(XTRANS_VERSION)
 
 XTRANS_INCLUDES		:= X11/xtrans
 XTRANS_PKGCONFIGS	:= xtrans.pc

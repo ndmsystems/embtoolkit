@@ -30,8 +30,8 @@ GLIB_SITE		:= http://ftp.gnome.org/pub/gnome/sources/glib/$(GLIB_MAJOR_VERSION)
 GLIB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GLIB_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/glib/$(GLIB_VERSION)
 GLIB_PACKAGE		:= glib-$(GLIB_VERSION).tar.bz2
-GLIB_SRC_DIR		:= $(PACKAGES_BUILD)/glib-$(GLIB_VERSION)
-GLIB_BUILD_DIR		:= $(PACKAGES_BUILD)/glib-$(GLIB_VERSION)
+GLIB_SRC_DIR		:= $(embtk_pkgb)/glib-$(GLIB_VERSION)
+GLIB_BUILD_DIR		:= $(embtk_pkgb)/glib-$(GLIB_VERSION)
 
 GLIB_BINS		= glib-genmarshal glib-gettextize glib-mkenums	\
 			gobject-query gtester gtester-report

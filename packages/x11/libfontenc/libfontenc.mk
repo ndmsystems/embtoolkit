@@ -28,8 +28,8 @@ LIBFONTENC_VERSION	:= $(call embtk_get_pkgversion,libfontenc)
 LIBFONTENC_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 LIBFONTENC_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBFONTENC_PACKAGE	:= libfontenc-$(LIBFONTENC_VERSION).tar.bz2
-LIBFONTENC_SRC_DIR	:= $(PACKAGES_BUILD)/libfontenc-$(LIBFONTENC_VERSION)
-LIBFONTENC_BUILD_DIR	:= $(PACKAGES_BUILD)/libfontenc-$(LIBFONTENC_VERSION)
+LIBFONTENC_SRC_DIR	:= $(embtk_pkgb)/libfontenc-$(LIBFONTENC_VERSION)
+LIBFONTENC_BUILD_DIR	:= $(embtk_pkgb)/libfontenc-$(LIBFONTENC_VERSION)
 
 LIBFONTENC_BINS =
 LIBFONTENC_SBINS =

@@ -29,8 +29,8 @@ ATK_MAJOR_VERSION	:= $(call embtk_get_pkgversion,atk_major)
 ATK_SITE		:= http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_MAJOR_VERSION)
 ATK_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 ATK_PACKAGE		:= atk-$(ATK_VERSION).tar.bz2
-ATK_SRC_DIR		:= $(PACKAGES_BUILD)/atk-$(ATK_VERSION)
-ATK_BUILD_DIR		:= $(PACKAGES_BUILD)/atk-$(ATK_VERSION)
+ATK_SRC_DIR		:= $(embtk_pkgb)/atk-$(ATK_VERSION)
+ATK_BUILD_DIR		:= $(embtk_pkgb)/atk-$(ATK_VERSION)
 
 ATK_BINS	=
 ATK_SBINS	=

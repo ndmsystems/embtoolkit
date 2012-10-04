@@ -28,8 +28,8 @@ GPERF_VERSION		:= $(call embtk_get_pkgversion,gperf)
 GPERF_SITE		:= http://ftp.gnu.org/gnu/gperf
 GPERF_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GPERF_PACKAGE		:= gperf-$(GPERF_VERSION).tar.gz
-GPERF_SRC_DIR		:= $(PACKAGES_BUILD)/gperf-$(GPERF_VERSION)
-GPERF_BUILD_DIR		:= $(PACKAGES_BUILD)/gperf-$(GPERF_VERSION)
+GPERF_SRC_DIR		:= $(embtk_pkgb)/gperf-$(GPERF_VERSION)
+GPERF_BUILD_DIR		:= $(embtk_pkgb)/gperf-$(GPERF_VERSION)
 
 #
 # gperf for target

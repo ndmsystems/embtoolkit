@@ -28,8 +28,8 @@ LIBXCOMPOSITE_VERSION		:= $(call embtk_get_pkgversion,libxcomposite)
 LIBXCOMPOSITE_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 LIBXCOMPOSITE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXCOMPOSITE_PACKAGE		:= libXcomposite-$(LIBXCOMPOSITE_VERSION).tar.bz2
-LIBXCOMPOSITE_SRC_DIR		:= $(PACKAGES_BUILD)/libXcomposite-$(LIBXCOMPOSITE_VERSION)
-LIBXCOMPOSITE_BUILD_DIR		:= $(PACKAGES_BUILD)/libXcomposite-$(LIBXCOMPOSITE_VERSION)
+LIBXCOMPOSITE_SRC_DIR		:= $(embtk_pkgb)/libXcomposite-$(LIBXCOMPOSITE_VERSION)
+LIBXCOMPOSITE_BUILD_DIR		:= $(embtk_pkgb)/libXcomposite-$(LIBXCOMPOSITE_VERSION)
 
 LIBXCOMPOSITE_BINS		=
 LIBXCOMPOSITE_SBINS		=

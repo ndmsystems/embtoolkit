@@ -28,8 +28,8 @@ DIRECTFB_VERSION	:= $(call embtk_get_pkgversion,directfb)
 DIRECTFB_BRANCH		:= $(call embtk_get_pkgversion,directfb_branch)
 DIRECTFB_SITE		:= http://www.directfb.org/downloads/Core/$(DIRECTFB_BRANCH)
 DIRECTFB_PACKAGE	:= DirectFB-$(DIRECTFB_VERSION).tar.gz
-DIRECTFB_SRC_DIR	:= $(PACKAGES_BUILD)/DirectFB-$(DIRECTFB_VERSION)
-DIRECTFB_BUILD_DIR	:= $(PACKAGES_BUILD)/DirectFB-$(DIRECTFB_VERSION)
+DIRECTFB_SRC_DIR	:= $(embtk_pkgb)/DirectFB-$(DIRECTFB_VERSION)
+DIRECTFB_BUILD_DIR	:= $(embtk_pkgb)/DirectFB-$(DIRECTFB_VERSION)
 
 DIRECTFB_BINS		= c64xdump dfbfx dfbinfo dfbinspector dfbmaster		\
 			dfbscreen directfb-csource mkdgiff dfbdump dfbg		\

@@ -28,8 +28,8 @@ DBUS_VERSION		:= $(call embtk_get_pkgversion,dbus)
 DBUS_SITE		:= http://dbus.freedesktop.org/releases/dbus
 DBUS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 DBUS_PACKAGE		:= dbus-$(DBUS_VERSION).tar.gz
-DBUS_SRC_DIR		:= $(PACKAGES_BUILD)/dbus-$(DBUS_VERSION)
-DBUS_BUILD_DIR		:= $(PACKAGES_BUILD)/dbus-$(DBUS_VERSION)
+DBUS_SRC_DIR		:= $(embtk_pkgb)/dbus-$(DBUS_VERSION)
+DBUS_BUILD_DIR		:= $(embtk_pkgb)/dbus-$(DBUS_VERSION)
 
 DBUS_BINS		= dbus-cleanup-sockets dbus-daemon dbus-launch		\
 			dbus-monitor dbus-send dbus-uuidgen

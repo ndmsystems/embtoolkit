@@ -28,8 +28,8 @@ LIBXRENDER_VERSION	:= $(call embtk_get_pkgversion,libxrender)
 LIBXRENDER_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 LIBXRENDER_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXRENDER_PACKAGE	:= libXrender-$(LIBXRENDER_VERSION).tar.bz2
-LIBXRENDER_SRC_DIR	:= $(PACKAGES_BUILD)/libXrender-$(LIBXRENDER_VERSION)
-LIBXRENDER_BUILD_DIR	:= $(PACKAGES_BUILD)/libXrender-$(LIBXRENDER_VERSION)
+LIBXRENDER_SRC_DIR	:= $(embtk_pkgb)/libXrender-$(LIBXRENDER_VERSION)
+LIBXRENDER_BUILD_DIR	:= $(embtk_pkgb)/libXrender-$(LIBXRENDER_VERSION)
 
 LIBXRENDER_BINS		=
 LIBXRENDER_SBINS	=

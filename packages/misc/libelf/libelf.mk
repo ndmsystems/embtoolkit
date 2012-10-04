@@ -27,8 +27,8 @@ LIBELF_NAME		:= libelf
 LIBELF_VERSION		:= $(call embtk_get_pkgversion,libelf)
 LIBELF_SITE		:= http://www.mr511.de/software
 LIBELF_PACKAGE		:= libelf-$(LIBELF_VERSION).tar.gz
-LIBELF_SRC_DIR		:= $(PACKAGES_BUILD)/libelf-$(LIBELF_VERSION)
-LIBELF_BUILD_DIR	:= $(PACKAGES_BUILD)/libelf-$(LIBELF_VERSION)
+LIBELF_SRC_DIR		:= $(embtk_pkgb)/libelf-$(LIBELF_VERSION)
+LIBELF_BUILD_DIR	:= $(embtk_pkgb)/libelf-$(LIBELF_VERSION)
 
 LIBELF_BINS		:=
 LIBELF_SBINS		:=

@@ -28,7 +28,7 @@ UPSTART_MAJOR_VERSION :=  $(subst ",,$(strip $(CONFIG_EMBTK_UPSTART_MAJOR_VERSIO
 UPSTART_SITE := http://upstart.ubuntu.com/download/$(UPSTART_MAJOR_VERSION)
 UPSTART_PATCH_SITE := ftp://ftp.embtoolkit.org/embtoolkit.org/upstart/$(UPSTART_VERSION)
 UPSTART_PACKAGE := upstart-$(UPSTART_VERSION).tar.gz
-UPSTART_BUILD_DIR := $(PACKAGES_BUILD)/upstart-$(UPSTART_VERSION)
+UPSTART_BUILD_DIR := $(embtk_pkgb)/upstart-$(UPSTART_VERSION)
 
 UPSTART_BINS =
 UPSTART_SBINS =
@@ -64,7 +64,7 @@ endif
 
 $(UPSTART_BUILD_DIR)/.decompressed:
 	$(call embtk_pinfo,"Decompressing $(UPSTART_PACKAGE) ...")
-	@tar -C $(PACKAGES_BUILD) -xzf $(embtk_dldir)/$(UPSTART_PACKAGE)
+	@tar -C $(embtk_pkgb) -xzf $(embtk_dldir)/$(UPSTART_PACKAGE)
 ifeq ($(CONFIG_EMBTK_UPSTART_NEED_PATCH),y)
 	@cd $(UPSTART_BUILD_DIR); \
 	patch -p1 < $(embtk_dldir)/upstart-$(UPSTART_VERSION).patch

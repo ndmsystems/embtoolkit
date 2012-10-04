@@ -27,8 +27,8 @@ FIXESPROTO_NAME		:= fixesproto
 FIXESPROTO_VERSION	:= $(call embtk_get_pkgversion,fixesproto)
 FIXESPROTO_SITE		:= http://xorg.freedesktop.org/archive/individual/proto
 FIXESPROTO_PACKAGE	:= fixesproto-$(FIXESPROTO_VERSION).tar.bz2
-FIXESPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/fixesproto-$(FIXESPROTO_VERSION)
-FIXESPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/fixesproto-$(FIXESPROTO_VERSION)
+FIXESPROTO_SRC_DIR	:= $(embtk_pkgb)/fixesproto-$(FIXESPROTO_VERSION)
+FIXESPROTO_BUILD_DIR	:= $(embtk_pkgb)/fixesproto-$(FIXESPROTO_VERSION)
 
 FIXESPROTO_BINS		=
 FIXESPROTO_SBINS	=

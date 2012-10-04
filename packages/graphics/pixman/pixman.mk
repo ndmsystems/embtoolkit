@@ -28,8 +28,8 @@ PIXMAN_VERSION		:= $(call embtk_get_pkgversion,pixman)
 PIXMAN_SITE		:= http://www.cairographics.org/releases
 PIXMAN_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 PIXMAN_PACKAGE		:= pixman-$(PIXMAN_VERSION).tar.gz
-PIXMAN_SRC_DIR		:= $(PACKAGES_BUILD)/pixman-$(PIXMAN_VERSION)
-PIXMAN_BUILD_DIR	:= $(PACKAGES_BUILD)/pixman-$(PIXMAN_VERSION)
+PIXMAN_SRC_DIR		:= $(embtk_pkgb)/pixman-$(PIXMAN_VERSION)
+PIXMAN_BUILD_DIR	:= $(embtk_pkgb)/pixman-$(PIXMAN_VERSION)
 
 PIXMAN_BINS		=
 PIXMAN_SBINS		=

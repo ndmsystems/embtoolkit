@@ -27,8 +27,8 @@ XCMISCPROTO_NAME	:= xcmiscproto
 XCMISCPROTO_VERSION	:= $(call embtk_get_pkgversion,xcmiscproto)
 XCMISCPROTO_SITE	:= http://xorg.freedesktop.org/archive/individual/proto
 XCMISCPROTO_PACKAGE	:= xcmiscproto-$(XCMISCPROTO_VERSION).tar.bz2
-XCMISCPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/xcmiscproto-$(XCMISCPROTO_VERSION)
-XCMISCPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/xcmiscproto-$(XCMISCPROTO_VERSION)
+XCMISCPROTO_SRC_DIR	:= $(embtk_pkgb)/xcmiscproto-$(XCMISCPROTO_VERSION)
+XCMISCPROTO_BUILD_DIR	:= $(embtk_pkgb)/xcmiscproto-$(XCMISCPROTO_VERSION)
 
 XCMISCPROTO_BINS	=
 XCMISCPROTO_SBINS	=

@@ -28,8 +28,8 @@ BB_VERSION	:= $(call embtk_get_pkgversion,bb)
 BB_SITE		:= http://www.busybox.net/downloads
 BB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 BB_PACKAGE	:= busybox-$(BB_VERSION).tar.bz2
-BB_SRC_DIR	:= $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
-BB_BUILD_DIR	:= $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
+BB_SRC_DIR	:= $(embtk_pkgb)/busybox-$(BB_VERSION)
+BB_BUILD_DIR	:= $(embtk_pkgb)/busybox-$(BB_VERSION)
 
 BB_NODESTDIR	:= y
 BB_MAKE_ENV	= CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"

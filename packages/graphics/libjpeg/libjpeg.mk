@@ -28,8 +28,8 @@ LIBJPEG_VERSION		:= $(call embtk_get_pkgversion,libjpeg)
 LIBJPEG_SITE		:= http://www.ijg.org/files
 LIBJPEG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBJPEG_PACKAGE		:= jpegsrc.v$(LIBJPEG_VERSION).tar.gz
-LIBJPEG_SRC_DIR		:= $(PACKAGES_BUILD)/jpeg-$(LIBJPEG_VERSION)
-LIBJPEG_BUILD_DIR	:= $(PACKAGES_BUILD)/jpeg-$(LIBJPEG_VERSION)
+LIBJPEG_SRC_DIR		:= $(embtk_pkgb)/jpeg-$(LIBJPEG_VERSION)
+LIBJPEG_BUILD_DIR	:= $(embtk_pkgb)/jpeg-$(LIBJPEG_VERSION)
 
 LIBJPEG_BINS		:= cjpeg djpeg jpegtran rdjpgcom wrjpgcom
 LIBJPEG_SBINS		:=

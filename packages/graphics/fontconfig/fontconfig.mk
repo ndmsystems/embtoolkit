@@ -28,8 +28,8 @@ FONTCONFIG_VERSION	:= $(call embtk_get_pkgversion,fontconfig)
 FONTCONFIG_SITE		:= http://fontconfig.org/release
 FONTCONFIG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 FONTCONFIG_PACKAGE	:= fontconfig-$(FONTCONFIG_VERSION).tar.gz
-FONTCONFIG_SRC_DIR	:= $(PACKAGES_BUILD)/fontconfig-$(FONTCONFIG_VERSION)
-FONTCONFIG_BUILD_DIR	:= $(PACKAGES_BUILD)/fontconfig-$(FONTCONFIG_VERSION)
+FONTCONFIG_SRC_DIR	:= $(embtk_pkgb)/fontconfig-$(FONTCONFIG_VERSION)
+FONTCONFIG_BUILD_DIR	:= $(embtk_pkgb)/fontconfig-$(FONTCONFIG_VERSION)
 
 FONTCONFIG_BINS		= fc-cache fc-cat fc-list fc-match fc-query fc-scan
 FONTCONFIG_SBINS	=

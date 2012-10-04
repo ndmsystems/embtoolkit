@@ -27,8 +27,8 @@ VIDEOPROTO_NAME		:= videoproto
 VIDEOPROTO_VERSION	:= $(call embtk_get_pkgversion,videoproto)
 VIDEOPROTO_SITE		:= http://ftp.x.org/pub/individual/proto
 VIDEOPROTO_PACKAGE	:= videoproto-$(VIDEOPROTO_VERSION).tar.bz2
-VIDEOPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/videoproto-$(VIDEOPROTO_VERSION)
-VIDEOPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/videoproto-$(VIDEOPROTO_VERSION)
+VIDEOPROTO_SRC_DIR	:= $(embtk_pkgb)/videoproto-$(VIDEOPROTO_VERSION)
+VIDEOPROTO_BUILD_DIR	:= $(embtk_pkgb)/videoproto-$(VIDEOPROTO_VERSION)
 
 VIDEOPROTO_BINS		=
 VIDEOPROTO_SBINS	=

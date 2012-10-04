@@ -29,8 +29,8 @@ INTLTOOL_VERSION	:= $(call embtk_get_pkgversion,intltool)
 INTLTOOL_SITE		:= http://ftp.gnome.org/pub/gnome/sources/intltool/$(INTLTOOL_MAJOR_VERSION)
 INTLTOOL_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 INTLTOOL_PACKAGE	:= intltool-$(INTLTOOL_VERSION).tar.bz2
-INTLTOOL_SRC_DIR	:= $(PACKAGES_BUILD)/intltool-$(INTLTOOL_VERSION)
-INTLTOOL_BUILD_DIR	:= $(PACKAGES_BUILD)/intltool-$(INTLTOOL_VERSION)
+INTLTOOL_SRC_DIR	:= $(embtk_pkgb)/intltool-$(INTLTOOL_VERSION)
+INTLTOOL_BUILD_DIR	:= $(embtk_pkgb)/intltool-$(INTLTOOL_VERSION)
 
 #
 # intltool for target

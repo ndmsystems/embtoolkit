@@ -27,8 +27,8 @@ KBPROTO_NAME		:= kbproto
 KBPROTO_VERSION		:= $(call embtk_get_pkgversion,kbproto)
 KBPROTO_SITE		:= http://xorg.freedesktop.org/archive/individual/proto
 KBPROTO_PACKAGE		:= kbproto-$(KBPROTO_VERSION).tar.bz2
-KBPROTO_SRC_DIR		:= $(PACKAGES_BUILD)/kbproto-$(KBPROTO_VERSION)
-KBPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/kbproto-$(KBPROTO_VERSION)
+KBPROTO_SRC_DIR		:= $(embtk_pkgb)/kbproto-$(KBPROTO_VERSION)
+KBPROTO_BUILD_DIR	:= $(embtk_pkgb)/kbproto-$(KBPROTO_VERSION)
 
 KBPROTO_BINS		=
 KBPROTO_SBINS		=

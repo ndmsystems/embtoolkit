@@ -28,8 +28,8 @@ LIBXAU_VERSION		:= $(call embtk_get_pkgversion,libxau)
 LIBXAU_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 LIBXAU_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXAU_PACKAGE		:= libXau-$(LIBXAU_VERSION).tar.bz2
-LIBXAU_SRC_DIR		:= $(PACKAGES_BUILD)/libXau-$(LIBXAU_VERSION)
-LIBXAU_BUILD_DIR	:= $(PACKAGES_BUILD)/libXau-$(LIBXAU_VERSION)
+LIBXAU_SRC_DIR		:= $(embtk_pkgb)/libXau-$(LIBXAU_VERSION)
+LIBXAU_BUILD_DIR	:= $(embtk_pkgb)/libXau-$(LIBXAU_VERSION)
 
 LIBXAU_BINS		=
 LIBXAU_SBINS		=

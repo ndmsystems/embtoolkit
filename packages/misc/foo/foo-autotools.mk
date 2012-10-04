@@ -27,8 +27,8 @@ FOO_NAME		:= foo
 FOO_VERSION		:= $(call embtk_get_pkgversion,foo)
 FOO_SITE		:= http://www.foo.org/download
 FOO_PACKAGE		:= foo-$(FOO_VERSION).tar.gz
-FOO_SRC_DIR		:= $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
-FOO_BUILD_DIR		:= $(PACKAGES_BUILD)/foo-$(FOO_VERSION)
+FOO_SRC_DIR		:= $(embtk_pkgb)/foo-$(FOO_VERSION)
+FOO_BUILD_DIR		:= $(embtk_pkgb)/foo-$(FOO_VERSION)
 
 FOO_BINS		:=
 FOO_SBINS		:=

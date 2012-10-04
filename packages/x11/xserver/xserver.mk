@@ -28,8 +28,8 @@ XSERVER_VERSION		:= $(call embtk_get_pkgversion,xserver)
 XSERVER_SITE		:= http://ftp.x.org/pub/individual/xserver
 XSERVER_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XSERVER_PACKAGE		:= xorg-server-$(XSERVER_VERSION).tar.bz2
-XSERVER_SRC_DIR		:= $(PACKAGES_BUILD)/xorg-server-$(XSERVER_VERSION)
-XSERVER_BUILD_DIR	:= $(PACKAGES_BUILD)/xorg-server-$(XSERVER_VERSION)
+XSERVER_SRC_DIR		:= $(embtk_pkgb)/xorg-server-$(XSERVER_VERSION)
+XSERVER_BUILD_DIR	:= $(embtk_pkgb)/xorg-server-$(XSERVER_VERSION)
 
 XSERVER_BINS		= Xfbdev X Xorg
 XSERVER_SBINS		=

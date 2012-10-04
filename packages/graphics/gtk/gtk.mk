@@ -29,8 +29,8 @@ GTK_VERSION		:= $(call embtk_get_pkgversion,gtk)
 GTK_SITE		:= http://ftp.gnome.org/pub/gnome/sources/gtk+/$(GTK_MAJOR_VERSION)
 GTK_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GTK_PACKAGE		:= gtk+-$(GTK_VERSION).tar.bz2
-GTK_SRC_DIR		:= $(PACKAGES_BUILD)/gtk+-$(GTK_VERSION)
-GTK_BUILD_DIR		:= $(PACKAGES_BUILD)/gtk+-$(GTK_VERSION)
+GTK_SRC_DIR		:= $(embtk_pkgb)/gtk+-$(GTK_VERSION)
+GTK_BUILD_DIR		:= $(embtk_pkgb)/gtk+-$(GTK_VERSION)
 
 GTK_BINS	= gtk-* gdk-*
 GTK_SBINS	=

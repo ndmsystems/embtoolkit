@@ -28,8 +28,8 @@ IMLIB2_VERSION		:= $(call embtk_get_pkgversion,imlib2)
 IMLIB2_SITE		:= http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
 IMLIB2_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 IMLIB2_PACKAGE		:= imlib2-$(IMLIB2_VERSION).tar.gz
-IMLIB2_SRC_DIR		:= $(PACKAGES_BUILD)/imlib2-$(IMLIB2_VERSION)
-IMLIB2_BUILD_DIR	:= $(PACKAGES_BUILD)/imlib2-$(IMLIB2_VERSION)
+IMLIB2_SRC_DIR		:= $(embtk_pkgb)/imlib2-$(IMLIB2_VERSION)
+IMLIB2_BUILD_DIR	:= $(embtk_pkgb)/imlib2-$(IMLIB2_VERSION)
 
 IMLIB2_BINS		= imlib2_bumpmap imlib2_colorspace imlib2-config	\
 			imlib2_conv imlib2_grab imlib2_poly imlib2_show		\

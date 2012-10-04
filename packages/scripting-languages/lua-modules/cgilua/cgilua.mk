@@ -27,8 +27,8 @@ CGILUA_NAME		:= cgilua
 CGILUA_VERSION		:= $(call embtk_get_pkgversion,cgilua)
 CGILUA_SITE		:= https://github.com/downloads/keplerproject/cgilua
 CGILUA_PACKAGE		:= cgilua-$(CGILUA_VERSION).tar.gz
-CGILUA_SRC_DIR		:= $(PACKAGES_BUILD)/cgilua-$(CGILUA_VERSION)
-CGILUA_BUILD_DIR	:= $(PACKAGES_BUILD)/cgilua-$(CGILUA_VERSION)
+CGILUA_SRC_DIR		:= $(embtk_pkgb)/cgilua-$(CGILUA_VERSION)
+CGILUA_BUILD_DIR	:= $(embtk_pkgb)/cgilua-$(CGILUA_VERSION)
 
 CGILUA_LIBS		=
 

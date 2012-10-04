@@ -28,8 +28,8 @@ XCBUTIL_VERSION		:= $(call embtk_get_pkgversion,xcbutil)
 XCBUTIL_SITE		:= http://xcb.freedesktop.org/dist
 XCBUTIL_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XCBUTIL_PACKAGE		:= xcb-util-$(XCBUTIL_VERSION).tar.bz2
-XCBUTIL_SRC_DIR		:= $(PACKAGES_BUILD)/xcb-util-$(XCBUTIL_VERSION)
-XCBUTIL_BUILD_DIR	:= $(PACKAGES_BUILD)/xcb-util-$(XCBUTIL_VERSION)
+XCBUTIL_SRC_DIR		:= $(embtk_pkgb)/xcb-util-$(XCBUTIL_VERSION)
+XCBUTIL_BUILD_DIR	:= $(embtk_pkgb)/xcb-util-$(XCBUTIL_VERSION)
 
 XCBUTIL_BINS =
 XCBUTIL_SBINS =

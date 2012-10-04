@@ -27,8 +27,8 @@ RENDERPROTO_NAME	:= renderproto
 RENDERPROTO_VERSION	:= $(call embtk_get_pkgversion,renderproto)
 RENDERPROTO_SITE	:= http://xorg.freedesktop.org/archive/individual/proto
 RENDERPROTO_PACKAGE	:= renderproto-$(RENDERPROTO_VERSION).tar.bz2
-RENDERPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/renderproto-$(RENDERPROTO_VERSION)
-RENDERPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/renderproto-$(RENDERPROTO_VERSION)
+RENDERPROTO_SRC_DIR	:= $(embtk_pkgb)/renderproto-$(RENDERPROTO_VERSION)
+RENDERPROTO_BUILD_DIR	:= $(embtk_pkgb)/renderproto-$(RENDERPROTO_VERSION)
 
 RENDERPROTO_BINS	=
 RENDERPROTO_SBINS	=

@@ -27,8 +27,8 @@ RINGS_NAME	:= rings
 RINGS_VERSION	:= $(call embtk_get_pkgversion,rings)
 RINGS_SITE	:= https://github.com/downloads/keplerproject/rings
 RINGS_PACKAGE	:= rings-$(RINGS_VERSION).tar.gz
-RINGS_SRC_DIR	:= $(PACKAGES_BUILD)/rings-$(RINGS_VERSION)
-RINGS_BUILD_DIR	:= $(PACKAGES_BUILD)/rings-$(RINGS_VERSION)
+RINGS_SRC_DIR	:= $(embtk_pkgb)/rings-$(RINGS_VERSION)
+RINGS_BUILD_DIR	:= $(embtk_pkgb)/rings-$(RINGS_VERSION)
 
 RINGS_LIBS		=
 

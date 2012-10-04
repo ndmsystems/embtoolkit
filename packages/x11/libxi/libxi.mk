@@ -28,8 +28,8 @@ LIBXI_VERSION		:= $(call embtk_get_pkgversion,libxi)
 LIBXI_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 LIBXI_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXI_PACKAGE		:= libXi-$(LIBXI_VERSION).tar.bz2
-LIBXI_SRC_DIR		:= $(PACKAGES_BUILD)/libXi-$(LIBXI_VERSION)
-LIBXI_BUILD_DIR		:= $(PACKAGES_BUILD)/libXi-$(LIBXI_VERSION)
+LIBXI_SRC_DIR		:= $(embtk_pkgb)/libXi-$(LIBXI_VERSION)
+LIBXI_BUILD_DIR		:= $(embtk_pkgb)/libXi-$(LIBXI_VERSION)
 
 LIBXI_BINS		=
 LIBXI_SBINS		=

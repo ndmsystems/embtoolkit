@@ -27,8 +27,8 @@ FREEFONT_TTF_NAME	:= freefont-ttf
 FREEFONT_TTF_SITE	:= http://ftp.gnu.org/gnu/freefont
 FREEFONT_TTF_VERSION	:= $(call embtk_get_pkgversion,freefont_ttf)
 FREEFONT_TTF_PACKAGE	:= freefont-ttf-$(FREEFONT_TTF_VERSION).tar.gz
-FREEFONT_TTF_SRC_DIR	:= $(PACKAGES_BUILD)/freefont-$(FREEFONT_TTF_VERSION)
-FREEFONT_TTF_BUILD_DIR	:= $(PACKAGES_BUILD)/freefont-$(FREEFONT_TTF_VERSION)
+FREEFONT_TTF_SRC_DIR	:= $(embtk_pkgb)/freefont-$(FREEFONT_TTF_VERSION)
+FREEFONT_TTF_BUILD_DIR	:= $(embtk_pkgb)/freefont-$(FREEFONT_TTF_VERSION)
 
 FREEFONT_TTF_DEPS := freetype_install
 FREEFONT_TTF_DEPS += download_freefont_ttf

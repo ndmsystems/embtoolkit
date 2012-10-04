@@ -27,8 +27,8 @@ FONTSPROTO_NAME		:= fontsproto
 FONTSPROTO_VERSION	:= $(call embtk_get_pkgversion,fontsproto)
 FONTSPROTO_SITE		:= http://xorg.freedesktop.org/archive/individual/proto
 FONTSPROTO_PACKAGE	:= fontsproto-$(FONTSPROTO_VERSION).tar.bz2
-FONTSPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/fontsproto-$(FONTSPROTO_VERSION)
-FONTSPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/fontsproto-$(FONTSPROTO_VERSION)
+FONTSPROTO_SRC_DIR	:= $(embtk_pkgb)/fontsproto-$(FONTSPROTO_VERSION)
+FONTSPROTO_BUILD_DIR	:= $(embtk_pkgb)/fontsproto-$(FONTSPROTO_VERSION)
 
 FONTSPROTO_BINS		=
 FONTSPROTO_SBINS	=

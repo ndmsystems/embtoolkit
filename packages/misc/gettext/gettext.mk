@@ -28,8 +28,8 @@ GETTEXT_VERSION		:= $(call embtk_get_pkgversion,gettext)
 GETTEXT_SITE		:= http://ftp.gnu.org/pub/gnu/gettext
 GETTEXT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 GETTEXT_PACKAGE		:= gettext-$(GETTEXT_VERSION).tar.gz
-GETTEXT_SRC_DIR		:= $(PACKAGES_BUILD)/gettext-$(GETTEXT_VERSION)
-GETTEXT_BUILD_DIR	:= $(PACKAGES_BUILD)/gettext-$(GETTEXT_VERSION)
+GETTEXT_SRC_DIR		:= $(embtk_pkgb)/gettext-$(GETTEXT_VERSION)
+GETTEXT_BUILD_DIR	:= $(embtk_pkgb)/gettext-$(GETTEXT_VERSION)
 
 # gettext for target
 GETTEXT_BINS =	autopoint gettext gettext.sh msgcat msgcomm msgen	\

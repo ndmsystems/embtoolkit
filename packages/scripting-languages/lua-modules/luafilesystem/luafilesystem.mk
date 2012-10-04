@@ -27,8 +27,8 @@ LUAFILESYSTEM_NAME	:= luafilesystem
 LUAFILESYSTEM_VERSION	:= $(call embtk_get_pkgversion,luafilesystem)
 LUAFILESYSTEM_SITE	:= https://github.com/downloads/keplerproject/luafilesystem
 LUAFILESYSTEM_PACKAGE	:= luafilesystem-$(LUAFILESYSTEM_VERSION).tar.gz
-LUAFILESYSTEM_SRC_DIR	:= $(PACKAGES_BUILD)/luafilesystem-$(LUAFILESYSTEM_VERSION)
-LUAFILESYSTEM_BUILD_DIR	:= $(PACKAGES_BUILD)/luafilesystem-$(LUAFILESYSTEM_VERSION)
+LUAFILESYSTEM_SRC_DIR	:= $(embtk_pkgb)/luafilesystem-$(LUAFILESYSTEM_VERSION)
+LUAFILESYSTEM_BUILD_DIR	:= $(embtk_pkgb)/luafilesystem-$(LUAFILESYSTEM_VERSION)
 
 LUAFILESYSTEM_LIBS		=
 

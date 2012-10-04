@@ -29,8 +29,8 @@ LZO_SITE		:= http://www.oberhumer.com/opensource/lzo/download
 LZO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LZO_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/lzo/$(LZO_VERSION)
 LZO_PACKAGE		:= lzo-$(LZO_VERSION).tar.gz
-LZO_SRC_DIR		:= $(PACKAGES_BUILD)/lzo-$(LZO_VERSION)
-LZO_BUILD_DIR		:= $(PACKAGES_BUILD)/lzo-$(LZO_VERSION)
+LZO_SRC_DIR		:= $(embtk_pkgb)/lzo-$(LZO_VERSION)
+LZO_BUILD_DIR		:= $(embtk_pkgb)/lzo-$(LZO_VERSION)
 
 LZO_BINS	=
 LZO_SBINS	=

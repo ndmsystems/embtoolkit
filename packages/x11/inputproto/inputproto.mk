@@ -27,8 +27,8 @@ INPUTPROTO_NAME		:= inputproto
 INPUTPROTO_VERSION	:= $(call embtk_get_pkgversion,inputproto)
 INPUTPROTO_SITE		:= http://xorg.freedesktop.org/archive/individual/proto
 INPUTPROTO_PACKAGE	:= inputproto-$(INPUTPROTO_VERSION).tar.bz2
-INPUTPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/inputproto-$(INPUTPROTO_VERSION)
-INPUTPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/inputproto-$(INPUTPROTO_VERSION)
+INPUTPROTO_SRC_DIR	:= $(embtk_pkgb)/inputproto-$(INPUTPROTO_VERSION)
+INPUTPROTO_BUILD_DIR	:= $(embtk_pkgb)/inputproto-$(INPUTPROTO_VERSION)
 
 INPUTPROTO_BINS		=
 INPUTPROTO_SBINS	=

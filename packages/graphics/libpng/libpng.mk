@@ -27,8 +27,8 @@ LIBPNG_NAME		:= libpng
 LIBPNG_VERSION		:= $(call embtk_get_pkgversion,libpng)
 LIBPNG_SITE		:= http://download.sourceforge.net/libpng
 LIBPNG_PACKAGE		:= libpng-$(LIBPNG_VERSION).tar.xz
-LIBPNG_SRC_DIR		:= $(PACKAGES_BUILD)/libpng-$(LIBPNG_VERSION)
-LIBPNG_BUILD_DIR	:= $(PACKAGES_BUILD)/libpng-$(LIBPNG_VERSION)
+LIBPNG_SRC_DIR		:= $(embtk_pkgb)/libpng-$(LIBPNG_VERSION)
+LIBPNG_BUILD_DIR	:= $(embtk_pkgb)/libpng-$(LIBPNG_VERSION)
 
 LIBPNG_BINS		= libpng*
 LIBPNG_SBINS		=

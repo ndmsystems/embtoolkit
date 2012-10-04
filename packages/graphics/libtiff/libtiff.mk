@@ -28,8 +28,8 @@ LIBTIFF_VERSION		:= $(call embtk_get_pkgversion,libtiff)
 LIBTIFF_SITE		:= ftp://ftp.remotesensing.org/pub/libtiff
 LIBTIFF_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBTIFF_PACKAGE		:= tiff-$(LIBTIFF_VERSION).tar.gz
-LIBTIFF_SRC_DIR		:= $(PACKAGES_BUILD)/tiff-$(LIBTIFF_VERSION)
-LIBTIFF_BUILD_DIR	:= $(PACKAGES_BUILD)/tiff-$(LIBTIFF_VERSION)
+LIBTIFF_SRC_DIR		:= $(embtk_pkgb)/tiff-$(LIBTIFF_VERSION)
+LIBTIFF_BUILD_DIR	:= $(embtk_pkgb)/tiff-$(LIBTIFF_VERSION)
 
 LIBTIFF_BINS =	vbmp2tiff fax2tiff pal2rgb  ras2tiff rgb2ycbcr tiff2bw tiff2ps	\
 		tiffcmp tiffcrop tiffdump tiffmedian tiffsplit fax2ps gif2tiff	\

@@ -28,8 +28,8 @@ TSLIB_VERSION		:= $(call embtk_get_pkgversion,tslib)
 TSLIB_SITE		:= http://download.berlios.de/tslib
 TSLIB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 TSLIB_PACKAGE		:= tslib-$(TSLIB_VERSION).tar.bz2
-TSLIB_SRC_DIR		:= $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION)
-TSLIB_BUILD_DIR		:= $(PACKAGES_BUILD)/tslib-$(TSLIB_VERSION)
+TSLIB_SRC_DIR		:= $(embtk_pkgb)/tslib-$(TSLIB_VERSION)
+TSLIB_BUILD_DIR		:= $(embtk_pkgb)/tslib-$(TSLIB_VERSION)
 
 TSLIB_BINS		= ts_calibrate ts_harvest ts_print ts_print_raw ts_test
 TSLIB_SBINS		=

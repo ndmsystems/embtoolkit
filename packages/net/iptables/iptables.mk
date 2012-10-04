@@ -27,8 +27,8 @@ IPTABLES_NAME		:= iptables
 IPTABLES_VERSION	:= $(call embtk_get_pkgversion,iptables)
 IPTABLES_SITE		:= ftp://ftp.netfilter.org/pub/iptables
 IPTABLES_PACKAGE	:= iptables-$(IPTABLES_VERSION).tar.bz2
-IPTABLES_SRC_DIR	:= $(PACKAGES_BUILD)/iptables-$(IPTABLES_VERSION)
-IPTABLES_BUILD_DIR	:= $(PACKAGES_BUILD)/iptables-$(IPTABLES_VERSION)
+IPTABLES_SRC_DIR	:= $(embtk_pkgb)/iptables-$(IPTABLES_VERSION)
+IPTABLES_BUILD_DIR	:= $(embtk_pkgb)/iptables-$(IPTABLES_VERSION)
 
 IPTABLES_SBINS		:= iptables ip6tables ip6tables-restore ip6tables-save
 IPTABLES_SBINS		+= iptables-restore iptables-save

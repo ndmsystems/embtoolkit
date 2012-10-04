@@ -28,8 +28,8 @@ LIBXFIXES_VERSION	:= $(call embtk_get_pkgversion,libxfixes)
 LIBXFIXES_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 LIBXFIXES_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXFIXES_PACKAGE	:= libXfixes-$(LIBXFIXES_VERSION).tar.bz2
-LIBXFIXES_SRC_DIR	:= $(PACKAGES_BUILD)/libXfixes-$(LIBXFIXES_VERSION)
-LIBXFIXES_BUILD_DIR	:= $(PACKAGES_BUILD)/libXfixes-$(LIBXFIXES_VERSION)
+LIBXFIXES_SRC_DIR	:= $(embtk_pkgb)/libXfixes-$(LIBXFIXES_VERSION)
+LIBXFIXES_BUILD_DIR	:= $(embtk_pkgb)/libXfixes-$(LIBXFIXES_VERSION)
 
 LIBXFIXES_BINS		=
 LIBXFIXES_SBINS		=

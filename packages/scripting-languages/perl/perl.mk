@@ -26,8 +26,8 @@ PERL_NAME	:= perl
 PERL_VERSION	:= $(call embtk_get_pkgversion,perl)
 PERL_SITE	:= http://www.cpan.org/src
 PERL_PACKAGE	:= perl-$(PERL_VERSION).tar.gz
-PERL_SRC_DIR	:= $(PACKAGES_BUILD)/perl-$(PERL_VERSION)
-PERL_BUILD_DIR	:= $(PACKAGES_BUILD)/perl-$(PERL_VERSION)
+PERL_SRC_DIR	:= $(embtk_pkgb)/perl-$(PERL_VERSION)
+PERL_BUILD_DIR	:= $(embtk_pkgb)/perl-$(PERL_VERSION)
 
 
 #
@@ -38,7 +38,7 @@ MICROPERL_VERSION	:= $(PERL_VERSION)
 MICROPERL_SITE		:= $(PERL_SITE)
 MICROPERL_PACKAGE	:= $(PERL_PACKAGE)
 MICROPERL_SRC_DIR	:= $(PERL_SRC_DIR)
-MICROPERL_BUILD_DIR	:= $(PACKAGES_BUILD)/perl-$(PERL_VERSION)
+MICROPERL_BUILD_DIR	:= $(embtk_pkgb)/perl-$(PERL_VERSION)
 
 microperl_install: $(MICROPERL_BUILD_DIR)/.installed
 	$(call embtk_pinfo,"Successfully installed microperl")

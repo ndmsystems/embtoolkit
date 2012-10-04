@@ -27,8 +27,8 @@ RANDRPROTO_NAME		:= randrproto
 RANDRPROTO_VERSION	:= $(call embtk_get_pkgversion,randrproto)
 RANDRPROTO_SITE		:= http://xorg.freedesktop.org/archive/individual/proto
 RANDRPROTO_PACKAGE	:= randrproto-$(RANDRPROTO_VERSION).tar.bz2
-RANDRPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/randrproto-$(RANDRPROTO_VERSION)
-RANDRPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/randrproto-$(RANDRPROTO_VERSION)
+RANDRPROTO_SRC_DIR	:= $(embtk_pkgb)/randrproto-$(RANDRPROTO_VERSION)
+RANDRPROTO_BUILD_DIR	:= $(embtk_pkgb)/randrproto-$(RANDRPROTO_VERSION)
 
 RANDRPROTO_BINS =
 RANDRPROTO_SBINS =

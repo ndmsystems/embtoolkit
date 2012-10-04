@@ -28,8 +28,8 @@ ZLIB_VERSION		:= $(call embtk_get_pkgversion,zlib)
 ZLIB_SITE		:= http://zlib.net
 ZLIB_MIRROR1		:= http://sourceforge.net/projects/libpng/files/zlib/$(ZLIB_VERSION)
 ZLIB_PACKAGE		:= zlib-$(ZLIB_VERSION).tar.bz2
-ZLIB_SRC_DIR		:= $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)
-ZLIB_BUILD_DIR		:= $(PACKAGES_BUILD)/zlib-$(ZLIB_VERSION)
+ZLIB_SRC_DIR		:= $(embtk_pkgb)/zlib-$(ZLIB_VERSION)
+ZLIB_BUILD_DIR		:= $(embtk_pkgb)/zlib-$(ZLIB_VERSION)
 
 
 ZLIB_BINS		:=

@@ -28,8 +28,8 @@ LIBPCIACCESS_VERSION		:= $(call embtk_get_pkgversion,libpciaccess)
 LIBPCIACCESS_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 LIBPCIACCESS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBPCIACCESS_PACKAGE		:= libpciaccess-$(LIBPCIACCESS_VERSION).tar.gz
-LIBPCIACCESS_SRC_DIR		:= $(PACKAGES_BUILD)/libpciaccess-$(LIBPCIACCESS_VERSION)
-LIBPCIACCESS_BUILD_DIR		:= $(PACKAGES_BUILD)/libpciaccess-$(LIBPCIACCESS_VERSION)
+LIBPCIACCESS_SRC_DIR		:= $(embtk_pkgb)/libpciaccess-$(LIBPCIACCESS_VERSION)
+LIBPCIACCESS_BUILD_DIR		:= $(embtk_pkgb)/libpciaccess-$(LIBPCIACCESS_VERSION)
 
 LIBPCIACCESS_BINS	=
 LIBPCIACCESS_SBINS	=

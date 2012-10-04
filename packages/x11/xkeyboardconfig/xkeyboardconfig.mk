@@ -28,8 +28,8 @@ XKEYBOARDCONFIG_VERSION		:= $(call embtk_get_pkgversion,xkeyboardconfig)
 XKEYBOARDCONFIG_SITE		:= http://www.x.org/releases/individual/data/xkeyboard-config
 XKEYBOARDCONFIG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XKEYBOARDCONFIG_PACKAGE		:= xkeyboard-config-$(XKEYBOARDCONFIG_VERSION).tar.bz2
-XKEYBOARDCONFIG_SRC_DIR		:= $(PACKAGES_BUILD)/xkeyboard-config-$(XKEYBOARDCONFIG_VERSION)
-XKEYBOARDCONFIG_BUILD_DIR	:= $(PACKAGES_BUILD)/xkeyboard-config-$(XKEYBOARDCONFIG_VERSION)
+XKEYBOARDCONFIG_SRC_DIR		:= $(embtk_pkgb)/xkeyboard-config-$(XKEYBOARDCONFIG_VERSION)
+XKEYBOARDCONFIG_BUILD_DIR	:= $(embtk_pkgb)/xkeyboard-config-$(XKEYBOARDCONFIG_VERSION)
 
 XKEYBOARDCONFIG_DEPS		:= intltool_host_install xkbcomp_install
 

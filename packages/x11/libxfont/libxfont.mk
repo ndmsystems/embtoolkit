@@ -28,8 +28,8 @@ LIBXFONT_VERSION	:= $(call embtk_get_pkgversion,libxfont)
 LIBXFONT_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 LIBXFONT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXFONT_PACKAGE	:= libXfont-$(LIBXFONT_VERSION).tar.bz2
-LIBXFONT_SRC_DIR	:= $(PACKAGES_BUILD)/libXfont-$(LIBXFONT_VERSION)
-LIBXFONT_BUILD_DIR	:= $(PACKAGES_BUILD)/libXfont-$(LIBXFONT_VERSION)
+LIBXFONT_SRC_DIR	:= $(embtk_pkgb)/libXfont-$(LIBXFONT_VERSION)
+LIBXFONT_BUILD_DIR	:= $(embtk_pkgb)/libXfont-$(LIBXFONT_VERSION)
 
 LIBXFONT_BINS =
 LIBXFONT_SBINS =

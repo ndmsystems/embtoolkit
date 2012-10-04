@@ -29,8 +29,8 @@ PANGO_VERSION		:= $(call embtk_get_pkgversion,pango)
 PANGO_SITE		:= http://ftp.gnome.org/pub/gnome/sources/pango/$(PANGO_MAJOR_VERSION)
 PANGO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 PANGO_PACKAGE		:= pango-$(PANGO_VERSION).tar.bz2
-PANGO_SRC_DIR		:= $(PACKAGES_BUILD)/pango-$(PANGO_VERSION)
-PANGO_BUILD_DIR		:= $(PACKAGES_BUILD)/pango-$(PANGO_VERSION)
+PANGO_SRC_DIR		:= $(embtk_pkgb)/pango-$(PANGO_VERSION)
+PANGO_BUILD_DIR		:= $(embtk_pkgb)/pango-$(PANGO_VERSION)
 
 PANGO_BINS		= pango*
 PANGO_SBINS		=

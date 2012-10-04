@@ -26,8 +26,8 @@ XCBPROTO_NAME		:= xcb-proto
 XCBPROTO_VERSION	:= $(call embtk_get_pkgversion,xcbproto)
 XCBPROTO_SITE		:= http://xcb.freedesktop.org/dist
 XCBPROTO_PACKAGE	:= xcb-proto-$(XCBPROTO_VERSION).tar.gz
-XCBPROTO_SRC_DIR	:= $(PACKAGES_BUILD)/xcb-proto-$(XCBPROTO_VERSION)
-XCBPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/xcb-proto-$(XCBPROTO_VERSION)
+XCBPROTO_SRC_DIR	:= $(embtk_pkgb)/xcb-proto-$(XCBPROTO_VERSION)
+XCBPROTO_BUILD_DIR	:= $(embtk_pkgb)/xcb-proto-$(XCBPROTO_VERSION)
 
 XCBPROTO_BINS =
 XCBPROTO_SBINS =

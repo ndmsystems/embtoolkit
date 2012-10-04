@@ -28,8 +28,8 @@ BIGREQSPROTO_VERSION		:= $(call embtk_get_pkgversion,BIGREQSPROTO)
 BIGREQSPROTO_SITE		:= http://xorg.freedesktop.org/archive/individual/proto
 BIGREQSPROTO_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 BIGREQSPROTO_PACKAGE		:= bigreqsproto-$(BIGREQSPROTO_VERSION).tar.bz2
-BIGREQSPROTO_SRC_DIR		:= $(PACKAGES_BUILD)/bigreqsproto-$(BIGREQSPROTO_VERSION)
-BIGREQSPROTO_BUILD_DIR		:= $(PACKAGES_BUILD)/bigreqsproto-$(BIGREQSPROTO_VERSION)
+BIGREQSPROTO_SRC_DIR		:= $(embtk_pkgb)/bigreqsproto-$(BIGREQSPROTO_VERSION)
+BIGREQSPROTO_BUILD_DIR		:= $(embtk_pkgb)/bigreqsproto-$(BIGREQSPROTO_VERSION)
 
 BIGREQSPROTO_BINS	=
 BIGREQSPROTO_SBINS	=

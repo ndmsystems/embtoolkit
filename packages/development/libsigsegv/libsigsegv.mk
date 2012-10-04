@@ -29,8 +29,8 @@ LIBSIGSEGV_SITE		:= ftp://ftp.gnu.org/pub/gnu/libsigsegv
 LIBSIGSEGV_SITE_MIRROR1	:= http://ftp.gnu.org/gnu/libsigsegv
 LIBSIGSEGV_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBSIGSEGV_PACKAGE	:= libsigsegv-$(LIBSIGSEGV_VERSION).tar.gz
-LIBSIGSEGV_SRC_DIR	:= $(PACKAGES_BUILD)/libsigsegv-$(LIBSIGSEGV_VERSION)
-LIBSIGSEGV_BUILD_DIR	:= $(PACKAGES_BUILD)/libsigsegv-$(LIBSIGSEGV_VERSION)
+LIBSIGSEGV_SRC_DIR	:= $(embtk_pkgb)/libsigsegv-$(LIBSIGSEGV_VERSION)
+LIBSIGSEGV_BUILD_DIR	:= $(embtk_pkgb)/libsigsegv-$(LIBSIGSEGV_VERSION)
 
 LIBSIGSEGV_BINS		=
 LIBSIGSEGV_SBINS	=

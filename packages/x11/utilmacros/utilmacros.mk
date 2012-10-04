@@ -28,8 +28,8 @@ UTILMACROS_VERSION	:= $(call embtk_get_pkgversion,utilmacros)
 UTILMACROS_SITE		:= http://xorg.freedesktop.org/archive/individual/util
 UTILMACROS_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 UTILMACROS_PACKAGE	:= util-macros-$(UTILMACROS_VERSION).tar.bz2
-UTILMACROS_SRC_DIR	:= $(PACKAGES_BUILD)/util-macros-$(UTILMACROS_VERSION)
-UTILMACROS_BUILD_DIR	:= $(PACKAGES_BUILD)/util-macros-$(UTILMACROS_VERSION)
+UTILMACROS_SRC_DIR	:= $(embtk_pkgb)/util-macros-$(UTILMACROS_VERSION)
+UTILMACROS_BUILD_DIR	:= $(embtk_pkgb)/util-macros-$(UTILMACROS_VERSION)
 
 UTILMACROS_BINS		=
 UTILMACROS_SBINS	=

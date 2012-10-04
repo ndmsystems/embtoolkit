@@ -28,8 +28,8 @@ LIBXCB_VERSION		:= $(call embtk_get_pkgversion,libxcb)
 LIBXCB_SITE		:= http://xcb.freedesktop.org/dist
 LIBXCB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXCB_PACKAGE		:= libxcb-$(LIBXCB_VERSION).tar.gz
-LIBXCB_SRC_DIR		:= $(PACKAGES_BUILD)/libxcb-$(LIBXCB_VERSION)
-LIBXCB_BUILD_DIR	:= $(PACKAGES_BUILD)/libxcb-$(LIBXCB_VERSION)
+LIBXCB_SRC_DIR		:= $(embtk_pkgb)/libxcb-$(LIBXCB_VERSION)
+LIBXCB_BUILD_DIR	:= $(embtk_pkgb)/libxcb-$(LIBXCB_VERSION)
 
 LIBXCB_BINS		=
 LIBXCB_SBINS		=

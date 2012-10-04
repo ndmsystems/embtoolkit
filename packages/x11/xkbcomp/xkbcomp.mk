@@ -28,8 +28,8 @@ XKBCOMP_VERSION		:= $(call embtk_get_pkgversion,xkbcomp)
 XKBCOMP_SITE		:= http://xorg.freedesktop.org/archive/individual/app
 XKBCOMP_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 XKBCOMP_PACKAGE		:= xkbcomp-$(XKBCOMP_VERSION).tar.bz2
-XKBCOMP_SRC_DIR		:= $(PACKAGES_BUILD)/xkbcomp-$(XKBCOMP_VERSION)
-XKBCOMP_BUILD_DIR	:= $(PACKAGES_BUILD)/xkbcomp-$(XKBCOMP_VERSION)
+XKBCOMP_SRC_DIR		:= $(embtk_pkgb)/xkbcomp-$(XKBCOMP_VERSION)
+XKBCOMP_BUILD_DIR	:= $(embtk_pkgb)/xkbcomp-$(XKBCOMP_VERSION)
 
 XKBCOMP_BINS		= xkbcomp
 XKBCOMP_SBINS		=

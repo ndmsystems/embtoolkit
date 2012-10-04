@@ -40,7 +40,7 @@ J			:= -j$(CONFIG_EMBTK_NUMBER_BUILD_JOBS)
 embtk_sysroot		:= $(SYSROOT)
 embtk_tools		:= $(TOOLS)
 embtk_toolsb		:= $(TOOLS_BUILD)
-embtk_pkgbuild		:= $(PACKAGES_BUILD)
+embtk_pkgb		:= $(PACKAGES_BUILD)
 embtk_generated		:= $(EMBTK_GENERATED)
 embtk_rootfs		:= $(ROOTFS)
 embtk_hosttools		:= $(HOSTTOOLS)
@@ -174,6 +174,6 @@ define __embtk_kconfig_clean
 endef
 
 rmallpath:
-	$(Q)rm -rf $(PACKAGES_BUILD)* $(embtk_rootfs)* $(embtk_tools)* $(embtk_toolsb)*
+	$(Q)rm -rf $(embtk_pkgb)* $(embtk_rootfs)* $(embtk_tools)* $(embtk_toolsb)*
 	$(Q)rm -rf $(embtk_sysroot)* $(HOSTTOOLS)* $(embtk_generated)/rootfs-*
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(embtk_dldir)/*.patch)

@@ -28,8 +28,8 @@ LIBXFT_VERSION		:= $(call embtk_get_pkgversion,libxft)
 LIBXFT_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 LIBXFT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBXFT_PACKAGE		:= libXft-$(LIBXFT_VERSION).tar.bz2
-LIBXFT_SRC_DIR		:= $(PACKAGES_BUILD)/libXft-$(LIBXFT_VERSION)
-LIBXFT_BUILD_DIR	:= $(PACKAGES_BUILD)/libXft-$(LIBXFT_VERSION)
+LIBXFT_SRC_DIR		:= $(embtk_pkgb)/libXft-$(LIBXFT_VERSION)
+LIBXFT_BUILD_DIR	:= $(embtk_pkgb)/libXft-$(LIBXFT_VERSION)
 
 LIBXFT_BINS		= xft-config
 LIBXFT_SBINS		=

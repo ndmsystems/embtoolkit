@@ -28,8 +28,8 @@ LIBX11_VERSION		:= $(call embtk_get_pkgversion,libx11)
 LIBX11_SITE		:= http://xorg.freedesktop.org/archive/individual/lib
 LIBX11_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 LIBX11_PACKAGE		:= libX11-$(LIBX11_VERSION).tar.bz2
-LIBX11_SRC_DIR		:= $(PACKAGES_BUILD)/libX11-$(LIBX11_VERSION)
-LIBX11_BUILD_DIR	:= $(PACKAGES_BUILD)/libX11-$(LIBX11_VERSION)
+LIBX11_SRC_DIR		:= $(embtk_pkgb)/libX11-$(LIBX11_VERSION)
+LIBX11_BUILD_DIR	:= $(embtk_pkgb)/libX11-$(LIBX11_VERSION)
 
 LIBX11_BINS		=
 LIBX11_SBINS		=

@@ -27,8 +27,8 @@ XPROTO_NAME		:= xproto
 XPROTO_VERSION		:= $(call embtk_get_pkgversion,xproto)
 XPROTO_SITE		:= http://ftp.x.org/pub/individual/proto
 XPROTO_PACKAGE		:= xproto-$(XPROTO_VERSION).tar.bz2
-XPROTO_SRC_DIR		:= $(PACKAGES_BUILD)/xproto-$(XPROTO_VERSION)
-XPROTO_BUILD_DIR	:= $(PACKAGES_BUILD)/xproto-$(XPROTO_VERSION)
+XPROTO_SRC_DIR		:= $(embtk_pkgb)/xproto-$(XPROTO_VERSION)
+XPROTO_BUILD_DIR	:= $(embtk_pkgb)/xproto-$(XPROTO_VERSION)
 
 XPROTO_BINS	=
 XPROTO_SBINS	=
