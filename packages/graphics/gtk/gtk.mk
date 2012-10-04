@@ -59,7 +59,7 @@ GTK_CONFIGURE_OPTS	+= LIBPNG=-lpng
 define embtk_postinstall_gtk
 	$(Q)test -e $(GTK_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(GTK_BUILD_DIR)/.patchlibtool
-	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/gtk-* $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/gtk-* $(embtk_rootfs)/usr/$(LIBDIR)/
 endef
 
 $(GTK_BUILD_DIR)/.patchlibtool:

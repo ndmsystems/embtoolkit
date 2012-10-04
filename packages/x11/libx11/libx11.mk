@@ -55,10 +55,10 @@ endef
 define embtk_postinstall_libx11
 	$(Q)test -e $(LIBX11_BUILD_DIR)/.patchlibtool ||			\
 	$(MAKE) $(LIBX11_BUILD_DIR)/.patchlibtool
-	$(Q)-mkdir -p $(ROOTFS)/usr/share
-	$(Q)-mkdir -p $(ROOTFS)/usr/share/X11
-	$(Q)-cp $(embtk_sysroot)/usr/share/X11/XErrorDB $(ROOTFS)/usr/share/X11/
-	$(Q)-cp $(embtk_sysroot)/usr/share/X11/XKeysymDB $(ROOTFS)/usr/share/X11/
+	$(Q)-mkdir -p $(embtk_rootfs)/usr/share
+	$(Q)-mkdir -p $(embtk_rootfs)/usr/share/X11
+	$(Q)-cp $(embtk_sysroot)/usr/share/X11/XErrorDB $(embtk_rootfs)/usr/share/X11/
+	$(Q)-cp $(embtk_sysroot)/usr/share/X11/XKeysymDB $(embtk_rootfs)/usr/share/X11/
 endef
 
 $(LIBX11_BUILD_DIR)/.patchlibtool:

@@ -40,8 +40,8 @@ cgilua_install:
 	$(call embtk_makeinstall_pkg,cgilua)
 
 define embtk_postinstall_cgilua
-	$(Q)mkdir -p $(ROOTFS)
-	$(Q)mkdir -p $(ROOTFS)/usr
-	$(Q)mkdir -p $(ROOTFS)/usr/share
-	$(Q)cp -R $(embtk_sysroot)/usr/share/lua $(ROOTFS)/usr/share/
+	$(Q)mkdir -p $(embtk_rootfs)
+	$(Q)mkdir -p $(embtk_rootfs)/usr
+	$(Q)mkdir -p $(embtk_rootfs)/usr/share
+	$(Q)cp -R $(embtk_sysroot)/usr/share/lua $(embtk_rootfs)/usr/share/
 endef

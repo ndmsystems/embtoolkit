@@ -82,5 +82,5 @@ XSERVER_CONFIGURE_OPTS += --disable-tslib
 endif
 
 define embtk_postinstall_xserver
-	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/xorg $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/xorg $(embtk_rootfs)/usr/$(LIBDIR)/
 endef

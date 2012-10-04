@@ -34,7 +34,7 @@ BB_BUILD_DIR	:= $(PACKAGES_BUILD)/busybox-$(BB_VERSION)
 BB_NODESTDIR	:= y
 BB_MAKE_ENV	= CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"
 BB_MAKE_OPTS	= CROSS_COMPILE="$(CCACHE_BIN) $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"
-BB_MAKE_OPTS	+= CONFIG_PREFIX=$(ROOTFS)
+BB_MAKE_OPTS	+= CONFIG_PREFIX=$(embtk_rootfs)
 
 bb_install:
 	$(call embtk_makeinstall_pkg,bb)
@@ -43,14 +43,14 @@ define embtk_beforeinstall_bb
 	$(embtk_configure_bb)
 	$(Q)$(MAKE) -C $(BB_BUILD_DIR)						\
 	CROSS_COMPILE="$(CCACHE_BIN) $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"	\
-	CONFIG_PREFIX=$(ROOTFS) oldconfig
+	CONFIG_PREFIX=$(embtk_rootfs) oldconfig
 endef
 
 define embtk_postinstall_bb
 	$(Q)CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"		\
 	$(MAKE) -C $(BB_BUILD_DIR)						\
 	CROSS_COMPILE="$(CCACHE_BIN) $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"	\
-	CONFIG_PREFIX=$(ROOTFS) install
+	CONFIG_PREFIX=$(embtk_rootfs) install
 endef
 
 define embtk_configure_bb

@@ -174,6 +174,6 @@ define __embtk_kconfig_clean
 endef
 
 rmallpath:
-	$(Q)rm -rf $(PACKAGES_BUILD)* $(ROOTFS)* $(embtk_tools)* $(embtk_toolsb)*
+	$(Q)rm -rf $(PACKAGES_BUILD)* $(embtk_rootfs)* $(embtk_tools)* $(embtk_toolsb)*
 	$(Q)rm -rf $(embtk_sysroot)* $(HOSTTOOLS)* $(embtk_generated)/rootfs-*
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(embtk_dldir)/*.patch)

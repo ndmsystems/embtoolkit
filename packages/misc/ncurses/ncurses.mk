@@ -50,6 +50,6 @@ NCURSES_CONFIGURE_OPTS	:= --disable-rpath --without-cxx-binding	\
 			--program-prefix=""
 
 define embtk_postinstall_ncurses
-	$(Q)mkdir -p $(ROOTFS)/usr/share
-	$(Q)-cp -R $(embtk_sysroot)/usr/share/tabset $(ROOTFS)/usr/share/
+	$(Q)mkdir -p $(embtk_rootfs)/usr/share
+	$(Q)-cp -R $(embtk_sysroot)/usr/share/tabset $(embtk_rootfs)/usr/share/
 endef

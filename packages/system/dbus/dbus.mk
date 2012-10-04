@@ -44,6 +44,6 @@ DBUS_CONFIGURE_OPTS := --enable-abstract-sockets --with-xml=libxml		\
 	$(if $(CONFIG_EMBTK_HAVE_LIBX11),--with-x,--without-x)
 
 define embtk_postinstall_dbus
-	$(Q)-mkdir -p $(ROOTFS)/usr/libexec
-	$(Q)-cp -R $(embtk_sysroot)/usr/libexec/dbus* $(ROOTFS)/usr/libexec/
+	$(Q)-mkdir -p $(embtk_rootfs)/usr/libexec
+	$(Q)-cp -R $(embtk_sysroot)/usr/libexec/dbus* $(embtk_rootfs)/usr/libexec/
 endef

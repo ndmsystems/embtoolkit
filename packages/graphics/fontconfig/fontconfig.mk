@@ -66,5 +66,5 @@ FONTCONFIG_MAKE_OPTS		+= FREETYPE_LIBS="$(FREETYPE_LIBS-y)"
 FONTCONFIG_DEPS			:= libxml2_install freetype_install
 
 define embtk_postinstall_fontconfig
-	$(Q)-cp -R $(embtk_sysroot)/usr/etc/fonts $(ROOTFS)/etc/
+	$(Q)-cp -R $(embtk_sysroot)/usr/etc/fonts $(embtk_rootfs)/etc/
 endef

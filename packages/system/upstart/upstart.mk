@@ -46,8 +46,8 @@ $(UPSTART_BUILD_DIR)/.installed: $(UPSTART_DEPS) download_upstart \
 	upstart-$(UPSTART_VERSION) in your root filesystem...")
 	$(call __embtk_kill_lt_rpath,$(UPSTART_BUILD_DIR))
 	$(Q)$(MAKE) -C $(UPSTART_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(UPSTART_BUILD_DIR) DESTDIR=$(ROOTFS)/ install
-	$(Q)-rm -rf $(ROOTFS)/share
+	$(Q)$(MAKE) -C $(UPSTART_BUILD_DIR) DESTDIR=$(embtk_rootfs)/ install
+	$(Q)-rm -rf $(embtk_rootfs)/share
 	@touch $@
 
 download_upstart:
@@ -104,9 +104,9 @@ upstart_clean:
 	$(Q)-rm -rf $(UPSTART_BUILD_DIR)*
 
 $(UPSTART_BUILD_DIR)/.special:
-	$(Q)-mkdir -p $(ROOTFS)/etc
-	$(Q)-mkdir -p $(ROOTFS)/etc/dbus-1
-	$(Q)-mkdir -p $(ROOTFS)/etc/dbus-1/system.d
+	$(Q)-mkdir -p $(embtk_rootfs)/etc
+	$(Q)-mkdir -p $(embtk_rootfs)/etc/dbus-1
+	$(Q)-mkdir -p $(embtk_rootfs)/etc/dbus-1/system.d
 	$(Q)-cp $(embtk_sysroot)/etc/dbus-1/system.d/Upstart.conf \
-	$(ROOTFS)/etc/dbus-1/system.d
-	$(Q)-cp -R $(embtk_sysroot)/etc/init $(ROOTFS)/etc/
+	$(embtk_rootfs)/etc/dbus-1/system.d
+	$(Q)-cp -R $(embtk_sysroot)/etc/init $(embtk_rootfs)/etc/

@@ -40,5 +40,5 @@ TSLIB_PKGCONFIGS	= tslib*.pc
 TSLIB_DEPS =
 
 define embtk_postinstall_tslib
-	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/ts $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/ts $(embtk_rootfs)/usr/$(LIBDIR)/
 endef

@@ -43,10 +43,10 @@ rings_install:
 	$(call embtk_makeinstall_pkg,rings)
 
 define embtk_postinstall_rings
-	$(Q)mkdir -p $(ROOTFS)
-	$(Q)mkdir -p $(ROOTFS)/usr
-	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
-	$(Q)mkdir -p $(ROOTFS)/usr/share
-	$(Q)cp -R $(embtk_sysroot)/usr/$(LIBDIR)/lua $(ROOTFS)/usr/$(LIBDIR)/
-	$(Q)cp -R $(embtk_sysroot)/usr/share/lua $(ROOTFS)/usr/share/
+	$(Q)mkdir -p $(embtk_rootfs)
+	$(Q)mkdir -p $(embtk_rootfs)/usr
+	$(Q)mkdir -p $(embtk_rootfs)/usr/$(LIBDIR)
+	$(Q)mkdir -p $(embtk_rootfs)/usr/share
+	$(Q)cp -R $(embtk_sysroot)/usr/$(LIBDIR)/lua $(embtk_rootfs)/usr/$(LIBDIR)/
+	$(Q)cp -R $(embtk_sysroot)/usr/share/lua $(embtk_rootfs)/usr/share/
 endef

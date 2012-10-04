@@ -51,7 +51,7 @@ PANGO_DEPS		:= glib_install fontconfig_install $(PANGO_DEPS-y)	\
 define embtk_postinstall_pango
 	$(Q)test -e $(PANGO_BUILD_DIR)/.patchlibtool || \
 	$(MAKE) $(PANGO_BUILD_DIR)/.patchlibtool
-	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/pango $(ROOTFS)/usr/$(LIBDIR)/
+	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/pango $(embtk_rootfs)/usr/$(LIBDIR)/
 endef
 
 $(PANGO_BUILD_DIR)/.patchlibtool:

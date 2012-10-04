@@ -70,7 +70,7 @@ define embtk_postinstall_openssl
 		$(MAKE) libtool_files_adapt;					\
 		touch $(OPENSSL_BUILD_DIR)/.postinstalled;			\
 	fi
-	$(Q)mkdir -p $(ROOTFS)
-	$(Q)mkdir -p $(ROOTFS)/etc
-	$(Q)-cp -R $(embtk_sysroot)/etc/ssl $(ROOTFS)/etc/
+	$(Q)mkdir -p $(embtk_rootfs)
+	$(Q)mkdir -p $(embtk_rootfs)/etc
+	$(Q)-cp -R $(embtk_sysroot)/etc/ssl $(embtk_rootfs)/etc/
 endef

@@ -49,11 +49,11 @@ $(MICROPERL_BUILD_DIR)/.installed: download_microperl \
 	microperl-$(PERL_VERSION) in your root filesystem...")
 	$(Q)$(MAKE) -C $(MICROPERL_BUILD_DIR) -f Makefile.micro \
 		OPTIMIZE="$(TARGET_CFLAGS)" CC=$(TARGETCC_CACHED)
-	$(Q)mkdir -p $(ROOTFS)
-	$(Q)mkdir -p $(ROOTFS)/usr
-	$(Q)mkdir -p $(ROOTFS)/usr/bin
-	$(Q)cp $(MICROPERL_BUILD_DIR)/microperl $(ROOTFS)/usr/bin
-	$(Q)cd $(ROOTFS)/usr/bin; ln -sf microperl perl
+	$(Q)mkdir -p $(embtk_rootfs)
+	$(Q)mkdir -p $(embtk_rootfs)/usr
+	$(Q)mkdir -p $(embtk_rootfs)/usr/bin
+	$(Q)cp $(MICROPERL_BUILD_DIR)/microperl $(embtk_rootfs)/usr/bin
+	$(Q)cd $(embtk_rootfs)/usr/bin; ln -sf microperl perl
 	$(Q)touch $@
 
 $(PERL_BUILD_DIR)/.decompressed:

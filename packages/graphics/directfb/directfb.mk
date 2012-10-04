@@ -102,12 +102,12 @@ DIRECTFB_DEPS	+= $(if $(CONFIG_EMBTK_DIRECTFB_INPUT_TSLIB),tslib_install)
 define embtk_postinstall_directfb
 	$(Q)test -e $(DIRECTFB_BUILD_DIR)/.patchlibtool ||			\
 	$(MAKE) $(DIRECTFB_BUILD_DIR)/.patchlibtool
-	$(Q)mkdir -p $(ROOTFS)
-	$(Q)mkdir -p $(ROOTFS)/etc
-	$(Q)-cp $(DIRECTFB_BUILD_DIR)/fb.modes $(ROOTFS)/etc
-	$(Q)mkdir -p $(ROOTFS)/usr
-	$(Q)mkdir -p $(ROOTFS)/usr/$(LIBDIR)
-	$(Q)-cp -R $(embtk_sysroot)/usr/lib/directfb-*-* $(ROOTFS)/usr/$(LIBDIR)
+	$(Q)mkdir -p $(embtk_rootfs)
+	$(Q)mkdir -p $(embtk_rootfs)/etc
+	$(Q)-cp $(DIRECTFB_BUILD_DIR)/fb.modes $(embtk_rootfs)/etc
+	$(Q)mkdir -p $(embtk_rootfs)/usr
+	$(Q)mkdir -p $(embtk_rootfs)/usr/$(LIBDIR)
+	$(Q)-cp -R $(embtk_sysroot)/usr/lib/directfb-*-* $(embtk_rootfs)/usr/$(LIBDIR)
 endef
 
 $(DIRECTFB_BUILD_DIR)/.patchlibtool:

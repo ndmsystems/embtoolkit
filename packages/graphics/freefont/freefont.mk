@@ -39,14 +39,14 @@ freefont_ttf_install: $(FREEFONT_TTF_BUILD_DIR)/.installed
 
 $(FREEFONT_TTF_BUILD_DIR)/.installed: $(FREEFONT_TTF_DEPS)
 	$(call embtk_pinfo,"Installing freefont-$(FREEFONT_TTF_VERSION) in your root filesystem...")
-	$(Q)mkdir -p $(ROOTFS)
-	$(Q)mkdir -p $(ROOTFS)/usr
-	$(Q)mkdir -p $(ROOTFS)/usr/share
-	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts
-	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts/truetype
-	$(Q)mkdir -p $(ROOTFS)/usr/share/fonts/truetype/freefont
+	$(Q)mkdir -p $(embtk_rootfs)
+	$(Q)mkdir -p $(embtk_rootfs)/usr
+	$(Q)mkdir -p $(embtk_rootfs)/usr/share
+	$(Q)mkdir -p $(embtk_rootfs)/usr/share/fonts
+	$(Q)mkdir -p $(embtk_rootfs)/usr/share/fonts/truetype
+	$(Q)mkdir -p $(embtk_rootfs)/usr/share/fonts/truetype/freefont
 	$(Q)cp $(FREEFONT_TTF_BUILD_DIR)/*.ttf					\
-				$(ROOTFS)/usr/share/fonts/truetype/freefont/
+				$(embtk_rootfs)/usr/share/fonts/truetype/freefont/
 
 $(FREEFONT_TTF_BUILD_DIR)/.decompressed:
 	$(call embtk_decompress_pkg,freefont_ttf)
