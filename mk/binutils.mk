@@ -34,7 +34,7 @@ BINUTILS_BUILD_DIR	:= $(TOOLS_BUILD)/binutils-build
 BINUTILS_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT) --disable-werror	\
 			--disable-nls --disable-multilib		\
 			--target=$(STRICT_GNU_TARGET)
-BINUTILS_PREFIX		:= $(TOOLS)
+BINUTILS_PREFIX		:= $(embtk_tools)
 
 binutils_install:
 	$(call embtk_install_hostpkg,binutils)

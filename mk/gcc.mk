@@ -73,8 +73,8 @@ GCC1_SRC_DIR		:= $(GCC_SRC_DIR)
 GCC1_BUILD_DIR		:= $(TOOLS_BUILD)/gcc1-build
 GCC1_KCONFIGS_NAME	:= GCC
 
-GCC1_MAKE_ENV		:= PATH=$(PATH):$(TOOLS)/bin
-GCC1_PREFIX		:= $(TOOLS)
+GCC1_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
+GCC1_PREFIX		:= $(embtk_tools)
 GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
@@ -101,8 +101,8 @@ GCC2_SRC_DIR		:= $(GCC_SRC_DIR)
 GCC2_BUILD_DIR		:= $(TOOLS_BUILD)/gcc2-build
 GCC2_KCONFIGS_NAME	:= GCC
 
-GCC2_MAKE_ENV		:= PATH=$(PATH):$(TOOLS)/bin
-GCC2_PREFIX		:= $(TOOLS)
+GCC2_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
+GCC2_PREFIX		:= $(embtk_tools)
 GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
@@ -128,8 +128,8 @@ GCC3_SRC_DIR		:= $(GCC_SRC_DIR)
 GCC3_BUILD_DIR		:= $(TOOLS_BUILD)/gcc3-build
 GCC3_KCONFIGS_NAME	:= GCC
 
-GCC3_MAKE_ENV		:= PATH=$(PATH):$(TOOLS)/bin
-GCC3_PREFIX		:= $(TOOLS)
+GCC3_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
+GCC3_PREFIX		:= $(embtk_tools)
 GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(SYSROOT)				\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
@@ -152,11 +152,11 @@ endef
 
 $(GCC3_BUILD_DIR)/.gcc3_post_install:
 ifeq ($(CONFIG_EMBTK_32BITS_FS),y)
-	$(Q)-cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib/*.so* $(SYSROOT)/lib/
+	$(Q)-cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.so* $(SYSROOT)/lib/
 else ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
-	$(Q)cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib64/*.so* $(SYSROOT)/lib/
+	$(Q)cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.so* $(SYSROOT)/lib/
 else ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cp -d $(TOOLS)/$(STRICT_GNU_TARGET)/lib32/*.so* $(SYSROOT)/lib32/
+	$(Q)cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.so* $(SYSROOT)/lib32/
 endif
 ifeq ($(CONFIG_EMBTK_64BITS_FS)$(CONFIG_EMBTK_CLIB_UCLIBC),yy)
 	$(Q)cd $(SYSROOT)/lib/; ln -sf ld-uClibc.so.0 ld64-uClibc.so.0

@@ -23,21 +23,21 @@
 # \date         May 2009
 ################################################################################
 
-TARGETCC		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-gcc
-TARGETCXX		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-g++
-TARGETAR		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-ar
-TARGETRANLIB		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-ranlib
-TARGETLD		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-ld
-TARGETNM		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-nm
-TARGETSTRIP		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-strip
-TARGETOBJDUMP		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-objdump
-TARGETOBJCOPY		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-objcopy
+TARGETCC		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-gcc
+TARGETCXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-g++
+TARGETAR		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ar
+TARGETRANLIB		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ranlib
+TARGETLD		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ld
+TARGETNM		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-nm
+TARGETSTRIP		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-strip
+TARGETOBJDUMP		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-objdump
+TARGETOBJCOPY		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-objcopy
 __TARGET_CFLAGS		:= $(subst ",,$(strip $(CONFIG_EMBTK_TARGET_COMPILER_CFLAGS)))
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SIZE_OPTIMIZED),-Os)
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SPEED_OPTIMIZED),-O3)
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_WITH_DEBUG_DATA),-g)
 TARGET_CFLAGS		:= $(strip $(__TARGET_CFLAGS))
-CROSS_COMPILE		:= $(TOOLS)/bin/$(STRICT_GNU_TARGET)-
+CROSS_COMPILE		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-
 
 export TARGETCC TARGETCXX TARGETAR TARGETRANLIB TARGETLD TARGETNM
 export TARGETSTRIP TARGETOBJDUMP TARGETOBJCOPY TARGET_CFLAGS CROSS_COMPILE
@@ -120,7 +120,7 @@ define __embtk_toolchain_mkinitdirs
 endef
 
 define __embtk_toolchain_symlinktools
-	cd $(TOOLS)/bin;							\
+	cd $(embtk_tools)/bin;							\
 	tools=$$(ls $(STRICT_GNU_TARGET)-*);					\
 	toolsnames=$$(echo $$tools | sed 's/$(STRICT_GNU_TARGET)-*//g');	\
 	for tool in $$toolsnames; do						\
@@ -130,7 +130,7 @@ endef
 
 define __embtk_toolchain_compress
 	tar -cjf $(TOOLCHAIN_PACKAGE)						\
-		$(notdir $(SYSROOT)) $(notdir $(TOOLS)) &&			\
+		$(notdir $(SYSROOT)) $(notdir $(embtk_tools)) &&			\
 	mv $(TOOLCHAIN_PACKAGE) $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 endef
 
@@ -162,7 +162,7 @@ define __embtk_toolchain_build
 		$(foreach dep,$(patsubst %_install,%,$(TOOLCHAIN_DEPS)),
 			$(MAKE) $(dep)_clean;)
 		$(foreach pkg,$(__embtk_rootfs_pkgs-y),$(MAKE) $(pkg)_clean;)
-		rm -rf $(SYSROOT) $(TOOLS)
+		rm -rf $(SYSROOT) $(embtk_tools)
 		$(__embtk_toolchain_mkinitdirs)
 		$(MAKE) $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
 		touch $(TOOLCHAIN_DIR)/.installed)

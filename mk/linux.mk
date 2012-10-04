@@ -48,7 +48,7 @@ $(LINUX_BUILD_DIR)/.headers_installed:
 	$(call embtk_pinfo,"Installing linux-$(LINUX_VERSION) headers...")
 	$(call embtk_download_pkg,linux)
 	$(call embtk_decompress_pkg,linux)
-	$(Q)PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) 		\
+	$(Q)PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) 		\
 		headers_install ARCH=$(LINUX_ARCH)				\
 		CROSS_COMPILE=$(STRICT_GNU_TARGET)-				\
 		INSTALL_HDR_PATH=$(SYSROOT)/usr

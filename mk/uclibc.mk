@@ -48,7 +48,7 @@ uclibc_headers_install:
 $(UCLIBC_BUILD_DIR)/.installed:
 	$(call embtk_pinfo,"Build and install uClibc-$(UCLIBC_VERSION) ...")
 	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/			\
-		CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
+		CROSS_COMPILER_PREFIX="$(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"	\
 		SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"				\
 		MULTILIB_DIR="/$(LIBDIR)/"					\
 		RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"				\
@@ -64,14 +64,14 @@ $(UCLIBC_BUILD_DIR)/.headers_installed:
 	$(Q)$(embtk_configure_uclibc)
 	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) silentoldconfig
 	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/			\
-		CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
+		CROSS_COMPILER_PREFIX="$(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"	\
 		SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"				\
 		MULTILIB_DIR="/$(LIBDIR)/"					\
 		RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"				\
 		KERNEL_HEADERS="$(SYSROOT)/usr/include/"			\
 		UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install_headers
 	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(SYSROOT)/			\
-		CROSS_COMPILER_PREFIX="$(TOOLS)/bin/$(STRICT_GNU_TARGET)-"	\
+		CROSS_COMPILER_PREFIX="$(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"	\
 		SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"				\
 		MULTILIB_DIR="/$(LIBDIR)/"					\
 		RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"				\

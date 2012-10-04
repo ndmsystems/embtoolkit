@@ -107,7 +107,7 @@ GDB_HOST_CONFIGURE_OPTS	:= --disable-werror --disable-sim --disable-nls	\
 			--with-bugurl="$(EMBTK_BUGURL)"			\
 			--with-pkgversion="embtk-$(EMBTK_VERSION)"	\
 			--target=$(STRICT_GNU_TARGET)
-GDB_HOST_PREFIX		:= $(TOOLS)
+GDB_HOST_PREFIX		:= $(embtk_tools)
 
 gdb_host_clean:
 	$(Q)rm -rf $(GDB_HOST_BUILD_DIR)

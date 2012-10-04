@@ -142,7 +142,7 @@ define __embtk_mk_initsysrootdirs
 endef
 
 define __embtk_mk_inittoolsdirs
-	mkdir -p $(TOOLS)
+	mkdir -p $(embtk_tools)
 	mkdir -p $(TOOLS_BUILD)
 endef
 
@@ -174,6 +174,6 @@ define __embtk_kconfig_clean
 endef
 
 rmallpath:
-	$(Q)rm -rf $(PACKAGES_BUILD)* $(ROOTFS)* $(TOOLS)* $(TOOLS_BUILD)*
+	$(Q)rm -rf $(PACKAGES_BUILD)* $(ROOTFS)* $(embtk_tools)* $(TOOLS_BUILD)*
 	$(Q)rm -rf $(SYSROOT)* $(HOSTTOOLS)* $(EMBTK_GENERATED)/rootfs-*
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(embtk_dldir)/*.patch)

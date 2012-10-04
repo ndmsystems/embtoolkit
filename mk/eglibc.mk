@@ -134,8 +134,8 @@ define embtk_configure_eglibc_headers
 endef
 
 define embtk_install_eglibc
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) $(J)
-	PATH=$(PATH):$(TOOLS)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) install	\
+	PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) $(J)
+	PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) install	\
 							install_root=$(SYSROOT)
 	touch $(EGLIBC_BUILD_DIR)/.installed
 endef
