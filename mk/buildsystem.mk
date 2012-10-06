@@ -96,7 +96,7 @@ define __embtk_mk_startbuild
 	$(call embtk_echo_blue,"| Toolchain |")
 	$(call embtk_echo_blue," ~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"\tLinux kernel headers: linux-$(call __embtk_pkg_version,linux)")
-	$(call embtk_echo_blue,"\tC library           : $(call __embtk_pkg_name,$(__embtk_toolchain_clib))-$(call __embtk_pkg_version,$(__embtk_toolchain_clib))")
+	$(call embtk_echo_blue,"\tC library           : $(call __embtk_pkg_name,$(embtk_clib))-$(call __embtk_pkg_version,$(embtk_clib))")
 	$(call embtk_echo_blue,"\tBinutils            : binutils-$(call  __embtk_pkg_version,binutils)")
 	$(call embtk_echo_blue,"\tGCC                 : gcc-$(call __embtk_pkg_version,gcc)")
 	$(if $(CONFIG_EMBTK_HAVE_GDB_SYSTEM),
