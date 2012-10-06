@@ -27,10 +27,10 @@ ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 
 # Include various filesystems macros
 include $(EMBTK_ROOT)/mk/fs.mk
-ROOTFS_JFFS2		:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(__embtk_toolchain_clib).jffs2
-ROOTFS_TARBZ2		:= rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(__embtk_toolchain_clib).tar.bz2
-ROOTFS_SQUASHFS		:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(__embtk_toolchain_clib).squashfs
-ROOTFS_INITRAMFS	:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(__embtk_toolchain_clib).initramfs
+ROOTFS_JFFS2		:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).jffs2
+ROOTFS_TARBZ2		:= rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).tar.bz2
+ROOTFS_SQUASHFS		:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).squashfs
+ROOTFS_INITRAMFS	:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).initramfs
 
 HOSTTOOLS_COMPONENTS-y += makedevs_install fakeroot_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += mtdutils_host_install
