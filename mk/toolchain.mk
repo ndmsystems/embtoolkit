@@ -216,6 +216,9 @@ endef
 toolchain_clean:
 	$(Q)$(__embtk_toolchain_clean)
 
+pembtk_toolchain_mkinitdirs:
+	$(call __embtk_toolchain_mkinitdirs)
+
 # Download target for offline build
 TOOLCHAIN_ALL_DEPS := $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
 TOOLCHAIN_ALL_DEPS += $(TOOLCHAIN_ADDONS_DEPS)
