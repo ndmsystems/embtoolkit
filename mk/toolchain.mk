@@ -1,6 +1,5 @@
 ################################################################################
-# Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -53,38 +52,38 @@ export PATH
 LIBDIR			:= $(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),lib32,lib)
 export LIBDIR
 
-#ccache on host
+# ccache
 include $(EMBTK_ROOT)/mk/ccache.mk
 
-#GMP on host
+# GMP
 include $(EMBTK_ROOT)/mk/gmp.mk
 
-#MPFR
+# MPFR
 include $(EMBTK_ROOT)/mk/mpfr.mk
 
-#MPC
+# MPC
 include $(EMBTK_ROOT)/mk/mpc.mk
 
-#binutils
+# binutils
 include $(EMBTK_ROOT)/mk/binutils.mk
 
-#GCC
+# GCC
 include $(EMBTK_ROOT)/mk/gcc.mk
 
-#linux kernel headers
+# linux kernel headers
 include $(EMBTK_ROOT)/mk/linux.mk
 
-# strace toolchain addon
+# toolchain addon: strace
 include $(EMBTK_ROOT)/mk/strace.mk
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_STRACE) += strace_install
 
-# gdb toolchain addon
+# toolchain addon: gdb
 include $(EMBTK_ROOT)/packages/development/gdb/gdb.mk
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDB) += gdbfull_install
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDBSERVER) += gdbserver_install
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HOST_HAVE_GDB) += gdb_host_install
 
-#Autotools
+# Autotools
 include $(EMBTK_ROOT)/mk/libtool.mk
 include $(EMBTK_ROOT)/mk/autoconf.mk
 include $(EMBTK_ROOT)/mk/automake.mk
@@ -92,7 +91,11 @@ include $(EMBTK_ROOT)/mk/m4.mk
 AUTOTOOLS_INSTALL	:= m4_install libtool_install autoconf_install
 AUTOTOOLS_INSTALL	+= automake_install
 
-__embtk_toolchain_clib	= $(if $(CONFIG_EMBTK_CLIB_EGLIBC),eglibc,uclibc)
+# C library to use for the toolchain
+__embtk_toolchain_clib-$(CONFIG_EMBTK_CLIB_EGLIBC) := eglibc
+__embtk_toolchain_clib-$(CONFIG_EMBTK_CLIB_UCLIBC) := uclibc
+__embtk_toolchain_clib	= $(or $(__embtk_toolchain_clib-y),BUG_NO_C_LIB)
+
 TOOLCHAIN_NAME		:= toolchain
 TOOLCHAIN_PACKAGE	:= toolchain-$(GNU_TARGET)-$(__embtk_toolchain_clib)-$(EMBTK_MCU_FLAG).tar.bz2
 TOOLCHAIN_DIR		:= $(embtk_generated)/toolchain-$(GNU_TARGET)-$(__embtk_toolchain_clib)-$(EMBTK_MCU_FLAG)
@@ -111,7 +114,7 @@ TOOLCHAIN_ADDONS_NAME		:= toolchain-addons
 TOOLCHAIN_ADDONS_DEPS		:= $(TOOLCHAIN_ADDONS-y)
 TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_BUILD_DIR)/.addons
 
-include $(EMBTK_ROOT)/mk/$(__embtk_toolchain_clib).mk
+-include $(EMBTK_ROOT)/mk/$(__embtk_toolchain_clib).mk
 
 define __embtk_toolchain_mkinitdirs
 	$(__embtk_mk_initsysrootdirs)
