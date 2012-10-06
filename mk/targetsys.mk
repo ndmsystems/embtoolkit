@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -16,18 +16,16 @@
 #
 ################################################################################
 #
-# \file         target-mcu.mk
-# \brief	target-mcu.mk of Embtoolkit.
+# \file         targetsys.mk
+# \brief	This file defines system environment of the target
+# \brief	(os, clib, etc.).
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2009
+# \date         October 2012
 ################################################################################
 
-# ARM
-ifeq ($(CONFIG_EMBTK_ARCH_ARM),y)
-include $(EMBTK_ROOT)/mk/arch/arm/arm.mk
-endif
+embtk_os-$(CONFIG_EMBTK_OS_LINUX)	:= linux
+embtk_os				:= $(or $(embtk_os-y),invalid-os)
 
-# MIPS
-ifeq ($(CONFIG_EMBTK_ARCH_MIPS),y)
-include $(EMBTK_ROOT)/mk/arch/mips/mips.mk
-endif
+embtk_clib-$(CONFIG_EMBTK_CLIB_EGLIBC)	:= eglibc
+embtk_clib-$(CONFIG_EMBTK_CLIB_UCLIBC)	:= uclibc
+embtk_clib				:= $(or $(embtk_clib-y),invalid-clib)

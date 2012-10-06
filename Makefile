@@ -83,6 +83,7 @@ EMBTK_BUILD := $(if $(CONFIG_EMBTK_DOTCONFIG),startbuild,xconfig)
 All: $(EMBTK_BUILD)
 
 include mk/macros.mk
+include mk/targetsys.mk
 include mk/target-mcu.mk
 include mk/buildsystem.mk
 include mk/toolchain.mk
