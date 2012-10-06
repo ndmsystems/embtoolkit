@@ -39,8 +39,8 @@ endef
 #
 # JFFS2 rootfs macro
 #
-__embtk_mkjffs2			:= $(HOSTTOOLS)/usr/sbin/mkfs.jffs2
-__embtk_sumtool			:= $(HOSTTOOLS)/usr/sbin/sumtool
+__embtk_mkjffs2			:= $(embtk_htools)/usr/sbin/mkfs.jffs2
+__embtk_sumtool			:= $(embtk_htools)/usr/sbin/sumtool
 __embtk_jffs2_eraseblksz	:= $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE)
 __embtk_jffs2_pad		:= $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_ERASEBLOCKSIZE)
 __embtk_jffs2_pagesz		:= $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2_PAGESIZE)

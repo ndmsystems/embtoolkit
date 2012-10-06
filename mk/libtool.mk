@@ -30,8 +30,8 @@ LIBTOOL_PACKAGE		:= libtool-$(LIBTOOL_VERSION).tar.gz
 LIBTOOL_SRC_DIR		:= $(embtk_toolsb)/libtool-$(LIBTOOL_VERSION)
 LIBTOOL_BUILD_DIR	:= $(embtk_toolsb)/libtool-$(LIBTOOL_VERSION)
 
-LIBTOOL			:= $(HOSTTOOLS)/usr/bin/libtool
-LIBTOOLIZE		:= $(HOSTTOOLS)/usr/bin/libtoolize
+LIBTOOL			:= $(embtk_htools)/usr/bin/libtool
+LIBTOOLIZE		:= $(embtk_htools)/usr/bin/libtoolize
 export LIBTOOL LIBTOOLIZE
 
 LIBTOOL_CONFIGURE_OPTS := --disable-ltdl-install

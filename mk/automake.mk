@@ -30,7 +30,7 @@ AUTOMAKE_PACKAGE	:= automake-$(AUTOMAKE_VERSION).tar.xz
 AUTOMAKE_SRC_DIR	:= $(embtk_toolsb)/automake-$(AUTOMAKE_VERSION)
 AUTOMAKE_BUILD_DIR	:= $(embtk_toolsb)/automake-$(AUTOMAKE_VERSION)
 
-AUTOMAKE_DIR	:= $(HOSTTOOLS)/usr
+AUTOMAKE_DIR	:= $(embtk_htools)/usr
 ACLOCAL		:= $(AUTOMAKE_DIR)/bin/aclocal
 AUTOMAKE	:= $(AUTOMAKE_DIR)/bin/automake
 export ACLOCAL AUTOMAKE

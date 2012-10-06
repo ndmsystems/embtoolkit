@@ -54,7 +54,7 @@ $(LINUX_BUILD_DIR)/.headers_installed:
 		INSTALL_HDR_PATH=$(embtk_sysroot)/usr
 	$(MAKE) -C $(LINUX_BUILD_DIR) distclean
 	$(MAKE) -C $(LINUX_BUILD_DIR) headers_install				\
-		INSTALL_HDR_PATH=$(HOSTTOOLS)/usr
+		INSTALL_HDR_PATH=$(embtk_htools)/usr
 	$(Q)touch $@
 
 download_linux download_linux_headers:

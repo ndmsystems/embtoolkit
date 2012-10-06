@@ -29,7 +29,7 @@ MPFR_HOST_SITE		:= http://www.mpfr.org/mpfr-$(MPFR_HOST_VERSION)
 MPFR_HOST_PACKAGE	:= mpfr-$(MPFR_HOST_VERSION).tar.bz2
 MPFR_HOST_SRC_DIR	:= $(embtk_toolsb)/mpfr-$(MPFR_HOST_VERSION)
 MPFR_HOST_BUILD_DIR	:= $(embtk_toolsb)/mpfr-build
-MPFR_HOST_DIR		:= $(HOSTTOOLS)/usr/local/mpfr-host
+MPFR_HOST_DIR		:= $(embtk_htools)/usr/local/mpfr-host
 
 export MPFR_HOST_DIR
 

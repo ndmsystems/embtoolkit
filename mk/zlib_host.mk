@@ -37,11 +37,11 @@ zlib_host_install:
 
 define embtk_configure_zlib_host
 	$(Q)cd $(ZLIB_HOST_BUILD_DIR);					\
-	CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\
-	LDFLAGS="-L$(HOSTTOOLS)/$(LIBDIR) -L$(HOSTTOOLS)/usr/$(LIBDIR)"	\
+	CPPFLAGS="-I$(embtk_htools)/usr/include"				\
+	LDFLAGS="-L$(embtk_htools)/$(LIBDIR) -L$(embtk_htools)/usr/$(LIBDIR)"	\
 	$(ZLIB_HOST_CONFIGURE_ENV)					\
 	$(CONFIG_SHELL) $(ZLIB_HOST_SRC_DIR)/configure			\
-		--prefix=$(HOSTTOOLS)/usr $(ZLIB_HOST_CONFIGURE_OPTS)
+		--prefix=$(embtk_htools)/usr $(ZLIB_HOST_CONFIGURE_OPTS)
 	$(Q)touch $(ZLIB_HOST_BUILD_DIR)/.configured
 endef
 

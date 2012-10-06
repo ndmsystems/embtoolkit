@@ -31,7 +31,7 @@ AUTOCONF_SRC_DIR	:= $(embtk_toolsb)/autoconf-$(AUTOCONF_VERSION)
 AUTOCONF_BUILD_DIR	:= $(embtk_toolsb)/autoconf-$(AUTOCONF_VERSION)
 
 # autoconf binaries
-AUTOCONF_DIR	:= $(HOSTTOOLS)/usr
+AUTOCONF_DIR	:= $(embtk_htools)/usr
 AUTOCONF	:= $(AUTOCONF_DIR)/bin/autoconf
 AUTOHEADER	:= $(AUTOCONF_DIR)/bin/autoheader
 AUTOM4TE	:= $(AUTOCONF_DIR)/bin/autom4te

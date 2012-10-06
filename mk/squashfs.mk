@@ -30,8 +30,8 @@ SQUASHFS_TOOLS_PACKAGE		:= squashfs$(SQUASHFS_TOOLS_VERSION).tar.gz
 SQUASHFS_TOOLS_SRC_DIR		:= $(embtk_toolsb)/squashfs$(SQUASHFS_TOOLS_VERSION)
 SQUASHFS_TOOLS_BUILD_DIR	:= $(SQUASHFS_TOOLS_SRC_DIR)/squashfs-tools
 
-MKSQUASHFS_BIN	:= $(HOSTTOOLS)/usr/bin/mksquashfs
-UNSQUASHFS_BIN	:= $(HOSTTOOLS)/usr/bin/unsquashfs
+MKSQUASHFS_BIN	:= $(embtk_htools)/usr/bin/mksquashfs
+UNSQUASHFS_BIN	:= $(embtk_htools)/usr/bin/unsquashfs
 
 SQUASHFS_TOOLS_DEPS := zlib_host_install
 
@@ -45,13 +45,13 @@ $(SQUASHFS_TOOLS_BUILD_DIR)/.installed:
 	$(call embtk_decompress_pkg,squashfs_tools)
 	$(Q)$(MAKE) -C $(SQUASHFS_TOOLS_BUILD_DIR)				\
 		CC=$(HOSTCC_CACHED)						\
-		CPPFLAGS="-I$(HOSTTOOLS)/usr/include"				\
-		LDFLAGS="-L$(HOSTTOOLS)/usr/lib"
-	$(Q)mkdir -p $(HOSTTOOLS)
-	$(Q)mkdir -p $(HOSTTOOLS)/usr
-	$(Q)mkdir -p $(HOSTTOOLS)/usr/bin
-	$(Q)install $(SQUASHFS_TOOLS_BUILD_DIR)/mksquashfs $(HOSTTOOLS)/usr/bin
-	$(Q)install $(SQUASHFS_TOOLS_BUILD_DIR)/unsquashfs $(HOSTTOOLS)/usr/bin
+		CPPFLAGS="-I$(embtk_htools)/usr/include"				\
+		LDFLAGS="-L$(embtk_htools)/usr/lib"
+	$(Q)mkdir -p $(embtk_htools)
+	$(Q)mkdir -p $(embtk_htools)/usr
+	$(Q)mkdir -p $(embtk_htools)/usr/bin
+	$(Q)install $(SQUASHFS_TOOLS_BUILD_DIR)/mksquashfs $(embtk_htools)/usr/bin
+	$(Q)install $(SQUASHFS_TOOLS_BUILD_DIR)/unsquashfs $(embtk_htools)/usr/bin
 	$(Q)touch $@
 
 squashfs_tools_clean:

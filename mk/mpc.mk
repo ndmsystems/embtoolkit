@@ -29,7 +29,7 @@ MPC_HOST_SITE		:= http://www.multiprecision.org/mpc/download
 MPC_HOST_PACKAGE	:= mpc-$(MPC_HOST_VERSION).tar.gz
 MPC_HOST_SRC_DIR	:= $(embtk_toolsb)/mpc-$(MPC_HOST_VERSION)
 MPC_HOST_BUILD_DIR	:= $(embtk_toolsb)/mpc-build
-MPC_HOST_DIR		:= $(HOSTTOOLS)/usr/local/mpc-host
+MPC_HOST_DIR		:= $(embtk_htools)/usr/local/mpc-host
 
 export MPC_HOST_DIR
 

@@ -72,9 +72,9 @@ MTDUTILS_HOST_BUILD_DIR		:= $(embtk_toolsb)/mtd-utils-$(MTDUTILS_VERSION)
 MTDUTILS_HOST_DEPS	:= zlib_host_install lzo_host_install \
 			e2fsprogs_host_install
 
-MTDUTILS_HOST_MAKE_ENV	:= LDFLAGS="-L$(HOSTTOOLS)/usr/lib"
-MTDUTILS_HOST_MAKE_ENV	+= CPPFLAGS="-I. -Iinclude -I../include -I$(HOSTTOOLS)/usr/include"
-MTDUTILS_HOST_MAKE_ENV	+= DESTDIR=$(HOSTTOOLS)
+MTDUTILS_HOST_MAKE_ENV	:= LDFLAGS="-L$(embtk_htools)/usr/lib"
+MTDUTILS_HOST_MAKE_ENV	+= CPPFLAGS="-I. -Iinclude -I../include -I$(embtk_htools)/usr/include"
+MTDUTILS_HOST_MAKE_ENV	+= DESTDIR=$(embtk_htools)
 MTDUTILS_HOST_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR)
 
 mtdutils_host_install:

@@ -32,7 +32,7 @@ M4_SRC_DIR	:= $(embtk_toolsb)/m4-$(M4_VERSION)
 M4_BUILD_DIR	:= $(embtk_toolsb)/m4-$(M4_VERSION)
 
 # m4 binaries
-M4_DIR	:= $(HOSTTOOLS)/usr
+M4_DIR	:= $(embtk_htools)/usr
 M4_BIN	:= $(M4_DIR)/bin/m4
 M4	:= $(M4_BIN)
 export M4

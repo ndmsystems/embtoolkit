@@ -308,12 +308,12 @@ endef
 # Usage:
 # $(call embtk_configure_hostpkg,PACKAGE)
 #
-__embtk_hostpkg_rpathldflags	= "-Wl,-rpath,$(HOSTTOOLS)/usr/lib"
+__embtk_hostpkg_rpathldflags	= "-Wl,-rpath,$(embtk_htools)/usr/lib"
 __embtk_hostpkg_rpath		= $(strip $(if $(__embtk_pkg_setrpath),		\
 					$(__embtk_hostpkg_rpathldflags)))
 
-__embtk_hostpkg_ldflags		= -L$(HOSTTOOLS)/usr/lib $(__embtk_hostpkg_rpath)
-__embtk_hostpkg_cppflags	= -I$(HOSTTOOLS)/usr/include
+__embtk_hostpkg_ldflags		= -L$(embtk_htools)/usr/lib $(__embtk_hostpkg_rpath)
+__embtk_hostpkg_cppflags	= -I$(embtk_htools)/usr/include
 define embtk_configure_hostpkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
 	$(call embtk_pinfo,"Configure $(__embtk_pkg_package) for host..."))
@@ -331,7 +331,7 @@ define embtk_configure_hostpkg
 	$(CONFIG_SHELL) $(__embtk_pkg_srcdir)/configure				\
 	--build=$(HOST_BUILD) --host=$(HOST_ARCH)				\
 	--prefix=$(strip $(if $(__embtk_pkg_prefix),				\
-				$(__embtk_pkg_prefix),$(HOSTTOOLS)/usr))	\
+				$(__embtk_pkg_prefix),$(embtk_htools)/usr))	\
 	$(__embtk_pkg_configureopts)
 	$(Q)touch $(__embtk_pkg_dotconfigured_f)
 endef

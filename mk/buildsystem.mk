@@ -17,9 +17,8 @@
 #
 ################################################################################
 #
-# \file         initialpath.mk
-# \brief	initialpath of Embtoolkit. Here we define SYSROOT, TOOLS,
-# \brief	TOOLS_BUILD PACKAGES_BUILD and ROOTFS.
+# \file         buildsystem.mk
+# \brief	buildsystem.mk of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
@@ -43,7 +42,7 @@ embtk_toolsb		:= $(TOOLS_BUILD)
 embtk_pkgb		:= $(PACKAGES_BUILD)
 embtk_generated		:= $(EMBTK_GENERATED)
 embtk_rootfs		:= $(ROOTFS)
-embtk_hosttools		:= $(HOSTTOOLS)
+embtk_htools		:= $(HOSTTOOLS)
 __embtk_dldir		:= $(patsubst %/,%,$(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_DOWNLOAD_DIR)))
 embtk_dldir		:= $(or $(__embtk_dldir),$(EMBTK_ROOT)/dl)
 
@@ -147,10 +146,10 @@ define __embtk_mk_inittoolsdirs
 endef
 
 define __embtk_mk_inithosttoolsdirs
-	mkdir -p $(HOSTTOOLS)
-	mkdir -p $(HOSTTOOLS)/usr
-	mkdir -p $(HOSTTOOLS)/usr/include
-	mkdir -p $(HOSTTOOLS)/usr/local
+	mkdir -p $(embtk_htools)
+	mkdir -p $(embtk_htools)/usr
+	mkdir -p $(embtk_htools)/usr/include
+	mkdir -p $(embtk_htools)/usr/local
 endef
 
 define __embtk_kconfig_clean
@@ -175,5 +174,5 @@ endef
 
 rmallpath:
 	$(Q)rm -rf $(embtk_pkgb)* $(embtk_rootfs)* $(embtk_tools)* $(embtk_toolsb)*
-	$(Q)rm -rf $(embtk_sysroot)* $(HOSTTOOLS)* $(embtk_generated)/rootfs-*
+	$(Q)rm -rf $(embtk_sysroot)* $(embtk_htools)* $(embtk_generated)/rootfs-*
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(embtk_dldir)/*.patch)

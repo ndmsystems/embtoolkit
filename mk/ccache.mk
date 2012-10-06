@@ -35,7 +35,7 @@ CCACHE_PACKAGE		:= ccache-$(CCACHE_VERSION).tar.bz2
 CCACHE_SRC_DIR		:= $(embtk_toolsb)/ccache-$(CCACHE_VERSION)
 CCACHE_BUILD_DIR	:= $(embtk_toolsb)/ccachehost-build
 
-CCACHE_HOST_DIR		:= $(HOSTTOOLS)/usr/local/ccachehost
+CCACHE_HOST_DIR		:= $(embtk_htools)/usr/local/ccachehost
 CCACHE_DIR		:= $(EMBTK_ROOT)/.ccache
 CCACHE_BIN		:= $(CCACHE_HOST_DIR)/bin/ccache
 

@@ -33,7 +33,7 @@ FAKEROOT_SRC_DIR	:= $(embtk_toolsb)/fakeroot-$(FAKEROOT_VERSION)
 FAKEROOT_BUILD_DIR	:= $(embtk_toolsb)/fakeroot-build
 
 # fakeroot binaries and env
-FAKEROOT_BIN		:= $(HOSTTOOLS)/usr/bin/fakeroot
+FAKEROOT_BIN		:= $(embtk_htools)/usr/bin/fakeroot
 FAKEROOT_ENV_FILE	:= $(EMBTK_ROOT)/.fakeroot.001
 export FAKEROOT_BIN FAKEROOT_ENV_FILE
 

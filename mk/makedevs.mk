@@ -26,7 +26,7 @@ MAKEDEVS_NAME		:= makedevs
 MAKEDEVS_BUILD_DIR	:= $(embtk_toolsb)/makedevs-build
 MAKEDEVS_SRC		:= $(EMBTK_ROOT)/src/makedevs
 
-MAKEDEVS_DIR		:= $(HOSTTOOLS)/usr/bin
+MAKEDEVS_DIR		:= $(embtk_htools)/usr/bin
 MAKEDEVS_BIN		:= $(MAKEDEVS_DIR)/makedevs
 
 makedevs_install:
@@ -36,8 +36,8 @@ makedevs_install:
 $(MAKEDEVS_BUILD_DIR)/.installed:
 	$(call embtk_pinfo,"Installing makedevs...")
 	$(Q)mkdir -p $(MAKEDEVS_BUILD_DIR)
-	$(Q)mkdir -p $(HOSTTOOLS)/usr
-	$(Q)mkdir -p $(HOSTTOOLS)/usr/bin
+	$(Q)mkdir -p $(embtk_htools)/usr
+	$(Q)mkdir -p $(embtk_htools)/usr/bin
 	$(hostcc_cached) -o $(MAKEDEVS_BIN) $(wildcard $(MAKEDEVS_SRC)/*.c)
 	$(Q)touch $@
 
