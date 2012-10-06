@@ -122,19 +122,19 @@ __embtk_pkg_mirror2		= $(strip $($(PKGV)_MIRROR2))
 __embtk_pkg_mirror3		= $(strip $($(PKGV)_MIRROR3))
 __embtk_pkg_package		= $(strip $($(PKGV)_PACKAGE))
 
-__embtk_pkg_refspec		= $(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_$(PKGV)_REFSPEC))
+__embtk_pkg_refspec		= $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_REFSPEC))
 
 __embtk_pkg_usesvn		= $(if $(CONFIG_EMBTK_$(PKGV)_VERSION_SVN),svn)
-__embtk_pkg_svnsite		= $(or $(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_$(PKGV)_SVN_SITE)),$(strip $($(PKGV)_SVN_SITE)))
-__embtk_pkg_svnbranch		= $(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_$(PKGV)_SVN_BRANCH))
-__embtk_pkg_svnrev		= $(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_$(PKGV)_SVN_REVISION))
+__embtk_pkg_svnsite		= $(or $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_SVN_SITE)),$(strip $($(PKGV)_SVN_SITE)))
+__embtk_pkg_svnbranch		= $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_SVN_BRANCH))
+__embtk_pkg_svnrev		= $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_SVN_REVISION))
 __embtk_pkg_localsvn		= $(strip $(if $(__embtk_pkg_usesvn),		\
 	$(EMBTK_ROOT)/src/$(__embtk_pkg_refspec)/$(__embtk_pkg_name)-$(notdir $(__embtk_pkg_svnbranch)).svn))
 
 __embtk_pkg_usegit		= $(if $(CONFIG_EMBTK_$(PKGV)_VERSION_GIT),git)
-__embtk_pkg_gitsite		= $(or $(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_$(PKGV)_GIT_SITE)),$(strip $($(PKGV)_GIT_SITE)))
-__embtk_pkg_gitbranch		= $(or $(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_$(PKGV)_GIT_BRANCH)),master)
-__embtk_pkg_gitrev		= $(or $(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_$(PKGV)_GIT_REVISION)),HEAD)
+__embtk_pkg_gitsite		= $(or $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_GIT_SITE)),$(strip $($(PKGV)_GIT_SITE)))
+__embtk_pkg_gitbranch		= $(or $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_GIT_BRANCH)),master)
+__embtk_pkg_gitrev		= $(or $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_GIT_REVISION)),HEAD)
 __embtk_pkg_localgit		= $(strip $(if $(__embtk_pkg_usegit),		\
 	$(EMBTK_ROOT)/src/$(__embtk_pkg_refspec)/$(__embtk_pkg_name).git))
 
@@ -196,7 +196,7 @@ __embtk_pkgs_nrall-y		= $(words $(__embtk_pkgs_all-y))
 # A macro to get packages version from .config file.
 # usage: $(call embtk_get_pkgversion,PACKAGE)
 #
-embtk_get_pkgversion = $(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_$(PKGV)_VERSION_STRING))
+embtk_get_pkgversion = $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_VERSION_STRING))
 
 
 #

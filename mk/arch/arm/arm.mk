@@ -24,7 +24,7 @@
 
 LINUX_ARCH		:= arm
 GNU_TARGET_ARCH		:= arm
-EMBTK_MCU_FLAG		:= $(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_ARM_MCU_STRING))
+EMBTK_MCU_FLAG		:= $(call __embtk_mk_uquote,$(CONFIG_EMBTK_ARM_MCU_STRING))
 
 ifeq ($(CONFIG_EMBTK_CLIB_EGLIBC),y)
 # EGLIBC C library

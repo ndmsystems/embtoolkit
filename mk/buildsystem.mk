@@ -43,7 +43,7 @@ embtk_pkgb		:= $(PACKAGES_BUILD)
 embtk_generated		:= $(EMBTK_GENERATED)
 embtk_rootfs		:= $(ROOTFS)
 embtk_htools		:= $(HOSTTOOLS)
-__embtk_dldir		:= $(patsubst %/,%,$(call __embtk_mk_unquotestr,$(CONFIG_EMBTK_DOWNLOAD_DIR)))
+__embtk_dldir		:= $(patsubst %/,%,$(call __embtk_mk_uquote,$(CONFIG_EMBTK_DOWNLOAD_DIR)))
 embtk_dldir		:= $(or $(__embtk_dldir),$(EMBTK_ROOT)/dl)
 
 

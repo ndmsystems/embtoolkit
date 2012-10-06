@@ -68,11 +68,11 @@ __embtk_mk_pathexist = $(shell test -e $(1) && echo y)
 __embtk_mk_pathnotexist = $(shell test -e $(1) || echo y)
 
 #
-# __embtk_mk_unquotestr
+# __embtk_mk_uquote
 # A macro to unquote a string.
-# Usage: $(call __embtk_mk_unquotestr,$(myquotedvar))
+# Usage: $(call __embtk_mk_uquote,$(myquotedvar))
 #
-__embtk_mk_unquotestr = $(subst ",,$(strip $(1)))
+__embtk_mk_uquote = $(subst ",,$(strip $(1)))
 
 # Macro to print messages
 embtk_pwarning	= $(call embtk_echo_yellow,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ WARNING: $(1)\\n$(__embtk_msg_h)")
