@@ -75,7 +75,7 @@ GCC1_KCONFIGS_NAME	:= GCC
 
 GCC1_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC1_PREFIX		:= $(embtk_tools)
-GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)				\
+GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
 	$(GCC_MULTILIB)								\
@@ -103,7 +103,7 @@ GCC2_KCONFIGS_NAME	:= GCC
 
 GCC2_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC2_PREFIX		:= $(embtk_tools)
-GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)				\
+GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
 	$(GCC_MULTILIB)								\
@@ -130,7 +130,7 @@ GCC3_KCONFIGS_NAME	:= GCC
 
 GCC3_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC3_PREFIX		:= $(embtk_tools)
-GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)				\
+GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
 	$(GCC_MULTILIB)								\
