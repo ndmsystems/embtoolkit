@@ -25,7 +25,6 @@
 
 config EMBTK_HOST_HAVE_GETTEXT
 	bool
-	default y
 	help
 		gettext for host development machine.
 
@@ -79,16 +78,8 @@ config EMBTK_GETTEXT_NEED_PATCH
 config EMBTK_GETTEXT_NEED_AUTORECONF
 	bool
 	select EMBTK_GETTEXT_HOST_NEED_AUTORECONF
-config EMBTK_GETTEXT_PKG_IS_TARGZ
-	bool
-config EMBTK_GETTEXT_PKG_IS_TARBZ2
-	bool
 
 config EMBTK_GETTEXT_HOST_NEED_PATCH
 	bool
 config EMBTK_GETTEXT_HOST_NEED_AUTORECONF
-	bool
-config EMBTK_GETTEXT_HOST_PKG_IS_TARGZ
-	bool
-config EMBTK_GETTEXT_HOST_PKG_IS_TARBZ2
 	bool
