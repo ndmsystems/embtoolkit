@@ -9,14 +9,12 @@ comment "-------------------------------------------------"
 
 config KEMBTK_BUSYB_ADD_SHELL
        bool "add-shell"
-       depends on EMBTK_BB_VERSION_1_18_X
        default y if KEMBTK_BUSYB_DESKTOP
        help
          Add shells to /etc/shells.
 
 config KEMBTK_BUSYB_REMOVE_SHELL
        bool "remove-shell"
-       depends on EMBTK_BB_VERSION_1_18_X
        default y if KEMBTK_BUSYB_DESKTOP
        help
          Remove shells from /etc/shells.
@@ -99,7 +97,6 @@ config KEMBTK_BUSYB_USE_BB_CRYPT_SHA
 	bool "Enable SHA256/512 crypt functions"
 	default y
 	depends on KEMBTK_BUSYB_USE_BB_CRYPT
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable this if you have passwords starting with "$5$" or "$6$"
 	  in your /etc/passwd or /etc/shadow files. These passwords
@@ -135,7 +132,6 @@ config KEMBTK_BUSYB_FEATURE_CHECK_NAMES
 config KEMBTK_BUSYB_FIRST_SYSTEM_ID
 	int "First valid system uid or gid for adduser and addgroup"
 	depends on KEMBTK_BUSYB_ADDUSER || KEMBTK_BUSYB_ADDGROUP
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	range 0 64900
 	default 100
 	help
@@ -144,7 +140,6 @@ config KEMBTK_BUSYB_FIRST_SYSTEM_ID
 config KEMBTK_BUSYB_LAST_SYSTEM_ID
 	int "Last valid system uid or gid for adduser and addgroup"
 	depends on KEMBTK_BUSYB_ADDUSER || KEMBTK_BUSYB_ADDGROUP
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	range 0 64900
 	default 999
 	help
@@ -160,7 +155,6 @@ config KEMBTK_BUSYB_FEATURE_ADDGROUP_LONG_OPTIONS
 	bool "Enable long options"
 	default y
 	depends on KEMBTK_BUSYB_ADDGROUP && KEMBTK_BUSYB_LONG_OPTS
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Support long options for the addgroup applet.
 
@@ -198,7 +192,19 @@ config KEMBTK_BUSYB_GETTY
 	default y
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
-	  getty lets you log in on a tty, it is normally invoked by init.
+	  getty lets you log in on a tty. It is normally invoked by init.
+
+	  Note that you can save a few bytes by disabling it and
+	  using login applet directly.
+	  If you need to reset tty attributes before calling login,
+	  this script approximates getty:
+
+	  exec </dev/$1 >/dev/$1 2>&1 || exit 1
+	  reset
+	  stty sane; stty ispeed 38400; stty ospeed 38400
+	  printf "%s login: " "`hostname`"
+	  read -r login
+	  exec /bin/login "$login"
 
 config KEMBTK_BUSYB_LOGIN
 	bool "login"
@@ -209,6 +215,17 @@ config KEMBTK_BUSYB_LOGIN
 
 	  Note that Busybox binary must be setuid root for this applet to
 	  work properly.
+
+config KEMBTK_BUSYB_LOGIN_SESSION_AS_CHILD
+	bool "Run logged in session in a child process"
+	default y if KEMBTK_BUSYB_PAM
+	depends on KEMBTK_BUSYB_LOGIN
+	help
+	  Run the logged in session in a child process.  This allows
+	  login to clean up things such as utmp entries or KEMBTK_BUSYB_PAM sessions
+	  when the login session is complete.  If you use KEMBTK_BUSYB_PAM, you
+	  almost always would want this to be set to Y, else KEMBTK_BUSYB_PAM session
+	  will not be cleaned up.
 
 config KEMBTK_BUSYB_PAM
 	bool "Support for KEMBTK_BUSYB_PAM (Pluggable Authentication Modules)"
@@ -275,6 +292,13 @@ config KEMBTK_BUSYB_CHPASSWD
 	help
 	  Reads a file of user name and password pairs from standard input
 	  and uses this information to update a group of existing users.
+
+config KEMBTK_BUSYB_FEATURE_DEFAULT_PASSWD_ALGO
+	string "Default password encryption method (passwd -a, cryptpw -m parameter)"
+	default "des"
+	depends on KEMBTK_BUSYB_PASSWD || KEMBTK_BUSYB_CRYPTPW
+	help
+	  Possible choices are "d[es]", "m[d5]", "s[ha256]" or "sha512".
 
 config KEMBTK_BUSYB_SU
 	bool "su"

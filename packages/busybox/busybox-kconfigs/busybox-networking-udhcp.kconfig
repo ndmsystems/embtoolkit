@@ -3,35 +3,15 @@
 # see scripts/kbuild/config-language.txt.
 #
 
-config KEMBTK_BUSYB_APP_UDHCPD
-       bool
-       default n
+config KEMBTK_BUSYB_UDHCPC6
+       bool "udhcp client for DHCPv6 (udhcpc6)"
        help
-               backward compatibility for busybox-1.1{3,4,5}.x
-
-config KEMBTK_BUSYB_APP_DHCPRELAY
-       bool
-       default n
-       help
-               backward compatibility for busybox-1.1{3,4,5}.x
-
-config KEMBTK_BUSYB_APP_DUMPLEASES
-       bool
-       default n
-       help
-               backward compatibility for busybox-1.1{3,4,5}.x
-
-config KEMBTK_BUSYB_APP_UDHCPC
-       bool
-       default n
-       help
-               backward compatibility for busybox-1.1{3,4,5}.x
+         udhcpc6 is a DHCPv6 client
 
 config KEMBTK_BUSYB_UDHCPD
 	bool "udhcp server (udhcpd)"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
-	select KEMBTK_BUSYB_APP_UDHCPD
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  udhcpd is a DHCP server geared primarily toward embedded systems,
 	  while striving to be fully functional and RFC compliant.
@@ -40,7 +20,6 @@ config KEMBTK_BUSYB_DHCPRELAY
 	bool "dhcprelay"
 	default y
 	depends on KEMBTK_BUSYB_UDHCPD
-	select KEMBTK_BUSYB_APP_DHCPRELAY
 	help
 	  dhcprelay listens for dhcp requests on one or more interfaces
 	  and forwards these requests to a different interface or dhcp
@@ -50,7 +29,6 @@ config KEMBTK_BUSYB_DUMPLEASES
 	bool "Lease display utility (dumpleases)"
 	default y
 	depends on KEMBTK_BUSYB_UDHCPD
-	select KEMBTK_BUSYB_APP_DUMPLEASES
 	help
 	  dumpleases displays the leases written out by the udhcpd server.
 	  Lease times are stored in the file by time remaining in lease, or
@@ -64,7 +42,20 @@ config KEMBTK_BUSYB_FEATURE_UDHCPD_WRITE_LEASES_EARLY
 	  If selected, udhcpd will write a new file with leases every
 	  time a new lease has been accepted, thus eliminating the need
 	  to send SIGUSR1 for the initial writing or updating. Any timed
-	  rewriting remains undisturbed
+	  rewriting remains undisturbed.
+
+config KEMBTK_BUSYB_FEATURE_UDHCPD_BASE_IP_ON_MAC
+	bool "Select KEMBTK_BUSYB_IP address based on client MAC"
+	depends on KEMBTK_BUSYB_UDHCPD
+	help
+	  If selected, udhcpd will base its selection of KEMBTK_BUSYB_IP address to offer
+	  on the client's hardware address. Otherwise udhcpd uses the next
+	  consecutive free address.
+
+	  This reduces the frequency of KEMBTK_BUSYB_IP address changes for clients
+	  which let their lease expire, and makes consecutive DHCPOFFERS
+	  for the same client to (almost always) contain the same
+	  KEMBTK_BUSYB_IP address.
 
 config KEMBTK_BUSYB_DHCPD_LEASES_FILE
 	string "Absolute path to lease file"
@@ -77,22 +68,13 @@ config KEMBTK_BUSYB_DHCPD_LEASES_FILE
 config KEMBTK_BUSYB_UDHCPC
 	bool "udhcp client (udhcpc)"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
-	select KEMBTK_BUSYB_APP_UDHCPC
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  udhcpc is a DHCP client geared primarily toward embedded systems,
 	  while striving to be fully functional and RFC compliant.
 
 	  The udhcp client negotiates a lease with the DHCP server and
 	  runs a script when a lease is obtained or lost.
-
-config KEMBTK_BUSYB_UDHCP_DEBUG_1_13_X_1_14_X
-       bool "Compile udhcp with noisy debugging messages"
-       default n
-       depends on KEMBTK_BUSYB_UDHCPD || KEMBTK_BUSYB_UDHCPC || KEMBTK_BUSYB_DHCPRELAY
-       depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X
-       help
-               If selected, udhcpd will output extra debugging output.
 
 config KEMBTK_BUSYB_FEATURE_UDHCPC_ARPING
 	bool "Verify that the offered address is free, using KEMBTK_BUSYB_ARP ping"
@@ -106,7 +88,6 @@ config KEMBTK_BUSYB_FEATURE_UDHCPC_ARPING
 
 config KEMBTK_BUSYB_FEATURE_UDHCP_PORT
 	bool "Enable '-P port' option for udhcpd and udhcpc"
-	default y
 	depends on KEMBTK_BUSYB_UDHCPD || KEMBTK_BUSYB_UDHCPC
 	help
 	  At the cost of ~300 bytes, enables -P port option.
@@ -117,7 +98,6 @@ config KEMBTK_BUSYB_UDHCP_DEBUG
 	default 9
 	range 0 9
 	depends on KEMBTK_BUSYB_UDHCPD || KEMBTK_BUSYB_UDHCPC || KEMBTK_BUSYB_DHCPRELAY
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Verbosity can be increased with multiple -v options.
 	  This option controls how high it can be cranked up.
@@ -133,6 +113,14 @@ config KEMBTK_BUSYB_FEATURE_UDHCP_RFC3397
 	  If selected, both client and server will support passing of domain
 	  search lists via option 119, specified in RFC 3397,
 	  and SIP servers option 120, specified in RFC 3361.
+
+config KEMBTK_BUSYB_FEATURE_UDHCP_8021Q
+	bool "Support for 802.1Q VLAN parameters"
+	default y
+	depends on KEMBTK_BUSYB_UDHCPD || KEMBTK_BUSYB_UDHCPC
+	help
+	  If selected, both client and server will support passing of VLAN
+	  KEMBTK_BUSYB_ID and priority via options 132 and 133 as per 802.1Q.
 
 config KEMBTK_BUSYB_UDHCPC_DEFAULT_SCRIPT
 	string "Absolute path to config script"

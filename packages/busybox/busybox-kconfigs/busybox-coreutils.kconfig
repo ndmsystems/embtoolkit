@@ -38,8 +38,8 @@ config KEMBTK_BUSYB_FEATURE_DATE_ISOFMT
 # defaults to "no": stat's nanosecond field is a bit non-portable
 config KEMBTK_BUSYB_FEATURE_DATE_NANO
 	bool "Support %[num]N nanosecond format specifier"
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
-	depends on KEMBTK_BUSYB_DATE && KEMBTK_BUSYB_PLATFORM_LINUX # syscall(__NR_clock_gettime)
+	depends on KEMBTK_BUSYB_DATE  # syscall(__NR_clock_gettime)
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Support %[num]N format specifier. Adds ~250 bytes of code.
 
@@ -47,7 +47,6 @@ config KEMBTK_BUSYB_FEATURE_DATE_COMPAT
 	bool "Support weird 'date MMDDhhmm[[YY]YY][.ss]' format"
 	default y
 	depends on KEMBTK_BUSYB_DATE
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  System time can be set by 'date -s KEMBTK_BUSYB_DATE' and simply 'date KEMBTK_BUSYB_DATE',
 	  but formats of KEMBTK_BUSYB_DATE string are different. 'date KEMBTK_BUSYB_DATE' accepts
@@ -59,6 +58,22 @@ config KEMBTK_BUSYB_FEATURE_DATE_COMPAT
 	  With this option off, 'date KEMBTK_BUSYB_DATE' is 'date -s KEMBTK_BUSYB_DATE' support
 	  the same format. With it on, 'date KEMBTK_BUSYB_DATE' additionally supports
 	  MMDDhhmm[[YY]YY][.ss] format.
+config KEMBTK_BUSYB_HOSTID
+	bool "hostid"
+	default y
+	help
+	  hostid prints the numeric identifier (in hexadecimal) for
+	  the current host.
+config KEMBTK_BUSYB_ID
+	bool "id"
+	default y
+	help
+	  id displays the current user and group KEMBTK_BUSYB_ID names.
+config KEMBTK_BUSYB_GROUPS
+	bool "groups"
+	default y
+	help
+	  Print the group names associated with current user id.
 config KEMBTK_BUSYB_TEST
 	bool "test"
 	default y
@@ -73,6 +88,19 @@ config KEMBTK_BUSYB_FEATURE_TEST_64
 	depends on KEMBTK_BUSYB_TEST || KEMBTK_BUSYB_ASH_BUILTIN_TEST || KEMBTK_BUSYB_HUSH
 	help
 	  Enable 64-bit support in test.
+config KEMBTK_BUSYB_TOUCH
+	bool "touch"
+	default y
+	help
+	  touch is used to create or change the access and/or
+	  modification timestamp of specified files.
+
+config KEMBTK_BUSYB_FEATURE_TOUCH_SUSV3
+	bool "Add support for KEMBTK_BUSYB_SUSV3 features (-d -t -r)"
+	default y
+	depends on KEMBTK_BUSYB_TOUCH
+	help
+	  Enable touch to use a reference file or a given date/time argument.
 config KEMBTK_BUSYB_TR
 	bool "tr"
 	default y
@@ -100,10 +128,21 @@ config KEMBTK_BUSYB_FEATURE_TR_EQUIV
 	  is possible.
 config KEMBTK_BUSYB_BASE64
 	bool "base64"
-	depends on EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Base64 encode and decode
+config KEMBTK_BUSYB_WHO
+      bool "who"
+      default y
+      depends on KEMBTK_BUSYB_FEATURE_UTMP
+      help
+        who is used to show who is logged on.
+config KEMBTK_BUSYB_USERS
+      bool "users"
+      default y
+      depends on KEMBTK_BUSYB_FEATURE_UTMP
+      help
+        Print users currently logged on.
 
 config KEMBTK_BUSYB_CAL
 	bool "cal"
@@ -141,7 +180,6 @@ config KEMBTK_BUSYB_FEATURE_CHOWN_LONG_OPTIONS
 	bool "Enable long options"
 	default y
 	depends on KEMBTK_BUSYB_CHOWN && KEMBTK_BUSYB_LONG_OPTS
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable use of long options
 
@@ -173,7 +211,6 @@ config KEMBTK_BUSYB_CP
 
 config KEMBTK_BUSYB_FEATURE_CP_LONG_OPTIONS
 	bool "Enable long options for cp"
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	depends on KEMBTK_BUSYB_CP && KEMBTK_BUSYB_LONG_OPTS
 	help
@@ -213,7 +250,6 @@ config KEMBTK_BUSYB_FEATURE_DD_THIRD_STATUS_LINE
 	bool "Enable the third status line upon signal"
 	default y
 	depends on KEMBTK_BUSYB_DD && KEMBTK_BUSYB_FEATURE_DD_SIGNAL_HANDLING
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Displays a coreutils-like third status line with transferred bytes,
 	  elapsed time and speed.
@@ -352,7 +388,6 @@ config KEMBTK_BUSYB_FOLD
 
 config KEMBTK_BUSYB_FSYNC
 	bool "fsync"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  fsync is used to flush file-related cached blocks to disk.
@@ -371,19 +406,6 @@ config KEMBTK_BUSYB_FEATURE_FANCY_HEAD
 	help
 	  This enables the head options (-c, -q, and -v).
 
-config KEMBTK_BUSYB_HOSTID
-	bool "hostid"
-	default y
-	help
-	  hostid prints the numeric identifier (in hexadecimal) for
-	  the current host.
-
-config KEMBTK_BUSYB_ID
-	bool "id"
-	default y
-	help
-	  id displays the current user and group KEMBTK_BUSYB_ID names.
-
 config KEMBTK_BUSYB_INSTALL
 	bool "install"
 	default y
@@ -397,11 +419,11 @@ config KEMBTK_BUSYB_FEATURE_INSTALL_LONG_OPTIONS
 	help
 	  Support long options for the install applet.
 
-config KEMBTK_BUSYB_LENGTH
-	bool "length"
-	default y
-	help
-	  length is used to print out the length of a specified string.
+####config LENGTH
+####	bool "length"
+####	default y
+####	help
+####	  length is used to print out the length of a specified string.
 
 config KEMBTK_BUSYB_LN
 	bool "ln"
@@ -619,14 +641,12 @@ config KEMBTK_BUSYB_SHA1SUM
 
 config KEMBTK_BUSYB_SHA256SUM
 	bool "sha256sum"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Compute and check SHA256 message digest
 
 config KEMBTK_BUSYB_SHA512SUM
 	bool "sha512sum"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Compute and check SHA512 message digest
@@ -695,7 +715,7 @@ config KEMBTK_BUSYB_FEATURE_SPLIT_FANCY
 config KEMBTK_BUSYB_STAT
 	bool "stat"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX # statfs()
+	select KEMBTK_BUSYB_PLATFORM_LINUX # statfs()
 	help
 	  display file or filesystem status.
 
@@ -764,13 +784,6 @@ config KEMBTK_BUSYB_FEATURE_TEE_USE_BLOCK_IO
 	depends on KEMBTK_BUSYB_TEE
 	help
 	  Enable this option for a faster tee, at expense of size.
-
-config KEMBTK_BUSYB_TOUCH
-	bool "touch"
-	default y
-	help
-	  touch is used to create or change the access and/or
-	  modification timestamp of specified files.
 
 config KEMBTK_BUSYB_TRUE
 	bool "true"
@@ -841,13 +854,6 @@ config KEMBTK_BUSYB_FEATURE_WC_LARGE
 	depends on KEMBTK_BUSYB_WC
 	help
 	  Use "unsigned long long" in wc for counter variables.
-
-config KEMBTK_BUSYB_WHO
-	bool "who"
-	default y
-	depends on KEMBTK_BUSYB_FEATURE_UTMP
-	help
-	  who is used to show who is logged on.
 
 config KEMBTK_BUSYB_WHOAMI
 	bool "whoami"

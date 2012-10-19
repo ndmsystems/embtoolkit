@@ -62,11 +62,11 @@ config KEMBTK_BUSYB_FEATURE_FIND_XDEV
 	  This option allows find to restrict searches to a single filesystem.
 
 config KEMBTK_BUSYB_FEATURE_FIND_MAXDEPTH
-	bool "Enable -maxdepth N"
+	bool "Enable -mindepth N and -maxdepth N"
 	default y
 	depends on KEMBTK_BUSYB_FIND
 	help
-	  This option enables -maxdepth N option.
+	  This option enables -mindepth N and -maxdepth N option.
 
 config KEMBTK_BUSYB_FEATURE_FIND_NEWER
 	bool "Enable -newer: compare file modification times"
@@ -74,7 +74,7 @@ config KEMBTK_BUSYB_FEATURE_FIND_NEWER
 	depends on KEMBTK_BUSYB_FIND
 	help
 	  Support the 'find -newer' option for finding any files which have
-	  a modified time that is more recent than the specified FILE.
+	  modification time that is more recent than the specified FILE.
 
 config KEMBTK_BUSYB_FEATURE_FIND_INUM
 	bool "Enable -inum: inode number matching"
@@ -176,7 +176,6 @@ config KEMBTK_BUSYB_FEATURE_FIND_LINKS
 	bool "Enable -links: link count matching"
 	default y
 	depends on KEMBTK_BUSYB_FIND
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Support the 'find -links' option for matching number of links.
 config KEMBTK_BUSYB_GREP

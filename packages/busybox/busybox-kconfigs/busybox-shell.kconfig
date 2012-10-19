@@ -18,29 +18,18 @@ config KEMBTK_BUSYB_ASH
 	  shell (by Herbert Xu), which was created by porting the 'ash' shell
 	  (written by Kenneth Almquist) from NetBSD.
 
-config KEMBTK_BUSYB_ASH_READ_NCHARS
-       bool "'read -n N' and 'read -s' support"
-       depends on KEMBTK_BUSYB_ASH
-       depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X
-       help
-               'read -n N' will return a value after N characters have been
-               read. 'read -s' will read without echoing the user's input.
-
-config KEMBTK_BUSYB_ASH_READ_TIMEOUT
-       bool "'read -t S' support"
-       depends on KEMBTK_BUSYB_ASH
-       depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X
-       help
-               'read -t S' will return a value after S seconds have passed.
-               This implementation will allow fractional seconds, expressed
-               as a decimal fraction, e.g. 'read -t 2.5 foo'.
-
 config KEMBTK_BUSYB_ASH_BASH_COMPAT
 	bool "bash-compatible extensions"
 	default y
 	depends on KEMBTK_BUSYB_ASH
 	help
 	  Enable bash-compatible extensions.
+
+config KEMBTK_BUSYB_ASH_IDLE_TIMEOUT
+	bool "Idle timeout variable"
+	depends on KEMBTK_BUSYB_ASH
+	help
+	  Enables bash-like auto-logout after $TMOUT seconds of idle time.
 
 config KEMBTK_BUSYB_ASH_JOB_CONTROL
 	bool "Job control"
@@ -50,56 +39,39 @@ config KEMBTK_BUSYB_ASH_JOB_CONTROL
 	  Enable job control in the ash shell.
 
 config KEMBTK_BUSYB_ASH_ALIAS
-	bool "alias support"
+	bool "Alias support"
 	default y
 	depends on KEMBTK_BUSYB_ASH
 	help
 	  Enable alias support in the ash shell.
-
-config KEMBTK_BUSYB_ASH_MATH_SUPPORT
-       bool "Posix math support"
-       default y
-       depends on KEMBTK_BUSYB_ASH
-       depends on EMBTK_BB_VERSION_1_13_X
-       help
-               Enable math support in the ash shell.
-
-config KEMBTK_BUSYB_ASH_MATH_SUPPORT_64
-       bool "Extend Posix math support to 64 bit"
-       depends on KEMBTK_BUSYB_ASH_MATH_SUPPORT
-       depends on EMBTK_BB_VERSION_1_13_X
-       help
-               Enable 64-bit math support in the ash shell. This will make
-               the shell slightly larger, but will allow computation with very
-               large numbers.
 
 config KEMBTK_BUSYB_ASH_GETOPTS
 	bool "Builtin getopt to parse positional parameters"
 	default y
 	depends on KEMBTK_BUSYB_ASH
 	help
-	  Enable getopts builtin in the ash shell.
+	  Enable support for getopts builtin in ash.
 
 config KEMBTK_BUSYB_ASH_BUILTIN_ECHO
 	bool "Builtin version of 'echo'"
 	default y
 	depends on KEMBTK_BUSYB_ASH
 	help
-	  Enable support for echo, builtin to ash.
+	  Enable support for echo builtin in ash.
 
 config KEMBTK_BUSYB_ASH_BUILTIN_PRINTF
 	bool "Builtin version of 'printf'"
 	default y
 	depends on KEMBTK_BUSYB_ASH
 	help
-	  Enable support for printf, builtin to ash.
+	  Enable support for printf builtin in ash.
 
 config KEMBTK_BUSYB_ASH_BUILTIN_TEST
 	bool "Builtin version of 'test'"
 	default y
 	depends on KEMBTK_BUSYB_ASH
 	help
-	  Enable support for test, builtin to ash.
+	  Enable support for test builtin in ash.
 
 config KEMBTK_BUSYB_ASH_CMDCMD
 	bool "'command' command to override shell builtins"
@@ -114,7 +86,7 @@ config KEMBTK_BUSYB_ASH_MAIL
 	bool "Check for new mail on interactive shells"
 	depends on KEMBTK_BUSYB_ASH
 	help
-	  Enable "check for new mail" in the ash shell.
+	  Enable "check for new mail" function in the ash shell.
 
 config KEMBTK_BUSYB_ASH_OPTIMIZE_FOR_SIZE
 	bool "Optimize for size instead of speed"
@@ -147,18 +119,22 @@ config KEMBTK_BUSYB_CTTYHACK
 	bool "cttyhack"
 	default y
 	help
-	  One common problem reported on the mailing list is "can't access tty;
-	  job control turned off" error message which typically appears when
-	  one tries to use shell with stdin/stdout opened to /dev/console.
+	  One common problem reported on the mailing list is the "can't
+	  access tty; job control turned off" error message, which typically
+	  appears when one tries to use a shell with stdin/stdout on
+	  /dev/console.
 	  This device is special - it cannot be a controlling tty.
 
-	  Proper solution is to use correct device instead of /dev/console.
+	  The proper solution is to use the correct device instead of
+	  /dev/console.
 
-	  cttyhack provides "quick and dirty" solution to this problem.
+	  cttyhack provides a "quick and dirty" solution to this problem.
 	  It analyzes stdin with various ioctls, trying to determine whether
 	  it is a /dev/ttyN or /dev/ttySN (virtual terminal or serial line).
-	  If it detects one, it closes stdin/out/err and reopens that device.
-	  Then it executes given program. Opening the device will make
+	  On Linux it also checks sysfs for a pointer to the active console.
+	  If cttyhack is able to find the real console device, it closes
+	  stdin/out/err and reopens that device.
+	  Then it executes the given program. Opening the device will make
 	  that device a controlling tty. This may require cttyhack
 	  to be a session leader.
 
@@ -179,6 +155,9 @@ config KEMBTK_BUSYB_CTTYHACK
 
 	  # exec setsid sh -c 'exec sh </dev/tty1 >/dev/tty1 2>&1'
 
+	  Starting getty on a controlling tty from a shell script:
+
+	  # getty 115200 $(cttyhack)
 config KEMBTK_BUSYB_HUSH
 	bool "hush"
 	default y
@@ -197,7 +176,6 @@ config KEMBTK_BUSYB_HUSH_BASH_COMPAT
 	bool "bash-compatible extensions"
 	default y
 	depends on KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable bash-compatible extensions.
 
@@ -205,7 +183,6 @@ config KEMBTK_BUSYB_HUSH_BRACE_EXPANSION
 	bool "Brace expansion"
 	default y
 	depends on KEMBTK_BUSYB_HUSH_BASH_COMPAT
-	depends on EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable {abc,def} extension.
 
@@ -230,7 +207,6 @@ config KEMBTK_BUSYB_HUSH_SAVEHISTORY
 	bool "Save command history to .hush_history"
 	default y
 	depends on KEMBTK_BUSYB_HUSH_INTERACTIVE && KEMBTK_BUSYB_FEATURE_EDITING_SAVEHISTORY
-	depends on EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable history saving in hush.
 
@@ -277,7 +253,6 @@ config KEMBTK_BUSYB_HUSH_FUNCTIONS
 	bool "Support funcname() { commands; } syntax"
 	default y
 	depends on KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable support for shell functions in hush. +800 bytes.
 
@@ -292,7 +267,6 @@ config KEMBTK_BUSYB_HUSH_RANDOM_SUPPORT
 	bool "Pseudorandom generator and $RANDOM variable"
 	default y
 	depends on KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable pseudorandom generator and dynamic variable "$RANDOM".
 	  Each read of "$RANDOM" will generate a new pseudorandom value.
@@ -301,7 +275,6 @@ config KEMBTK_BUSYB_HUSH_EXPORT_N
 	bool "Support 'export -n' option"
 	default y
 	depends on KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  export -n unexports variables. It is a bash extension.
 
@@ -309,16 +282,16 @@ config KEMBTK_BUSYB_HUSH_MODE_X
 	bool "Support 'hush -x' option and 'set -x' command"
 	default y
 	depends on KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_18_X
 	help
 	  This instructs hush to print commands before execution.
 	  Adds ~300 bytes.
 
 config KEMBTK_BUSYB_MSH
 	bool "msh (deprecated: aliased to hush)"
-	select KEMBTK_BUSYB_HUSH if EMBTK_BB_VERSION_1_18_X
+	select KEMBTK_BUSYB_HUSH
 	help
 	  msh is deprecated and will be removed, please migrate to hush.
+
 
 
 choice
@@ -329,17 +302,13 @@ choice
 
 # note: cannot use "select KEMBTK_BUSYB_ASH" here, it breaks "make allnoconfig"
 config KEMBTK_BUSYB_FEATURE_SH_IS_ASH
-	bool "ash"
 	depends on KEMBTK_BUSYB_ASH
+	bool "ash"
 	depends on !KEMBTK_BUSYB_NOMMU
 
 config KEMBTK_BUSYB_FEATURE_SH_IS_HUSH
-	bool "hush"
 	depends on KEMBTK_BUSYB_HUSH
-
-config KEMBTK_BUSYB_FEATURE_SH_IS_MSH
-	bool "msh"
-	depends on EMBTK_BB_VERSION_1_13_X || EMBTK_BB_VERSION_1_14_X
+	bool "hush"
 
 config KEMBTK_BUSYB_FEATURE_SH_IS_NONE
 	bool "none"
@@ -348,7 +317,6 @@ endchoice
 
 choice
 	prompt "Choose which shell is aliased to 'bash' name"
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Choose which shell you want to be executed by 'bash' alias.
 	  The ash shell is the most bash compatible and full featured one.
@@ -377,17 +345,11 @@ config KEMBTK_BUSYB_FEATURE_BASH_IS_NONE
 
 endchoice
 
-config KEMBTK_BUSYB_LASH
-       bool "lash (deprecated)"
-       select KEMBTK_BUSYB_HUSH if (EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X)
-       help
-         lash is deprecated and will be removed, please migrate to hush.
 
 config KEMBTK_BUSYB_SH_MATH_SUPPORT
 	bool "POSIX math support"
 	default y
 	depends on KEMBTK_BUSYB_ASH || KEMBTK_BUSYB_HUSH
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable math support in the shell via $((...)) syntax.
 
@@ -403,13 +365,13 @@ config KEMBTK_BUSYB_SH_MATH_SUPPORT_64
 config KEMBTK_BUSYB_FEATURE_SH_EXTRA_QUIET
 	bool "Hide message on interactive shell startup"
 	default y
-	depends on KEMBTK_BUSYB_MSH || KEMBTK_BUSYB_LASH || KEMBTK_BUSYB_HUSH || KEMBTK_BUSYB_ASH
+	depends on KEMBTK_BUSYB_HUSH || KEMBTK_BUSYB_ASH
 	help
 	  Remove the busybox introduction when starting a shell.
 
 config KEMBTK_BUSYB_FEATURE_SH_STANDALONE
 	bool "Standalone shell"
-	depends on (KEMBTK_BUSYB_MSH || KEMBTK_BUSYB_LASH || KEMBTK_BUSYB_HUSH || KEMBTK_BUSYB_ASH) && KEMBTK_BUSYB_FEATURE_PREFER_APPLETS
+	depends on (KEMBTK_BUSYB_HUSH || KEMBTK_BUSYB_ASH) && KEMBTK_BUSYB_FEATURE_PREFER_APPLETS
 	help
 	  This option causes busybox shells to use busybox applets
 	  in preference to executables in the PATH whenever possible. For
@@ -441,11 +403,11 @@ config KEMBTK_BUSYB_FEATURE_SH_STANDALONE
 
 config KEMBTK_BUSYB_FEATURE_SH_NOFORK
 	bool "Run 'nofork' applets directly"
-	depends on (KEMBTK_BUSYB_MSH || KEMBTK_BUSYB_LASH || KEMBTK_BUSYB_HUSH || KEMBTK_BUSYB_ASH) && KEMBTK_BUSYB_FEATURE_PREFER_APPLETS
+	depends on (KEMBTK_BUSYB_HUSH || KEMBTK_BUSYB_ASH) && KEMBTK_BUSYB_FEATURE_PREFER_APPLETS
 	help
-	  This option causes busybox shells [currently only ash]
-	  to not execute typical fork/exec/wait sequence, but call <applet>_main
-	  directly, if possible. (Sometimes it is not possible: for example,
+	  This option causes busybox shells to not execute typical
+	  fork/exec/wait sequence, but call <applet>_main directly,
+	  if possible. (Sometimes it is not possible: for example,
 	  this is not possible in pipes).
 
 	  This will be done only for some applets (those which are marked
@@ -453,5 +415,16 @@ config KEMBTK_BUSYB_FEATURE_SH_NOFORK
 
 	  This may significantly speed up some shell scripts.
 
-	  This feature is relatively new. Use with care.
+	  This feature is relatively new. Use with care. Report bugs
+	  to project mailing list.
+
+config KEMBTK_BUSYB_FEATURE_SH_HISTFILESIZE
+	bool "Use $HISTFILESIZE"
+	default y
+	depends on KEMBTK_BUSYB_HUSH || KEMBTK_BUSYB_ASH
+	help
+	  This option makes busybox shells to use $HISTFILESIZE variable
+	  to set shell history size. Note that its max value is capped
+	  by "History size" setting in library tuning section.
+
 

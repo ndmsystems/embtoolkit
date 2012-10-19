@@ -9,7 +9,6 @@ comment "-------------------------------------------------"
 
 config KEMBTK_BUSYB_BOOTCHARTD
 	bool "bootchartd"
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  bootchartd is commonly used to profile the boot process
@@ -56,7 +55,6 @@ config KEMBTK_BUSYB_FEATURE_CALL_TELINIT
 	bool "Call telinit on shutdown and reboot"
 	default y
 	depends on KEMBTK_BUSYB_HALT && !KEMBTK_BUSYB_INIT
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Call an external program (normally telinit) to facilitate
 	  a switch to a proper runlevel.
@@ -157,7 +155,6 @@ config KEMBTK_BUSYB_INIT_TERMINAL_TYPE
 	string "Initial terminal type"
 	default "linux"
 	depends on KEMBTK_BUSYB_INIT
-	depends on EMBTK_BB_VERSION_1_18_X
 	help
 	  This is the initial value set by init for the TERM environment
 	  variable. This variable is used by programs which make use of
@@ -171,4 +168,16 @@ config KEMBTK_BUSYB_MESG
 	help
 	  Mesg controls access to your terminal by others. It is typically
 	  used to allow or disallow other users to write to your terminal
+
+config KEMBTK_BUSYB_FEATURE_MESG_ENABLE_ONLY_GROUP
+	bool "Enable writing to tty only by group, not by everybody"
+	default y
+	depends on KEMBTK_BUSYB_MESG
+	help
+	  Usually, ttys are owned by group "tty", and "write" tool is
+	  setgid to this group. This way, "mesg y" only needs to enable
+	  "write by owning group" bit in tty mode.
+
+	  If you set this option to N, "mesg y" will enable writing
+	  by anybody at all. This is not recommended.
 

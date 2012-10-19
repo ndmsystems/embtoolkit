@@ -8,10 +8,8 @@ comment "Archival Utilities"
 comment "-------------------------------------------------"
 
 
-
 config KEMBTK_BUSYB_FEATURE_SEAMLESS_XZ
 	bool "Make tar, rpm, modprobe etc understand .xz data"
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Make tar, rpm, modprobe etc understand .xz data.
@@ -35,9 +33,9 @@ config KEMBTK_BUSYB_FEATURE_SEAMLESS_GZ
 	  Make tar, rpm, modprobe etc understand .gz data.
 
 config KEMBTK_BUSYB_FEATURE_SEAMLESS_Z
-	bool "Make tar and gunzip understand .Z data"
+	bool "tar, rpm, modprobe etc understand .Z data"
 	help
-	  Make tar and gunzip understand .Z data.
+	  Make tar, rpm, modprobe etc understand .Z data.
 
 config KEMBTK_BUSYB_AR
 	bool "ar"
@@ -73,7 +71,6 @@ config KEMBTK_BUSYB_FEATURE_AR_LONG_FILENAMES
 
 config KEMBTK_BUSYB_FEATURE_AR_CREATE
 	bool "Support archive creation"
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	depends on KEMBTK_BUSYB_AR
 	help
@@ -131,7 +128,6 @@ config KEMBTK_BUSYB_FEATURE_CPIO_P
 	bool "Support for passthrough mode"
 	default y
 	depends on KEMBTK_BUSYB_FEATURE_CPIO_O
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Passthrough mode. Rarely used.
 
@@ -187,9 +183,20 @@ config KEMBTK_BUSYB_FEATURE_GZIP_LONG_OPTIONS
 	help
 	  Enable use of long options, increases size by about 106 Bytes
 
+config KEMBTK_BUSYB_GZIP_FAST
+	int "Trade memory for gzip speed (0:small,slow - 2:fast,big)"
+	default 0
+	range 0 2
+	depends on KEMBTK_BUSYB_GZIP
+	help
+	  Enable big memory options for gzip.
+	  0: small buffers, small hash-tables
+	  1: larger buffers, larger hash-tables
+	  2: larger buffers, largest hash-tables
+	  Larger models may give slightly better compression
+
 config KEMBTK_BUSYB_LZOP
 	bool "lzop"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Lzop compression/decompresion.
@@ -282,7 +289,6 @@ config KEMBTK_BUSYB_FEATURE_TAR_LONG_OPTIONS
 
 config KEMBTK_BUSYB_FEATURE_TAR_TO_COMMAND
 	bool "Support for writing to an external program"
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	depends on KEMBTK_BUSYB_TAR && KEMBTK_BUSYB_FEATURE_TAR_LONG_OPTIONS
 	help
@@ -301,7 +307,6 @@ config KEMBTK_BUSYB_FEATURE_TAR_UNAME_GNAME
 
 config KEMBTK_BUSYB_FEATURE_TAR_NOPRESERVE_TIME
 	bool "Enable -m (do not preserve time) option"
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	depends on KEMBTK_BUSYB_TAR
 	help
@@ -311,7 +316,6 @@ config KEMBTK_BUSYB_FEATURE_TAR_NOPRESERVE_TIME
 config KEMBTK_BUSYB_FEATURE_TAR_SELINUX
 	bool "Support for extracting SELinux labels"
 	depends on KEMBTK_BUSYB_TAR && KEMBTK_BUSYB_SELINUX
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  With this option busybox supports restoring SELinux labels
 	  when extracting files from tar archives.
@@ -331,15 +335,11 @@ config KEMBTK_BUSYB_UNLZMA
 	  is generally considerably better than that achieved by the bzip2
 	  compressors.
 
-	  The BusyBox unlzma applet is limited to de-compression only.
+	  The BusyBox unlzma applet is limited to decompression only.
 	  On an x86 system, this applet adds about 4K.
-
-	  Unless you have a specific application which requires unlzma, you
-	  should probably say N here.
 
 config KEMBTK_BUSYB_FEATURE_LZMA_FAST
 	bool "Optimize unlzma for speed"
-	default y
 	depends on KEMBTK_BUSYB_UNLZMA
 	help
 	  This option reduces decompression time by about 25% at the cost of
@@ -347,7 +347,6 @@ config KEMBTK_BUSYB_FEATURE_LZMA_FAST
 
 config KEMBTK_BUSYB_LZMA
 	bool "Provide lzma alias which supports only unpacking"
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	depends on KEMBTK_BUSYB_UNLZMA
 	help
@@ -356,14 +355,12 @@ config KEMBTK_BUSYB_LZMA
 
 config KEMBTK_BUSYB_UNXZ
 	bool "unxz"
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  unxz is a unlzma successor.
 
 config KEMBTK_BUSYB_XZ
 	bool "Provide xz alias which supports only unpacking"
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	depends on KEMBTK_BUSYB_UNXZ
 	help

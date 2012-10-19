@@ -9,7 +9,6 @@ comment "-------------------------------------------------"
 	depends on KEMBTK_BUSYB_SELINUX
 
 
-
 config KEMBTK_BUSYB_CHCON
 	bool "chcon"
 	depends on KEMBTK_BUSYB_SELINUX

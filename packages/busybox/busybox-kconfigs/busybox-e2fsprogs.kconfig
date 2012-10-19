@@ -8,7 +8,6 @@ comment "Linux Ext2 FS Progs"
 comment "-------------------------------------------------"
 
 
-
 config KEMBTK_BUSYB_CHATTR
 	bool "chattr"
 	default y
@@ -35,7 +34,7 @@ config KEMBTK_BUSYB_FSCK
 config KEMBTK_BUSYB_LSATTR
 	bool "lsattr"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  lsattr lists the file attributes on a second extended file system.
 

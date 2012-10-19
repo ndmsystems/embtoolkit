@@ -9,44 +9,153 @@ comment "-------------------------------------------------"
 
 config KEMBTK_BUSYB_CONSPY
 	bool "conspy"
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
+	default y
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  A text-mode VNC like program for Linux virtual terminals.
 	  example:  conspy NUM      shared access to console num
 	  or        conspy -nd NUM  screenshot of console num
 	  or        conspy -cs NUM  poor man's GNU screen like
+config KEMBTK_BUSYB_LESS
+	bool "less"
+	default y
+	help
+	  'less' is a pager, meaning that it displays text files. It possesses
+	  a wide array of features, and is an improvement over 'more'.
+
+config KEMBTK_BUSYB_FEATURE_LESS_MAXLINES
+	int "Max number of input lines less will try to eat"
+	default 9999999
+	depends on KEMBTK_BUSYB_LESS
+
+config KEMBTK_BUSYB_FEATURE_LESS_BRACKETS
+	bool "Enable bracket searching"
+	default y
+	depends on KEMBTK_BUSYB_LESS
+	help
+	  This option adds the capability to search for matching left and right
+	  brackets, facilitating programming.
+
+config KEMBTK_BUSYB_FEATURE_LESS_FLAGS
+	bool "Enable -m/-M"
+	default y
+	depends on KEMBTK_BUSYB_LESS
+	help
+	  The -M/-m flag enables a more sophisticated status line.
+
+config KEMBTK_BUSYB_FEATURE_LESS_MARKS
+	bool "Enable marks"
+	default y
+	depends on KEMBTK_BUSYB_LESS
+	help
+	  Marks enable positions in a file to be stored for easy reference.
+
+config KEMBTK_BUSYB_FEATURE_LESS_REGEXP
+	bool "Enable regular expressions"
+	default y
+	depends on KEMBTK_BUSYB_LESS
+	help
+	  Enable regular expressions, allowing complex file searches.
+
+config KEMBTK_BUSYB_FEATURE_LESS_WINCH
+	bool "Enable automatic resizing on window size changes"
+	default y
+	depends on KEMBTK_BUSYB_LESS
+	help
+	  Makes less track window size changes.
+
+config KEMBTK_BUSYB_FEATURE_LESS_ASK_TERMINAL
+	bool "Use 'tell me cursor position' ESC sequence to measure window"
+	default y
+	depends on KEMBTK_BUSYB_FEATURE_LESS_WINCH
+	help
+	  Makes less track window size changes.
+	  If terminal size can't be retrieved and $LINES/$COLUMNS are not set,
+	  this option makes less perform a last-ditch effort to find it:
+	  position cursor to 999,999 and ask terminal to report real
+	  cursor position using "ESC [ 6 n" escape sequence, then read stdin.
+
+	  This is not clean but helps a lot on serial lines and such.
+
+config KEMBTK_BUSYB_FEATURE_LESS_DASHCMD
+	bool "Enable flag changes ('-' command)"
+	default y
+	depends on KEMBTK_BUSYB_LESS
+	help
+	  This enables the ability to change command-line flags within
+	  less itself ('-' keyboard command).
+
+config KEMBTK_BUSYB_FEATURE_LESS_LINENUMS
+	bool "Enable dynamic switching of line numbers"
+	default y
+	depends on KEMBTK_BUSYB_FEATURE_LESS_DASHCMD
+	help
+	  Enables "-N" command.
 config KEMBTK_BUSYB_NANDWRITE
 	bool
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	default n
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Write to the specified KEMBTK_BUSYB_MTD device, with bad blocks awareness
 
 config KEMBTK_BUSYB_NANDDUMP
 	bool
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	default n
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Dump the content of raw NAND chip
+config KEMBTK_BUSYB_SETSERIAL
+	bool "setserial"
+	default y
+	select KEMBTK_BUSYB_PLATFORM_LINUX
+	help
+	  Retrieve or set Linux serial port.
 config KEMBTK_BUSYB_UBIATTACH
 	bool
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	default n
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Attach KEMBTK_BUSYB_MTD device to an UBI device.
 
 config KEMBTK_BUSYB_UBIDETACH
 	bool
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
 	default n
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Detach KEMBTK_BUSYB_MTD device from an UBI device.
+
+config KEMBTK_BUSYB_UBIMKVOL
+	bool
+	default n
+	select KEMBTK_BUSYB_PLATFORM_LINUX
+	help
+	  Create a UBI volume.
+
+config KEMBTK_BUSYB_UBIRMVOL
+	bool
+	default n
+	select KEMBTK_BUSYB_PLATFORM_LINUX
+	help
+	  Delete a UBI volume.
+
+config KEMBTK_BUSYB_UBIRSVOL
+	bool
+	default n
+	select KEMBTK_BUSYB_PLATFORM_LINUX
+	help
+	  Resize a UBI volume.
+
+config KEMBTK_BUSYB_UBIUPDATEVOL
+	bool
+	default n
+	select KEMBTK_BUSYB_PLATFORM_LINUX
+	help
+	  Update a UBI volume.
 
 config KEMBTK_BUSYB_ADJTIMEX
 	bool "adjtimex"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Adjtimex reads and optionally sets adjustment parameters for
 	  the Linux clock adjustment algorithm.
@@ -61,7 +170,6 @@ config KEMBTK_BUSYB_FEATURE_COMPRESS_BBCONFIG
 	bool "Compress bbconfig data"
 	default y
 	depends on KEMBTK_BUSYB_BBCONFIG
-	depends on EMBTK_BB_VERSION_1_18_X
 	help
 	  Store bbconfig data in compressed form, uncompress them on-the-fly
 	  before output.
@@ -75,8 +183,7 @@ config KEMBTK_BUSYB_FEATURE_COMPRESS_BBCONFIG
 config KEMBTK_BUSYB_BEEP
 	bool "beep"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  The beep applets beeps in a given freq/Hz.
 
@@ -200,7 +307,6 @@ config KEMBTK_BUSYB_FEATURE_CROND_DIR
 	string "crond spool directory"
 	default "/var/spool/cron"
 	depends on KEMBTK_BUSYB_CROND || KEMBTK_BUSYB_CRONTAB
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Location of crond spool.
 
@@ -230,7 +336,7 @@ config KEMBTK_BUSYB_FEATURE_DC_LIBM
 
 config KEMBTK_BUSYB_DEVFSD
 	bool "devfsd (obsolete)"
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
 	  This is deprecated and should NOT be used anymore.
@@ -273,7 +379,7 @@ config KEMBTK_BUSYB_DEVFSD_VERBOSE
 
 config KEMBTK_BUSYB_FEATURE_DEVFS
 	bool "Use devfs names for all devices (obsolete)"
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  This is obsolete and should NOT be used anymore.
 	  Use linux >= 2.6 (optionally with hotplug) and mdev instead!
@@ -292,14 +398,14 @@ config KEMBTK_BUSYB_DEVMEM
 
 config KEMBTK_BUSYB_EJECT
 	bool "eject"
-	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	default n
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Used to eject cdroms. (defaults to /dev/cdrom)
 
 config KEMBTK_BUSYB_FEATURE_EJECT_SCSI
 	bool "SCSI support"
-	default y
+	default n
 	depends on KEMBTK_BUSYB_EJECT
 	help
 	  Add the -s option to eject, this allows to eject SCSI-Devices and
@@ -308,7 +414,7 @@ config KEMBTK_BUSYB_FEATURE_EJECT_SCSI
 config KEMBTK_BUSYB_FBSPLASH
 	bool "fbsplash"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Shows splash image and progress bar on framebuffer device.
 	  Can be used during boot phase of an embedded device. ~2kb.
@@ -358,8 +464,7 @@ config KEMBTK_BUSYB_FLASH_ERASEALL
 config KEMBTK_BUSYB_IONICE
 	bool "ionice"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Set/set program io scheduling class and priority
 	  Requires kernel >= 2.6.13
@@ -394,76 +499,10 @@ config KEMBTK_BUSYB_FEATURE_LAST_FANCY
 	  logged into the system (mimics sysvinit last). +900 bytes.
 endchoice
 
-config KEMBTK_BUSYB_LESS
-	bool "less"
-	default y
-	help
-	  'less' is a pager, meaning that it displays text files. It possesses
-	  a wide array of features, and is an improvement over 'more'.
-
-config KEMBTK_BUSYB_FEATURE_LESS_MAXLINES
-	int "Max number of input lines less will try to eat"
-	default 9999999
-	depends on KEMBTK_BUSYB_LESS
-
-config KEMBTK_BUSYB_FEATURE_LESS_BRACKETS
-	bool "Enable bracket searching"
-	default y
-	depends on KEMBTK_BUSYB_LESS
-	help
-	  This option adds the capability to search for matching left and right
-	  brackets, facilitating programming.
-
-config KEMBTK_BUSYB_FEATURE_LESS_FLAGS
-	bool "Enable extra flags"
-	default y
-	depends on KEMBTK_BUSYB_LESS
-	help
-	  The extra flags provided do the following:
-
-	  The -M flag enables a more sophisticated status line.
-	  The -m flag enables a simpler status line with a percentage.
-
-config KEMBTK_BUSYB_FEATURE_LESS_MARKS
-	bool "Enable marks"
-	default y
-	depends on KEMBTK_BUSYB_LESS
-	help
-	  Marks enable positions in a file to be stored for easy reference.
-
-config KEMBTK_BUSYB_FEATURE_LESS_REGEXP
-	bool "Enable regular expressions"
-	default y
-	depends on KEMBTK_BUSYB_LESS
-	help
-	  Enable regular expressions, allowing complex file searches.
-
-config KEMBTK_BUSYB_FEATURE_LESS_WINCH
-	bool "Enable automatic resizing on window size changes"
-	default y
-	depends on KEMBTK_BUSYB_LESS
-	help
-	  Makes less track window size changes.
-
-config KEMBTK_BUSYB_FEATURE_LESS_DASHCMD
-	bool "Enable flag changes ('-' command)"
-	default y
-	depends on KEMBTK_BUSYB_LESS
-	help
-	  This enables the ability to change command-line flags within
-	  less itself ('-' keyboard command).
-
-config KEMBTK_BUSYB_FEATURE_LESS_LINENUMS
-	bool "Enable dynamic switching of line numbers"
-	default y
-	depends on KEMBTK_BUSYB_FEATURE_LESS_DASHCMD
-	help
-	  Enables "-N" command.
-
 config KEMBTK_BUSYB_HDPARM
 	bool "hdparm"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Get/Set hard drive parameters. Primarily intended for ATA
 	  drives. Adds about 13k (or around 30k if you enable the
@@ -579,7 +618,7 @@ config KEMBTK_BUSYB_MT
 config KEMBTK_BUSYB_RAIDAUTORUN
 	bool "raidautorun"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  raidautorun tells the kernel md driver to
 	  search and start RAID arrays.
@@ -587,7 +626,8 @@ config KEMBTK_BUSYB_RAIDAUTORUN
 config KEMBTK_BUSYB_READAHEAD
 	bool "readahead"
 	default y
-	depends on KEMBTK_BUSYB_LFS && KEMBTK_BUSYB_PLATFORM_LINUX
+	depends on KEMBTK_BUSYB_LFS
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Preload the files listed on the command line into RAM cache so that
 	  subsequent reads on these files will not block on disk I/O.
@@ -603,8 +643,7 @@ config KEMBTK_BUSYB_READAHEAD
 
 config KEMBTK_BUSYB_RFKILL
 	bool "rfkill"
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
-	depends on EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Enable/disable wireless devices.
 
@@ -616,6 +655,7 @@ config KEMBTK_BUSYB_RFKILL
 config KEMBTK_BUSYB_RUNLEVEL
 	bool "runlevel"
 	default y
+	depends on KEMBTK_BUSYB_FEATURE_UTMP
 	help
 	  find the current and previous system runlevel.
 
@@ -625,7 +665,7 @@ config KEMBTK_BUSYB_RUNLEVEL
 config KEMBTK_BUSYB_RX
 	bool "rx"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Receive files using the Xmodem protocol.
 
@@ -667,7 +707,6 @@ config KEMBTK_BUSYB_TIME
 
 config KEMBTK_BUSYB_TIMEOUT
 	bool "timeout"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Runs a program and watches it. If it does not terminate in
@@ -684,22 +723,21 @@ config KEMBTK_BUSYB_TTYSIZE
 
 config KEMBTK_BUSYB_VOLNAME
 	bool "volname"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  Prints a CD-ROM volume name.
 
 config KEMBTK_BUSYB_WALL
 	bool "wall"
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
+	depends on KEMBTK_BUSYB_FEATURE_UTMP
 	help
 	  Write a message to all users that are logged in.
 
 config KEMBTK_BUSYB_WATCHDOG
 	bool "watchdog"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  The watchdog utility is used with hardware or software watchdog
 	  device drivers. It opens the specified watchdog device special file

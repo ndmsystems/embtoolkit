@@ -8,7 +8,6 @@ comment "Print Utilities"
 comment "-------------------------------------------------"
 
 
-
 config KEMBTK_BUSYB_LPD
 	bool "lpd"
 	default y

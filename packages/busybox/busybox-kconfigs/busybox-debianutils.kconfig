@@ -8,7 +8,6 @@ comment "Debian Utilities"
 comment "-------------------------------------------------"
 
 
-
 config KEMBTK_BUSYB_MKTEMP
 	bool "mktemp"
 	default y

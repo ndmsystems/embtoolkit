@@ -8,7 +8,6 @@ comment "Runit Utilities"
 comment "-------------------------------------------------"
 
 
-
 config KEMBTK_BUSYB_RUNSV
 	bool "runsv"
 	default y

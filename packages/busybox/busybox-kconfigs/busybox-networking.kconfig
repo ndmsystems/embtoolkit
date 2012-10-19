@@ -7,6 +7,35 @@ comment "-------------------------------------------------"
 comment "Networking Utilities"
 comment "-------------------------------------------------"
 
+config KEMBTK_BUSYB_NAMEIF
+	bool "nameif"
+	default y
+	select KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_FEATURE_SYSLOG
+	help
+	  nameif is used to rename network interface by its MAC address.
+	  Renamed interfaces MUST be in the down state.
+	  It is possible to use a file (default: /etc/mactab)
+	  with list of new interface names and MACs.
+	  Maximum interface name length: IFNAMSIZ = 16
+	  File fields are separated by space or tab.
+	  File format:
+	  # Comment
+	  new_interface_name    XX:XX:XX:XX:XX:XX
+
+config KEMBTK_BUSYB_FEATURE_NAMEIF_EXTENDED
+	bool "Extended nameif"
+	default y
+	depends on KEMBTK_BUSYB_NAMEIF
+	help
+	  This extends the nameif syntax to support the bus_info, driver,
+	  phyaddr selectors. The syntax is compatible to the normal nameif.
+	  File format:
+	    new_interface_name  driver=asix bus=usb-0000:00:08.2-3
+	    new_interface_name  bus=usb-0000:00:08.2-3 00:80:C8:38:91:B5
+	    new_interface_name  phy_address=2 00:80:C8:38:91:B5
+	    new_interface_name  mac=00:80:C8:38:91:B5
+	    new_interface_name  00:80:C8:38:91:B5
 config KEMBTK_BUSYB_NBDCLIENT
 	bool "nbd-client"
 	default y
@@ -43,6 +72,33 @@ config KEMBTK_BUSYB_NC_110_COMPAT
 	  The code is about 2.5k bigger. It enables
 	  -s ADDR, -n, -u, -v, -o FILE, -z options, but loses
 	  busybox-specific extensions: -f FILE and -ll.
+config KEMBTK_BUSYB_PING
+	bool "ping"
+	default y
+	select KEMBTK_BUSYB_PLATFORM_LINUX
+	help
+	  ping uses the ICMP protocol's mandatory KEMBTK_BUSYB_ECHO_REQUEST datagram to
+	  elicit an ICMP KEMBTK_BUSYB_ECHO_RESPONSE from a host or gateway.
+
+config KEMBTK_BUSYB_PING6
+	bool "ping6"
+	default y
+	depends on KEMBTK_BUSYB_FEATURE_IPV6 && KEMBTK_BUSYB_PING
+	help
+	  This will give you a ping that can talk KEMBTK_BUSYB_IPv6.
+
+config KEMBTK_BUSYB_FEATURE_FANCY_PING
+	bool "Enable fancy ping output"
+	default y
+	depends on KEMBTK_BUSYB_PING
+	help
+	  Make the output from the ping applet include statistics, and at the
+	  same time provide full support for ICMP packets.
+config KEMBTK_BUSYB_WHOIS
+	bool "whois"
+	default y
+	help
+	  whois is a client for the whois directory service
 
 config KEMBTK_BUSYB_FEATURE_IPV6
 	bool "Enable KEMBTK_BUSYB_IPv6 support"
@@ -53,7 +109,6 @@ config KEMBTK_BUSYB_FEATURE_IPV6
 
 config KEMBTK_BUSYB_FEATURE_UNIX_LOCAL
 	bool "Enable Unix domain socket support (usually not needed)"
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Enable Unix domain socket support in all busybox networking
 	  applets.  Address of the form local:/path/to/unix/socket
@@ -87,21 +142,21 @@ config KEMBTK_BUSYB_VERBOSE_RESOLUTION_ERRORS
 config KEMBTK_BUSYB_ARP
 	bool "arp"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Manipulate the system KEMBTK_BUSYB_ARP cache.
 
 config KEMBTK_BUSYB_ARPING
 	bool "arping"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Ping hosts by KEMBTK_BUSYB_ARP packets.
 
 config KEMBTK_BUSYB_BRCTL
 	bool "brctl"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Manage ethernet bridges.
 	  Supports addbr/delbr and addif/delif.
@@ -134,7 +189,7 @@ config KEMBTK_BUSYB_DNSD
 config KEMBTK_BUSYB_ETHER_WAKE
 	bool "ether-wake"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Send a magic packet to wake up sleeping machines.
 
@@ -148,7 +203,6 @@ config KEMBTK_BUSYB_FAKEIDENTD
 
 config KEMBTK_BUSYB_FTPD
 	bool "ftpd"
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	default y
 	help
 	  simple FTP daemon. You have to run it via inetd.
@@ -164,7 +218,6 @@ config KEMBTK_BUSYB_FEATURE_FTPD_ACCEPT_BROKEN_LIST
 	bool "Enable workaround for RFC-violating clients"
 	default y
 	depends on KEMBTK_BUSYB_FTPD
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Some ftp clients (among them KDE's Konqueror) issue illegal
 	  "LIST -l" requests. This option works around such problems.
@@ -220,14 +273,6 @@ config KEMBTK_BUSYB_FEATURE_HTTPD_USE_SENDFILE
 	  When enabled, httpd will use the kernel sendfile() function
 	  instead of read/write loop.
 
-config KEMBTK_BUSYB_FEATURE_HTTPD_RELOAD_CONFIG_SIGHUP
-       bool "Support reloading of global config file on HUP signal"
-       depends on KEMBTK_BUSYB_HTTPD
-       depends on EMBTK_BB_VERSION_1_13_X
-       help
-               This option enables processing of SIGHUP to reload cached
-               configuration settings.
-
 config KEMBTK_BUSYB_FEATURE_HTTPD_SETUID
 	bool "Enable -u <user> option"
 	default y
@@ -245,22 +290,22 @@ config KEMBTK_BUSYB_FEATURE_HTTPD_BASIC_AUTH
 	help
 	  Utilizes password settings from /etc/httpd.conf for basic
 	  authentication on a per url basis.
+	  Example for httpd.conf file:
+	  /adm:toor:PaSsWd
 
 config KEMBTK_BUSYB_FEATURE_HTTPD_AUTH_MD5
 	bool "Support MD5 crypted passwords for http Authentication"
 	default y
 	depends on KEMBTK_BUSYB_FEATURE_HTTPD_BASIC_AUTH
 	help
-	  Enables basic per URL authentication from /etc/httpd.conf
-	  using md5 passwords.
-
-config KEMBTK_BUSYB_FEATURE_HTTPD_CONFIG_WITH_MIME_TYPES
-       bool "Support loading additional MIME types at run-time"
-       depends on KEMBTK_BUSYB_HTTPD
-       depends on EMBTK_BB_VERSION_1_13_X
-       help
-               This option enables support for additional MIME types at
-               run-time to be specified in the configuration file.
+	  Enables encrypted passwords, and wildcard user/passwords
+	  in httpd.conf file.
+	  User '*' means 'any system user name is ok',
+	  password of '*' means 'use system password for this user'
+	  Examples:
+	  /adm:toor:$1$P/eKnWXS$aI1aPGxT.dJD5SzqAKWrF0
+	  /adm:root:*
+	  /wiki:*:*
 
 config KEMBTK_BUSYB_FEATURE_HTTPD_CGI
 	bool "Support Common Gateway Interface (CGI)"
@@ -277,8 +322,8 @@ config KEMBTK_BUSYB_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR
 	help
 	  This option enables support for running scripts through an
 	  interpreter. Turn this on if you want PHP scripts to work
-	  properly. You need to supply an additional line in your httpd
-	  config file:
+	  properly. You need to supply an additional line in your
+	  httpd.conf file:
 	  *.php:/path/to/your/php
 
 config KEMBTK_BUSYB_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV
@@ -327,7 +372,6 @@ config KEMBTK_BUSYB_FEATURE_HTTPD_GZIP
 	bool "Support for KEMBTK_BUSYB_GZIP content encoding"
 	default y
 	depends on KEMBTK_BUSYB_HTTPD
-	depends on EMBTK_BB_VERSION_1_18_X
 	help
 	  Makes httpd send files using KEMBTK_BUSYB_GZIP content encoding if the
 	  client supports it and a pre-compressed <file>.gz exists.
@@ -335,7 +379,7 @@ config KEMBTK_BUSYB_FEATURE_HTTPD_GZIP
 config KEMBTK_BUSYB_IFCONFIG
 	bool "ifconfig"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Ifconfig is used to configure the kernel-resident network interfaces.
 
@@ -383,7 +427,7 @@ config KEMBTK_BUSYB_FEATURE_IFCONFIG_BROADCAST_PLUS
 config KEMBTK_BUSYB_IFENSLAVE
 	bool "ifenslave"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Userspace application to bind several interfaces
 	  to a logical interface (use with kernel bonding driver).
@@ -391,8 +435,7 @@ config KEMBTK_BUSYB_IFENSLAVE
 config KEMBTK_BUSYB_IFPLUGD
 	bool "ifplugd"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
-	depends on EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Network interface plug detection daemon.
 
@@ -434,7 +477,8 @@ config KEMBTK_BUSYB_FEATURE_IFUPDOWN_IP
 config KEMBTK_BUSYB_FEATURE_IFUPDOWN_IP_BUILTIN
 	bool "Use busybox ip applet"
 	default y
-	depends on KEMBTK_BUSYB_FEATURE_IFUPDOWN_IP && KEMBTK_BUSYB_PLATFORM_LINUX
+	depends on KEMBTK_BUSYB_FEATURE_IFUPDOWN_IP
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	select KEMBTK_BUSYB_IP
 	select KEMBTK_BUSYB_FEATURE_IP_ADDRESS
 	select KEMBTK_BUSYB_FEATURE_IP_LINK
@@ -551,7 +595,7 @@ config KEMBTK_BUSYB_FEATURE_INETD_RPC
 config KEMBTK_BUSYB_IP
 	bool "ip"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  The "ip" applet is a TCP/IP interface configuration and routing
 	  utility. You generally don't need "ip" to use busybox with
@@ -663,39 +707,10 @@ config KEMBTK_BUSYB_FEATURE_IPCALC_LONG_OPTIONS
 	help
 	  Support long options for the ipcalc applet.
 
-config KEMBTK_BUSYB_NAMEIF
-	bool "nameif"
-	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
-	select KEMBTK_BUSYB_FEATURE_SYSLOG
-	help
-	  nameif is used to rename network interface by its MAC address.
-	  Renamed interfaces MUST be in the down state.
-	  It is possible to use a file (default: /etc/mactab)
-	  with list of new interface names and MACs.
-	  Maximum interface name length: IFNAMSIZ = 16
-	  File fields are separated by space or tab.
-	  File format:
-	  # Comment
-	  new_interface_name    XX:XX:XX:XX:XX:XX
-
-config KEMBTK_BUSYB_FEATURE_NAMEIF_EXTENDED
-	bool "Extended nameif"
-	default y
-	depends on KEMBTK_BUSYB_NAMEIF
-	help
-	  This extends the nameif syntax to support the bus_info and driver
-	  checks. The syntax is compatible to the normal nameif.
-	  File format:
-	    new_interface_name  driver=asix bus=usb-0000:00:08.2-3
-	    new_interface_name  bus=usb-0000:00:08.2-3 00:80:C8:38:91:B5
-	    new_interface_name  mac=00:80:C8:38:91:B5
-	    new_interface_name  00:80:C8:38:91:B5
-
 config KEMBTK_BUSYB_NETSTAT
 	bool "netstat"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  netstat prints information about the Linux networking subsystem.
 
@@ -724,8 +739,7 @@ config KEMBTK_BUSYB_NSLOOKUP
 config KEMBTK_BUSYB_NTPD
 	bool "ntpd"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  The NTP client/server daemon.
 
@@ -737,29 +751,6 @@ config KEMBTK_BUSYB_FEATURE_NTPD_SERVER
 	  Make ntpd usable as a NTP server. If you disable this option
 	  ntpd will be usable only as a NTP client.
 
-config KEMBTK_BUSYB_PING
-	bool "ping"
-	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
-	help
-	  ping uses the ICMP protocol's mandatory KEMBTK_BUSYB_ECHO_REQUEST datagram to
-	  elicit an ICMP KEMBTK_BUSYB_ECHO_RESPONSE from a host or gateway.
-
-config KEMBTK_BUSYB_PING6
-	bool "ping6"
-	default y
-	depends on KEMBTK_BUSYB_FEATURE_IPV6 && KEMBTK_BUSYB_PING
-	help
-	  This will give you a ping that can talk KEMBTK_BUSYB_IPv6.
-
-config KEMBTK_BUSYB_FEATURE_FANCY_PING
-	bool "Enable fancy ping output"
-	default y
-	depends on KEMBTK_BUSYB_PING
-	help
-	  Make the output from the ping applet include statistics, and at the
-	  same time provide full support for ICMP packets.
-
 config KEMBTK_BUSYB_PSCAN
 	bool "pscan"
 	default y
@@ -769,14 +760,14 @@ config KEMBTK_BUSYB_PSCAN
 config KEMBTK_BUSYB_ROUTE
 	bool "route"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Route displays or manipulates the kernel's KEMBTK_BUSYB_IP routing tables.
 
 config KEMBTK_BUSYB_SLATTACH
 	bool "slattach"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  slattach is a small utility to attach network interfaces to serial
 	  lines.
@@ -878,7 +869,6 @@ config KEMBTK_BUSYB_FEATURE_TELNETD_INETD_WAIT
 	bool "Support -w SEC option (inetd wait mode)"
 	default y
 	depends on KEMBTK_BUSYB_FEATURE_TELNETD_STANDALONE
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  This option allows you to run telnetd in "inet wait" mode.
 	  Example inetd.conf line (note "wait", not usual "nowait"):
@@ -950,7 +940,6 @@ config KEMBTK_BUSYB_FEATURE_TFTP_PROGRESS_BAR
 	bool "Enable tftp progress meter"
 	default y
 	depends on KEMBTK_BUSYB_TFTP && KEMBTK_BUSYB_FEATURE_TFTP_BLOCKSIZE
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Show progress bar.
 
@@ -964,7 +953,7 @@ config KEMBTK_BUSYB_TFTP_DEBUG
 config KEMBTK_BUSYB_TRACEROUTE
 	bool "traceroute"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Utility to trace the route of KEMBTK_BUSYB_IP packets.
 
@@ -972,7 +961,6 @@ config KEMBTK_BUSYB_TRACEROUTE6
 	bool "traceroute6"
 	default y
 	depends on KEMBTK_BUSYB_FEATURE_IPV6 && KEMBTK_BUSYB_TRACEROUTE
-	depends on EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Utility to trace the route of KEMBTK_BUSYB_IPv6 packets.
 
@@ -1000,8 +988,7 @@ config KEMBTK_BUSYB_FEATURE_TRACEROUTE_USE_ICMP
 config KEMBTK_BUSYB_TUNCTL
 	bool "tunctl"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  tunctl creates or deletes tun devices.
 
@@ -1019,7 +1006,6 @@ config KEMBTK_BUSYB_IFUPDOWN_UDHCPC_CMD_OPTIONS
 	string "ifup udhcpc command line options"
 	default "-R -n"
 	depends on KEMBTK_BUSYB_IFUPDOWN && KEMBTK_BUSYB_UDHCPC
-	depends on EMBTK_BB_VERSION_1_14_X || EMBTK_BB_VERSION_1_15_X || EMBTK_BB_VERSION_1_16_X || EMBTK_BB_VERSION_1_17_X || EMBTK_BB_VERSION_1_18_X
 	help
 	  Command line options to pass to udhcpc from ifup.
 	  Intended to alter options not available in /etc/network/interfaces.
@@ -1035,7 +1021,7 @@ config KEMBTK_BUSYB_UDPSVD
 config KEMBTK_BUSYB_VCONFIG
 	bool "vconfig"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Creates, removes, and configures VLAN interfaces
 
@@ -1071,7 +1057,6 @@ config KEMBTK_BUSYB_FEATURE_WGET_TIMEOUT
 	bool "Enable read timeout option -T SEC"
 	default y
 	depends on KEMBTK_BUSYB_WGET
-	depends on EMBTK_BB_VERSION_1_18_X
 	help
 	  Supports network read timeout for wget, so that wget will give
 	  up and timeout when reading network data, through the -T command
@@ -1083,7 +1068,7 @@ config KEMBTK_BUSYB_FEATURE_WGET_TIMEOUT
 config KEMBTK_BUSYB_ZCIP
 	bool "zcip"
 	default y
-	depends on KEMBTK_BUSYB_PLATFORM_LINUX
+	select KEMBTK_BUSYB_PLATFORM_LINUX
 	select KEMBTK_BUSYB_FEATURE_SYSLOG
 	help
 	  KEMBTK_BUSYB_ZCIP provides ZeroConf KEMBTK_BUSYB_IPv4 address selection, according to RFC 3927.
