@@ -17,20 +17,23 @@
 #
 ################################################################################
 #
-# \file         net.mk
-# \brief	net.mk of Embtoolkit
+# \file         libtirpc.mk
+# \brief	libtirpc.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2012
+# \date         October 2012
 ################################################################################
 
-# Iptables
-include $(EMBTK_ROOT)/packages/net/iptables/iptables.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_IPTABLES) += iptables_install
+LIBTIRPC_NAME		:= libtirpc
+LIBTIRPC_VERSION	:= $(call embtk_get_pkgversion,libtirpc)
+LIBTIRPC_SITE		:= http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
+LIBTIRPC_PACKAGE	:= libtirpc-$(LIBTIRPC_VERSION).tar.bz2
+LIBTIRPC_SRC_DIR	:= $(embtk_pkgb)/libtirpc-$(LIBTIRPC_VERSION)
+LIBTIRPC_BUILD_DIR	:= $(embtk_pkgb)/libtirpc-$(LIBTIRPC_VERSION)
 
-# LIBNL
-include $(EMBTK_ROOT)/packages/net/libnl/libnl.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBNL) += libnl_install
-
-# libtirpc
-include $(EMBTK_ROOT)/packages/net/libtirpc/libtirpc.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIRPC) += libtirpc_install
+LIBTIRPC_BINS		:=
+LIBTIRPC_ETC		:= netconfig
+LIBTIRPC_SBINS		:=
+LIBTIRPC_INCLUDES	:= tirpc
+LIBTIRPC_LIBS		:= libtirpc.*
+LIBTIRPC_LIBEXECS	:=
+LIBTIRPC_PKGCONFIGS	:= libtirpc.pc

@@ -17,20 +17,38 @@
 #
 ################################################################################
 #
-# \file         net.mk
-# \brief	net.mk of Embtoolkit
+# \file         libtirpc.kconfig
+# \brief	libtirpc.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2012
+# \date         October 2012
 ################################################################################
 
-# Iptables
-include $(EMBTK_ROOT)/packages/net/iptables/iptables.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_IPTABLES) += iptables_install
+config EMBTK_HAVE_LIBTIRPC
+	bool "Have libtirpc"
+	select EMBTK_UCLIBC_UCLIBC_HAS_SOCKET if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_HAS_NETWORK_SUPPORT if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_USE_NETLINK if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_SUPPORT_AI_ADDRCONFIG if EMBTK_CLIB_UCLIBC
+	help
+	 Libtirpc is a port of Suns Transport-Independent RPC library to Linux.
 
-# LIBNL
-include $(EMBTK_ROOT)/packages/net/libnl/libnl.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBNL) += libnl_install
+choice
+	prompt "libtirpc version you wish"
+	depends on EMBTK_HAVE_LIBTIRPC
+	help
+	 Here you can choose which version of libtirpc you want to use.
 
-# libtirpc
-include $(EMBTK_ROOT)/packages/net/libtirpc/libtirpc.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIRPC) += libtirpc_install
+	config  EMBTK_LIBTIRPC_VERSION_0_2_2
+		bool "libtirpc-0.2.2"
+		select EMBTK_LIBTIRPC_NEED_PATCH
+		select EMBTK_LIBTIRPC_NEED_AUTORECONF
+endchoice
+
+config EMBTK_LIBTIRPC_VERSION_STRING
+	string
+	default "0.2.2"		if EMBTK_LIBTIRPC_VERSION_0_2_2
+
+config EMBTK_LIBTIRPC_NEED_PATCH
+	bool
+config EMBTK_LIBTIRPC_NEED_AUTORECONF
+	bool

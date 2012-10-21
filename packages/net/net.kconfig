@@ -28,3 +28,6 @@ source packages/net/iptables/iptables.kconfig
 
 # LIBNL
 source packages/net/libnl/libnl.kconfig
+
+# libtirpc
+source packages/net/libtirpc/libtirpc.kconfig
