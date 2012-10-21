@@ -23,14 +23,14 @@
 ################################################################################
 
 __embtk_arm_endian	:= $(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),el,eb)
-__embtk_arm_clib-(CONFIG_EMBTK_CLIB_EGLIBC) := gnueabi
-__embtk_arm_clib	:= $(or $(__embtk_arm_clib-y),$(embtk_clib)eabi)
+__embtk_arm_abi-$(CONFIG_EMBTK_CLIB_EGLIBC) := gnueabi
+__embtk_arm_abi		:= $(or $(__embtk_arm_abi-y),$(embtk_clib)eabi)
 
 LINUX_ARCH		:= arm
 GNU_TARGET_ARCH		:= arm
 EMBTK_MCU_FLAG		:= $(call __embtk_mk_uquote,$(CONFIG_EMBTK_ARM_MCU_STRING))
 GNU_TARGET		:= arm$(__embtk_arm_endian)-$(embtk_os)
-STRICT_GNU_TARGET	:= arm$(__embtk_arm_endian)-unknown-$(embtk_os)-$(__embtk_arm_clib)
+STRICT_GNU_TARGET	:= arm$(__embtk_arm_endian)-unknown-$(embtk_os)-$(__embtk_arm_abi)
 
 #
 # GCC configure options

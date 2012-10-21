@@ -25,54 +25,54 @@
 LINUX_ARCH		:= mips
 
 __embtk_mips_endian	:= $(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),el)
-__embtk_mips_clib-(CONFIG_EMBTK_CLIB_EGLIBC) := gnu
-__embtk_mips_clib	:= $(or $(__embtk_mips_clib-y),$(embtk_clib))
+__embtk_mips_abi-$(CONFIG_EMBTK_CLIB_EGLIBC) := gnu
+__embtk_mips_abi	:= $(or $(__embtk_mips_abi-y),$(embtk_clib))
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1),y)
 GNU_TARGET		:= mips$(__embtk_mips_endian)-$(embtk_os)
-STRICT_GNU_TARGET	:= mips$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_clib)
+STRICT_GNU_TARGET	:= mips$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
 GNU_TARGET_ARCH		:= mips1
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS2),y)
 GNU_TARGET		:= mips$(__embtk_mips_endian)-$(embtk_os)
-STRICT_GNU_TARGET	:= mips$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_clib)
+STRICT_GNU_TARGET	:= mips$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
 GNU_TARGET_ARCH		:= mips2
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS3),y)
 GNU_TARGET		:= mips64$(__embtk_mips_endian)-$(embtk_os)
-STRICT_GNU_TARGET	:= mips64$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_clib)
+STRICT_GNU_TARGET	:= mips64$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
 GNU_TARGET_ARCH		:= mips3
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS4),y)
 GNU_TARGET		:= mips64$(__embtk_mips_endian)-$(embtk_os)
-STRICT_GNU_TARGET	:= mips64$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_clib)
+STRICT_GNU_TARGET	:= mips64$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
 GNU_TARGET_ARCH		:= mips4
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32),y)
 GNU_TARGET		:= mips$(__embtk_mips_endian)-$(embtk_os)
-STRICT_GNU_TARGET	:= mipsisa32$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_clib)
+STRICT_GNU_TARGET	:= mipsisa32$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
 GNU_TARGET_ARCH		:= mips32
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS32R2),y)
 GNU_TARGET		:= mips$(__embtk_mips_endian)-$(embtk_os)
-STRICT_GNU_TARGET	:= mipsisa32r2$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_clib)
+STRICT_GNU_TARGET	:= mipsisa32r2$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
 GNU_TARGET_ARCH		:= mips32r2
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64),y)
 GNU_TARGET		:= mips64$(__embtk_mips_endian)-$(embtk_os)
-STRICT_GNU_TARGET	:= mipsisa64$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_clib)
+STRICT_GNU_TARGET	:= mipsisa64$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
 GNU_TARGET_ARCH		:= mips64
 endif
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS64R2),y)
 GNU_TARGET		:= mips64$(__embtk_mips_endian)-$(embtk_os)
-STRICT_GNU_TARGET	:= mipsisa64r2$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_clib)
+STRICT_GNU_TARGET	:= mipsisa64r2$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
 GNU_TARGET_ARCH		:= mips64r2
 endif
 
