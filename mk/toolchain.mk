@@ -35,6 +35,7 @@ __TARGET_CFLAGS		:= $(subst ",,$(strip $(CONFIG_EMBTK_TARGET_COMPILER_CFLAGS)))
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SIZE_OPTIMIZED),-Os)
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SPEED_OPTIMIZED),-O3)
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_WITH_DEBUG_DATA),-g)
+__TARGET_CFLAGS		+= -fno-unwind-tables -fno-asynchronous-unwind-tables
 TARGET_CFLAGS		:= $(strip $(__TARGET_CFLAGS))
 CROSS_COMPILE		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-
 
