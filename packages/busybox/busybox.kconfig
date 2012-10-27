@@ -41,6 +41,7 @@ choice
 	config  EMBTK_BB_VERSION_1_20_2
 		bool "busybox-1.20.2"
 		depends on EMBTK_BB_VERSION_1_20_X
+		select EMBTK_BB_NEED_PATCH
 endchoice
 
 config EMBTK_BB_VERSION_STRING
