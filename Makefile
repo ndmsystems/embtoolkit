@@ -25,7 +25,7 @@
 VERSION			:= 0
 PATCHLEVEL		:= 1
 SUBLEVEL		:= 0
-EXTRAVERSION		:= -rc17
+EXTRAVERSION		:=
 EMBTK_VERSION		:= 							\
 	$(shell									\
 	dversion=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION);		\
