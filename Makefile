@@ -24,7 +24,7 @@
 ################################################################################
 VERSION			:= 0
 PATCHLEVEL		:= 1
-SUBLEVEL		:= 0
+SUBLEVEL		:= 1
 EXTRAVERSION		:=
 EMBTK_VERSION		:= 							\
 	$(shell									\
