@@ -169,12 +169,12 @@ __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
 __embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
 __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))
 
-# Some embtoolkit insternal files for packages
-__embtk_pkg_dotdecompressed_f	= $(__embtk_pkg_srcdir)/.decompressed
-__embtk_pkg_dotpatched_f	= $(__embtk_pkg_srcdir)/.patched
-__embtk_pkg_dotconfigured_f	= $(__embtk_pkg_builddir)/.configured
-__embtk_pkg_dotinstalled_f	= $(__embtk_pkg_builddir)/.installed
-__embtk_pkg_dotpkgkconfig_f	= $(__embtk_pkg_builddir)/.embtk.$(__embtk_pkg_name).kconfig
+# Some embtoolkit internal files for packages
+__embtk_pkg_dotdecompressed_f	= $(__embtk_pkg_srcdir)/.$(__embtk_pkg_name).embtk.decompressed
+__embtk_pkg_dotpatched_f	= $(__embtk_pkg_srcdir)/.$(__embtk_pkg_name).embtk.patched
+__embtk_pkg_dotconfigured_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.configured
+__embtk_pkg_dotinstalled_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.installed
+__embtk_pkg_dotpkgkconfig_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.kconfig
 
 # Some useful macros about packages
 __embtk_rootfs_pkgs-y		= $(patsubst %_install,%,$(ROOTFS_COMPONENTS-y))
