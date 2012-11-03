@@ -30,10 +30,10 @@ MAKEDEVS_DIR		:= $(embtk_htools)/usr/bin
 MAKEDEVS_BIN		:= $(MAKEDEVS_DIR)/makedevs
 
 makedevs_install:
-	[ -e $(MAKEDEVS_BUILD_DIR)/.installed ] || 				\
-				$(MAKE) $(MAKEDEVS_BUILD_DIR)/.installed
+	[ -e $(MAKEDEVS_BUILD_DIR)/.makedevs.embtk.installed ] || 		\
+			$(MAKE) $(MAKEDEVS_BUILD_DIR)/.makedevs.embtk.installed
 
-$(MAKEDEVS_BUILD_DIR)/.installed:
+$(MAKEDEVS_BUILD_DIR)/.makedevs.embtk.installed:
 	$(call embtk_pinfo,"Installing makedevs...")
 	$(Q)mkdir -p $(MAKEDEVS_BUILD_DIR)
 	$(Q)mkdir -p $(embtk_htools)/usr

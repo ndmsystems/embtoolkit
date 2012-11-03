@@ -122,8 +122,9 @@ define __embtk_mk_startbuild
 	$(MAKE) toolchain_install rootfs_build successful_build
 endef
 
+
 startbuild:
-	$(if $(call __embtk_mk_pathexist,$(GCC3_BUILD_DIR)/.installed),		\
+	$(if $(call __embtk_mk_pathexist,$(call __embtk_pkg_dotinstalled_f,gcc3)), \
 		$(__embtk_mk_pwarning_restartbuild),$(__embtk_mk_startbuild))
 
 define __embtk_mk_initsysrootdirs
@@ -133,7 +134,7 @@ define __embtk_mk_initsysrootdirs
 	mkdir -p $(embtk_sysroot)/usr/etc
 	mkdir -p $(embtk_sysroot)/root
 	mkdir -p $(embtk_sysroot)/usr/lib
-	$(if $(CONFIG_EMBTK_32BITS_FS),,cd $(embtk_sysroot);				\
+	$(if $(CONFIG_EMBTK_32BITS_FS),,cd $(embtk_sysroot);			\
 		ln -sf lib lib64; cd $(embtk_sysroot)/usr;ln -sf lib lib64)
 	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
 		cd $(embtk_sysroot); ln -sf lib lib64; mkdir -p lib32;		\

@@ -107,13 +107,13 @@ define embtk_configure_eglibc
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
-	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include			\
+	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include		\
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
 	--enable-add-ons --enable-kernel="2.6.27" $(embtk_eglibc_versioning-y)	\
 	--with-bugurl=$(EMBTK_BUGURL)						\
 	--with-pkgversion="EGLIBC from embtoolkit-$(EMBTK_VERSION)"
-	touch $(EGLIBC_BUILD_DIR)/.conifgured
+	touch $(EGLIBC_BUILD_DIR)/.eglibc.embtk.conifgured
 endef
 
 define embtk_configure_eglibc_headers
@@ -125,19 +125,19 @@ define embtk_configure_eglibc_headers
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
-	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include			\
+	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include		\
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
 	--enable-add-ons --enable-kernel="2.6.27" $(embtk_eglibc_versioning-y)	\
 	--with-bugurl=$(EMBTK_BUGURL)
-	touch $(EGLIBC_HEADERS_BUILD_DIR)/.configured
+	touch $(EGLIBC_HEADERS_BUILD_DIR)/.eglibc_headers.embtk.configured
 endef
 
 define embtk_install_eglibc
 	PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) $(J)
 	PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) install	\
 							install_root=$(embtk_sysroot)
-	touch $(EGLIBC_BUILD_DIR)/.installed
+	touch $(EGLIBC_BUILD_DIR)/.eglibc.embtk.installed
 endef
 
 define embtk_install_eglibc_headers
@@ -148,8 +148,8 @@ define embtk_install_eglibc_headers
 	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crti.o $(embtk_sysroot)/usr/lib/
 	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(embtk_sysroot)/usr/lib/
 	$(TARGETCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
-						-o $(embtk_sysroot)/usr/lib/libc.so
-	touch $(EGLIBC_HEADERS_BUILD_DIR)/.installed
+					-o $(embtk_sysroot)/usr/lib/libc.so
+	touch $(EGLIBC_HEADERS_BUILD_DIR)/.eglibc_headers.embtk.installed
 endef
 
 __embtk_get_eglibc_optgroups = grep "CONFIG_KEMBTK_EGLIBC_" $(EMBTK_DOTCONFIG)	\

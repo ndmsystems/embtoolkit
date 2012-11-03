@@ -24,11 +24,11 @@
 # \date         August 2010
 ################################################################################
 
-MAKEIMAGE_VERSION := 0.4
-MAKEIMAGE_SITE := http://ftp.debian.org/debian/pool/main/u/uboot-mkimage
-MAKEIMAGE_PACKAGE :=
-MAKEIMAGE_BUILD_DIR := $(embtk_toolsb)/mkimage
-MAKEIMAGE_BIN := $(embtk_htools)/usr/bin/mkimage
+MAKEIMAGE_VERSION	:= 0.4
+MAKEIMAGE_SITE		:= http://ftp.debian.org/debian/pool/main/u/uboot-mkimage
+MAKEIMAGE_PACKAGE	:=
+MAKEIMAGE_BUILD_DIR	:= $(embtk_toolsb)/mkimage
+MAKEIMAGE_BIN		:= $(embtk_htools)/usr/bin/mkimage
 export MAKEIMAGE_BIN
 
 mkimage_install:
