@@ -491,6 +491,14 @@ define embtk_makeinstall_hostpkg
 endef
 
 #
+# A wrapper macro for embtk_install_hostpkg and embtk_install_pkg, based on
+# package name (xxxx or xxxx_host).
+#
+define embtk_install_xpkg
+	$(call embtk_install_$(findstring host,$(1))pkg,$(1))
+endef
+
+#
 # A macro which downloads a package.
 # Usage:
 # $(call embtk_download_pkg,PACKAGE)
