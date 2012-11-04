@@ -162,7 +162,7 @@ __embtk_pkg_destdir		= $(strip $($(PKGV)_DESTDIR))
 __embtk_pkg_nodestdir		= $(strip $($(PKGV)_NODESTDIR))
 __embtk_pkg_deps		= $(strip $($(PKGV)_DEPS))
 __embtk_pkg_depspkgv		= $(sort $(patsubst %_install,%,$(__embtk_pkg_deps)))
-___embtk_pkg_kconfigsname	= $(strip $(if $($(PKGV)_KCONFIGS_NAME),$($(PKGV)_KCONFIGS_NAME),$(PKGV)))
+___embtk_pkg_kconfigsname	= $(strip $(or $($(PKGV)_KCONFIGS_NAME),$(PKGV)))
 __embtk_pkg_kconfigsname	= $(patsubst %_HOST,%,$(___embtk_pkg_kconfigsname))
 
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
