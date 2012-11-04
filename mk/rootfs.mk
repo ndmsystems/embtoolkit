@@ -53,7 +53,8 @@ define __embtk_rootfs_strip_f
 					$(TARGETSTRIP) $(1) >/dev/null 2>&1
 endef
 
-define __embtk_rootfs_stripbins
+define __embtk_rootfs_components_strip
+	$(call embtk_pinfo,"Stripping binaries as specified...")
 	$(if $(__embtk_rootfs/libso),
 		$(foreach bin,$(__embtk_rootfs/libso),
 				$(call __embtk_rootfs_strip_f,$(bin)) &&:))
@@ -82,9 +83,6 @@ define __embtk_rootfs_stripbins
 		$(foreach bin,$(__embtk_rootfs/usr/sbins),
 				$(call __embtk_rootfs_strip_f,$(bin)) &&:))
 endef
-
-__embtk_rootfs_strip:
-	$(__embtk_rootfs_stripbins)
 
 define __embtk_rootfs_mkdevnodes
 	$(call embtk_pinfo,"Populating devices nodes of the rootfs...")
@@ -130,9 +128,6 @@ define __embtk_rootfs_components_install
 	-cp -R $(embtk_sysroot)/usr/sbin/* $(embtk_rootfs)/usr/sbin/
 	-cp -R $(embtk_sysroot)/etc/* $(embtk_rootfs)/etc/ >/dev/null 2>/dev/null
 	cp -R $(embtk_sysroot)/root $(embtk_rootfs)/
-	$(if $(CONFIG_EMBTK_TARGET_STRIPPED),
-		$(call embtk_pinfo,"Stripping binaries as specified...")
-		$(MAKE) __embtk_rootfs_strip)
 	-$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- 				\
 				rm -rf `find $(embtk_rootfs) -type f -name *.la`
 endef
@@ -166,12 +161,17 @@ __rootfs_mkdevnodes:
 __rootfs_components_install:
 	$(Q)$(__embtk_rootfs_components_install)
 
+__rootfs_components_strip:
+	$(__embtk_rootfs_components_strip)
+
 __rootfs_prebuild_targets := __rootfs_build_msg
 __rootfs_prebuild_targets += __rootfs_clean
 __rootfs_prebuild_targets += __rootfs_mkinitpath
 __rootfs_prebuild_targets += __rootfs_components_build
 __rootfs_prebuild_targets += __rootfs_mkdevnodes
 __rootfs_prebuild_targets += __rootfs_components_install
+__rootfs_prebuild_targets += $(strip $(if $(CONFIG_EMBTK_TARGET_STRIPPED),	\
+						__rootfs_components_strip))
 
 rootfs_build: toolchain_install host_packages_build $(__rootfs_prebuild_targets)
 	$(Q)$(__embtk_rootfs_fs_generate)
