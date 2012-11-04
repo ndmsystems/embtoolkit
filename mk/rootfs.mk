@@ -56,31 +56,31 @@ endef
 define __embtk_rootfs_stripbins
 	$(if $(__embtk_rootfs/libso),
 		$(foreach bin,$(__embtk_rootfs/libso),
-				$(call __embtk_rootfs_strip_f,$(bin));))
+				$(call __embtk_rootfs_strip_f,$(bin)) &&:))
 	$(if $(__embtk_rootfs/lib32so),
 		$(foreach bin,$(__embtk_rootfs/lib32so),
-				$(call __embtk_rootfs_strip_f,$(bin));))
+				$(call __embtk_rootfs_strip_f,$(bin)) &&:))
 	$(if $(__embtk_rootfs/usr/libso),
 		$(foreach bin,$(__embtk_rootfs/usr/libso),
-				$(call __embtk_rootfs_strip_f,$(bin));))
+				$(call __embtk_rootfs_strip_f,$(bin)) &&:))
 	$(if $(__embtk_rootfs/usr/lib32so),
 		$(foreach bin,$(__embtk_rootfs/usr/lib32so),
-				$(call __embtk_rootfs_strip_f,$(bin));))
+				$(call __embtk_rootfs_strip_f,$(bin)) &&:))
 	$(if $(__embtk_rootfs/usr/libexec),
 		$(foreach bin,$(__embtk_rootfs/usr/libexec),
-				$(call __embtk_rootfs_strip_f,$(bin));))
+				$(call __embtk_rootfs_strip_f,$(bin)) &&:))
 	$(if $(__embtk_rootfs/bins),
 		$(foreach bin,$(__embtk_rootfs/bins),
-				$(call __embtk_rootfs_strip_f,$(bin));))
+				$(call __embtk_rootfs_strip_f,$(bin)) &&:))
 	$(if $(__embtk_rootfs/sbins),
 		$(foreach bin,$(__embtk_rootfs/sbins),
-				$(call __embtk_rootfs_strip_f,$(bin));))
+				$(call __embtk_rootfs_strip_f,$(bin)) &&:))
 	$(if $(__embtk_rootfs/usr/bins),
 		$(foreach bin,$(__embtk_rootfs/usr/bins),
-				$(call __embtk_rootfs_strip_f,$(bin));))
+				$(call __embtk_rootfs_strip_f,$(bin)) &&:))
 	$(if $(__embtk_rootfs/usr/sbins),
 		$(foreach bin,$(__embtk_rootfs/usr/sbins),
-				$(call __embtk_rootfs_strip_f,$(bin));))
+				$(call __embtk_rootfs_strip_f,$(bin)) &&:))
 endef
 
 __embtk_rootfs_strip:
@@ -94,7 +94,7 @@ endef
 
 define __embtk_rootfs_cleanup
 	$(foreach pkg-n,$(__embtk_rootfs_pkgs-n),
-		$(call __embtk_cleanup_pkg,$(pkg-n));)
+		$(call __embtk_cleanup_pkg,$(pkg-n)) &&:)
 	rm -rf $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
 endef
 
