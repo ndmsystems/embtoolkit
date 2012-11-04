@@ -37,8 +37,10 @@ mkimage_install:
 
 $(MAKEIMAGE_BUILD_DIR)/.installed: zlib_host_install
 	$(Q)cp -R $(EMBTK_ROOT)/src/mkimage $(embtk_toolsb)/
-	$(MAKE) -C $(MAKEIMAGE_BUILD_DIR) CPPFLAGS="-I$(embtk_htools)/usr/include"
-	$(MAKE) -C $(MAKEIMAGE_BUILD_DIR) DESTDIR=$(embtk_htools) install
+	$(call __embtk_pkg_makeenv,makeimage) $(MAKE) -C $(MAKEIMAGE_BUILD_DIR) \
+			CPPFLAGS="-I$(embtk_htools)/usr/include"
+	$(call __embtk_pkg_makeenv,makeimage) $(MAKE) -C $(MAKEIMAGE_BUILD_DIR) \
+			DESTDIR=$(embtk_htools) install
 	@touch $@
 
 download_mkimage:
