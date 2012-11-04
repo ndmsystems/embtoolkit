@@ -107,7 +107,7 @@ define __embtk_rootfs_mkinitpath
 		mkdir -p $(embtk_rootfs)/usr/lib32)
 endef
 
-define __embtk_rootfs_fill
+define __embtk_rootfs_components_install
 	mkdir -p $(embtk_rootfs)/$(LIBDIR)
 	mkdir -p $(embtk_rootfs)/lib
 	mkdir -p $(embtk_rootfs)/usr
@@ -137,13 +137,7 @@ define __embtk_rootfs_fill
 				rm -rf `find $(embtk_rootfs) -type f -name *.la`
 endef
 
-define __embtk_rootfs_build
-	$(call embtk_pinfo,"Building selected root filesystems - please wait...")
-	$(__embtk_rootfs_cleanup)
-	$(__embtk_rootfs_mkinitpath)
-	$(MAKE) $(ROOTFS_COMPONENTS-y)
-	$(__embtk_rootfs_mkdevnodes)
-	$(__embtk_rootfs_fill)
+define __embtk_rootfs_fs_generate
 	$(call embtk_rootfs_mktarbz2,$(embtk_rootfs),$(ROOTFS_TARBZ2))
 	$(if $(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),
 		$(call embtk_rootfs_mkinitramfs,$(embtk_rootfs),$(ROOTFS_INITRAMFS)))
@@ -152,11 +146,36 @@ define __embtk_rootfs_build
 	$(if $(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),
 		$(call embtk_rootfs_mksquashfs,$(embtk_rootfs),$(ROOTFS_SQUASHFS)))
 	rm -rf $(embtk_rootfs)
-	$(call embtk_pinfo,"Selected root filesystems built successfully!")
 endef
 
-rootfs_build: toolchain_install host_packages_build
-	$(Q)$(__embtk_rootfs_build)
+__rootfs_build_msg:
+	$(call embtk_pinfo,"Building selected filesystems - please wait...")
+
+__rootfs_clean:
+	$(Q)$(__embtk_rootfs_cleanup)
+
+__rootfs_mkinitpath:
+	$(Q)$(__embtk_rootfs_mkinitpath)
+
+__rootfs_components_build: $(ROOTFS_COMPONENTS-y)
+	true
+
+__rootfs_mkdevnodes:
+	$(Q)$(__embtk_rootfs_mkdevnodes)
+
+__rootfs_components_install:
+	$(Q)$(__embtk_rootfs_components_install)
+
+__rootfs_prebuild_targets := __rootfs_build_msg
+__rootfs_prebuild_targets += __rootfs_clean
+__rootfs_prebuild_targets += __rootfs_mkinitpath
+__rootfs_prebuild_targets += __rootfs_components_build
+__rootfs_prebuild_targets += __rootfs_mkdevnodes
+__rootfs_prebuild_targets += __rootfs_components_install
+
+rootfs_build: toolchain_install host_packages_build $(__rootfs_prebuild_targets)
+	$(Q)$(__embtk_rootfs_fs_generate)
+	$(call embtk_pinfo,"Selected root filesystems built successfully!")
 else
 # Build of root file system not selected
 rootfs_build:
