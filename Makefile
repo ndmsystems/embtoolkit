@@ -76,6 +76,24 @@ Q :=
 endif
 export Q
 
+#
+# Performance hack
+#
+MAKEFLAGS += --no-builtin-rules --no-builtin-variables
+.SUFFIXES:
+	MAKEFLAGS += --no-builtin-rules --no-builtin-variables
+
+SUFFIXES :=
+
+%: %,v
+%: RCS/%,v
+%: RCS/%
+%: s.%
+%: SCCS/s.%
+
+#
+# Include oour config if any
+#
 -include .config
 
 EMBTK_BUILD := $(if $(CONFIG_EMBTK_DOTCONFIG),startbuild,xconfig)
