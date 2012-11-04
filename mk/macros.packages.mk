@@ -166,7 +166,8 @@ ___embtk_pkg_kconfigsname	= $(strip $(or $($(PKGV)_KCONFIGS_NAME),$(PKGV)))
 __embtk_pkg_kconfigsname	= $(patsubst %_HOST,%,$(___embtk_pkg_kconfigsname))
 
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
-__embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
+___embtk_pkg_makeenv		= $(if $(V),MAKEFLAGS=,MAKEFLAGS="--no-print-directory --silent")
+__embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV)) $(___embtk_pkg_makeenv)
 __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))
 
 # Some embtoolkit internal files for packages
