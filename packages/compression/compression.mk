@@ -24,10 +24,10 @@
 ################################################################################
 
 #lzo for host and target
-include $(EMBTK_ROOT)/packages/compression/lzo/lzo.mk
+include packages/compression/lzo/lzo.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LZO) += lzo_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LZO) += lzo_host_install
 
 #zlib for target
-include $(EMBTK_ROOT)/packages/compression/zlib/zlib.mk
+include packages/compression/zlib/zlib.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_ZLIB) += zlib_install

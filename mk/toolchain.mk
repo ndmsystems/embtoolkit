@@ -54,41 +54,41 @@ LIBDIR			:= $(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),lib32,lib)
 export LIBDIR
 
 # ccache
-include $(EMBTK_ROOT)/mk/ccache.mk
+include mk/ccache.mk
 
 # GMP
-include $(EMBTK_ROOT)/mk/gmp.mk
+include mk/gmp.mk
 
 # MPFR
-include $(EMBTK_ROOT)/mk/mpfr.mk
+include mk/mpfr.mk
 
 # MPC
-include $(EMBTK_ROOT)/mk/mpc.mk
+include mk/mpc.mk
 
 # binutils
-include $(EMBTK_ROOT)/mk/binutils.mk
+include mk/binutils.mk
 
 # GCC
-include $(EMBTK_ROOT)/mk/gcc.mk
+include mk/gcc.mk
 
 # linux kernel headers
-include $(EMBTK_ROOT)/mk/linux.mk
+include mk/linux.mk
 
 # toolchain addon: strace
-include $(EMBTK_ROOT)/mk/strace.mk
+include mk/strace.mk
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_STRACE) += strace_install
 
 # toolchain addon: gdb
-include $(EMBTK_ROOT)/packages/development/gdb/gdb.mk
+include packages/development/gdb/gdb.mk
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDB) += gdbfull_install
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDBSERVER) += gdbserver_install
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HOST_HAVE_GDB) += gdb_host_install
 
 # Autotools
-include $(EMBTK_ROOT)/mk/libtool.mk
-include $(EMBTK_ROOT)/mk/autoconf.mk
-include $(EMBTK_ROOT)/mk/automake.mk
-include $(EMBTK_ROOT)/mk/m4.mk
+include mk/libtool.mk
+include mk/autoconf.mk
+include mk/automake.mk
+include mk/m4.mk
 AUTOTOOLS_INSTALL	:= m4_install libtool_install autoconf_install
 AUTOTOOLS_INSTALL	+= automake_install
 

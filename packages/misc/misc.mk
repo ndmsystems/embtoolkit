@@ -24,32 +24,32 @@
 ################################################################################
 
 #expat
-include $(EMBTK_ROOT)/packages/misc/expat/expat.mk
+include packages/misc/expat/expat.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_EXPAT) += expat_install
 
 #gettext
-include $(EMBTK_ROOT)/packages/misc/gettext/gettext.mk
+include packages/misc/gettext/gettext.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GETTEXT) += gettext_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GETTEXT) += gettext_host_install
 
 #GLib
-include $(EMBTK_ROOT)/packages/misc/glib/glib.mk
+include packages/misc/glib/glib.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GLIB) += glib_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GLIB) += glib_host_install
 
 # intltool
-include $(EMBTK_ROOT)/packages/misc/intltool/intltool.mk
+include packages/misc/intltool/intltool.mk
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_INTLTOOL) += intltool_host_install
 
 #libxml2
-include $(EMBTK_ROOT)/packages/misc/libxml/libxml.mk
+include packages/misc/libxml/libxml.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXML2) += libxml2_install
 
 #ncurses
-include $(EMBTK_ROOT)/packages/misc/ncurses/ncurses.mk
+include packages/misc/ncurses/ncurses.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_NCURSES) += ncurses_install
 
 #tslib
-include $(EMBTK_ROOT)/packages/misc/tslib/tslib.mk
+include packages/misc/tslib/tslib.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_TSLIB) += tslib_install
 

@@ -30,25 +30,25 @@ HOSTTOOLS_COMPONENTS-y		:= mkimage_install pkgconfig_install
 #
 
 # fakeroot
-include $(EMBTK_ROOT)/mk/fakeroot.mk
+include mk/fakeroot.mk
 
 # gperf
-include $(EMBTK_ROOT)/mk/gperf_host.mk
+include mk/gperf_host.mk
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GPERF) += gperf_host_install
 
 # libelf
-include $(EMBTK_ROOT)/packages/misc/libelf/libelf.mk
+include packages/misc/libelf/libelf.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBELF) += libelf_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBELF) += libelf_host_install
 
-include $(EMBTK_ROOT)/mk/makedevs.mk
-include $(EMBTK_ROOT)/mk/mkimage.mk
-include $(EMBTK_ROOT)/mk/mtd-utils.mk
-include $(EMBTK_ROOT)/mk/pkgconfig.mk
-include $(EMBTK_ROOT)/mk/squashfs.mk
+include mk/makedevs.mk
+include mk/mkimage.mk
+include mk/mtd-utils.mk
+include mk/pkgconfig.mk
+include mk/squashfs.mk
 
 # zlib_host
-include $(EMBTK_ROOT)/mk/zlib_host.mk
+include mk/zlib_host.mk
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_ZLIB) += zlib_host_install
 
 
@@ -61,38 +61,38 @@ HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_ZLIB) += zlib_host_install
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MTDUTILS) += mtdutils_install
 
 # Compression packages
-include $(EMBTK_ROOT)/packages/compression/compression.mk
+include packages/compression/compression.mk
 
 # Database packages/libraries
-include $(EMBTK_ROOT)/packages/database/database.mk
+include packages/database/database.mk
 
 # Development libraries/packages
-include $(EMBTK_ROOT)/packages/development/development.mk
+include packages/development/development.mk
 
 # Graphics packages
-include $(EMBTK_ROOT)/packages/graphics/graphics.mk
+include packages/graphics/graphics.mk
 
 # Networking packages
-include $(EMBTK_ROOT)/packages/net/net.mk
+include packages/net/net.mk
 
 # Scripting languages
-include $(EMBTK_ROOT)/packages/scripting-languages/scripting-languages.mk
+include packages/scripting-languages/scripting-languages.mk
 
 # Security packages
-include $(EMBTK_ROOT)/packages/security/security.mk
+include packages/security/security.mk
 
 # System packages
-include $(EMBTK_ROOT)/packages/system/system.mk
+include packages/system/system.mk
 
 # X window system packages
-include $(EMBTK_ROOT)/packages/x11/x11.mk
+include packages/x11/x11.mk
 
 # Miscellaneous packages
-include $(EMBTK_ROOT)/packages/misc/misc.mk
+include packages/misc/misc.mk
 
 # Busybox
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_BB) += bb_install
-include $(EMBTK_ROOT)/packages/busybox/busybox.mk
+include packages/busybox/busybox.mk
 
 #
 # Targets for host machine

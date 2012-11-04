@@ -24,14 +24,14 @@
 ################################################################################
 
 #dbus
-include $(EMBTK_ROOT)/packages/system/dbus/dbus.mk
+include packages/system/dbus/dbus.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_DBUS) += dbus_install
 
 # e2fsprogs
-include $(EMBTK_ROOT)/packages/system/e2fsprogs/e2fsprogs.mk
+include packages/system/e2fsprogs/e2fsprogs.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_E2FSPROGS) += e2fsprogs_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_E2FSPROGS) += e2fsprogs_host_install
 
 #upstart
-include $(EMBTK_ROOT)/packages/system/upstart/upstart.mk
+include packages/system/upstart/upstart.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_UPSTART) += upstart_install

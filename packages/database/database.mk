@@ -24,5 +24,5 @@
 ################################################################################
 
 #SQLite
-include $(EMBTK_ROOT)/packages/database/sqlite/sqlite.mk
+include packages/database/sqlite/sqlite.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_SQLITE) += sqlite_install

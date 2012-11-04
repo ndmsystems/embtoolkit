@@ -24,17 +24,17 @@
 ################################################################################
 
 #libevent
-include $(EMBTK_ROOT)/packages/development/libbsd/libbsd.mk
+include packages/development/libbsd/libbsd.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBBSD) += libbsd_install
 
 #libevent
-include $(EMBTK_ROOT)/packages/development/libevent/libevent.mk
+include packages/development/libevent/libevent.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBEVENT) += libevent_install
 
 #libnih
-include $(EMBTK_ROOT)/packages/development/libnih/libnih.mk
+include packages/development/libnih/libnih.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBNIH) += libnih_install
 
 #libsigsegv
-include $(EMBTK_ROOT)/packages/development/libsigsegv/libsigsegv.mk
+include packages/development/libsigsegv/libsigsegv.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBSIGSEGV) += libsigsegv_install

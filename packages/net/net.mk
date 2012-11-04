@@ -24,13 +24,13 @@
 ################################################################################
 
 # Iptables
-include $(EMBTK_ROOT)/packages/net/iptables/iptables.mk
+include packages/net/iptables/iptables.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_IPTABLES) += iptables_install
 
 # LIBNL
-include $(EMBTK_ROOT)/packages/net/libnl/libnl.mk
+include packages/net/libnl/libnl.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBNL) += libnl_install
 
 # libtirpc
-include $(EMBTK_ROOT)/packages/net/libtirpc/libtirpc.mk
+include packages/net/libtirpc/libtirpc.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIRPC) += libtirpc_install

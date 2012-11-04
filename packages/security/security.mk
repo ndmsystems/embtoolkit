@@ -24,5 +24,5 @@
 ################################################################################
 
 # OpenSSL
-include $(EMBTK_ROOT)/packages/security/openssl/openssl.mk
+include packages/security/openssl/openssl.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_OPENSSL) += openssl_install

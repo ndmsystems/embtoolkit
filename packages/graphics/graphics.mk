@@ -24,62 +24,62 @@
 ################################################################################
 
 #atk
-include $(EMBTK_ROOT)/packages/graphics/atk/atk.mk
+include packages/graphics/atk/atk.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_ATK) += atk_install
 
 #Cairo
-include $(EMBTK_ROOT)/packages/graphics/cairo/cairo.mk
+include packages/graphics/cairo/cairo.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_CAIRO) += cairo_install
 
 #DirectFB
-include $(EMBTK_ROOT)/packages/graphics/directfb/directfb.mk
+include packages/graphics/directfb/directfb.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_DIRECTFB) += directfb_install
 
 #fontconfig
-include $(EMBTK_ROOT)/packages/graphics/fontconfig/fontconfig.mk
+include packages/graphics/fontconfig/fontconfig.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FONTCONFIG) += fontconfig_install
 
 #FreeFont
-include $(EMBTK_ROOT)/packages/graphics/freefont/freefont.mk
+include packages/graphics/freefont/freefont.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FREEFONT_TTF) += freefont_ttf_install
 
 #FreeType
-include $(EMBTK_ROOT)/packages/graphics/freetype/freetype.mk
+include packages/graphics/freetype/freetype.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FREETYPE) += freetype_install
 
 #gdk-pixbuf
-include $(EMBTK_ROOT)/packages/graphics/gdk-pixbuf/gdk-pixbuf.mk
+include packages/graphics/gdk-pixbuf/gdk-pixbuf.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GDKPIXBUF) += gdkpixbuf_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GDKPIXBUF) += gdkpixbuf_host_install
 
 #gtk+
-include $(EMBTK_ROOT)/packages/graphics/gtk/gtk.mk
+include packages/graphics/gtk/gtk.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GTK) += gtk_install
 
 #imlib2
-include $(EMBTK_ROOT)/packages/graphics/imlib2/imlib2.mk
+include packages/graphics/imlib2/imlib2.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_IMLIB2) += imlib2_install
 
 #libjpeg
-include $(EMBTK_ROOT)/packages/graphics/libjpeg/libjpeg.mk
+include packages/graphics/libjpeg/libjpeg.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBJPEG) += libjpeg_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBJPEG) += libjpeg_host_install
 
 #libpng
-include $(EMBTK_ROOT)/packages/graphics/libpng/libpng.mk
+include packages/graphics/libpng/libpng.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPNG) += libpng_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBPNG) += libpng_host_install
 
 #libtiff
-include $(EMBTK_ROOT)/packages/graphics/libtiff/libtiff.mk
+include packages/graphics/libtiff/libtiff.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIFF) += libtiff_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBTIFF) += libtiff_host_install
 
 #Pango
-include $(EMBTK_ROOT)/packages/graphics/pango/pango.mk
+include packages/graphics/pango/pango.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_PANGO) += pango_install
 
 #pixman
-include $(EMBTK_ROOT)/packages/graphics/pixman/pixman.mk
+include packages/graphics/pixman/pixman.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_PIXMAN) += pixman_install
 

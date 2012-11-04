@@ -24,19 +24,19 @@
 ################################################################################
 
 # LUA and modules
-include $(EMBTK_ROOT)/packages/scripting-languages/lua/lua.mk
+include packages/scripting-languages/lua/lua.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LUA) += lua_install
 
-include $(EMBTK_ROOT)/packages/scripting-languages/lua-modules/luafilesystem/luafilesystem.mk
+include packages/scripting-languages/lua-modules/luafilesystem/luafilesystem.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LUAFILESYSTEM) += luafilesystem_install
 
-include $(EMBTK_ROOT)/packages/scripting-languages/lua-modules/rings/rings.mk
+include packages/scripting-languages/lua-modules/rings/rings.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_RINGS) += rings_install
 
-include $(EMBTK_ROOT)/packages/scripting-languages/lua-modules/cgilua/cgilua.mk
+include packages/scripting-languages/lua-modules/cgilua/cgilua.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_CGILUA) += cgilua_install
 
 #microperl
-include $(EMBTK_ROOT)/packages/scripting-languages/perl/perl.mk
+include packages/scripting-languages/perl/perl.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MICROPERL) += microperl_install
 
