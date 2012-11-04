@@ -113,7 +113,7 @@ TOOLCHAIN_ADDONS_DEPS		:= $(TOOLCHAIN_ADDONS-y)
 TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_BUILD_DIR)/.addons
 TOOLCHAIN_ADDONS_SRC_DIR	:= $(TOOLCHAIN_BUILD_DIR)/.addons
 
--include $(EMBTK_ROOT)/mk/$(embtk_clib).mk
+-include mk/$(embtk_clib).mk
 
 define __embtk_toolchain_mkinitdirs
 	$(__embtk_mk_initsysrootdirs)
