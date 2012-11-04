@@ -109,7 +109,7 @@ host_packages_build:
 
 # This install implicit rule is intended for autotool'ed packages
 %_install:
-	$(call embtk_install_$(findstring host,$@)pkg,$*)
+	$(call embtk_install_xpkg,$*)
 
 # Download generic implicit rule
 download_%:
