@@ -46,5 +46,5 @@ LIBNL_SHARES		:= $(addprefix man/man8/,$(__LIBNL_SHARES))
 
 define embtk_postinstall_libnl
 	test -e $(LIBNL_BUILD_DIR)/.installed ||				\
-		$(call __embtk_fix_libtool_files,$(LIBDIR)/libln)
+		$(call __embtk_fix_libtool_files,$(LIBDIR)/libnl)
 endef
