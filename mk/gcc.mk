@@ -59,8 +59,6 @@ endif
 gcc%_install:
 	$(call embtk_install_hostpkg,$(patsubst %_install,%,$@))
 
-gcc%_clean:
-	$(Q)rm -rf $(GCC$*_BUILD_DIR)
 #
 # GCC first stage
 #
@@ -163,3 +161,20 @@ ifeq ($(CONFIG_EMBTK_64BITS_FS)$(CONFIG_EMBTK_CLIB_UCLIBC),yy)
 endif
 	$(Q)touch $@
 
+#
+# clean up macros and targets
+#
+define embtk_cleanup_gcc1
+	rm -rf $(GCC1_BUILD_DIR)
+endef
+
+define embtk_cleanup_gcc2
+	rm -rf $(GCC2_BUILD_DIR)
+endef
+
+define embtk_cleanup_gcc3
+	rm -rf $(GCC3_BUILD_DIR)
+endef
+
+gcc%_clean:
+	$(Q)$(embtk_cleanup_gcc$*)

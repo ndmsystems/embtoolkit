@@ -78,6 +78,14 @@ $(GDB_BUILD_DIR)/.gdbserver_decompressed:
 	$(call embtk_decompress_pkg,gdb)
 	@touch $@
 
+define embtk_cleanup_gdbfull
+	$(call embtk_cleanup_pkg,gdb)
+endef
+
+define embtk_cleanup_gdbserver
+	$(call embtk_cleanup_pkg,gdb)
+endef
+
 gdbserver_clean gdbfull_clean:
 	$(call embtk_cleanup_pkg,gdb)
 
@@ -109,8 +117,12 @@ GDB_HOST_CONFIGURE_OPTS	:= --disable-werror --disable-sim --disable-nls	\
 			--target=$(STRICT_GNU_TARGET)
 GDB_HOST_PREFIX		:= $(embtk_tools)
 
+define embtk_cleanup_gdb_host
+	rm -rf $(GDB_HOST_BUILD_DIR)
+endef
+
 gdb_host_clean:
-	$(Q)rm -rf $(GDB_HOST_BUILD_DIR)
+	$(Q)$(embtk_cleanup_gdb_host)
 #
 # Common for target and host development machine
 #

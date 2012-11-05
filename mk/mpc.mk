@@ -38,5 +38,9 @@ MPC_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static	\
 				--with-mpfr=$(MPFR_HOST_DIR)
 MPC_HOST_PREFIX		:= $(MPC_HOST_DIR)
 
+define embtk_cleanup_mpc_host
+	rm -rf $(MPC_HOST_BUILD_DIR)
+endef
+
 mpc_host_clean:
-	$(Q)rm -rf $(MPC_HOST_BUILD_DIR)
+	$(Q)$(embtk_cleanup_mpc_host)

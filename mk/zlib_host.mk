@@ -49,5 +49,9 @@ define embtk_beforeinstall_zlib_host
 	$(embtk_configure_zlib_host)
 endef
 
-zlib_host_clean:
+define embtk_cleanup_zlib_host
 	$(call embtk_pinfo,"Clean up zlib for host")
+endef
+
+zlib_host_clean:
+	$(embtk_cleanup_zlib_host)

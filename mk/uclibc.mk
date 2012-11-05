@@ -84,7 +84,7 @@ $(UCLIBC_BUILD_DIR)/.headers_installed:
 download_uclibc_headers:
 	$(call embtk_download_pkg,uClibc)
 
-define embtk_uclibc_clean
+define embtk_cleanup_uclibc
 	if [ -d $(UCLIBC_BUILD_DIR) ]; then					\
 		$(MAKE) -C $(UCLIBC_BUILD_DIR) distclean;			\
 		rm -rf $(UCLIBC_BUILD_DIR)/.installed;				\
@@ -92,8 +92,12 @@ define embtk_uclibc_clean
 	fi
 endef
 
+define embtk_cleanup_uclibc_headers
+	$(embtk_cleanup_uclibc)
+endef
+
 uclibc_clean uclibc_headers_clean:
-	$(Q)$(embtk_uclibc_clean)
+	$(Q)$(embtk_cleanup_uclibc)
 #
 # uClibc configuration macros and target
 #

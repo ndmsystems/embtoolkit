@@ -81,11 +81,19 @@ eglibc_install:
 #
 # clean targets
 #
+define embtk_cleanup_eglibc
+	rm -rf $(EGLIBC_BUILD_DIR)
+endef
+
+define embtk_cleanup_eglibc_headers
+	rm -rf $(EGLIBC_HEADERS_BUILD_DIR)
+endef
+
 eglibc_clean:
-	$(Q)rm -rf $(EGLIBC_BUILD_DIR)
+	$(Q)$(embtk_cleanup_eglibc)
 
 eglibc_headers_clean:
-	$(Q)rm -rf $(EGLIBC_HEADERS_BUILD_DIR)
+	$(Q)$(embtk_cleanup_eglibc_headers)
 
 #
 # download and macros

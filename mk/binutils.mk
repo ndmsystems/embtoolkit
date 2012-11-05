@@ -39,5 +39,9 @@ BINUTILS_PREFIX		:= $(embtk_tools)
 binutils_install:
 	$(call embtk_install_hostpkg,binutils)
 
+define embtk_cleanup_binutils
+	rm -rf $(BINUTILS_BUILD_DIR)
+endef
+
 binutils_clean:
-	$(Q)rm -rf $(BINUTILS_BUILD_DIR)
+	$(Q)$(embtk_cleanup_binutils)

@@ -61,14 +61,18 @@ download_linux download_linux_headers:
 	$(call embtk_download_pkg,linux)
 
 #
-# clean target
+# clean target and macros
 #
-define embtk_linux_clean
+define embtk_cleanup_linux
 	if [ -d $(LINUX_BUILD_DIR) ]; then					\
 		$(MAKE) -C $(LINUX_BUILD_DIR) distclean;			\
 		rm -rf $(LINUX_BUILD_DIR)/.headers_installed;			\
 	fi
 endef
 
+define embtk_cleanup_linux_headers
+	$(embtk_cleanup_linux)
+endef
+
 linux_clean linux_headers_clean:
-	$(embtk_linux_clean)
+	$(embtk_cleanup_linux)
