@@ -673,6 +673,7 @@ endef
 # $(call embtk_cleanup_pkg,pkgname)
 #
 define __embtk_cleanup_pkg
+	$(if $(embtk_cleanup_$(pkgv)),$(embtk_cleanup_$(pkgv)))
 	$(if $(__embtk_pkg_etc),
 		rm -rf $(addprefix $(embtk_sysroot)/etc/,$(__embtk_pkg_etc)))
 	$(if $(__embtk_pkg_bins),
