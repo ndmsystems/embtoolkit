@@ -84,6 +84,6 @@ embtk_empty	:=
 embtk_space	:= $(embtk_empty) $(embtk_empty)
 embtk_comma	:= ,
 
-
+#
 # Packages management macros
-include $(EMBTK_ROOT)/mk/macros.packages.mk
+include mk/macros.packages.mk

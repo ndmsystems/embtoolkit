@@ -62,6 +62,14 @@ define embtk_pkgconfig_getcflags
 		$(PKGCONFIG_BIN) $(strip $(1)) --cflags)
 endef
 
+#
+# Define here which make program to use in MAKE.
+# FIXME: On some systems, gnu make is named gmake (ie FreeBSD)
+#
+__embtk_make_cmd	:= make
+__embtk_make_env	:=  $(if $(V),MAKEFLAGS="",MAKEFLAGS="--no-print-directory --silent")
+MAKE			:= $(__embtk_make_env) $(__embtk_make_cmd)
+
 #Macro to adapt libtool files (*.la) for cross compiling
 __ltlibdirold		= libdir='\/usr\/$(LIBDIR)\(.*\)'
 __ltlibdirnew		= libdir='$(embtk_sysroot)\/usr\/$(LIBDIR)\1'
@@ -166,8 +174,7 @@ ___embtk_pkg_kconfigsname	= $(strip $(or $($(PKGV)_KCONFIGS_NAME),$(PKGV)))
 __embtk_pkg_kconfigsname	= $(patsubst %_HOST,%,$(___embtk_pkg_kconfigsname))
 
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
-___embtk_pkg_makeenv		= $(if $(V),MAKEFLAGS=,MAKEFLAGS="--no-print-directory --silent")
-__embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV)) $(___embtk_pkg_makeenv)
+__embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
 __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))
 
 # Some embtoolkit internal files for packages
