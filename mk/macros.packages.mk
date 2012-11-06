@@ -448,11 +448,15 @@ __embtk_xinstall_xpkg_allvarset-y = $(and $(__embtk_pkg_name),			\
 # Usage:
 # $(call embtk_install_pkg,package)
 #
+define __embtk_install_pkg
+	$(if $(__embtk_pkg_installed-y),true,
+		$(call __embtk_install_pkg_make,$(1),autotools))
+	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
+endef
+
 define embtk_install_pkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
-		$(if $(__embtk_pkg_installed-y),true,
-			$(call __embtk_install_pkg_make,$(1),autotools))
-		$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv))),
+		$(or $(embtk_install_$(pkgv)),$(call __embtk_install_pkg,$(1))),
 		$(call __embtk_install_paramsfailure,$(1)))
 endef
 
