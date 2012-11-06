@@ -38,31 +38,35 @@ LINUX_SITE		:= $(call __LINUX_SITE)
 LINUX_PACKAGE		:= linux-$(LINUX_VERSION).tar.bz2
 LINUX_SRC_DIR		:= $(embtk_toolsb)/linux-$(LINUX_VERSION)
 LINUX_BUILD_DIR		:= $(embtk_toolsb)/linux-$(LINUX_VERSION)
-LINUX_HEADERS_KCONFIGS_NAME := LINUX
 
-LINUX_HAEDERS_NAME	:= $(LINUX_NAME)
+LINUX_HEADERS_NAME	:= $(LINUX_NAME)
+LINUX_HEADERS_VERSION	:= $(LINUX_VERSION)
 LINUX_HEADERS_SITE	:= $(LINUX_SITE)
 LINUX_HEADERS_PACKAGE	:= $(LINUX_PACKAGE)
 LINUX_HEADERS_SRC_DIR	:= $(LINUX_SRC_DIR)
 LINUX_HEADERS_BUILD_DIR	:= $(LINUX_BUILD_DIR)
 LINUX_HEADERS_KCONFIGS_NAME := LINUX
 
-linux_headers_install:
-	$(Q)test -e $(LINUX_BUILD_DIR)/.headers_installed ||			\
-				$(MAKE) $(LINUX_BUILD_DIR)/.headers_installed
-
-$(LINUX_BUILD_DIR)/.headers_installed:
+define __embtk_install_linux_headers
 	$(call embtk_pinfo,"Installing linux-$(LINUX_VERSION) headers...")
 	$(call embtk_download_pkg,linux)
 	$(call embtk_decompress_pkg,linux)
-	$(Q)PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) 		\
+	$(Q)PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) 	\
 		headers_install ARCH=$(LINUX_ARCH)				\
 		CROSS_COMPILE=$(STRICT_GNU_TARGET)-				\
 		INSTALL_HDR_PATH=$(embtk_sysroot)/usr
 	$(MAKE) -C $(LINUX_BUILD_DIR) distclean
 	$(MAKE) -C $(LINUX_BUILD_DIR) headers_install				\
 		INSTALL_HDR_PATH=$(embtk_htools)/usr
-	$(Q)touch $@
+	touch $(call __embtk_pkg_dotinstalled_f,linux_headers)
+endef
+define embtk_install_linux_headers
+	[ -e $(call __embtk_pkg_dotinstalled_f,linux_headers) ] ||		\
+		$(__embtk_install_linux_headers)
+endef
+
+linux_headers_install:
+	$(Q)$(embtk_install_linux_headers)
 
 download_linux download_linux_headers:
 	$(call embtk_download_pkg,linux)
@@ -73,7 +77,7 @@ download_linux download_linux_headers:
 define embtk_cleanup_linux
 	if [ -d $(LINUX_BUILD_DIR) ]; then					\
 		$(MAKE) -C $(LINUX_BUILD_DIR) distclean;			\
-		rm -rf $(LINUX_BUILD_DIR)/.headers_installed;			\
+		rm -rf $$(call __embtk_pkg_dotinstalled_f,linux_headers);	\
 	fi
 endef
 
