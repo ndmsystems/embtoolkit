@@ -78,7 +78,7 @@ define embtk_cleanup_linux
 	if [ -d $(LINUX_BUILD_DIR) ] &&						\
 		[ -e $(call __embtk_pkg_dotinstalled_f,linux_headers) ]; then	\
 		$(MAKE) -C $(LINUX_BUILD_DIR) distclean;			\
-		rm -rf $$(call __embtk_pkg_dotinstalled_f,linux_headers);	\
+		rm -rf $(call __embtk_pkg_dotinstalled_f,linux_headers);	\
 	fi
 endef
 
