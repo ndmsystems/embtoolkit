@@ -75,7 +75,8 @@ download_linux download_linux_headers:
 # clean target and macros
 #
 define embtk_cleanup_linux
-	if [ -d $(LINUX_BUILD_DIR) ]; then					\
+	if [ -d $(LINUX_BUILD_DIR) ] &&						\
+		[ -e $(call __embtk_pkg_dotinstalled_f,linux_headers) ]; then	\
 		$(MAKE) -C $(LINUX_BUILD_DIR) distclean;			\
 		rm -rf $$(call __embtk_pkg_dotinstalled_f,linux_headers);	\
 	fi
