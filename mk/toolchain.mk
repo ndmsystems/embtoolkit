@@ -162,8 +162,9 @@ define __embtk_toolchain_build
 		rm -rf $(call __embtk_pkg_dotinstalled_f,toolchain)
 		rm -rf $(call __embtk_pkg_dotdecompressed_f,toolchain)
 		$(foreach dep,$(patsubst %_install,%,$(TOOLCHAIN_DEPS)),
-			$(MAKE) $(dep)_clean;)
-		$(foreach pkg,$(__embtk_rootfs_pkgs-y),$(MAKE) $(pkg)_clean;)
+			$(call embtk_cleanup_pkg,$(dep)))
+		$(foreach pkg,$(__embtk_rootfs_pkgs-y),
+			$(call embtk_cleanup_pkg,$(pkg)))
 		rm -rf $(embtk_sysroot) $(embtk_tools)
 		$(__embtk_toolchain_mkinitdirs)
 		$(MAKE) $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
@@ -175,10 +176,10 @@ define __embtk_toolchain_build
 		$(if $(findstring core,$(1)),,$(___embtk_toolchain_decompress))
 		$(if $(findstring core,$(1)),
 			$(foreach addon,$(__embtk_toolchain_addons-y),
-				$(MAKE) $(addon)_clean;))
+				$(call embtk_cleanup_pkg,$(addon))))
 		$(if $(TOOLCHAIN_ADDONS-),
 			$(foreach addon,$(__embtk_toolchain_addons-n),
-				$(MAKE) $(addon)_clean;))
+				$(call embtk_cleanup_pkg,$(addon))))
 		$(if $(TOOLCHAIN_ADDONS-y),
 			$(MAKE) $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_ADDONS-y))
 		touch $(call __embtk_pkg_dotinstalled_f,toolchain_addons))
