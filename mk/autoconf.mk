@@ -41,8 +41,6 @@ AUTOUPDATE	:= $(AUTOCONF_DIR)/bin/autoupdate
 IFNAMES		:= $(AUTOCONF_DIR)/bin/ifnames
 export AUTOCONF AUTOHEADER AUTOM4TE AUTORECONF AUTOSCAN AUTOUPDATE IFNAMES
 
-autoconf_install:
-	$(call embtk_install_hostpkg,autoconf)
-
-download_autoconf:
-	$(call embtk_download_pkg,autoconf)
+define embtk_install_autoconf
+	$(call __embtk_install_hostpkg,autoconf)
+endef

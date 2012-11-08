@@ -37,5 +37,6 @@ M4_BIN	:= $(M4_DIR)/bin/m4
 M4	:= $(M4_BIN)
 export M4
 
-m4_install:
-	$(call embtk_install_hostpkg,m4)
+define embtk_install_m4
+	$(call __embtk_install_hostpkg,m4)
+endef

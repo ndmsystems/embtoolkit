@@ -53,8 +53,15 @@ MTDUTILS_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_BUILD_DIR)
 MTDUTILS_MAKE_ENV	+= DESTDIR=$(embtk_sysroot)
 MTDUTILS_MAKE_ENV	+= PATH=$(PATH):$(embtk_tools)/bin CROSS=$(CROSS_COMPILE)
 
-mtdutils_install:
+define __embtk_install_mtdutils
+	$(call embtk_download_pkg,mtdutils)
+	$(call embtk_decompress_pkg,mtdutils)
 	$(call embtk_makeinstall_pkg,mtdutils)
+endef
+define embtk_install_mtdutils
+	[ -e $(__embtk_pkg_dotinstalled_f,mtdutils) ] ||			\
+						$(__embtk_install_mtdutils)
+endef
 
 #
 # mtd-utils for host development machine.
@@ -77,5 +84,12 @@ MTDUTILS_HOST_MAKE_ENV	+= CPPFLAGS="-I. -Iinclude -I../include -I$(embtk_htools)
 MTDUTILS_HOST_MAKE_ENV	+= DESTDIR=$(embtk_htools)
 MTDUTILS_HOST_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR)
 
-mtdutils_host_install:
+define __embtk_install_mtdutils_host
+	$(call embtk_download_pkg,mtdutils_host)
+	$(call embtk_decompress_pkg,mtdutils_host)
 	$(call embtk_makeinstall_hostpkg,mtdutils_host)
+endef
+define embtk_install_mtdutils_host
+	[ -e $(__embtk_pkg_dotinstalled_f,mtdutils_host) ] ||			\
+					$(__embtk_install_mtdutils_host)
+endef

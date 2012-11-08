@@ -29,6 +29,10 @@ MAKEDEVS_SRC		:= $(EMBTK_ROOT)/src/makedevs
 MAKEDEVS_DIR		:= $(embtk_htools)/usr/bin
 MAKEDEVS_BIN		:= $(MAKEDEVS_DIR)/makedevs
 
+define embtk_install_makedevs
+	$(MAKE) makedevs_install
+endef
+
 makedevs_install:
 	[ -e $(MAKEDEVS_BUILD_DIR)/.makedevs.embtk.installed ] || 		\
 			$(MAKE) $(MAKEDEVS_BUILD_DIR)/.makedevs.embtk.installed

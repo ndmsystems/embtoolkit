@@ -37,5 +37,6 @@ FAKEROOT_BIN		:= $(embtk_htools)/usr/bin/fakeroot
 FAKEROOT_ENV_FILE	:= $(EMBTK_ROOT)/.fakeroot.001
 export FAKEROOT_BIN FAKEROOT_ENV_FILE
 
-fakeroot_install:
-	$(call embtk_install_hostpkg,fakeroot)
+define embtk_install_fakeroot
+	$(call __embtk_install_hostpkg,fakeroot)
+endef	

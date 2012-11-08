@@ -39,6 +39,3 @@ GMP_HOST_PREFIX		:= $(GMP_HOST_DIR)
 define embtk_cleanup_gmp_host
 	rm -rf $(GMP_HOST_BUILD_DIR)
 endef
-
-gmp_host_clean:
-	$(Q)$(embtk_cleanup_gmp_host)

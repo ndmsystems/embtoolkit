@@ -55,5 +55,6 @@ export CCACHE_DIR HOSTCC_CACHED HOSTCXX_CACHED TARGETCC_CACHED TARGETCXX_CACHED
 
 CCACHE_PREFIX		:= $(CCACHE_HOST_DIR)
 
-ccache_install:
-	$(call embtk_install_hostpkg,ccache)
+define embtk_install_ccache
+	$(call __embtk_install_hostpkg,ccache)
+endef

@@ -32,8 +32,9 @@ ZLIB_HOST_BUILD_DIR	:= $(embtk_toolsb)/zlib-$(ZLIB_HOST_VERSION)
 
 ZLIB_HOST_CONFIGURE_ENV		:= CC=$(HOSTCC_CACHED)
 
-zlib_host_install:
+define emtk_install_zlib_host
 	$(call embtk_makeinstall_hostpkg,zlib_host)
+endef
 
 define embtk_configure_zlib_host
 	$(Q)cd $(ZLIB_HOST_BUILD_DIR);					\
@@ -46,12 +47,11 @@ define embtk_configure_zlib_host
 endef
 
 define embtk_beforeinstall_zlib_host
+	$(call embtk_download_pkg,zlib_host)
+	$(call embtk_decompress_pkg,zlib_host)
 	$(embtk_configure_zlib_host)
 endef
 
 define embtk_cleanup_zlib_host
 	$(call embtk_pinfo,"Clean up zlib for host")
 endef
-
-zlib_host_clean:
-	$(embtk_cleanup_zlib_host)

@@ -52,5 +52,6 @@ export EMBTK_HOST_PKG_CONFIG_PATH
 PKGCONFIG_PREFIX	:= /usr
 PKGCONFIG_DESTDIR	:= $(embtk_htools)
 
-pkgconfig_install:
-	$(call embtk_install_hostpkg,pkgconfig)
+define embtk_install_pkgconfig
+	$(call __embtk_install_hostpkg,pkgconfig)
+endef

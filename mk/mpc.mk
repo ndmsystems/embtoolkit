@@ -41,6 +41,3 @@ MPC_HOST_PREFIX		:= $(MPC_HOST_DIR)
 define embtk_cleanup_mpc_host
 	rm -rf $(MPC_HOST_BUILD_DIR)
 endef
-
-mpc_host_clean:
-	$(Q)$(embtk_cleanup_mpc_host)

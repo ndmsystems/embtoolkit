@@ -35,6 +35,10 @@ UNSQUASHFS_BIN	:= $(embtk_htools)/usr/bin/unsquashfs
 
 SQUASHFS_TOOLS_DEPS := zlib_host_install
 
+define embtk_install_squashfs_tools
+	$(MAKE) squashfs_tools_install
+endef
+
 squashfs_tools_install: $(SQUASHFS_TOOLS_DEPS)
 	$(Q)test -e $(SQUASHFS_TOOLS_BUILD_DIR)/.installed || 			\
 	$(MAKE) $(SQUASHFS_TOOLS_BUILD_DIR)/.installed

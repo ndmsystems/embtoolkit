@@ -65,12 +65,6 @@ define embtk_install_linux_headers
 		$(__embtk_install_linux_headers)
 endef
 
-linux_headers_install:
-	$(Q)$(embtk_install_linux_headers)
-
-download_linux download_linux_headers:
-	$(call embtk_download_pkg,linux)
-
 #
 # clean target and macros
 #
@@ -85,6 +79,3 @@ endef
 define embtk_cleanup_linux_headers
 	$(embtk_cleanup_linux)
 endef
-
-linux_clean linux_headers_clean:
-	$(embtk_cleanup_linux)

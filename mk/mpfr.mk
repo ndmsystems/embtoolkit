@@ -40,6 +40,3 @@ MPFR_HOST_PREFIX		:= $(MPFR_HOST_DIR)
 define embtk_cleanup_mpfr_host
 	rm -rf $(MPFR_HOST_BUILD_DIR)
 endef
-
-mpfr_host_clean:
-	$(Q)$(embtk_cleanup_mpfr_host)

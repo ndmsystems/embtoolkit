@@ -56,8 +56,17 @@ GCC3_CONFIGURE_EXTRA_OPTIONS += \
 	$(if $(CONFIG_KEMBTK_UCLIBC_UCLIBC_HAS_THREADS_NATIVE),,--disable-tls)
 endif
 
-gcc%_install:
-	$(call embtk_install_hostpkg,$(patsubst %_install,%,$@))
+define embtk_install_gcc1
+	$(call __embtk_install_hostpkg,gcc1)
+endef
+
+define embtk_install_gcc2
+	$(call __embtk_install_hostpkg,gcc2)
+endef
+
+define embtk_install_gcc3
+	$(call __embtk_install_hostpkg,gcc3)
+endef
 
 #
 # GCC first stage
@@ -143,23 +152,26 @@ GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 CONFIG_EMBTK_GCC3_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC3_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
-define embtk_postinstall_gcc3
-	$(Q)test -e $(GCC3_BUILD_DIR)/.gcc3_post_install ||			\
-	$(MAKE) $(GCC3_BUILD_DIR)/.gcc3_post_install
+define __embtk_postinstall_gcc3
+	$(if $(CONFIG_EMBTK_32BITS_FS),						\
+		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.so*		\
+						$(embtk_sysroot)/lib/)		\
+	$(if $(CONFIG_EMBTK_64BITS_FS),						\
+		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.so*		\
+						$(embtk_sysroot)/lib/)		\
+	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
+		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.so*		\
+						$(embtk_sysroot)/lib32/)	\
+	$(if $(CONFIG_EMBTK_64BITS_FS),						\
+		$(if $(CONFIG_EMBTK_CLIB_UCLIBC),				\
+			cd $(embtk_sysroot)/lib/;				\
+				ln -sf ld-uClibc.so.0 ld64-uClibc.so.0))	\
+	touch $(GCC3_BUILD_DIR)/.gcc3_post_install
 endef
-
-$(GCC3_BUILD_DIR)/.gcc3_post_install:
-ifeq ($(CONFIG_EMBTK_32BITS_FS),y)
-	$(Q)-cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.so* $(embtk_sysroot)/lib/
-else ifeq ($(CONFIG_EMBTK_64BITS_FS),y)
-	$(Q)cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.so* $(embtk_sysroot)/lib/
-else ifeq ($(CONFIG_EMBTK_64BITS_FS_COMPAT32),y)
-	$(Q)cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.so* $(embtk_sysroot)/lib32/
-endif
-ifeq ($(CONFIG_EMBTK_64BITS_FS)$(CONFIG_EMBTK_CLIB_UCLIBC),yy)
-	$(Q)cd $(embtk_sysroot)/lib/; ln -sf ld-uClibc.so.0 ld64-uClibc.so.0
-endif
-	$(Q)touch $@
+define embtk_postinstall_gcc3
+	[ -e $(GCC3_BUILD_DIR)/.gcc3_post_install ] ||				\
+						$(__embtk_postinstall_gcc3)
+endef
 
 #
 # clean up macros and targets
@@ -175,6 +187,3 @@ endef
 define embtk_cleanup_gcc3
 	rm -rf $(GCC3_BUILD_DIR)
 endef
-
-gcc%_clean:
-	$(Q)$(embtk_cleanup_gcc$*)

@@ -52,31 +52,33 @@ eglibc_headers_optgroups_f	:= $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
 #
 # eglibc headers install
 #
-define __embtk_eglibc_headers_install
-	$(call embtk_pinfo,"Installing eglibc headers")
-	$(MAKE) download_eglibc
+define __embtk_install_eglibc_headers
+	$(call embtk_pinfo,"Installing eglibc headers...")
+	$(embtk_download_eglibc)
 	$(embtk_parse_eglibc_optgroups)
 	$(embtk_configure_eglibc_headers)
 	$(embtk_install_eglibc_headers)
 endef
 
-eglibc_headers_install:
+define embtk_install_eglibc_headers
 	$(if $(call __embtk_pkg_installed-y,eglibc_headers),true,		\
-					$(__embtk_eglibc_headers_install))
+					$(__embtk_install_eglibc_headers))
+endef
 
 #
 # eglibc install
 #
-define __embtk_eglibc_install
-	$(call embtk_pinfo,"Installing eglibc")
-	$(MAKE) download_eglibc
+define __embtk_install_eglibc
+	$(call embtk_pinfo,"Installing eglibc...")
+	$(embtk_download_eglibc)
 	$(embtk_parse_eglibc_optgroups)
 	$(embtk_configure_eglibc)
 	$(embtk_install_eglibc)
 endef
-eglibc_install:
-	$(Q)$(if $(call __embtk_pkg_installed-y,eglibc),			\
-		true,$(__embtk_eglibc_install))
+define embtk_install_eglibc
+	$(if $(call __embtk_pkg_installed-y,eglibc),true,			\
+					$(__embtk_install_eglibc))
+endef
 
 #
 # clean targets
@@ -89,22 +91,20 @@ define embtk_cleanup_eglibc_headers
 	rm -rf $(EGLIBC_HEADERS_BUILD_DIR)
 endef
 
-eglibc_clean:
-	$(Q)$(embtk_cleanup_eglibc)
-
-eglibc_headers_clean:
-	$(Q)$(embtk_cleanup_eglibc_headers)
-
 #
 # download and macros
 #
-download_eglibc download_eglibc_headers:
+define embtk_download_eglibc
 	$(call embtk_download_pkg,eglibc)
-	$(Q)$(call __embtk_download_pkg_patches,eglibc)
-	$(Q)$(call __embtk_applypatch_pkg,eglibc)
-	$(Q)cd $(EGLIBC_SRC_DIR); touch `find . -name configure`
-	$(Q)[ -e $(EGLIBC_SRC_DIR)/libc/ports ] ||				\
+	$(call __embtk_download_pkg_patches,eglibc)
+	$(call __embtk_applypatch_pkg,eglibc)
+	cd $(EGLIBC_SRC_DIR); touch `find . -name configure`
+	[ -e $(EGLIBC_SRC_DIR)/libc/ports ] ||					\
 		ln -sf $(EGLIBC_SRC_DIR)/ports $(EGLIBC_SRC_DIR)/libc/ports
+endef
+
+download_eglibc download_eglibc_headers:
+	$(embtk_download_eglibc)
 
 define embtk_configure_eglibc
 	cd $(EGLIBC_BUILD_DIR);							\

@@ -33,6 +33,3 @@ GPERF_HOST_BUILD_DIR	:= $(embtk_toolsb)/gperf-$(GPERF_HOST_VERSION)
 define embtk_cleanup_gperf_host
 	rm -rf $(GPERF_HOST_BUILD_DIR)
 endef
-
-gperf_host_clean:
-	$(Q)$(embtk_cleanup_gperf_host)

@@ -36,12 +36,6 @@ BINUTILS_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot) --disable-werror	\
 			--target=$(STRICT_GNU_TARGET)
 BINUTILS_PREFIX		:= $(embtk_tools)
 
-binutils_install:
-	$(call embtk_install_hostpkg,binutils)
-
-define embtk_cleanup_binutils
-	rm -rf $(BINUTILS_BUILD_DIR)
+define embtk_install_binutils
+	$(call __embtk_install_hostpkg,binutils)
 endef
-
-binutils_clean:
-	$(Q)$(embtk_cleanup_binutils)

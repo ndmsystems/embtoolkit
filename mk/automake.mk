@@ -35,8 +35,6 @@ ACLOCAL		:= $(AUTOMAKE_DIR)/bin/aclocal
 AUTOMAKE	:= $(AUTOMAKE_DIR)/bin/automake
 export ACLOCAL AUTOMAKE
 
-automake_install:
-	$(call embtk_install_hostpkg,AUTOMAKE)
-
-download_automake:
-	$(call embtk_download_pkg,AUTOMAKE)
+define embtk_install_automake
+	$(call __embtk_install_hostpkg,automake)
+endef

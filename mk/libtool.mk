@@ -36,5 +36,6 @@ export LIBTOOL LIBTOOLIZE
 
 LIBTOOL_CONFIGURE_OPTS := --disable-ltdl-install
 
-libtool_install:
-	$(call embtk_install_hostpkg,libtool)
+define embtk_install_libtool
+	$(call __embtk_install_hostpkg,libtool)
+endef

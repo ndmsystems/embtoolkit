@@ -26,13 +26,17 @@
 
 MAKEIMAGE_VERSION	:= 0.4
 MAKEIMAGE_SITE		:= http://ftp.debian.org/debian/pool/main/u/uboot-mkimage
-MAKEIMAGE_PACKAGE	:=
+MAKEIMAGE_PACKAGE	:= mkimage-$(MAKEIMAGE_VERSION)-nosource-need.tar.bz2
 MAKEIMAGE_BUILD_DIR	:= $(embtk_toolsb)/mkimage
 MAKEIMAGE_BIN		:= $(embtk_htools)/usr/bin/mkimage
 export MAKEIMAGE_BIN
 
+define embtk_install_mkimage
+	$(MAKE) mkimage_install
+endef
+
 mkimage_install:
-	@test -e $(MAKEIMAGE_BUILD_DIR)/.installed || \
+	test -e $(MAKEIMAGE_BUILD_DIR)/.installed || \
 	$(MAKE) $(MAKEIMAGE_BUILD_DIR)/.installed
 
 $(MAKEIMAGE_BUILD_DIR)/.installed: zlib_host_install
