@@ -31,64 +31,68 @@ UCLIBC_PACKAGE		:= uClibc-$(UCLIBC_VERSION).tar.bz2
 UCLIBC_SRC_DIR		:= $(embtk_toolsb)/uClibc-$(UCLIBC_VERSION)
 UCLIBC_BUILD_DIR	:= $(call __embtk_pkg_srcdir,uClibc)
 
-UCLIBC_DOTCONFIG	:= $(UCLIBC_BUILD_DIR)/.config
+UCLIBC_HEADERS_NAME		:= uClibc_headers
+UCLIBC_HEADERS_VERSION		:= $(UCLIBC_VERSION)
+UCLIBC_HEADERS_SITE		:= $(UCLIBC_SITE)
+UCLIBC_HEADERS_GIT_SITE		:= $(UCLIBC_GIT_SITE)
+UCLIBC_HEADERS_PACKAGE		:= $(UCLIBC_PACKAGE)
+UCLIBC_HEADERS_SRC_DIR		:= $(UCLIBC_SRC_DIR)
+UCLIBC_HEADERS_BUILD_DIR	:= $(UCLIBC_BUILD_DIR)
+UCLIBC_HEADERS_KCONFIGS_NAME	:= UCLIBC
 
+UCLIBC_DOTCONFIG	:= $(UCLIBC_BUILD_DIR)/.config
 EMBTK_UCLIBC_CFLAGS	:= $(TARGET_CFLAGS) $(EMBTK_TARGET_MCPU)
 EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
 EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_MARCH) -pipe
 
-uclibc_install:
-	$(Q)test -e $(UCLIBC_BUILD_DIR)/.installed ||				\
-				$(MAKE) $(UCLIBC_BUILD_DIR)/.installed
+#
+# uClibc libraries make options.
+#
+UCLIBC_MAKE_OPTS	:= PREFIX="$(embtk_sysroot)/"
+UCLIBC_MAKE_OPTS	+= CROSS_COMPILER_PREFIX="$(CROSS_COMPILE)"
+UCLIBC_MAKE_OPTS	+= SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"
+UCLIBC_MAKE_OPTS	+= RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"
+UCLIBC_MAKE_OPTS	+= KERNEL_HEADERS="$(embtk_sysroot)/usr/include/"
+UCLIBC_MAKE_OPTS	+= UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)"
 
-uclibc_headers_install:
-	$(Q)test -e $(UCLIBC_BUILD_DIR)/.headers_installed ||			\
-				$(MAKE) $(UCLIBC_BUILD_DIR)/.headers_installed
+#
+# uClibc libraries install
+#
+define embtk_install_uclibc
+	$(call embtk_makeinstall_pkg,uclibc)
+endef
 
-$(UCLIBC_BUILD_DIR)/.installed:
-	$(call embtk_pinfo,"Build and install uClibc-$(UCLIBC_VERSION) ...")
-	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(embtk_sysroot)/			\
-		CROSS_COMPILER_PREFIX="$(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"	\
-		SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"				\
-		MULTILIB_DIR="/$(LIBDIR)/"					\
-		RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"				\
-		KERNEL_HEADERS="$(embtk_sysroot)/usr/include/"			\
-		UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install
-	$(Q)touch $@
-
-$(UCLIBC_BUILD_DIR)/.headers_installed:
+#
+# Uclibc headers install
+#
+define __embtk_install_uclibc_headers
 	$(call embtk_pinfo,"Install uClibc-$(UCLIBC_VERSION) headers ...")
 	$(call embtk_download_pkg,uClibc)
 	$(call embtk_decompress_pkg,uClibc)
-	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) distclean
-	$(Q)$(embtk_configure_uclibc)
-	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) silentoldconfig
-	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(embtk_sysroot)/			\
-		CROSS_COMPILER_PREFIX="$(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"	\
-		SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"				\
-		MULTILIB_DIR="/$(LIBDIR)/"					\
-		RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"				\
-		KERNEL_HEADERS="$(embtk_sysroot)/usr/include/"			\
-		UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install_headers
-	$(Q)$(MAKE) -C $(UCLIBC_BUILD_DIR) PREFIX=$(embtk_sysroot)/			\
-		CROSS_COMPILER_PREFIX="$(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"	\
-		SHARED_LIB_LOADER_PREFIX="/$(LIBDIR)/"				\
-		MULTILIB_DIR="/$(LIBDIR)/"					\
-		RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"				\
-		KERNEL_HEADERS="$(embtk_sysroot)/usr/include/"			\
-		UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)" install_startfiles
-	$(Q)$(TARGETCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
-					-o $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
-	$(Q)touch $@
+	$(MAKE) -C $(UCLIBC_BUILD_DIR) distclean
+	$(embtk_configure_uclibc)
+	$(MAKE) -C $(UCLIBC_BUILD_DIR) silentoldconfig
+	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_headers
+	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
+	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
+	$(TARGETCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
+				-o $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
+	touch $(call __embtk_pkg_dotinstalled_f,uclibc_headers)
+endef
 
-download_uclibc_headers:
-	$(call embtk_download_pkg,uClibc)
+define embtk_install_uclibc_headers
+	[ -e $(call __embtk_pkg_dotinstalled_f,uclibc_headers) ] ||		\
+		$(__embtk_install_uclibc_headers)
+endef
 
+#
+# Clean up macros
+#
 define embtk_cleanup_uclibc
 	if [ -d $(UCLIBC_BUILD_DIR) ]; then					\
 		$(MAKE) -C $(UCLIBC_BUILD_DIR) distclean;			\
-		rm -rf $(UCLIBC_BUILD_DIR)/.installed;				\
-		rm -rf $(UCLIBC_BUILD_DIR)/.headers_installed;			\
+		rm -rf $(call __embtk_pkg_dotinstalled_f,uclibc);		\
+		rm -rf $(call __embtk_pkg_dotinstalled_f,uclibc_headers);	\
 	fi
 endef
 
@@ -96,8 +100,6 @@ define embtk_cleanup_uclibc_headers
 	$(embtk_cleanup_uclibc)
 endef
 
-uclibc_clean uclibc_headers_clean:
-	$(Q)$(embtk_cleanup_uclibc)
 #
 # uClibc configuration macros and target
 #
@@ -107,3 +109,9 @@ define embtk_configure_uclibc
 	$(call embtk_pinfo,"Configure uClibc")
 	$(__embtk_get_uclibc_config) | $(__embtk_set_uclibc_config)
 endef
+
+#
+# downloads
+#
+download_uclibc download_uclibc_headers:
+	$(call embtk_download_pkg,uclibc)
