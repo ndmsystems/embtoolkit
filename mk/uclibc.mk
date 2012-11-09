@@ -88,11 +88,15 @@ endef
 #
 # Clean up macros
 #
+define __embtk_cleanup_uclibc
+	($(MAKE) -C $(UCLIBC_BUILD_DIR) distclean &&				\
+	rm -rf $(call __embtk_pkg_dotinstalled_f,uclibc) &&			\
+	rm -rf $(call __embtk_pkg_dotinstalled_f,uclibc_headers))
+endef
 define embtk_cleanup_uclibc
-	if [ -d $(UCLIBC_BUILD_DIR) ]; then					\
-		$(MAKE) -C $(UCLIBC_BUILD_DIR) distclean;			\
-		rm -rf $(call __embtk_pkg_dotinstalled_f,uclibc);		\
-		rm -rf $(call __embtk_pkg_dotinstalled_f,uclibc_headers);	\
+	if [ -d $(UCLIBC_BUILD_DIR) ]						\
+		&& [ -e $(UCLIBC_BUILD_DIR)/Makefile ]; then			\
+		$(__embtk_cleanup_uclibc)					\
 	fi
 endef
 
