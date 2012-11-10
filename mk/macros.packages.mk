@@ -624,11 +624,14 @@ endef
 # Usage:
 # $(call embtk_decompress_pkg,pkgname)
 #
+
 __embtk_applypatch_pkg =							\
-	$(if $(and $(__embtk_pkg_needpatch),$(__embtk_pkg_notpatched-y)),	\
-		cd $(__embtk_pkg_srcdir);					\
-		patch --silent -p1 < $(__embtk_pkg_patch_f) &&			\
-		touch $(__embtk_pkg_dotpatched_f))
+	$(if $(__embtk_pkg_needpatch),						\
+		if [ ! -e $(__embtk_pkg_dotpatched_f) ]; then			\
+			cd $(__embtk_pkg_srcdir);				\
+			patch -p1 < $(__embtk_pkg_patch_f);			\
+			touch $(__embtk_pkg_dotpatched_f);			\
+		fi,true;)
 
 __embtk_decompress_pkg_exitfailure =						\
 	$(call embtk_perror,"!Compression unknown for $(__embtk_pkg_name)!");	\
@@ -665,13 +668,14 @@ __embtk_decompress_pkg =							\
 			;;							\
 	esac
 
+__embtk_decompress_pkg_msg = $(call embtk_pinfo,"Decrompressing $(__embtk_pkg_package) ...")
 define embtk_decompress_pkg
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),true,
-	$(if $(EMBTK_BUILDSYS_DEBUG),
-		$(call embtk_pinfo,"Decrompressing $(__embtk_pkg_package) ..."))
-	$(if $(__embtk_pkg_notdecompressed-y),
-		$(Q)$(__embtk_decompress_pkg)
-		$(Q)$(__embtk_applypatch_pkg)))
+		$(if $(EMBTK_BUILDSYS_DEBUG),$(__embtk_decompress_pkg_msg))
+		if [ ! -e $(__embtk_pkg_dotdecompressed_f) ]; then		\
+			$(call __embtk_decompress_pkg,$(1)) &&			\
+			$(call __embtk_applypatch_pkg,$(1))			\
+		fi)
 	$(Q)mkdir -p $(__embtk_pkg_builddir)
 endef
 
