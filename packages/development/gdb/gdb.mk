@@ -28,66 +28,45 @@ GDB_VERSION		:= $(call embtk_get_pkgversion,gdb)
 GDB_SITE		:= http://ftp.gnu.org/gnu/gdb
 GDB_PACKAGE		:= gdb-$(GDB_VERSION).tar.bz2
 GDB_SRC_DIR		:= $(embtk_pkgb)/gdb-$(GDB_VERSION)
-GDB_BUILD_DIR		:= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),		\
-		$(embtk_pkgb)/gdb-$(GDB_VERSION)-serverbuild,	\
-		$(embtk_pkgb)/gdb-$(GDB_VERSION)-build)
+GDB_BUILD_DIR		:= $(embtk_pkgb)/gdb-$(GDB_VERSION)-build
 
-# GDB installed files
-GDBSERVER_BIN	:= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),,gdbserver)
-GDB_BINS	:= gdb $(GDBSERVER_BIN) gdbtui run
-GDB_SBINS	:=
-GDB_INCLUDES	:= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),			\
-			,,ansidecl.h bfd.h bfdlink.h dis-asm.h symcat.h)
-GDB_LIBS	:= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),			\
-			,,lib*-sim.a  libbfd.*  libiberty.* libopcodes.*)
-GDB_LIBEXECS	:=
-GDB_PKGCONFIGS	:=
-
-GDB_CONFIGURE_ENV	:=
-GDB_CONFIGURE_OPTS	:= --disable-werror --disable-sim --disable-nls	\
-			--with-bugurl="$(EMBTK_BUGURL)"			\
-			--with-pkgversion="embtk-$(EMBTK_VERSION)"
+GDBSERVER_NAME		:= $(GDB_NAME)
+GDBSERVER_VERSION	:= $(GDB_VERSION)
+GDBSERVER_SITE		:= $(GDB_SITE)
+GDBSERVER_PACKAGE	:= $(GDB_PACKAGE)
+GDBSERVER_SRC_DIR	:= $(GDB_SRC_DIR)
+GDBSERVER_BUILD_DIR	:= $(embtk_pkgb)/gdbserver-$(GDB_VERSION)-build
 
 GDB_DEPS := ncurses_install
 
+GDB_CONFIGURE_OPTS := --disable-werror --disable-sim --disable-nl
+GDB_CONFIGURE_OPTS += --with-bugurl="$(EMBTK_BUGURL)"
+GDB_CONFIGURE_OPTS += --with-pkgversion="embtk-$(EMBTK_VERSION)"
+
+GDBSERVER_DEPS := $(GDB_DEPS)
+GDBSERVER_CONFIGURE_OPTS := $(GDB_CONFIGURE_OPTS)
+
 #
-# GDB for target
+# gdb
 #
-gdbfull_install:
-	$(call embtk_install_pkg,gdb)
+__GDB_INCLUDES	:= ansidecl.h bfd.h bfdlink.h dis-asm.h symcat.h gdb
+__GDB_LIBS	:= lib*-sim.a  libbfd.*  libiberty.* libopcodes.*
 
-gdbserver_install:
-	@test -e $(GDB_BUILD_DIR)/.gdbserver_installed ||			\
-	$(MAKE) $(GDB_BUILD_DIR)/.gdbserver_installed
+GDB_BINS	:= gdb gdbtui run
+GDB_BINS	+= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),,gdbserver)
+GDB_INCLUDES	:= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),,$(__GDB_INCLUDES))
+GDB_LIBS	:= $(if $(CONFIG_EMBTK_HAVE_GDBSERVER),,$(__GDB_LIBS))
 
-$(GDB_BUILD_DIR)/.gdbserver_installed: $(GDB_DEPS)				\
-		download_gdbfull						\
-		$(GDB_BUILD_DIR)/.gdbserver_decompressed			\
-		$(GDB_BUILD_DIR)/.gdbserver_configured
-	$(Q)$(MAKE) -C $(GDB_BUILD_DIR) $(J)
-	$(Q)$(MAKE) -C $(GDB_BUILD_DIR)/gdb/gdbserver				\
-		DESTDIR=$(embtk_sysroot)/$(GDB_SYSROOT_SUFFIX) install
-	$(Q)$(MAKE) libtool_files_adapt
-	@touch $@
+#
+# gdbserver
+#
+GDBSERVER_BINS		:= $(if $(CONFIG_EMBTK_HAVE_GDB),,gdbserver)
+GDBSERVER_INCLUDES	:= $(if $(CONFIG_EMBTK_HAVE_GDB),,$(__GDB_INCLUDES))
+GDBSERVER_LIBS		:= $(if $(CONFIG_EMBTK_HAVE_GDB),,$(__GDB_LIBS))
 
-$(GDB_BUILD_DIR)/.gdbserver_configured:
-	$(call embtk_configure_pkg,gdb)
-	@touch $@
-
-$(GDB_BUILD_DIR)/.gdbserver_decompressed:
-	$(call embtk_decompress_pkg,gdb)
-	@touch $@
-
-define embtk_cleanup_gdbfull
-	$(call embtk_cleanup_pkg,gdb)
+define embtk_postinstall_gdbserver
+	rm -rf $(addprefix $(embtk_sysroot)/usr/bin/,$(GDB_BINS))
 endef
-
-define embtk_cleanup_gdbserver
-	$(call embtk_cleanup_pkg,gdb)
-endef
-
-gdbserver_clean gdbfull_clean:
-	$(call embtk_cleanup_pkg,gdb)
 
 #
 # GDB for host development machine
@@ -111,20 +90,12 @@ GDB_HOST_CONFIGURE_ENV	+= RANLIB_FOR_TARGET=$(TARGETRANLIB)
 GDB_HOST_CONFIGURE_ENV	+= STRIP_FOR_TARGET=$(TARGETSTRIP)
 GDB_HOST_CONFIGURE_ENV	+= OBJDUMP_FOR_TARGET=$(TARGETOBJDUMP)
 
-GDB_HOST_CONFIGURE_OPTS	:= --disable-werror --disable-sim --disable-nls	\
-			--with-bugurl="$(EMBTK_BUGURL)"			\
-			--with-pkgversion="embtk-$(EMBTK_VERSION)"	\
-			--target=$(STRICT_GNU_TARGET)
+GDB_HOST_CONFIGURE_OPTS	:= --disable-werror --disable-sim --disable-nls
+GDB_HOST_CONFIGURE_OPTS	+= --with-bugurl="$(EMBTK_BUGURL)"
+GDB_HOST_CONFIGURE_OPTS	+= --with-pkgversion="embtk-$(EMBTK_VERSION)"
+GDB_HOST_CONFIGURE_OPTS	+= --target=$(STRICT_GNU_TARGET)
 GDB_HOST_PREFIX		:= $(embtk_tools)
 
 define embtk_cleanup_gdb_host
 	rm -rf $(GDB_HOST_BUILD_DIR)
 endef
-
-gdb_host_clean:
-	$(Q)$(embtk_cleanup_gdb_host)
-#
-# Common for target and host development machine
-#
-download_gdbfull download_gdb_host download_gdbserver:
-	$(call embtk_download_pkg,gdb)
