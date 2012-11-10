@@ -146,7 +146,7 @@ __embtk_pkg_gitrev		= $(or $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_GIT_R
 __embtk_pkg_localgit		= $(strip $(if $(__embtk_pkg_usegit),		\
 	$(EMBTK_ROOT)/src/$(__embtk_pkg_refspec)/$(__embtk_pkg_name).git))
 
-__embtk_pkg_version		= $(or $(strip $($(PKGV)_VERSION)),$(__embtk_pkg_usegit),$(__embtk_pkg_usesvn))
+__embtk_pkg_version		= $(or $(__embtk_pkg_usegit),$(__embtk_pkg_usesvn),$(strip $($(PKGV)_VERSION)))
 
 __embtk_pkg_package_f		= $(strip $(embtk_dldir))/$(__embtk_pkg_package)
 __embtk_pkg_srcdir		= $(or $(__embtk_pkg_localgit),$(__embtk_pkg_localsvn),$(patsubst %/,%,$(strip $($(PKGV)_SRC_DIR))))
