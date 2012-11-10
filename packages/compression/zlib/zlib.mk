@@ -41,8 +41,9 @@ ZLIB_PKGCONFIGS		:= zlib.pc
 ZLIB_CONFIGURE_ENV	:=
 ZLIB_CONFIGURE_OPTS	:= --enable-shared
 
-zlib_install:
+define embtk_install_zlib
 	$(call embtk_makeinstall_pkg,zlib)
+endef
 
 define embtk_configure_zlib
 	$(Q)cd $(ZLIB_BUILD_DIR);					\
