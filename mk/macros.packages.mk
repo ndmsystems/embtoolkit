@@ -629,7 +629,7 @@ __embtk_applypatch_pkg =							\
 	$(if $(__embtk_pkg_needpatch),						\
 		if [ ! -e $(__embtk_pkg_dotpatched_f) ]; then			\
 			cd $(__embtk_pkg_srcdir);				\
-			patch -p1 < $(__embtk_pkg_patch_f);			\
+			patch -p1 --silent < $(__embtk_pkg_patch_f);		\
 			touch $(__embtk_pkg_dotpatched_f);			\
 		fi,true;)
 
