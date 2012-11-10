@@ -80,7 +80,7 @@ TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_STRACE) += strace_install
 
 # toolchain addon: gdb
 include packages/development/gdb/gdb.mk
-TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDB) += gdbfull_install
+TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDB) += gdb_install
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDBSERVER) += gdbserver_install
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HOST_HAVE_GDB) += gdb_host_install
 
@@ -154,40 +154,52 @@ define __embtk_toolchain_decompress
 		touch $(call __embtk_pkg_dotdecompressed_f,toolchain))
 endef
 
-__embtk_toolchain_addons-y = $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-y))
-__embtk_toolchain_addons-n = $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-))
+__embtk_toolchain_deps-y	= $(patsubst %_install,%,$(TOOLCHAIN_DEPS))
+__embtk_toolchain_predeps-y	= $(patsubst %_install,%,$(TOOLCHAIN_PRE_DEPS-y))
+__embtk_toolchain_addons-y	= $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-y))
+__embtk_toolchain_addons-n	= $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-))
+__embtk_toolchain_built_msg	= $(call embtk_pinfo,"New $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain successfully built!")
+__embtk_toolchain_building_msg	= $(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) CORE toolchain - please wait...")
+__embtk_toolsaddons_build_msg	= $(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain ADDONS - please wait...")
 define __embtk_toolchain_build
 	$(if $(findstring core,$(1)),
-		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) CORE toolchain - please wait...")
+		$(__embtk_toolchain_building_msg)
 		rm -rf $(call __embtk_pkg_dotinstalled_f,toolchain)
 		rm -rf $(call __embtk_pkg_dotdecompressed_f,toolchain)
-		$(foreach dep,$(patsubst %_install,%,$(TOOLCHAIN_DEPS)),
-			$(call embtk_cleanup_pkg,$(dep)))
+		$(foreach dep,$(__embtk_toolchain_deps-y),
+					$(call embtk_cleanup_pkg,$(dep)))
 		$(foreach pkg,$(__embtk_rootfs_pkgs-y),
-			$(call embtk_cleanup_pkg,$(pkg)))
+					$(call embtk_cleanup_pkg,$(pkg)))
 		rm -rf $(embtk_sysroot) $(embtk_tools)
 		$(__embtk_toolchain_mkinitdirs)
-		$(MAKE) $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
+		$(foreach pdep,$(__embtk_toolchain_predeps-y),
+					$(call embtk_install_xpkg,$(pdep)))
+		$(foreach dep,$(__embtk_toolchain_deps-y),
+					$(call embtk_install_xpkg,$(dep)))
 		touch $(call __embtk_pkg_dotinstalled_f,toolchain))
 	$(if $(findstring addons,$(1)),
-		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain ADDONS - please wait...")
-		rm -rf $(TOOLCHAIN_ADDONS_BUILD_DIR)/.toolchain-addons.installed
-		rm -rf $(TOOLCHAIN_DIR)/.toolchain-addons.decompressed
+		$(__embtk_toolsaddons_build_msg)
+		rm -rf $(call __embtk_pkg_dotinstalled_f,toolchain_addons)
+		rm -rf $(call __embtk_pkg_dotdecompressed_f,toolchain_addons)
 		$(if $(findstring core,$(1)),,$(___embtk_toolchain_decompress))
 		$(if $(findstring core,$(1)),
 			$(foreach addon,$(__embtk_toolchain_addons-y),
-				$(call embtk_cleanup_pkg,$(addon))))
+					$(call embtk_cleanup_pkg,$(addon))))
 		$(if $(TOOLCHAIN_ADDONS-),
 			$(foreach addon,$(__embtk_toolchain_addons-n),
-				$(call embtk_cleanup_pkg,$(addon))))
+					$(call embtk_cleanup_pkg,$(addon))))
 		$(if $(TOOLCHAIN_ADDONS-y),
-			$(MAKE) $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_ADDONS-y))
+			$(foreach pdep,$(__embtk_toolchain_predeps-y),
+					$(call embtk_install_xpkg,$(pdep)))
+			$(foreach addon,$(__embtk_toolchain_addons-y),
+					$(call embtk_install_xpkg,$(addon))))
 		touch $(call __embtk_pkg_dotinstalled_f,toolchain_addons))
 	$(if $(findstring core,$(1))$(findstring addons,$(1)),
 		$(__embtk_toolchain_symlinktools)
 		$(__embtk_toolchain_compress)
 		touch $(call __embtk_pkg_dotdecompressed_f,toolchain)
-		$(call embtk_pinfo,"New $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain successfully built!"),
+		touch $(call __embtk_pkg_dotdecompressed_f,toolchain_addons)
+		$(__embtk_toolchain_built_msg),
 		$(__embtk_toolchain_decompress))
 endef
 
