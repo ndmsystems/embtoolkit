@@ -258,15 +258,15 @@ __embtk_pkg_installed-y = $(shell						\
 # embtk_fixgconfigsfor_pkg
 #
 __embtk_gconfigsub	:= $(EMBTK_ROOT)/scripts/config.sub
-__embtk_gconfigguess	:= $(EMBTK_ROOT)/scripts/config.guess
+__embtk_gconfiguess	:= $(EMBTK_ROOT)/scripts/config.guess
 __embtk_fixgconfigsfor_pkg = $(shell						\
-	gconfigsub=$(find $(__embtk_pkg_srcdir) -type f -name config.sub);	\
-	if [ -e $(gconfigsub) ]; then						\
-		ln -sf (__embtk_gconfigsub) $(gconfigsub);			\
-	fi									\
-	gconfigguess=$(find $(__embtk_pkg_srcdir) -type f -name config.guess);	\
-	if [ -e $(gconfigguess) ]; then						\
-		ln -sf (__embtk_gconfigguess) $(gconfigguess);			\
+	gconfigsub="$$(find $(__embtk_pkg_srcdir) -type f -name config.sub)";	\
+	if [ -n $$gconfigsub -a -e $$gconfigsub ]; then				\
+		ln -sf $(__embtk_gconfigsub) $$gconfigsub;			\
+	fi;									\
+	gconfiguess="$$(find $(__embtk_pkg_srcdir) -type f -name config.guess)";\
+	if [ -n $$gconfiguess -a -e $$gconfiguess ]; then			\
+		ln -sf $(__embtk_gconfiguess) $$gconfiguess;			\
 	fi)
 
 #
