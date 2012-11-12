@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-1010 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,31 +26,24 @@
 BB_NAME		:= busybox
 BB_VERSION	:= $(call embtk_get_pkgversion,bb)
 BB_SITE		:= http://www.busybox.net/downloads
-BB_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 BB_PACKAGE	:= busybox-$(BB_VERSION).tar.bz2
 BB_SRC_DIR	:= $(embtk_pkgb)/busybox-$(BB_VERSION)
 BB_BUILD_DIR	:= $(embtk_pkgb)/busybox-$(BB_VERSION)
 
 BB_NODESTDIR	:= y
-BB_MAKE_ENV	= CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"
-BB_MAKE_OPTS	= CROSS_COMPILE="$(CCACHE_BIN) $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"
-BB_MAKE_OPTS	+= CONFIG_PREFIX=$(embtk_rootfs)
+BB_MAKE_ENV	:= CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"
+BB_MAKE_OPTS	:= CROSS_COMPILE="$(CROSS_COMPILE)" CC="$(targetcc_cached)"
+BB_MAKE_OPTS	+= CONFIG_PREFIX="$(embtk_rootfs)"
 
-bb_install:
-	$(call embtk_makeinstall_pkg,bb)
+define embtk_install_bb
+	set -x; $(call embtk_makeinstall_pkg,bb)
+endef
 
 define embtk_beforeinstall_bb
 	$(embtk_configure_bb)
 	$(Q)$(MAKE) -C $(BB_BUILD_DIR)						\
-	CROSS_COMPILE="$(CCACHE_BIN) $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"	\
-	CONFIG_PREFIX=$(embtk_rootfs) oldconfig
-endef
-
-define embtk_postinstall_bb
-	$(Q)CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"		\
-	$(MAKE) -C $(BB_BUILD_DIR)						\
-	CROSS_COMPILE="$(CCACHE_BIN) $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-"	\
-	CONFIG_PREFIX=$(embtk_rootfs) install
+	CROSS_COMPILE="$(CROSS_COMPILE)" CC="$(targetcc_cached)"		\
+	CONFIG_PREFIX="$(embtk_rootfs)" oldconfig
 endef
 
 define embtk_configure_bb
@@ -58,5 +51,4 @@ define embtk_configure_bb
 	$(Q)grep "CONFIG_KEMBTK_BUSYB_" $(EMBTK_ROOT)/.config |			\
 		sed -e 's/CONFIG_KEMBTK_BUSYB_*/CONFIG_/g'			\
 						> $(BB_BUILD_DIR)/.config
-	$(Q)sed -i 's/_1_13_X_1_14_X//g' $(BB_BUILD_DIR)/.config
 endef
