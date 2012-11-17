@@ -34,6 +34,7 @@ BB_NODESTDIR	:= y
 BB_MAKE_ENV	:= CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"
 BB_MAKE_OPTS	:= CROSS_COMPILE="$(CROSS_COMPILE)" CC="$(TARGETCC)"
 BB_MAKE_OPTS	+= CONFIG_PREFIX="$(embtk_rootfs)" CONFIG_EXTRA_LDFLAGS=""
+BB_MAKE_OPTS	+= CONFIG_EXT_DEFINED_OPTIMIZATION=y
 
 define embtk_install_bb
 	$(Q)$(call embtk_makeinstall_pkg,bb)
