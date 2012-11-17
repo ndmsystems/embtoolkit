@@ -30,8 +30,12 @@ BB_PACKAGE	:= busybox-$(BB_VERSION).tar.bz2
 BB_SRC_DIR	:= $(embtk_pkgb)/busybox-$(BB_VERSION)
 BB_BUILD_DIR	:= $(embtk_pkgb)/busybox-$(BB_VERSION)
 
+__embtk_cflags_bb 	:= $(TARGET_CFLAGS) -pipe -fno-strict-aliasing
+__embtk_cflags_bb 	+= -fno-unwind-tables -fno-asynchronous-unwind-tables
+
+
 BB_NODESTDIR	:= y
-BB_MAKE_ENV	:= CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"
+BB_MAKE_ENV	:= CFLAGS="$(__embtk_cflags_bb)"
 BB_MAKE_OPTS	:= CROSS_COMPILE="$(CROSS_COMPILE)" CC="$(TARGETCC)"
 BB_MAKE_OPTS	+= CONFIG_PREFIX="$(embtk_rootfs)" CONFIG_EXTRA_LDFLAGS=""
 BB_MAKE_OPTS	+= CONFIG_EXT_DEFINED_OPTIMIZATION=y
