@@ -24,6 +24,8 @@
 
 TARGETGCC		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-gcc
 TARGETGCXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-g++
+TARGETCLANG		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-clang
+TARGETCLANGXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-clang++
 
 TARGETCC		:= $(TARGETGCC)
 TARGETCXX		:= $(TARGETGCXX)
@@ -74,6 +76,11 @@ include mk/binutils.mk
 # GCC
 include mk/gcc.mk
 
+# llvm/clang compiler infrastructure
+include mk/llvm/clang.mk
+include mk/llvm/compiler-rt.mk
+include mk/llvm/llvm.mk
+
 # linux kernel headers
 include mk/linux.mk
 
@@ -108,6 +115,7 @@ TOOLCHAIN_PRE_DEPS-y	+= $(if $(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST),	\
 
 TOOLCHAIN_DEPS		:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
+TOOLCHAIN_DEPS		+= clang_install llvm_install
 TOOLCHAIN_DEPS		+= gcc1_install $(embtk_clib)_headers_install
 TOOLCHAIN_DEPS		+= gcc2_install $(embtk_clib)_install gcc3_install
 
