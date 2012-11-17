@@ -22,8 +22,11 @@
 # \date         May 2009
 ################################################################################
 
-TARGETCC		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-gcc
-TARGETCXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-g++
+TARGETGCC		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-gcc
+TARGETGCXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-g++
+
+TARGETCC		:= $(TARGETGCC)
+TARGETCXX		:= $(TARGETGCXX)
 TARGETAR		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ar
 TARGETRANLIB		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ranlib
 TARGETLD		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ld
@@ -31,11 +34,11 @@ TARGETNM		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-nm
 TARGETSTRIP		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-strip
 TARGETOBJDUMP		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-objdump
 TARGETOBJCOPY		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-objcopy
-__TARGET_CFLAGS		:= $(subst ",,$(strip $(CONFIG_EMBTK_TARGET_COMPILER_CFLAGS)))
+__kconfig-cflags	:= $(strip $(CONFIG_EMBTK_TARGET_COMPILER_CFLAGS))
+__TARGET_CFLAGS		:= $(subst ",,$(__kconfig-cflags))
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SIZE_OPTIMIZED),-Os)
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SPEED_OPTIMIZED),-O3)
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_WITH_DEBUG_DATA),-g)
-__TARGET_CFLAGS		+= -fno-unwind-tables -fno-asynchronous-unwind-tables
 TARGET_CFLAGS		:= $(strip $(__TARGET_CFLAGS))
 CROSS_COMPILE		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-
 
