@@ -31,22 +31,22 @@ BB_SRC_DIR	:= $(embtk_pkgb)/busybox-$(BB_VERSION)
 BB_BUILD_DIR	:= $(embtk_pkgb)/busybox-$(BB_VERSION)
 
 BB_NODESTDIR	:= y
-BB_MAKE_OPTS	:= CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"
-BB_MAKE_OPTS	+= CROSS_COMPILE="$(CROSS_COMPILE)" CC="$(TARGETCC)"
+BB_MAKE_ENV	:= CFLAGS="$(TARGET_CFLAGS) -pipe -fno-strict-aliasing"
+BB_MAKE_OPTS	:= CROSS_COMPILE="$(CROSS_COMPILE)" CC="$(TARGETCC)"
 BB_MAKE_OPTS	+= CONFIG_PREFIX="$(embtk_rootfs)" CONFIG_EXTRA_LDFLAGS=""
 
 define embtk_install_bb
-	$(call embtk_makeinstall_pkg,bb)
+	$(Q)$(call embtk_makeinstall_pkg,bb)
 endef
 
 define embtk_beforeinstall_bb
 	$(embtk_configure_bb)
-	$(Q)$(MAKE) -C $(BB_BUILD_DIR) $(BB_MAKE_OPTS) oldconfig
+	$(Q)$(BB_MAKE_ENV) $(MAKE) -C $(BB_BUILD_DIR) $(BB_MAKE_OPTS) oldconfig
 endef
 
 # This is needed as busybox is installed directly in the rootfs
 define embtk_postinstall_bb
-	$(Q)$(MAKE) -C $(BB_BUILD_DIR) $(BB_MAKE_OPTS) install
+	$(Q)$(BB_MAKE_ENV) $(MAKE) -C $(BB_BUILD_DIR) $(BB_MAKE_OPTS) install
 endef
 
 define embtk_configure_bb
