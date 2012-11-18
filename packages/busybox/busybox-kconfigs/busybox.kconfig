@@ -471,7 +471,8 @@ config KEMBTK_BUSYB_PIE
 	  Most people will leave this set to 'N'.
 
 config KEMBTK_BUSYB_NOMMU
-	bool "Force KEMBTK_BUSYB_NOMMU build"
+	bool
+	default n
 	help
 	  Busybox tries to detect whether architecture it is being
 	  built against supports MMU or not. If this detection fails,
@@ -569,7 +570,7 @@ config KEMBTK_BUSYB_LFS
 	  than 2 Gigabytes, enable this option. Otherwise, leave it set to 'N'.
 
 config KEMBTK_BUSYB_CROSS_COMPILER_PREFIX
-	string "Cross Compiler prefix"
+	string
 	default ""
 	help
 	  If you want to build BusyBox with a cross compiler, then you
@@ -749,7 +750,7 @@ config KEMBTK_BUSYB_INSTALL_SH_APPLET_SCRIPT_WRAPPER
 endchoice
 
 config KEMBTK_BUSYB_PREFIX
-	string "BusyBox installation prefix"
+	string
 	default "./_install"
 	help
 	  Define your directory to install BusyBox files/subdirs in.
