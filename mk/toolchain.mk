@@ -135,7 +135,7 @@ endef
 
 define __embtk_toolchain_compress
 	tar -cjf $(TOOLCHAIN_PACKAGE)						\
-		$(notdir $(embtk_sysroot)) $(notdir $(embtk_tools)) &&			\
+		$(notdir $(embtk_sysroot)) $(notdir $(embtk_tools)) &&		\
 	mv $(TOOLCHAIN_PACKAGE) $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 endef
 
