@@ -435,6 +435,22 @@ endef
 #
 define __embtk_install_paramsfailure
 	$(call embtk_perror,"!Not all needed variables defined for $(1)!")
+	$(call embtk_echo_red,"Summary of variables and their current values")
+	$(call embtk_echo_red,"$(PKGV)_NAME                             (needed) = $(or $(__embtk_pkg_name),not set)")
+	$(call embtk_echo_red,"$(PKGV)_SITE                  (needed if tarball) = $(or $(__embtk_pkg_site),not set)")
+	$(call embtk_echo_red,"$(PKGV)_VERSION               (needed if tarball) = $(or $(__embtk_pkg_version),not set)")
+	$(call embtk_echo_red,"$(PKGV)_PACKAGE               (needed if tarball) = $(or $(__embtk_pkg_package),not set)")
+	$(call embtk_echo_red,"$(PKGV)_GIT_SITE                  (needed if git) = $(or $(__embtk_pkg_gitsite),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_VERSION_GIT  (needed if git) = $(or $(__embtk_pkg_usegit),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_GIT_REVISION (needed if git) = $(or $(__embtk_pkg_gitrev),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_GIT_BRANCH   (needed if git) = $(or $(__embtk_pkg_gitbranch),not set)")
+	$(call embtk_echo_red,"$(PKGV)_SVN_SITE                  (needed if svn) = $(or $(__embtk_pkg_svnsite),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_VERSION_SVN (needed if svn)  = $(or $(__embtk_pkg_usesvn),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_SVN_REVISION (needed if svn) = $(or $(__embtk_pkg_svnrev),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_SVN_BRANCH   (needed if svn) = $(or $(__embtk_pkg_svnbranch),not set)")
+	$(call embtk_echo_red,"$(PKGV)_SRC_DIR               (needed if tarball) = $(or $(__embtk_pkg_srcdir),not set)")
+	$(call embtk_echo_red,"$(PKGV)_BUILD_DIR                      (optional) = $(or $(__embtk_pkg_builddir),not set)")
+
 	exit 1
 endef
 
