@@ -146,7 +146,9 @@ __embtk_pkg_gitrev		= $(or $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_GIT_R
 __embtk_pkg_localgit		= $(strip $(if $(__embtk_pkg_usegit),		\
 	$(EMBTK_ROOT)/src/$(__embtk_pkg_refspec)/$(__embtk_pkg_name).git))
 
-__embtk_pkg_version		= $(or $(__embtk_pkg_usegit),$(__embtk_pkg_usesvn),$(strip $($(PKGV)_VERSION)))
+# FIXME: __embtk_pkg_versionsvn: hack for eglibc, should work just as git
+__embtk_pkg_versionsvn		= $(if $(__embtk_pkg_usesvn),$(or $(CONFIG_EMBTK_$(PKGV)_VERSION_STRING),$(__embtk_pkg_usesvn)))
+__embtk_pkg_version		= $(or $(__embtk_pkg_usegit),$(__embtk_pkg_versionsvn),$(strip $($(PKGV)_VERSION)))
 
 __embtk_pkg_package_f		= $(strip $(embtk_dldir))/$(__embtk_pkg_package)
 __embtk_pkg_srcdir		= $(or $(__embtk_pkg_localgit),$(__embtk_pkg_localsvn),$(patsubst %/,%,$(strip $($(PKGV)_SRC_DIR))))
@@ -435,6 +437,22 @@ endef
 #
 define __embtk_install_paramsfailure
 	$(call embtk_perror,"!Not all needed variables defined for $(1)!")
+	$(call embtk_echo_red,"Summary of variables and their current values")
+	$(call embtk_echo_red,"$(PKGV)_NAME                             (needed) = $(or $(__embtk_pkg_name),not set)")
+	$(call embtk_echo_red,"$(PKGV)_SITE                  (needed if tarball) = $(or $(__embtk_pkg_site),not set)")
+	$(call embtk_echo_red,"$(PKGV)_VERSION               (needed if tarball) = $(or $(__embtk_pkg_version),not set)")
+	$(call embtk_echo_red,"$(PKGV)_PACKAGE               (needed if tarball) = $(or $(__embtk_pkg_package),not set)")
+	$(call embtk_echo_red,"$(PKGV)_GIT_SITE                  (needed if git) = $(or $(__embtk_pkg_gitsite),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_VERSION_GIT  (needed if git) = $(or $(__embtk_pkg_usegit),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_GIT_REVISION (needed if git) = $(or $(__embtk_pkg_gitrev),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_GIT_BRANCH   (needed if git) = $(or $(__embtk_pkg_gitbranch),not set)")
+	$(call embtk_echo_red,"$(PKGV)_SVN_SITE                  (needed if svn) = $(or $(__embtk_pkg_svnsite),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_VERSION_SVN (needed if svn)  = $(or $(__embtk_pkg_usesvn),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_SVN_REVISION (needed if svn) = $(or $(__embtk_pkg_svnrev),not set)")
+	$(call embtk_echo_red,"CONFIG_EMBTK_$(PKGV)_SVN_BRANCH   (needed if svn) = $(or $(__embtk_pkg_svnbranch),not set)")
+	$(call embtk_echo_red,"$(PKGV)_SRC_DIR               (needed if tarball) = $(or $(__embtk_pkg_srcdir),not set)")
+	$(call embtk_echo_red,"$(PKGV)_BUILD_DIR                      (optional) = $(or $(__embtk_pkg_builddir),not set)")
+
 	exit 1
 endef
 
@@ -541,13 +559,12 @@ __embtk_pkg_depof = $(strip $(foreach p,$(__embtk_pkgs_all-y) toolchain toolchai
 __embtk_pkg_needpatch_yesno = $(if $(__embtk_pkg_needpatch),Yes,No)
 
 define __embtk_download_pkg_patches
-if [ "x$(__embtk_pkg_needpatch)" = "xy" ]; then					\
+	$(if $(__embtk_pkg_needpatch),						\
 	test -e	$(__embtk_pkg_patch_f) ||					\
 	$(call embtk_wget,							\
 		$(__embtk_pkg_name)-$(__embtk_pkg_version).patch,		\
 		$(__embtk_pkg_patch_site),					\
-		$(__embtk_pkg_name)-$(__embtk_pkg_version)-*.patch);		\
-fi
+		$(__embtk_pkg_name)-$(__embtk_pkg_version)-*.patch))
 endef
 
 define __embtk_download_pkg_exitfailure
@@ -555,6 +572,10 @@ define __embtk_download_pkg_exitfailure
 	exit 1)
 endef
 
+define __embtk_svncheckout_pkg
+	svn co $(__embtk_pkg_svnsite)/$(__embtk_pkg_svnbranch)			\
+			-r$(__embtk_pkg_svnrev)	$(__embtk_pkg_localsvn)
+endef
 define __embtk_download_pkg_from_svn
 	$(call embtk_echo_blue,"$(__embtk_pkg_name) using SVN")
 	$(call embtk_echo_blue,"\tBranch        : $(notdir $(__embtk_pkg_svnbranch))")
@@ -564,8 +585,12 @@ define __embtk_download_pkg_from_svn
 	$(call embtk_echo_blue,"\tPatched       : $(__embtk_pkg_needpatch_yesno)")
 	$(call embtk_echo_blue,"\tDependency of : $(or $(__embtk_pkg_depof),N/A)")
 	test -e $(__embtk_pkg_localsvn) ||					\
-	svn co $(__embtk_pkg_svnsite)/$(__embtk_pkg_svnbranch)			\
-				-r$(__embtk_pkg_svnrev)	$(__embtk_pkg_localsvn)
+	$(call __embtk_svncheckout_pkg,$(1)) ||					\
+	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_package_f))
+	$(call __embtk_download_pkg_patches,$(1)) ||				\
+	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
+	$(call __embtk_applypatch_pkg,$(1))
+
 endef
 
 define __embtk_gitclone_pkg
