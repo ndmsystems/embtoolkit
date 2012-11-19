@@ -91,6 +91,22 @@ config EMBTK_EGLIBC_NEED_PATCH
 	bool
 	default y
 
+config EMBTK_EGLIBC_HEADERS_SVN_REVISION
+	int
+	default EMBTK_EGLIBC_SVN_REVISION
+config EMBTK_EGLIBC_HEADERS_SVN_BRANCH
+	string
+	default EMBTK_EGLIBC_SVN_BRANCH
+config EMBTK_EGLIBC_HEADEERS_VERSION_STRING
+	string
+	default EMBTK_EGLIBC_VERSION_STRING
+config EMBTK_EGLIBC_HEADERS_NEED_PATCH
+	bool
+	default EMBTK_EGLIBC_NEED_PATCH
+config EMBTK_EGLIBC_HEADERS_VERSION_SVN
+	bool
+	default EMBTK_EGLIBC_VERSION_SVN
+
 comment "------------------------------------"
 comment "----- EGLIBC options configuration"
 comment "------------------------------------"
