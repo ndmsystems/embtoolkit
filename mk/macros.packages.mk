@@ -564,12 +564,11 @@ define __embtk_download_pkg_patches
 	$(call embtk_wget,							\
 		$(__embtk_pkg_name)-$(__embtk_pkg_version).patch,		\
 		$(__embtk_pkg_patch_site),					\
-		$(__embtk_pkg_name)-$(__embtk_pkg_version)-*.patch))
+		$(__embtk_pkg_name)-$(__embtk_pkg_version)-*.patch),true)
 endef
 
 define __embtk_download_pkg_exitfailure
-	(echo -e "\E[1;31m!Error on $(notdir $(1)) download!\E[0m";rm -rf $(1);	\
-	exit 1)
+	($(call embtk_perror,"On $(notdir $(1)) download!");rm -rf $(1);exit 1)
 endef
 
 define __embtk_svncheckout_pkg
@@ -650,7 +649,7 @@ define __embtk_download_pkg_from_tarball
 			$(__embtk_pkg_package)),false) ||			\
 	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_package_f))
 	$(call __embtk_download_pkg_patches,$(1)) ||				\
-	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
+	 $(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
 endef
 
 __embtk_pkgdl_src = $(or $(__embtk_pkg_usegit),$(__embtk_pkg_usesvn),tarball)
