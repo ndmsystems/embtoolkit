@@ -69,10 +69,10 @@ XSERVER_CONFIGURE_OPTS := $(XSERVER_VARIANT) --with-sha1=libcrypto \
 		--with-os-name=$(STRICT_GNU_TARGET) \
 		--with-os-vendor="embtoolkit.org"
 
-XSERVER_CONFIGURE_ENV = XLIB_CFLAGS="$(call embtk_pkgconfig_getcflags,xcb)"
-XSERVER_CONFIGURE_ENV += XLIB_LIBS="$(call embtk_pkgconfig_getlibs,xcb)"
-XSERVER_CONFIGURE_ENV += TSLIB_CFLAGS="$(call embtk_pkgconfig_getcflags,tslib)"
-XSERVER_CONFIGURE_ENV += TSLIB_LIBS="$(call embtk_pkgconfig_getlibs,tslib)"
+XSERVER_CONFIGURE_ENV = XLIB_CFLAGS="$(call embtk_pkgconfig-cflags,xcb)"
+XSERVER_CONFIGURE_ENV += XLIB_LIBS="$(call embtk_pkgconfig-libs,xcb)"
+XSERVER_CONFIGURE_ENV += TSLIB_CFLAGS="$(call embtk_pkgconfig-cflags,tslib)"
+XSERVER_CONFIGURE_ENV += TSLIB_LIBS="$(call embtk_pkgconfig-libs,tslib)"
 
 ifeq ($(CONFIG_EMBTK_HAVE_XSERVER_WITH_TSLIB),y)
 XSERVER_DEPS += tslib_install

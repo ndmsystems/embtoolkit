@@ -39,11 +39,11 @@ define embtk_wget
 endef
 
 #
-# embtk_pkgconfig_getlibs:
+# embtk_pkgconfig-libs:
 # A macro to get pkg-config libs entry for a target package
 # Usage: $(call embtk_pkgconfig_getlibs,pkgname)
 #
-define embtk_pkgconfig_getlibs
+define embtk_pkgconfig-libs
 	$(shell									\
 		PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
 		PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"			\
@@ -51,11 +51,11 @@ define embtk_pkgconfig_getlibs
 endef
 
 #
-# embtk_pkgconfig_getcflags:
+# embtk_pkgconfig-cflags:
 # A macro to get pkg-config cflags entry for a target package
 # Usage: $(call embtk_pkgconfig_getcflags,pkgname)
 #
-define embtk_pkgconfig_getcflags
+define embtk_pkgconfig-cflags
 	$(shell									\
 		PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
 		PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"			\
