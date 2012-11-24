@@ -26,28 +26,20 @@
 FONTCONFIG_NAME		:= fontconfig
 FONTCONFIG_VERSION	:= $(call embtk_get_pkgversion,fontconfig)
 FONTCONFIG_SITE		:= http://fontconfig.org/release
-FONTCONFIG_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 FONTCONFIG_PACKAGE	:= fontconfig-$(FONTCONFIG_VERSION).tar.gz
 FONTCONFIG_SRC_DIR	:= $(embtk_pkgb)/fontconfig-$(FONTCONFIG_VERSION)
 FONTCONFIG_BUILD_DIR	:= $(embtk_pkgb)/fontconfig-$(FONTCONFIG_VERSION)
 
-FONTCONFIG_BINS		= fc-cache fc-cat fc-list fc-match fc-query fc-scan
-FONTCONFIG_SBINS	=
-FONTCONFIG_INCLUDES	= fontconfig
-FONTCONFIG_LIBS		= libfontconfig*
-FONTCONFIG_PKGCONFIGS	= fontconfig.pc
+FONTCONFIG_BINS		:= fc-cache fc-cat fc-list fc-match fc-query fc-scan
+FONTCONFIG_INCLUDES	:= fontconfig
+FONTCONFIG_LIBS		:= libfontconfig*
+FONTCONFIG_PKGCONFIGS	:= fontconfig.pc
 
-LIBXML2_CFLAGS-y	= -I$(embtk_sysroot)/usr/include/libxml2
-LIBXML2_LIBS-y		= -L$(embtk_sysroot)/usr/$(LIBDIR) -lxml2
+LIBXML2_CFLAGS-y	:= -I$(embtk_sysroot)/usr/include/libxml2
+LIBXML2_LIBS-y		:= -L$(embtk_sysroot)/usr/$(LIBDIR) -lxml2
 
-FREETYPE_CFLAGS-y	= $(shell						\
-				PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)	\
-				PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"	\
-				$(PKGCONFIG_BIN) freetype2 --cflags)
-FREETYPE_LIBS-y		= $(shell						\
-				PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)	\
-				PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"	\
-				$(PKGCONFIG_BIN) freetype2 --libs)
+FREETYPE_CFLAGS-y	= $(call embtk_pkgconfig-cflags,freetype2)
+FREETYPE_LIBS-y		= $(call embtk_pkgconfig-libs,freetype2)
 
 FONTCONFIG_CONFIGURE_ENV	= LIBXML2_CFLAGS="$(LIBXML2_CFLAGS-y)"
 FONTCONFIG_CONFIGURE_ENV	+= LIBXML2_CFLAGS="$(LIBXML2_LIBS-y)"
