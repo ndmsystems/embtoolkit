@@ -36,9 +36,11 @@ EGLIBC_HEADERS_SRC_DIR		:= $(EGLIBC_SRC_DIR)
 EGLIBC_HEADERS_BUILD_DIR	:= $(embtk_toolsb)/eglibc-headers-build
 EGLIBC_HEADERS_KCONFIGS_NAME	:= EGLIBC
 
-embtk_eglibc_cflags := $(TARGET_CFLAGS) $(EMBTK_TARGET_MCPU)
-embtk_eglibc_cflags += $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
-embtk_eglibc_cflags += $(EMBTK_TARGET_MARCH) -pipe
+__embtk_eglibc_cflags	:= $(TARGET_CFLAGS) $(EMBTK_TARGET_MCPU)
+__embtk_eglibc_cflags	+= $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
+__embtk_eglibc_cflags	+= $(EMBTK_TARGET_MARCH) -pipe
+# eglibc does not support -O0 optimization
+embtk_eglibc_cflags	:= $(subst -O0,-O1,$(__embtk_eglibc_cflags))
 
 # Hard or soft floating point in eglibc?
 embtk_eglibc_floattype := $(if $(CONFIG_EMBTK_SOFTFLOAT),			\
