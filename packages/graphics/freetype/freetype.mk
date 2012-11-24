@@ -26,7 +26,6 @@
 FREETYPE_NAME		:= freetype
 FREETYPE_VERSION	:= $(call embtk_get_pkgversion,freetype)
 FREETYPE_SITE		:= http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
-FREETYPE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
 FREETYPE_PACKAGE	:= freetype-$(FREETYPE_VERSION).tar.bz2
 FREETYPE_SRC_DIR	:= $(embtk_pkgb)/freetype-$(FREETYPE_VERSION)
 FREETYPE_BUILD_DIR	:= $(embtk_pkgb)/freetype-$(FREETYPE_VERSION)
@@ -39,4 +38,3 @@ FREETYPE_PKGCONFIGS	= freetype*.pc
 
 FREETYPE_DEPS		:= zlib_install
 FREETYPE_MAKE_OPTS	:= LIBTOOL=$(FREETYPE_BUILD_DIR)/builds/unix/libtool
-
