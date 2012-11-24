@@ -77,7 +77,7 @@ __lt_usr/lib		= $(embtk_space)\/usr\/$(LIBDIR)\/
 __lt_sysroot/usr/lib	= $(embtk_space)$(embtk_sysroot)\/usr\/$(LIBDIR)\/
 __lt_path		= $(addprefix $(embtk_sysroot)/usr/,$(or $(1),$(LIBDIR)))
 define __embtk_fix_libtool_files
-	__lt_las=`find $(__lt_path) -name *.la`;				\
+	__lt_las=$$(find $(__lt_path) -name '*.la');				\
 	for la in $$__lt_las; do						\
 		sed -i "s;$(__ltlibdirold);$(__ltlibdirnew);" $$la;		\
 		sed -i "s;$(__lt_usr/lib);$(__lt_sysroot/usr/lib);g" $$la;	\
@@ -309,8 +309,8 @@ define embtk_configure_pkg
 	OBJCOPY=$(TARGETOBJCOPY)						\
 	CFLAGS="$(TARGET_CFLAGS)"						\
 	CXXFLAGS="$(TARGET_CFLAGS)"						\
-	LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"		\
-	CPPFLAGS="-I$(embtk_sysroot)/usr/include"					\
+	LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"	\
+	CPPFLAGS="-I$(embtk_sysroot)/usr/include"				\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
 	PKG_CONFIG_PATH="$(EMBTK_PKG_CONFIG_PATH)"				\
 	PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"				\
@@ -403,10 +403,10 @@ define __embtk_install_pkg_make
 	$(call embtk_decompress_pkg,$(1))
 	$(if $(embtk_beforeinstall_$(pkgv)),$(embtk_beforeinstall_$(pkgv)))
 	$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_pkg,$(1)))
-	$(if $(__embtk_pkg_makedirs),					\
+	$(if $(__embtk_pkg_makedirs),						\
 		$(__embtk_multi_make),						\
 		$(__embtk_single_make))
-	$(if $(__embtk_pkg_makedirs),					\
+	$(if $(__embtk_pkg_makedirs),						\
 		$(__embtk_multi_make_install),					\
 		$(__embtk_single_make_install))
 	$(if $(__embtk_autotoolspkg-y)$(__embtk_pkg_pkgconfigs),
@@ -421,10 +421,10 @@ define __embtk_install_hostpkg_make
 	$(call embtk_decompress_pkg,$(1))
 	$(if $(embtk_beforeinstall_$(pkgv)),$(embtk_beforeinstall_$(pkgv)))
 	$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_hostpkg,$(1)))
-	$(if $(__embtk_pkg_makedirs),					\
+	$(if $(__embtk_pkg_makedirs),						\
 		$(__embtk_multi_make),						\
 		$(__embtk_single_make))
-	$(if $(__embtk_pkg_makedirs),					\
+	$(if $(__embtk_pkg_makedirs),						\
 		$(__embtk_multi_make_hostinstall),				\
 		$(__embtk_single_make_hostinstall))
 	$(Q)touch $(__embtk_pkg_dotinstalled_f)
