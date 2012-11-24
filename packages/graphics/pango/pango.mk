@@ -46,3 +46,10 @@ PANGO_DEPS-y		:= $(if $(CONFIG_EMBTK_HAVE_PANGO_WITH_X),		\
 PANGO_CONFIGURE_OPTS	:= $(PANGO_CONFIGURE_OPTS-y)
 PANGO_DEPS		:= glib_install fontconfig_install
 PANGO_DEPS		+= $(PANGO_DEPS-y) cairo_install
+
+define embtk_postinstall_pango
+	$(Q)mkdir -p $(embtk_rootfs)
+	$(Q)mkdir -p $(embtk_rootfs)/usr
+	$(Q)mkdir -p $(embtk_rootfs)/usr/$(LIBDIR)
+	$(Q)-cp -R $(embtk_sysroot)/usr/$(LIBDIR)/pango $(embtk_rootfs)/usr/$(LIBDIR)/
+endef
