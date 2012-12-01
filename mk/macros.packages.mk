@@ -261,15 +261,20 @@ __embtk_pkg_installed-y = $(shell						\
 #
 __embtk_gconfigsub	:= $(EMBTK_ROOT)/scripts/config.sub
 __embtk_gconfiguess	:= $(EMBTK_ROOT)/scripts/config.guess
-__embtk_fixgconfigsfor_pkg = $(shell						\
-	sub="$$(find $(__embtk_pkg_srcdir)/ -type f -name config.sub)";		\
-	if [ -n $$sub -a -e $$sub ]; then					\
-		ln -sf $(__embtk_gconfigsub) $$sub;				\
-	fi;									\
-	guess="$$(find $(__embtk_pkg_srcdir)/ -type f -name config.guess)"; 	\
-	if [ -n $$guess -a -e $$guess ]; then					\
-		ln -sf $(__embtk_gconfiguess) $$guess;				\
-	fi)
+define __embtk_fixgconfigsfor_pkg
+	subs="$$(find $(__embtk_pkg_srcdir)/ -type f -name config.sub)";	\
+	for sub in $$subs; do							\
+		if [ -n $$sub -a -e $$sub ]; then				\
+			ln -sf $(__embtk_gconfigsub) $$sub;			\
+		fi;								\
+	done;									\
+	guesses="$$(find $(__embtk_pkg_srcdir)/ -type f -name config.guess)"; 	\
+	for guess in $$guesses; do						\
+		if [ -n $$guess -a -e $$guess ]; then				\
+			ln -sf $(__embtk_gconfiguess) $$guess;			\
+		fi;								\
+	done;
+endef
 
 #
 # A macro which runs configure script (conpatible with autotools configure)
