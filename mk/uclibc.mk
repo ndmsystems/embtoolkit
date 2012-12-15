@@ -61,6 +61,7 @@ UCLIBC_MAKE_OPTS	+= UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)"
 #
 define embtk_install_uclibc
 	$(call embtk_makeinstall_pkg,uclibc)
+	cd $(embtk_sysroot)/usr/$(LIBDIR); ln -sf ../../$(LIBDIR)/libc.so.0 libc.so
 endef
 
 #
