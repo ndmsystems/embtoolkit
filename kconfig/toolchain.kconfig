@@ -107,10 +107,20 @@ choice
 
 endchoice
 
+comment "------------------------------------------"
+comment "--- GCC versions"
+comment "------------------------------------------"
 source kconfig/gcc.kconfig
+
+if EMBTK_LLVM_ONLY_TOOLCHAIN || EMBTK_GCC_AND_LLVM_TOOLCHAIN
+comment "------------------------------------------"
+comment "--- clang/llvm versions"
+comment "------------------------------------------"
 source kconfig/llvm/llvm.kconfig
 source kconfig/llvm/clang.kconfig
 source kconfig/llvm/compiler-rt.kconfig
+endif
+
 endmenu
 
 menu "Binutils"
