@@ -41,7 +41,8 @@ UCLIBC_HEADERS_BUILD_DIR	:= $(UCLIBC_BUILD_DIR)
 UCLIBC_HEADERS_KCONFIGS_NAME	:= UCLIBC
 
 UCLIBC_DOTCONFIG	:= $(UCLIBC_BUILD_DIR)/.config
-EMBTK_UCLIBC_CFLAGS	:= $(TARGET_CFLAGS) $(EMBTK_TARGET_MCPU)
+EMBTK_UCLIBC_CFLAGS	:= $(filter-out $(__clang_cflags),$(TARGET_CFLAGS))
+EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_MCPU)
 EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
 EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_MARCH) -pipe
 
@@ -75,7 +76,7 @@ define __embtk_install_uclibc_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
-	$(TARGETCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
+	$(TARGETGCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
 				-o $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
 	touch $(call __embtk_pkg_dotinstalled_f,uclibc_headers)
 endef

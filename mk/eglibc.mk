@@ -36,7 +36,8 @@ EGLIBC_HEADERS_SRC_DIR		:= $(EGLIBC_SRC_DIR)
 EGLIBC_HEADERS_BUILD_DIR	:= $(embtk_toolsb)/eglibc-headers-build
 EGLIBC_HEADERS_KCONFIGS_NAME	:= EGLIBC
 
-__embtk_eglibc_cflags	:= $(TARGET_CFLAGS) $(EMBTK_TARGET_MCPU)
+__embtk_eglibc_cflags	:= $(filter-out $(__clang_cflags),$(TARGET_CFLAGS))
+__embtk_eglibc_cflags	+= $(EMBTK_TARGET_MCPU)
 __embtk_eglibc_cflags	+= $(EMBTK_TARGET_ABI) $(EMBTK_TARGET_FLOAT_CFLAGS)
 __embtk_eglibc_cflags	+= $(EMBTK_TARGET_MARCH) -pipe
 # eglibc does not support -O0 optimization
@@ -86,7 +87,7 @@ define __embtk_install_eglibc_headers
 	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crt1.o $(embtk_sysroot)/usr/$(LIBDIR)/
 	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crti.o $(embtk_sysroot)/usr/$(LIBDIR)/
 	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(embtk_sysroot)/usr/$(LIBDIR)/
-	$(TARGETCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
+	$(TARGETGCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
 					-o $(embtk_sysroot)/usr/lib/libc.so
 	touch $(call __embtk_pkg_dotinstalled_f,eglibc_headers)
 endef
@@ -104,8 +105,8 @@ define embtk_configure_eglibc
 	cd $(EGLIBC_BUILD_DIR);							\
 	BUILD_CC=$(HOSTCC_CACHED)						\
 	CFLAGS="$(embtk_eglibc_cflags)"						\
-	CC=$(TARGETCC_CACHED)							\
-	CXX=$(TARGETCXX_CACHED)							\
+	CC=$(TARGETGCC_CACHED)							\
+	CXX=$(TARGETGCXX_CACHED)						\
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
