@@ -42,6 +42,8 @@ choice
 		 embedded systems. But compatibility with glibc is not guaranted
 		 and even between different uClibc versions.
 		 see http://www.uclibc.org for more information about uclibc.
+
+
 endchoice
 
 
@@ -55,11 +57,57 @@ endif
 
 endmenu
 
-menu "GCC compiler"
-source "kconfig/gcc.kconfig"
-endmenu
+menu "Cross Compiler environment"
+choice
+	prompt "Cross Compiler environment setup"
+	help
+	 Choose your cross compiler environment setup combination between
+	 clang/llvm and GCC.
 
-menu "LLVM/clang compiler infrastructure"
+	config EMBTK_GCC_ONLY_TOOLCHAIN
+		bool "GCC only"
+		help
+		 Choose this configuration if you want to use only traditional
+		 GCC cross compiler environment.
+
+	config EMBTK_LLVM_ONLY_TOOLCHAIN
+		bool "clang/llvm only (experimental)"
+		help
+		 Choose this configuration if you want to use only clang/llvm
+		 cross compiler environment.
+		 With this configuration:
+		  * All userspace packages will use clang as compiler.
+		  * A bare metal gcc compiler will still be built, but you will
+		  be able to only build linux kernel/u-boot etc. with this gcc.
+
+	config EMBTK_GCC_AND_LLVM_TOOLCHAIN
+		bool "clang/llvm and GCC"
+		help
+		 With this configuration you will have full clang/llvm and GGC
+		 built and available to build your userspace packages.
+
+endchoice
+
+choice
+	prompt "Default cross compiler to build packages"
+	depends on EMBTK_GCC_AND_LLVM_TOOLCHAIN
+	help
+	 Choose which cross compiler environment to use by default to build
+	 packages.
+
+	config EMBTK_LLVM_DEFAULT_TOOLCHAIN
+		bool "clang/llvm"
+		help
+		 Userspace packages will be built with clang by default.
+
+	config EMBTK_GCC_DEFAULT_TOOLCHAIN
+		bool "GCC"
+		help
+		 Userspace packages will be built with clang by default.
+
+endchoice
+
+source kconfig/gcc.kconfig
 source kconfig/llvm/llvm.kconfig
 source kconfig/llvm/clang.kconfig
 source kconfig/llvm/compiler-rt.kconfig
