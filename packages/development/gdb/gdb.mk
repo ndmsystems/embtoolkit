@@ -39,7 +39,7 @@ GDBSERVER_BUILD_DIR	:= $(embtk_pkgb)/gdbserver-$(GDB_VERSION)-build
 
 GDB_DEPS := ncurses_install
 
-GDB_CONFIGURE_OPTS := --disable-werror --disable-sim --disable-nl
+GDB_CONFIGURE_OPTS := --disable-werror --disable-sim --disable-nls
 GDB_CONFIGURE_OPTS += --with-bugurl="$(EMBTK_BUGURL)"
 GDB_CONFIGURE_OPTS += --with-pkgversion="embtk-$(EMBTK_VERSION)"
 
