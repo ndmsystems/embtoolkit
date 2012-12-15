@@ -27,8 +27,25 @@ TARGETGCXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-g++
 TARGETCLANG		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-clang
 TARGETCLANGXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-clang++
 
-TARGETCC		:= $(TARGETGCC)
-TARGETCXX		:= $(TARGETGCXX)
+#
+# Default compilers to use for packages.
+#
+__TARGETCC-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= $(TARGETGCC)
+__TARGETCC-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)	:= $(TARGETGCC)
+__TARGETCXX-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= $(TARGETGCXX)
+__TARGETCXX-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)	:= $(TARGETGCXX)
+
+__TARGETCC-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= $(TARGETCLANG)
+__TARGETCC-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= $(TARGETCLANG)
+__TARGETCXX-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= $(TARGETCLANGXX)
+__TARGETCXX-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= $(TARGETCLANGXX)
+
+TARGETCC		:= $(__TARGETCC-y)
+TARGETCXX		:= $(__TARGETCXX-y)
+
+#
+# Some binutils components.
+#
 TARGETAR		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ar
 TARGETRANLIB		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ranlib
 TARGETLD		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ld
@@ -36,12 +53,24 @@ TARGETNM		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-nm
 TARGETSTRIP		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-strip
 TARGETOBJDUMP		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-objdump
 TARGETOBJCOPY		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-objcopy
+
+#
+# TARGET cflags
+#
 __kconfig-cflags	:= $(strip $(CONFIG_EMBTK_TARGET_COMPILER_CFLAGS))
 __TARGET_CFLAGS		:= $(subst ",,$(__kconfig-cflags))
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_NONE_OPTIMIZED),-O0)
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SIZE_OPTIMIZED),-Os)
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_SPEED_OPTIMIZED),-O3)
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_WITH_DEBUG_DATA),-g)
+
+# cflags for clang
+__clang_cflags		:= $(EMBTK_TARGET_MCPU)
+__clang_cflags		+= $(if $(CONFIG_EMBTK_SOFTFLOAT),-mfloat-abi=soft)
+__clang_cflags		+= $(if $(CONFIG_EMBTK_HARDFLOAT),-mfloat-abi=hard)
+__TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),$(__clang_cflags))
+__TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN),$(__clang_cflags))
+
 TARGET_CFLAGS		:= $(strip $(__TARGET_CFLAGS))
 CROSS_COMPILE		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-
 
@@ -114,11 +143,20 @@ TOOLCHAIN_PRE_DEPS-y	:= ccache_install $(AUTOTOOLS_INSTALL)
 TOOLCHAIN_PRE_DEPS-y	+= $(if $(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST),	\
 				gperf_host_install)
 
+__gcc3_toolchain-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)	:= gcc3_install
+__gcc3_toolchain-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)	:= gcc3_install
+
+__llvm_toolchain-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)	:= clang_install
+__llvm_toolchain-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)	+= llvm_install
+__llvm_toolchain-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= clang_install
+__llvm_toolchain-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	+= llvm_install
+
 TOOLCHAIN_DEPS		:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
-TOOLCHAIN_DEPS		+= clang_install llvm_install
+TOOLCHAIN_DEPS		+= $(__llvm_toolchain-y)
 TOOLCHAIN_DEPS		+= gcc1_install $(embtk_clib)_headers_install
-TOOLCHAIN_DEPS		+= gcc2_install $(embtk_clib)_install gcc3_install
+TOOLCHAIN_DEPS		+= gcc2_install $(embtk_clib)_install
+TOOLCHAIN_DEPS		+= $(__gcc3_toolchain-y)
 
 TOOLCHAIN_ADDONS_NAME		:= toolchain-addons
 TOOLCHAIN_ADDONS_DEPS		:= $(TOOLCHAIN_ADDONS-y)
