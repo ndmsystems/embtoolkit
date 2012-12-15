@@ -123,6 +123,28 @@ GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 CONFIG_EMBTK_GCC2_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC2_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
+define __embtk_postinstall_gcc2
+	($(if $(CONFIG_EMBTK_32BITS_FS),					\
+		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.so*		\
+						$(embtk_sysroot)/lib/ &&)	\
+	$(if $(CONFIG_EMBTK_64BITS_FS),						\
+		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.so*		\
+						$(embtk_sysroot)/lib/ &&)	\
+	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
+		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.so*		\
+						$(embtk_sysroot)/lib32/ &&)	\
+	$(if $(CONFIG_EMBTK_64BITS_FS),						\
+		$(if $(CONFIG_EMBTK_CLIB_UCLIBC),				\
+			cd $(embtk_sysroot)/lib/;				\
+				ln -sf ld-uClibc.so.0 ld64-uClibc.so.0 &&))	\
+	touch $(GCC2_BUILD_DIR)/.gcc.embtk.postinstall)
+endef
+define embtk_postinstall_gcc2
+	$(if $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),
+		[ -e $(GCC2_BUILD_DIR)/.gcc.embtk.postinstall ] ||		\
+					$(__embtk_postinstall_gcc2),true)
+endef
+
 #
 # GCC last stage
 #
