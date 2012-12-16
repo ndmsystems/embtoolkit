@@ -54,3 +54,6 @@ define embtk_beforeinstall_llvm
 				$(call __embtk_pkg_srcdir,llvm)/tools/clang
 endef
 
+define embtk_cleanup_llvm
+	$(Q)rm -rf $(LLVM_BUILD_DIR)
+endef
