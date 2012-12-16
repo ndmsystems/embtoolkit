@@ -157,7 +157,7 @@ TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
 TOOLCHAIN_DEPS		+= $(__llvm_toolchain-y)
 TOOLCHAIN_DEPS		+= gcc1_install $(embtk_clib)_headers_install
 TOOLCHAIN_DEPS		+= gcc2_install $(embtk_clib)_install
-TOOLCHAIN_DEPS		+= $(__gcc3_toolchain-y)
+TOOLCHAIN_DEPS		+= gcc3_install
 
 TOOLCHAIN_ADDONS_NAME		:= toolchain-addons
 TOOLCHAIN_ADDONS_DEPS		:= $(TOOLCHAIN_ADDONS-y)
