@@ -63,8 +63,8 @@ define embtk_configure_eglibc_headers
 	cd $(EGLIBC_HEADERS_BUILD_DIR);						\
 	BUILD_CC=$(HOSTCC_CACHED)						\
 	CFLAGS="$(embtk_eglibc_cflags)"						\
-	CC=$(TARGETCC)								\
-	CXX=$(TARGETCXX)							\
+	CC=$(TARGETGCC)								\
+	CXX=$(TARGETGCXX)							\
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
