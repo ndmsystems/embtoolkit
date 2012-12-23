@@ -22,9 +22,9 @@
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
-VERSION			:= 0
-PATCHLEVEL		:= 1
-SUBLEVEL		:= 1
+VERSION			:= 1
+PATCHLEVEL		:= 0
+SUBLEVEL		:= 0
 EXTRAVERSION		:=
 EMBTK_VERSION		:= 							\
 	$(shell									\
