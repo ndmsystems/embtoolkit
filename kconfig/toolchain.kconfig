@@ -118,7 +118,6 @@ comment "--- clang/llvm versions"
 comment "------------------------------------------"
 source kconfig/llvm/llvm.kconfig
 source kconfig/llvm/clang.kconfig
-source kconfig/llvm/compiler-rt.kconfig
 endif
 
 endmenu
