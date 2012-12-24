@@ -35,6 +35,9 @@ choice
 	help
 	 Version of llvm you wish
 
+	config EMBTK_LLVM_VERSION_3_2
+		bool "llvm-3.2"
+		select EMBTK_LLVM_NEED_PATCH
 	config EMBTK_LLVM_VERSION_GIT
 		bool "Use llvm git repository"
 		help
@@ -67,6 +70,7 @@ config EMBTK_LLVM_REFSPEC
 #
 config EMBTK_LLVM_VERSION_STRING
 	string
+	default "3.2"		if EMBTK_LLVM_VERSION_3_2
 	default "git"		if EMBTK_LLVM_VERSION_GIT
 
 
