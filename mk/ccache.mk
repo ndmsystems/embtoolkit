@@ -72,3 +72,7 @@ CCACHE_PREFIX		:= $(CCACHE_HOST_DIR)
 define embtk_install_ccache
 	$(call __embtk_install_hostpkg,ccache)
 endef
+
+define embtk_postinstall_ccache
+	CCACHE_DIR=$(CCACHE_DIR) $(CCACHE_BIN) --max-size=2GB
+endef
