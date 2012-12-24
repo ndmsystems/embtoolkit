@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,8 +35,4 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_RINGS) += rings_install
 
 include packages/scripting-languages/lua-modules/cgilua/cgilua.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_CGILUA) += cgilua_install
-
-#microperl
-include packages/scripting-languages/perl/perl.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MICROPERL) += microperl_install
 

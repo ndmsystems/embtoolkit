@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,4 @@ comment "------------------------------------"
 source packages/scripting-languages/lua-modules/luafilesystem/luafilesystem.kconfig
 source packages/scripting-languages/lua-modules/rings/rings.kconfig
 source packages/scripting-languages/lua-modules/cgilua/cgilua.kconfig
-
-# microperl
-source packages/scripting-languages/perl/perl.kconfig
 
