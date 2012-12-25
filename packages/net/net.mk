@@ -31,6 +31,10 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_IPTABLES) += iptables_install
 include packages/net/libnl/libnl.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBNL) += libnl_install
 
+# libpcap
+include packages/net/libpcap/libpcap.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPCAP) += libpcap_install
+
 # libtirpc
 include packages/net/libtirpc/libtirpc.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIRPC) += libtirpc_install

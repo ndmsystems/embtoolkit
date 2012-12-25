@@ -17,20 +17,21 @@
 #
 ################################################################################
 #
-# \file         net.kconfig
-# \brief	net.kconfig of Embtoolkit
+# \file         libpcap.mk
+# \brief	libpcap.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2012
+# \date         December 2012
 ################################################################################
 
-# Iptables
-source packages/net/iptables/iptables.kconfig
+LIBPCAP_NAME		:= libpcap
+LIBPCAP_VERSION		:= $(call embtk_get_pkgversion,libpcap)
+LIBPCAP_SITE		:= http://www.tcpdump.org/release
+LIBPCAP_PACKAGE		:= libpcap-$(LIBPCAP_VERSION).tar.gz
+LIBPCAP_SRC_DIR		:= $(embtk_pkgb)/libpcap-$(LIBPCAP_VERSION)
+LIBPCAP_BUILD_DIR	:= $(embtk_pkgb)/libpcap-$(LIBPCAP_VERSION)
 
-# LIBNL
-source packages/net/libnl/libnl.kconfig
+LIBPCAP_BINS		:= pcap-config
+LIBPCAP_INCLUDES	:= pcap*
+LIBPCAP_LIBS		:= libpcap*
 
-# libpcap
-source packages/net/libpcap/libpcap.kconfig
-
-# libtirpc
-source packages/net/libtirpc/libtirpc.kconfig
+LIBPCAP_CONFIGURE_OPTS	:= --with-pcap=linux
