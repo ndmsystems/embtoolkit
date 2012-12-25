@@ -17,23 +17,33 @@
 #
 ################################################################################
 #
-# \file         net.kconfig
-# \brief	net.kconfig of Embtoolkit
+# \file         tcpdump.kconfig
+# \brief	tcpdump.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2012
+# \date         December 2012
 ################################################################################
 
-# Iptables
-source packages/net/iptables/iptables.kconfig
+config EMBTK_HAVE_TCPDUMP
+	bool "Have tcpdump"
+	help
+	 Tcpdump uses libpcap, a system-independent interface for user-level
+	 packet capture.
 
-# LIBNL
-source packages/net/libnl/libnl.kconfig
+choice
+	prompt "tcpdump version you wish"
+	depends on EMBTK_HAVE_TCPDUMP
+	help
+	 Here you can choose which version of tcpdump you want to use.
 
-# libpcap
-source packages/net/libpcap/libpcap.kconfig
+	config  EMBTK_TCPDUMP_VERSION_4_3_0
+		bool "tcpdump-4.3.0"
+endchoice
 
-# libtirpc
-source packages/net/libtirpc/libtirpc.kconfig
+config EMBTK_TCPDUMP_VERSION_STRING
+	string
+	default "4.3.0"		if EMBTK_TCPDUMP_VERSION_4_3_0
 
-# tcpdump
-source packages/net/tcpdump/tcpdump.kconfig
+config EMBTK_TCPDUMP_NEED_PATCH
+	bool
+config EMBTK_TCPDUMP_NEED_AUTORECONF
+	bool

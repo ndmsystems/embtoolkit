@@ -17,23 +17,22 @@
 #
 ################################################################################
 #
-# \file         net.kconfig
-# \brief	net.kconfig of Embtoolkit
+# \file         tcpdump.mk
+# \brief	tcpdump.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2012
+# \date         December 2012
 ################################################################################
 
-# Iptables
-source packages/net/iptables/iptables.kconfig
+TCPDUMP_NAME		:= tcpdump
+TCPDUMP_VERSION		:= $(call embtk_get_pkgversion,tcpdump)
+TCPDUMP_SITE		:= http://www.tcpdump.org/release
+TCPDUMP_PACKAGE		:= tcpdump-$(TCPDUMP_VERSION).tar.gz
+TCPDUMP_SRC_DIR		:= $(embtk_pkgb)/tcpdump-$(TCPDUMP_VERSION)
+TCPDUMP_BUILD_DIR	:= $(embtk_pkgb)/tcpdump-$(TCPDUMP_VERSION)
 
-# LIBNL
-source packages/net/libnl/libnl.kconfig
+TCPDUMP_SBINS		:= tcpdump*
 
-# libpcap
-source packages/net/libpcap/libpcap.kconfig
+TCPDUMP_CONFIGURE_ENV	:= ac_cv_linux_vers=2
+TCPDUMP_CONFIGURE_OPTS	:= --with-pcap=linux --without-smi --without-crypto
 
-# libtirpc
-source packages/net/libtirpc/libtirpc.kconfig
-
-# tcpdump
-source packages/net/tcpdump/tcpdump.kconfig
+TCPDUMP_DEPS		:= libpcap_install

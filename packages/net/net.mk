@@ -38,3 +38,7 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPCAP) += libpcap_install
 # libtirpc
 include packages/net/libtirpc/libtirpc.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIRPC) += libtirpc_install
+
+# tcpdump
+include packages/net/tcpdump/tcpdump.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_TCPDUMP) += tcpdump_install
