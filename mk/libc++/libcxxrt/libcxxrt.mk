@@ -44,8 +44,6 @@ endef
 define embtk_beforeinstall_libcxxrt
 	ln -sf $(EMBTK_ROOT)/mk/libc++/libcxxrt/Makefile			\
 					$(LIBCXXRT_BUILD_DIR)/Makefile
-	ln -sf $(EMBTK_ROOT)/mk/libc++/libcxxrt/Version.map			\
-					$(LIBCXXRT_BUILD_DIR)/Version.map
 endef
 
 define embtk_cleanup_libcxxrt
@@ -53,5 +51,4 @@ define embtk_cleanup_libcxxrt
 		$(MAKE) -C $(LIBCXXRT_BUILD_DIR) clean;				\
 	fi
 	rm -rf $(LIBCXXRT_BUILD_DIR)/Makefile
-	rm -rf $(LIBCXXRT_BUILD_DIR)/Version.map
 endef
