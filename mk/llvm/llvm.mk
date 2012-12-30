@@ -37,6 +37,7 @@ LLVM_DEPS		:= clang_install
 __embtk_binutils_inc	:= $(call __embtk_pkg_srcdir,binutils)/include
 LLVM_CONFIGURE_OPTS	:= --target=$(STRICT_GNU_TARGET)
 LLVM_CONFIGURE_OPTS	+= --enable-targets=$(LINUX_ARCH)
+LLVM_CONFIGURE_OPTS	+= --with-default-cpu=$(EMBTK_MCU_FLAG)
 LLVM_CONFIGURE_OPTS	+= --with-default-sysroot=$(embtk_sysroot)
 LLVM_CONFIGURE_OPTS	+= --enable-optimized
 LLVM_CONFIGURE_OPTS	+= --with-bug-report-url=$(EMBTK_BUGURL)

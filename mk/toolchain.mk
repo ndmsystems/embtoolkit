@@ -66,7 +66,7 @@ __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_WITH_DEBUG_DATA),-g)
 
 # cflags for clang
 __clang_cflags		:= -Qunused-arguments -fcolor-diagnostics
-__clang_cflags		+= -Wl,--hash-style=sysv $(EMBTK_TARGET_MCPU)
+__clang_cflags		+= -Wl,--hash-style=sysv
 __clang_cflags		+= $(if $(CONFIG_EMBTK_SOFTFLOAT),-mfloat-abi=soft)
 __clang_cflags		+= $(if $(CONFIG_EMBTK_HARDFLOAT),-mfloat-abi=hard)
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),$(__clang_cflags))
