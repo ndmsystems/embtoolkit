@@ -37,6 +37,8 @@ choice
 		select EMBTK_CLANG_VERSION_3_2
 	config EMBTK_CLANG_LLVM_VERSION_GIT
 		bool "Use clang/llvm git repository"
+		select EMBTK_LLVM_VERSION_GIT
+		select EMBTK_CLANG_VERSION_GIT
 		help
 		 Answer Y here if you want to build your toolchain based on
 		 clang/llvm sources from its GIT repository.
