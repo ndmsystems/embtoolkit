@@ -61,6 +61,7 @@ GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_NEON)		:= neon
 GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_NEON_FP16)	:= neon-fp16
 GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_NEON_VFPV4)	:= neon-vfpv4
 GCC_WITH_FPU	:= $(if $(GCC_WITH_FPU-y),--with-fpu=$(GCC_WITH_FPU-y))
+LLVM_WITH_FPU	:= $(if $(GCC_WITH_FPU-y),--with-default-fpu=$(GCC_WITH_FPU-y))
 
 # Hard or soft floating point?
 EMBTK_TARGET_FLOAT_CFLAGS := $(strip $(if $(CONFIG_EMBTK_SOFTFLOAT),		\
