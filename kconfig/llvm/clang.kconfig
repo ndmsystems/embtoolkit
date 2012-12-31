@@ -30,20 +30,17 @@ config EMTK_HAVE_CLANG
 #
 # clang version
 #
-choice
-	prompt "Version of clang you wish"
-	help
-	 Version of clang you wish
 
-	config EMBTK_CLANG_VERSION_3_2
-		bool "clang-3.2"
-		select EMBTK_CLANG_NEED_PATCH
-	config EMBTK_CLANG_VERSION_GIT
-		bool "Use clang git repository"
-		help
-		 Answer Y here if you want to build your toolchain based on
-		 clang sources from its GIT repository.
-endchoice
+config EMBTK_CLANG_VERSION_3_2
+	bool
+	select EMBTK_CLANG_NEED_PATCH
+
+config EMBTK_CLANG_VERSION_GIT
+	bool "Use clang git repository"
+	depends on EMBTK_CLANG_LLVM_VERSION_GIT
+	help
+	 Answer Y here if you want to build your toolchain based on
+	 clang sources from its GIT repository.
 
 #
 # GIT repository options

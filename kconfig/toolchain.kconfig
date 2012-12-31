@@ -116,6 +116,7 @@ if EMBTK_LLVM_ONLY_TOOLCHAIN || EMBTK_GCC_AND_LLVM_TOOLCHAIN
 comment "------------------------------------------"
 comment "--- clang/llvm versions"
 comment "------------------------------------------"
+source kconfig/llvm/clang-llvm.kconfig
 source kconfig/llvm/llvm.kconfig
 source kconfig/llvm/clang.kconfig
 endif
