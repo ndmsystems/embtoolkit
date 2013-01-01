@@ -44,7 +44,8 @@ choice
 		bool "GCC libstdc++"
 		help
 		 GCC C++ standard library implementation, under GPLv3 with
-		 runtime exception (allowing use with proprietary software).
+		 runtime exception (see http://gcc.gnu.org/onlinedocs for more
+		 details).
 
 endchoice
 
