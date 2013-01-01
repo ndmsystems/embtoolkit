@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -152,8 +152,3 @@ config EMBTK_GCC3_NEED_PATCH
 	bool
 config EMBTK_GCC3_NEED_AUTORECONF
 	bool
-
-#
-# GCC various options (languages to support, etc.)
-#
-source kconfig/gcc-options.kconfig
