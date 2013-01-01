@@ -34,11 +34,14 @@ LLVM_BUILD_DIR		:= $(embtk_toolsb)/llvm-build
 
 LLVM_DEPS		:= clang_install
 
+LLVM_WITH_HASHSTYLE	:= $(if $(CONFIG_EMBTK_CLIB_UCLIBC),--with-default-hash-style=sysv)
+
 __embtk_binutils_inc	:= $(call __embtk_pkg_srcdir,binutils)/include
 LLVM_CONFIGURE_OPTS	:= --target=$(STRICT_GNU_TARGET)
 LLVM_CONFIGURE_OPTS	+= --enable-targets=$(LINUX_ARCH)
 LLVM_CONFIGURE_OPTS	+= --with-default-cpu=$(EMBTK_MCU_FLAG)
 LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_FLOAT) $(LLVM_WITH_FPU)
+LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_HASHSTYLE)
 LLVM_CONFIGURE_OPTS	+= --with-default-sysroot=$(embtk_sysroot)
 LLVM_CONFIGURE_OPTS	+= --enable-optimized
 LLVM_CONFIGURE_OPTS	+= --with-bug-report-url=$(EMBTK_BUGURL)
