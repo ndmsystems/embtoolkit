@@ -34,6 +34,19 @@ config EMBTK_GCC_LANGUAGE_CPP
 	select KEMBTK_EGLIBC_OPTION_POSIX_WIDE_CHAR_DEVICE_IO if EMBTK_CLIB_EGLIBC
 	help
 	 Your toolchain will be able to build C++ source code
+choice
+	prompt "C++ standard library implementation"
+	depends on EMBTK_GCC_LANGUAGE_CPP
+	help
+	 Here you can choose which GCC series you want to use.
+
+	config EMBTK_CXXLIB_LIBSTDCXX
+		bool "GCC libstdc++"
+		help
+		 GCC C++ standard library implementation, under GPLv3 with
+		 runtime exception (allowing use with proprietary software).
+
+endchoice
 
 #config EMBTK_GCC_LANGUAGE_JAVA
 #	bool "Support Java"
