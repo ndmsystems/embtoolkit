@@ -88,7 +88,7 @@ define __embtk_install_eglibc_headers
 	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crti.o $(embtk_sysroot)/usr/$(LIBDIR)/
 	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(embtk_sysroot)/usr/$(LIBDIR)/
 	$(TARGETGCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
-					-o $(embtk_sysroot)/usr/lib/libc.so
+				-o $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
 	touch $(call __embtk_pkg_dotinstalled_f,eglibc_headers)
 endef
 
