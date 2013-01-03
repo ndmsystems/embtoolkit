@@ -144,8 +144,8 @@ TOOLCHAIN_PRE_DEPS-y	+= $(if $(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST),	\
 __gcc3_toolchain-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)	:= gcc3_install
 __gcc3_toolchain-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)	:= gcc3_install
 
-__llvm_toolchain-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)	+= llvm_install
-__llvm_toolchain-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	+= llvm_install
+__llvm_toolchain-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)	:= llvm_install
+__llvm_toolchain-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= llvm_install
 
 TOOLCHAIN_DEPS		:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
