@@ -57,6 +57,20 @@ UCLIBC_MAKE_OPTS	+= KERNEL_HEADERS="$(embtk_sysroot)/usr/include/"
 UCLIBC_MAKE_OPTS	+= UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)"
 
 #
+# Install dummy uClibc needed to build gcc stage 2
+#
+define __embtk_install_uclibc_dummy
+	$(TARGETGCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
+				-o $(embtk_sysroot)/$(LIBDIR)/libc.so.0
+	echo '/* GNU ld script - Dummy uClibc linker script. */'		\
+		> $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
+	$(TARGETGCC) -Wl,--verbose 2>&1 | sed -n '/OUTPUT_FORMAT/,/)/p'		\
+		>> $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
+	echo 'GROUP(AS_NEEDED(libc.so.0))'					\
+		>> $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
+endef
+
+#
 # uClibc libraries install
 #
 define embtk_install_uclibc
@@ -76,8 +90,7 @@ define __embtk_install_uclibc_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
-	$(TARGETGCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
-				-o $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
+	$(__embtk_install_uclibc_dummy)
 	touch $(call __embtk_pkg_dotinstalled_f,uclibc_headers)
 endef
 

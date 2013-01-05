@@ -56,6 +56,20 @@ eglibc_optgroups_f		:= $(EGLIBC_BUILD_DIR)/option-groups.config
 eglibc_headers_optgroups_f	:= $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
 
 #
+# Install dummy eglibc needed to build gcc stage 2
+#
+define __embtk_install_eglibc_dummy
+	$(TARGETGCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
+				-o $(embtk_sysroot)/$(LIBDIR)/libc.so.6
+	echo '/* GNU ld script - Dummy eglibc linker script. */'		\
+		> $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
+	$(TARGETGCC) -Wl,--verbose 2>&1 | sed -n '/OUTPUT_FORMAT/,/)/p'		\
+		>> $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
+	echo 'GROUP(AS_NEEDED(libc.so.6))'					\
+		>> $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
+endef
+
+#
 # eglibc headers install
 #
 
@@ -87,8 +101,7 @@ define __embtk_install_eglibc_headers
 	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crt1.o $(embtk_sysroot)/usr/$(LIBDIR)/
 	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crti.o $(embtk_sysroot)/usr/$(LIBDIR)/
 	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(embtk_sysroot)/usr/$(LIBDIR)/
-	$(TARGETGCC) -nostdlib -nostartfiles -shared -x c /dev/null		\
-				-o $(embtk_sysroot)/usr/$(LIBDIR)/libc.so
+	$(__embtk_install_eglibc_dummy)
 	touch $(call __embtk_pkg_dotinstalled_f,eglibc_headers)
 endef
 
