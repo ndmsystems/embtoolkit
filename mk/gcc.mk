@@ -44,6 +44,8 @@ __GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_FORTRAN),fortran)
 __GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_ADA),ada)
 GCC_LANGUAGES	:= $(subst $(embtk_space),$(embtk_comma),$(strip $(__GCC_LANGUAGES)))
 
+GCC_CXA_ATEXIT-$(CONFIG_EMBTK_GCC_LANGUAGE_CPP) := --enable-__cxa_atexit
+GCC_CXA_ATEXIT-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP) := --enable-__cxa_atexit
 
 #
 # Final GCC extra configure options
@@ -117,8 +119,10 @@ GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)			\
 	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
+	--disable-libquadmath							\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
-	--enable-languages=c --enable-target-optspace --disable-libquadmath
+	--enable-languages=c --enable-target-optspace --enable-threads		\
+	$(GCC_CXA_ATEXIT-y)
 
 CONFIG_EMBTK_GCC2_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC2_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
@@ -168,7 +172,7 @@ GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
 	--disable-libquadmath							\
-	--enable-languages=$(GCC_LANGUAGES) --enable-__cxa_atexit		\
+	--enable-languages=$(GCC_LANGUAGES) $(GCC_CXA_ATEXIT-y)			\
 	--enable-threads --enable-shared --enable-target-optspace		\
 	$(GCC3_CONFIGURE_EXTRA_OPTIONS)
 
