@@ -143,6 +143,11 @@ TOOLCHAIN_PRE_DEPS-y	+= $(if $(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST),	\
 
 __gcc3_toolchain-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)	:= gcc3_install
 __gcc3_toolchain-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)	:= gcc3_install
+# FIXME: When libc++ will be used with clang/llvm toolchain, remove this
+__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_CPP)	:= gcc3_install
+
+__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC) := gcc3_install
+__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP) := gcc3_install
 
 __llvm_toolchain-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)	:= llvm_install
 __llvm_toolchain-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= llvm_install
