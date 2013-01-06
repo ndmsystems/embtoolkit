@@ -51,8 +51,6 @@ CC			?= gcc
 CXX			?= g++
 
 ARFLAGS			:= rvs
-ARADD			:= $(shell $(CC) --print-file-name=libgcc.a)
-ARADD			+= $(shell $(CC) --print-file-name=libgcc_eh.a)
 
 override CFLAGS		:= $(CFLAGS) -I$(rootsrc)/src
 override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS)
