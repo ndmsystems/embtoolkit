@@ -166,10 +166,11 @@ GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)			\
 	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
-	--enable-languages=$(GCC_LANGUAGES) --enable-__cxa_atexit		\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
+	--disable-libquadmath							\
+	--enable-languages=$(GCC_LANGUAGES) --enable-__cxa_atexit		\
 	--enable-threads --enable-shared --enable-target-optspace		\
-	--disable-libquadmath $(GCC3_CONFIGURE_EXTRA_OPTIONS)
+	$(GCC3_CONFIGURE_EXTRA_OPTIONS)
 
 CONFIG_EMBTK_GCC3_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC3_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
