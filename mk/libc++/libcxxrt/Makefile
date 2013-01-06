@@ -33,7 +33,7 @@ C_SRCS			:= $(filter-out $(__NO_C_SRCS),$(C_SRCS))
 
 CXX_SRCS		:= $(wildcard $(rootsrc)/src/*.cc)
 
-__HEADERS		:= cxxabi.h unwind.h unwind-arm.h unwind-itanium.h
+__HEADERS		:= cxxabi.h unwind-arm.h unwind.h unwind-itanium.h
 HEADERS			:= $(addprefix $(rootsrc)/src/,$(__HEADERS))
 
 OBJS			:= $(patsubst %.c,%.o,$(C_SRCS))
@@ -50,12 +50,9 @@ SHAREDLIB_SONAME	:= $(SHAREDLIB_NAME)
 CC			?= gcc
 CXX			?= g++
 
-override LDFLAGS	:= $(LDFLAGS)
-override LDFLAGS	+= -Wl,--fatal-warnings -Wl,--warn-shared-textrel
-override LDFLAGS	+= -shared -Wl,-x
-LDADD			:= -ldl
-
 ARFLAGS			:= rvs
+ARADD			:= $(shell $(CC) --print-file-name=libgcc.a)
+ARADD			+= $(shell $(CC) --print-file-name=libgcc_eh.a)
 
 override CFLAGS		:= $(CFLAGS) -I$(rootsrc)/src
 override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS)
@@ -67,34 +64,27 @@ define __lib_install
 		mkdir -p $(SYSROOT)/usr/include
 		mkdir -p $(SYSROOT)/usr/include/c++
 		mkdir -p $(SYSROOT)/usr/include/c++/v1
-		cp -d $(SHAREDLIB_NAME) $(SYSROOT)/$(LIBDIR)/
-		cp -d $(SHAREDLIB_LINK) $(SYSROOT)/$(LIBDIR)/
 		cp lib$(LIB).a $(SYSROOT)/$(LIBDIR)/
 		cp lib$(LIB)_pic.a $(SYSROOT)/$(LIBDIR)/
 		cp lib$(LIB)_p.a $(SYSROOT)/$(LIBDIR)/
 		cp $(HEADERS) $(SYSROOT)/usr/include/c++/v1/)
 endef
 
-all: lib$(LIB).a lib$(LIB)_p.a lib$(LIB)_pic.a $(SHAREDLIB_NAME)
+all: lib$(LIB).a lib$(LIB)_p.a lib$(LIB)_pic.a
 	$(Q)true
 
 install: all
 	$(Q)$(__lib_install)
 	$(Q)true
 
-$(SHAREDLIB_NAME): $(SOBJS)
-	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) -o $@					\
-			-Wl,-soname,$(SHAREDLIB_SONAME) $(SOBJS) $(LDADD)
-	$(Q)ln -fs $(SHAREDLIB_NAME) $(SHAREDLIB_LINK)
-
 lib$(LIB).a: $(OBJS)
-	$(Q)$(AR) $(ARFLAGS) $@ $(OBJS)
+	$(Q)$(AR) $(ARFLAGS) $@ $(OBJS) $(ARADD)
 
 lib$(LIB)_p.a: $(POBJS)
-	$(Q)$(AR) $(ARFLAGS) $@ $(POBJS)
+	$(Q)$(AR) $(ARFLAGS) $@ $(POBJS) $(ARADD)
 
 lib$(LIB)_pic.a: $(SOBJS)
-	$(Q)$(AR) $(ARFLAGS) $@ $(SOBJS)
+	$(Q)$(AR) $(ARFLAGS) $@ $(SOBJS) $(ARADD)
 
 %.o: %.c
 	$(Q)$(CC) $(CFLAGS) -c $< -o $@
@@ -117,5 +107,4 @@ lib$(LIB)_pic.a: $(SOBJS)
 clean:
 	$(Q)rm -rf $(OBJS) $(SOBJS) $(POBJS)
 	$(Q)rm -rf lib$(LIB).a lib$(LIB)_p.a lib$(LIB)_pic.a
-	$(Q)rm -rf $(SHAREDLIB_NAME) $(SHAREDLIB_LINK)
 
