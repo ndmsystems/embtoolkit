@@ -38,3 +38,7 @@ ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBNIH) += libnih_install
 #libsigsegv
 include packages/development/libsigsegv/libsigsegv.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBSIGSEGV) += libsigsegv_install
+
+# libunwind
+include packages/development/libunwind/libunwind.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBUNWIND) += libunwind_install

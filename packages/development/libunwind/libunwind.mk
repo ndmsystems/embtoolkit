@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,23 +17,22 @@
 #
 ################################################################################
 #
-# \file         development.kconfig
-# \brief	development.kconfig of Embtoolkit
+# \file         libunwind.mk
+# \brief	libunwind.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         October 2009
+# \date         December 2009
 ################################################################################
 
-# libbsd
-source packages/development/libbsd/libbsd.kconfig
+LIBUNWIND_NAME		:= libunwind
+LIBUNWIND_VERSION	:= $(call embtk_get_pkgversion,libunwind)
+LIBUNWIND_SITE		:= http://download.savannah.nongnu.org/releases/libunwind
+LIBUNWIND_PACKAGE	:= libunwind-$(LIBUNWIND_VERSION).tar.gz
+LIBUNWIND_SRC_DIR	:= $(embtk_pkgb)/libunwind-$(LIBUNWIND_VERSION)
+LIBUNWIND_BUILD_DIR	:= $(embtk_pkgb)/libunwind-$(LIBUNWIND_VERSION)
 
-#libevent
-source packages/development/libevent/libevent.kconfig
+LIBUNWIND_INCLUDES	:= libunwind*.h
+LIBUNWIND_LIBS		:= libunwind*
+LIBUNWIND_PKGCONFIGS	:= libunwind*.pc
 
-#libnih
-source packages/development/libnih/libnih.kconfig
-
-#libsigsegv
-source packages/development/libsigsegv/libsigsegv.kconfig
-
-# libunwind
-source packages/development/libunwind/libunwind.kconfig
+LIBUNWIND_CONFIGURE_OPTS	:= --enable-cxx-exceptions --disable-coredump
+LIBUNWIND_CONFIGURE_OPTS	+= --enable-static --disable-shared
