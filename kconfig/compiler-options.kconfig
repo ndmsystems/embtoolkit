@@ -66,10 +66,12 @@ config EMBTK_GCC_LANGUAGE_OBJECTIVECPP
 	help
 	 Your toolchain will be able to build Objective-C source code
 
+if EMBTK_GCC_ONLY_TOOLCHAIN || EMBTK_GCC_AND_LLVM_TOOLCHAIN
 config EMBTK_GCC_LANGUAGE_FORTRAN
 	bool "Support Fortran"
 	help
 	 Your toolchain will be able to build fortran source code
+endif
 
 #config EMBTK_GCC_LANGUAGE_ADA
 #	bool "Support Ada"
