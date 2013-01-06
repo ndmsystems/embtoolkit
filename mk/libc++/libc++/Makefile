@@ -46,13 +46,13 @@ SHAREDLIB_LINK		:= lib$(SHAREDLIB).so
 SHAREDLIB_SONAME	:= $(SHAREDLIB_NAME)
 
 override LDFLAGS	:= $(LDFLAGS) -shared
-override LDFLAGS	+= -Wl,--fatal-warnings -Wl,--warn-shared-textrel -Wl,-x
+override LDFLAGS	+= -Wl,--warn-shared-textrel -Wl,-x
 
 override CFLAGS		:= $(CFLAGS) -I$(rootsrc)/include
 override CFLAGS		+= -DLIBCXXRT -DNO_CATGETS_SUPPORT
 override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS) -nostdinc++ -std=c++0x
 
-LDADD			:= -lcxxrt -lpthread -lrt -lc
+LDADD			:= -lcxxrt -lpthread -lrt -ldl -lc
 
 ARADD			:= $(shell $(CC) --print-file-name=libcxxrt.a)
 ARADD			+= $(shell $(CC) --print-file-name=libpthread.a)
