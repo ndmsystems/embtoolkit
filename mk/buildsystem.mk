@@ -37,6 +37,7 @@ J			:= -j$(CONFIG_EMBTK_NUMBER_BUILD_JOBS)
 # New version of above variables names. The old names are scheduled for removal
 #
 embtk_sysroot		:= $(SYSROOT)
+embtk_build		:= $(EMBTK_ROOT)/build
 embtk_tools		:= $(TOOLS)
 embtk_toolsb		:= $(TOOLS_BUILD)
 embtk_pkgb		:= $(PACKAGES_BUILD)
