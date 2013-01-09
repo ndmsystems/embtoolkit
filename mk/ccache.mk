@@ -35,9 +35,8 @@ CCACHE_PACKAGE		:= ccache-$(CCACHE_VERSION).tar.bz2
 CCACHE_SRC_DIR		:= $(embtk_toolsb)/ccache-$(CCACHE_VERSION)
 CCACHE_BUILD_DIR	:= $(embtk_toolsb)/ccachehost-build
 
-CCACHE_HOST_DIR		:= $(embtk_htools)/usr/local/ccachehost
 CCACHE_DIR		:= $(EMBTK_ROOT)/.ccache
-CCACHE_BIN		:= $(CCACHE_HOST_DIR)/bin/ccache
+CCACHE_BIN		:=  $(embtk_htools)/usr/bin/ccache
 
 # Variables for use in env
 HOSTCC_CACHED		:= "$(CCACHE_BIN) $(HOSTCC)"
@@ -66,8 +65,6 @@ targetclang_cached	:= $(CCACHE_BIN) $(TARGETCLANG)
 targetclangxx_cached	:= $(CCACHE_BIN) $(TARGETCLANGXX)
 
 export CCACHE_DIR HOSTCC_CACHED HOSTCXX_CACHED TARGETCC_CACHED TARGETCXX_CACHED
-
-CCACHE_PREFIX		:= $(CCACHE_HOST_DIR)
 
 define embtk_install_ccache
 	$(call __embtk_install_hostpkg,ccache)
