@@ -149,8 +149,7 @@ __gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_CPP)	:= gcc3_install
 __gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC) := gcc3_install
 __gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP) := gcc3_install
 
-__llvm_toolchain-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)	:= llvm_install
-__llvm_toolchain-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= llvm_install
+__llvm_toolchain-$(CONFIG_EMTK_HAVE_LLVM) := llvm_install
 
 TOOLCHAIN_DEPS		:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
