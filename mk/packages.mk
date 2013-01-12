@@ -24,7 +24,7 @@
 ################################################################################
 
 ROOTFS_COMPONENTS-y		:=
-HOSTTOOLS_COMPONENTS-y		:= mkimage_install pkgconfig_install
+HOSTTOOLS_COMPONENTS-y		:= mkimage_install pkgconf_install
 #
 # Common include for target and host
 #
@@ -44,7 +44,7 @@ HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBELF) += libelf_host_install
 include mk/makedevs.mk
 include mk/mkimage.mk
 include mk/mtd-utils.mk
-include mk/pkgconfig.mk
+include mk/pkgconf.mk
 include mk/squashfs.mk
 
 # zlib_host

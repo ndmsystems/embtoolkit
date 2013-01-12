@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2013 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,26 +16,35 @@
 #
 ################################################################################
 #
-# \file         pkgconfig.mk
-# \brief	pkgconfig.mk of Embtoolkit
+# \file         pkgconf.mk
+# \brief	pkgconf.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         October 2009
+# \date         January 2013
 ################################################################################
 
-PKGCONFIG_NAME		:= pkg-config
-PKGCONFIG_VERSION	:= $(call embtk_get_pkgversion,pkgconfig)
-PKGCONFIG_SITE		:= http://pkgconfig.freedesktop.org/releases
-PKGCONFIG_PACKAGE	:= pkg-config-$(PKGCONFIG_VERSION).tar.gz
-PKGCONFIG_SRC_DIR	:= $(embtk_toolsb)/pkg-config-$(PKGCONFIG_VERSION)
-PKGCONFIG_BUILD_DIR	:= $(embtk_toolsb)/pkg-config-$(PKGCONFIG_VERSION)
+PKGCONF_NAME		:= pkgconf
+PKGCONF_VERSION		:= $(call embtk_get_pkgversion,pkgconf)
+PKGCONF_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+PKGCONF_PACKAGE		:= pkgconf-$(PKGCONF_VERSION).tar.gz
+PKGCONF_SRC_DIR		:= $(embtk_toolsb)/pkgconf-$(PKGCONF_VERSION)
+PKGCONF_BUILD_DIR	:= $(embtk_toolsb)/pkgconf-$(PKGCONF_VERSION)
 
-PKGCONFIG_BIN			:= $(embtk_htools)/usr/bin/pkg-config
+PKGCONFIG_BIN		:= $(embtk_htools)/usr/bin/pkg-config
+export PKGCONFIG_BIN
 
+#
+# PKG_CONFIG_PATH for target packages
+#
 __EMBTK_PKG_CONFIG_PATH		:= $(embtk_sysroot)/usr/$(LIBDIR)/pkgconfig
 __EMBTK_PKG_CONFIG_PATH		+= $(embtk_sysroot)/usr/share/pkgconfig
 EMBTK_PKG_CONFIG_PATH		:= $(subst $(embtk_space),:,$(__EMBTK_PKG_CONFIG_PATH))
 EMBTK_PKG_CONFIG_LIBDIR		:= $(EMBTK_PKG_CONFIG_PATH)
 
+export PKGCONFIG_BIN EMBTK_PKG_CONFIG_PATH
+
+#
+# PKG_CONFIG_PATH for host packages
+#
 __EMBTK_HOST_PKG_CONFIG_PATH	:= $(embtk_htools)/usr/lib/pkgconfig/
 __EMBTK_HOST_PKG_CONFIG_PATH	+= /usr/lib/pkgconfig/ /usr/share/pkgconfig/
 __EMBTK_HOST_PKG_CONFIG_PATH	+= /usr/local/lib/pkgconfig/ /usr/local/share/pkgconfig/
@@ -43,15 +52,19 @@ __EMBTK_HOST_PKG_CONFIG_PATH	+= $(dir $(shell find /usr/lib -type f -name '*.pc'
 __EMBTK_HOST_PKG_CONFIG_PATH	+= $(dir $(shell find /usr/local/lib -type f -name '*.pc'))
 EMBTK_HOST_PKG_CONFIG_PATH	:= $(subst $(embtk_space),:,$(sort $(__EMBTK_HOST_PKG_CONFIG_PATH)))
 
-PKGCONFIG_CONFIGURE_OPTS	:= --with-pc-path="$(EMBTK_HOST_PKG_CONFIG_PATH)"
-PKGCONFIG_CONFIGURE_OPTS	+= --with-internal-glib
-
-export PKGCONFIG_BIN EMBTK_PKG_CONFIG_PATH EMBTK_PKG_CONFIG_LIBDIR
 export EMBTK_HOST_PKG_CONFIG_PATH
 
-PKGCONFIG_PREFIX	:= /usr
-PKGCONFIG_DESTDIR	:= $(embtk_htools)
+#
+# pkgconf install
+#
+PKGCONF_PREFIX	:= /usr
+PKGCONF_DESTDIR	:= $(embtk_htools)
 
-define embtk_install_pkgconfig
-	$(call __embtk_install_hostpkg,pkgconfig)
+define embtk_install_pkgconf
+	$(call __embtk_install_hostpkg,pkgconf)
+endef
+
+define embtk_postinstall_pkgconf
+	[ -e $(call __embtk_pkg_dotinstalled_f,pkgcong) ] ||			\
+		cd $(embtk_htools)/usr/bin/; ln -sf pkgconf pkg-config
 endef

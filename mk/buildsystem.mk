@@ -48,6 +48,7 @@ embtk_dldir		:= $(or $(__embtk_dldir),$(EMBTK_ROOT)/dl)
 
 
 define __embtk_kconfig_buildrun
+	PKG_CONFIG_PATH=$(EMBTK_HOST_PKG_CONFIG_PATH)				\
 	$(MAKE) -f scripts/Makefile.build					\
 		obj=$(EMBTK_ROOT)/scripts/kconfig				\
 		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\

@@ -17,32 +17,32 @@
 #
 ################################################################################
 #
-# \file         pkgconfig.kconfig
-# \brief	pkgconfig.kconfig of Embtoolkit.
+# \file         pkgconf.kconfig
+# \brief	pkgconf.kconfig of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         January 2011
 ################################################################################
 
-config EMBTK_HAVE_PKGCONFIG
+config EMBTK_HAVE_PKGCONF
 	bool
 	default y
+	select EMBTK_PKGCONF_NEED_AUTORECONF
 	help
-		pkgconfig for host tools.
+		pkgconf for host tools.
 
-config EMBTK_PKGCONFIG_VERSION_STRING
+config EMBTK_PKGCONF_VERSION_STRING
 	string
-	default "0.25"
+	default "0.8.9"
 
-config EMBTK_PKGCONFIG_VERSION_GIT
+config EMBTK_PKGCONF_VERSION_GIT
 	bool
 
-config EMBTK_PKGCONFIG_GIT_SITE
+config EMBTK_PKGCONF_GIT_SITE
 	string
-	default "git://anongit.freedesktop.org/pkg-config"
-	depends on EMBTK_PKGCONFIG_VERSION_GIT
+	default "git://github.com/pkgconf/pkgconf.git"
+	depends on EMBTK_PKGCONF_VERSION_GIT
 
-config EMBTK_PKGCONFIG_NEED_PATCH
+config EMBTK_PKGCONF_NEED_PATCH
 	bool
-config EMBTK_PKGCONFIG_NEED_AUTORECONF
+config EMBTK_PKGCONF_NEED_AUTORECONF
 	bool
-	default y if EMBTK_PKGCONFIG_VERSION_GIT

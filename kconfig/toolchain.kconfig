@@ -167,9 +167,9 @@ source kconfig/autoconf.kconfig
 source kconfig/automake.kconfig
 
 #
-# pkg-config
+# pkgconf
 #
-source kconfig/pkgconfig.kconfig
+source kconfig/pkgconf.kconfig
 
 #
 # fakeroot
