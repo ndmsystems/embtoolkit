@@ -307,7 +307,6 @@ define embtk_configure_pkg
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	AS=$(CROSS_COMPILE)as							\
-	LD=$(TARGETLD)								\
 	NM=$(TARGETNM)								\
 	STRIP=$(TARGETSTRIP)							\
 	OBJDUMP=$(TARGETOBJDUMP)						\
