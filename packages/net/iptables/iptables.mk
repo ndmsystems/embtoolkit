@@ -36,6 +36,8 @@ IPTABLES_INCLUDES	:= ipt_kernel_headers.h libip6tc.h libiptc.h
 IPTABLES_INCLUDES	+= libxtc.h xtables.h xtcshared.h
 IPTABLES_LIBS		:= libip4tc.so.0 libip4tc.so.0 libxtables.so.7
 
+IPTABLES_MAKE_OPTS	:= AR="$(TARGETAR)"
+
 ifeq ($(CONFIG_EMBTK_IPTABLES_HAVE_LIBIPQ),y)
 IPTABLES_CONFIGURE_OPTS	:= --enable-libipq
 endif
