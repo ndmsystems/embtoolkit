@@ -76,6 +76,12 @@ STRICT_GNU_TARGET	:= mipsisa64r2$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__e
 GNU_TARGET_ARCH		:= mips64r2
 endif
 
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_OCTEON),y)
+GNU_TARGET		:= mips64octeon$(__embtk_mips_endian)-$(embtk_os)
+STRICT_GNU_TARGET	:= mips64octeon$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
+GNU_TARGET_ARCH		:= octeon
+endif
+
 EMBTK_MCU_FLAG		:= $(GNU_TARGET_ARCH)
 
 #
