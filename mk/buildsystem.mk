@@ -130,16 +130,19 @@ startbuild:
 
 define __embtk_mk_initsysrootdirs
 	mkdir -p $(embtk_sysroot)
+	mkdir -p $(embtk_sysroot)/etc
 	mkdir -p $(embtk_sysroot)/lib
 	mkdir -p $(embtk_sysroot)/usr
-	mkdir -p $(embtk_sysroot)/usr/etc
 	mkdir -p $(embtk_sysroot)/root
 	mkdir -p $(embtk_sysroot)/usr/lib
-	$(if $(CONFIG_EMBTK_32BITS_FS),,cd $(embtk_sysroot);			\
-		ln -sf lib lib64; cd $(embtk_sysroot)/usr;ln -sf lib lib64)
+	$(if $(CONFIG_EMBTK_32BITS_FS),,					\
+		cd $(embtk_sysroot); rm -rf lib64; ln -sf lib lib64;		\
+		cd $(embtk_sysroot)/usr; rm -rf lib64; ln -sf lib lib64)
 	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
-		cd $(embtk_sysroot); ln -sf lib lib64; mkdir -p lib32;		\
-		cd $(embtk_sysroot)/usr; ln -sf lib lib64; mkdir -p lib32)
+		cd $(embtk_sysroot);						\
+			 rm -rf lib64; ln -sf lib lib64; mkdir -p lib32;	\
+		cd $(embtk_sysroot)/usr;					\
+			 rm -rf lib64; ln -sf lib lib64; mkdir -p lib32)
 endef
 
 define __embtk_mk_inittoolsdirs
