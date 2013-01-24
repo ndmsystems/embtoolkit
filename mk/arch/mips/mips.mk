@@ -27,6 +27,7 @@ LINUX_ARCH		:= mips
 __embtk_mips_endian	:= $(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),el)
 __embtk_mips_abi-$(CONFIG_EMBTK_CLIB_EGLIBC) := gnu
 __embtk_mips_abi	:= $(or $(__embtk_mips_abi-y),$(embtk_clib))
+__embtk_mips_64bit	:= $(if $(CONFIG_EMBTK_TARGET_ARCH_64BITS),64)
 
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_MIPS1),y)
 GNU_TARGET		:= mips$(__embtk_mips_endian)-$(embtk_os)
@@ -93,19 +94,23 @@ GCC_WITH_ARCH			:= --with-arch=$(GNU_TARGET_ARCH)
 ifeq ($(CONFIG_EMBTK_HARDFLOAT),y)
 GCC_WITH_FLOAT			:= --with-float=hard
 EMBTK_TARGET_FLOAT_CFLAGS	:= -mhard-float
+__xtools_env_float		:= sf
 else
 GCC_WITH_FLOAT			:= --with-float=soft
 EMBTK_TARGET_FLOAT_CFLAGS	:= -msoft-float
+__xtools_env_float		:= hf
 endif
 
 # ABI part
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_O32),y)
 GCC_WITH_ABI			:= --with-abi=32
 EMBTK_TARGET_ABI		:= -mabi=32
+__xtools_env_abi		:= o32
 
 else ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_N32),y)
 GCC_WITH_ABI			:= --with-abi=n32
 EMBTK_TARGET_ABI		:= -mabi=n32
+__xtools_env_abi		:= n32
 
 #else ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_EABI),y)
 #GCC_WITH_ABI			:= --with-abi=eabi
@@ -118,8 +123,13 @@ EMBTK_TARGET_ABI		:= -mabi=n32
 else
 GCC_WITH_ABI			:= --with-abi=64
 EMBTK_TARGET_ABI		:= -mabi=64
+__xtools_env_abi		:= n64
 endif
 
 # Some other flags for TARGET_CFLAGS
 EMBTK_TARGET_MCPU		:=
 EMBTK_TARGET_MARCH		:= -march=$(EMBTK_MCU_FLAG)
+
+# Some cross compiler variables
+__xtools_archos			:= mips$(__embtk_mips_64bit)$(__embtk_mips_endian)-$(embtk_os)
+__xtools_env			:= $(GNU_TARGET_ARCH)$(__xtools_env_float)-$(__xtools_env_abi)

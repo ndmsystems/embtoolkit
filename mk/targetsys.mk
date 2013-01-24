@@ -29,3 +29,4 @@ embtk_os				:= $(or $(embtk_os-y),invalid-os)
 embtk_clib-$(CONFIG_EMBTK_CLIB_EGLIBC)	:= eglibc
 embtk_clib-$(CONFIG_EMBTK_CLIB_UCLIBC)	:= uclibc
 embtk_clib				:= $(or $(embtk_clib-y),invalid-clib)
+embtk_clib_version			:= $(call embtk_get_pkgversion,$(embtk_clib))

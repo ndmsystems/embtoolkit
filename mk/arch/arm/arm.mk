@@ -70,3 +70,8 @@ EMBTK_TARGET_FLOAT_CFLAGS := $(strip $(if $(CONFIG_EMBTK_SOFTFLOAT),		\
 # Some other flags for TARGET_CFLAGS
 EMBTK_TARGET_MCPU	:= -mcpu=$(EMBTK_MCU_FLAG)
 EMBTK_TARGET_MARCH	:=
+
+# Some cross compiler variables
+__xtools_env_float	:= $(if $(CONFIG_EMBTK_SOFTFLOAT),sf,hf)
+__xtools_archos		:= $(GNU_TARGET)
+__xtools_env		:= $(EMBTK_MCU_FLAG)-$(__xtools_env_float)

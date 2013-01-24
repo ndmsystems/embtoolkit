@@ -134,9 +134,15 @@ AUTOTOOLS_INSTALL	:= m4_install libtool_install autoconf_install
 AUTOTOOLS_INSTALL	+= automake_install
 
 # Toolchain internals
+__xtools_compiler-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= clangllvm-$(LLVM_VERSION)
+__xtools_compiler-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= clangllvm-$(LLVM_VERSION)
+__xtools_compiler-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= gcc-$(GCC_VERSION)
+__xtools_compiler-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)		:= gcc-$(GCC_VERSION)
+__xtools_bins		:= $(__xtools_compiler-y)-$(embtk_clib)-$(embtk_clib_version)
+
+TOOLCHAIN_PACKAGE	:= toolchain-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env).tar.bz2
+TOOLCHAIN_DIR		:= $(embtk_generated)/toolchain-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)
 TOOLCHAIN_NAME		:= toolchain
-TOOLCHAIN_PACKAGE	:= toolchain-$(GNU_TARGET)-$(embtk_clib)-$(EMBTK_MCU_FLAG).tar.bz2
-TOOLCHAIN_DIR		:= $(embtk_generated)/toolchain-$(GNU_TARGET)-$(embtk_clib)-$(EMBTK_MCU_FLAG)
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
 TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)
 
