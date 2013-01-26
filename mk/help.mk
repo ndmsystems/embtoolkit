@@ -79,7 +79,7 @@ successful_build:
 	$(call embtk_echo_blue,"| Root file system build log |")
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-	$(call embtk_echo_blue,"You also successfully build root filesystem(s) located in the")
+	$(call embtk_echo_blue,"Built root filesystems are located in the")
 	$(call embtk_echo_blue,"'generated' sub-directory of EmbToolkit.")
 else
 	$(call embtk_echo_green,"Build of root filesystem not selected.")
@@ -89,6 +89,7 @@ endif
 	$(call embtk_echo_blue,"| Embedded systems Toolkit   |")
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"Hope that EmbToolkit will be useful for your project !!!")
+	$(call embtk_echo_blue,"We will be happy to know it at embtk-users@embtoolkit.org")
 	$(call embtk_echo_blue,"Please report any bugs/suggestion at:")
 	$(call embtk_echo_blue,"   http://www.embtoolkit.org/issues/projects/show/embtoolkit")
 	$(call embtk_echo_blue,"You can also visit the wiki at:")
