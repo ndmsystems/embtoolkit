@@ -74,6 +74,8 @@ successful_build:
 	$(call embtk_echo_blue,"You successfully build your toolchain for $(GNU_TARGET)")
 	$(call embtk_echo_blue,"Tools built (compilers, Binutils, etc.) are located in:")
 	$(call embtk_echo_blue,"    $(embtk_tools)/bin")
+	$(call embtk_echo_blue,"The toolchain has been also packaged (for external use) in:")
+	$(call embtk_echo_blue,"    $(embtk_generated)")
 	@echo
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"| Root file system build log |")
