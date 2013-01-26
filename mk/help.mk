@@ -72,7 +72,7 @@ successful_build:
 	$(call embtk_echo_blue,"| Toolchain build log |")
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"You successfully build your toolchain for $(GNU_TARGET)")
-	$(call embtk_echo_blue,"Tools built (GCC compiler, Binutils, etc.) are located in:")
+	$(call embtk_echo_blue,"Tools built (compilers, Binutils, etc.) are located in:")
 	$(call embtk_echo_blue,"    $(embtk_tools)/bin")
 	@echo
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
