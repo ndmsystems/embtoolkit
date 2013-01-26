@@ -89,17 +89,16 @@ endef
 
 define __embtk_mk_print_selectedfeatures
 	$(call embtk_pinfo,"Starting build of selected features...")
-endef
-
-define __embtk_mk_startbuild
-	$(__embtk_mk_print_selectedfeatures)
 	$(call embtk_echo_blue," ~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"| Toolchain |")
 	$(call embtk_echo_blue," ~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"\tArchitecture        : $(GNU_TARGET_ARCH)")
 	$(call embtk_echo_blue,"\tLinux kernel headers: linux-$(call __embtk_pkg_version,linux)")
-	$(call embtk_echo_blue,"\tC library           : $(call __embtk_pkg_name,$(embtk_clib))-$(call __embtk_pkg_version,$(embtk_clib))")
 	$(call embtk_echo_blue,"\tBinutils            : binutils-$(call  __embtk_pkg_version,binutils)")
+	$(if $(CONFIG_EMTK_HAVE_LLVM),
+	$(call embtk_echo_blue,"\tCLANG/LLVM          : clang/llvm-$(call __embtk_pkg_version,llvm)"))
 	$(call embtk_echo_blue,"\tGCC                 : gcc-$(call __embtk_pkg_version,gcc)")
+	$(call embtk_echo_blue,"\tC library           : $(call __embtk_pkg_name,$(embtk_clib))-$(call __embtk_pkg_version,$(embtk_clib))")
 	$(if $(CONFIG_EMBTK_HAVE_GDB_SYSTEM),
 	$(call embtk_echo_blue,"\tGDB                 : gdb-$(call __embtk_pkg_version,gdb)"))
 	$(if $(CONFIG_EMBTK_HAVE_STRACE),
@@ -120,9 +119,12 @@ define __embtk_mk_startbuild
 		$(call embtk_echo_blue,"\tInitramfs  : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),Yes,No)")
 		$(call embtk_echo_blue,"\tsquashFS   : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),Yes,No)")
 		$(call embtk_echo_blue,"\tJFFS2      : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),Yes,No)"))
-	$(MAKE) toolchain_install rootfs_build successful_build
 endef
 
+define __embtk_mk_startbuild
+	$(__embtk_mk_print_selectedfeatures)
+	$(MAKE) toolchain_install rootfs_build successful_build
+endef
 
 startbuild:
 	$(if $(call __embtk_mk_pathexist,$(call __embtk_pkg_dotinstalled_f,gcc3)), \
