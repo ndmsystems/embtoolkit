@@ -33,15 +33,16 @@ GNU_TARGET		:= arm$(__embtk_arm_endian)-$(embtk_os)
 STRICT_GNU_TARGET	:= arm$(__embtk_arm_endian)-unknown-$(embtk_os)-$(__embtk_arm_abi)
 
 #
-# GCC configure options
+# GCC/LLVM configure options
 #
-GCC_WITH_CPU := --with-cpu=$(EMBTK_MCU_FLAG)
+GCC_WITH_CPU		:= --with-cpu=$(EMBTK_MCU_FLAG)
+LLVM_WITH_DEFAULT_CPU	:= --with-default-cpu=$(EMBTK_MCU_FLAG)
 
 # GCC extra configure options for arm
 GCC3_CONFIGURE_EXTRA_OPTIONS += $(strip $(if $(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),	\
 					--enable-sjlj-exceptions))
 
-# Hard or soft floating point for GCC?
+# Hard or soft floating point for GCC/LLVM?
 GCC_WITH_FLOAT-$(CONFIG_EMBTK_SOFTFLOAT)		:= soft
 GCC_WITH_FLOAT-$(CONFIG_EMBTK_HARDFLOAT)		:= softfp
 GCC_WITH_FLOAT	:= --with-float=$(GCC_WITH_FLOAT-y)
