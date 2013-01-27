@@ -94,11 +94,11 @@ GCC_WITH_ARCH			:= --with-arch=$(GNU_TARGET_ARCH)
 ifeq ($(CONFIG_EMBTK_HARDFLOAT),y)
 GCC_WITH_FLOAT			:= --with-float=hard
 EMBTK_TARGET_FLOAT_CFLAGS	:= -mhard-float
-__xtools_env_float		:= sf
+__xtools_env_float		:= hf
 else
 GCC_WITH_FLOAT			:= --with-float=soft
 EMBTK_TARGET_FLOAT_CFLAGS	:= -msoft-float
-__xtools_env_float		:= hf
+__xtools_env_float		:= sf
 endif
 
 # ABI part
