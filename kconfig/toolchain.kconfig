@@ -72,7 +72,7 @@ choice
 
 	config EMBTK_LLVM_ONLY_TOOLCHAIN
 		bool "clang/llvm only (experimental)"
-		depends on EMBTK_ARCH_ARM
+		depends on EMBTK_ARCH_ARM || (EMBTK_ARCH_MIPS && EMBTK_TARGET_ARCH_32BITS)
 		help
 		 Choose this configuration if you want to use only clang/llvm
 		 cross compiler environment.
@@ -83,7 +83,7 @@ choice
 
 	config EMBTK_GCC_AND_LLVM_TOOLCHAIN
 		bool "clang/llvm and GCC"
-		depends on EMBTK_ARCH_ARM
+		depends on EMBTK_ARCH_ARM || (EMBTK_ARCH_MIPS && EMBTK_TARGET_ARCH_32BITS)
 		help
 		 With this configuration you will have full clang/llvm and GGC
 		 built and available to build your userspace packages.

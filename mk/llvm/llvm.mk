@@ -40,7 +40,7 @@ __embtk_binutils_inc	:= $(call __embtk_pkg_srcdir,binutils)/include
 
 LLVM_CONFIGURE_OPTS	:= --target=$(STRICT_GNU_TARGET)
 LLVM_CONFIGURE_OPTS	+= --enable-targets=$(LINUX_ARCH)
-LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_DEFAULT_CPU)
+LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_CPU) $(LLVM_WITH_ABI)
 LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_FLOAT) $(LLVM_WITH_FPU)
 LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_HASHSTYLE)
 LLVM_CONFIGURE_OPTS	+= --with-default-sysroot=$(embtk_sysroot)
