@@ -52,7 +52,7 @@ CXX			?= g++
 
 ARFLAGS			:= rvs
 
-override CFLAGS		:= $(CFLAGS) -I$(rootsrc)/src
+override CFLAGS		:= $(CFLAGS) -I$(rootsrc)/src -D_GNU_SOURCE
 override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS)
 
 define __lib_install
