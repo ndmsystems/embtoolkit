@@ -30,7 +30,7 @@ LINUX_ARCH		:= arm
 GNU_TARGET_ARCH		:= arm
 EMBTK_MCU_FLAG		:= $(call __embtk_mk_uquote,$(CONFIG_EMBTK_ARM_MCU_STRING))
 GNU_TARGET		:= arm$(__embtk_arm_endian)-$(embtk_os)
-STRICT_GNU_TARGET	:= arm$(__embtk_arm_endian)-unknown-$(embtk_os)-$(__embtk_arm_abi)
+STRICT_GNU_TARGET	:= arm$(__embtk_arm_endian)-embtk-$(embtk_os)-$(__embtk_arm_abi)
 
 #
 # GCC/LLVM configure options
