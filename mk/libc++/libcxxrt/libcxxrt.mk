@@ -32,7 +32,9 @@ LIBCXXRT_PACKAGE	:= libcxxrt-$(LIBCXXRT_VERSION).tar.bz2
 LIBCXXRT_SRC_DIR	:= $(embtk_toolsb)/libcxxrt-$(LIBCXXRT_VERSION)
 LIBCXXRT_BUILD_DIR	:= $(call __embtk_pkg_srcdir,libcxxrt)
 
-LIBCXXRT_MAKE_OPTS	:= CC="$(TARGETCC)" CFLAGS="$(TARGET_CFLAGS)"
+__embtk_libcxxrt_cflags	:= $(TARGET_CFLAGS)
+
+LIBCXXRT_MAKE_OPTS	:= CC="$(TARGETCC)" CFLAGS="$(__embtk_libcxxrt_cflags)"
 LIBCXXRT_MAKE_OPTS	+= CXX="$(TARGETCXX)" LIBDIR=$(LIBDIR)
 LIBCXXRT_MAKE_OPTS	+= AR=$(TARGETAR) RANLIB=$(TARGETRANLIB)
 LIBCXXRT_MAKE_OPTS	+= SYSROOT="$(embtk_sysroot)"
