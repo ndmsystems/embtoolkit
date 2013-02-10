@@ -52,7 +52,8 @@ override CFLAGS		:= $(CFLAGS) -I$(rootsrc)/include
 override CFLAGS		+= -DLIBCXXRT -DNO_CATGETS_SUPPORT
 override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS) -nostdinc++ -std=c++0x
 
-LDADD			:= -lcxxrt -lpthread -lrt -ldl -lc
+LDADD			:= $(shell $(CC) --print-file-name=libcxxrt_pic.a)
+LDADD			+= -lpthread -lrt -ldl -lc
 
 ARADD			:= $(shell $(CC) --print-file-name=libcxxrt.a)
 ARADD			+= $(shell $(CC) --print-file-name=libpthread.a)
@@ -95,7 +96,7 @@ install: all
 	$(Q)true
 
 $(SHAREDLIB_NAME): $(SOBJS)
-	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) -o $@					\
+	$(Q)$(CC) $(LDFLAGS) -o $@					\
 			-Wl,-soname,$(SHAREDLIB_SONAME) $(SOBJS) $(LDADD)
 	$(Q)ln -fs $(SHAREDLIB_NAME) $(SHAREDLIB_LINK)
 
