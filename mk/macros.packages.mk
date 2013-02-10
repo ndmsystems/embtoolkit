@@ -312,7 +312,7 @@ define embtk_configure_pkg
 	OBJDUMP=$(TARGETOBJDUMP)						\
 	OBJCOPY=$(TARGETOBJCOPY)						\
 	CFLAGS="$(TARGET_CFLAGS)"						\
-	CXXFLAGS="$(TARGET_CFLAGS)"						\
+	CXXFLAGS="$(TARGET_CXXFLAGS)"						\
 	LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"	\
 	CPPFLAGS="-I$(embtk_sysroot)/usr/include"				\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
