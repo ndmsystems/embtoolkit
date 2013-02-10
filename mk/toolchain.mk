@@ -113,8 +113,10 @@ include mk/gcc.mk
 
 # llvm/clang compiler infrastructure
 include mk/llvm/clang.mk
-include mk/llvm/compiler-rt.mk
 include mk/llvm/llvm.mk
+include mk/llvm/compiler-rt.mk
+include mk/libc++/libcxxrt/libcxxrt.mk
+include mk/libc++/libc++/libcxx.mk
 
 # linux kernel headers
 include mk/linux.mk
