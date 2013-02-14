@@ -54,6 +54,7 @@ choice
 		 LLVM C++ standard library implementation, under
 		 the MIT license and the UIUC License (a BSD-like license).
 		 See http://libcxx.llvm.org
+
 endchoice
 
 source "kconfig/libc++/libc++/libcxx.kconfig"
