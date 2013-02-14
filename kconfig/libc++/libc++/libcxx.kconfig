@@ -26,6 +26,7 @@
 config EMTK_HAVE_LIBCXX
 	bool
 	default y
+	depends on EMBTK_CXXLIB_LLVM_LIBCXX
 	select KEMBTK_UCLIBC_UCLIBC_HAS_LOCALE if EMBTK_CLIB_UCLIBC
 	select KEMBTK_UCLIBC_UCLIBC_HAS_XLOCALE if EMBTK_CLIB_UCLIBC
 
@@ -34,6 +35,7 @@ config EMTK_HAVE_LIBCXX
 #
 choice
 	prompt "Version of libcxx you wish"
+	depends on EMTK_HAVE_LIBCXX
 	help
 	 Version of libcxx you wish
 

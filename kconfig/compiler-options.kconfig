@@ -40,14 +40,24 @@ choice
 	help
 	 Here you can choose which GCC series you want to use.
 
-	config EMBTK_CXXLIB_LIBSTDCXX
+	config EMBTK_CXXLIB_GCC_LIBSTDCXX
 		bool "GCC libstdc++"
 		help
 		 GCC C++ standard library implementation, under GPLv3 with
 		 runtime exception (see http://gcc.gnu.org/onlinedocs for more
 		 details).
 
+	config EMBTK_CXXLIB_LLVM_LIBCXX
+		bool "LLVM libc++"
+		depends on (EMBTK_LLVM_ONLY_TOOLCHAIN || EMBTK_GCC_AND_LLVM_TOOLCHAIN) && (EMBTK_ARCH_MIPS && EMBTK_TARGET_ARCH_32BITS)
+		help
+		 LLVM C++ standard library implementation, under
+		 the MIT license and the UIUC License (a BSD-like license).
+		 See http://libcxx.llvm.org
 endchoice
+
+source "kconfig/libc++/libc++/libcxx.kconfig"
+source "kconfig/libc++/libcxxrt/libcxxrt.kconfig"
 
 #config EMBTK_GCC_LANGUAGE_JAVA
 #	bool "Support Java"
