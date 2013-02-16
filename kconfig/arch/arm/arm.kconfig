@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,6 +54,7 @@ endchoice
 choice
 	prompt "ARM Family"
 	depends on EMBTK_ARCH_ARM
+	default EMBTK_ARCH_ARM_FAMILY_ARM9TDMI
 	help
 	 Select ARM MCU family you want to use.
 
