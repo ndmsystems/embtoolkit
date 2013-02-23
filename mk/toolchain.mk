@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -117,7 +117,7 @@ include mk/gcc.mk
 # llvm/clang compiler infrastructure
 include mk/llvm/clang.mk
 include mk/llvm/llvm.mk
-include mk/llvm/compiler-rt.mk
+include mk/llvm/compiler-rt/compiler-rt.mk
 include mk/libc++/libcxxrt/libcxxrt.mk
 include mk/libc++/libc++/libcxx.mk
 
