@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2012-2013 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,11 +29,25 @@ COMPILER-RT_SITE	:= http://llvm.org/releases/$(COMPILER-RT_VERSION)
 COMPILER-RT_GIT_SITE	:= http://llvm.org/git/compiler-rt.git
 COMPILER-RT_PACKAGE	:= compiler-rt-$(COMPILER-RT_VERSION).src.tar.gz
 COMPILER-RT_SRC_DIR	:= $(embtk_toolsb)/compiler-rt-$(COMPILER-RT_VERSION).src
-COMPILER-RT_BUILD_DIR	:= $(embtk_toolsb)/compiler-rt-build
+COMPILER-RT_BUILD_DIR	:= $(call __embtk_pkg_srcdir,compiler-rt)
 
-COMPILER-RT_CONFIGURE_OPTS	:=
-COMPILER-RT_PREFIX		:= $(embtk_tools)
+COMPILER-RT_MAKE_OPTS	:= CC="$(TARGETCC)" CFLAGS="$(TARGET_CFLAGS)"
+COMPILER-RT_MAKE_OPTS	+= CXX="$(TARGETCXX)" LIBDIR="$(LIBDIR)"
+COMPILER-RT_MAKE_OPTS	+= AR=$(TARGETAR) RANLIB=$(TARGETRANLIB)
+COMPILER-RT_MAKE_OPTS	+= SYSROOT="$(embtk_sysroot)"
 
 define embtk_install_compiler-rt
-	$(call __embtk_install_pkg,compiler-rt)
+	$(call embtk_makeinstall_pkg,compiler-rt)
+endef
+
+define embtk_beforeinstall_compiler-rt
+	ln -sf $(EMBTK_ROOT)/mk/llvm/compiler-rt/Makefile			\
+					$(COMPILER-RT_BUILD_DIR)/Makefile
+endef
+
+define embtk_cleanup_compiler-rt
+	if [ -e $(LIBCXXRT_BUILD_DIR)/Makefile ]; then				\
+		$(MAKE) -C $(COMPILER-RT_BUILD_DIR) clean;			\
+	fi
+	rm -rf $(COMPILER-RT_BUILD_DIR)/Makefile
 endef
