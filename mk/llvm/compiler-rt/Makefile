@@ -108,6 +108,6 @@ lib$(UBSAN).a: $(UBSAN_OBJS)
 	$(Q)$(CXX) -fno-builtin -fPIC -DPIC $(CXXFLAGS) -c $< -o $@
 
 clean:
-	$(Q)rm -rf $(SANCOMMON_OBJS) $(ASAN_OBJS) $(TSAN_OBJS)
+	$(Q)rm -rf $(SANCOMMON_OBJS) $(ASAN_OBJS) $(TSAN_OBJS) $(UBSAN_OBJS)
 	$(Q)rm -rf lib$(SANCOMMON).a lib$(ASAN).a lib$(TSAN).a lib$(UBSAN).a
 
