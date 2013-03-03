@@ -174,6 +174,9 @@ __embtk_pkg_deps		= $(strip $($(PKGV)_DEPS))
 __embtk_pkg_depspkgv		= $(sort $(patsubst %_install,%,$(__embtk_pkg_deps)))
 ___embtk_pkg_kconfigsname	= $(strip $(or $($(PKGV)_KCONFIGS_NAME),$(PKGV)))
 __embtk_pkg_kconfigsname	= $(patsubst %_HOST,%,$(___embtk_pkg_kconfigsname))
+__embtk_pkg_cflags		= $(strip $($(PKGV)_CFLAGS))
+__embtk_pkg_cppflags		= $(strip $($(PKGV)_CPPFLAGS))
+__embtk_pkg_cxxflags		= $(strip $($(PKGV)_CXXFLAGS))
 
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
 __embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
@@ -295,6 +298,7 @@ define __embtk_print_configure_opts
 	$(call embtk_echo_blue,"Configure options:$(strip $(1))") | sed "s/\(--\)/\n\t\1/g")
 	echo
 endef
+
 define embtk_configure_pkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
 		$(call embtk_pinfo,"Configure $(__embtk_pkg_package)..."))
@@ -311,10 +315,10 @@ define embtk_configure_pkg
 	STRIP=$(TARGETSTRIP)							\
 	OBJDUMP=$(TARGETOBJDUMP)						\
 	OBJCOPY=$(TARGETOBJCOPY)						\
-	CFLAGS="$(TARGET_CFLAGS)"						\
-	CXXFLAGS="$(TARGET_CXXFLAGS)"						\
+	CFLAGS="$(TARGET_CFLAGS) $(__embtk_pkg_cflags)"				\
+	CXXFLAGS="$(TARGET_CXXFLAGS) $(__embtk_pkg_cxxflags)"			\
 	LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"	\
-	CPPFLAGS="-I$(embtk_sysroot)/usr/include"				\
+	CPPFLAGS="-I$(embtk_sysroot)/usr/include $(__embtk_pkg_cppflags)"	\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
 	PKG_CONFIG_PATH="$(EMBTK_PKG_CONFIG_PATH)"				\
 	PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"				\
