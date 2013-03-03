@@ -29,6 +29,9 @@ source packages/development/libbsd/libbsd.kconfig
 #libevent
 source packages/development/libevent/libevent.kconfig
 
+# gtest
+source packages/development/gtest/gtest.kconfig
+
 #libnih
 source packages/development/libnih/libnih.kconfig
 

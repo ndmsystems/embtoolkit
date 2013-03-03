@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,32 +17,32 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
+# \file         gtest.kconfig
+# \brief	gtest.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \date         March 2013
 ################################################################################
 
-#libevent
-include packages/development/libbsd/libbsd.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBBSD) += libbsd_install
+config EMBTK_HAVE_GTEST
+	bool "Have gtest"
+	help
+	 Google C++ Testing Framework.
 
-#libevent
-include packages/development/libevent/libevent.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBEVENT) += libevent_install
+choice
+	prompt "gtest version you wish"
+	depends on EMBTK_HAVE_GTEST
+	help
+	 Here you can choose which version of gtest you want to use.
 
-# gtest
-include packages/development/gtest/gtest.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GTEST) += gtest_install
+	config  EMBTK_GTEST_VERSION_EMBTK_110
+		bool "gtest-embtk-1.1.0"
+endchoice
 
-#libnih
-include packages/development/libnih/libnih.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBNIH) += libnih_install
+config EMBTK_GTEST_VERSION_STRING
+	string
+	default "embtk-1.1.0"		if EMBTK_GTEST_VERSION_EMBTK_110
 
-#libsigsegv
-include packages/development/libsigsegv/libsigsegv.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBSIGSEGV) += libsigsegv_install
-
-# libunwind
-include packages/development/libunwind/libunwind.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBUNWIND) += libunwind_install
+config EMBTK_GTEST_NEED_PATCH
+	bool
+config EMBTK_GTEST_NEED_AUTORECONF
+	bool
