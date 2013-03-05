@@ -80,14 +80,17 @@ override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS)
 define __lib_install
 	$(if $(SYSROOT),
 		mkdir -p $(SYSROOT)/usr
-		mkdir -p $(SYSROOT)/usr/$(LIBDIR))
+		mkdir -p $(SYSROOT)/usr/$(LIBDIR)
+		cp lib$(SANCOMMON).a $(SYSROOT)/usr/$(LIBDIR)
+		cp lib$(ASAN).a $(SYSROOT)/usr/$(LIBDIR)
+		cp lib$(UBSAN).a $(SYSROOT)/usr/$(LIBDIR))
 endef
 
 all: lib$(SANCOMMON).a lib$(ASAN).a lib$(UBSAN).a
 	$(Q)true
 
 install: all
-	$(Q)true
+	$(Q)$(__lib_install)
 
 lib$(SANCOMMON).a: $(SANCOMMON_OBJS)
 	$(Q)$(AR) $(ARFLAGS) $@ $(SANCOMMON_OBJS)
