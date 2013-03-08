@@ -45,6 +45,15 @@ define embtk_beforeinstall_compiler-rt
 					$(COMPILER-RT_BUILD_DIR)/Makefile
 endef
 
+__embtk_libasan			:= libclang_rt.asan-$(__embtk_clang_arch).a
+__embtk_libubsan		:= libclang_rt.ubsan-$(__embtk_clang_arch).a
+define embtk_postinstall_compiler-rt
+	echo "GROUP(libasan.a libsanitizer_common.a)"				\
+				> $(__embtk_clang_libdir)/$(__embtk_libasan)
+	echo "GROUP(libubsan.a libsanitizer_common.a)"				\
+				> $(__embtk_clang_libdir)/$(__embtk_libubsan)
+endef
+
 define embtk_cleanup_compiler-rt
 	if [ -e $(LIBCXXRT_BUILD_DIR)/Makefile ]; then				\
 		$(MAKE) -C $(COMPILER-RT_BUILD_DIR) clean;			\
