@@ -50,6 +50,9 @@ LLVM_CONFIGURE_OPTS	+= --with-binutils-include=$(__embtk_binutils_inc)
 
 LLVM_PREFIX		:= $(embtk_tools)
 
+__embtk_clang_rversion	= $(shell ls $(embtk_tools)/lib/clang/)
+embtk_clang_libdir	= $(embtk_tools)/lib/clang/$(__embtk_clang_rversion)/lib/linux
+
 define embtk_install_llvm
 	$(call __embtk_install_hostpkg,llvm)
 endef
@@ -65,6 +68,8 @@ define embtk_postinstall_llvm
 	cd $(embtk_tools)/lib/bfd-plugins;					\
 		ln -sf ../libLTO.so libLTO.so;					\
 		ln -sf ../LLVMgold.so LLVMgold.so
+	mkdir -p $(embtk_tools)/lib/clang/$(__embtk_clang_rversion)/lib
+	mkdir -p $(embtk_tools)/lib/clang/$(__embtk_clang_rversion)/lib/linux
 endef
 
 define embtk_cleanup_llvm
