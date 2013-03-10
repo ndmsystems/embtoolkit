@@ -72,9 +72,14 @@ CLANG_UBSAN		:= clang_rt.ubsan-$(ARCH_NAME)
 CC			?= gcc
 CXX			?= g++
 
+SANCOMMON_CFLAGS	:= -W -Wall -fPIC -fno-builtin -fno-exceptions
+SANCOMMON_CFLAGS	+= -fomit-frame-pointer -funwind-tables
+SANCOMMON_CFLAGS	+= -fvisibility=hidden
+
 ARFLAGS			:= rvs
 
-override CFLAGS		:= -W -Wall -fno-exceptions $(CFLAGS) -I$(rootsrc)/include -I$(rootsrc)/lib
+override CFLAGS		:=  $(CFLAGS) $(SANCOMMON_CFLAGS)
+override CPPFLAGS	:= -I$(rootsrc)/include -I$(rootsrc)/lib
 override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS)
 
 define __lib_install
@@ -105,10 +110,10 @@ lib$(UBSAN).a: $(UBSAN_OBJS)
 	$(Q)$(AR) $(ARFLAGS) $@ $(UBSAN_OBJS)
 
 %.o: %.c
-	$(Q)$(CC) -fno-builtin -fPIC -DPIC $(CFLAGS) -c $< -o $@
+	$(Q)$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 %.o: %.cc
-	$(Q)$(CXX) -fno-builtin -fPIC -DPIC $(CXXFLAGS) -c $< -o $@
+	$(Q)$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 clean:
 	$(Q)rm -rf $(SANCOMMON_OBJS) $(ASAN_OBJS) $(TSAN_OBJS) $(UBSAN_OBJS)
