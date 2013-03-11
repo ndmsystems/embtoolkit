@@ -53,6 +53,7 @@ LLVM_PREFIX		:= $(embtk_tools)
 __embtk_clang_arch	:= $(firstword $(subst -, ,$(STRICT_GNU_TARGET)))
 __embtk_clang_rversion	= $(shell ls $(embtk_tools)/lib/clang/)
 __embtk_clang_libdir	= $(embtk_tools)/lib/clang/$(__embtk_clang_rversion)/lib/linux
+__embtk_clang_incdir	= $(embtk_tools)/lib/clang/$(__embtk_clang_rversion)/include
 
 define embtk_install_llvm
 	$(call __embtk_install_hostpkg,llvm)
