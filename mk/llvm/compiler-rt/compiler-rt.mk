@@ -52,6 +52,8 @@ define embtk_postinstall_compiler-rt
 				> $(__embtk_clang_libdir)/$(__embtk_libasan)
 	echo "GROUP(libubsan.a libsanitizer_common.a)"				\
 				> $(__embtk_clang_libdir)/$(__embtk_libubsan)
+	cp -R $(call __embtk_pkg_srcdir,compiler-rt)/include/*			\
+				$(__embtk_clang_incdir)/
 endef
 
 define embtk_cleanup_compiler-rt
