@@ -57,7 +57,7 @@ define embtk_postinstall_compiler-rt
 endef
 
 define embtk_cleanup_compiler-rt
-	if [ -e $(LIBCXXRT_BUILD_DIR)/Makefile ]; then				\
+	if [ -e $(COMPILER-RT_BUILD_DIR)/Makefile ]; then			\
 		$(MAKE) -C $(COMPILER-RT_BUILD_DIR) clean;			\
 	fi
 	rm -rf $(COMPILER-RT_BUILD_DIR)/Makefile
