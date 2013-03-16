@@ -30,7 +30,6 @@ LIBDIR			?= lib
 CXX_SRCS		:= $(wildcard $(rootsrc)/src/*.cpp)
 
 OBJS			:= $(patsubst %.cpp,%.o,$(CXX_SRCS))
-POBJS			:= $(patsubst %.o,%.po,$(OBJS))
 SOBJS			:= $(patsubst %.o,%.So,$(OBJS))
 
 __HEADERS		:= $(wildcard $(rootsrc)/include/*)
@@ -45,27 +44,16 @@ SHAREDLIB_NAME		:= lib$(SHAREDLIB).so.1
 SHAREDLIB_LINK		:= lib$(SHAREDLIB).so
 SHAREDLIB_SONAME	:= $(SHAREDLIB_NAME)
 
-override LDFLAGS	:= $(LDFLAGS) -shared
-override LDFLAGS	+= -Wl,--warn-shared-textrel -Wl,-x
+override LDFLAGS	:= $(LDFLAGS) -shared -Wl,--warn-shared-textrel -Wl,-x
 
-override CFLAGS		:= $(CFLAGS) -I$(rootsrc)/include
-override CFLAGS		+= -DLIBCXXRT -DNO_CATGETS_SUPPORT
 override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS) -nostdinc++ -std=c++0x
+override CPPFLAGS	:= $(CPPFLAGS) -I$(rootsrc)/include
+override CPPFLAGS	+= -DLIBCXXRT -DNO_CATGETS_SUPPORT
 
 LDADD			:= $(shell $(CC) --print-file-name=libcxxrt_pic.a)
 LDADD			+= -lpthread -lrt -ldl -lc
 
 ARADD			:= $(shell $(CC) --print-file-name=libcxxrt.a)
-ARADD			+= $(shell $(CC) --print-file-name=libpthread.a)
-ARADD			+= $(shell $(CC) --print-file-name=librt.a)
-
-ARADD_P			:= $(shell $(CC) --print-file-name=libcxxrt_p.a)
-#ARADD_P		+= $(shell $(CC) --print-file-name=libpthread_p.a)
-#ARADD_P		+= $(shell $(CC) --print-file-name=librt_p.a)
-
-ARADD_PIC		:= $(shell $(CC) --print-file-name=libcxxrt_pic.a)
-#ARADD_PIC		+= $(shell $(CC) --print-file-name=libpthread.a)
-#ARADD_PIC		+= $(shell $(CC) --print-file-name=librt.a)
 
 ARFLAGS			:= rvs
 
@@ -83,12 +71,10 @@ define __lib_install
 		mkdir -p $(SYSROOT)/$(LIBDIR)
 		cp -d $(SHAREDLIB_NAME) $(SYSROOT)/$(LIBDIR)/
 		cp -d $(SHAREDLIB_LINK) $(SYSROOT)/$(LIBDIR)/
-		cp lib$(LIB).a $(SYSROOT)/$(LIBDIR)/
-		cp lib$(LIB)_pic.a $(SYSROOT)/$(LIBDIR)/
-		cp lib$(LIB)_p.a $(SYSROOT)/$(LIBDIR)/)
+		cp lib$(LIB).a $(SYSROOT)/$(LIBDIR)/)
 endef
 
-all: lib$(LIB).a lib$(LIB)_p.a lib$(LIB)_pic.a $(SHAREDLIB_NAME)
+all: lib$(LIB).a $(SHAREDLIB_NAME)
 	$(Q)true
 
 install: all
@@ -96,30 +82,24 @@ install: all
 	$(Q)true
 
 $(SHAREDLIB_NAME): $(SOBJS)
-	$(Q)$(CC) $(LDFLAGS) -o $@					\
+	$(Q)$(CC) $(LDFLAGS) -o $@	\
 			-Wl,-soname,$(SHAREDLIB_SONAME) $(SOBJS) $(LDADD)
 	$(Q)ln -fs $(SHAREDLIB_NAME) $(SHAREDLIB_LINK)
 
 lib$(LIB).a: $(OBJS)
-	$(Q)$(AR) $(ARFLAGS) $@ $(OBJS)
-
-lib$(LIB)_p.a: $(POBJS)
-	$(Q)$(AR) $(ARFLAGS) $@ $(POBJS)
-
-lib$(LIB)_pic.a: $(SOBJS)
-	$(Q)$(AR) $(ARFLAGS) $@ $(SOBJS)
+	$(Q)rm -rf libcxxrt-objs
+	$(Q)mkdir -p libcxxrt-objs
+	$(Q)cd libcxxrt-objs; $(AR) -x $(ARADD)
+	$(Q)$(AR) $(ARFLAGS) $@ $(OBJS) libcxxrt-objs/*.o
+	$(Q)rm -rf libcxxrt-objs
 
 %.o: %.cpp
-	$(Q)$(CXX) $(CXXFLAGS) -c $< -o $@
-
-%.po: %.cpp
-	$(Q)$(CXX) $(CXXFLAGS) -pg -c $< -o $@
+	$(Q)$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 %.So: %.cpp
-	$(Q)$(CXX) -fPIC -DPIC $(CXXFLAGS) -c $< -o $@
+	$(Q)$(CXX) -fPIC $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 clean:
-	$(Q)rm -rf $(OBJS) $(SOBJS) $(POBJS)
-	$(Q)rm -rf lib$(LIB).a lib$(LIB)_p.a lib$(LIB)_pic.a
+	$(Q)rm -rf $(OBJS) $(SOBJS) lib$(LIB).a
 	$(Q)rm -rf $(SHAREDLIB_NAME) $(SHAREDLIB_LINK)
 
