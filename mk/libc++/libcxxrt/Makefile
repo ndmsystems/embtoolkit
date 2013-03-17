@@ -62,9 +62,9 @@ define __lib_install
 		mkdir -p $(SYSROOT)/usr/include
 		mkdir -p $(SYSROOT)/usr/include/c++
 		mkdir -p $(SYSROOT)/usr/include/c++/v1
-		cp lib$(LIB).a $(SYSROOT)/$(LIBDIR)/
-		cp lib$(LIB)_pic.a $(SYSROOT)/$(LIBDIR)/
-		cp lib$(LIB)_p.a $(SYSROOT)/$(LIBDIR)/
+		cp lib$(LIB).a $(SYSROOT)/usr/$(LIBDIR)/
+		cp lib$(LIB)_pic.a $(SYSROOT)/usr/$(LIBDIR)/
+		cp lib$(LIB)_p.a $(SYSROOT)/usr/$(LIBDIR)/
 		cp $(HEADERS) $(SYSROOT)/usr/include/c++/v1/)
 endef
 
