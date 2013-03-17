@@ -70,6 +70,32 @@ define embtk_install_gcc3
 	$(call __embtk_install_hostpkg,gcc3)
 endef
 
+define __embtk_postinstall_libgcc
+	$(if $(CONFIG_EMBTK_32BITS_FS),						\
+		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.so*		\
+					$(embtk_sysroot)/lib/ &&		\
+		cp $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.a			\
+					$(embtk_sysroot)/usr/lib/)		\
+	$(if $(CONFIG_EMBTK_64BITS_FS),						\
+		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.so*		\
+					$(embtk_sysroot)/lib/ &&		\
+		cp $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.a		\
+					$(embtk_sysroot)/usr/lib/)		\
+	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
+		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.so*		\
+					$(embtk_sysroot)/lib32/ &&		\
+		cp $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.a		\
+					$(embtk_sysroot)/usr/lib32/)
+endef
+
+define __embtk_postinstall_gcc2_gcc3
+	$(__embtk_postinstall_libgcc) &&					\
+	$(if $(CONFIG_EMBTK_64BITS_FS),						\
+		$(if $(CONFIG_EMBTK_CLIB_UCLIBC),				\
+			cd $(embtk_sysroot)/lib/;				\
+				ln -sf ld-uClibc.so.0 ld64-uClibc.so.0), true)
+endef
+
 #
 # GCC first stage
 #
@@ -127,26 +153,10 @@ GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 CONFIG_EMBTK_GCC2_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC2_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
-define __embtk_postinstall_gcc2
-	($(if $(CONFIG_EMBTK_32BITS_FS),					\
-		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.so*		\
-						$(embtk_sysroot)/lib/ &&)	\
-	$(if $(CONFIG_EMBTK_64BITS_FS),						\
-		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.so*		\
-						$(embtk_sysroot)/lib/ &&)	\
-	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
-		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.so*		\
-						$(embtk_sysroot)/lib32/ &&)	\
-	$(if $(CONFIG_EMBTK_64BITS_FS),						\
-		$(if $(CONFIG_EMBTK_CLIB_UCLIBC),				\
-			cd $(embtk_sysroot)/lib/;				\
-				ln -sf ld-uClibc.so.0 ld64-uClibc.so.0 &&))	\
-	touch $(GCC2_BUILD_DIR)/.gcc.embtk.postinstall)
-endef
 define embtk_postinstall_gcc2
 	$(if $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),
 		[ -e $(GCC2_BUILD_DIR)/.gcc.embtk.postinstall ] ||		\
-					$(__embtk_postinstall_gcc2),true)
+					$(__embtk_postinstall_gcc2_gcc3),true)
 endef
 
 #
@@ -179,25 +189,10 @@ GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 CONFIG_EMBTK_GCC3_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC3_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
-define __embtk_postinstall_gcc3
-	($(if $(CONFIG_EMBTK_32BITS_FS),					\
-		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.so*		\
-						$(embtk_sysroot)/lib/ &&)	\
-	$(if $(CONFIG_EMBTK_64BITS_FS),						\
-		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.so*		\
-						$(embtk_sysroot)/lib/ &&)	\
-	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
-		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.so*		\
-						$(embtk_sysroot)/lib32/ &&)	\
-	$(if $(CONFIG_EMBTK_64BITS_FS),						\
-		$(if $(CONFIG_EMBTK_CLIB_UCLIBC),				\
-			cd $(embtk_sysroot)/lib/;				\
-				ln -sf ld-uClibc.so.0 ld64-uClibc.so.0 &&))	\
-	touch $(GCC3_BUILD_DIR)/.gcc3_post_install)
-endef
 define embtk_postinstall_gcc3
 	[ -e $(GCC3_BUILD_DIR)/.gcc3_post_install ] ||				\
-						$(__embtk_postinstall_gcc3)
+		$(__embtk_postinstall_gcc2_gcc3) &&				\
+		touch $(GCC3_BUILD_DIR)/.gcc3_post_install
 endef
 
 #
