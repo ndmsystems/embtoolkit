@@ -73,19 +73,19 @@ endef
 define __embtk_postinstall_libgcc
 	$(if $(CONFIG_EMBTK_32BITS_FS),						\
 		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.so*		\
-					$(embtk_sysroot)/lib/ &&		\
+			$(embtk_sysroot)/lib/ &&				\
 		cp $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.a			\
-					$(embtk_sysroot)/usr/lib/)		\
+			$(embtk_sysroot)/usr/lib/ 2>/dev/null || true)		\
 	$(if $(CONFIG_EMBTK_64BITS_FS),						\
 		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.so*		\
-					$(embtk_sysroot)/lib/ &&		\
+			$(embtk_sysroot)/lib/ &&				\
 		cp $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.a		\
-					$(embtk_sysroot)/usr/lib/)		\
+			$(embtk_sysroot)/usr/lib/  2>/dev/null || true)		\
 	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),				\
 		cp -d $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.so*		\
-					$(embtk_sysroot)/lib32/ &&		\
+			$(embtk_sysroot)/lib32/ &&				\
 		cp $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.a		\
-					$(embtk_sysroot)/usr/lib32/)
+			$(embtk_sysroot)/usr/lib32/  2>/dev/null || true)
 endef
 
 define __embtk_postinstall_gcc2_gcc3
