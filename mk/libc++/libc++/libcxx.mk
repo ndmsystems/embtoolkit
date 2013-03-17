@@ -51,6 +51,18 @@ define embtk_beforeinstall_libcxx
 					$(LIBCXX_BUILD_DIR)/Makefile
 endef
 
+__embtk_staticlibcxx := $(embtk_sysroot)/usr/$(LIBDIR)/libc++.a
+define __embtk_postinstall_staticlibcxx
+	(echo "GROUP(libc++_nonshared.a libcxxrt.a libpthread.a librt.a libdl.a)" \
+					> $(__embtk_staticlibcxx))
+endef
+
+define embtk_postinstall_libcxx
+	[ -e $(LIBCXX_BUILD_DIR)/.libcxx.embtk.postinstall ] ||			\
+	$(__embtk_postinstall_staticlibcxx) &&					\
+	touch $(LIBCXX_BUILD_DIR)/.libcxx.embtk.postinstall
+endef
+
 define embtk_cleanup_libcxx
 	if [ -e $(LIBCXXRT_BUILD_DIR)/Makefile ]; then				\
 		$(MAKE) -C $(LIBCXXRT_BUILD_DIR) clean;				\
