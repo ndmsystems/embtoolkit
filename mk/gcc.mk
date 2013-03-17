@@ -154,9 +154,11 @@ CONFIG_EMBTK_GCC2_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC2_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
 define embtk_postinstall_gcc2
-	$(if $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),
+	$(if $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),				\
 		[ -e $(GCC2_BUILD_DIR)/.gcc.embtk.postinstall ] ||		\
-					$(__embtk_postinstall_gcc2_gcc3),true)
+			$(__embtk_postinstall_gcc2_gcc3) && 			\
+			touch $(GCC2_BUILD_DIR)/.gcc.embtk.postinstall,		\
+		true)
 endef
 
 #
