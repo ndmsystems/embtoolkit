@@ -46,14 +46,12 @@ SHAREDLIB_SONAME	:= $(SHAREDLIB_NAME)
 
 override LDFLAGS	:= $(LDFLAGS) -shared -Wl,--warn-shared-textrel -Wl,-x
 
-override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS) -nostdinc++ -std=c++0x
+override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS) -nostdinc++ -std=c++11
 override CPPFLAGS	:= $(CPPFLAGS) -I$(rootsrc)/include
 override CPPFLAGS	+= -DLIBCXXRT -DNO_CATGETS_SUPPORT
 
 LDADD			:= $(shell $(CC) --print-file-name=libcxxrt_pic.a)
 LDADD			+= -lpthread -lrt -ldl -lc
-
-ARADD			:= $(shell $(CC) --print-file-name=libcxxrt.a)
 
 ARFLAGS			:= rvs
 
@@ -71,10 +69,10 @@ define __lib_install
 		mkdir -p $(SYSROOT)/$(LIBDIR)
 		cp -d $(SHAREDLIB_NAME) $(SYSROOT)/$(LIBDIR)/
 		cp -d $(SHAREDLIB_LINK) $(SYSROOT)/$(LIBDIR)/
-		cp lib$(LIB).a $(SYSROOT)/usr/$(LIBDIR)/)
+		cp lib$(LIB)_nonshared.a $(SYSROOT)/usr/$(LIBDIR)/)
 endef
 
-all: lib$(LIB).a $(SHAREDLIB_NAME)
+all: lib$(LIB)_nonshared.a $(SHAREDLIB_NAME)
 	$(Q)true
 
 install: all
@@ -86,12 +84,8 @@ $(SHAREDLIB_NAME): $(SOBJS)
 			-Wl,-soname,$(SHAREDLIB_SONAME) $(SOBJS) $(LDADD)
 	$(Q)ln -fs $(SHAREDLIB_NAME) $(SHAREDLIB_LINK)
 
-lib$(LIB).a: $(OBJS)
-	$(Q)rm -rf libcxxrt-objs
-	$(Q)mkdir -p libcxxrt-objs
-	$(Q)cd libcxxrt-objs; $(AR) -x $(ARADD)
-	$(Q)$(AR) $(ARFLAGS) $@ $(OBJS) libcxxrt-objs/*.o
-	$(Q)rm -rf libcxxrt-objs
+lib$(LIB)_nonshared.a: $(OBJS)
+	$(Q)$(AR) $(ARFLAGS) $@ $(OBJS)
 
 %.o: %.cpp
 	$(Q)$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
