@@ -71,7 +71,7 @@ define __lib_install
 		mkdir -p $(SYSROOT)/$(LIBDIR)
 		cp -d $(SHAREDLIB_NAME) $(SYSROOT)/$(LIBDIR)/
 		cp -d $(SHAREDLIB_LINK) $(SYSROOT)/$(LIBDIR)/
-		cp lib$(LIB).a $(SYSROOT)/$(LIBDIR)/)
+		cp lib$(LIB).a $(SYSROOT)/usr/$(LIBDIR)/)
 endef
 
 all: lib$(LIB).a $(SHAREDLIB_NAME)
