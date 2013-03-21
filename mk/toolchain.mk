@@ -78,6 +78,13 @@ __clang_cflags		:= -Qunused-arguments -fcolor-diagnostics
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),$(__clang_cflags))
 __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN),$(__clang_cflags))
 
+#
+# FIXME: remove this when c++ exceptions handling fully supported in ARM
+#
+ifeq ($(TARGETCXX),$(TARGETGCXX))
+__TARGET_CFLAGS		:= $(filter-out $(__clang_cflags),$(__TARGET_CFLAGS))
+endif
+
 TARGET_CFLAGS		:= $(strip $(__TARGET_CFLAGS))
 TARGET_CXXFLAGS		:= $(filter-out $(__clang_cflags),$(TARGET_CFLAGS))
 CROSS_COMPILE		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-
