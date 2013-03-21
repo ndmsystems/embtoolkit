@@ -32,6 +32,12 @@ GTEST_BUILD_DIR		:= $(embtk_pkgb)/gtest-$(GTEST_VERSION)
 GTEST_EMBTK_DIR		:= $(EMBTK_ROOT)/packages/development/gtest
 
 __embtk_gtest_cflags	:= $(TARGET_CFLAGS)
+#
+# FIXME: remove this when c++ exceptions handling fully supported in ARM
+#
+ifeq ($(TARGETCXX),$(TARGETGCXX))
+__embtk_gtest_cflags	:= $(filter-out $(__clang_cflags),$(__embtk_gtest_cflags))
+endif
 
 GTEST_MAKE_OPTS	:= CC="$(TARGETCC)" CXX="$(TARGETCXX)"
 GTEST_MAKE_OPTS	+= CFLAGS="$(__embtk_gtest_cflags)" LIBDIR="$(LIBDIR)"
