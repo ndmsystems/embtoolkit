@@ -245,9 +245,9 @@ define __embtk_pkg_gen_dotkconfig_f
 	$(call __embtk_pkg_printkconfigs,$(1))					\
 			> $(__embtk_pkg_dotkconfig_f) 2>/dev/null		\
 	$(if $(__embtk_pkg_deps),						\
-		;$(foreach dep,$(call __embtk_pkg_depspkgv,$(1)),		\
+		$(foreach dep,$(call __embtk_pkg_depspkgv,$(1)),;		\
 			$(call __embtk_pkg_printkconfigs,$(dep))		\
-					>> $(__embtk_pkg_dotkconfig_f); true))
+					>> $(__embtk_pkg_dotkconfig_f)))
 endef
 
 #
