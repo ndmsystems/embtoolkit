@@ -187,7 +187,7 @@ __embtk_pkg_dotdecompressed_f	= $(__embtk_pkg_srcdir)/.$(__embtk_pkg_name).embtk
 __embtk_pkg_dotpatched_f	= $(__embtk_pkg_srcdir)/.$(__embtk_pkg_name).embtk.patched
 __embtk_pkg_dotconfigured_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.configured
 __embtk_pkg_dotinstalled_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.installed
-__embtk_pkg_dotpkgkconfig_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.kconfig
+__embtk_pkg_dotkconfig_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.kconfig
 
 # Some useful macros about packages
 __embtk_rootfs_pkgs-y		= $(patsubst %_install,%,$(ROOTFS_COMPONENTS-y))
@@ -239,24 +239,35 @@ __embtk_pkg_printkconfigs	=						\
 	$(EMBTK_DOTCONFIG)
 
 #
+# A macro to generate a package __embtk_pkg_dotkconfig_f file.
+#
+define __embtk_pkg_gen_dotkconfig_f
+	$(call __embtk_pkg_printkconfigs,$(1))					\
+			> $(__embtk_pkg_dotkconfig_f) 2>/dev/null		\
+	$(if $(__embtk_pkg_deps),						\
+		;$(foreach dep,$(call __embtk_pkg_depspkgv,$(1)),		\
+			$(call __embtk_pkg_printkconfigs,$(dep))		\
+					>> $(__embtk_pkg_dotkconfig_f); true))
+endef
+
+#
 # A macro to test if a package is already installed.
 # It returns y if installed and nothing if not.
 #
 __installed_f		= $(__embtk_pkg_dotinstalled_f)
-__pkgkconfig_f		= $(__embtk_pkg_dotpkgkconfig_f)
-__pkgkconfig_f_old	= $(__embtk_pkg_dotpkgkconfig_f).old
-__installed-y-makecmd	= $(MAKE) -i __embtk_$(1)_printmetakconfigs
+__pkgkconfig_f		= $(__embtk_pkg_dotkconfig_f)
+__pkgkconfig_f_old	= $(__embtk_pkg_dotkconfig_f).old
 __embtk_pkg_installed-y = $(shell						\
 	if [ -e $(__installed_f) ] && [ -e $(__pkgkconfig_f) ]; then		\
 		cp $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
-		$(__installed-y-makecmd) > $(__pkgkconfig_f);			\
+		$(call __embtk_pkg_gen_dotkconfig_f,$(1));			\
 		cmp -s $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
 		if [ "x$$?" = "x0" ]; then					\
 			echo y;							\
 		fi;								\
 	else									\
 		mkdir -p $(__embtk_pkg_builddir);				\
-		$(__installed-y-makecmd) > $(__pkgkconfig_f);			\
+		$(call __embtk_pkg_gen_dotkconfig_f,$(1));			\
 	fi;)
 
 #

@@ -212,8 +212,7 @@ define ___embtk_toolchain_decompress
 	mkdir -p $(GCC3_BUILD_DIR)
 	touch $(call __embtk_pkg_dotinstalled_f,gcc3)
 	touch $(GCC3_BUILD_DIR)/.gcc3_post_install
-	$(MAKE) __embtk_gcc3_printmetakconfigs > 				\
-					$(call __embtk_pkg_dotpkgkconfig_f,gcc3)
+	$(call __embtk_pkg_gen_dotkconfig_f,gcc3)
 endef
 
 define __embtk_toolchain_decompress
