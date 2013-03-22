@@ -773,11 +773,3 @@ define embtk_cleanup_pkg
 		$(call embtk_pinfo,"Cleanup $(__embtk_pkg_name)..."))
 	$(Q)$(call __embtk_cleanup_pkg,$(1))
 endef
-
-#
-# Implicit rule to print a package and its dependencies kconfig entries.
-#
-__embtk_%_printmetakconfigs:
-	$(call __embtk_pkg_printkconfigs,$*)
-	$(foreach dep,$(call __embtk_pkg_depspkgv,$*),				\
-		$(call __embtk_pkg_printkconfigs,$(dep));)
