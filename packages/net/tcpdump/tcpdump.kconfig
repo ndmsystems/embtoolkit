@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_TCPDUMP
 	bool "Have tcpdump"
+	select EMBTK_HAVE_LIBPCAP
 	help
 	 Tcpdump uses libpcap, a system-independent interface for user-level
 	 packet capture.
