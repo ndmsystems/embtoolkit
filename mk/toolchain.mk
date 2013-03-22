@@ -159,22 +159,23 @@ TOOLCHAIN_PRE_DEPS-y	:= ccache_install $(AUTOTOOLS_INSTALL)
 TOOLCHAIN_PRE_DEPS-y	+= $(if $(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST),	\
 				gperf_host_install)
 
-__gcc3_toolchain-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)	:= gcc3_install
-__gcc3_toolchain-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)	:= gcc3_install
+__gcc3_toolchain-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= gcc3_install
+__gcc3_toolchain-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)		:= gcc3_install
 # FIXME: When libc++ will be used with clang/llvm toolchain, remove this
-__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_CPP)	:= gcc3_install
+__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_CPP)		:= gcc3_install
 
-__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC) := gcc3_install
-__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP) := gcc3_install
+__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC) 	:= gcc3_install
+__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP)	:= gcc3_install
 
-__llvm_toolchain-$(CONFIG_EMTK_HAVE_LLVM) := llvm_install
+__llvm_toolchain-$(CONFIG_EMTK_HAVE_LLVM)			:= llvm_install
+__llvm_compiler-rt-$(CONFIG_EMTK_HAVE_COMPILER-RT)		:= compiler-rt_install
 
 TOOLCHAIN_DEPS		:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
 TOOLCHAIN_DEPS		+= $(__llvm_toolchain-y)
 TOOLCHAIN_DEPS		+= gcc1_install $(embtk_clib)_headers_install
 TOOLCHAIN_DEPS		+= gcc2_install $(embtk_clib)_install
-TOOLCHAIN_DEPS		+= $(__gcc3_toolchain-y)
+TOOLCHAIN_DEPS		+= $(__gcc3_toolchain-y) $(__llvm_compiler-rt-y)
 
 TOOLCHAIN_ADDONS_NAME		:= toolchain-addons
 TOOLCHAIN_ADDONS_DEPS		:= $(TOOLCHAIN_ADDONS-y)
