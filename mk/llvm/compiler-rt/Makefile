@@ -79,7 +79,7 @@ SANCOMMON_CFLAGS	+= -fvisibility=hidden
 ARFLAGS			:= rvs
 
 override CFLAGS		:=  $(CFLAGS) $(SANCOMMON_CFLAGS)
-override CPPFLAGS	:= -I$(rootsrc)/include -I$(rootsrc)/lib
+override CPPFLAGS	:= $(CPPFLAGS) -I$(rootsrc)/include -I$(rootsrc)/lib
 override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS)
 
 define __lib_install
