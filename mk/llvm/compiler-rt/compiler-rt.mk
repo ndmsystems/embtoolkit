@@ -31,7 +31,15 @@ COMPILER-RT_PACKAGE	:= compiler-rt-$(COMPILER-RT_VERSION).src.tar.gz
 COMPILER-RT_SRC_DIR	:= $(embtk_toolsb)/compiler-rt-$(COMPILER-RT_VERSION).src
 COMPILER-RT_BUILD_DIR	:= $(call __embtk_pkg_srcdir,compiler-rt)
 
-COMPILER-RT_MAKE_OPTS	:= CC="$(TARGETCC)" CFLAGS="$(TARGET_CFLAGS)"
+__embtk_compiler-rt_cflags	:= $(TARGET_CFLAGS)
+#
+# FIXME: remove this when c++ exceptions handling fully supported in ARM
+#
+ifeq ($(TARGETCXX),$(TARGETGCXX))
+__embtk_compiler-rt_cflags	:= $(filter-out $(__clang_cflags),$(__embtk_compiler-rt_cflags))
+endif
+
+COMPILER-RT_MAKE_OPTS	:= CC="$(TARGETCC)" CFLAGS="$(__embtk_compiler-rt_cflags)"
 COMPILER-RT_MAKE_OPTS	+= CXX="$(TARGETCXX)" LIBDIR="$(LIBDIR)"
 COMPILER-RT_MAKE_OPTS	+= AR=$(TARGETAR) RANLIB=$(TARGETRANLIB)
 COMPILER-RT_MAKE_OPTS	+= SYSROOT="$(embtk_sysroot)"

@@ -73,7 +73,7 @@ CC			?= gcc
 CXX			?= g++
 
 SANCOMMON_CFLAGS	:= -W -Wall -fPIC -fno-builtin -fno-exceptions
-SANCOMMON_CFLAGS	+= -fomit-frame-pointer -funwind-tables -fno-rtti
+SANCOMMON_CFLAGS	+= -fomit-frame-pointer -funwind-tables
 SANCOMMON_CFLAGS	+= -fvisibility=hidden
 
 ARFLAGS			:= rvs
