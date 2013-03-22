@@ -25,10 +25,11 @@
 
 COMPILER-RT_NAME	:= compiler-rt
 COMPILER-RT_VERSION	:= $(call embtk_get_pkgversion,compiler-rt)
-COMPILER-RT_SITE	:= http://llvm.org/releases/$(COMPILER-RT_VERSION)
-COMPILER-RT_GIT_SITE	:= http://llvm.org/git/compiler-rt.git
-COMPILER-RT_PACKAGE	:= compiler-rt-$(COMPILER-RT_VERSION).src.tar.gz
-COMPILER-RT_SRC_DIR	:= $(embtk_toolsb)/compiler-rt-$(COMPILER-RT_VERSION).src
+COMPILER-RT_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+#COMPILER-RT_GIT_SITE	:= http://llvm.org/git/compiler-rt.git
+COMPILER-RT_GIT_SITE	:= git://www.embtoolkit.org/compiler-rt.git
+COMPILER-RT_PACKAGE	:= compiler-rt-$(COMPILER-RT_VERSION).tar.bz2
+COMPILER-RT_SRC_DIR	:= $(embtk_toolsb)/compiler-rt-$(COMPILER-RT_VERSION)
 COMPILER-RT_BUILD_DIR	:= $(call __embtk_pkg_srcdir,compiler-rt)
 
 __embtk_compiler-rt_cflags	:= $(TARGET_CFLAGS)

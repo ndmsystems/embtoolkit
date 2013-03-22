@@ -121,6 +121,7 @@ comment "------------------------------------------"
 source kconfig/llvm/clang-llvm.kconfig
 source kconfig/llvm/llvm.kconfig
 source kconfig/llvm/clang.kconfig
+source kconfig/llvm/compiler-rt.kconfig
 endif
 
 comment "------------------------------------------"
