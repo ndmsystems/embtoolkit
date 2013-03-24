@@ -74,7 +74,7 @@ embtk_kconfig_basic:
 clean: toolchain_clean rmallpath
 	$(Q)$(__embtk_kconfig_clean)
 	$(Q)rm -rf .config kbuild.log .fakeroot*
-	$(Q)rm -rf $(embtk_generated)/toolchain*/*.embtk.decompressed
+	$(Q)rm -rf $(wildcard $(embtk_generated)/toolchain-*/.*.embtk.decompressed)
 
 distclean: clean
 	$(Q)rm -rf dl/* src/*.git src/*.svn .config.old
