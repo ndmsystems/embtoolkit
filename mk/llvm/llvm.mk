@@ -44,7 +44,7 @@ LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_CPU) $(LLVM_WITH_ABI)
 LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_FLOAT) $(LLVM_WITH_FPU)
 LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_HASHSTYLE)
 LLVM_CONFIGURE_OPTS	+= --with-default-sysroot=$(embtk_sysroot)
-LLVM_CONFIGURE_OPTS	+= --enable-optimized
+LLVM_CONFIGURE_OPTS	+= --enable-optimized --disable-jit
 LLVM_CONFIGURE_OPTS	+= --with-bug-report-url=$(EMBTK_BUGURL)
 LLVM_CONFIGURE_OPTS	+= --with-binutils-include=$(__embtk_binutils_inc)
 
