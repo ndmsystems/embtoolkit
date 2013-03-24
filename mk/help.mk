@@ -72,9 +72,9 @@ successful_build:
 	$(call embtk_echo_blue,"| Toolchain build log |")
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"$(GNU_TARGET) ($(EMBTK_MCU_FLAG)) toolchain successfully generated.")
-	$(call embtk_echo_blue,"Generated tools (compilers, Binutils, etc.) are located in:")
+	$(call embtk_echo_blue,"Generated tools (compilers, Binutils, etc.) are in:")
 	$(call embtk_echo_blue,"    $(embtk_tools)/bin")
-	$(call embtk_echo_blue,"The packaged toolchain (for external use) is located in:")
+	$(call embtk_echo_blue,"The packaged toolchain (for external use) is in:")
 	$(call embtk_echo_blue,"    $(embtk_generated)")
 	@echo
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
