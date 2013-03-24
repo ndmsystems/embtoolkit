@@ -213,10 +213,6 @@ define ___embtk_toolchain_decompress
 	cd $(EMBTK_ROOT) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 	$(__embtk_toolchain_mkinitdirs)
 	$(MAKE) $(TOOLCHAIN_PRE_DEPS-y)
-	mkdir -p $(GCC3_BUILD_DIR)
-	touch $(call __embtk_pkg_dotinstalled_f,gcc3)
-	touch $(GCC3_BUILD_DIR)/.gcc3_post_install
-	$(call __embtk_pkg_gen_dotkconfig_f,gcc3)
 endef
 
 define __embtk_toolchain_decompress

@@ -74,6 +74,7 @@ embtk_kconfig_basic:
 clean: toolchain_clean rmallpath
 	$(Q)$(__embtk_kconfig_clean)
 	$(Q)rm -rf .config kbuild.log .fakeroot*
+	$(Q)rm -rf $(embtk_generated)/toolchain*/*.embtk.decompressed
 
 distclean: clean
 	$(Q)rm -rf dl/* src/*.git src/*.svn .config.old
@@ -127,7 +128,7 @@ define __embtk_mk_startbuild
 endef
 
 startbuild:
-	$(if $(call __embtk_mk_pathexist,$(call __embtk_pkg_dotinstalled_f,gcc3)), \
+	$(if $(wildcard $(call __embtk_pkg_dotdecompressed_f,toolchain)),	\
 		$(__embtk_mk_pwarning_restartbuild),$(__embtk_mk_startbuild))
 
 define __embtk_mk_initsysrootdirs
