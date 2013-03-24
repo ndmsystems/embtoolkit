@@ -152,6 +152,11 @@ define __embtk_mk_inittoolsdirs
 	mkdir -p $(embtk_toolsb)
 endef
 
+define __embtk_mk_initpkgdirs
+	mkdir -p $(EMBTK_ROOT)/build
+	mkdir -p $(embtk_pkgb)
+endef
+
 define __embtk_mk_inithosttoolsdirs
 	mkdir -p $(embtk_htools)
 	mkdir -p $(embtk_htools)/usr

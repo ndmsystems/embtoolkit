@@ -265,9 +265,6 @@ __embtk_pkg_installed-y = $(shell						\
 		if [ "x$$?" = "x0" ]; then					\
 			echo y;							\
 		fi;								\
-	else									\
-		mkdir -p $(__embtk_pkg_builddir);				\
-		$(call __embtk_pkg_gen_dotkconfig_f,$(1));			\
 	fi;)
 
 #
@@ -420,6 +417,7 @@ define __embtk_install_pkg_make
 	$(call embtk_pinfo,"Compile/Install $(__embtk_pkg_name)-$(__embtk_pkg_version) in your root filesystem...")
 	$(call embtk_download_pkg,$(1))
 	$(call embtk_decompress_pkg,$(1))
+	mkdir -p $(__embtk_pkg_builddir)
 	$(if $(embtk_beforeinstall_$(pkgv)),$(embtk_beforeinstall_$(pkgv)))
 	$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_pkg,$(1)))
 	$(if $(__embtk_pkg_makedirs),						\
@@ -432,12 +430,14 @@ define __embtk_install_pkg_make
 		$(call __embtk_fix_libtool_files)
 		$(call __embtk_fix_pkgconfig_files))
 	touch $(__embtk_pkg_dotinstalled_f)
+	$(call __embtk_pkg_gen_dotkconfig_f,$(1))
 endef
 define __embtk_install_hostpkg_make
 	$(Q)$(if $(__embtk_pkg_deps),$(MAKE) $(__embtk_pkg_deps))
 	$(call embtk_pinfo,"Compile/Install $(__embtk_pkg_name)-$(__embtk_pkg_version) for host...")
 	$(call embtk_download_pkg,$(1))
 	$(call embtk_decompress_pkg,$(1))
+	mkdir -p $(__embtk_pkg_builddir)
 	$(if $(embtk_beforeinstall_$(pkgv)),$(embtk_beforeinstall_$(pkgv)))
 	$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_hostpkg,$(1)))
 	$(if $(__embtk_pkg_makedirs),						\
@@ -446,7 +446,8 @@ define __embtk_install_hostpkg_make
 	$(if $(__embtk_pkg_makedirs),						\
 		$(__embtk_multi_make_hostinstall),				\
 		$(__embtk_single_make_hostinstall))
-	$(Q)touch $(__embtk_pkg_dotinstalled_f)
+	touch $(__embtk_pkg_dotinstalled_f)
+	$(call __embtk_pkg_gen_dotkconfig_f,$(1))
 endef
 
 #

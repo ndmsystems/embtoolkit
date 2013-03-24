@@ -103,6 +103,7 @@ define __embtk_install_eglibc_headers
 	cp $(EGLIBC_HEADERS_BUILD_DIR)/csu/crtn.o $(embtk_sysroot)/usr/$(LIBDIR)/
 	$(__embtk_install_eglibc_dummy)
 	touch $(call __embtk_pkg_dotinstalled_f,eglibc_headers)
+	$(call __embtk_pkg_gen_dotkconfig_f,eglibc_headers)
 endef
 
 define embtk_install_eglibc_headers
@@ -140,6 +141,7 @@ define __embtk_install_eglibc
 	PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR)		\
 		install_root=$(embtk_sysroot) install
 	touch $(call __embtk_pkg_dotinstalled_f,eglibc)
+	$(call __embtk_pkg_gen_dotkconfig_f,eglibc)
 endef
 
 define embtk_install_eglibc

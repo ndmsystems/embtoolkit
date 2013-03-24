@@ -185,9 +185,13 @@ TOOLCHAIN_ADDONS_SRC_DIR	:= $(TOOLCHAIN_BUILD_DIR)/.addons
 -include mk/$(embtk_clib).mk
 
 define __embtk_toolchain_mkinitdirs
+	mkdir -p $(embtk_generated)
+	mkdir -p $(TOOLCHAIN_DIR)
+	mkdir -p $(TOOLCHAIN_ADDONS_BUILD_DIR)
 	$(__embtk_mk_initsysrootdirs)
 	$(__embtk_mk_inittoolsdirs)
 	$(__embtk_mk_inithosttoolsdirs)
+	$(__embtk_mk_initpkgdirs)
 endef
 
 define __embtk_toolchain_symlinktools
@@ -217,7 +221,7 @@ endef
 
 define __embtk_toolchain_decompress
 	$(if $(call __embtk_mk_pathnotexist,$(call __embtk_pkg_dotdecompressed_f,toolchain)),
-		$(call embtk_pinfo,"Decompressing $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
+		$(call embtk_pinfo,"Decompressing cached $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
 		$(___embtk_toolchain_decompress)
 		touch $(call __embtk_pkg_dotdecompressed_f,toolchain))
 endef
@@ -229,39 +233,49 @@ __embtk_toolchain_addons-n	= $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-))
 __embtk_toolchain_built_msg	= $(call embtk_pinfo,"New $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain successfully built!")
 __embtk_toolchain_building_msg	= $(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) CORE toolchain - please wait...")
 __embtk_toolsaddons_build_msg	= $(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain ADDONS - please wait...")
-define __embtk_toolchain_build
+
+define __embtk_toolchain_build_core
+	$(__embtk_toolchain_building_msg)
+	rm -rf $(call __embtk_pkg_dotinstalled_f,toolchain)
+	rm -rf $(call __embtk_pkg_dotdecompressed_f,toolchain)
+	$(foreach dep,$(__embtk_toolchain_deps-y),
+				$(call embtk_cleanup_pkg,$(dep)))
+	$(foreach pkg,$(__embtk_rootfs_pkgs-y),
+				$(call embtk_cleanup_pkg,$(pkg)))
+	rm -rf $(embtk_sysroot) $(embtk_tools)
+	$(__embtk_toolchain_mkinitdirs)
+	$(foreach pdep,$(__embtk_toolchain_predeps-y),
+				$(call embtk_install_xpkg,$(pdep)))
+	$(foreach dep,$(__embtk_toolchain_deps-y),
+				$(call embtk_install_xpkg,$(dep)))
+	touch $(call __embtk_pkg_dotinstalled_f,toolchain)
+	$(call __embtk_pkg_gen_dotkconfig_f,toolchain)
+endef
+
+define __embtk_toolchain_build_addons
+	$(__embtk_toolsaddons_build_msg)
+	rm -rf $(call __embtk_pkg_dotinstalled_f,toolchain_addons)
+	rm -rf $(call __embtk_pkg_dotdecompressed_f,toolchain_addons)
+	$(__embtk_toolchain_mkinitdirs)
+	$(if $(findstring core,$(1)),,$(___embtk_toolchain_decompress))
 	$(if $(findstring core,$(1)),
-		$(__embtk_toolchain_building_msg)
-		rm -rf $(call __embtk_pkg_dotinstalled_f,toolchain)
-		rm -rf $(call __embtk_pkg_dotdecompressed_f,toolchain)
-		$(foreach dep,$(__embtk_toolchain_deps-y),
-					$(call embtk_cleanup_pkg,$(dep)))
-		$(foreach pkg,$(__embtk_rootfs_pkgs-y),
-					$(call embtk_cleanup_pkg,$(pkg)))
-		rm -rf $(embtk_sysroot) $(embtk_tools)
-		$(__embtk_toolchain_mkinitdirs)
+		$(foreach addon,$(__embtk_toolchain_addons-y),
+				$(call embtk_cleanup_pkg,$(addon))))
+	$(if $(TOOLCHAIN_ADDONS-),
+		$(foreach addon,$(__embtk_toolchain_addons-n),
+				$(call embtk_cleanup_pkg,$(addon))))
+	$(if $(TOOLCHAIN_ADDONS-y),
 		$(foreach pdep,$(__embtk_toolchain_predeps-y),
-					$(call embtk_install_xpkg,$(pdep)))
-		$(foreach dep,$(__embtk_toolchain_deps-y),
-					$(call embtk_install_xpkg,$(dep)))
-		touch $(call __embtk_pkg_dotinstalled_f,toolchain))
-	$(if $(findstring addons,$(1)),
-		$(__embtk_toolsaddons_build_msg)
-		rm -rf $(call __embtk_pkg_dotinstalled_f,toolchain_addons)
-		rm -rf $(call __embtk_pkg_dotdecompressed_f,toolchain_addons)
-		$(if $(findstring core,$(1)),,$(___embtk_toolchain_decompress))
-		$(if $(findstring core,$(1)),
-			$(foreach addon,$(__embtk_toolchain_addons-y),
-					$(call embtk_cleanup_pkg,$(addon))))
-		$(if $(TOOLCHAIN_ADDONS-),
-			$(foreach addon,$(__embtk_toolchain_addons-n),
-					$(call embtk_cleanup_pkg,$(addon))))
-		$(if $(TOOLCHAIN_ADDONS-y),
-			$(foreach pdep,$(__embtk_toolchain_predeps-y),
-					$(call embtk_install_xpkg,$(pdep)))
-			$(foreach addon,$(__embtk_toolchain_addons-y),
-					$(call embtk_install_xpkg,$(addon))))
-		touch $(call __embtk_pkg_dotinstalled_f,toolchain_addons))
+				$(call embtk_install_xpkg,$(pdep)))
+		$(foreach addon,$(__embtk_toolchain_addons-y),
+				$(call embtk_install_xpkg,$(addon))))
+	touch $(call __embtk_pkg_dotinstalled_f,toolchain_addons)
+	$(call __embtk_pkg_gen_dotkconfig_f,toolchain_addons)
+endef
+
+define __embtk_toolchain_build
+	$(if $(findstring core,$(1)),$(__embtk_toolchain_build_core))
+	$(if $(findstring addons,$(1)),$(__embtk_toolchain_build_addons))
 	$(if $(findstring core,$(1))$(findstring addons,$(1)),
 		$(__embtk_toolchain_symlinktools)
 		$(__embtk_toolchain_compress)
