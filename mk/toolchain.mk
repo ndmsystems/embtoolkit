@@ -283,13 +283,13 @@ endef
 
 define __embtk_toolchain_core_inst-y
 	 $(and $(call __embtk_pkg_installed-y,toolchain),
-	 $(call __embtk_mk_pathexist,$(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)))
+		$(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)))
 endef
 __embtk_toolchain_core_inst = $(if $(strip $(__embtk_toolchain_core_inst-y)),,core)
 
 define __embtk_toolchain_addons_inst-y
 	$(and $(call __embtk_pkg_installed-y,toolchain_addons),
-	$(call __embtk_mk_pathexist,$(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)))
+		$(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)))
 endef
 __embtk_toolchain_addons_inst = $(if $(strip $(__embtk_toolchain_addons_inst-y)),,addons)
 
