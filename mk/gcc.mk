@@ -50,13 +50,9 @@ GCC_CXA_ATEXIT-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP) := --enable-__cxa_atexi
 #
 # Final GCC extra configure options
 #
-GCC3_CONFIGURE_EXTRA_OPTIONS += $(if $(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),		\
-						--enable-java-home)
-# Disable tls when creating uClibc toolchain with linuxthreads
-ifeq ($(CONFIG_EMBTK_CLIB_UCLIBC),y)
-GCC3_CONFIGURE_EXTRA_OPTIONS += \
-	$(if $(CONFIG_KEMBTK_UCLIBC_UCLIBC_HAS_THREADS_NATIVE),,--disable-tls)
-endif
+__gcc3_extra_opts-y :=
+__gcc3_extra_opts-$(CONFIG_EMBTK_GCC_LANGUAGE_JAVA) += --enable-java-home
+__gcc3_extra_opts-$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD) += --disable-tls
 
 define embtk_install_gcc1
 	$(call __embtk_install_hostpkg,gcc1)
@@ -186,7 +182,7 @@ GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--disable-libquadmath							\
 	--enable-languages=$(GCC_LANGUAGES) $(GCC_CXA_ATEXIT-y)			\
 	--enable-threads --enable-shared --enable-target-optspace		\
-	$(GCC3_CONFIGURE_EXTRA_OPTIONS)
+	$(__gcc3_extra_opts-y)
 
 CONFIG_EMBTK_GCC3_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC3_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
