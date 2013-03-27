@@ -67,6 +67,10 @@ endef
 # FIXME: On some systems, gnu make is named gmake (ie FreeBSD)
 #
 __embtk_make_cmd	:= make
+ifeq ($(findstring freebsd,$(HOST_ARCH)),freebsd)
+__embtk_make_cmd	:= gmake
+endif
+
 __embtk_make_env	:=  $(if $(V),MAKEFLAGS="",MAKEFLAGS="--no-print-directory --silent")
 MAKE			:= $(__embtk_make_env) $(__embtk_make_cmd)
 
