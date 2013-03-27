@@ -53,6 +53,7 @@ GCC_CXA_ATEXIT-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP) := --enable-__cxa_atexi
 __gcc3_extra_opts-y :=
 __gcc3_extra_opts-$(CONFIG_EMBTK_GCC_LANGUAGE_JAVA) += --enable-java-home
 __gcc3_extra_opts-$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD) += --disable-tls
+GCC3_CONFIGURE_EXTRA_OPTIONS += $(__gcc3_extra_opts-y)
 
 define embtk_install_gcc1
 	$(call __embtk_install_hostpkg,gcc1)
@@ -182,7 +183,7 @@ GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--disable-libquadmath							\
 	--enable-languages=$(GCC_LANGUAGES) $(GCC_CXA_ATEXIT-y)			\
 	--enable-threads --enable-shared --enable-target-optspace		\
-	$(__gcc3_extra_opts-y)
+	$(GCC3_CONFIGURE_EXTRA_OPTIONS)
 
 CONFIG_EMBTK_GCC3_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC3_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
