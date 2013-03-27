@@ -58,7 +58,7 @@ CONFIG_SHELL		:=							\
 SHELL			:= $(CONFIG_SHELL)
 export SHELL CONFIG_SHELL
 
-HOST_ARCH		:= `$(CONFIG_SHELL) $(EMBTK_ROOT)/scripts/config.guess`
+HOST_ARCH		:= $(shell $(CONFIG_SHELL) $(EMBTK_ROOT)/scripts/config.guess)
 HOST_BUILD		:= $(HOST_ARCH)
 export HOST_ARCH HOST_BUILD
 
