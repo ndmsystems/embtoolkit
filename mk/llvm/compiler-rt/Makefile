@@ -75,6 +75,12 @@ CXX			?= g++
 SANCOMMON_CFLAGS	:= -W -Wall -fPIC -fno-builtin -fno-exceptions
 SANCOMMON_CFLAGS	+= -fomit-frame-pointer -funwind-tables
 SANCOMMON_CFLAGS	+= -fvisibility=hidden
+#
+# FIXME: remove this avec full merge of compiler-rt/llvm/clang-3.3.
+# The copy of compiler-rt shipped with EmbToolkit was in the middle of
+# compiler-rt-3.3 development.
+#
+SANCOMMON_CFLAGS	+= -DASAN_ALLOCATOR_VERSION=1
 
 ARFLAGS			:= rvs
 
