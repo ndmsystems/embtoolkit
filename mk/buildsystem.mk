@@ -31,7 +31,7 @@ EMBTK_GENERATED 	:= $(EMBTK_ROOT)/generated
 ROOTFS			:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 HOSTTOOLS		:= $(EMBTK_ROOT)/host-tools-$(EMBTK_MCU_FLAG)
 DOWNLOAD_DIR		:= $(patsubst %/,%,$(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR))))
-J			:= -j$(CONFIG_EMBTK_NUMBER_BUILD_JOBS)
+J			:= -j$(or $(CONFIG_EMBTK_NUMBER_BUILD_JOBS),1)
 
 #
 # New version of above variables names. The old names are scheduled for removal
