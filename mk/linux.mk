@@ -55,9 +55,6 @@ define __embtk_install_linux_headers
 		headers_install ARCH=$(LINUX_ARCH)				\
 		CROSS_COMPILE=$(STRICT_GNU_TARGET)-				\
 		INSTALL_HDR_PATH=$(embtk_sysroot)/usr
-	$(MAKE) -C $(LINUX_BUILD_DIR) distclean
-	$(MAKE) -C $(LINUX_BUILD_DIR) headers_install				\
-		INSTALL_HDR_PATH=$(embtk_htools)/usr
 	touch $(call __embtk_pkg_dotinstalled_f,linux_headers)
 endef
 define embtk_install_linux_headers
@@ -71,7 +68,6 @@ endef
 define embtk_cleanup_linux
 	if [ -d $(LINUX_BUILD_DIR) ] &&						\
 		[ -e $(call __embtk_pkg_dotinstalled_f,linux_headers) ]; then	\
-		$(MAKE) -C $(LINUX_BUILD_DIR) distclean;			\
 		rm -rf $(call __embtk_pkg_dotinstalled_f,linux_headers);	\
 	fi
 endef
