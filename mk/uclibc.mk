@@ -103,7 +103,6 @@ define __embtk_install_uclibc_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) silentoldconfig
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
-	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
 	$(__embtk_install_uclibc_dummy)
 	touch $(call __embtk_pkg_dotinstalled_f,uclibc_headers)
 endef
