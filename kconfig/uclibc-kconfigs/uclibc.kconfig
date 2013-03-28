@@ -320,13 +320,11 @@ choice
 
 config KEMBTK_UCLIBC_HAS_NO_THREADS
 	bool "none"
-	depends on !EMBTK_LLVM_ONLY_TOOLCHAIN && !EMBTK_GCC_AND_LLVM_TOOLCHAIN
 	help
 	  Disable thread support.
 
 config KEMBTK_UCLIBC_LINUXTHREADS_OLD
 	bool "older (stable) version of linuxthreads"
-	depends on !EMBTK_LLVM_ONLY_TOOLCHAIN && !EMBTK_GCC_AND_LLVM_TOOLCHAIN
 	# linuxthreads and linuxthreads.old need nanosleep()
 	select KEMBTK_UCLIBC_UCLIBC_HAS_REALTIME
 	help
