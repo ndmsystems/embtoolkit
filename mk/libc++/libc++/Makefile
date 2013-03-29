@@ -67,8 +67,7 @@ define __lib_install
 		chmod 755 $(SYSROOT)/usr/include/c++/v1/ext
 		chmod 644 $(SYSROOT)/usr/include/c++/v1/ext/*
 		mkdir -p $(SYSROOT)/$(LIBDIR)
-		cp -d $(SHAREDLIB_NAME) $(SYSROOT)/$(LIBDIR)/
-		cp -d $(SHAREDLIB_LINK) $(SYSROOT)/$(LIBDIR)/
+		tar -cf - *.so* | tar -xf - -C $(SYSROOT)/$(LIBDIR)/
 		cp lib$(LIB)_nonshared.a $(SYSROOT)/usr/$(LIBDIR)/)
 endef
 

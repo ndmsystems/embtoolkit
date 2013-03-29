@@ -117,13 +117,17 @@ define __embtk_rootfs_components_install
 	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),
 		cd $(embtk_rootfs); ln -s lib lib64
 		cd $(embtk_rootfs)/usr; ln -s lib lib64)
-	-cp -d $(embtk_sysroot)/lib/*.so* $(embtk_rootfs)/lib/
-	-cp -d $(embtk_sysroot)/usr/lib/*.so* $(embtk_rootfs)/usr/lib/
+	-(cd $(embtk_sysroot)/lib/ && tar -cf - *.so*)				\
+		| tar -xf - -C $(embtk_rootfs)/lib/
+	-(cd $(embtk_sysroot)/usr/lib/ && tar -cf - *.so*)			\
+		| tar -xf - -C $(embtk_rootfs)/usr/lib/
 	rm -rf $(embtk_rootfs)/lib/libgcc_s.so
 	rm -rf $(embtk_rootfs)/usr/lib/libc.so
 	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),
-		-cp -d $(embtk_sysroot)/lib32/*.so* $(embtk_rootfs)/lib32/
-		-cp -d $(embtk_sysroot)/usr/lib32/*.so* $(embtk_rootfs)/usr/lib32/
+		-(cd $(embtk_sysroot)/lib32/ && tar -cf - *.so*)		\
+			| tar -xf - -C $(embtk_rootfs)/lib32/
+		-(cd $(embtk_sysroot)/usr/lib32/ && tar -cf - *.so*)		\
+			| tar -xf - -C $(embtk_rootfs)/usr/lib32/
 		rm -rf $(embtk_rootfs)/lib32/libgcc_s.so
 		rm -rf $(embtk_rootfs)/usr/lib32/libc.so)
 	-cp -R $(embtk_sysroot)/bin/* $(embtk_rootfs)/bin/ >/dev/null 2>/dev/null
