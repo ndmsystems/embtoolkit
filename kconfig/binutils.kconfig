@@ -39,9 +39,6 @@ choice
 	config EMBTK_BINUTILS_VERSION_2_22
 		bool "binutils-2.22"
 		select EMBTK_BINUTILS_NEED_PATCH
-	config EMBTK_BINUTILS_VERSION_2_21_1
-		bool "binutils-2.21.1"
-		select EMBTK_BINUTILS_NEED_PATCH
 	config EMBTK_BINUTILS_VERSION_GIT
 		bool "Use binutils git repository"
 		help
@@ -77,8 +74,6 @@ config EMBTK_BINUTILS_VERSION_STRING
 	string
 	default "2.23.2"	if EMBTK_BINUTILS_VERSION_2_23_2
 	default "2.22"		if EMBTK_BINUTILS_VERSION_2_22
-	default "2.21.1"	if EMBTK_BINUTILS_VERSION_2_21_1
-
 
 config EMBTK_BINUTILS_NEED_PATCH
 	bool
