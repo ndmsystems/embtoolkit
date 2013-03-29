@@ -31,7 +31,7 @@ config EMBTK_HAVE_FAKEROOT
 
 config EMBTK_FAKEROOT_VERSION_STRING
 	string
-	default "1.12.4"
+	default "1.18.4"
 
 config EMBTK_FAKEROOT_NEED_PATCH
 	bool
