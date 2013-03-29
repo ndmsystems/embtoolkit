@@ -30,3 +30,14 @@ embtk_clib-$(CONFIG_EMBTK_CLIB_EGLIBC)	:= eglibc
 embtk_clib-$(CONFIG_EMBTK_CLIB_UCLIBC)	:= uclibc
 embtk_clib				:= $(or $(embtk_clib-y),invalid-clib)
 embtk_clib_version			:= $(call embtk_get_pkgversion,$(embtk_clib))
+
+#
+# Host development machine info
+#
+ifeq ($(findstring linux,$(HOST_ARCH)),linux)
+embtk_buildhost_os			:= linux
+else ifeq ($(findstring freebsd,$(HOST_ARCH)),freebsd)
+embtk_buildhost_os			:= freebsd
+else
+embtk_buildhost_os			:= unknown-host-os
+endif
