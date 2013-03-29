@@ -85,8 +85,8 @@ __lt_path		= $(addprefix $(embtk_sysroot)/usr/,$(or $(1),$(LIBDIR)))
 define __embtk_fix_libtool_files
 	__lt_las=$$(find $(__lt_path) -name '*.la');				\
 	for la in $$__lt_las; do						\
-		sed -i "s;$(__ltlibdirold);$(__ltlibdirnew);" $$la;		\
-		sed -i "s;$(__lt_usr/lib);$(__lt_sysroot/usr/lib);g" $$la;	\
+		sed -i '' "s;$(__ltlibdirold);$(__ltlibdirnew);" $$la;		\
+		sed -i '' "s;$(__lt_usr/lib);$(__lt_sysroot/usr/lib);g" $$la;	\
 	done
 endef
 libtool_files_adapt:
@@ -113,8 +113,8 @@ define __embtk_kill_lt_rpath
 	LOCAL_LT_FILES=`find -type f -name libtool`; \
 	for i in $$LOCAL_LT_FILES; \
 	do \
-	sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $$i; \
-	sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $$i; \
+	sed -i '' 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $$i; \
+	sed -i '' 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $$i; \
 	done
 endef
 
