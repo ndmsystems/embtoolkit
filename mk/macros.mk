@@ -24,20 +24,20 @@
 ################################################################################
 
 # Embtoolkit colors
-__embtk_color_red	= "[1;31m"
-__embtk_color_green	= "[1;32m"
-__embtk_color_yellow	= "[0;33m"
-__embtk_color_blue	= "[1;34m"
-__embtk_no_color	= "[0m"
+__embtk_color_red	= "\033[1;31m"
+__embtk_color_green	= "\033[1;32m"
+__embtk_color_yellow	= "\033[0;33m"
+__embtk_color_blue	= "\033[1;34m"
+__embtk_no_color	= "\033[0m"
 
 #
 # echo colored text
 # usage: $(call embtk_echo_{color},msg)
 #
-embtk_echo_red		= echo -e $(__embtk_color_red)$(1)$(__embtk_no_color)
-embtk_echo_green	= echo -e $(__embtk_color_green)$(1)$(__embtk_no_color)
-embtk_echo_yellow	= echo -e $(__embtk_color_yellow)$(1)$(__embtk_no_color)
-embtk_echo_blue		= echo -e $(__embtk_color_blue)$(1)$(__embtk_no_color)
+embtk_echo_red		= printf $(__embtk_color_red)$(1)$(__embtk_no_color)"\n"
+embtk_echo_green	= printf $(__embtk_color_green)$(1)$(__embtk_no_color)"\n"
+embtk_echo_yellow	= printf $(__embtk_color_yellow)$(1)$(__embtk_no_color)"\n"
+embtk_echo_blue		= printf $(__embtk_color_blue)$(1)$(__embtk_no_color)"\n"
 
 __embtk_msg_h = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
@@ -75,9 +75,9 @@ __embtk_mk_pathnotexist = $(shell test -e $(1) || echo y)
 __embtk_mk_uquote = $(subst ",,$(strip $(1)))
 
 # Macro to print messages
-embtk_pwarning	= $(call embtk_echo_yellow,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ WARNING: $(1)\\n$(__embtk_msg_h)")
-embtk_perror	= $(call embtk_echo_red,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ ERROR: $(1)\\n$(__embtk_msg_h)")
-embtk_pinfo	= $(call embtk_echo_blue,"$(__embtk_msg_h)\n~~ EmbToolkit ~~ $(1)\n$(__embtk_msg_h)")
+embtk_pwarning	= $(call embtk_echo_yellow,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ WARNING: $(call __embtk_mk_uquote,$(1))\\n$(__embtk_msg_h)")
+embtk_perror	= $(call embtk_echo_red,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ ERROR: $(call __embtk_mk_uquote,$(1))\\n$(__embtk_msg_h)")
+embtk_pinfo	= $(call embtk_echo_blue,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ $(call __embtk_mk_uquote,$(1))\\n$(__embtk_msg_h)")
 
 # Macros for emmpty, space and comma
 embtk_empty	:=
