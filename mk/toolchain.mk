@@ -220,6 +220,7 @@ define __embtk_toolchain_compress
 endef
 
 define ___embtk_toolchain_decompress
+	rm -rf $(embtk_sysroot) $(embtk_tools)
 	cd $(EMBTK_ROOT) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 	$(__embtk_toolchain_mkinitdirs)
 	$(MAKE) $(TOOLCHAIN_PRE_DEPS-y)
@@ -263,7 +264,12 @@ define __embtk_toolchain_build_addons
 	rm -rf $(call __embtk_pkg_dotinstalled_f,toolchain_addons)
 	rm -rf $(call __embtk_pkg_dotdecompressed_f,toolchain_addons)
 	$(__embtk_toolchain_mkinitdirs)
-	$(if $(findstring core,$(1)),,$(___embtk_toolchain_decompress))
+	$(if $(findstring core,$(1)),,
+		$(foreach rootfspkg,$(__embtk_rootfs_pkgs-y),
+				$(call embtk_cleanup_pkg,$(rootfspkg)))
+		$(foreach rootfsnpkg,$(__embtk_rootfs_pkgs-n),
+				$(call embtk_cleanup_pkg,$(rootfsnpkg)))
+		$(___embtk_toolchain_decompress))
 	$(if $(findstring core,$(1)),
 		$(foreach addon,$(__embtk_toolchain_addons-y),
 				$(call embtk_cleanup_pkg,$(addon))))
@@ -276,7 +282,9 @@ define __embtk_toolchain_build_addons
 		$(foreach addon,$(__embtk_toolchain_addons-y),
 				$(call embtk_install_xpkg,$(addon))))
 	touch $(call __embtk_pkg_dotinstalled_f,toolchain_addons)
-	$(call __embtk_pkg_gen_dotkconfig_f,toolchain_addons)
+	$(if $(TOOLCHAIN_ADDONS-y),
+		$(call __embtk_pkg_gen_dotkconfig_f,toolchain_addons),
+		touch $(call __embtk_pkg_dotkconfig_f,toolchain_addons))
 endef
 
 define __embtk_toolchain_build
@@ -284,6 +292,7 @@ define __embtk_toolchain_build
 	$(if $(findstring addons,$(1)),$(__embtk_toolchain_build_addons))
 	$(if $(findstring core,$(1))$(findstring addons,$(1)),
 		$(__embtk_toolchain_symlinktools)
+		$(call embtk_pinfo,"Packaging new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
 		$(__embtk_toolchain_compress)
 		touch $(call __embtk_pkg_dotdecompressed_f,toolchain)
 		touch $(call __embtk_pkg_dotdecompressed_f,toolchain_addons)
