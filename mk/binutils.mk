@@ -38,6 +38,12 @@ BINUTILS_CONFIGURE_OPTS	+= --target=$(STRICT_GNU_TARGET)
 
 BINUTILS_PREFIX		:= $(embtk_tools)
 
+define embtk_beforeinstall_binutils
+	$(if $(findstring freebsd,$(embtk_buildhost_os)),
+		sed -i "" 's/-ldl//g' $(call __embtk_pkg_srcdir,binutils)/bfd/Makefile.in
+		sed -i "" 's/-ldl//g' $(call __embtk_pkg_srcdir,binutils)/gold/Makefile.in)
+endef
+
 define embtk_install_binutils
 	$(call __embtk_install_hostpkg,binutils)
 endef
