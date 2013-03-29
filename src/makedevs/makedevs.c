@@ -30,7 +30,7 @@
 #include <stdarg.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#ifndef __APPLE__
+#if !defined(__APPLE__) && !defined(__FreeBSD__)
 #include <sys/sysmacros.h>     /* major() and minor() */
 #endif
 
