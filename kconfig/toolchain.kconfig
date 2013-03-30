@@ -167,6 +167,9 @@ source kconfig/libtool.kconfig
 source kconfig/autoconf.kconfig
 source kconfig/automake.kconfig
 
+# GNU sed
+source kconfig/gsed.kconfig
+
 #
 # pkgconf
 #

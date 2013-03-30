@@ -142,6 +142,9 @@ include mk/m4.mk
 AUTOTOOLS_INSTALL	:= m4_install libtool_install autoconf_install
 AUTOTOOLS_INSTALL	+= automake_install
 
+# GNU sed
+include mk/gsed.mk
+
 # Toolchain internals
 __xtools_compiler-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= clangllvm-$(LLVM_VERSION)
 __xtools_compiler-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= clangllvm-$(LLVM_VERSION)
