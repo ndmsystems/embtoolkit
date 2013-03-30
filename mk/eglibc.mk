@@ -119,7 +119,7 @@ endef
 
 define embtk_configure_eglibc
 	cd $(EGLIBC_BUILD_DIR);							\
-	BUILD_CC=$(HOSTCC_CACHED)						\
+	BUILD_CC="$(hostcc_cached) -I/usr/local/include"			\
 	CFLAGS="$(embtk_eglibc_cflags)"						\
 	CC=$(TARGETGCC_CACHED)							\
 	CXX=$(TARGETGCXX_CACHED)						\
