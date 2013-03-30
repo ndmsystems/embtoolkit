@@ -144,6 +144,7 @@ AUTOTOOLS_INSTALL	+= automake_install
 
 # GNU sed
 include mk/gsed.mk
+__toolchain_gsed-y	:= $(if $(findstring freebsd,$(embtk_buildhost_os)),gsed_install)
 
 # Toolchain internals
 __xtools_compiler-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= clangllvm-$(LLVM_VERSION)
@@ -159,6 +160,7 @@ TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
 TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)
 
 TOOLCHAIN_PRE_DEPS-y	:= ccache_install $(AUTOTOOLS_INSTALL)
+TOOLCHAIN_PRE_DEPS-y	+= $(__toolchain_gsed-y)
 TOOLCHAIN_PRE_DEPS-y	+= $(if $(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST),	\
 				gperf_host_install)
 
