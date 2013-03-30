@@ -93,6 +93,8 @@ endef
 define __embtk_install_eglibc_headers
 	$(call embtk_pinfo,"Installing eglibc headers...")
 	$(call embtk_download_pkg,eglibc)
+	[ -e $(EGLIBC_SRC_DIR)/libc/ports ] ||					\
+		ln -sf $(EGLIBC_SRC_DIR)/ports $(EGLIBC_SRC_DIR)/libc/ports
 	$(embtk_parse_eglibc_optgroups)
 	$(embtk_configure_eglibc_headers)
 	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) install-headers			\
