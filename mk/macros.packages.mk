@@ -310,9 +310,11 @@ if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_AUTORECONF)" = "xy" ]; then			\
 	$(AUTORECONF) --install -f;						\
 fi
 endef
+
+__embtk_parse_configure_opts = $(subst $(embtk_space),"\\n\\t",$(strip $(1)))
 define __embtk_print_configure_opts
 	$(if $(strip $(1)),
-	$(call embtk_echo_blue,"Configure options:$(strip $(1))") | sed "s/\(--\)/\\n\\t\1/g")
+	$(call embtk_echo_blue,"Configure options:\\n\\t$(__embtk_parse_configure_opts)"))
 	echo
 endef
 
