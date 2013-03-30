@@ -249,6 +249,8 @@ define __embtk_toolchain_build_core
 				$(call embtk_cleanup_pkg,$(dep)))
 	$(foreach pkg,$(__embtk_rootfs_pkgs-y),
 				$(call embtk_cleanup_pkg,$(pkg)))
+	$(foreach pkgn,$(__embtk_rootfs_pkgs-n),
+				$(call embtk_cleanup_pkg,$(pkgn)))
 	rm -rf $(embtk_sysroot) $(embtk_tools)
 	$(__embtk_toolchain_mkinitdirs)
 	$(foreach pdep,$(__embtk_toolchain_predeps-y),
