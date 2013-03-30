@@ -599,7 +599,9 @@ define __embtk_download_pkg_patches
 endef
 
 define __embtk_download_pkg_exitfailure
-	($(call embtk_perror,"On $(notdir $(1)) download!");rm -rf $(1);exit 1)
+	($(call embtk_perror,"On $(notdir $(1)) download!");			\
+		$(if $(notdir $(1)),rm -rf $(1);)				\
+		exit 1)
 endef
 
 define __embtk_svncheckout_pkg
