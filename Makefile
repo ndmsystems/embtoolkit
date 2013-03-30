@@ -53,7 +53,11 @@ CONFIG_SHELL		:=							\
 	if [ -x "$$BASH" ]; then						\
 		echo $$BASH;							\
 	else									\
-		if [ -x /bin/bash ]; then echo /bin/bash; else echo sh; fi;	\
+		if [ -x /bin/bash ]; then					\
+			echo /bin/bash;						\
+		else								\
+			echo /bin/sh;						\
+		fi;								\
 	fi)
 SHELL			:= $(CONFIG_SHELL)
 export SHELL CONFIG_SHELL
