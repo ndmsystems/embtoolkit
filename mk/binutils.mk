@@ -40,8 +40,12 @@ BINUTILS_PREFIX		:= $(embtk_tools)
 
 define embtk_beforeinstall_binutils
 	$(if $(findstring freebsd,$(embtk_buildhost_os)),
-		sed -i "" 's/-ldl//g' $(call __embtk_pkg_srcdir,binutils)/bfd/Makefile.in
-		sed -i "" 's/-ldl//g' $(call __embtk_pkg_srcdir,binutils)/gold/Makefile.in)
+		bfdmk=$(call __embtk_pkg_srcdir,binutils)/bfd/Makefile.in;	\
+		goldmk=$(call __embtk_pkg_srcdir,binutils)/gold/Makefile.in;	\
+		sed -e 's/-ldl//g' < $$bfdmk > $$bfdmk.tmp;			\
+			mv $$bfdmk.tmp $$bfdmk;					\
+		sed -e 's/-ldl//g' < $$goldmk > $$goldmk.tmp;			\
+			mv $$goldmk.tmp $$goldmk;)
 endef
 
 define embtk_install_binutils
