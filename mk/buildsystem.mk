@@ -64,14 +64,14 @@ define __embtk_mk_xconfig
 	$(call __embtk_kconfig_buildrun,$(1))
 endef
 
-xconfig menuconfig: embtk_kconfig_basic
+xconfig menuconfig olddefconfig: embtk_kconfig_basic
 	$(Q)$(call __embtk_mk_xconfig,$@)
 
 embtk_kconfig_basic:
 	$(Q)$(MAKE) -f scripts/Makefile.build					\
 		obj=$(EMBTK_ROOT)/scripts/basic quiet=quiet_ KBUILD_VERBOSE=0
 
-__bsystem_xtoolchain_decompressed = $(wildcard $(embtk_generated)/toolchain-*/.*.embtk.decompressed)
+__bsystem_xtoolchain_decompressed := $(wildcard $(embtk_generated)/toolchain-*/.*.embtk.decompressed)
 clean: toolchain_clean rmallpath
 	$(Q)$(__embtk_kconfig_clean)
 	[ -e .config ] && cp .config .config.old || true
@@ -129,8 +129,9 @@ define __embtk_mk_startbuild
 	$(MAKE) toolchain_install rootfs_build successful_build
 endef
 
+__bsystem_toolchain_decompressed := $(wildcard $(call __embtk_pkg_dotdecompressed_f,toolchain))
 startbuild:
-	$(if $(wildcard $(call __embtk_pkg_dotdecompressed_f,toolchain)),	\
+	$(if $(__bsystem_toolchain_decompressed),				\
 		$(__embtk_mk_pwarning_restartbuild),$(__embtk_mk_startbuild))
 
 define __embtk_mk_initsysrootdirs

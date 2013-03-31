@@ -35,6 +35,10 @@ help:
 	@echo
 	@echo "make menuconfig: Same as xconfig but using this time ncurse GUI."
 	@echo
+	@echo "make olddefconfig: Update silently current config utilising a"
+	@echo "                 provided .config as base, and sets new"
+	@echo "                 symbols to their default value."
+	@echo
 	@echo "make:            Start building your toolchain and your root"
 	@echo "                 filesystem (if selected) or start xconfig if"
 	@echo "                 you did not configure before."
