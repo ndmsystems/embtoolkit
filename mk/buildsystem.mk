@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -71,11 +71,12 @@ embtk_kconfig_basic:
 	$(Q)$(MAKE) -f scripts/Makefile.build					\
 		obj=$(EMBTK_ROOT)/scripts/basic quiet=quiet_ KBUILD_VERBOSE=0
 
+__bsystem_xtoolchain_decompressed = $(wildcard $(embtk_generated)/toolchain-*/.*.embtk.decompressed)
 clean: toolchain_clean rmallpath
 	$(Q)$(__embtk_kconfig_clean)
-	[ -e .config ] && cp .config .config.old
+	[ -e .config ] && cp .config .config.old || true
 	$(Q)rm -rf .config kbuild.log .fakeroot*
-	$(Q)rm -rf $(wildcard $(embtk_generated)/toolchain-*/.*.embtk.decompressed)
+	$(Q)$(if $(__bsystem_xtoolchain_decompressed),rm -rf $(__bsystem_xtoolchain_decompressed))
 
 distclean: clean
 	$(Q)rm -rf dl/* src/*.git src/*.svn .config.old
@@ -178,6 +179,7 @@ define __embtk_kconfig_clean
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'lkc_defs.h')
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name '*.o')
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name '*.tmp_qtcheck')
+	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name '*.tmp_gtkcheck')
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'conf')
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'mconf')
 	rm -rf $$(find $(EMBTK_ROOT)/scripts/kconfig -type f -name 'qconf')
