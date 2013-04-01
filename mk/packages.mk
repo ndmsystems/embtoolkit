@@ -116,7 +116,7 @@ host_packages_build:
 	$(call embtk_install_xpkg,$*)
 
 # Download generic implicit rule
-download_%:
+download_% %_download:
 	$(call embtk_download_pkg,$*)
 
 # clean generic implicit rule
