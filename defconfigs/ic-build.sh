@@ -68,7 +68,7 @@ if [ ! -e $workspace/defconfigs/$arch/$arch-ic-build.sh ]; then
 	perror "Architecture $arch does not provide specifics"
 	exit 1
 fi
-cd $workspace && rm -rf .config .config.old && make clean
+cd $workspace && rm -rf .config .config.old && gmake clean
 
 #
 # arch script
@@ -80,4 +80,4 @@ cd $workspace && rm -rf .config .config.old && make clean
 #
 
 cat $workspace/defconfigs/common.kconfig >> $workspace/.config
-cd $workspace && rm -rf $workspace/generated/* && make olddefconfig
+cd $workspace && rm -rf $workspace/generated/* && gmake olddefconfig
