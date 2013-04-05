@@ -73,7 +73,7 @@ cd $workspace && rm -rf .config .config.old && gmake clean
 #
 # arch script
 #
-. $workspace/defconfigs/$arch/$arch-ic-build.sh
+. $workspace/defconfigs/$arch/$arch-ci-build.sh
 
 #
 # Now generating .config
