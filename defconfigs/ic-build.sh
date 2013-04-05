@@ -80,4 +80,4 @@ cd $workspace && rm -rf .config .config.old && gmake clean
 #
 
 cat $workspace/defconfigs/common.kconfig >> $workspace/.config
-cd $workspace && rm -rf $workspace/generated/* && gmake olddefconfig
+cd $workspace && rm -rf $workspace/generated/* && gmake olddefconfig && gmake
