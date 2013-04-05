@@ -3,15 +3,15 @@
 # NOTE: this script only accepts long options
 
 perror() {
-	echo "[IC-BUILD-ERROR]  : $1"
+	echo "[CI-BUILD-ERROR]  : $1"
 }
 
 pwarning() {
-	echo "[IC-BUILD-WARNING]: $1"
+	echo "[CI-BUILD-WARNING]: $1"
 }
 
 pinfo() {
-	echo "[IC-BUILD-INFO]   : $1"
+	echo "[CI-BUILD-INFO]   : $1"
 }
 
 options=$(echo $* | sed 's/=/ /g')
@@ -79,5 +79,6 @@ cd $workspace && rm -rf .config .config.old && gmake clean
 # Now generating .config
 #
 
+set --
 cat $workspace/defconfigs/common.kconfig >> $workspace/.config
 cd $workspace && rm -rf $workspace/generated/* && gmake olddefconfig && gmake

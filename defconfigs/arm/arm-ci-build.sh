@@ -1,7 +1,7 @@
 #!/bin/sh
 
 arm_perror() {
-	echo "[IC-BUILD-ERROR] ARM: $1"
+	echo "[CI-BUILD-ERROR] ARM: $1"
 }
 
 cibuild_kconfig=$workspace/cibuild-arm.kconfig
