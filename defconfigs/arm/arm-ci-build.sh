@@ -10,21 +10,27 @@ rm -rf $cibuild_kconfig
 set_arch_family() {
 	case "$archvariant" in
 		arm9tdmi|arm920t|arm922t)
+			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM9TDMI=y" >> $cibuild_kconfig
 			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_"$(echo $archvariant | tr a-z A-Z)"=y" >> $cibuild_kconfig
 			;;
 		arm968e-s)
+			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM9E=y" >> $cibuild_kconfig
 			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM9E_"$(echo $archvariant | tr a-z A-Z)"=y" >> $cibuild_kconfig
 			;;
 		arm1020e|arm1022e|arm1026ej-s)
+			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM10E=y" >> $cibuild_kconfig
 			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM10E_"$(echo $archvariant | tr a-z A-Z)"=y" >> $cibuild_kconfig
 			;;
 		xscale)
+			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_XSCALE=y" >> $cibuild_kconfig
 			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_XSCALE_"$(echo $archvariant | tr a-z A-Z)"=y" >> $cibuild_kconfig
 			;;
 		arm1136j-s|arm1136jf-s|arm1176jz-s|arm1176jzf-s|mpcore)
+			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM11=y" >> $cibuild_kconfig
 			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM11_"$(echo $archvariant | tr a-z A-Z)"=y" >> $cibuild_kconfig
 			;;
 		cortex-a7|cortex-a8|cortex-a9|cortex-a15)
+			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_CORTEX=y" >> $cibuild_kconfig
 			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_CORTEX_"$(echo $archvariant | tr a-z A-Z)"=y" >> $cibuild_kconfig
 			;;
 		*)
