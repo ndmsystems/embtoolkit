@@ -64,7 +64,7 @@ if [ ! -d $workspace/defconfigs/$arch ]; then
 	exit 1
 fi
 
-if [ ! -e $workspace/defconfigs/$arch/$arch-ic-build.sh ]; then
+if [ ! -e $workspace/defconfigs/$arch/$arch-ci-build.sh ]; then
 	perror "Architecture $arch does not provide specifics"
 	exit 1
 fi
