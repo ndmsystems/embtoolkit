@@ -48,8 +48,8 @@ export PKGCONFIG_BIN EMBTK_PKG_CONFIG_PATH
 __EMBTK_HOST_PKG_CONFIG_PATH	:= $(embtk_htools)/usr/lib/pkgconfig/
 __EMBTK_HOST_PKG_CONFIG_PATH	+= /usr/lib/pkgconfig/ /usr/share/pkgconfig/
 __EMBTK_HOST_PKG_CONFIG_PATH	+= /usr/local/lib/pkgconfig/ /usr/local/share/pkgconfig/
-__EMBTK_HOST_PKG_CONFIG_PATH	+= $(dir $(shell find /usr/lib -type f -name '*.pc'))
-__EMBTK_HOST_PKG_CONFIG_PATH	+= $(dir $(shell find /usr/local/lib -type f -name '*.pc'))
+__EMBTK_HOST_PKG_CONFIG_PATH	+= $(dir $(shell find /usr/lib -type f -name '*.pc' 2>/dev/null))
+__EMBTK_HOST_PKG_CONFIG_PATH	+= $(dir $(shell find /usr/local/lib -type f -name '*.pc' 2>/dev/null))
 EMBTK_HOST_PKG_CONFIG_PATH	:= $(subst $(embtk_space),:,$(sort $(__EMBTK_HOST_PKG_CONFIG_PATH)))
 
 export EMBTK_HOST_PKG_CONFIG_PATH
