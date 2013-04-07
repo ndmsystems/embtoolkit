@@ -80,7 +80,7 @@ else
 	xmakecmd=$makecmd
 fi
 
-cd $workspace && rm -rf .config .config.old && $xmakecmd clean
+cd $workspace && rm -rf .config .config.old && rm -rf dl/*.patch && $xmakecmd clean
 
 #
 # arch script
@@ -94,6 +94,7 @@ cd $workspace && rm -rf .config .config.old && $xmakecmd clean
 if [ ! "x$downloaddir" = "x" ]; then
 	if [ -d $downloaddir ]; then
 		echo "CONFIG_EMBTK_DOWNLOAD_DIR=\"$downloaddir\"" >> $workspace/.config
+		rm -rf $downloaddir/*.patch
 	fi
 fi
 
