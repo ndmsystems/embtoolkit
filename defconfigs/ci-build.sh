@@ -39,6 +39,8 @@ while true; do
 			toolchain=$2; shift 2;;
 		--workspace)
 			workspace=$2; shift 2;;
+		--downloaddir)
+			downloaddir=$2; shift 2;;
 		--)
 			shift; break ;;
 		*)
@@ -78,6 +80,12 @@ cd $workspace && rm -rf .config .config.old && gmake clean
 #
 # Now generating .config
 #
+
+if [ ! "x$downloaddir" = "x" ]; then
+	if [ -d $downloaddir ]; then
+		echo "CONFIG_EMBTK_DOWNLOAD_DIR=\"$downloaddir\"" >> $workspace/.config
+	fi
+fi
 
 set --
 cat $workspace/defconfigs/common.kconfig >> $workspace/.config
