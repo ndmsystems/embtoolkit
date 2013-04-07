@@ -41,6 +41,8 @@ while true; do
 			workspace=$2; shift 2;;
 		--downloaddir)
 			downloaddir=$2; shift 2;;
+		--makecmd)
+			makecmd=$2; shift 2;;
 		--)
 			shift; break ;;
 		*)
@@ -70,7 +72,15 @@ if [ ! -e $workspace/defconfigs/$arch/$arch-ci-build.sh ]; then
 	perror "Architecture $arch does not provide specifics"
 	exit 1
 fi
-cd $workspace && rm -rf .config .config.old && gmake clean
+
+xmakecmd=""
+if [ "x$makecmd" = "x" ]; then
+	xmakecmd=make
+else
+	xmakecmd=$makecmd
+fi
+
+cd $workspace && rm -rf .config .config.old && $xmakecmd clean
 
 #
 # arch script
@@ -89,4 +99,4 @@ fi
 
 set --
 cat $workspace/defconfigs/common.kconfig >> $workspace/.config
-cd $workspace && rm -rf $workspace/generated/* && gmake olddefconfig && gmake
+cd $workspace && rm -rf $workspace/generated/* && $xmakecmd olddefconfig && $xmakecmd
