@@ -81,6 +81,7 @@ else
 fi
 
 cd $workspace && rm -rf .config .config.old && rm -rf dl/*.patch && $xmakecmd clean
+cd $workspace src/toolchain/ && rm -rf *.git *.svn
 
 #
 # arch script
