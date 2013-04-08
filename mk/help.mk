@@ -97,7 +97,7 @@ endif
 	$(call embtk_echo_blue,"We hope that EmbToolkit will be useful for your project !!!")
 	$(call embtk_echo_blue,"We will be happy to know it at embtk-users@embtoolkit.org")
 	$(call embtk_echo_blue,"Please report any bugs/suggestion at:")
-	$(call embtk_echo_blue,"   http://www.embtoolkit.org/issues/projects/show/embtoolkit")
+	$(call embtk_echo_blue,"   $(EMBTK_BUGURL)")
 	$(call embtk_echo_blue,"You can also visit the wiki at:")
 	$(call embtk_echo_blue,"   http://www.embtoolkit.org")
 	@echo

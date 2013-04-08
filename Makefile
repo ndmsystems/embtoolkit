@@ -39,7 +39,7 @@ EMBTK_VERSION		:= 							\
 			echo $$version;						\
 		fi;								\
 	else echo $$dversion; fi)
-EMBTK_BUGURL		= "http://www.embtoolkit.org/issues/projects/embtoolkit"
+EMBTK_BUGURL		= "http://bugs.embtoolkit.org/projects/embtoolkit"
 EMBTK_HOMEURL		= "http://www.embtoolkit.org"
 export EMBTK_BUGURL EMBTK_HOMEURL EMBTK_VERSION
 
