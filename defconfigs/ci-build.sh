@@ -80,9 +80,19 @@ else
 	xmakecmd=$makecmd
 fi
 
-cd $workspace && rm -rf .config .config.old && rm -rf dl/*.patch && $xmakecmd clean
-cd $workspace src/toolchain/ && rm -rf *.git *.svn
+#
+# Clean up old build
+#
+pinfo "Clean up old build"
+cd $workspace && $xmakecmd clean
+rm -rf $workspace/.config
+rm -rf $workspace/.config.old
+rm -rf $workspace/dl/*.patch
+rm -rf $workspace/src/toolchain/*.git
+rm -rf $workspace/src/toolchain/*.svn
+rm -rf $workspace/generated/*
 
+pinfo "Generating .config file"
 #
 # arch script
 #
@@ -98,7 +108,7 @@ if [ ! "x$downloaddir" = "x" ]; then
 		rm -rf $downloaddir/*.patch
 	fi
 fi
-
-set --
 cat $workspace/defconfigs/common.kconfig >> $workspace/.config
-cd $workspace && rm -rf $workspace/generated/* && $xmakecmd olddefconfig && $xmakecmd
+
+pinfo "Starting toolchain build"
+cd $workspace && $xmakecmd olddefconfig && $xmakecmd
