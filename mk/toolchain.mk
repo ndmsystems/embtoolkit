@@ -157,7 +157,7 @@ __xtools_compiler-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= gcc-$(GCC_VERSION)
 __xtools_compiler-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)		:= gcc-$(GCC_VERSION)
 __xtools_bins		:= $(__xtools_compiler-y)-$(embtk_clib)-$(embtk_clib_version)
 
-TOOLCHAIN_PACKAGE	:= toolchain-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env).tar.bz2
+TOOLCHAIN_PACKAGE	:= toolchain-$(HOST_ARCH)-target-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env).tar.bz2
 TOOLCHAIN_DIR		:= $(embtk_generated)/toolchain-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)
 TOOLCHAIN_NAME		:= toolchain
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
