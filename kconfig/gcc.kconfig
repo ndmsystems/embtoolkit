@@ -56,9 +56,8 @@ choice
 	help
 	 gcc-4.7.x version used.
 
-	config EMBTK_GCC_VERSION_4_7_2
-		bool "gcc-4.7.2"
-		select EMBTK_GCC_NEED_PATCH
+	config EMBTK_GCC_VERSION_4_7_3
+		bool "gcc-4.7.3"
 endchoice
 
 # GCC-4.6.x
@@ -119,7 +118,7 @@ config EMBTK_GCC_REFSPEC
 #
 config EMBTK_GCC_VERSION_STRING
 	string
-	default "4.7.2"		if EMBTK_GCC_VERSION_4_7_2
+	default "4.7.3"		if EMBTK_GCC_VERSION_4_7_3
 	default "4.6.4"		if EMBTK_GCC_VERSION_4_6_4
 	default "4.5.4"		if EMBTK_GCC_VERSION_4_5_4
 	default "4.4.7"		if EMBTK_GCC_VERSION_4_4_7
