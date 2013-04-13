@@ -36,8 +36,16 @@ embtk_clib_version			:= $(call embtk_get_pkgversion,$(embtk_clib))
 #
 ifeq ($(findstring linux,$(HOST_ARCH)),linux)
 embtk_buildhost_os			:= linux
+embtk_buildhost_os_type			:= linux
 else ifeq ($(findstring freebsd,$(HOST_ARCH)),freebsd)
 embtk_buildhost_os			:= freebsd
+embtk_buildhost_os_type			:= bsd
+else ifeq ($(findstring netbsd,$(HOST_ARCH)),netbsd)
+embtk_buildhost_os			:= netbsd
+embtk_buildhost_os_type			:= bsd
+else ifeq ($(findstring openbsd,$(HOST_ARCH)),openbsd)
+embtk_buildhost_os			:= openbsd
+embtk_buildhost_os_type			:= bsd
 else
 embtk_buildhost_os			:= unknown-host-os
 endif
