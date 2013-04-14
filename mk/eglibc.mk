@@ -55,6 +55,11 @@ embtk_eglibc_optgroups_f	:= $(EMBTK_ROOT)/mk/eglibc/eglibc-$(EGLIBC_VERSION)-opt
 eglibc_optgroups_f		:= $(EGLIBC_BUILD_DIR)/option-groups.config
 eglibc_headers_optgroups_f	:= $(EGLIBC_HEADERS_BUILD_DIR)/option-groups.config
 
+ifeq ($(embtk_buildhost_os_type),bsd)
+embtk_eglibc_buildcflags	:= -I/usr/local/include
+embtk_eglibc_buildldflags	:= -L/usr/local/lib -lintl
+endif
+
 #
 # Install dummy eglibc needed to build gcc stage 2
 #
@@ -119,7 +124,7 @@ endef
 
 define embtk_configure_eglibc
 	cd $(EGLIBC_BUILD_DIR);							\
-	BUILD_CC="$(hostcc_cached) -I/usr/local/include -L/usr/local/lib"	\
+	BUILD_CC="$(hostcc_cached)"						\
 	CFLAGS="$(embtk_eglibc_cflags)"						\
 	CC=$(TARGETGCC_CACHED)							\
 	CXX=$(TARGETGCXX_CACHED)						\
@@ -139,8 +144,12 @@ endef
 define __embtk_install_eglibc
 	$(call embtk_pinfo,"Installing eglibc...")
 	$(embtk_configure_eglibc)
-	PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) $(J)
+	PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR) $(J)	\
+		BUILD_CFLAGS="$(embtk_eglibc_buildcflags)"			\
+		BUILD_LDFLAGS="$(embtk_eglibc_buildldflags)"
 	PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(EGLIBC_BUILD_DIR)		\
+		BUILD_CFLAGS="$(embtk_eglibc_buildcflags)"			\
+		BUILD_LDFLAGS="$(embtk_eglibc_buildldflags)"			\
 		install_root=$(embtk_sysroot) install
 	touch $(call __embtk_pkg_dotinstalled_f,eglibc)
 	$(call __embtk_pkg_gen_dotkconfig_f,eglibc)
