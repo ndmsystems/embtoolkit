@@ -47,7 +47,7 @@ NCURSES_CONFIGURE_ENV	:= ac_cv_header_locale_h=no
 
 NCURSES_CONFIGURE_OPTS	:= --disable-rpath --without-cxx-binding --without-ada
 NCURSES_CONFIGURE_OPTS	+= --disable-database --enable-termcap --without-progs
-NCURSES_CONFIGURE_OPTS	+= --program-prefix=""
+NCURSES_CONFIGURE_OPTS	+= --program-prefix="" --without-tests
 
 define embtk_postinstall_ncurses
 	$(Q)mkdir -p $(embtk_rootfs)/usr/share
