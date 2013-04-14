@@ -29,7 +29,7 @@ choice
 		Linux v3.6.x series exact version used.
 
 	config EMBTK_LINUX_VERSION_3_6_11
-		bool "linux-3.6.3"
+		bool "linux-3.6.11"
 endchoice
 
 config EMBTK_LINUX_VERSION_STRING
