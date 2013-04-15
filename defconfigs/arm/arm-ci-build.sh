@@ -13,7 +13,7 @@ set_arch_family() {
 			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM9TDMI=y" >> $cibuild_kconfig
 			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM9TDMI_"$(echo $archvariant | tr a-z A-Z)"=y" >> $cibuild_kconfig
 			;;
-		arm968e-s)
+		arm926ej-s)
 			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM9E=y" >> $cibuild_kconfig
 			echo "CONFIG_EMBTK_ARCH_ARM_FAMILY_ARM9E_"$(echo $archvariant | tr a-z A-Z)"=y" >> $cibuild_kconfig
 			;;
