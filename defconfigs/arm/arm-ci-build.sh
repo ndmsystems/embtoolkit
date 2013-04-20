@@ -6,7 +6,8 @@ arm_perror() {
 
 cibuild_kconfig=$workspace/cibuild-arm.kconfig
 rm -rf $cibuild_kconfig
- 
+echo "CONFIG_EMBTK_ARCH_ARM=y" > $cibuild_kconfig
+
 set_arch_family() {
 	case "$archvariant" in
 		arm9tdmi|arm920t|arm922t)
@@ -42,11 +43,11 @@ set_arch_family() {
 
 set_endian() {
 	case "$endian" in
-		LITTLE)
+		little|LITTLE)
 			echo "CONFIG_EMBTK_ARCH_ARM_LITTLE_ENDIAN=y" >> $cibuild_kconfig
 			;;
-		BIG)
-			echo "CONFIG_EMBTK_ARCH_ARM_LITTLE_ENDIAN=y" >> $cibuild_kconfig
+		big|BIG)
+			echo "CONFIG_EMBTK_ARCH_ARM_BIG_ENDIAN=y" >> $cibuild_kconfig
 			;;
 		*)
 			arm_perror "Unknown ARM endianness for $archvariant"
@@ -72,7 +73,7 @@ set_float() {
 
 set_os() {
 	case "$os" in
-		LINUX)
+		linux|LINUX)
 			echo "CONFIG_EMBTK_OS_LINUX=y" >> $cibuild_kconfig
 			;;
 		*)
@@ -84,7 +85,7 @@ set_os() {
 
 set_xcompiler() {
 	case "$toolchain" in
-		GCC)
+		gcc|GCC)
 			echo "CONFIG_EMBTK_GCC_TOOLCHAIN=y" >> $cibuild_kconfig
 			;;
 		Clang+llvm)
