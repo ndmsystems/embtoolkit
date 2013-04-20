@@ -92,7 +92,7 @@ define embtk_configure_eglibc_headers
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
 	--enable-add-ons --enable-kernel="2.6.27" $(embtk_eglibc_versioning-y)	\
 	--with-bugurl=$(EMBTK_BUGURL)
-	touch touch $(call __embtk_pkg_dotconfigured_f,eglibc_headers)
+	touch $(call __embtk_pkg_dotconfigured_f,eglibc_headers)
 endef
 
 define __embtk_install_eglibc_headers
