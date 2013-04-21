@@ -144,11 +144,11 @@ AUTOTOOLS_INSTALL	+= automake_install
 
 # GNU sed
 include mk/gsed.mk
-__toolchain_gsed-y	:= $(if $(findstring freebsd,$(embtk_buildhost_os)),gsed_install)
+__toolchain_gsed-y	:= $(if $(findstring bsd,$(embtk_buildhost_os_type)),gsed_install)
 
 # GNU make
 include mk/gmake.mk
-__toolchain_gmake-y	:= $(if $(findstring freebsd,$(embtk_buildhost_os)),gmake_install)
+__toolchain_gmake-y	:= $(if $(findstring bsd,$(embtk_buildhost_os_type)),gmake_install)
 
 # Toolchain internals
 __xtools_compiler-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= clangllvm-$(LLVM_VERSION)
