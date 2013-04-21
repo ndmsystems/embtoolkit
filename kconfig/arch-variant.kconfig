@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -40,15 +40,15 @@ choice
 config EMBTK_SOFTFLOAT
 	bool "Soft floating point"
 	help
-		Select if your CPU does not have hardware floating point unit or
-		kernel floating point emulation.
+	 Select if your CPU does not have hardware floating point unit or
+	 kernel floating point emulation.
 
 config EMBTK_HARDFLOAT
 	bool "Hard floating point"
 	depends on EMBTK_TARGET_ARCH_MAYUSE_FPU
 	select KEMBTK_UCLIBC_UCLIBC_HAS_FPU if EMBTK_CLIB_UCLIBC
 	help
-		Select if your CPU has a hardware floating point unit.
+	 Select if your CPU has a hardware floating point unit.
 endchoice
 
 if EMBTK_ARCH_ARM && EMBTK_HARDFLOAT
