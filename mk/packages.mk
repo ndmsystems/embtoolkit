@@ -52,7 +52,7 @@ include mk/zlib_host.mk
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_ZLIB) += zlib_host_install
 
 # Install various tools in case of FreeBSD host development machine
-ifeq ($(findstring freebsd,$(embtk_buildhost_os)),freebsd)
+ifeq ($(embtk_buildhost_os_type),bsd)
 HOSTTOOLS_COMPONENTS-y += gsed_install gmake_install
 endif
 
