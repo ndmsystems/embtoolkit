@@ -170,6 +170,9 @@ source kconfig/automake.kconfig
 # GNU sed
 source kconfig/gsed.kconfig
 
+# BSD make
+source kconfig/bmake.kconfig
+
 # GNU make
 source kconfig/gmake.kconfig
 

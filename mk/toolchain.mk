@@ -146,6 +146,9 @@ AUTOTOOLS_INSTALL	+= automake_install
 include mk/gsed.mk
 __toolchain_gsed-y	:= $(if $(findstring bsd,$(embtk_buildhost_os_type)),gsed_install)
 
+# BSD make
+include mk/bmake.mk
+
 # GNU make
 include mk/gmake.mk
 __toolchain_gmake-y	:= $(if $(findstring bsd,$(embtk_buildhost_os_type)),gmake_install)
