@@ -47,15 +47,18 @@ LINUX_HEADERS_SRC_DIR	:= $(LINUX_SRC_DIR)
 LINUX_HEADERS_BUILD_DIR	:= $(LINUX_BUILD_DIR)
 LINUX_HEADERS_KCONFIGS_NAME := LINUX
 
+LINUX_MAKE_OPTS	:= quiet=quiet_
+LINUX_MAKE_OPTS	+= ARCH=$(LINUX_ARCH)
+LINUX_MAKE_OPTS	+= CROSS_COMPILE=$(CROSS_COMPILE_CACHED)
+
 define __embtk_install_linux_headers
 	$(call embtk_pinfo,"Installing linux-$(LINUX_VERSION) headers...")
 	$(call embtk_download_pkg,linux)
 	$(call embtk_decompress_pkg,linux)
-	$(Q)PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(LINUX_BUILD_DIR) 	\
-		headers_install ARCH=$(LINUX_ARCH)				\
-		CROSS_COMPILE=$(STRICT_GNU_TARGET)-				\
-		INSTALL_HDR_PATH=$(embtk_sysroot)/usr
+	$(MAKE) -C $(LINUX_BUILD_DIR) $(LINUX_MAKE_OPTS)			\
+		INSTALL_HDR_PATH=$(embtk_sysroot)/usr headers_install
 	touch $(call __embtk_pkg_dotinstalled_f,linux_headers)
+	$(call __embtk_pkg_gen_dotkconfig_f,linux_headers)
 endef
 define embtk_install_linux_headers
 	[ -e $(call __embtk_pkg_dotinstalled_f,linux_headers) ] ||		\
@@ -65,16 +68,10 @@ endef
 #
 # linux install macros
 #
+
 __embtk_linux_dotconfig_f	:= $(call __embtk_mk_uquote,$(CONFIG_EMBTK_LINUX_DOTCONFIG))
 __embtk_linux_srcdir		:= $(call __embtk_mk_uquote,$(or $(CONFIG_EMBTK_LINUX_BUILD_EXTSRC),$(LINUX_SRC_DIR)))
 __embtk_linux_support_modules	:= $(shell grep MODULES=y "$(__embtk_linux_dotconfig_f)" 2>/dev/null)
-
-define __embtk_install_linux_modules
-	$(MAKE) -C $(__embtk_linux_srcdir) quiet=quiet_				\
-		INSTALL_MOD_PATH=$(embtk_rootfs)				\
-		ARCH=$(LINUX_ARCH)						\
-		CROSS_COMPILE=$(CROSS_COMPILE_CACHED) modules_install
-endef
 
 define __embtk_install_linux_check_config
 	if [ "x" = "x$(__embtk_linux_dotconfig_f)" ]; then			\
@@ -106,30 +103,23 @@ define __embtk_install_linux
 	$(if $(CONFIG_EMBTK_LINUX_BUILD_TOOLCHAIN_SRC),
 		$(call embtk_download_pkg,linux)
 		$(call embtk_decompress_pkg,linux))
-	$(MAKE) -C $(__embtk_linux_srcdir)					\
-		ARCH=$(LINUX_ARCH)						\
-		CROSS_COMPILE=$(CROSS_COMPILE_CACHED) distclean
-	rm -rf $(__embtk_linux_srcdir)/.config
+	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS) distclean
 	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(__embtk_linux_srcdir)/.config
-	$(MAKE) -C $(__embtk_linux_srcdir) quiet=quiet_				\
-		ARCH=$(LINUX_ARCH)						\
-		CROSS_COMPILE=$(CROSS_COMPILE_CACHED) silentoldconfig
-	$(MAKE) -C $(__embtk_linux_srcdir) quiet=quiet_				\
-		ARCH=$(LINUX_ARCH)						\
-		CROSS_COMPILE=$(CROSS_COMPILE_CACHED) $(J)
+	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS) silentoldconfig
+	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS) $(J)
 	touch $(call __embtk_pkg_dotinstalled_f,linux)
 	$(call __embtk_pkg_gen_dotkconfig_f,linux)
 endef
 
 define embtk_install_linux
 	$(if $(call __embtk_pkg_installed-y,linux),true,$(__embtk_install_linux))
-	$(if $(__embtk_linux_support_modules),
-		$(embtk_postinstall_linux))
+	$(if $(__embtk_linux_support_modules),$(embtk_postinstall_linux))
 endef
 
 define embtk_postinstall_linux
 	$(call embtk_pinfo,"Install linux kernel modules...")
-	$(__embtk_install_linux_modules)
+	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS)			\
+		INSTALL_MOD_PATH=$(embtk_rootfs) modules_install
 endef
 
 #
