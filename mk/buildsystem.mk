@@ -125,9 +125,13 @@ define __embtk_mk_print_selectedfeatures
 		$(call embtk_echo_blue,"\tJFFS2      : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),Yes,No)"))
 endef
 
+__embtk_mk_startbuild-y						:= toolchain_install
+__embtk_mk_startbuild-$(CONFIG_EMBTK_BUILD_LINUX_KERNEL)	+= linux_install
+__embtk_mk_startbuild-$(CONFIG_EMBTK_HAVE_ROOTFS)		+= rootfs_build
+__embtk_mk_startbuild-y						+= successful_build
 define __embtk_mk_startbuild
 	$(__embtk_mk_print_selectedfeatures)
-	$(MAKE) toolchain_install rootfs_build successful_build
+	$(MAKE) $(__embtk_mk_startbuild-y)
 endef
 
 __bsystem_toolchain_decompressed := $(wildcard $(call __embtk_pkg_dotdecompressed_f,toolchain))
