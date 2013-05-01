@@ -1,6 +1,6 @@
 #################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,6 +60,76 @@ endef
 define embtk_install_linux_headers
 	[ -e $(call __embtk_pkg_dotinstalled_f,linux_headers) ] ||		\
 		$(__embtk_install_linux_headers)
+endef
+
+#
+# linux install macros
+#
+__embtk_linux_dotconfig_f	:= $(call __embtk_mk_uquote,$(CONFIG_EMBTK_LINUX_DOTCONFIG))
+__embtk_linux_srcdir		:= $(call __embtk_mk_uquote,$(or $(CONFIG_EMBTK_LINUX_BUILD_EXTSRC),$(LINUX_SRC_DIR)))
+__embtk_linux_support_modules	:= $(shell grep MODULES=y "$(__embtk_linux_dotconfig_f)" 2>/dev/null)
+
+define __embtk_install_linux_modules
+	$(MAKE) -C $(__embtk_linux_srcdir) quiet=quiet_				\
+		INSTALL_MOD_PATH=$(embtk_rootfs)				\
+		ARCH=$(LINUX_ARCH)						\
+		CROSS_COMPILE=$(CROSS_COMPILE_CACHED) modules_install
+endef
+
+define __embtk_install_linux_check_config
+	if [ "x" = "x$(__embtk_linux_dotconfig_f)" ]; then			\
+	$(call embtk_perror,"Unable to build linux kernel image: no config file");\
+	exit 1;									\
+	fi
+	if [ ! -e $(__embtk_linux_dotconfig_f) ]; then				\
+	$(call embtk_perror,"Unable to build linux kernel image: config file $(__embtk_linux_dotconfig_f) not found");\
+	exit 1;									\
+	fi
+endef
+
+define __embtk_install_linux_check_extsrc
+	if [ "x" = "x$(__embtk_linux_srcdir)" ]; then				\
+	$(call embtk_perror,"Unable to build linux kernel image: External source tree not specified");\
+	exit 1;									\
+	fi
+	if [ ! -d $(__embtk_linux_srcdir) ]; then				\
+	$(call embtk_perror,"Unable to build linux kernel image: External source tree $(__embtk_linux_srcdir) not found");\
+	exit 1;									\
+	fi
+endef
+
+define __embtk_install_linux
+	$(call embtk_pinfo,"Generating linux kernel image...")
+	$(__embtk_install_linux_check_config)
+	$(if $(CONFIG_EMBTK_LINUX_BUILD_USE_EXTSRC),
+		$(__embtk_install_linux_check_extsrc))
+	$(if $(CONFIG_EMBTK_LINUX_BUILD_TOOLCHAIN_SRC),
+		$(call embtk_download_pkg,linux)
+		$(call embtk_decompress_pkg,linux))
+	$(MAKE) -C $(__embtk_linux_srcdir)					\
+		ARCH=$(LINUX_ARCH)						\
+		CROSS_COMPILE=$(CROSS_COMPILE_CACHED) distclean
+	rm -rf $(__embtk_linux_srcdir)/.config
+	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(__embtk_linux_srcdir)/.config
+	$(MAKE) -C $(__embtk_linux_srcdir) quiet=quiet_				\
+		ARCH=$(LINUX_ARCH)						\
+		CROSS_COMPILE=$(CROSS_COMPILE_CACHED) silentoldconfig
+	$(MAKE) -C $(__embtk_linux_srcdir) quiet=quiet_				\
+		ARCH=$(LINUX_ARCH)						\
+		CROSS_COMPILE=$(CROSS_COMPILE_CACHED) $(J)
+	touch $(call __embtk_pkg_dotinstalled_f,linux)
+	$(call __embtk_pkg_gen_dotkconfig_f,linux)
+endef
+
+define embtk_install_linux
+	$(if $(call __embtk_pkg_installed-y,linux),true,$(__embtk_install_linux))
+	$(if $(__embtk_linux_support_modules),
+		$(embtk_postinstall_linux))
+endef
+
+define embtk_postinstall_linux
+	$(call embtk_pinfo,"Install linux kernel modules...")
+	$(__embtk_install_linux_modules)
 endef
 
 #

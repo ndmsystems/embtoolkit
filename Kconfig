@@ -1,6 +1,6 @@
 ################################################################################
 # Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -73,6 +73,16 @@ endmenu
 menu "Embtoolkit build options and host tools"
 source kconfig/hosttools-buildopts.kconfig
 endmenu
+
+if EMBTK_OS_LINUX
+config EMBTK_BUILD_LINUX_KERNEL
+	bool "Build linux kernel image"
+
+if EMBTK_BUILD_LINUX_KERNEL
+source kconfig/linux-kernel-build.kconfig
+endif
+
+endif
 
 config EMBTK_HAVE_ROOTFS
 	bool "Build root filesystem"
