@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 ##
@@ -42,6 +42,7 @@ CCACHE_BIN		:=  $(embtk_htools)/usr/bin/ccache
 HOSTCC_CACHED		:= "$(CCACHE_BIN) $(HOSTCC)"
 HOSTCXX_CACHED		:= "$(CCACHE_BIN) $(HOSTCXX)"
 
+CROSS_COMPILE_CACHED	:= "$(CCACHE_BIN) $(CROSS_COMPILE)"
 TARGETCC_CACHED		:= "$(CCACHE_BIN) $(TARGETCC)"
 TARGETCXX_CACHED	:= "$(CCACHE_BIN) $(TARGETCXX)"
 
