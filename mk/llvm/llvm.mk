@@ -47,7 +47,9 @@ LLVM_CONFIGURE_OPTS	+= --with-default-sysroot=$(embtk_sysroot)
 LLVM_CONFIGURE_OPTS	+= --enable-optimized --disable-jit
 LLVM_CONFIGURE_OPTS	+= --with-bug-report-url=$(EMBTK_BUGURL)
 LLVM_CONFIGURE_OPTS	+= --with-binutils-include=$(__embtk_binutils_inc)
+
 LLVM_MAKE_OPTS		:= NO_UNITTESTS=1
+LLVM_MAKE_OPTS		+= CLANG_VENDOR="EmbToolkit(v$(EMBTK_VERSION))"
 
 LLVM_PREFIX		:= $(embtk_tools)
 
