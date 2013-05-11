@@ -25,7 +25,6 @@
 ################################################################################
 
 rootsrc			?= $(shell pwd)
-ARCH_NAME		:=
 LIBDIR			?= lib
 
 #
@@ -47,7 +46,6 @@ ASAN_CXXSRCS		:= $(wildcard $(rootsrc)/lib/asan/*.cc)
 ASAN_CSRCS		:= $(wildcard $(rootsrc)/lib/asan/*.c)
 ASAN_OBJS		:= $(patsubst %.cc,%.o,$(ASAN_CXXSRCS))
 ASAN_OBJS		+= $(patsubst %.c,%.o,$(ASAN_CSRCS))
-CLANG_ASAN		:= clang_rt.asan-$(ARCH_NAME)
 
 #
 # Thread sanitizer part
@@ -57,7 +55,6 @@ TSAN_CXXSRCS		:= $(wildcard $(rootsrc)/lib/tsan/rtl/*.cc)
 TSAN_CSRCS		:= $(wildcard $(rootsrc)/lib/tsan/rtl/*.c)
 TSAN_OBJS		:= $(patsubst %.cc,%.o,$(TSAN_CXXSRCS))
 TSAN_OBJS		+= $(patsubst %.c,%.o,$(TSAN_CSRCS))
-CLANG_TSAN		:= clang_rt.tsan-$(ARCH_NAME)
 
 #
 # Undefined behavior sanitizer part
@@ -67,14 +64,13 @@ UBSAN_CXXSRCS		:= $(wildcard $(rootsrc)/lib/ubsan/*.cc)
 UBSAN_CSRCS		:= $(wildcard $(rootsrc)/lib/ubsan/*.c)
 UBSAN_OBJS		:= $(patsubst %.cc,%.o,$(UBSAN_CXXSRCS))
 UBSAN_OBJS		+= $(patsubst %.c,%.o,$(UBSAN_CSRCS))
-CLANG_UBSAN		:= clang_rt.ubsan-$(ARCH_NAME)
 
 CC			?= gcc
 CXX			?= g++
 
 SANCOMMON_CFLAGS	:= -W -Wall -fPIC -fno-builtin -fno-exceptions
 SANCOMMON_CFLAGS	+= -fomit-frame-pointer -funwind-tables
-SANCOMMON_CFLAGS	+= -fvisibility=hidden
+SANCOMMON_CFLAGS	+= -fno-stack-protector -fvisibility=hidden -g
 #
 # FIXME: remove this avec full merge of compiler-rt/llvm/clang-3.3.
 # The copy of compiler-rt shipped with EmbToolkit was in the middle of
@@ -124,4 +120,3 @@ lib$(UBSAN).a: $(UBSAN_OBJS)
 clean:
 	$(Q)rm -rf $(SANCOMMON_OBJS) $(ASAN_OBJS) $(TSAN_OBJS) $(UBSAN_OBJS)
 	$(Q)rm -rf lib$(SANCOMMON).a lib$(ASAN).a lib$(TSAN).a lib$(UBSAN).a
-
