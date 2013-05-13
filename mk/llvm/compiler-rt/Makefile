@@ -35,8 +35,11 @@ SANCOMMON_CXXSRCS	:= $(wildcard $(rootsrc)/lib/sanitizer_common/*.cc)
 SANCOMMON_CXXSRCS	+= $(wildcard $(rootsrc)/lib/interception/*.cc)
 SANCOMMON_CSRCS		:= $(wildcard $(rootsrc)/lib/sanitizer_common/*.c)
 SANCOMMON_CSRCS		+= $(wildcard $(rootsrc)/lib/interception/*.c)
+
 SANCOMMON_OBJS		:= $(patsubst %.cc,%.o,$(SANCOMMON_CXXSRCS))
 SANCOMMON_OBJS		+= $(patsubst %.c,%.o,$(SANCOMMON_CSRCS))
+
+SANCOMMON_EXTRA_CFLAGS	:= -fno-rtti
 
 #
 # Address sanitizer part
@@ -44,8 +47,11 @@ SANCOMMON_OBJS		+= $(patsubst %.c,%.o,$(SANCOMMON_CSRCS))
 ASAN			:= asan
 ASAN_CXXSRCS		:= $(wildcard $(rootsrc)/lib/asan/*.cc)
 ASAN_CSRCS		:= $(wildcard $(rootsrc)/lib/asan/*.c)
+
 ASAN_OBJS		:= $(patsubst %.cc,%.o,$(ASAN_CXXSRCS))
 ASAN_OBJS		+= $(patsubst %.c,%.o,$(ASAN_CSRCS))
+
+ASAN_EXTRA_CFLAGS	:= -fno-rtti
 
 #
 # Thread sanitizer part
@@ -62,9 +68,13 @@ TSAN_OBJS		+= $(patsubst %.c,%.o,$(TSAN_CSRCS))
 UBSAN			:= ubsan
 UBSAN_CXXSRCS		:= $(wildcard $(rootsrc)/lib/ubsan/*.cc)
 UBSAN_CSRCS		:= $(wildcard $(rootsrc)/lib/ubsan/*.c)
+
 UBSAN_OBJS		:= $(patsubst %.cc,%.o,$(UBSAN_CXXSRCS))
 UBSAN_OBJS		+= $(patsubst %.c,%.o,$(UBSAN_CSRCS))
 
+#
+# Common part
+#
 CC			?= gcc
 CXX			?= g++
 
@@ -99,9 +109,11 @@ all: lib$(SANCOMMON).a lib$(ASAN).a lib$(UBSAN).a
 install: all
 	$(Q)$(__lib_install)
 
+lib$(SANCOMMON).a: EXTRA_CFLAGS = $(SANCOMMON_EXTRA_CFLAGS)
 lib$(SANCOMMON).a: $(SANCOMMON_OBJS)
 	$(Q)$(AR) $(ARFLAGS) $@ $(SANCOMMON_OBJS)
 
+lib$(ASAN).a: EXTRA_CFLAGS = $(ASAN_EXTRA_CFLAGS)
 lib$(ASAN).a: $(ASAN_OBJS)
 	$(Q)$(AR) $(ARFLAGS) $@ $(ASAN_OBJS)
 
@@ -112,10 +124,10 @@ lib$(UBSAN).a: $(UBSAN_OBJS)
 	$(Q)$(AR) $(ARFLAGS) $@ $(UBSAN_OBJS)
 
 %.o: %.c
-	$(Q)$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+	$(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 %.o: %.cc
-	$(Q)$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+	$(Q)$(CXX) $(CXXFLAGS) $(EXTRA_CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 clean:
 	$(Q)rm -rf $(SANCOMMON_OBJS) $(ASAN_OBJS) $(TSAN_OBJS) $(UBSAN_OBJS)
