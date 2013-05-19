@@ -24,17 +24,17 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ################################################################################
 
-rootsrc			?= $(shell pwd)
+rootsrc/		?=
 LIBDIR			?= lib
 
 #
 # Sanitizer common part
 #
 SANCOMMON		:= sanitizer_common
-SANCOMMON_CXXSRCS	:= $(wildcard $(rootsrc)/lib/sanitizer_common/*.cc)
-SANCOMMON_CXXSRCS	+= $(wildcard $(rootsrc)/lib/interception/*.cc)
-SANCOMMON_CSRCS		:= $(wildcard $(rootsrc)/lib/sanitizer_common/*.c)
-SANCOMMON_CSRCS		+= $(wildcard $(rootsrc)/lib/interception/*.c)
+SANCOMMON_CXXSRCS	:= $(wildcard $(rootsrc/)lib/sanitizer_common/*.cc)
+SANCOMMON_CXXSRCS	+= $(wildcard $(rootsrc/)lib/interception/*.cc)
+SANCOMMON_CSRCS		:= $(wildcard $(rootsrc/)lib/sanitizer_common/*.c)
+SANCOMMON_CSRCS		+= $(wildcard $(rootsrc/)lib/interception/*.c)
 
 SANCOMMON_OBJS		:= $(patsubst %.cc,%.o,$(SANCOMMON_CXXSRCS))
 SANCOMMON_OBJS		+= $(patsubst %.c,%.o,$(SANCOMMON_CSRCS))
@@ -45,8 +45,8 @@ SANCOMMON_EXTRA_CFLAGS	:= -fno-rtti
 # Address sanitizer part
 #
 ASAN			:= asan
-ASAN_CXXSRCS		:= $(wildcard $(rootsrc)/lib/asan/*.cc)
-ASAN_CSRCS		:= $(wildcard $(rootsrc)/lib/asan/*.c)
+ASAN_CXXSRCS		:= $(wildcard $(rootsrc/)lib/asan/*.cc)
+ASAN_CSRCS		:= $(wildcard $(rootsrc/)lib/asan/*.c)
 
 ASAN_OBJS		:= $(patsubst %.cc,%.o,$(ASAN_CXXSRCS))
 ASAN_OBJS		+= $(patsubst %.c,%.o,$(ASAN_CSRCS))
@@ -57,8 +57,8 @@ ASAN_EXTRA_CFLAGS	:= -fno-rtti
 # Thread sanitizer part
 #
 TSAN			:= tsan
-TSAN_CXXSRCS		:= $(wildcard $(rootsrc)/lib/tsan/rtl/*.cc)
-TSAN_CSRCS		:= $(wildcard $(rootsrc)/lib/tsan/rtl/*.c)
+TSAN_CXXSRCS		:= $(wildcard $(rootsrc/)lib/tsan/rtl/*.cc)
+TSAN_CSRCS		:= $(wildcard $(rootsrc/)lib/tsan/rtl/*.c)
 TSAN_OBJS		:= $(patsubst %.cc,%.o,$(TSAN_CXXSRCS))
 TSAN_OBJS		+= $(patsubst %.c,%.o,$(TSAN_CSRCS))
 
@@ -66,8 +66,8 @@ TSAN_OBJS		+= $(patsubst %.c,%.o,$(TSAN_CSRCS))
 # Undefined behavior sanitizer part
 #
 UBSAN			:= ubsan
-UBSAN_CXXSRCS		:= $(wildcard $(rootsrc)/lib/ubsan/*.cc)
-UBSAN_CSRCS		:= $(wildcard $(rootsrc)/lib/ubsan/*.c)
+UBSAN_CXXSRCS		:= $(wildcard $(rootsrc/)lib/ubsan/*.cc)
+UBSAN_CSRCS		:= $(wildcard $(rootsrc/)lib/ubsan/*.c)
 
 UBSAN_OBJS		:= $(patsubst %.cc,%.o,$(UBSAN_CXXSRCS))
 UBSAN_OBJS		+= $(patsubst %.c,%.o,$(UBSAN_CSRCS))
@@ -91,7 +91,7 @@ SANCOMMON_CFLAGS	+= -DASAN_ALLOCATOR_VERSION=1
 ARFLAGS			:= rvs
 
 override CFLAGS		:=  $(CFLAGS) $(SANCOMMON_CFLAGS)
-override CPPFLAGS	:= $(CPPFLAGS) -I$(rootsrc)/include -I$(rootsrc)/lib
+override CPPFLAGS	:= $(CPPFLAGS) -I$(rootsrc/)include -I$(rootsrc/)lib
 override CXXFLAGS	:= $(CXXFLAGS) $(CFLAGS)
 
 define __lib_install
