@@ -69,7 +69,7 @@ endef
 # FIXME: On some systems, gnu make is named gmake (ie FreeBSD)
 #
 __embtk_make_cmd	:= make
-ifeq ($(embtk_buildhost_os_type),bsd)
+ifeq ($(findstring bsd,$(HOST_ARCH)),bsd)
 __embtk_make_cmd	:= gmake
 endif
 
