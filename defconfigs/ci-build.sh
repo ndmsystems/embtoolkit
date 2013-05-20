@@ -111,4 +111,5 @@ fi
 cat $workspace/defconfigs/common.kconfig >> $workspace/.config
 
 pinfo "Starting toolchain build"
+set --
 cd $workspace && $xmakecmd olddefconfig && $xmakecmd
