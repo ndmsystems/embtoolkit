@@ -116,7 +116,8 @@ GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
 	--without-headers --with-newlib --disable-shared --disable-threads	\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
-	--enable-languages=c --enable-target-optspace --disable-libquadmath
+	--enable-languages=c --enable-target-optspace --disable-libquadmath	\
+	--disable-libatomic
 
 CONFIG_EMBTK_GCC1_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC1_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
@@ -145,7 +146,7 @@ GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--disable-libquadmath							\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
 	--enable-languages=c --enable-target-optspace --enable-threads		\
-	$(GCC_CXA_ATEXIT-y)
+	--disable-libatomic $(GCC_CXA_ATEXIT-y)
 
 CONFIG_EMBTK_GCC2_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC2_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
