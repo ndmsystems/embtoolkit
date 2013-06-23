@@ -45,6 +45,7 @@ FOO_SET_RPATH		:= # Only for host packages
 
 FOO_CONFIGURE_ENV	:=
 FOO_CONFIGURE_OPTS	:=
+FOO_MAKE_ENV		:=
 FOO_MAKE_OPTS		:=
 FOO_MAKE_DIRS		:=
 
