@@ -78,6 +78,8 @@ __embtk_mk_uquote = $(subst ",,$(strip $(1)))
 embtk_pwarning	= $(call embtk_echo_yellow,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ WARNING: $(call __embtk_mk_uquote,$(1))\\n$(__embtk_msg_h)")
 embtk_perror	= $(call embtk_echo_red,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ ERROR: $(call __embtk_mk_uquote,$(1))\\n$(__embtk_msg_h)")
 embtk_pinfo	= $(call embtk_echo_blue,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ $(call __embtk_mk_uquote,$(1))\\n$(__embtk_msg_h)")
+embtk_pdone	= $(call embtk_echo_blue,"[✔] Done  : $(call __embtk_mk_uquote,$(1))")
+embtk_pfailed	= $(call embtk_echo_red,"[✘] Failed: $(call __embtk_mk_uquote,$(1))")
 
 # Macros for emmpty, space and comma
 embtk_empty	:=
