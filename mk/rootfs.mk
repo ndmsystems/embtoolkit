@@ -98,7 +98,7 @@ endef
 
 define __embtk_rootfs_mkinitpath
 	mkdir -p $(embtk_rootfs)
-	cp -Rp $(EMBTK_ROOT)/src/target_skeleton/* $(embtk_rootfs)
+	cp -Rp $(EMBTK_ROOT)/src/rootfs_skel/* $(embtk_rootfs)
 	mkdir -p $(embtk_pkgb)
 	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),
 		mkdir -p $(embtk_rootfs)/lib32
