@@ -55,6 +55,14 @@ __gcc3_extra_opts-$(CONFIG_EMBTK_GCC_LANGUAGE_JAVA) += --enable-java-home
 __gcc3_extra_opts-$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD) += --disable-tls
 GCC3_CONFIGURE_EXTRA_OPTIONS += $(__gcc3_extra_opts-y)
 
+define embtk_beforeinstall_gcc1
+	fixincludes_mk=$(call __embtk_pkg_srcdir,gcc)/gcc/Makefile.in;		\
+	cp $$fixincludes_mk $$fixincludes_mk.old;				\
+	sed -e 's@\./fixinc\.sh@-c true@'					\
+		< $$fixincludes_mk > $$fixincludes_mk.tmp;			\
+	mv $$fixincludes_mk.tmp $$fixincludes_mk
+endef
+
 define embtk_install_gcc1
 	$(call __embtk_install_hostpkg,gcc1)
 endef
