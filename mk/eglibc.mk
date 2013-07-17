@@ -50,6 +50,8 @@ embtk_eglibc_floattype := $(if $(CONFIG_EMBTK_SOFTFLOAT),			\
 # Versioning in eglibc
 embtk_eglibc_versioning-$(CONFIG_EMBTK_EGLIBC_DISABLE_VERSIONING) :=		\
 							--disable-versioning
+embtk_eglibc-sunrpc-(CONFIG_KEMBTK_EGLIBC_OPTION_EGLIBC_SUNRPC) :=		\
+						--enable-obsolete-rpc=yes
 
 embtk_eglibc_optgroups_f	:= $(EMBTK_ROOT)/mk/eglibc/eglibc-$(EGLIBC_VERSION)-options.mk
 eglibc_optgroups_f		:= $(EGLIBC_BUILD_DIR)/option-groups.config
@@ -90,7 +92,9 @@ define embtk_configure_eglibc_headers
 	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include		\
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
-	--enable-add-ons --enable-kernel="2.6.27" $(embtk_eglibc_versioning-y)	\
+	--enable-add-ons --enable-kernel="2.6.27"				\
+	$(embtk_eglibc_versioning-y)						\
+	$(embtk_eglibc-sunrpc-y)						\
 	--with-bugurl=$(EMBTK_BUGURL)
 	touch $(call __embtk_pkg_dotconfigured_f,eglibc_headers)
 endef
@@ -98,8 +102,6 @@ endef
 define __embtk_install_eglibc_headers
 	$(call embtk_pinfo,"Installing eglibc headers...")
 	$(call embtk_download_pkg,eglibc)
-	[ -e $(EGLIBC_SRC_DIR)/libc/ports ] ||					\
-		ln -sf $(EGLIBC_SRC_DIR)/ports $(EGLIBC_SRC_DIR)/libc/ports
 	$(embtk_parse_eglibc_optgroups)
 	$(embtk_configure_eglibc_headers)
 	$(MAKE) -C $(EGLIBC_HEADERS_BUILD_DIR) install-headers			\
@@ -134,7 +136,9 @@ define embtk_configure_eglibc
 	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include		\
 	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
-	--enable-add-ons --enable-kernel="2.6.27" $(embtk_eglibc_versioning-y)	\
+	--enable-add-ons --enable-kernel="2.6.27"				\
+	$(embtk_eglibc_versioning-y)						\
+	$(embtk_eglibc-sunrpc-y)						\
 	--with-bugurl=$(EMBTK_BUGURL)						\
 	--with-pkgversion="EGLIBC from embtoolkit-$(EMBTK_VERSION)"
 	touch $(EGLIBC_BUILD_DIR)/.eglibc.embtk.conifgured
