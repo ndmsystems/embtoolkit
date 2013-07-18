@@ -89,6 +89,7 @@ define embtk_configure_eglibc_headers
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	NM=$(TARGETNM)								\
+	ac_cv_prog_ac_ct_NM=$(TARGETNM)						\
 	libc_cv_ssp=no								\
 	libc_cv_predef_stack_protector=no					\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
@@ -136,6 +137,7 @@ define embtk_configure_eglibc
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	NM=$(TARGETNM)								\
+	ac_cv_prog_ac_ct_NM=$(TARGETNM)						\
 	libc_cv_ssp=no								\
 	libc_cv_predef_stack_protector=no					\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
