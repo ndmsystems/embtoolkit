@@ -88,6 +88,7 @@ define embtk_configure_eglibc_headers
 	CXX=$(TARGETGCXX)							\
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
+	libc_cv_ssp=no								\
 	libc_cv_predef_stack_protector=no					\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
 	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include		\
@@ -133,6 +134,7 @@ define embtk_configure_eglibc
 	CXX=$(TARGETGCXX_CACHED)						\
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
+	libc_cv_ssp=no								\
 	libc_cv_predef_stack_protector=no					\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
 	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include		\
