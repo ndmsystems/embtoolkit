@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,21 +23,16 @@
 # \date         January 2011
 ################################################################################
 
+
+#
+# Default autoconf version
+#
 config EMBTK_HAVE_AUTOCONF
 	bool
 	default y
 	help
-		autoconf for autotools.
+	 autoconf for autotools.
 
 config EMBTK_AUTOCONF_VERSION_STRING
 	string
 	default	"2.68"
-
-config EMBTK_AUTOCONF_NEED_PATCH
-	bool
-config EMBTK_AUTOCONF_NEED_AUTORECONF
-	bool
-config EMBTK_AUTOCONF_PKG_IS_TARGZ
-	bool
-config EMBTK_AUTOCONF_PKG_IS_TARBZ2
-	bool
