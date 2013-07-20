@@ -344,7 +344,7 @@ define embtk_configure_pkg
 	ac_cv_func_malloc_0_nonnull=yes						\
 	ac_cv_func_realloc_0_nonnull=yes					\
 	$(__embtk_pkg_configureenv)						\
-	$(CONFIG_SHELL) $(__embtk_pkg_srcdir)/configure				\
+	$(CONFIG_EMBTK_SHELL) $(__embtk_pkg_srcdir)/configure			\
 	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)			\
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)			\
 	--prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-rpath	\
@@ -380,7 +380,7 @@ define embtk_configure_hostpkg
 	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CC=$(HOSTCC_CACHED))	\
 	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CXX=$(HOSTCXX_CACHED))	\
 	$(__embtk_pkg_configureenv)						\
-	$(CONFIG_SHELL) $(__embtk_pkg_srcdir)/configure				\
+	$(CONFIG_EMBTK_SHELL) $(__embtk_pkg_srcdir)/configure			\
 	--build=$(HOST_BUILD) --host=$(HOST_ARCH)				\
 	--prefix=$(strip $(if $(__embtk_pkg_prefix),				\
 				$(__embtk_pkg_prefix),$(embtk_htools)/usr))	\

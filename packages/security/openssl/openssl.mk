@@ -61,7 +61,7 @@ openssl_install:
 define embtk_beforeinstall_openssl
 	$(Q)rm -rf $(OPENSSL_BUILD_DIR)/.postinstalled
 	$(Q)cd $(OPENSSL_BUILD_DIR);						\
-	$(CONFIG_SHELL) $(OPENSSL_SRC_DIR)/Configure $(OPENSSL_LINUX_TARGET)	\
+	$(CONFIG_EMBTK_SHELL) $(OPENSSL_SRC_DIR)/Configure $(OPENSSL_LINUX_TARGET)	\
 	--openssldir=/etc/ssl --prefix=/usr shared
 endef
 

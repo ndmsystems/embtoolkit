@@ -45,10 +45,9 @@ export EMBTK_BUGURL EMBTK_HOMEURL EMBTK_VERSION
 
 EMBTK_ROOT		:= $(shell pwd)
 EMBTK_DOTCONFIG 	:= $(EMBTK_ROOT)/.config
-export EMBTK_ROOT EMBTK_DOTCONFIG
 
 # SHELL used by kbuild
-CONFIG_SHELL		:=							\
+CONFIG_EMBTK_SHELL		:=						\
 	$(shell									\
 	if [ -x "$$BASH" ]; then						\
 		echo $$BASH;							\
@@ -59,9 +58,8 @@ CONFIG_SHELL		:=							\
 			echo /bin/sh;						\
 		fi;								\
 	fi)
-export CONFIG_SHELL
 
-HOST_ARCH		:= $(shell $(CONFIG_SHELL) $(EMBTK_ROOT)/scripts/config.guess)
+HOST_ARCH		:= $(shell $(CONFIG_EMBTK_SHELL) $(EMBTK_ROOT)/scripts/config.guess)
 HOST_BUILD		:= $(HOST_ARCH)
 export HOST_ARCH HOST_BUILD
 

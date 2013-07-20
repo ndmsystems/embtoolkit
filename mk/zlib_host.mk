@@ -41,7 +41,7 @@ define embtk_configure_zlib_host
 	CPPFLAGS="-I$(embtk_htools)/usr/include"				\
 	LDFLAGS="-L$(embtk_htools)/$(LIBDIR) -L$(embtk_htools)/usr/$(LIBDIR)"	\
 	$(ZLIB_HOST_CONFIGURE_ENV)					\
-	$(CONFIG_SHELL) $(ZLIB_HOST_SRC_DIR)/configure			\
+	$(CONFIG_EMBTK_SHELL) $(ZLIB_HOST_SRC_DIR)/configure			\
 		--prefix=$(embtk_htools)/usr $(ZLIB_HOST_CONFIGURE_OPTS)
 	touch $(call __embtk_pkg_dotconfigured_f,zlib_host)
 endef

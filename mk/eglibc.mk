@@ -92,7 +92,7 @@ define embtk_configure_eglibc_headers
 	NM=$(TARGETNM)								\
 	OBJCOPY=$(TARGETOBJCOPY)						\
 	OBJDUMP=$(TARGETDUMP)							\
-	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
+	$(CONFIG_EMBTK_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
 	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include		\
 	--host=$(STRICT_GNU_TARGET)						\
 	--target=$(STRICT_GNU_TARGET)						\
@@ -142,7 +142,7 @@ define embtk_configure_eglibc
 	NM=$(TARGETNM)								\
 	OBJCOPY=$(TARGETOBJCOPY)						\
 	OBJDUMP=$(TARGETDUMP)							\
-	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
+	$(CONFIG_EMBTK_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
 	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include		\
 	--host=$(STRICT_GNU_TARGET)						\
 	--target=$(STRICT_GNU_TARGET)						\

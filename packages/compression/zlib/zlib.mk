@@ -64,7 +64,7 @@ define embtk_configure_zlib
 	PKG_CONFIG=$(PKGCONFIG_BIN)					\
 	PKG_CONFIG_PATH=$(EMBTK_PKG_CONFIG_PATH)			\
 	$(ZLIB_CONFIGURE_ENV)						\
-	$(CONFIG_SHELL) $(ZLIB_SRC_DIR)/configure			\
+	$(CONFIG_EMBTK_SHELL) $(ZLIB_SRC_DIR)/configure			\
 		--libdir=/usr/$(LIBDIR)	--prefix=/usr --sysconfdir=/etc	\
 		$(ZLIB_CONFIGURE_OPTS)
 	$(Q)touch $(ZLIB_BUILD_DIR)/.configured
