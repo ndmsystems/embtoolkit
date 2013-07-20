@@ -883,8 +883,9 @@ config KEMBTK_EGLIBC_OPTION_POSIX_REGEXP
 		omitted.
 
 config KEMBTK_EGLIBC_OPTION_POSIX_REGEXP_GLIBC
-	bool "Regular expressions from GLIBC"
+	bool
 	depends on KEMBTK_EGLIBC_OPTION_POSIX_REGEXP
+	default y
 	help
 		This option group specifies which regular expression
 		library to use.  The choice is between regex
