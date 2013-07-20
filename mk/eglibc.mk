@@ -94,7 +94,9 @@ define embtk_configure_eglibc_headers
 	OBJDUMP=$(TARGETDUMP)							\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
 	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include		\
-	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
+	--host=$(STRICT_GNU_TARGET)						\
+	--target=$(STRICT_GNU_TARGET)						\
+	--build=$(HOST_BUILD)							\
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
 	--enable-add-ons --enable-kernel="2.6.27"				\
 	$(embtk_eglibc_versioning-y)						\
@@ -142,7 +144,9 @@ define embtk_configure_eglibc
 	OBJDUMP=$(TARGETDUMP)							\
 	$(CONFIG_SHELL) $(EGLIBC_SRC_DIR)/libc/configure			\
 	--prefix=/usr --with-headers=$(embtk_sysroot)/usr/include		\
-	--host=$(STRICT_GNU_TARGET) --build=$(HOST_BUILD)			\
+	--host=$(STRICT_GNU_TARGET)						\
+	--target=$(STRICT_GNU_TARGET)						\
+	--build=$(HOST_BUILD)							\
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
 	--enable-add-ons --enable-kernel="2.6.27"				\
 	$(embtk_eglibc_versioning-y)						\
