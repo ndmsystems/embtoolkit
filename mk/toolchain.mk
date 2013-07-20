@@ -62,6 +62,7 @@ TARGETNM		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-nm
 TARGETSTRIP		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-strip
 TARGETOBJDUMP		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-objdump
 TARGETOBJCOPY		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-objcopy
+TARGETREADELF		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-readelf
 
 #
 # TARGET cflags
