@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,25 +26,24 @@
 config EMBTK_HAVE_SQLITE
 	bool "Have sqlite"
 	help
-		SQLite is a software library that implements a self-contained,
-		serverless, zero-configuration, transactional SQL database
-		engine.
-		SQLite is the most widely deployed SQL database engine in the
-		world. The source code for SQLite is in the public domain.
+	 SQLite is a software library that implements a self-contained,
+	 serverless, zero-configuration, transactional SQL database engine.
+	 SQLite is the most widely deployed SQL database engine in the world.
+	 The source code for SQLite is in the public domain.
 
 choice
 	prompt "sqlite version you wish"
 	depends on EMBTK_HAVE_SQLITE
 	help
-		Here you can choose which version of sqlite you want to use.
+	 Here you can choose which version of sqlite you want to use.
 
-	config  EMBTK_SQLITE_VERSION_3_7_13
-		bool "sqlite-3.7.13"
+	config  EMBTK_SQLITE_VERSION_3_7_17
+		bool "sqlite-3.7.17"
 endchoice
 
 config EMBTK_SQLITE_VERSION_STRING
 	string
-	default "3071300"	if EMBTK_SQLITE_VERSION_3_7_13
+	default "3071700"	if EMBTK_SQLITE_VERSION_3_7_17
 
 
 config EMBTK_SQLITE_NEED_PATCH
