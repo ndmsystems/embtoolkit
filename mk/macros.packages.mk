@@ -326,7 +326,7 @@ define embtk_configure_pkg
 	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
 	$(Q)cd $(__embtk_pkg_builddir);						\
 	CC=$(TARGETCC_CACHED)							\
-	CXX=$(TARGETCXX_CACHED)							\
+	$(if $(CONFIG_EMBTK_GCC_LANGUAGE_CPP),CXX=$(TARGETCXX_CACHED))		\
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	AS=$(CROSS_COMPILE)as							\
