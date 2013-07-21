@@ -343,6 +343,7 @@ define embtk_configure_pkg
 	PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"				\
 	ac_cv_func_malloc_0_nonnull=yes						\
 	ac_cv_func_realloc_0_nonnull=yes					\
+	CONFIG_SHELL=$(CONFIG_EMBTK_SHELL)					\
 	$(__embtk_pkg_configureenv)						\
 	$(CONFIG_EMBTK_SHELL) $(__embtk_pkg_srcdir)/configure			\
 	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)			\
@@ -379,6 +380,7 @@ define embtk_configure_hostpkg
 	PKG_CONFIG_PATH="$(EMBTK_HOST_PKG_CONFIG_PATH)"				\
 	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CC=$(HOSTCC_CACHED))	\
 	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CXX=$(HOSTCXX_CACHED))	\
+	CONFIG_SHELL=$(CONFIG_EMBTK_SHELL)					\
 	$(__embtk_pkg_configureenv)						\
 	$(CONFIG_EMBTK_SHELL) $(__embtk_pkg_srcdir)/configure			\
 	--build=$(HOST_BUILD) --host=$(HOST_ARCH)				\
