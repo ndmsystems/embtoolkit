@@ -50,7 +50,7 @@ embtk_eglibc_floattype := $(if $(CONFIG_EMBTK_SOFTFLOAT),			\
 # Versioning in eglibc
 embtk_eglibc_versioning-$(CONFIG_EMBTK_EGLIBC_DISABLE_VERSIONING) :=		\
 							--disable-versioning
-embtk_eglibc-sunrpc-(CONFIG_KEMBTK_EGLIBC_OPTION_EGLIBC_SUNRPC) :=		\
+embtk_eglibc-sunrpc-$(CONFIG_KEMBTK_EGLIBC_OPTION_EGLIBC_SUNRPC) :=		\
 						--enable-obsolete-rpc=yes
 
 embtk_eglibc_optgroups_f	:= $(EMBTK_ROOT)/mk/eglibc/eglibc-$(EGLIBC_VERSION)-options.mk
