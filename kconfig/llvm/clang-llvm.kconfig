@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2012-2013 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,6 +31,10 @@ choice
 	help
 	 Version of llvm you wish
 
+	config EMBTK_CLANG_LLVM_VERSION_3_3
+		bool "clang/llvm-3.3"
+		select EMBTK_LLVM_VERSION_3_3
+		select EMBTK_CLANG_VERSION_3_3
 	config EMBTK_CLANG_LLVM_VERSION_3_2
 		bool "clang/llvm-3.2"
 		select EMBTK_LLVM_VERSION_3_2

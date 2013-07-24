@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2012-2013 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,7 +30,9 @@ config EMTK_HAVE_CLANG
 #
 # clang version
 #
-
+config EMBTK_CLANG_VERSION_3_3
+	bool
+	select EMBTK_CLANG_NEED_PATCH
 config EMBTK_CLANG_VERSION_3_2
 	bool
 	select EMBTK_CLANG_NEED_PATCH
@@ -66,6 +68,7 @@ config EMBTK_CLANG_REFSPEC
 #
 config EMBTK_CLANG_VERSION_STRING
 	string
+	default "3.3"		if EMBTK_CLANG_VERSION_3_3
 	default "3.2"		if EMBTK_CLANG_VERSION_3_2
 	default "git"		if EMBTK_CLANG_VERSION_GIT
 
