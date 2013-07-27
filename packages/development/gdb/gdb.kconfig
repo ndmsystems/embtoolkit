@@ -35,17 +35,10 @@ choice
 	help
 		Choose which version of gdb to use.
 
+	config EMBTK_GDB_VERSION_7_6
+		bool "gdb-7.6"
 	config EMBTK_GDB_VERSION_7_5_1
 		bool "gdb-7.5.1"
-	config EMBTK_GDB_VERSION_7_4_1
-		bool "gdb-7.4.1"
-	config EMBTK_GDB_VERSION_7_3_1
-		bool "gdb-7.3.1"
-	config EMBTK_GDB_VERSION_7_2
-		bool "gdb-7.2"
-		select EMBTK_GDB_NEED_PATCH
-	config EMBTK_GDB_VERSION_6_8
-		bool "gdb-6.8"
 endchoice
 
 choice
@@ -82,11 +75,8 @@ config EMBTK_HOST_HAVE_GDB
 
 config EMBTK_GDB_VERSION_STRING
 	string
+	default "7.6"		if EMBTK_GDB_VERSION_7_6
 	default "7.5.1"		if EMBTK_GDB_VERSION_7_5_1
-	default "7.4.1"		if EMBTK_GDB_VERSION_7_4_1
-	default "7.3.1"		if EMBTK_GDB_VERSION_7_3_1
-	default "7.2"		if EMBTK_GDB_VERSION_7_2
-	default "6.8"		if EMBTK_GDB_VERSION_6_8
 
 config EMBTK_GDB_NEED_PATCH
 	bool
