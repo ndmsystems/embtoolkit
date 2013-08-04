@@ -40,6 +40,10 @@ ifeq ($(TARGETCXX),$(TARGETGCXX))
 __embtk_compiler-rt_cflags	:= $(filter-out $(__clang_cflags),$(__embtk_compiler-rt_cflags))
 endif
 
+ifeq ($(CONFIG_EMBTK_CLANG_VERSION_3_3),y)
+__embtk_compiler-rt_cflags += -DASAN_INTERFACE_VERSION=3
+endif
+
 COMPILER-RT_MAKE_OPTS	:= CC="$(TARGETCC)" CFLAGS="$(__embtk_compiler-rt_cflags)"
 COMPILER-RT_MAKE_OPTS	+= CXX="$(TARGETCXX)" LIBDIR="$(LIBDIR)"
 COMPILER-RT_MAKE_OPTS	+= AR=$(TARGETAR) RANLIB=$(TARGETRANLIB)
