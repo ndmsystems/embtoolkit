@@ -85,20 +85,20 @@ define __embtk_postinstall_libgcc
 		(cd $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/ && tar -cf - *.so*)	\
 			| tar -xf - -C $(embtk_sysroot)/lib/ &&				\
 		cp $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.a			\
-			$(embtk_sysroot)/usr/lib/  2>/dev/null || true)			\
+			$(embtk_sysroot)/usr/lib/ 2>/dev/null || true)			\
 	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),					\
 		(cd $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/ && tar -cf - *.so*)	\
 			| tar -xf - -C $(embtk_sysroot)/lib32/ &&			\
 		cp $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.a			\
-			$(embtk_sysroot)/usr/lib32/  2>/dev/null || true)
+			$(embtk_sysroot)/usr/lib32/ 2>/dev/null || true)
 endef
 
 define __embtk_postinstall_gcc2_gcc3
-	$(__embtk_postinstall_libgcc) &&					\
+	$(__embtk_postinstall_libgcc)						\
 	$(if $(CONFIG_EMBTK_64BITS_FS),						\
 		$(if $(CONFIG_EMBTK_CLIB_UCLIBC),				\
-			cd $(embtk_sysroot)/lib/;				\
-				ln -sf ld-uClibc.so.0 ld64-uClibc.so.0), true)
+			&& cd $(embtk_sysroot)/lib/;				\
+				ln -sf ld-uClibc.so.0 ld64-uClibc.so.0))
 endef
 
 #
