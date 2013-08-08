@@ -32,7 +32,7 @@ set_abi() {
 			echo "CONFIG_EMBTK_ARCH_MIPS_ABI_N64=y" >> $cibuild_kconfig
 			;;
 		*)
-			mips_error "Unknown MIPS abi: $abi"
+			mips_perror "Unknown MIPS abi: $abi"
 			exit 1
 			;;
 	esac
