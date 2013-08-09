@@ -19,8 +19,8 @@
 #
 # \file         iptables.kconfig
 # \brief	iptables.kconfig of Embtoolkit
-# \author       Averell KINOUANI,  <a.kinouani@voila.fr>
-# \date         May 2012
+# \author       Averell KINOUANI,  <averell.kinouani@embtoolkit.org>
+# \date         Juin 2013
 ################################################################################
 
 config EMBTK_HAVE_IPTABLES
@@ -39,8 +39,8 @@ choice
 	depends on EMBTK_HAVE_IPTABLES
 	help
 		Here you can choose which version of iptables you want to use.
-	config  EMBTK_IPTABLES_VERSION_1_4_13
-		bool "iptables-1.4.13"
+	config  EMBTK_IPTABLES_VERSION_1_4_19_1
+		bool "iptables-1.4.19.1"
 
 endchoice
 
@@ -53,7 +53,7 @@ config EMBTK_IPTABLES_HAVE_LIBIPQ
 
 config EMBTK_IPTABLES_VERSION_STRING
 	string
-	default "1.4.13"	if EMBTK_IPTABLES_VERSION_1_4_13
+	default "1.4.19.1"	if EMBTK_IPTABLES_VERSION_1_4_19_1
 
 config EMBTK_IPTABLES_NEED_PATCH
 	bool
