@@ -43,7 +43,7 @@ choice
 		 build the toolchain.
 
 	config EMBTK_LINUX_BUILD_USE_EXTSRC
-		bool "The same used to build the toolchain"
+		bool "External linux source tree"
 		help
 		 Select this option to use an external linux source tree.
 endchoice
