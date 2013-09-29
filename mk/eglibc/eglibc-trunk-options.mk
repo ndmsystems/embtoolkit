@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2009-2013 GAYE Abdoulaye Walsimou.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
