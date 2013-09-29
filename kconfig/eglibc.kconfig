@@ -50,12 +50,12 @@ config EMBTK_EGLIBC_SVN_REVISION
 		moment you build your toolchain new revision is available,
 		you can increase this value.
 
-	default 23365	if EMBTK_EGLIBC_VERSION_2_17
-	default 23440	if EMBTK_EGLIBC_VERSION_TRUNK
+	default 23797	if EMBTK_EGLIBC_VERSION_2_17
+	default 23996	if EMBTK_EGLIBC_VERSION_TRUNK
 
 comment "At EmbToolkit release, valid eglibc svn revisions are:"
-comment "svn revision 23365	for eglibc-2.17"
-comment "svn revision 23440	for eglibc-trunk (development version)"
+comment "svn revision 23797	for eglibc-2.17"
+comment "svn revision 23996	for eglibc-trunk (development version)"
 comment ""
 
 config EMBTK_EGLIBC_SVN_BRANCH
