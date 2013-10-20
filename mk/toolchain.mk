@@ -26,6 +26,8 @@ TARGETGCC		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-gcc
 TARGETGCXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-g++
 TARGETCLANG		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-clang
 TARGETCLANGXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-clang++
+TARGETSCANBUILD		:= $(embtk_tools)/bin/clang-scan-build/scan-build
+TARGETSCANVIEW		:= $(embtk_tools)/bin/clang-scan-view/scan-view
 
 #
 # Default compilers to use for packages.
