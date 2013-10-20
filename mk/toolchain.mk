@@ -26,8 +26,6 @@ TARGETGCC		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-gcc
 TARGETGCXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-g++
 TARGETCLANG		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-clang
 TARGETCLANGXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-clang++
-TARGETSCANBUILD		:= $(embtk_tools)/bin/clang-scan-build/scan-build
-TARGETSCANVIEW		:= $(embtk_tools)/bin/clang-scan-view/scan-view
 
 #
 # Default compilers to use for packages.
@@ -53,6 +51,17 @@ endif
 
 TARGETCC		:= $(__TARGETCC-y)
 TARGETCXX		:= $(__TARGETCXX-y)
+
+#
+# Clang static analyzer tools
+#
+ifeq ($(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN),)
+TARGETSCANBUILD		:= $(embtk_tools)/bin/clang-scan-build/scan-build
+TARGETSCANBUILD		+= --use-analyzer=$(TARGETCLANG)
+TARGETSCANBUILD		+= --use-cc=$(TARGETCC)
+TARGETSCANBUILD		+= --use-c++=$(TARGETCXX)
+TARGETSCANVIEW		:= $(embtk_tools)/bin/clang-scan-view/scan-view
+endif
 
 #
 # Some binutils components.
