@@ -73,8 +73,8 @@ ifeq ($(findstring bsd,$(HOST_ARCH)),bsd)
 __embtk_make_cmd	:= gmake
 endif
 
-__embtk_make_env	:=  $(if $(V),MAKEFLAGS="",MAKEFLAGS="--no-print-directory --silent")
-MAKE			:= $(__embtk_make_env) $(__embtk_make_cmd)
+__embtk_make_env	:= $(if $(V),MAKEFLAGS="",MAKEFLAGS="--no-print-directory --silent")
+MAKE			:= $(__embtk_make_cmd) $(__embtk_make_env)
 
 #Macro to adapt libtool files (*.la) for cross compiling
 __ltlibdirold		= libdir='\/usr\/$(LIBDIR)\(.*\)'
