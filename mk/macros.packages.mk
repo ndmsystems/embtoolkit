@@ -73,8 +73,8 @@ ifeq ($(findstring bsd,$(HOST_ARCH)),bsd)
 __embtk_make_cmd	:= gmake
 endif
 
-__embtk_make_env	:=  $(if $(V),MAKEFLAGS="",MAKEFLAGS="--no-print-directory --silent")
-MAKE			:= $(__embtk_make_env) $(__embtk_make_cmd)
+__embtk_make_env	:= $(if $(V),MAKEFLAGS="",MAKEFLAGS="--no-print-directory --silent")
+MAKE			:= $(__embtk_make_cmd)
 
 #Macro to adapt libtool files (*.la) for cross compiling
 __ltlibdirold		= libdir='\/usr\/$(LIBDIR)\(.*\)'
@@ -394,32 +394,33 @@ endef
 # Various helpers macros for different steps while installing packages.
 #
 __embtk_multi_make = $(foreach builddir,$(__embtk_pkg_makedirs),		\
-				$(__embtk_pkg_makeenv)				\
+				$(__embtk_pkg_makeenv) $(__embtk_make_env)	\
 				$(MAKE) -C $(__embtk_pkg_builddir)/$(builddir)	\
 				$(J) $(__embtk_pkg_makeopts);)
 
-__embtk_single_make = $(__embtk_pkg_makeenv) $(MAKE) -C $(__embtk_pkg_builddir)	\
-			$(J) $(__embtk_pkg_makeopts)
+__embtk_single_make = $(__embtk_pkg_makeenv) $(__embtk_make_env)		\
+		$(MAKE) -C $(__embtk_pkg_builddir) $(J) $(__embtk_pkg_makeopts)
 
 __embtk_multi_make_install = $(foreach builddir,$(__embtk_pkg_makedirs),	\
-	$(__embtk_pkg_makeenv) $(MAKE) -C $(__embtk_pkg_builddir)/$(builddir)	\
+	$(__embtk_pkg_makeenv) $(__embtk_make_env)				\
+	$(MAKE) -C $(__embtk_pkg_builddir)/$(builddir)				\
 	$(if $(__embtk_pkg_nodestdir),,						\
 		DESTDIR=$(embtk_sysroot)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix))) \
 	$(__embtk_pkg_makeopts) install;)
 
-__embtk_single_make_install = $(__embtk_pkg_makeenv)				\
+__embtk_single_make_install = $(__embtk_pkg_makeenv) $(__embtk_make_env)	\
 	$(MAKE) -C $(__embtk_pkg_builddir)					\
 	$(if $(__embtk_pkg_nodestdir),,						\
 		DESTDIR=$(embtk_sysroot)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix))) \
 	$(__embtk_pkg_makeopts) install
 
 __embtk_multi_make_hostinstall = $(foreach builddir,$(__embtk_pkg_makedirs),	\
-	$(__embtk_pkg_makeenv)							\
+	$(__embtk_pkg_makeenv) $(__embtk_make_env)				\
 	$(MAKE) -C $(__embtk_pkg_builddir)/$(builddir)				\
 	$(if $(__embtk_pkg_destdir),DESTDIR=$(__embtk_pkg_destdir))		\
 	$(__embtk_pkg_makeopts) install;)
 
-__embtk_single_make_hostinstall = $(__embtk_pkg_makeenv)			\
+__embtk_single_make_hostinstall = $(__embtk_pkg_makeenv) $(__embtk_make_env)	\
 	$(MAKE) -C $(__embtk_pkg_builddir)					\
 	$(if $(__embtk_pkg_destdir),DESTDIR=$(__embtk_pkg_destdir))		\
 	$(__embtk_pkg_makeopts) install
