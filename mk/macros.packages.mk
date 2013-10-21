@@ -190,6 +190,8 @@ __embtk_pkg_cxxflags		= $(strip $($(PKGV)_CXXFLAGS))
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
 __embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
 __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))
+__embtk_pkg_scanbuild		= $(if $(CONFIG_EMBTK_$(PKGV)_USE_SCANBUILD),$(TARGETSCANBUILD))
+
 
 # Some embtoolkit internal files for packages
 __embtk_pkg_dotdecompressed_f	= $(__embtk_pkg_srcdir)/.$(__embtk_pkg_name).embtk.decompressed
@@ -394,11 +396,12 @@ endef
 # Various helpers macros for different steps while installing packages.
 #
 __embtk_multi_make = $(foreach builddir,$(__embtk_pkg_makedirs),		\
-				$(__embtk_pkg_makeenv)				\
-				$(MAKE) -C $(__embtk_pkg_builddir)/$(builddir)	\
-				$(J) $(__embtk_pkg_makeopts);)
+			$(__embtk_pkg_makeenv) $(__embtk_pkg_scanbuild)		\
+			$(MAKE) -C $(__embtk_pkg_builddir)/$(builddir)		\
+			$(J) $(__embtk_pkg_makeopts);)
 
-__embtk_single_make = $(__embtk_pkg_makeenv) $(MAKE) -C $(__embtk_pkg_builddir)	\
+__embtk_single_make = $(__embtk_pkg_makeenv) $(__embtk_pkg_scanbuild)		\
+			$(MAKE) -C $(__embtk_pkg_builddir)			\
 			$(J) $(__embtk_pkg_makeopts)
 
 __embtk_multi_make_install = $(foreach builddir,$(__embtk_pkg_makedirs),	\
