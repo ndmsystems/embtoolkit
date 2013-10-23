@@ -190,7 +190,7 @@ __embtk_pkg_cxxflags		= $(strip $($(PKGV)_CXXFLAGS))
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
 __embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
 __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))
-__embtk_pkg_scanbuild		= $(if $(CONFIG_EMBTK_$(PKGV)_USE_SCANBUILD),$(TARGETSCANBUILD))
+__embtk_pkg_scanbuild		= $(if $(CONFIG_EMBTK_$(PKGV)_USE_SCANBUILD),$(TARGETSCANBUILD) -o $(__embtk_pkg_srcdir)-scanbuild-results)
 
 
 # Some embtoolkit internal files for packages
@@ -346,7 +346,7 @@ define embtk_configure_pkg
 	ac_cv_func_malloc_0_nonnull=yes						\
 	ac_cv_func_realloc_0_nonnull=yes					\
 	CONFIG_SHELL=$(CONFIG_EMBTK_SHELL)					\
-	$(__embtk_pkg_configureenv)						\
+	$(__embtk_pkg_configureenv) $(__embtk_pkg_scanbuild)			\
 	$(CONFIG_EMBTK_SHELL) $(__embtk_pkg_srcdir)/configure			\
 	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)			\
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)			\
