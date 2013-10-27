@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,26 +17,22 @@
 #
 ################################################################################
 #
-# \file         net.kconfig
-# \brief	net.kconfig of Embtoolkit
+# \file         fcgi.mk
+# \brief	fcgi.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2012
+# \date         October 2013
 ################################################################################
 
-# fcgi
-source packages/net/fcgi/fcgi.kconfig
+FCGI_NAME	:= fcgi
+FCGI_VERSION	:= $(call embtk_get_pkgversion,fcgi)
+FCGI_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+FCGI_PACKAGE	:= fcgi-$(FCGI_VERSION).tar.bz2
+FCGI_SRC_DIR	:= $(embtk_pkgb)/fcgi-$(FCGI_VERSION)
+FCGI_BUILD_DIR	:= $(embtk_pkgb)/fcgi-$(FCGI_VERSION)
 
-# Iptables
-source packages/net/iptables/iptables.kconfig
+FCGI_INCLUDES	:= fastcgi.h fcgiapp.h fcgi_config.h fcgimisc.h fcgio.h
+FCGI_INCLUDES	+= fcgios.h fcgi_stdio.h
+FCGI_LIBS	:= libfcgi.*
 
-# LIBNL
-source packages/net/libnl/libnl.kconfig
-
-# libpcap
-source packages/net/libpcap/libpcap.kconfig
-
-# libtirpc
-source packages/net/libtirpc/libtirpc.kconfig
-
-# tcpdump
-source packages/net/tcpdump/tcpdump.kconfig
+FCGI_CFALGS	:= -fno-strict-aliasing
+FCGI_CXXFALGS	:= $(FCGI_CFALGS)

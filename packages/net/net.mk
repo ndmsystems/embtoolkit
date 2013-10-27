@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,6 +22,10 @@
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2012
 ################################################################################
+
+# fcgi
+include packages/net/fcgi/fcgi.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FCGI) += fcgi_install
 
 # Iptables
 include packages/net/iptables/iptables.mk
