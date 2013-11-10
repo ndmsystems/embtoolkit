@@ -74,7 +74,7 @@ __embtk_make_cmd	:= gmake
 endif
 
 __embtk_make_env	:= $(if $(V),MAKEFLAGS="",MAKEFLAGS="--no-print-directory --silent")
-MAKE			:= $(__embtk_make_cmd) $(__embtk_make_env)
+MAKE			:= $(__embtk_make_env) $(__embtk_make_cmd)
 
 #Macro to adapt libtool files (*.la) for cross compiling
 __ltlibdirold		= libdir='\/usr\/$(LIBDIR)\(.*\)'
