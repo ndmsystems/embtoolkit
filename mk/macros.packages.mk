@@ -64,18 +64,6 @@ define embtk_pkgconfig-cflags
 		$(PKGCONFIG_BIN) $(strip $(1)) --cflags)
 endef
 
-#
-# Define here which make program to use in MAKE.
-# FIXME: On some systems, gnu make is named gmake (ie FreeBSD)
-#
-__embtk_make_cmd	:= make
-ifeq ($(findstring bsd,$(HOST_ARCH)),bsd)
-__embtk_make_cmd	:= gmake
-endif
-
-__embtk_make_env	:= $(if $(V),MAKEFLAGS="",MAKEFLAGS="--no-print-directory --silent")
-MAKE			:= $(__embtk_make_env) $(__embtk_make_cmd)
-
 #Macro to adapt libtool files (*.la) for cross compiling
 __ltlibdirold		= libdir='\/usr\/$(LIBDIR)\(.*\)'
 __ltlibdirnew		= libdir='$(embtk_sysroot)\/usr\/$(LIBDIR)\1'
@@ -124,6 +112,9 @@ endef
 #
 # Get passed package variables prefix and set some helpers macros.
 #
+__embtk_toolchain_use_llvm-y	:= $(or $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN))
+__embtk_toolchain_has_llvm-y	:= $(or $(CONFIG_EMBTK_GCC_AND_LLVM_TOOLCHAIN),$(__embtk_toolchain_use_llvm-y))
+
 PKGV				= $(strip $(shell echo $(1) | tr a-z A-Z))
 pkgv				= $(strip $(shell echo $(1) | tr A-Z a-z))
 __embtk_pkg_name		= $(strip $($(PKGV)_NAME))
@@ -191,7 +182,20 @@ __embtk_pkg_ldflags		= $(strip $($(PKGV)_LDFLAGS))
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
 __embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
 __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))
-__embtk_pkg_scanbuild		= $(if $(CONFIG_EMBTK_$(PKGV)_USE_SCANBUILD),$(TARGETSCANBUILD) -o $(__embtk_pkg_srcdir)-scanbuild-results)
+__embtk_pkg_scanbuild-y		= $(and $(CONFIG_EMBTK_$(PKGV)_USE_SCANBUILD),$(__embtk_toolchain_has_llvm-y))
+__embtk_pkg_scanbuild		= $(if $(__embtk_pkg_scanbuild-y),$(TARGETSCANBUILD) -o $(__embtk_pkg_srcdir)-scanbuild-results)
+
+#
+# Define here which make program to use in MAKE.
+# FIXME: On some systems, gnu make is named gmake (ie FreeBSD)
+#
+__embtk_make_cmd	:= make
+ifeq ($(findstring bsd,$(HOST_ARCH)),bsd)
+__embtk_make_cmd	:= gmake
+endif
+
+__embtk_make_env	:= $(if $(V),MAKEFLAGS="",MAKEFLAGS="--no-print-directory --silent")
+MAKE			= $(__embtk_make_env) $(__embtk_pkg_scanbuild) $(__embtk_make_cmd)
 
 
 # Some embtoolkit internal files for packages
@@ -399,11 +403,11 @@ endef
 # Various helpers macros for different steps while installing packages.
 #
 __embtk_multi_make = $(foreach builddir,$(__embtk_pkg_makedirs),		\
-			$(__embtk_pkg_makeenv) $(__embtk_pkg_scanbuild)		\
+			$(__embtk_pkg_makeenv)					\
 			$(MAKE) -C $(__embtk_pkg_builddir)/$(builddir)		\
 			$(J) $(__embtk_pkg_makeopts);)
 
-__embtk_single_make = $(__embtk_pkg_makeenv) $(__embtk_pkg_scanbuild)		\
+__embtk_single_make = $(__embtk_pkg_makeenv)					\
 			$(MAKE) -C $(__embtk_pkg_builddir)			\
 			$(J) $(__embtk_pkg_makeopts)
 
