@@ -30,13 +30,12 @@ TARGETCLANGXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-clang++
 #
 # Default compilers to use for packages.
 #
-__TARGETCC-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= $(TARGETGCC)
-__TARGETCC-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)	:= $(TARGETGCC)
-__TARGETCXX-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= $(TARGETGCXX)
-__TARGETCXX-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)	:= $(TARGETGCXX)
+__TARGETCC-y					:= $(TARGETGCC)
+__TARGETCXX-y					:= $(TARGETGCXX)
 
-__TARGETCC-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= $(TARGETCLANG)
-__TARGETCC-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= $(TARGETCLANG)
+__TARGETCC-$(__embtk_toolchain_use_llvm-y)	:= $(TARGETCLANG)
+__TARGETCXX-$(__embtk_toolchain_use_llvm-y)	:= $(TARGETCLANGXX)
+
 #
 # FIXME: remove this when clang++ will support exceptions in c++ for arm,
 # as exceptions seem to work for mips.
