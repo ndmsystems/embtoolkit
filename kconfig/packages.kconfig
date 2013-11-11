@@ -26,6 +26,8 @@
 #Busybox
 config EMBTK_HAVE_BB
 	bool "Have Busybox in your root filesystem"
+	default y
+
 if EMBTK_HAVE_BB
 menu "Busybox configuration"
 source packages/busybox/busybox.kconfig
