@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,27 +26,11 @@
 MTDUTILS_NAME			:= mtd-utils
 MTDUTILS_VERSION		:= $(call embtk_get_pkgversion,mtdutils)
 MTDUTILS_SITE			:= ftp://ftp.infradead.org/pub/mtd-utils
-MTDUTILS_SITE_MIRROR3		:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-MTDUTILS_PATCH_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/mtd-utils/$(MTDUTILS_VERSION)
 MTDUTILS_PACKAGE		:= mtd-utils-$(MTDUTILS_VERSION).tar.bz2
 MTDUTILS_SRC_DIR		:= $(embtk_pkgb)/mtd-utils-$(MTDUTILS_VERSION)
 MTDUTILS_BUILD_DIR		:= $(embtk_pkgb)/mtd-utils-$(MTDUTILS_VERSION)
 
-#
-# make these binaries selectable from kconfig after version 1.4.6
-#
-MTDUTILS_SBINS := bin2nand flash_eraseall flash_unlock mkfs.jffs2 nand2bin \
-		nftl_format rfddump ubicrc32 ubimirror ubirmvol docfdisk \
-		flash_info ftl_check mkfs.ubifs nanddump pddcustomize \
-		rfdformat ubicrc32.pl ubimkvol ubirsvol doc_loadbios \
-		flash_lock ftl_format mkpfi nandtest pfi2bin serve_image \
-		ubidetach ubinfo ubiupdatevol flashcp flash_otp_dump \
-		jffs2dump mtd_debug nandwrite pfiflash sumtool ubiformat \
-		ubinize unubi flash_erase flash_otp_info mkbootenv mtdinfo \
-		nftldump recv_image ubiattach ubigen ubirename
-
 MTDUTILS_DEPS		:= zlib_install lzo_install e2fsprogs_install
-
 
 __embtk_mtdutils_cflags	:= $(TARGET_CFLAGS)
 
@@ -57,10 +41,10 @@ MTDUTILS_MAKE_ENV	:= LDFLAGS="-L$(embtk_sysroot)/lib -L$(embtk_sysroot)/usr/lib"
 MTDUTILS_MAKE_ENV	+= CPPFLAGS="-I. -I./include -I$(embtk_sysroot)/usr/include"
 MTDUTILS_MAKE_ENV	+= CFLAGS="$(__embtk_mtdutils_cflags)"
 MTDUTILS_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_BUILD_DIR)
-MTDUTILS_MAKE_ENV	+= DESTDIR=$(embtk_sysroot)
 MTDUTILS_MAKE_ENV	+= PATH=$(PATH):$(embtk_tools)/bin
 MTDUTILS_MAKE_ENV	+= CROSS=$(CROSS_COMPILE)
 MTDUTILS_MAKE_OPTS	:= CC=$(TARGETCC_CACHED)
+MTDUTILS_MAKE_OPTS	+= DESTDIR=$(embtk_sysroot) WITHOUT_XATTR=1
 
 define __embtk_install_mtdutils
 	$(call embtk_makeinstall_pkg,mtdutils)
@@ -68,6 +52,48 @@ endef
 define embtk_install_mtdutils
 	$(call embtk_makeinstall_pkg,mtdutils)
 endef
+
+#
+# make these binaries selectable from kconfig
+#
+MTDUTILS_SBINS	:= docfdisk
+MTDUTILS_SBINS	+= flash_erase
+MTDUTILS_SBINS	+= flash_otp_dump
+MTDUTILS_SBINS	+= ftl_check
+MTDUTILS_SBINS	+= jffs2reader
+MTDUTILS_SBINS	+= mtd_debug
+MTDUTILS_SBINS	+= nandtest
+MTDUTILS_SBINS	+= nftl_format
+MTDUTILS_SBINS	+= rfdformat
+MTDUTILS_SBINS	+= ubiattach
+MTDUTILS_SBINS	+= ubiformat
+MTDUTILS_SBINS	+= ubinize
+MTDUTILS_SBINS	+= ubirsvol
+MTDUTILS_SBINS	+= doc_loadbios
+MTDUTILS_SBINS	+= flash_eraseall
+MTDUTILS_SBINS	+= flash_otp_info
+MTDUTILS_SBINS	+= ftl_format
+MTDUTILS_SBINS	+= mkfs.jffs2
+MTDUTILS_SBINS	+= mtdinfo
+MTDUTILS_SBINS	+= nandwrite
+MTDUTILS_SBINS	+= recv_image
+MTDUTILS_SBINS	+= serve_image
+MTDUTILS_SBINS	+= ubicrc32
+MTDUTILS_SBINS	+= ubimkvol
+MTDUTILS_SBINS	+= ubirename
+MTDUTILS_SBINS	+= ubiupdatevol
+MTDUTILS_SBINS	+= flashcp
+MTDUTILS_SBINS	+= flash_lock
+MTDUTILS_SBINS	+= flash_unlock
+MTDUTILS_SBINS	+= jffs2dump
+MTDUTILS_SBINS	+= mkfs.ubifs
+MTDUTILS_SBINS	+= nanddump
+MTDUTILS_SBINS	+= nftldump
+MTDUTILS_SBINS	+= rfddump
+MTDUTILS_SBINS	+= sumtool
+MTDUTILS_SBINS	+= ubidetach
+MTDUTILS_SBINS	+= ubinfo
+MTDUTILS_SBINS	+= ubirmvol
 
 #
 # mtd-utils for host development machine.
@@ -87,8 +113,8 @@ MTDUTILS_HOST_DEPS	:= zlib_host_install lzo_host_install \
 
 MTDUTILS_HOST_MAKE_ENV	:= LDFLAGS="-L$(embtk_htools)/usr/lib"
 MTDUTILS_HOST_MAKE_ENV	+= CPPFLAGS="-I. -Iinclude -I../include -I$(embtk_htools)/usr/include"
-MTDUTILS_HOST_MAKE_ENV	+= DESTDIR=$(embtk_htools)
 MTDUTILS_HOST_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR)
+MTDUTILS_HOST_MAKE_OPTS	:= DESTDIR=$(embtk_htools) WITHOUT_XATTR=1
 
 define embtk_install_mtdutils_host
 	$(call embtk_makeinstall_hostpkg,mtdutils_host)

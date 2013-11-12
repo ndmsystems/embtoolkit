@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,33 +38,18 @@ choice
 		NOTE: This version of mtd-utils is patched to fix various issue,
 		these patches come from mtd-utils git repository.
 
-	config EMBTK_MTDUTILS_VERSION_1_4_6
-		bool "mtd-utils-1.4.6"
+	config EMBTK_MTDUTILS_VERSION_1_5_0
+		bool "mtd-utils-1.5.0"
 		select EMBTK_MTDUTILS_NEED_PATCH
-		help
-			mtd-utils-1.4.6
 endchoice
 
 config EMBTK_MTDUTILS_VERSION_STRING
 	string
-	default "1.4.6"		if EMBTK_MTDUTILS_VERSION_1_4_6
+	default "1.5.0"		if EMBTK_MTDUTILS_VERSION_1_5_0
 
 config EMBTK_MTDUTILS_NEED_PATCH
 	bool
 	select EMBTK_MTDUTILS_HOST_NEED_PATCH
-config EMBTK_MTDUTILS_NEED_AUTORECONF
-	bool
-	select EMBTK_MTDUTILS_HOST_NEED_AUTORECONF
-config EMBTK_MTDUTILS_PKG_IS_TARGZ
-	bool
-config EMBTK_MTDUTILS_PKG_IS_TARBZ2
-	bool
 
 config EMBTK_MTDUTILS_HOST_NEED_PATCH
-	bool
-config EMBTK_MTDUTILS_HOST_NEED_AUTORECONF
-	bool
-config EMBTK_MTDUTILS_HOST_HOST_PKG_IS_TARGZ
-	bool
-config EMBTK_MTDUTILS_HOST_PKG_IS_TARBZ2
 	bool
