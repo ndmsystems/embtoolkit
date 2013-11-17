@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,8 +39,9 @@ LUAFILESYSTEM_MAKE_OPTS		+= CC=$(TARGETCC_CACHED)
 LUAFILESYSTEM_MAKE_OPTS		+= LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"
 LUAFILESYSTEM_MAKE_OPTS		+= CFLAGS="$(TARGET_CFLAGS) -I$(embtk_sysroot)/usr/include"
 
-luafilesystem_install:
+define embtk_install_luafilesystem
 	$(call embtk_makeinstall_pkg,luafilesystem)
+endef
 
 define embtk_postinstall_luafilesystem
 	$(Q)mkdir -p $(embtk_rootfs)
