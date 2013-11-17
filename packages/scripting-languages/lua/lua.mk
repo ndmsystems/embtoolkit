@@ -30,28 +30,25 @@ LUA_PACKAGE	:= lua-$(LUA_VERSION).tar.gz
 LUA_SRC_DIR	:= $(embtk_pkgb)/lua-$(LUA_VERSION)
 LUA_BUILD_DIR	:= $(embtk_pkgb)/lua-$(LUA_VERSION)
 
-LUA_BINS	= lua luac
-LUA_SBINS	=
-LUA_INCLUDES	= lauxlib.h luaconf.h lua.h lua.hpp lualib.h
-LUA_LIBS	= lua liblua.*
-LUA_PKGCONFIGS	= lua.pc
-LUA_SHARES	= lua
+LUA_BINS	:= lua luac
+LUA_SBINS	:=
+LUA_INCLUDES	:= lauxlib.h luaconf.h lua.h lua.hpp lualib.h
+LUA_LIBS	:= lua liblua.*
+LUA_PKGCONFIGS	:= lua.pc
+LUA_SHARES	:= lua
 
-LUA_DEPS	=
-LUACONF_H_OPTS	= -DCONFIG_LUA_ROOT="/usr/" -DCONFIG_SYSTEM_LIBDIR="$(LIBDIR)/"
+LUACONF_H_OPTS	:= -DCONFIG_LUA_ROOT="/usr/" -DCONFIG_SYSTEM_LIBDIR="$(LIBDIR)/"
 LUACONF_H_OPTS	+= -DLUA_USE_DLOPEN -DLUA_USE_MKSTEMP -DLUA_USE_ULONGJMP
 LUACONF_H_OPTS	+= -DLUA_USE_POPEN -DLUA_USE_ISATTY
 
-LUA_MAKE_OPTS	= INSTALL_TOP=$(embtk_sysroot)/usr/ LIBDIR=$(LIBDIR) PLAT=ansi
+LUA_MAKE_OPTS	:= INSTALL_TOP=$(embtk_sysroot)/usr/ LIBDIR=$(LIBDIR) PLAT=ansi
+LUA_MAKE_OPTS	+= CC=$(TARGETCC_CACHED)
+LUA_MAKE_OPTS	+= AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB)
+LUA_MAKE_OPTS	+= LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"
+LUA_MAKE_OPTS	+= CFLAGS="$(TARGET_CFLAGS) -I$(embtk_sysroot)/usr/include $(LUACONF_H_OPTS)"
 
-lua_install:
+define embtk_install_lua
 	$(call embtk_makeinstall_pkg,lua)
-
-define embtk_beforeinstall_lua
-	$(Q)$(MAKE) -C $(LUA_BUILD_DIR) PLAT=ansi CC=$(TARGETCC_CACHED)		\
-	AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB)				\
-	LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"		\
-	CFLAGS="$(TARGET_CFLAGS) -I$(embtk_sysroot)/usr/include $(LUACONF_H_OPTS)"
 endef
 
 define embtk_postinstall_lua
