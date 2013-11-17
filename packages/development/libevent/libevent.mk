@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,8 +25,7 @@
 
 LIBEVENT_NAME		:= libevent
 LIBEVENT_VERSION	:= $(call embtk_get_pkgversion,libevent)
-LIBEVENT_SITE		:= http://www.monkey.org/~provos
-LIBEVENT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+LIBEVENT_SITE		:= http://github.com/downloads/libevent/libevent
 LIBEVENT_PACKAGE	:= libevent-$(LIBEVENT_VERSION).tar.gz
 LIBEVENT_SRC_DIR	:= $(embtk_pkgb)/libevent-$(LIBEVENT_VERSION)
 LIBEVENT_BUILD_DIR	:= $(embtk_pkgb)/libevent-$(LIBEVENT_VERSION)
@@ -35,4 +34,3 @@ LIBEVENT_BINS		= event_rpcgen.py
 LIBEVENT_SBINS		=
 LIBEVENT_INCLUDES	= evdns.h event-config.h event.h evhttp.h evrpc.h evutil.h
 LIBEVENT_LIBS		= libevent*
-LIBEVENT_PKGCONFIGS	=
