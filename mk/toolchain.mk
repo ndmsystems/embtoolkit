@@ -33,8 +33,8 @@ TARGETCLANGXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-clang++
 __TARGETCC-y					:= $(TARGETGCC)
 __TARGETCXX-y					:= $(TARGETGCXX)
 
-__TARGETCC-$(__embtk_toolchain_use_llvm-y)	:= $(TARGETCLANG)
-__TARGETCXX-$(__embtk_toolchain_use_llvm-y)	:= $(TARGETCLANGXX)
+__TARGETCC-$(embtk_toolchain_use_llvm-y)	:= $(TARGETCLANG)
+__TARGETCXX-$(embtk_toolchain_use_llvm-y)	:= $(TARGETCLANGXX)
 
 #
 # FIXME: remove this when clang++ will support exceptions in c++ for arm,

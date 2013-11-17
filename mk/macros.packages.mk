@@ -112,8 +112,8 @@ endef
 #
 # Get passed package variables prefix and set some helpers macros.
 #
-__embtk_toolchain_use_llvm-y	:= $(or $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN))
-__embtk_toolchain_has_llvm-y	:= $(or $(CONFIG_EMBTK_GCC_AND_LLVM_TOOLCHAIN),$(__embtk_toolchain_use_llvm-y))
+embtk_toolchain_use_llvm-y	:= $(or $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN))
+embtk_toolchain_has_llvm-y	:= $(or $(CONFIG_EMBTK_GCC_AND_LLVM_TOOLCHAIN),$(embtk_toolchain_use_llvm-y))
 
 PKGV				= $(strip $(shell echo $(1) | tr a-z A-Z))
 pkgv				= $(strip $(shell echo $(1) | tr A-Z a-z))
@@ -182,7 +182,7 @@ __embtk_pkg_ldflags		= $(strip $($(PKGV)_LDFLAGS))
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
 __embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
 __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))
-__embtk_pkg_scanbuild-y		= $(and $(CONFIG_EMBTK_$(PKGV)_USE_SCANBUILD),$(__embtk_toolchain_has_llvm-y))
+__embtk_pkg_scanbuild-y		= $(and $(CONFIG_EMBTK_$(PKGV)_USE_SCANBUILD),$(embtk_toolchain_has_llvm-y))
 __embtk_pkg_scanbuild		= $(if $(__embtk_pkg_scanbuild-y),$(TARGETSCANBUILD) -o $(__embtk_pkg_srcdir)-scanbuild-results)
 
 #
