@@ -37,7 +37,7 @@ choice
 		 GCC cross compiler environment.
 
 	config EMBTK_LLVM_ONLY_TOOLCHAIN
-		bool "clang/llvm only (experimental)"
+		bool "clang/llvm only"
 		depends on EMBTK_ARCH_ARM || (EMBTK_ARCH_MIPS && EMBTK_TARGET_ARCH_32BITS)
 		help
 		 Choose this configuration if you want to use only clang/llvm
