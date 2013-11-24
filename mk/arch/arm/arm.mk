@@ -22,7 +22,7 @@
 # \date         June 2009
 ################################################################################
 
-__embtk_arm_endian	:= $(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),el,eb)
+__embtk_arm_endian	:= $(if $(CONFIG_EMBTK_TARGET_ARCH_BIG_ENDIAN),eb)
 __embtk_arm_abi-$(CONFIG_EMBTK_CLIB_EGLIBC) := gnueabi
 __embtk_arm_abi		:= $(or $(__embtk_arm_abi-y),$(embtk_clib)eabi)
 
