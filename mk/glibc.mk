@@ -42,9 +42,6 @@ embtk_glibc_cflags	:= $(subst -O0,-O1,$(__embtk_glibc_cflags))
 # Hard or soft floating point in glibc?
 embtk_glibc_floattype := $(if $(CONFIG_EMBTK_SOFTFLOAT),--with-fp=no,--with-fp=yes)
 
-embtk_glibc-sunrpc-$(CONFIG_KEMBTK_GLIBC_OPTION_GLIBC_SUNRPC) :=		\
-						--enable-obsolete-rpc=yes
-
 ifeq ($(embtk_buildhost_os_type),bsd)
 embtk_glibc_buildcflags		:= -I/usr/local/include
 embtk_glibc_buildldflags	:= -L/usr/local/lib -lintl
@@ -73,7 +70,7 @@ define embtk_configure_glibc
 	--build=$(HOST_BUILD)							\
 	$(embtk_glibc_floattype) --disable-profile --without-gd --without-cvs	\
 	--without-selinux --enable-add-ons --enable-kernel="2.6.27"		\
-	$(embtk_glibc-sunrpc-y)	--disable-build-nscd --disable-nscd		\
+	--enable-obsolete-rpc --disable-build-nscd --disable-nscd		\
 	--with-bugurl=$(EMBTK_BUGURL)						\
 	--with-pkgversion="GLIBC from embtoolkit-$(EMBTK_VERSION)"
 	touch $(GLIBC_BUILD_DIR)/.glibc.embtk.conifgured
