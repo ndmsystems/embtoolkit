@@ -190,8 +190,6 @@ __gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_CPP)		:= gcc3_install
 __gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC) 	:= gcc3_install
 __gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP)	:= gcc3_install
 
-__llvm_toolchain-$(CONFIG_EMTK_HAVE_LLVM)			:= llvm_install
-
 #
 # Handle clang/llvm/uClibc based toolchain where linuxthread.old is used or non
 # threading is used at all.
@@ -203,13 +201,16 @@ else
 __llvm_compiler-rt-$(CONFIG_EMTK_HAVE_COMPILER-RT) := compiler-rt_install
 endif
 
-TOOLCHAIN_DEPS		:= linux_headers_install gmp_host_install
-TOOLCHAIN_DEPS		+= mpfr_host_install mpc_host_install binutils_install
-TOOLCHAIN_DEPS		+= $(__llvm_toolchain-y)
-TOOLCHAIN_DEPS		+= gcc1_install $(embtk_clib)_headers_install
-TOOLCHAIN_DEPS		+= gcc2_install $(embtk_clib)_install
-TOOLCHAIN_DEPS		+= $(__gcc3_toolchain-y) $(__llvm_compiler-rt-y)
+TOOLCHAIN_DEPS-y	:= linux_headers_install gmp_host_install
+TOOLCHAIN_DEPS-y	+= mpfr_host_install mpc_host_install binutils_install
+TOOLCHAIN_DEPS-$(CONFIG_EMTK_HAVE_LLVM) += llvm_install
+TOOLCHAIN_DEPS-y	+= gcc1_install
+TOOLCHAIN_DEPS-$(CONFIG_EMTK_CLIB_EGLIBC) += $(embtk_clib)_headers_install gcc2_install
+TOOLCHAIN_DEPS-$(CONFIG_EMTK_CLIB_UCLIBC) += $(embtk_clib)_headers_install gcc2_install
+TOOLCHAIN_DEPS-y	+= $(embtk_clib)_install
+TOOLCHAIN_DEPS-y	+= $(__gcc3_toolchain-y) $(__llvm_compiler-rt-y)
 
+TOOLCHAIN_DEPS			:= $(TOOLCHAIN_DEPS-y)
 TOOLCHAIN_ADDONS_NAME		:= toolchain-addons
 TOOLCHAIN_ADDONS_DEPS		:= $(TOOLCHAIN_ADDONS-y)
 TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_BUILD_DIR)/.addons

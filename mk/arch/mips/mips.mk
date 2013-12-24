@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -25,7 +25,8 @@
 LINUX_ARCH		:= mips
 
 __embtk_mips_endian	:= $(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),el)
-__embtk_mips_abi-$(CONFIG_EMBTK_CLIB_EGLIBC) := gnu
+__embtk_mips_abi-$(CONFIG_EMBTK_CLIB_EGLIBC)	:= gnu
+__embtk_mips_abi-$(CONFIG_EMBTK_CLIB_GLIBC)	:= gnu
 __embtk_mips_abi	:= $(or $(__embtk_mips_abi-y),$(embtk_clib))
 __embtk_mips_64bit	:= $(if $(CONFIG_EMBTK_TARGET_ARCH_64BITS),64)
 

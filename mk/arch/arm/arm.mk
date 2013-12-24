@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -23,7 +23,8 @@
 ################################################################################
 
 __embtk_arm_endian	:= $(if $(CONFIG_EMBTK_TARGET_ARCH_BIG_ENDIAN),eb)
-__embtk_arm_abi-$(CONFIG_EMBTK_CLIB_EGLIBC) := gnueabi
+__embtk_arm_abi-$(CONFIG_EMBTK_CLIB_EGLIBC)	:= gnueabi
+__embtk_arm_abi-$(CONFIG_EMBTK_CLIB_GLIBC)	:= gnueabi
 __embtk_arm_abi		:= $(or $(__embtk_arm_abi-y),$(embtk_clib)eabi)
 
 LINUX_ARCH		:= arm

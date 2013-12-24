@@ -102,6 +102,7 @@ choice
 	prompt "Choose which C library to use"
 	help
 	 Choose here which C library your toolchain will use.
+
 	config EMBTK_CLIB_EGLIBC
 		bool "eglibc"
 		help
@@ -109,6 +110,13 @@ choice
 		 glibc, but care is also taken to satisfy embedded systems
 		 constraints.
 		 see http://www.eglibc.org for more information about eglibc.
+
+	config EMBTK_CLIB_GLIBC
+		bool "GLIBC"
+		help
+		 GNU GLIBC is the well known general purpose c library found on
+		 most general purpose GNU Linux distribution.
+
 	config EMBTK_CLIB_UCLIBC
 		bool "uClibc"
 		help
@@ -123,6 +131,10 @@ endchoice
 
 if EMBTK_CLIB_EGLIBC
 source "kconfig/eglibc.kconfig"
+endif
+
+if EMBTK_CLIB_GLIBC
+source "kconfig/glibc.kconfig"
 endif
 
 if EMBTK_CLIB_UCLIBC
