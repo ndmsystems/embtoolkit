@@ -71,53 +71,8 @@ set_float() {
 	esac
 }
 
-set_os() {
-	case "$os" in
-		linux|LINUX)
-			echo "CONFIG_EMBTK_OS_LINUX=y" >> $cibuild_kconfig
-			;;
-		*)
-			arm_perror "Unsupported OS $os for ARM, please help to support it"
-			exit 1
-			;;
-	esac
-}
-
-set_xcompiler() {
-	case "$toolchain" in
-		gcc|GCC)
-			echo "CONFIG_EMBTK_GCC_TOOLCHAIN=y" >> $cibuild_kconfig
-			;;
-		Clang+llvm)
-			echo "CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN=y" >> $cibuild_kconfig
-			;;
-		*)
-			arm_perror "Unsupported cross compiler $toolchain for ARM, please help to support it"
-			exit 1
-			;;
-	esac
-}
-
-set_clibrary() {
-	case "$clibrary" in
-		eglibc)
-			echo "CONFIG_EMBTK_CLIB_EGLIBC=y" >> $cibuild_kconfig
-			;;
-		uClibc)
-			echo "CONFIG_EMBTK_CLIB_UCLIBC=y" >> $cibuild_kconfig
-			;;
-		*)
-			arm_perror "Unsupported c library $clibrary for ARM, please help to support it"
-			exit 1
-			;;
-	esac
-}
-
-set_os
 set_endian
 set_arch_family
 set_float
-set_xcompiler
-set_clibrary
 
 cat $cibuild_kconfig >> $workspace/.config && rm -rf $cibuild_kconfig

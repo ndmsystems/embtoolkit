@@ -14,6 +14,60 @@ pinfo() {
 	echo "[CI-BUILD-INFO]   : $1"
 }
 
+set_os() {
+	local x_os=$1
+	local x_cibuild_kconfig=$2
+	case "$x_os" in
+		linux|LINUX)
+			echo "CONFIG_EMBTK_OS_LINUX=y" >> $x_cibuild_kconfig
+			;;
+		*)
+			perror "Unsupported OS $x_os , please help to support it"
+			exit 1
+			;;
+	esac
+}
+
+set_xcompiler() {
+	local x_toolchain=$1
+	local x_cibuild_kconfig=$2
+	case "$x_toolchain" in
+		gcc|GCC)
+			echo "CONFIG_EMBTK_GCC_TOOLCHAIN=y" >> $x_cibuild_kconfig
+			;;
+		Clang+llvm)
+			echo "CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN=y" >> $x_cibuild_kconfig
+			;;
+		*)
+			perror "Unsupported cross compiler $x_toolchain , please help to support it"
+			exit 1
+			;;
+	esac
+}
+
+set_clibrary() {
+	local x_clibrary=$1
+	local x_cibuild_kconfig=$2
+	case "$x_clibrary" in
+		eglibc)
+			echo "CONFIG_EMBTK_CLIB_EGLIBC=y" >> $x_cibuild_kconfig
+			;;
+		uClibc)
+			echo "CONFIG_EMBTK_CLIB_UCLIBC=y" >> $x_cibuild_kconfig
+			;;
+		glibc)
+			echo "CONFIG_EMBTK_CLIB_GLIBC=y" >> $x_cibuild_kconfig
+			;;
+		musl)
+			echo "CONFIG_EMBTK_CLIB_MUSL=y" >> $x_cibuild_kconfig
+			;;
+		*)
+			perror "Unsupported c library $x_clibrary , please help to support it"
+			exit 1
+			;;
+	esac
+}
+
 options=$(echo $* | sed 's/=/ /g')
 set -- $options
 
@@ -99,7 +153,14 @@ pinfo "Generating .config file"
 . $workspace/defconfigs/$arch/$arch-ci-build.sh
 
 #
-# Now generating .config
+# toolchain and OS
+#
+set_os $os $workspace/.config
+set_xcompiler $toolchain $workspace/.config
+set_clibrary $clibrary $workspace/.config
+
+#
+# Now generating final .config
 #
 
 if [ ! "x$downloaddir" = "x" ]; then
