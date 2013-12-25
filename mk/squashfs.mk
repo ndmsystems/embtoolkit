@@ -44,6 +44,7 @@ endif
 SQUASHFS_TOOLS_MAKE_ENV		:= CC=$(HOSTCC_CACHED)
 SQUASHFS_TOOLS_MAKE_ENV		+= CPPFLAGS="$(__embtk_squashfs_cppflags)"
 SQUASHFS_TOOLS_MAKE_ENV 	+= LDFLAGS="-L$(embtk_htools)/usr/lib"
+SQUASHFS_TOOLS_MAKE_ENV		+= EXTRA_CFLAGS="-include sys/stat.h"
 
 SQUASHFS_TOOLS_MAKE_OPTS	:= XATTR_SUPPORT=0
 SQUASHFS_TOOLS_MAKE_OPTS	+= INSTALL_DIR="$(embtk_htools)/usr/bin"
