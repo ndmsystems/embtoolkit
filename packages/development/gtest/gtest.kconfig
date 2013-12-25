@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_GTEST
 	bool "Have gtest"
+	select EMBTK_GCC_LANGUAGE_CPP
 	help
 	 Google C++ Testing Framework.
 
