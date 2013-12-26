@@ -105,7 +105,3 @@ endef
 define embtk_cleanup_glibc
 	rm -rf $(GLIBC_BUILD_DIR)
 endef
-
-define embtk_cleanup_glibc_headers
-	rm -rf $(GLIBC_HEADERS_BUILD_DIR)
-endef
