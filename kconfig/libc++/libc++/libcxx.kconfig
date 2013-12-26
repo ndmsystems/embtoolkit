@@ -23,7 +23,7 @@
 # \date         December 2012
 ################################################################################
 
-config EMTK_HAVE_LIBCXX
+config EMBTK_HAVE_LIBCXX
 	bool
 	default y
 	depends on EMBTK_CXXLIB_LLVM_LIBCXX
@@ -35,7 +35,7 @@ config EMTK_HAVE_LIBCXX
 #
 choice
 	prompt "Version of libcxx you wish"
-	depends on EMTK_HAVE_LIBCXX
+	depends on EMBTK_HAVE_LIBCXX
 	help
 	 Version of libcxx you wish
 

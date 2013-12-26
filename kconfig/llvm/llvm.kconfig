@@ -23,7 +23,7 @@
 # \date         October 2012
 ################################################################################
 
-config EMTK_HAVE_LLVM
+config EMBTK_HAVE_LLVM
 	bool
 	default y
 

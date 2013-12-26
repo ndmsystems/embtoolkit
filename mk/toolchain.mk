@@ -195,18 +195,18 @@ __gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP)	:= gcc3_install
 # threading is used at all.
 # FIXME: print a warning
 
-ifeq ($(CONFIG_EMTK_HAVE_COMPILER-RT)$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD),yy)
-else ifeq ($(CONFIG_EMTK_HAVE_COMPILER-RT)$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD),yy)
+ifeq ($(CONFIG_EMBTK_HAVE_COMPILER-RT)$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD),yy)
+else ifeq ($(CONFIG_EMBTK_HAVE_COMPILER-RT)$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD),yy)
 else
-__llvm_compiler-rt-$(CONFIG_EMTK_HAVE_COMPILER-RT) := compiler-rt_install
+__llvm_compiler-rt-$(CONFIG_EMBTK_HAVE_COMPILER-RT) := compiler-rt_install
 endif
 
 TOOLCHAIN_DEPS-y	:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS-y	+= mpfr_host_install mpc_host_install binutils_install
-TOOLCHAIN_DEPS-$(CONFIG_EMTK_HAVE_LLVM) += llvm_install
+TOOLCHAIN_DEPS-$(CONFIG_EMBTK_HAVE_LLVM) += llvm_install
 TOOLCHAIN_DEPS-y	+= gcc1_install
-TOOLCHAIN_DEPS-$(CONFIG_EMTK_CLIB_EGLIBC) += $(embtk_clib)_headers_install gcc2_install
-TOOLCHAIN_DEPS-$(CONFIG_EMTK_CLIB_UCLIBC) += $(embtk_clib)_headers_install gcc2_install
+TOOLCHAIN_DEPS-$(CONFIG_EMBTK_CLIB_EGLIBC) += $(embtk_clib)_headers_install gcc2_install
+TOOLCHAIN_DEPS-$(CONFIG_EMBTK_CLIB_UCLIBC) += $(embtk_clib)_headers_install gcc2_install
 TOOLCHAIN_DEPS-y	+= $(embtk_clib)_install
 TOOLCHAIN_DEPS-y	+= $(__gcc3_toolchain-y) $(__llvm_compiler-rt-y)
 

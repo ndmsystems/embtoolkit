@@ -23,7 +23,7 @@
 # \date         October 2012
 ################################################################################
 
-config EMTK_HAVE_CLANG
+config EMBTK_HAVE_CLANG
 	bool
 	default y
 

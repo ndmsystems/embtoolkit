@@ -23,7 +23,7 @@
 # \date         December 2012
 ################################################################################
 
-config EMTK_HAVE_LIBCXXRT
+config EMBTK_HAVE_LIBCXXRT
 	bool
 	depends on EMBTK_CXXLIB_LLVM_LIBCXX
 	select EMBTK_LIBCXXRT_VERSION_4_0_10

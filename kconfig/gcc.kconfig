@@ -23,13 +23,13 @@
 # \date         May 2009
 ################################################################################
 
-config EMTK_HAVE_GCC
+config EMBTK_HAVE_GCC
 	bool
 	default y
 
 choice
 	prompt "GCC series to use"
-	depends on EMTK_HAVE_GCC
+	depends on EMBTK_HAVE_GCC
 	help
 	 Here you can choose which GCC series you want to use.
 

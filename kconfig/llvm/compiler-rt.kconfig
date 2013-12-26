@@ -23,7 +23,7 @@
 # \date         October 2012
 ################################################################################
 
-config EMTK_HAVE_COMPILER-RT
+config EMBTK_HAVE_COMPILER-RT
 	bool
 	default y
 	select EMBTK_COMPILER-RT_VERSION_3_3
