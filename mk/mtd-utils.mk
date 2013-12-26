@@ -34,9 +34,6 @@ MTDUTILS_DEPS		:= zlib_install lzo_install e2fsprogs_install
 
 __embtk_mtdutils_cflags	:= $(TARGET_CFLAGS)
 
-# FIXME: remove this after upgrade to new version of mtd-utils
-__embtk_mtdutils_cflags	+= -std=gnu90
-
 MTDUTILS_MAKE_ENV	:= LDFLAGS="-L$(embtk_sysroot)/lib -L$(embtk_sysroot)/usr/lib"
 MTDUTILS_MAKE_ENV	+= CPPFLAGS="-I. -I./include -I$(embtk_sysroot)/usr/include"
 MTDUTILS_MAKE_ENV	+= CFLAGS="$(__embtk_mtdutils_cflags)"
