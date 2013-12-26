@@ -155,14 +155,12 @@ AUTOTOOLS_INSTALL	+= automake_install
 
 # GNU sed
 include mk/gsed.mk
-__toolchain_gsed-y	:= $(if $(findstring bsd,$(embtk_buildhost_os_type)),gsed_install)
 
 # BSD make
 include mk/bmake.mk
 
 # GNU make
 include mk/gmake.mk
-__toolchain_gmake-y	:= $(if $(findstring bsd,$(embtk_buildhost_os_type)),gmake_install)
 
 # Toolchain internals
 __xtools_compiler-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= clangllvm-$(LLVM_VERSION)
@@ -178,9 +176,10 @@ TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
 TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)
 
 TOOLCHAIN_PRE_DEPS-y	:= ccache_install $(AUTOTOOLS_INSTALL)
-TOOLCHAIN_PRE_DEPS-y	+= $(__toolchain_gsed-y) $(__toolchain_gmake-y)
-TOOLCHAIN_PRE_DEPS-y	+= $(if $(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST),	\
-				gperf_host_install)
+ifeq ($(embtk_buildhost_os_type),bsd)
+TOOLCHAIN_PRE_DEPS-y	+= gsed_install gmake_install
+endif
+TOOLCHAIN_PRE_DEPS-$(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST) += gperf_host_install
 
 __gcc3_toolchain-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= gcc3_install
 __gcc3_toolchain-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)		:= gcc3_install
@@ -205,7 +204,6 @@ TOOLCHAIN_DEPS-y	:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS-y	+= mpfr_host_install mpc_host_install binutils_install
 TOOLCHAIN_DEPS-$(CONFIG_EMBTK_HAVE_LLVM) += llvm_install
 TOOLCHAIN_DEPS-y	+= gcc1_install
-TOOLCHAIN_DEPS-$(CONFIG_EMBTK_CLIB_EGLIBC) += $(embtk_clib)_headers_install gcc2_install
 TOOLCHAIN_DEPS-$(CONFIG_EMBTK_CLIB_UCLIBC) += $(embtk_clib)_headers_install gcc2_install
 TOOLCHAIN_DEPS-y	+= $(embtk_clib)_install
 TOOLCHAIN_DEPS-y	+= $(__gcc3_toolchain-y) $(__llvm_compiler-rt-y)
