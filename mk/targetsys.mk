@@ -47,6 +47,9 @@ embtk_buildhost_os_type			:= bsd
 else ifeq ($(findstring openbsd,$(HOST_ARCH)),openbsd)
 embtk_buildhost_os			:= openbsd
 embtk_buildhost_os_type			:= bsd
+else ifeq ($(findstring apple,$(HOST_ARCH)),apple)
+embtk_buildhost_os			:= macos
+embtk_buildhost_os_type			:= bsd
 else
 embtk_buildhost_os			:= unknown-host-os
 endif
