@@ -33,7 +33,7 @@ MUSL_BUILD_DIR		:= $(call __embtk_pkg_srcdir,musl)
 
 define embtk_beforeinstall_musl
 	cd $(MUSL_SRC_DIR);							\
-		CC=$(TARGETCC)							\
+		CC=$(TARGETCC_CACHED)						\
 		CROSS_COMPILE="$(CROSS_COMPILE)"				\
 		CFLAGS="$(TARGET_CFLAGS)"					\
 		$(CONFIG_SHELL) $(MUSL_SRC_DIR)/configure			\
@@ -41,6 +41,8 @@ define embtk_beforeinstall_musl
 		--disable-gcc-wrapper --prefix=/				\
 		--syslibdir=/$(LIBDIR) --libdir=/$(LIBDIR) 			\
 		--includedir=/usr/include
+	echo "$(MUSL_VERSION) From EmbToolkit v$(EMBTK_VERSION)"		\
+		> $(MUSL_SRC_DIR)/VERSION
 	touch $(call __embtk_pkg_dotconfigured_f,musl)
 endef
 
