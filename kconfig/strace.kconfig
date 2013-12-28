@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,22 +33,14 @@ choice
 	prompt "starce version to use"
 	depends on EMBTK_HAVE_STRACE
 
-	config EMBTK_STRACE_VERSION_4_5_20
-		bool "strace-4.5.20"
-		select EMBTK_STRACE_NEED_PATCH
-	config EMBTK_STRACE_VERSION_4_5_19
-		bool "strace-4.5.19"
-		select EMBTK_STRACE_NEED_PATCH
-	config EMBTK_STRACE_VERSION_4_5_18
-		bool "strace-4.5.18"
+	config EMBTK_STRACE_VERSION_4_8
+		bool "strace-embtk-4.8"
 		select EMBTK_STRACE_NEED_PATCH
 endchoice
 
 config EMBTK_STRACE_VERSION_STRING
 	string
-	default "4.5.20"	if EMBTK_STRACE_VERSION_4_5_20
-	default "4.5.19"	if EMBTK_STRACE_VERSION_4_5_19
-	default "4.5.18"	if EMBTK_STRACE_VERSION_4_5_18
+	default "embtk-4.8"	if EMBTK_STRACE_VERSION_4_8
 
 config EMBTK_STRACE_NEED_PATCH
 	bool

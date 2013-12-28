@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,3 @@ STRACE_SRC_DIR		:= $(embtk_pkgb)/strace-$(STRACE_VERSION)
 STRACE_BUILD_DIR	:= $(embtk_pkgb)/strace-build
 
 STRACE_BINS		:= strace strace-graph
-STRACE_SBINS		:=
-STRACE_INCLUDES		:=
-STRACE_LIBS		:=
-STRACE_PKGCONFIGS	:=
