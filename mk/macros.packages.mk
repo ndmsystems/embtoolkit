@@ -112,6 +112,8 @@ endef
 #
 # Get passed package variables prefix and set some helpers macros.
 #
+embtk_ftp			:= ftp://ftp.embtoolkit.org/embtoolkit.org
+embtk_ftp/packages-mirror	:= $(embtk_ftp)/packages-mirror
 embtk_toolchain_use_llvm-y	:= $(or $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN))
 embtk_toolchain_has_llvm-y	:= $(or $(CONFIG_EMBTK_GCC_AND_LLVM_TOOLCHAIN),$(embtk_toolchain_use_llvm-y))
 
@@ -120,11 +122,11 @@ pkgv				= $(strip $(shell echo $(1) | tr A-Z a-z))
 __embtk_pkg_name		= $(strip $($(PKGV)_NAME))
 __embtk_pkg_needpatch		= $(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)
 __embtk_pkg_site		= $(strip $($(PKGV)_SITE))
-__embtk_patch_site		= ftp://ftp.embtoolkit.org/embtoolkit.org
+__embtk_patch_site		= $(embtk_ftp)
 __embtk_patch_url		= $(__embtk_patch_site)/$(__embtk_pkg_name)/$(__embtk_pkg_version)
 __embtk_pkg_patch_site		= $(strip $(or $($(PKGV)_PATCH_SITE),$(__embtk_patch_url)))
 __embtk_pkg_patch_f		= $(strip $(embtk_dldir))/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch
-__embtk_pkg_mirror		= $(__embtk_patch_site)/packages-mirror
+__embtk_pkg_mirror		= $(embtk_ftp/packages-mirror)
 __embtk_pkg_mirror1		= $(strip $($(PKGV)_MIRROR1))
 __embtk_pkg_mirror2		= $(strip $($(PKGV)_MIRROR2))
 __embtk_pkg_mirror3		= $(strip $($(PKGV)_MIRROR3))
