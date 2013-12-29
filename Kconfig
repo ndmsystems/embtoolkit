@@ -67,11 +67,11 @@ source "kconfig/strace.kconfig"
 endmenu
 
 menu "Target build options"
-source kconfig/targetbuildopts.kconfig
+source "kconfig/targetbuildopts.kconfig"
 endmenu
 
 menu "Embtoolkit build options and host tools"
-source kconfig/hosttools-buildopts.kconfig
+source "kconfig/hosttools-buildopts.kconfig"
 endmenu
 
 if EMBTK_OS_LINUX
@@ -79,7 +79,7 @@ config EMBTK_BUILD_LINUX_KERNEL
 	bool "Build linux kernel image"
 
 if EMBTK_BUILD_LINUX_KERNEL
-source kconfig/linux-kernel-build.kconfig
+source "kconfig/linux-kernel-build.kconfig"
 endif
 
 endif
@@ -94,8 +94,5 @@ config EMBTK_HAVE_ROOTFS
 	 Select packages in "Packages to include in your root filesystem".
 
 if EMBTK_HAVE_ROOTFS
-source kconfig/fs.kconfig
-source kconfig/mtdutils.kconfig
-source kconfig/squashfs.kconfig
-source kconfig/packages.kconfig
+source "kconfig/rootfs/rootfs.kconfig"
 endif
