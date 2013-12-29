@@ -121,6 +121,7 @@ define __embtk_rootfs_components_install
 		| tar -xf - -C $(embtk_rootfs)/lib/
 	-(cd $(embtk_sysroot)/usr/lib/ && tar -cf - *.so*)			\
 		| tar -xf - -C $(embtk_rootfs)/usr/lib/
+	-cp -R $(embtk_sysroot)/usr/libexec $(embtk_rootfs)/usr/
 	rm -rf $(embtk_rootfs)/lib/libgcc_s.so
 	rm -rf $(embtk_rootfs)/usr/lib/libc.so
 	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),
