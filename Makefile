@@ -107,5 +107,5 @@ include mk/target-mcu.mk
 include mk/buildsystem.mk
 include mk/toolchain.mk
 include mk/packages.mk
-include mk/rootfs.mk
+include mk/rootfs/rootfs.mk
 include mk/help.mk
