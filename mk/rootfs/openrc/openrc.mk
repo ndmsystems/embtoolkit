@@ -29,7 +29,15 @@ OPENRC_PACKAGE		:= openrc-$(OPENRC_VERSION).tar.bz2
 OPENRC_SRC_DIR		:= $(embtk_pkgb)/openrc-$(OPENRC_VERSION)
 OPENRC_BUILD_DIR	:= $(embtk_pkgb)/openrc-$(OPENRC_VERSION)
 
-OPENRC_ETC		:= conf.d init.d.misc init.d local.d rc.conf runlevels sysctl.d
+embtk_openrc_mk		:= $(EMBTK_ROOT)/mk/rootfs/openrc
+embtk_openrc_sysinit	:= devfs dmesg sysfs
+embtk_openrc_boot	:= hostname loopback modules mtab network procfs
+embtk_openrc_boot	+= root staticroute sysctl urandom
+embtk_openrc_default	:= netmount
+
+# Installed dir/files in sysroot
+OPENRC_ETC		:= conf.d init.d.misc init.d local.d rc.conf runlevels
+OPENRC_ETC		+= sysctl.d
 OPENRC_LIBEXECS		:= rc
 
 ifeq ($(embtk_os),linux)
@@ -54,9 +62,34 @@ define embtk_install_openrc
 	$(call embtk_makeinstall_pkg,openrc)
 endef
 
+define __embtk_install_openrc_runlevel
+	install -d $(embtk_rootfs)/etc/runlevels/$(1) || exit $$?
+	for f in $(embtk_openrc_$(1)); do					\
+		install -m 0755 $(embtk_openrc_mk)/etc/init.d/$$f		\
+			$(embtk_rootfs)/etc/init.d/$$f || exit $$?;		\
+		ln -snf /etc/init.d/$$f						\
+			$(embtk_rootfs)/etc/runlevels/$(1)/$$f || exit $$?;	\
+	done
+endef
+
+define embtk_postinstall_openrc
+	install -d $(embtk_rootfs)/etc/conf.d || exit $$?
+	echo "hostname=\"EmbToolkit v$(EMBTK_VERSION)\""			\
+		> $(embtk_rootfs)/etc/conf.d/hostname
+	echo "\"EmbToolkit v$(EMBTK_VERSION)\""	> $(embtk_rootfs)/etc/hostname
+	install -d $(embtk_rootfs)/etc/init.d || exit $$?
+	install -m 0644 $(embtk_openrc_mk)/etc/defaultdomain			\
+		$(embtk_rootfs)/etc/defaultdomain || exit $$?
+	install -m 0644 $(embtk_openrc_mk)/etc/rc.conf				\
+		$(embtk_rootfs)/etc/rc.conf || exit $$?
+	$(call __embtk_install_openrc_runlevel,sysinit)
+	$(call __embtk_install_openrc_runlevel,boot)
+	$(call __embtk_install_openrc_runlevel,default)
+endef
+
 define embtk_cleanup_openrc
-	rm -rf $(embtk_sysroot)/$(LIBDIR)/libeinfo.so*
-	rm -rf $(embtk_sysroot)/$(LIBDIR)/librc.so*
+	rm -rf $(embtk_sysroot)/$(LIBDIR)/libeinfo.*
+	rm -rf $(embtk_sysroot)/$(LIBDIR)/librc.*
 	rm -rf $(embtk_sysroot)/bin/rc-status
 	rm -rf $(embtk_sysroot)/sbin/rc
 	rm -rf $(embtk_sysroot)/sbin/rc-service

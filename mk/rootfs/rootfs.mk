@@ -27,6 +27,9 @@ ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 
 # Include various filesystems macros
 include mk/rootfs/fs.mk
+include mk/rootfs/openrc/openrc.mk
+ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_OPENRC)	+= openrc_install
+
 ROOTFS_JFFS2		:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).jffs2
 ROOTFS_TARBZ2		:= rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).tar.bz2
 ROOTFS_SQUASHFS		:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).squashfs
@@ -136,6 +139,7 @@ define __embtk_rootfs_components_install
 	-cp -R $(embtk_sysroot)/sbin/* $(embtk_rootfs)/sbin/ >/dev/null 2>/dev/null
 	-cp -R $(embtk_sysroot)/usr/sbin/* $(embtk_rootfs)/usr/sbin/
 	-cp -R $(embtk_sysroot)/etc/* $(embtk_rootfs)/etc/ >/dev/null 2>/dev/null
+	-rm -rf $$(find $(embtk_rootfs) -type f -name '.empty')
 	cp -R $(embtk_sysroot)/root $(embtk_rootfs)/
 	-$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) -- 				\
 				rm -rf `find $(embtk_rootfs) -type f -name *.la`
