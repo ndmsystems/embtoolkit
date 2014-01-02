@@ -80,12 +80,19 @@ define __embtk_install_openrc_runlevel
 	done
 endef
 
-define embtk_postinstall_openrc
+define __embtk_install_openrc_confd
 	install -d $(embtk_rootfs)/etc/conf.d || exit $$?
+	for f in $(embtk_openrc_mk)/etc/conf.d/*; do				\
+		install -m 0644 $$f $(embtk_rootfs)/etc/conf.d || exit $$?;	\
+	done
 	echo "hostname=\"$(embtk_openrc_hostname)\""				\
 		> $(embtk_rootfs)/etc/conf.d/hostname
 	echo "$(embtk_openrc_hostname)"						\
 		> $(embtk_rootfs)/etc/hostname
+endef
+
+define embtk_postinstall_openrc
+	$(__embtk_install_openrc_confd)
 	install -d $(embtk_rootfs)/etc/init.d || exit $$?
 	install -m 0644 $(embtk_openrc_mk)/etc/defaultdomain			\
 		$(embtk_rootfs)/etc/defaultdomain || exit $$?
