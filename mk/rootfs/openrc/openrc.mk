@@ -30,10 +30,16 @@ OPENRC_SRC_DIR		:= $(embtk_pkgb)/openrc-$(OPENRC_VERSION)
 OPENRC_BUILD_DIR	:= $(embtk_pkgb)/openrc-$(OPENRC_VERSION)
 
 embtk_openrc_mk		:= $(EMBTK_ROOT)/mk/rootfs/openrc
+
+# sysinit runlevel scripts
 embtk_openrc_sysinit	:= devfs dmesg sysfs
+# boot runlevel scripts
 embtk_openrc_boot	:= hostname loopback modules mtab network procfs
 embtk_openrc_boot	+= root staticroute sysctl urandom
+# defaultrunlevel scripts
 embtk_openrc_default	:= netmount
+# shutdown runlevel scripts
+embtk_openrc_shutdown	:= killprocs
 
 # Installed dir/files in sysroot
 OPENRC_ETC		:= conf.d init.d.misc init.d local.d rc.conf runlevels
@@ -85,6 +91,7 @@ define embtk_postinstall_openrc
 	$(call __embtk_install_openrc_runlevel,sysinit)
 	$(call __embtk_install_openrc_runlevel,boot)
 	$(call __embtk_install_openrc_runlevel,default)
+	$(call __embtk_install_openrc_runlevel,shutdown)
 endef
 
 define embtk_cleanup_openrc

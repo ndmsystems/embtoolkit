@@ -21,12 +21,11 @@ null::respawn:/sbin/syslogd -n -m 0
 null::respawn:/sbin/klogd -n
 #tty3::respawn:/usr/bin/tail -f /var/log/messages
 
-# Stuff to do for the 3-finger salute
+# What to do at the "Three Finger Salute"
 ::ctrlaltdel:/sbin/reboot
 
 # Stuff to do before rebooting
-null::shutdown:/usr/bin/killall klogd
-null::shutdown:/usr/bin/killall syslogd
+null::shutdown:/sbin/openrc shutdown
 null::shutdown:/bin/umount -a -r
 null::shutdown:/sbin/swapoff -a
 
