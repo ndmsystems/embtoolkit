@@ -31,6 +31,8 @@ OPENRC_BUILD_DIR	:= $(embtk_pkgb)/openrc-$(OPENRC_VERSION)
 
 embtk_openrc_mk		:= $(EMBTK_ROOT)/mk/rootfs/openrc
 
+embtk_openrc_hostname	:= EmbToolkit-$(embtk_os)
+
 # sysinit runlevel scripts
 embtk_openrc_sysinit	:= devfs dmesg sysfs
 # boot runlevel scripts
@@ -80,9 +82,10 @@ endef
 
 define embtk_postinstall_openrc
 	install -d $(embtk_rootfs)/etc/conf.d || exit $$?
-	echo "hostname=\"EmbToolkitv$(EMBTK_VERSION)\""				\
+	echo "hostname=\"$(embtk_openrc_hostname)\""				\
 		> $(embtk_rootfs)/etc/conf.d/hostname
-	echo "\"EmbToolkitv$(EMBTK_VERSION)\""	> $(embtk_rootfs)/etc/hostname
+	echo "$(embtk_openrc_hostname)"						\
+		> $(embtk_rootfs)/etc/hostname
 	install -d $(embtk_rootfs)/etc/init.d || exit $$?
 	install -m 0644 $(embtk_openrc_mk)/etc/defaultdomain			\
 		$(embtk_rootfs)/etc/defaultdomain || exit $$?
