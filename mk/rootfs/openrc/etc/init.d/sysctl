@@ -2,6 +2,11 @@
 # Copyright (c) 2007-2008 Roy Marples <roy@marples.name>
 # Released under the 2-clause BSD license.
 
+depend()
+{
+	before bootmisc
+}
+
 start()
 {
 	local conf= retval=0 err errs

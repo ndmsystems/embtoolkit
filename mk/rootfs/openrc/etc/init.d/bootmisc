@@ -4,6 +4,7 @@
 
 depend()
 {
+	need localmount
 	after root sysctl
 	keyword -timeout
 }

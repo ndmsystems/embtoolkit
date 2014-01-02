@@ -11,6 +11,7 @@ __nl="
 depend()
 {
 	need localmount
+	after bootmisc
 	if [ -n "$(interfaces)" ]; then
 		provide net
 	fi

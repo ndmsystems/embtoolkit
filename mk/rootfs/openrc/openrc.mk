@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright(C) 2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2013-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,9 +34,9 @@ embtk_openrc_mk		:= $(EMBTK_ROOT)/mk/rootfs/openrc
 # sysinit runlevel scripts
 embtk_openrc_sysinit	:= devfs dmesg sysfs
 # boot runlevel scripts
-embtk_openrc_boot	:= hostname localmount loopback modules mtab network
-embtk_openrc_boot	+= procfs root staticroute swap sysctl urandom
-# defaultrunlevel scripts
+embtk_openrc_boot	:= bootmisc hostname localmount loopback modules mtab
+embtk_openrc_boot	+= network procfs root staticroute swap sysctl urandom
+# default runlevel scripts
 embtk_openrc_default	:= netmount
 # shutdown runlevel scripts
 embtk_openrc_shutdown	:= killprocs

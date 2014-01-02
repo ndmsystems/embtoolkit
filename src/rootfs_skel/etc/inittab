@@ -1,7 +1,4 @@
 # Initial system critical filesystems mounting (/proc, /dev, /sys, etc.)
-# FIXME: Cleanup this for /tmp
-null::sysinit:/bin/mount -a
-
 ::sysinit:/sbin/openrc sysinit
 ::wait:/sbin/openrc boot
 ::wait:/sbin/openrc default
