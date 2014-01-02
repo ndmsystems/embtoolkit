@@ -10,6 +10,7 @@ __nl="
 
 depend()
 {
+	need localmount
 	if [ -n "$(interfaces)" ]; then
 		provide net
 	fi
@@ -67,7 +68,7 @@ tentative()
 	case "$RC_UNAME" in
 	Linux)
 		[ -x /sbin/ip ] || [ -x /bin/ip ] || return 1
-		[ -n "$(ip -f inet6 addr show tentative)" ]
+		[ -n "$(ip -f inet6 addr show tentative 2>/dev/null)" ]
 		;;
 	*)
 		local inet= address= rest=

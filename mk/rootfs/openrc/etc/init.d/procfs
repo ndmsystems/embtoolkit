@@ -7,6 +7,7 @@ description="Mounts misc filesystems in /proc."
 depend()
 {
 	use modules devfs
+	need localmount
 }
 
 start()

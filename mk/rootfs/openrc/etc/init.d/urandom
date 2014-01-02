@@ -5,6 +5,11 @@
 : ${urandom_seed:=${URANDOM_SEED:-/etc/random-seed}}
 description="Initializes the random number generator."
 
+depend()
+{
+	need localmount
+}
+
 save_seed()
 {
 	local psz=1

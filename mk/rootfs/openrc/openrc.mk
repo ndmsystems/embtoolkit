@@ -34,8 +34,8 @@ embtk_openrc_mk		:= $(EMBTK_ROOT)/mk/rootfs/openrc
 # sysinit runlevel scripts
 embtk_openrc_sysinit	:= devfs dmesg sysfs
 # boot runlevel scripts
-embtk_openrc_boot	:= hostname loopback modules mtab network procfs
-embtk_openrc_boot	+= root staticroute sysctl urandom
+embtk_openrc_boot	:= hostname localmount loopback modules mtab network
+embtk_openrc_boot	+= procfs root staticroute swap sysctl urandom
 # defaultrunlevel scripts
 embtk_openrc_default	:= netmount
 # shutdown runlevel scripts
