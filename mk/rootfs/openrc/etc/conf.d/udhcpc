@@ -1,0 +1,5 @@
+# pidfile used for udhcpc
+#udhcpc_pidfile=/run/udhcpc.pid
+
+# Additional argument when starting udhcpc
+udhcpc_args=""

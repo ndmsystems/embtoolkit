@@ -1,0 +1,15 @@
+#!/sbin/openrc-run
+# Copyright (c) 2013 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Released under the 2-clause BSD license.
+
+command=/sbin/udhcpc
+pidfile=${udhcpc_pidfile:=/var/run/udhcpc.pid}
+command_args=--pidfile=${pidfile} ${udhcpc_args}
+name="Busybox DHCP client"
+
+depend()
+{
+	provide net
+	need localmount
+	after bootmisc modules
+}

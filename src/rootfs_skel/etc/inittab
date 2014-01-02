@@ -5,7 +5,6 @@
 ::wait:/sbin/openrc boot
 ::wait:/sbin/openrc default
 ::wait:/sbin/openrc
-null::sysinit:/sbin/udhcpc
 
 # Put a getty on the serial port
 ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100

@@ -35,11 +35,17 @@ embtk_openrc_hostname	:= EmbToolkit-$(embtk_os)
 
 # sysinit runlevel scripts
 embtk_openrc_sysinit	:= devfs dmesg sysfs
+
 # boot runlevel scripts
 embtk_openrc_boot	:= bootmisc hostname localmount loopback modules mtab
 embtk_openrc_boot	+= network procfs root staticroute swap sysctl urandom
+
 # default runlevel scripts
+embtk_openrc_default-y	:=
 embtk_openrc_default	:= netmount
+embtk_openrc_default-$(CONFIG_KEMBTK_BUSYB_UDHCPC) += udhcpc
+embtk_openrc_default	+= $(embtk_openrc_default-y)
+
 # shutdown runlevel scripts
 embtk_openrc_shutdown	:= killprocs
 
