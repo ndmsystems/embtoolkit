@@ -1,13 +1,11 @@
 # Initial system critical filesystems mounting (/proc, /dev, /sys, etc.)
 ::sysinit:/sbin/openrc sysinit
+
+# Goto other runlevels now
 ::wait:/sbin/openrc boot
 ::wait:/sbin/openrc default
 ::wait:/sbin/openrc
 null::sysinit:/sbin/udhcpc
-
-# Set up a couple of getty's
-#tty1::respawn:/sbin/getty 38400 tty1
-#tty2::respawn:/sbin/getty 38400 tty2
 
 # Put a getty on the serial port
 ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100
@@ -16,7 +14,6 @@ ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100
 null::sysinit:/bin/touch /var/log/messages
 null::respawn:/sbin/syslogd -n -m 0
 null::respawn:/sbin/klogd -n
-#tty3::respawn:/usr/bin/tail -f /var/log/messages
 
 # What to do at the "Three Finger Salute"
 ::ctrlaltdel:/sbin/reboot
