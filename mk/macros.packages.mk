@@ -731,27 +731,19 @@ __embtk_decompress_pkg =							\
 	case $(__embtk_pkg_package_f) in					\
 		*.tar.bz2 | *.tbz2)						\
 			tar -C $(dir $(__embtk_pkg_srcdir)) -xjf		\
-						$(__embtk_pkg_package_f) &&	\
-			mkdir -p $(__embtk_pkg_builddir) &&			\
-			touch $(__embtk_pkg_dotdecompressed_f)			\
+						$(__embtk_pkg_package_f)	\
 			;;							\
 		*.tar.gz | *.tgz)						\
 			tar -C $(dir $(__embtk_pkg_srcdir)) -xzf		\
-						$(__embtk_pkg_package_f) &&	\
-			mkdir -p $(__embtk_pkg_builddir) &&			\
-			touch $(__embtk_pkg_dotdecompressed_f)			\
+						$(__embtk_pkg_package_f)	\
 			;;							\
 		*.tar.xz)							\
 			tar -C $(dir $(__embtk_pkg_srcdir)) -xJf		\
-						$(__embtk_pkg_package_f) &&	\
-			mkdir -p $(__embtk_pkg_builddir) &&			\
-			touch $(__embtk_pkg_dotdecompressed_f)			\
+						$(__embtk_pkg_package_f)	\
 			;;							\
 		*.tar)								\
 			tar -C $(dir $(__embtk_pkg_srcdir)) -xf			\
-						$(__embtk_pkg_package_f) &&	\
-			mkdir -p $(__embtk_pkg_builddir) &&			\
-			touch $(__embtk_pkg_dotdecompressed_f)			\
+						$(__embtk_pkg_package_f)	\
 			;;							\
 		*)								\
 			$(call __embtk_decompress_pkg_exitfailure,$(1))		\
@@ -760,13 +752,14 @@ __embtk_decompress_pkg =							\
 
 __embtk_decompress_pkg_msg = $(call embtk_pinfo,"Decrompressing $(__embtk_pkg_package) ...")
 define embtk_decompress_pkg
+	$(Q)mkdir -p $(__embtk_pkg_builddir)
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),true,
 		$(if $(EMBTK_BUILDSYS_DEBUG),$(__embtk_decompress_pkg_msg))
 		if [ ! -e $(__embtk_pkg_dotdecompressed_f) ]; then		\
 			$(call __embtk_decompress_pkg,$(1)) &&			\
+			touch $(__embtk_pkg_dotdecompressed_f) &&		\
 			$(call __embtk_applypatch_pkg,$(1))			\
 		fi)
-	$(Q)mkdir -p $(__embtk_pkg_builddir)
 endef
 
 #
