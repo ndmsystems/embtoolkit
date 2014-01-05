@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -111,7 +111,8 @@ host_packages_build:
 # Generic implicite rules
 #
 
-# This install implicit rule is intended for autotool'ed packages
+# This install implicit rule is intended for autotool'ed packages, or packages
+# defininng an embtk_install_{pkgname} macro.
 %_install:
 	$(call embtk_install_xpkg,$*)
 
