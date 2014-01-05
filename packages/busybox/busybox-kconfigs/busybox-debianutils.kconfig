@@ -52,8 +52,8 @@ config KEMBTK_BUSYB_FEATURE_RUN_PARTS_FANCY
 	            limited to executables), but don't actually run them.
 
 config KEMBTK_BUSYB_START_STOP_DAEMON
-	bool "start-stop-daemon"
-	default y
+	bool
+	default n
 	help
 	  start-stop-daemon is used to control the creation and
 	  termination of system-level processes, usually the ones
