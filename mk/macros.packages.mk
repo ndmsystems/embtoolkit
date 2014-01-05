@@ -445,7 +445,6 @@ define __embtk_install_pkg_make
 	$(call embtk_pinfo,"Compile/Install $(__embtk_pkg_name)-$(__embtk_pkg_version) in your root filesystem...")
 	$(call embtk_download_pkg,$(1))
 	$(call embtk_decompress_pkg,$(1))
-	mkdir -p $(__embtk_pkg_builddir)
 	$(if $(embtk_beforeinstall_$(pkgv)),$(embtk_beforeinstall_$(pkgv)))
 	$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_pkg,$(1)))
 	$(if $(__embtk_pkg_makedirs),						\
@@ -465,7 +464,6 @@ define __embtk_install_hostpkg_make
 	$(call embtk_pinfo,"Compile/Install $(__embtk_pkg_name)-$(__embtk_pkg_version) for host...")
 	$(call embtk_download_pkg,$(1))
 	$(call embtk_decompress_pkg,$(1))
-	mkdir -p $(__embtk_pkg_builddir)
 	$(if $(embtk_beforeinstall_$(pkgv)),$(embtk_beforeinstall_$(pkgv)))
 	$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_hostpkg,$(1)))
 	$(if $(__embtk_pkg_makedirs),						\
@@ -531,6 +529,7 @@ __embtk_xinstall_xpkg_allvarset-y = $(and $(__embtk_pkg_name),			\
 #
 define __embtk_install_pkg
 	$(if $(__embtk_pkg_installed-y),true,
+		$(Q)mkdir -p $(__embtk_pkg_builddir)
 		$(Q)$(call __embtk_install_pkg_make,$(1),autotools))
 	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
@@ -550,6 +549,7 @@ endef
 define embtk_makeinstall_pkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
 		$(if $(__embtk_pkg_installed-y),true,
+			$(Q)mkdir -p $(__embtk_pkg_builddir)
 			$(Q)$(call __embtk_install_pkg_make,$(1)))
 		$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv))),
 		$(call __embtk_install_paramsfailure,$(1)))
@@ -564,6 +564,7 @@ endef
 
 define __embtk_install_hostpkg
 	$(if $(__embtk_pkg_installed-y),true,
+		$(Q)mkdir -p $(__embtk_pkg_builddir)
 		$(Q)$(call __embtk_install_hostpkg_make,$(1),autotools))
 	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
@@ -582,6 +583,7 @@ endef
 define embtk_makeinstall_hostpkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
 		$(if $(__embtk_pkg_installed-y),true,
+			$(Q)mkdir -p $(__embtk_pkg_builddir)
 			$(Q)$(call __embtk_install_hostpkg_make,$(1)))
 		$(or $(embtk_postinstall_$(pkgv)),true),
 		$(call __embtk_install_paramsfailure,$(1)))
@@ -752,7 +754,6 @@ __embtk_decompress_pkg =							\
 
 __embtk_decompress_pkg_msg = $(call embtk_pinfo,"Decrompressing $(__embtk_pkg_package) ...")
 define embtk_decompress_pkg
-	$(Q)mkdir -p $(__embtk_pkg_builddir)
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),true,
 		$(if $(EMBTK_BUILDSYS_DEBUG),$(__embtk_decompress_pkg_msg))
 		if [ ! -e $(__embtk_pkg_dotdecompressed_f) ]; then		\
