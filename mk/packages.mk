@@ -119,6 +119,10 @@ host_packages_build:
 download_% %_download:
 	$(call embtk_download_pkg,$*)
 
+# Decompress generic implicit rule
+%_decompress:
+	$(call embtk_decompress_pkg,$*)
+
 # clean generic implicit rule
 %_clean:
 	$(call embtk_cleanup_pkg,$*)
