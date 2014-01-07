@@ -373,7 +373,7 @@ define embtk_configure_pkg
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)			\
 	--prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-rpath	\
 	$(__embtk_pkg_configureopts)
-	$(Q)touch $(__embtk_pkg_dotconfigured_f)
+	$(Q)$(call __embtk_setconfigured_pkg,$(1))
 	$(Q)$(call __embtk_kill_lt_rpath,$(__embtk_pkg_builddir))
 endef
 
@@ -410,7 +410,7 @@ define embtk_configure_hostpkg
 	--prefix=$(strip $(if $(__embtk_pkg_prefix),				\
 				$(__embtk_pkg_prefix),$(embtk_htools)/usr))	\
 	$(__embtk_pkg_configureopts)
-	$(Q)touch $(__embtk_pkg_dotconfigured_f)
+	$(Q)$(call __embtk_setconfigured_pkg,$(1))
 endef
 
 #
@@ -734,7 +734,7 @@ __embtk_applypatch_pkg =							\
 		if [ ! -e $(__embtk_pkg_dotpatched_f) ]; then			\
 			cd $(__embtk_pkg_srcdir);				\
 			patch -p1 --silent < $(__embtk_pkg_patch_f);		\
-			touch $(__embtk_pkg_dotpatched_f);			\
+			$(call __embtk_setpatched_pkg,$(1));			\
 		fi,true;)
 
 __embtk_decompress_pkg_exitfailure =						\
