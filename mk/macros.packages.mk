@@ -155,6 +155,10 @@ __embtk_pkg_version		= $(or $(__embtk_pkg_usegit),$(__embtk_pkg_versionsvn),$(st
 __embtk_pkg_package_f		= $(strip $(embtk_dldir))/$(__embtk_pkg_package)
 __embtk_pkg_srcdir		= $(or $(__embtk_pkg_localgit),$(__embtk_pkg_localsvn),$(patsubst %/,%,$(strip $($(PKGV)_SRC_DIR))))
 __embtk_pkg_builddir		= $(patsubst %/,%,$(strip $($(PKGV)_BUILD_DIR)))
+# State dir: where build system stores package states: installed, patched, etc.
+____embtk_pkg_statedir		= $(dir $(__embtk_pkg_builddir))
+___embtk_pkg_statedir		= $(____embtk_pkg_statedir)/.embtk-$(__embtk_pkg_name)-$(pkgv)
+__embtk_pkg_statedir		= $(___embtk_pkg_statedir)
 
 __embtk_pkg_etc			= $(strip $($(PKGV)_ETC))
 __embtk_pkg_bins		= $(strip $($(PKGV)_BINS))
@@ -203,20 +207,19 @@ MAKE			= $(__embtk_make_env) $(__embtk_pkg_scanbuild) $(__embtk_make_cmd)
 # Some embtoolkit internal files for packages
 __embtk_pkg_dotdecompressed_f	= $(__embtk_pkg_srcdir)/.$(__embtk_pkg_name).embtk.decompressed
 __embtk_pkg_dotpatched_f	= $(__embtk_pkg_srcdir)/.$(__embtk_pkg_name).embtk.patched
-__embtk_pkg_dotconfigured_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.configured
-__embtk_pkg_dotinstalled_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.installed
-__embtk_pkg_dotkconfig_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.kconfig
-
+__embtk_pkg_dotconfigured_f	= $(__embtk_pkg_statedir)/.$(__embtk_pkg_name).embtk.configured
+__embtk_pkg_dotinstalled_f	= $(__embtk_pkg_statedir)/.$(__embtk_pkg_name).embtk.installed
+__embtk_pkg_dotkconfig_f	= $(__embtk_pkg_statedir)/.$(__embtk_pkg_name).embtk.kconfig
 
 __embtk_setdecompressed_pkg	= touch $(__embtk_pkg_dotdecompressed_f)
 __embtk_unsetdecompressed_pkg	= rm -rf $(__embtk_pkg_dotdecompressed_f)
 __embtk_setpatched_pkg		= touch $(__embtk_pkg_dotpatched_f)
 __embtk_unsetpatched_pkg	= rm -rf $(__embtk_pkg_dotpatched_f)
-__embtk_setconfigured_pkg	= touch $(__embtk_pkg_dotconfigured_f)
+__embtk_setconfigured_pkg	= mkdir -p $(__embtk_pkg_statedir) && touch $(__embtk_pkg_dotconfigured_f)
 __embtk_unsetconfigured_pkg	= rm -rf $(__embtk_pkg_dotconfigured_f)
-__embtk_setinstalled_pkg	= touch $(__embtk_pkg_dotinstalled_f)
+__embtk_setinstalled_pkg	= mkdir -p $(__embtk_pkg_statedir) && touch $(__embtk_pkg_dotinstalled_f)
 __embtk_unsetinstalled_pkg	= rm -rf $(__embtk_pkg_dotinstalled_f)
-__embtk_setkconfigured_pkg	= touch $(__embtk_pkg_dotkconfig_f)
+__embtk_setkconfigured_pkg	= mkdir -p $(__embtk_pkg_statedir) && touch $(__embtk_pkg_dotkconfig_f)
 __embtk_unsetkconfigured_pkg	= rm -rf $(__embtk_pkg_dotkconfig_f)
 
 # Some useful macros about packages
@@ -802,7 +805,9 @@ define __embtk_cleanup_pkg
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),
 		$(call __embtk_unsetconfigured_pkg,$(1))
 		$(call __embtk_unsetinstalled_pkg,$(1)),
-		$(if $(__embtk_pkg_builddir),rm -rf $(__embtk_pkg_builddir)*))
+		$(if $(__embtk_pkg_builddir),
+			rm -rf $(__embtk_pkg_builddir)*
+			rm -rf $(__embtk_pkg_statedir)))
 endef
 
 define embtk_cleanup_pkg
