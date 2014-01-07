@@ -207,6 +207,18 @@ __embtk_pkg_dotconfigured_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk
 __embtk_pkg_dotinstalled_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.installed
 __embtk_pkg_dotkconfig_f	= $(__embtk_pkg_builddir)/.$(__embtk_pkg_name).embtk.kconfig
 
+
+__embtk_setdecompressed_pkg	= touch $(__embtk_pkg_dotdecompressed_f)
+__embtk_unsetdecompressed_pkg	= rm -rf $(__embtk_pkg_dotdecompressed_f)
+__embtk_setpatched_pkg		= touch $(__embtk_pkg_dotpatched_f)
+__embtk_unsetpatched_pkg	= rm -rf $(__embtk_pkg_dotpatched_f)
+__embtk_setconfigured_pkg	= touch $(__embtk_pkg_dotconfigured_f)
+__embtk_unsetconfigured_pkg	= rm -rf $(__embtk_pkg_dotconfigured_f)
+__embtk_setinstalled_pkg	= touch $(__embtk_pkg_dotinstalled_f)
+__embtk_unsetinstalled_pkg	= rm -rf $(__embtk_pkg_dotinstalled_f)
+__embtk_setkconfigured_pkg	= touch $(__embtk_pkg_dotkconfig_f)
+__embtk_unsetkconfigured_pkg	= rm -rf $(__embtk_pkg_dotkconfig_f)
+
 # Some useful macros about packages
 __embtk_rootfs_pkgs-y		= $(patsubst %_install,%,$(ROOTFS_COMPONENTS-y))
 __embtk_rootfs_nrpkgs-y		= $(words $(__embtk_rootfs_pkgs-y))
@@ -456,7 +468,7 @@ define __embtk_install_pkg_make
 	$(if $(__embtk_autotoolspkg-y)$(__embtk_pkg_pkgconfigs),
 		$(call __embtk_fix_libtool_files)
 		$(call __embtk_fix_pkgconfig_files))
-	touch $(__embtk_pkg_dotinstalled_f)
+	$(call __embtk_setinstalled_pkg,$(1))
 	$(call __embtk_pkg_gen_dotkconfig_f,$(1))
 endef
 define __embtk_install_hostpkg_make
@@ -472,7 +484,7 @@ define __embtk_install_hostpkg_make
 	$(if $(__embtk_pkg_makedirs),						\
 		$(__embtk_multi_make_hostinstall),				\
 		$(__embtk_single_make_hostinstall))
-	touch $(__embtk_pkg_dotinstalled_f)
+	$(call __embtk_setinstalled_pkg,$(1))
 	$(call __embtk_pkg_gen_dotkconfig_f,$(1))
 endef
 
@@ -758,7 +770,7 @@ define embtk_decompress_pkg
 		$(if $(EMBTK_BUILDSYS_DEBUG),$(__embtk_decompress_pkg_msg))
 		if [ ! -e $(__embtk_pkg_dotdecompressed_f) ]; then		\
 			$(call __embtk_decompress_pkg,$(1)) &&			\
-			touch $(__embtk_pkg_dotdecompressed_f) &&		\
+			$(call __embtk_setdecompressed_pkg,$(1)) &&		\
 			$(call __embtk_applypatch_pkg,$(1))			\
 		fi)
 endef
@@ -788,8 +800,8 @@ define __embtk_cleanup_pkg
 	$(if $(__embtk_pkg_shares),
 		rm -rf $(addprefix $(embtk_sysroot)/usr/share/,$(__embtk_pkg_shares)))
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),
-		rm -rf $(__embtk_pkg_dotconfigured_f)
-		rm -rf $(__embtk_pkg_dotinstalled_f),
+		$(call __embtk_unsetconfigured_pkg,$(1))
+		$(call __embtk_unsetinstalled_pkg,$(1)),
 		$(if $(__embtk_pkg_builddir),rm -rf $(__embtk_pkg_builddir)*))
 endef
 

@@ -43,7 +43,7 @@ define embtk_beforeinstall_musl
 		--includedir=/usr/include
 	echo "$(MUSL_VERSION) From EmbToolkit v$(EMBTK_VERSION)"		\
 		> $(MUSL_SRC_DIR)/VERSION
-	touch $(call __embtk_pkg_dotconfigured_f,musl)
+	$(call __embtk_setconfigured_pkg,musl)
 endef
 
 define __embtk_install_musl
@@ -55,7 +55,7 @@ define __embtk_install_musl
 	$(Q)$(MAKE) -C $(MUSL_BUILD_DIR)					\
 		DESTDIR=$(embtk_sysroot) install-libs install-headers
 	cd $(embtk_sysroot)/$(LIBDIR); ln -sf libc.so ld-musl-$(LINUX_ARCH).so.1
-	touch $(call __embtk_pkg_dotinstalled_f,musl)
+	$(call __embtk_setinstalled_pkg,musl)
 	$(call __embtk_pkg_gen_dotkconfig_f,musl)
 endef
 
@@ -66,8 +66,8 @@ endef
 define embtk_cleanup_musl
 	if [ -d $(MUSL_BUILD_DIR) ]; then					\
 		$(MAKE) -C $(MUSL_BUILD_DIR) distclean;				\
-		rm -rf $(call __embtk_pkg_dotconfigured_f,musl);		\
-		rm -rf $(call __embtk_pkg_dotinstalled_f,musl);			\
-		rm -rf $(call __embtk_pkg_dotkconfig_f,musl);			\
+		$(call __embtk_unsetconfigured_pkg,musl);			\
+		$(call __embtk_unsetinstalled_pkg,musl);			\
+		$(call __embtk_unsetkconfigured_pkg,musl);			\
 	fi
 endef

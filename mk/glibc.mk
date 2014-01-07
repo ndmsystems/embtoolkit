@@ -73,8 +73,7 @@ define embtk_configure_glibc
 	--enable-obsolete-rpc --disable-build-nscd --disable-nscd		\
 	--with-bugurl=$(EMBTK_BUGURL)						\
 	--with-pkgversion="GLIBC from embtoolkit-$(EMBTK_VERSION)"
-	touch $(GLIBC_BUILD_DIR)/.glibc.embtk.conifgured
-	touch $(call __embtk_pkg_dotconfigured_f,glibc)
+	$(call __embtk_setconfigured_pkg,glibc)
 endef
 
 define __embtk_install_glibc
@@ -90,7 +89,7 @@ define __embtk_install_glibc
 		BUILD_CFLAGS="$(embtk_glibc_buildcflags)"			\
 		BUILD_LDFLAGS="$(embtk_glibc_buildldflags)"			\
 		install_root=$(embtk_sysroot) install
-	touch $(call __embtk_pkg_dotinstalled_f,glibc)
+	$(call __embtk_setinstalled_pkg,glibc)
 	$(call __embtk_pkg_gen_dotkconfig_f,glibc)
 endef
 

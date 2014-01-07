@@ -37,7 +37,7 @@ define __embtk_install_bmake
 	cd $(BMAKE_BUILD_DIR) && MAKEFLAGS=""					\
 		$(BMAKE_SRC_DIR)/boot-strap					\
 			--prefix=$(embtk_htools)/usr --install
-	touch $(call __embtk_pkg_dotinstalled_f,bmake)
+	$(call __embtk_setinstalled_pkg,bmake)
 	$(call __embtk_pkg_gen_dotkconfig_f,bmake)
 endef
 

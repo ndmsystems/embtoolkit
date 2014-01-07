@@ -104,12 +104,12 @@ define __embtk_install_uclibc_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
 	$(__embtk_install_uclibc_dummy)
-	touch $(call __embtk_pkg_dotinstalled_f,uclibc_headers)
+	$(call __embtk_setinstalled_pkg,uclibc_headers)
 endef
 
 define embtk_install_uclibc_headers
-	[ -e $(call __embtk_pkg_dotinstalled_f,uclibc_headers) ] ||		\
-		$(__embtk_install_uclibc_headers)
+	$(if $(call __embtk_pkg_installed-y,uclubc_headers),,
+		$(__embtk_install_uclibc_headers))
 endef
 
 #
@@ -117,8 +117,8 @@ endef
 #
 define __embtk_cleanup_uclibc
 	($(MAKE) -C $(UCLIBC_BUILD_DIR) distclean &&				\
-	rm -rf $(call __embtk_pkg_dotinstalled_f,uclibc) &&			\
-	rm -rf $(call __embtk_pkg_dotinstalled_f,uclibc_headers))
+	$(call __embtk_unsetinstalled_pkg,uclibc) &&				\
+	$(call __embtk_unsetinstalled_pkg,uclibc_headers))
 endef
 define embtk_cleanup_uclibc
 	if [ -d $(UCLIBC_BUILD_DIR) ]						\

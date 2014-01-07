@@ -57,12 +57,12 @@ define __embtk_install_linux_headers
 	$(call embtk_decompress_pkg,linux)
 	$(MAKE) -C $(LINUX_BUILD_DIR) $(LINUX_MAKE_OPTS)			\
 		INSTALL_HDR_PATH=$(embtk_sysroot)/usr headers_install
-	touch $(call __embtk_pkg_dotinstalled_f,linux_headers)
+	$(call __embtk_setinstalled_pkg,linux_headers)
 	$(call __embtk_pkg_gen_dotkconfig_f,linux_headers)
 endef
 define embtk_install_linux_headers
-	[ -e $(call __embtk_pkg_dotinstalled_f,linux_headers) ] ||		\
-		$(__embtk_install_linux_headers)
+	$(if $(call __embtk_pkg_installed-y,linux_headers),,
+		$(__embtk_install_linux_headers))
 endef
 
 #
@@ -107,7 +107,7 @@ define __embtk_install_linux
 	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(__embtk_linux_srcdir)/.config
 	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS) silentoldconfig
 	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS) $(J)
-	touch $(call __embtk_pkg_dotinstalled_f,linux)
+	$(call __embtk_setinstalled_pkg,linux)
 	$(call __embtk_pkg_gen_dotkconfig_f,linux)
 endef
 
@@ -126,12 +126,9 @@ endef
 # clean target and macros
 #
 define embtk_cleanup_linux
-	if [ -d $(LINUX_BUILD_DIR) ] &&						\
-		[ -e $(call __embtk_pkg_dotinstalled_f,linux_headers) ]; then	\
-		rm -rf $(call __embtk_pkg_dotinstalled_f,linux_headers);	\
-	fi
+	[ -d $(LINUX_BUILD_DIR) ] && $(call __embtk_unsetinstalled_pkg,linux)
 endef
 
 define embtk_cleanup_linux_headers
-	$(embtk_cleanup_linux)
+	[ -d $(LINUX_BUILD_DIR) ] && $(call __embtk_unsetinstalled_pkg,linux_headers)
 endef

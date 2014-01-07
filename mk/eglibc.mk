@@ -80,8 +80,7 @@ define embtk_configure_eglibc
 	$(embtk_eglibc-sunrpc-y)						\
 	--with-bugurl=$(EMBTK_BUGURL)						\
 	--with-pkgversion="EGLIBC from embtoolkit-$(EMBTK_VERSION)"
-	touch $(EGLIBC_BUILD_DIR)/.eglibc.embtk.conifgured
-	touch $(call __embtk_pkg_dotconfigured_f,eglibc)
+	$(call __embtk_setconfigured_pkg,eglibc)
 endef
 
 define __embtk_install_eglibc
@@ -97,7 +96,7 @@ define __embtk_install_eglibc
 		BUILD_CFLAGS="$(embtk_eglibc_buildcflags)"			\
 		BUILD_LDFLAGS="$(embtk_eglibc_buildldflags)"			\
 		install_root=$(embtk_sysroot) install
-	touch $(call __embtk_pkg_dotinstalled_f,eglibc)
+	$(call __embtk_setinstalled_pkg,eglibc)
 	$(call __embtk_pkg_gen_dotkconfig_f,eglibc)
 endef
 
