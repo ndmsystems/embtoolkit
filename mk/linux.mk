@@ -126,9 +126,9 @@ endef
 # clean target and macros
 #
 define embtk_cleanup_linux
-	[ -d $(LINUX_BUILD_DIR) ] && $(call __embtk_unsetinstalled_pkg,linux)
+	[ -d $(LINUX_BUILD_DIR) ] && $(call __embtk_unsetinstalled_pkg,linux) ||:
 endef
 
 define embtk_cleanup_linux_headers
-	[ -d $(LINUX_BUILD_DIR) ] && $(call __embtk_unsetinstalled_pkg,linux_headers)
+	[ -d $(LINUX_BUILD_DIR) ] && $(call __embtk_unsetinstalled_pkg,linux_headers) ||:
 endef
