@@ -116,15 +116,12 @@ endef
 # Clean up macros
 #
 define __embtk_cleanup_uclibc
-	($(MAKE) -C $(UCLIBC_BUILD_DIR) distclean &&				\
+	$(MAKE) -C $(UCLIBC_BUILD_DIR) distclean &&				\
 	$(call __embtk_unsetinstalled_pkg,uclibc) &&				\
-	$(call __embtk_unsetinstalled_pkg,uclibc_headers))
+	$(call __embtk_unsetinstalled_pkg,uclibc_headers)
 endef
 define embtk_cleanup_uclibc
-	if [ -d $(UCLIBC_BUILD_DIR) ]						\
-		&& [ -e $(UCLIBC_BUILD_DIR)/Makefile ]; then			\
-		$(__embtk_cleanup_uclibc)					\
-	fi
+	[ -e $(UCLIBC_BUILD_DIR)/Makefile ] && $(__embtk_cleanup_uclibc) ||:
 endef
 
 define embtk_cleanup_uclibc_headers
