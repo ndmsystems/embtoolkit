@@ -805,9 +805,8 @@ define __embtk_cleanup_pkg
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),
 		$(call __embtk_unsetconfigured_pkg,$(1))
 		$(call __embtk_unsetinstalled_pkg,$(1)),
-		$(if $(__embtk_pkg_builddir),
-			rm -rf $(__embtk_pkg_builddir)*
-			rm -rf $(__embtk_pkg_statedir)))
+		$(if $(__embtk_pkg_builddir),rm -rf $(__embtk_pkg_builddir)*))
+	rm -rf $(__embtk_pkg_statedir)
 endef
 
 define embtk_cleanup_pkg
