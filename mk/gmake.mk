@@ -35,8 +35,7 @@ define embtk_install_gmake
 endef
 
 define embtk_postinstall_gmake
-	if [ ! -e $(GMAKE_BUILD_DIR)/.gmake.embtk.postinstalled ]; then		\
+	if [ ! -e $(embtk_htools)/usr/bin/gmake ]; then				\
 		cd $(embtk_htools)/usr/bin; mv make gmake;			\
-		touch $(GMAKE_BUILD_DIR)/.gmake.embtk.postinstalled;		\
 	fi
 endef
