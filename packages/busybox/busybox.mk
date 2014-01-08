@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@ BB_SITE		:= http://www.busybox.net/downloads
 BB_PACKAGE	:= busybox-$(BB_VERSION).tar.bz2
 BB_SRC_DIR	:= $(embtk_pkgb)/busybox-$(BB_VERSION)
 BB_BUILD_DIR	:= $(embtk_pkgb)/busybox-$(BB_VERSION)
+
+BB_KEEP_SRC_DIR	:= y
 
 __embtk_cflags_bb 	:= $(TARGET_CFLAGS) -pipe -fno-strict-aliasing
 __embtk_cflags_bb 	+= -fno-unwind-tables -fno-asynchronous-unwind-tables
