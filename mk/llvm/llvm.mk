@@ -66,15 +66,15 @@ define embtk_beforeinstall_llvm
 	[ -e $(call __embtk_pkg_srcdir,llvm)/tools/clang ] ||			\
 		ln -sf $(call __embtk_pkg_srcdir,clang)				\
 				$(call __embtk_pkg_srcdir,llvm)/tools/clang
-endef
-
-define embtk_postinstall_llvm
 	mkdir -p $(embtk_tools)/bin/clang-scan-build
 	cp -R $(call __embtk_pkg_srcdir,llvm)/tools/clang/tools/scan-build/*	\
 		$(embtk_tools)/bin/clang-scan-build
 	mkdir -p $(embtk_tools)/bin/clang-scan-view
 	cp -R $(call __embtk_pkg_srcdir,llvm)/tools/clang/tools/scan-view/*	\
 		$(embtk_tools)/bin/clang-scan-view
+endef
+
+define embtk_postinstall_llvm
 	mkdir -p $(embtk_tools)/lib/bfd-plugins
 	cd $(embtk_tools)/lib/bfd-plugins;					\
 		ln -sf ../libLTO.so libLTO.so;					\
