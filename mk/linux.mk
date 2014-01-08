@@ -1,6 +1,6 @@
 #################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ LINUX_SITE		:= $(call __LINUX_SITE)
 LINUX_PACKAGE		:= linux-$(LINUX_VERSION).tar.bz2
 LINUX_SRC_DIR		:= $(embtk_toolsb)/linux-$(LINUX_VERSION)
 LINUX_BUILD_DIR		:= $(embtk_toolsb)/linux-$(LINUX_VERSION)
+LINUX_KEEP_SRC_DIR	:= y
 
 LINUX_HEADERS_NAME	:= linux_headers
 LINUX_HEADERS_VERSION	:= $(LINUX_VERSION)
@@ -45,7 +46,8 @@ LINUX_HEADERS_SITE	:= $(LINUX_SITE)
 LINUX_HEADERS_PACKAGE	:= $(LINUX_PACKAGE)
 LINUX_HEADERS_SRC_DIR	:= $(LINUX_SRC_DIR)
 LINUX_HEADERS_BUILD_DIR	:= $(LINUX_BUILD_DIR)
-LINUX_HEADERS_KCONFIGS_NAME := LINUX
+LINUX_HEADERS_KCONFIGS_NAME	:= LINUX
+LINUX_HEADERS_KEEP_SRC_DIR	:= y
 
 LINUX_MAKE_OPTS	:= quiet=quiet_
 LINUX_MAKE_OPTS	+= ARCH=$(LINUX_ARCH)
