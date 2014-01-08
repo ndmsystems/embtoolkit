@@ -155,6 +155,7 @@ __embtk_pkg_version		= $(or $(__embtk_pkg_usegit),$(__embtk_pkg_versionsvn),$(st
 __embtk_pkg_package_f		= $(strip $(embtk_dldir))/$(__embtk_pkg_package)
 __embtk_pkg_srcdir		= $(or $(__embtk_pkg_localgit),$(__embtk_pkg_localsvn),$(patsubst %/,%,$(strip $($(PKGV)_SRC_DIR))))
 __embtk_pkg_builddir		= $(patsubst %/,%,$(strip $($(PKGV)_BUILD_DIR)))
+__embtk_pkg_nowipeworkspace	= $(strip $($(PKGV)_KEEP_SRC_DIR))
 # State dir: where build system stores package states: installed, patched, etc.
 ____embtk_pkg_statedir		= $(dir $(__embtk_pkg_builddir))
 ___embtk_pkg_statedir		= $(____embtk_pkg_statedir)/.embtk-$(__embtk_pkg_name)-$(pkgv)
@@ -221,6 +222,14 @@ __embtk_setinstalled_pkg	= mkdir -p $(__embtk_pkg_statedir) && touch $(__embtk_p
 __embtk_unsetinstalled_pkg	= rm -rf $(__embtk_pkg_dotinstalled_f)
 __embtk_setkconfigured_pkg	= mkdir -p $(__embtk_pkg_statedir) && touch $(__embtk_pkg_dotkconfig_f)
 __embtk_unsetkconfigured_pkg	= rm -rf $(__embtk_pkg_dotkconfig_f)
+
+ifeq ($(CONFIG_EMBTK_WIPEOUTWORKSPACES),y)
+define __embtk_wipeoutworkspace_pkg
+	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),,
+		rm -rf $(__embtk_pkg_builddir)
+		rm -rf $(__embtk_pkg_srcdir))
+endef
+endif
 
 # Some useful macros about packages
 __embtk_rootfs_pkgs-y		= $(patsubst %_install,%,$(ROOTFS_COMPONENTS-y))
@@ -545,7 +554,9 @@ __embtk_xinstall_xpkg_allvarset-y = $(and $(__embtk_pkg_name),			\
 define __embtk_install_pkg
 	$(if $(__embtk_pkg_installed-y),true,
 		$(Q)mkdir -p $(__embtk_pkg_builddir)
-		$(Q)$(call __embtk_install_pkg_make,$(1),autotools))
+		$(Q)$(call __embtk_install_pkg_make,$(1),autotools)
+		$(call __embtk_wipeoutworkspace_pkg,$(1)))
+	$(call __embtk_wipeoutworkspace_pkg,$(1))
 	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
 
@@ -565,7 +576,8 @@ define embtk_makeinstall_pkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
 		$(if $(__embtk_pkg_installed-y),true,
 			$(Q)mkdir -p $(__embtk_pkg_builddir)
-			$(Q)$(call __embtk_install_pkg_make,$(1)))
+			$(Q)$(call __embtk_install_pkg_make,$(1))
+			$(call __embtk_wipeoutworkspace_pkg,$(1)))
 		$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv))),
 		$(call __embtk_install_paramsfailure,$(1)))
 endef
@@ -580,7 +592,8 @@ endef
 define __embtk_install_hostpkg
 	$(if $(__embtk_pkg_installed-y),true,
 		$(Q)mkdir -p $(__embtk_pkg_builddir)
-		$(Q)$(call __embtk_install_hostpkg_make,$(1),autotools))
+		$(Q)$(call __embtk_install_hostpkg_make,$(1),autotools)
+		$(call __embtk_wipeoutworkspace_pkg,$(1)))
 	$(if $(embtk_postinstall_$(pkgv)),$(embtk_postinstall_$(pkgv)))
 endef
 define embtk_install_hostpkg
@@ -599,7 +612,8 @@ define embtk_makeinstall_hostpkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
 		$(if $(__embtk_pkg_installed-y),true,
 			$(Q)mkdir -p $(__embtk_pkg_builddir)
-			$(Q)$(call __embtk_install_hostpkg_make,$(1)))
+			$(Q)$(call __embtk_install_hostpkg_make,$(1))
+			$(call __embtk_wipeoutworkspace_pkg,$(1)))
 		$(or $(embtk_postinstall_$(pkgv)),true),
 		$(call __embtk_install_paramsfailure,$(1)))
 endef

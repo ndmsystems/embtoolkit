@@ -64,6 +64,13 @@ config EMBTK_DOWNLOAD_DIR
 	 downloaded packages in the default location under EmbToolkit,
 	 not make clean.
 
+config EMBTK_WIPEOUTWORKSPACES
+	bool "Wipe out packages workspace after successful build"
+	help
+	 Wipe out packages workspace after successful build. If is highly
+	 recommended to enable this option if you want to save disk space on you
+	 host development.
+
 config EMBTK_CACHE_PATCHES
 	bool "Preserve first downloaded patches and do not download new one"
 	default y

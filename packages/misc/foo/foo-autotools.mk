@@ -50,3 +50,9 @@ FOO_MAKE_OPTS		:=
 FOO_MAKE_DIRS		:=
 
 FOO_DEPS		:=
+
+#
+# if not empty, force build system to not remove this package workspace after
+# successful build even if it is globally configured to do so.
+#
+FOO_KEEP_SRC_DIR	:=
