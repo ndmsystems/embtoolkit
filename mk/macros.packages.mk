@@ -225,7 +225,7 @@ __embtk_unsetkconfigured_pkg	= rm -rf $(__embtk_pkg_dotkconfig_f)
 
 ifeq ($(CONFIG_EMBTK_WIPEOUTWORKSPACES),y)
 define __embtk_wipeoutworkspace_pkg
-	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),,
+	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn)$(__embtk_pkg_nowipeworkspace),,
 		rm -rf $(__embtk_pkg_builddir)
 		rm -rf $(__embtk_pkg_srcdir))
 endef
