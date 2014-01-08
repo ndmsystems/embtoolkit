@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2012-2014 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@ LIBCXX_GIT_SITE		:= git://www.embtoolkit.org/libcxx.git
 LIBCXX_PACKAGE		:= libcxx-$(LIBCXX_VERSION).tar.bz2
 LIBCXX_SRC_DIR		:= $(embtk_toolsb)/libcxx-$(LIBCXX_VERSION)
 LIBCXX_BUILD_DIR	:= $(call __embtk_pkg_srcdir,libcxx)
+
+LIBCXX_KEEP_SRC_DIR	:= y
 
 LIBCXX_DEPS		:= libcxxrt_install
 
