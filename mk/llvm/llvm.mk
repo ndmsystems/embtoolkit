@@ -74,7 +74,7 @@ define embtk_beforeinstall_llvm
 		$(embtk_tools)/bin/clang-scan-view
 endef
 
-define embtk_postinstall_llvm
+define embtk_postinstallonce_llvm
 	mkdir -p $(embtk_tools)/lib/bfd-plugins
 	cd $(embtk_tools)/lib/bfd-plugins;					\
 		ln -sf ../libLTO.so libLTO.so;					\

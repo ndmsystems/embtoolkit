@@ -99,12 +99,17 @@ DIRECTFB_CONFIGURE_OPTS	+= $(CONFIG_DIRECTFB_INPUTS-y)
 DIRECTFB_DEPS	:= libpng_install freetype_install libjpeg_install
 DIRECTFB_DEPS	+= $(if $(CONFIG_EMBTK_DIRECTFB_INPUT_TSLIB),tslib_install)
 
-define embtk_postinstall_directfb
-	$(Q)test -e $(DIRECTFB_BUILD_DIR)/.patchlibtool ||			\
+define embtk_postinstallonce_directfb
 	$(MAKE) $(DIRECTFB_BUILD_DIR)/.patchlibtool
+	$(Q)mkdir -p $(embtk_sysroot)
+	$(Q)mkdir -p $(embtk_sysroot)/etc
+	$(Q)-cp $(DIRECTFB_BUILD_DIR)/fb.modes $(embtk_sysroot)/etc
+endef
+
+define embtk_postinstall_directfb
 	$(Q)mkdir -p $(embtk_rootfs)
 	$(Q)mkdir -p $(embtk_rootfs)/etc
-	$(Q)-cp $(DIRECTFB_BUILD_DIR)/fb.modes $(embtk_rootfs)/etc
+	$(Q)-cp $(embtk_sysroot)/etc/fb.modes $(embtk_rootfs)/etc
 	$(Q)mkdir -p $(embtk_rootfs)/usr
 	$(Q)mkdir -p $(embtk_rootfs)/usr/$(LIBDIR)
 	$(Q)-cp -R $(embtk_sysroot)/usr/lib/directfb-*-* $(embtk_rootfs)/usr/$(LIBDIR)

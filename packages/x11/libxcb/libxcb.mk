@@ -41,8 +41,7 @@ LIBXCB_CONFIGURE_OPTS	:= --enable-xinput
 
 LIBXCB_DEPS		:= xcbproto_install libpthreadstubs_install libxau_install
 
-define embtk_postinstall_libxcb
-	$(Q)test -e $(LIBXCB_BUILD_DIR)/.patchlibtool ||			\
+define embtk_postinstallonce_libxcb
 	$(MAKE) $(LIBXCB_BUILD_DIR)/.patchlibtool
 endef
 

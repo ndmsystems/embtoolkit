@@ -60,7 +60,7 @@ endef
 
 __embtk_libasan			:= libclang_rt.asan-$(__embtk_clang_arch).a
 __embtk_libubsan		:= libclang_rt.ubsan-$(__embtk_clang_arch).a
-define embtk_postinstall_compiler-rt
+define embtk_postinstallonce_compiler-rt
 	echo "GROUP(libasan.a libsanitizer_common.a)"				\
 				> $(__embtk_clang_libdir)/$(__embtk_libasan)
 	echo "GROUP(libubsan.a libsanitizer_common.a)"				\

@@ -64,7 +64,7 @@ GDBSERVER_BINS		:= $(if $(CONFIG_EMBTK_HAVE_GDB),,gdbserver)
 GDBSERVER_INCLUDES	:= $(if $(CONFIG_EMBTK_HAVE_GDB),,$(__GDB_INCLUDES))
 GDBSERVER_LIBS		:= $(if $(CONFIG_EMBTK_HAVE_GDB),,$(__GDB_LIBS))
 
-define embtk_postinstall_gdbserver
+define embtk_postinstallonce_gdbserver
 	rm -rf $(addprefix $(embtk_sysroot)/usr/bin/,$(GDB_BINS))
 endef
 

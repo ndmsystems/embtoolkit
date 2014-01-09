@@ -55,8 +55,9 @@ else
 OPENSSL_LINUX_TARGET := linux-generic32
 endif
 
-openssl_install:
+define embtk_install_openssl
 	$(call embtk_makeinstall_pkg,openssl)
+endef
 
 define embtk_beforeinstall_openssl
 	$(Q)rm -rf $(OPENSSL_BUILD_DIR)/.postinstalled
@@ -65,11 +66,11 @@ define embtk_beforeinstall_openssl
 	--openssldir=/etc/ssl --prefix=/usr shared
 endef
 
+define embtk_postinstallonce_openssl
+	$(MAKE) libtool_files_adapt
+endef
+
 define embtk_postinstall_openssl
-	$(Q)if [ ! -e $(OPENSSL_BUILD_DIR)/.postinstalled ]; then		\
-		$(MAKE) libtool_files_adapt;					\
-		touch $(OPENSSL_BUILD_DIR)/.postinstalled;			\
-	fi
 	$(Q)mkdir -p $(embtk_rootfs)
 	$(Q)mkdir -p $(embtk_rootfs)/etc
 	$(Q)-cp -R $(embtk_sysroot)/etc/ssl $(embtk_rootfs)/etc/

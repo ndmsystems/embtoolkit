@@ -52,9 +52,11 @@ define embtk_beforeinstall_libx11
 	$(hostcc_cached) makekeys.c -o makekeys
 endef
 
-define embtk_postinstall_libx11
-	$(Q)test -e $(LIBX11_BUILD_DIR)/.patchlibtool ||			\
+define embtk_postinstallonce_libx11
 	$(MAKE) $(LIBX11_BUILD_DIR)/.patchlibtool
+endef
+
+define embtk_postinstall_libx11
 	$(Q)-mkdir -p $(embtk_rootfs)/usr/share
 	$(Q)-mkdir -p $(embtk_rootfs)/usr/share/X11
 	$(Q)-cp $(embtk_sysroot)/usr/share/X11/XErrorDB $(embtk_rootfs)/usr/share/X11/

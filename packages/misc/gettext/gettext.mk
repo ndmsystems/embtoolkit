@@ -53,8 +53,7 @@ GETTEXT_CONFIGURE_OPTS	:= --enable-relocatable --with-included-gettext	\
 GETTEXT_DEPS = ncurses_install libxml2_install
 
 
-define embtk_postinstall_gettext
-	$(Q)test -e $(GETTEXT_BUILD_DIR)/.patchlibtool || \
+define embtk_postinstallonce_gettext
 	$(MAKE) $(GETTEXT_BUILD_DIR)/.patchlibtool
 endef
 
@@ -68,7 +67,6 @@ $(GETTEXT_BUILD_DIR)/.patchlibtool:
 	$(Q)sed \
 	-i "s;/usr/$(LIBDIR)/libgettextlib.la;$(embtk_sysroot)/$(LIBDIR)/libgettextlib.la;" \
 	$(embtk_sysroot)/usr/$(LIBDIR)/libgettextsrc.la
-	@touch $@
 
 # gettext for host development machine
 GETTEXT_HOST_NAME		:= $(GETTEXT_NAME)

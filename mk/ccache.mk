@@ -71,6 +71,6 @@ define embtk_install_ccache
 	$(call __embtk_install_hostpkg,ccache)
 endef
 
-define embtk_postinstall_ccache
+define embtk_postinstallonce_ccache
 	CCACHE_DIR=$(CCACHE_DIR) $(CCACHE_BIN) --max-size=2GB
 endef

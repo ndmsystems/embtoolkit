@@ -34,8 +34,6 @@ define embtk_install_gmake
 	$(call __embtk_install_hostpkg,gmake)
 endef
 
-define embtk_postinstall_gmake
-	if [ ! -e $(embtk_htools)/usr/bin/gmake ]; then				\
-		cd $(embtk_htools)/usr/bin; mv make gmake;			\
-	fi
+define embtk_postinstallonce_gmake
+	mv $(embtk_htools)/usr/bin/make $(embtk_htools)/usr/bin/gmake
 endef

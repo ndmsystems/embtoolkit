@@ -46,8 +46,7 @@ XCBUTIL_PKGCONFIGS = xcb-atom.pc xcb-aux.pc xcb-event.pc xcb-icccm.pc \
 
 XCBUTIL_DEPS = gperf_host_install libxcb_install
 
-define embtk_postinstall_xcbutil
-	$(Q)test -e $(XCBUTIL_BUILD_DIR)/.patchlibtool ||			\
+define embtk_postinstallonce_xcbutil
 	$(MAKE) $(XCBUTIL_BUILD_DIR)/.patchlibtool
 endef
 
@@ -64,4 +63,3 @@ $(XCBUTIL_BUILD_DIR)/.patchlibtool:
 	sed \
 	-i "s; /usr/$(LIBDIR)/libxcb-atom.la ; $(embtk_sysroot)/usr/$(LIBDIR)/libxcb-atom.la ;" $$i; \
 	done
-	$(Q)touch $@

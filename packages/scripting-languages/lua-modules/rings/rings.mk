@@ -39,8 +39,9 @@ RINGS_MAKE_OPTS		+= CC=$(TARGETCC_CACHED)
 RINGS_MAKE_OPTS		+= LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"
 RINGS_MAKE_OPTS		+= CFLAGS="$(TARGET_CFLAGS) -I$(embtk_sysroot)/usr/include"
 
-rings_install:
+define embtk_install_rings
 	$(call embtk_makeinstall_pkg,rings)
+endef
 
 define embtk_postinstall_rings
 	$(Q)mkdir -p $(embtk_rootfs)

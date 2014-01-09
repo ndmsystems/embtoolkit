@@ -159,12 +159,9 @@ GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 CONFIG_EMBTK_GCC2_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC2_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
-define embtk_postinstall_gcc2
+define embtk_postinstallonce_gcc2
 	$(if $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),				\
-		[ -e $(GCC2_BUILD_DIR)/.gcc.embtk.postinstall ] ||		\
-			$(__embtk_postinstall_gcc2_gcc3) && 			\
-			touch $(GCC2_BUILD_DIR)/.gcc.embtk.postinstall,		\
-		true)
+		$(__embtk_postinstall_gcc2_gcc3))
 endef
 
 #
@@ -197,10 +194,8 @@ GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 CONFIG_EMBTK_GCC3_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC3_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
-define embtk_postinstall_gcc3
-	[ -e $(GCC3_BUILD_DIR)/.gcc3_post_install ] ||				\
-		$(__embtk_postinstall_gcc2_gcc3) &&				\
-		touch $(GCC3_BUILD_DIR)/.gcc3_post_install
+define embtk_postinstallonce_gcc3
+	$(__embtk_postinstall_gcc2_gcc3)
 endef
 
 #

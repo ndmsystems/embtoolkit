@@ -44,7 +44,6 @@ __LIBNL_SHARES		+= nl-pktloc-lookup.8 nl-qdisc-add.8 nl-qdisc-delete.8
 __LIBNL_SHARES		+= nl-qdisc-list.8
 LIBNL_SHARES		:= $(addprefix man/man8/,$(__LIBNL_SHARES))
 
-define embtk_postinstall_libnl
-	test -e $(LIBNL_BUILD_DIR)/.installed ||				\
-		$(call __embtk_fix_libtool_files,$(LIBDIR)/libnl)
+define embtk_postinstallonce_libnl
+	$(call __embtk_fix_libtool_files,$(LIBDIR)/libnl)
 endef

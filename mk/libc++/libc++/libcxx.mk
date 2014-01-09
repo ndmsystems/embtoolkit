@@ -59,10 +59,8 @@ define __embtk_postinstall_staticlibcxx
 					> $(__embtk_staticlibcxx))
 endef
 
-define embtk_postinstall_libcxx
-	[ -e $(LIBCXX_BUILD_DIR)/.libcxx.embtk.postinstall ] ||			\
-	$(__embtk_postinstall_staticlibcxx) &&					\
-	touch $(LIBCXX_BUILD_DIR)/.libcxx.embtk.postinstall
+define embtk_postinstallonce_libcxx
+	$(__embtk_postinstall_staticlibcxx)
 endef
 
 define embtk_cleanup_libcxx

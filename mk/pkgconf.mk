@@ -64,7 +64,6 @@ define embtk_install_pkgconf
 	$(call __embtk_install_hostpkg,pkgconf)
 endef
 
-define embtk_postinstall_pkgconf
-	[ -e $(call __embtk_pkg_dotinstalled_f,pkgcong) ] ||			\
-		cd $(embtk_htools)/usr/bin/; ln -sf pkgconf pkg-config
+define embtk_postinstallonce_pkgconf
+	cd $(embtk_htools)/usr/bin/; ln -sf pkgconf pkg-config
 endef
