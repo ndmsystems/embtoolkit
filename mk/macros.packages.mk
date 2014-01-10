@@ -119,7 +119,7 @@ embtk_toolchain_has_llvm-y	:= $(or $(CONFIG_EMBTK_GCC_AND_LLVM_TOOLCHAIN),$(embt
 
 PKGV				= $(strip $(shell echo $(1) | tr a-z A-Z))
 pkgv				= $(strip $(shell echo $(1) | tr A-Z a-z))
-__embtk_pkg_name		= $(strip $($(PKGV)_NAME))
+__embtk_pkg_name		= $(or $(strip $($(PKGV)_NAME)),$(pkgv))
 __embtk_pkg_needpatch		= $(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)
 __embtk_pkg_site		= $(strip $($(PKGV)_SITE))
 __embtk_patch_site		= $(embtk_ftp)
