@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,6 +28,3 @@ source packages/system/dbus/dbus.kconfig
 
 # e2fsprogs
 source packages/system/e2fsprogs/e2fsprogs.kconfig
-
-#upstart
-source packages/system/upstart/upstart.kconfig

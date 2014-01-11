@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,15 +23,10 @@
 # \date         July 2010
 ################################################################################
 
-#dbus
-include packages/system/dbus/dbus.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_DBUS) += dbus_install
+# dbus
+$(call embtk_include_pkg,dbus)
 
 # e2fsprogs
 include packages/system/e2fsprogs/e2fsprogs.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_E2FSPROGS) += e2fsprogs_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_E2FSPROGS) += e2fsprogs_host_install
-
-#upstart
-include packages/system/upstart/upstart.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_UPSTART) += upstart_install
