@@ -157,9 +157,11 @@ __embtk_pkg_srcdir		= $(or $(__embtk_pkg_localgit),$(__embtk_pkg_localsvn),$(pat
 __embtk_pkg_builddir		= $(patsubst %/,%,$(strip $($(PKGV)_BUILD_DIR)))
 __embtk_pkg_nowipeworkspace	= $(strip $($(PKGV)_KEEP_SRC_DIR))
 # State dir: where build system stores package states: installed, patched, etc.
-____embtk_pkg_statedir		= $(dir $(__embtk_pkg_builddir))
-___embtk_pkg_statedir		= $(____embtk_pkg_statedir)/.embtk-$(__embtk_pkg_name)-$(pkgv)
-__embtk_pkg_statedir		= $(___embtk_pkg_statedir)
+__embtk_pkg_xstatedir		= $(if $(__embtk_pkg_builddir),$(dir $(__embtk_pkg_builddir)))
+__embtk_pkg_hoststatedir	= $(if $(CONFIG_EMBTK_HOST_HAVE_$(PKGV)),$(embtk_toolsb))
+__embtk_pkg_targetstatedir	= $(if $(CONFIG_EMBTK_HAVE_$(PKGV)),$(embtk_pkgb))
+___embtk_pkg_statedir		= $(or $(__embtk_pkg_xstatedir),$(__embtk_pkg_hoststatedir),$(__embtk_pkg_targetstatedir))
+__embtk_pkg_statedir		= $(if $(___embtk_pkg_statedir),$(___embtk_pkg_statedir)/.embtk-$(__embtk_pkg_name)-$(pkgv))
 
 __embtk_pkg_etc			= $(strip $($(PKGV)_ETC))
 __embtk_pkg_bins		= $(strip $($(PKGV)_BINS))
@@ -824,7 +826,7 @@ define __embtk_cleanup_pkg
 		$(call __embtk_unsetconfigured_pkg,$(1))
 		$(call __embtk_unsetinstalled_pkg,$(1)),
 		$(if $(__embtk_pkg_builddir),rm -rf $(__embtk_pkg_builddir)*))
-	rm -rf $(__embtk_pkg_statedir)
+	$(if $(__embtk_pkg_statedir),rm -rf $(__embtk_pkg_statedir))
 endef
 
 define embtk_cleanup_pkg

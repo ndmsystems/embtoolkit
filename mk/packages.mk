@@ -108,7 +108,7 @@ host_packages_build:
 	$(Q)$(__embtk_hostpkgs_build)
 
 #
-# Generic implicite rules
+# Generic implicit rules
 #
 
 # This install implicit rule is intended for autotool'ed packages, or packages
