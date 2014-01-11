@@ -157,10 +157,13 @@ __embtk_pkg_srcdir		= $(or $(__embtk_pkg_localgit),$(__embtk_pkg_localsvn),$(pat
 __embtk_pkg_builddir		= $(patsubst %/,%,$(strip $($(PKGV)_BUILD_DIR)))
 __embtk_pkg_nowipeworkspace	= $(strip $($(PKGV)_KEEP_SRC_DIR))
 # State dir: where build system stores package states: installed, patched, etc.
-__embtk_pkg_xstatedir		= $(if $(__embtk_pkg_builddir),$(dir $(__embtk_pkg_builddir)))
-__embtk_pkg_hoststatedir	= $(if $(CONFIG_EMBTK_HOST_HAVE_$(PKGV)),$(embtk_toolsb))
-__embtk_pkg_targetstatedir	= $(if $(CONFIG_EMBTK_HAVE_$(PKGV)),$(embtk_pkgb))
-___embtk_pkg_statedir		= $(or $(__embtk_pkg_xstatedir),$(__embtk_pkg_hoststatedir),$(__embtk_pkg_targetstatedir))
+__embtk_pkg_x0statedir		= $(if $(__embtk_pkg_builddir),$(dir $(__embtk_pkg_builddir)))
+#__embtk_pkg_hoststatedir	= $(if $(strip $(wildcard $(embtk_toolsb)/.embtk-$(__embtk_pkg_name)-$(pkgv))),$(embtk_toolsb))
+__embtk_pkg_targetstatedir	= $(if $(strip $(wildcard $(embtk_pkgb)/.embtk-$(__embtk_pkg_name)-$(pkgv))),$(embtk_pkgb))
+__embtk_pkg_gitstatedir		= $(dir $(wildcard $(EMBTK_ROOT)/src/*/$(__embtk_pkg_name).git))
+__embtk_pkg_svnstatedir		= $(dir $(wildcard $(EMBTK_ROOT)/src/*/$(__embtk_pkg_name)*.svn))
+__embtk_pkg_gitsvnstatedir	= $(or $(__embtk_pkg_gitstatedir),$(__embtk_pkg_svnstatedir))
+___embtk_pkg_statedir		= $(or $(__embtk_pkg_x0statedir),$(__embtk_pkg_targetstatedir),$(__embtk_pkg_hoststatedir),$(__embtk_pkg_gitsvnstatedir))
 __embtk_pkg_statedir		= $(if $(___embtk_pkg_statedir),$(___embtk_pkg_statedir)/.embtk-$(__embtk_pkg_name)-$(pkgv))
 
 __embtk_pkg_etc			= $(strip $($(PKGV)_ETC))
