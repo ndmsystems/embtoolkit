@@ -87,5 +87,29 @@ embtk_space	:= $(embtk_empty) $(embtk_empty)
 embtk_comma	:= ,
 
 #
+# Macros to change strings case (upper->lower or lower to upper)
+#
+[U-l]           := A,a B,b C,c D,d E,e F,f G,g H,h I,i J,j K,k L,l M,m N,n O,o P,p Q,q R,r S,s T,t U,u V,v W,w X,x Y,y Z,z
+[l-U]           := a,A b,B c,C d,D e,E f,F g,G h,H i,I j,J k,K l,L m,M n,N o,O p,P q,Q r,R s,S t,T u,U v,V w,W x,X y,Y z,Z
+
+embtk_lcase	= $(strip $(call __embtk_lcase,$(1)))
+define __embtk_lcase
+	$(eval __lcase := $(1))
+	$(foreach __c,$([U-l]),
+		$(eval __c1	:= $(word 1,$(subst $(embtk_comma),$(embtk_space),$(__c))))
+		$(eval __c2	:= $(word 2,$(subst $(embtk_comma),$(embtk_space),$(__c))))
+		$(eval __lcase	:= $(subst $(__c1),$(__c2),$(__lcase))))$(__lcase)
+endef
+
+embtk_ucase	= $(strip $(call __embtk_ucase,$(1)))
+define __embtk_ucase
+	$(eval __ucase := $(1))
+	$(foreach __c,$([l-U]),
+		$(eval __c1	:= $(word 1,$(subst $(embtk_comma),$(embtk_space),$(__c))))
+		$(eval __c2	:= $(word 2,$(subst $(embtk_comma),$(embtk_space),$(__c))))
+		$(eval __ucase	:= $(subst $(__c1),$(__c2),$(__ucase))))$(__ucase)
+endef
+
+#
 # Packages management macros
 include mk/macros.packages.mk
