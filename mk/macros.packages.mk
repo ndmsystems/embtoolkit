@@ -117,8 +117,8 @@ embtk_ftp/packages-mirror	:= $(embtk_ftp)/packages-mirror
 embtk_toolchain_use_llvm-y	:= $(or $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN))
 embtk_toolchain_has_llvm-y	:= $(or $(CONFIG_EMBTK_GCC_AND_LLVM_TOOLCHAIN),$(embtk_toolchain_use_llvm-y))
 
-PKGV				= $(strip $(shell echo $(1) | tr a-z A-Z))
-pkgv				= $(strip $(shell echo $(1) | tr A-Z a-z))
+PKGV				= $(call embtk_ucase,$(1))
+pkgv				= $(call embtk_lcase,$(1))
 __embtk_pkg_name		= $(or $(strip $($(PKGV)_NAME)),$(pkgv))
 __embtk_pkg_needpatch		= $(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)
 __embtk_pkg_site		= $(strip $($(PKGV)_SITE))
