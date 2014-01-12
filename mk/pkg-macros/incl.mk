@@ -50,7 +50,7 @@ define __embtk_include_pkg
 endef
 
 define embtk_include_hostpkg
-	$(eval $(call __embtk_include_hostpkg,$(1)))
+	$(eval $(call __embtk_include_hostpkg,$(1),$(2)))
 endef
 define __embtk_include_hostpkg
 	$(eval __embtk_inckconfig	:= $(or $(2),$(PKGV)))
