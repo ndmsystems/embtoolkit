@@ -53,17 +53,22 @@ define embtk_include_hostpkg
 	$(eval $(call __embtk_include_hostpkg,$(1)))
 endef
 define __embtk_include_hostpkg
-	# Is it necessary to include .mk file?
-	ifeq (x$(__embtk_pkg_inc_hostmkinclude),xy)
-		include $(dir $(lastword $(MAKEFILE_LIST)))$(pkgv)/$(pkgv).mk
+	$(eval __embtk_inckconfig	:= $(or $(2),$(PKGV)))
+	# Case where foo and foo_host are in the same .mk file
+	$(eval __embtk_incmk0		:= $(embtk_pkgincdir)/$(pkgv)/$(pkgv).mk)
+	$(eval __embtk_incmk1		:= $(embtk_pkgincdir)/$(patsubst %_host,%,$(pkgv))/$(patsubst %_host,%,$(pkgv)).mk)
+	$(eval __embtk_incmk		:= $(or $(wildcard $(__embtk_incmk0)),$(wildcard $(__embtk_incmk1)),$(wildcard $(__embtk_incmk0))))
+	$(eval __embtk_incinstalled-y	:= $(if $(wildcard $(__embtk_pkg_dotinstalled_f)),y))
+	$(eval __embtk_incenabled-y	:= $(CONFIG_EMBTK_HOST_HAVE_$(patsubst %_HOST,%,$(__embtk_inckconfig))))
+	$(eval __embtk_incmk-y		:= $(if $(__embtk_incenabled-y)$(__embtk_incinstalled-y),y))
+	# Is it necessary to include the .mk file?
+	$(eval __embtk_incmk-y		:= $(if $(findstring $(__embtk_incmk),$(MAKEFILE_LIST)),,$(__embtk_incmk-y)))
+	ifeq (x$(__embtk_incmk-y),xy)
+		include $(__embtk_incmk)
 	endif
-	ifeq (x$(CONFIG_EMBTK_HOST_HAVE_$(PKGV)),xy)
+	ifeq (x$(__embtk_incenabled-y),xy)
 		HOSTTOOLS_COMPONENTS-y		+= $(pkgv)_install
-	else ifeq (x$(__embtk_pkg_inc_curinstalled),xy)
+	else ifeq (x$(__embtk_incinstalled-y),xy)
 		HOSTTOOLS_COMPONENTS-		+= $(pkgv)_install
 	endif
 endef
-
-__embtk_pkg_inc_currinstalled	= $(if $(wildcard $(__embtk_pkg_dotinstalled_f)),y)
-__embtk_pkg_inc_mkinclude	= $(if $(CONFIG_EMBTK_HAVE_$(PKGV))$(__embtk_pkg_currinstalled),y)
-__embtk_pkg_inc_hostmkinclude	= $(if $(CONFIG_EMBTK_HOST_HAVE_$(PKGV))$(__embtk_pkg_currinstalled),y)
