@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,16 +23,25 @@
 # \date         February 2010
 ################################################################################
 
-# LUA and modules
-include packages/scripting-languages/lua/lua.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LUA) += lua_install
+embtk_pkgincdir := packages/scripting-languages
 
-include packages/scripting-languages/lua-modules/luafilesystem/luafilesystem.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LUAFILESYSTEM) += luafilesystem_install
+#
+# lua
+#
+$(call embtk_include_pkg,lua)
 
-include packages/scripting-languages/lua-modules/rings/rings.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_RINGS) += rings_install
+#
+# lua modules
+#
+embtk_pkgincdir := packages/scripting-languages/lua-modules
 
-include packages/scripting-languages/lua-modules/cgilua/cgilua.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_CGILUA) += cgilua_install
+# luafilesystem
+$(call embtk_include_pkg,luafilesystem)
 
+# rings
+$(call embtk_include_pkg,rings)
+
+# cgilua
+$(call embtk_include_pkg,cgilua)
+
+embtk_pkgincdir :=
