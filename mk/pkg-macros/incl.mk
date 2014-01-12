@@ -25,18 +25,25 @@
 
 #
 # Macros to include a package in the build system
-#
+#	$(1): pkgname => pkgname/pkgname.mk should exist (required)
+#	$(2): kconfig: package specific kconfig symbol name used in .kconfig
+#	      This is parameter is optional.
 define embtk_include_pkg
-	$(eval $(call __embtk_include_pkg,$(1)))
+	$(eval $(call __embtk_include_pkg,$(1),$(2)))
 endef
 define __embtk_include_pkg
 	# Is it necessary to include .mk file?
-	ifeq (x$(__embtk_pkg_inc_mkinclude),xy)
-		include $(dir $(lastword $(MAKEFILE_LIST)))$(pkgv)/$(pkgv).mk
+	$(eval __embtk_inckconfig	:= $(or $(2),$(PKGV)))
+	$(eval __embtk_incdir		:= $(dir $(lastword $(MAKEFILE_LIST))))
+	$(eval __embtk_incinstalled-y	:= $(if $(wildcard $(__embtk_pkg_dotinstalled_f)),y))
+	$(eval __embtk_incenabled-y	:= $(CONFIG_EMBTK_HAVE_$(__embtk_inckconfig)))
+	$(eval __embtk_incmk-y		:= $(if $(__embtk_incenabled-y)$(__embtk_incinstalled-y),y))
+	ifeq (x$(__embtk_incmk-y),xy)
+		include $(__embtk_incdir)$(pkgv)/$(pkgv).mk
 	endif
-	ifeq (x$(CONFIG_EMBTK_HAVE_$(PKGV)),xy)
+	ifeq (x$(__embtk_incenabled-y),xy)
 		ROOTFS_COMPONENTS-y		+= $(pkgv)_install
-	else ifeq (x$(__embtk_pkg_inc_curinstalled),xy)
+	else ifeq (x$(__embtk_incinstalled-y),xy)
 		ROOTFS_COMPONENTS-		+= $(pkgv)_install
 	endif
 endef
