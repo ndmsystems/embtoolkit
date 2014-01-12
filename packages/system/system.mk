@@ -23,10 +23,11 @@
 # \date         July 2010
 ################################################################################
 
+embtk_pkgincdir := packages/system
+
 # dbus
 $(call embtk_include_pkg,dbus)
 
 # e2fsprogs
-include packages/system/e2fsprogs/e2fsprogs.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_E2FSPROGS) += e2fsprogs_install
-HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_E2FSPROGS) += e2fsprogs_host_install
+$(call embtk_include_pkg,e2fsprogs)
+$(call embtk_include_hostpkg,e2fsprogs_host)
