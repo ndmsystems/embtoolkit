@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2012 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2010-2014 GAYE Abdoulaye Walsimou.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,33 +23,28 @@
 # \date         February 2010
 ################################################################################
 
-#expat
-include packages/misc/expat/expat.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_EXPAT) += expat_install
+embtk_pkgincdir := packages/misc
 
-#gettext
-include packages/misc/gettext/gettext.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GETTEXT) += gettext_install
-HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GETTEXT) += gettext_host_install
+# expat
+$(call embtk_include_pkg,expat)
 
-#GLib
-include packages/misc/glib/glib.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GLIB) += glib_install
-HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GLIB) += glib_host_install
+# gettext
+$(call embtk_include_pkg,gettext)
+$(call embtk_include_hostpkg,gettext_host)
+
+# glib
+$(call embtk_include_pkg,glib)
+$(call embtk_include_hostpkg,glib_host)
 
 # intltool
-include packages/misc/intltool/intltool.mk
-HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_INTLTOOL) += intltool_host_install
+$(call embtk_include_hostpkg,intltool_host)
 
-#libxml2
+# libxml2
 include packages/misc/libxml/libxml.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXML2) += libxml2_install
 
-#ncurses
-include packages/misc/ncurses/ncurses.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_NCURSES) += ncurses_install
+# ncurses
+$(call embtk_include_pkg,ncurses)
 
-#tslib
-include packages/misc/tslib/tslib.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_TSLIB) += tslib_install
-
+# tslib
+$(call embtk_include_pkg,tslib)
