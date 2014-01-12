@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -198,6 +198,10 @@ CONFIG_EMBTK_GCC3_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
 define embtk_postinstallonce_gcc3
 	$(__embtk_postinstall_gcc2_gcc3)
+	$(if $(CONFIG_EMBTK_WIPEOUTWORKSPACES),
+		$(embtk_cleanup_gcc1)
+		$(embtk_cleanup_gcc3)
+		$(embtk_cleanup_gcc3))
 endef
 
 #
