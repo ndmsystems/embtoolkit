@@ -23,26 +23,22 @@
 # \date         February 2010
 ################################################################################
 
-#libevent
-include packages/development/libbsd/libbsd.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBBSD) += libbsd_install
+embtk_pkgincdir := packages/development
 
-#libevent
-include packages/development/libevent/libevent.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBEVENT) += libevent_install
+# libbsd
+$(call embtk_include_pkg,libbsd)
+
+# libevent
+$(call embtk_include_pkg,libevent)
 
 # gtest
-include packages/development/gtest/gtest.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_GTEST) += gtest_install
+$(call embtk_include_pkg,gtest)
 
-#libnih
-include packages/development/libnih/libnih.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBNIH) += libnih_install
+# libnih
+$(call embtk_include_pkg,libnih)
 
-#libsigsegv
-include packages/development/libsigsegv/libsigsegv.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBSIGSEGV) += libsigsegv_install
+# libsigsegv
+$(call embtk_include_pkg,libsigsegv)
 
 # libunwind
-include packages/development/libunwind/libunwind.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBUNWIND) += libunwind_install
+$(call embtk_include_pkg,libunwind)
