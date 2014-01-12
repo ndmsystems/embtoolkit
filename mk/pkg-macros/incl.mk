@@ -32,14 +32,15 @@ define embtk_include_pkg
 	$(eval $(call __embtk_include_pkg,$(1),$(2)))
 endef
 define __embtk_include_pkg
-	# Is it necessary to include .mk file?
 	$(eval __embtk_inckconfig	:= $(or $(2),$(PKGV)))
-	$(eval __embtk_incdir		:= $(dir $(lastword $(MAKEFILE_LIST))))
+	$(eval __embtk_incmk		:= $(embtk_pkgincdir)/$(pkgv)/$(pkgv).mk)
 	$(eval __embtk_incinstalled-y	:= $(if $(wildcard $(__embtk_pkg_dotinstalled_f)),y))
 	$(eval __embtk_incenabled-y	:= $(CONFIG_EMBTK_HAVE_$(__embtk_inckconfig)))
 	$(eval __embtk_incmk-y		:= $(if $(__embtk_incenabled-y)$(__embtk_incinstalled-y),y))
+	# Is it necessary to include the .mk file?
+	$(eval __embtk_incmk-y		:= $(if $(findstring $(__embtk_incmk),$(MAKEFILE_LIST)),,$(__embtk_incmk-y)))
 	ifeq (x$(__embtk_incmk-y),xy)
-		include $(__embtk_incdir)$(pkgv)/$(pkgv).mk
+		include $(__embtk_incmk)
 	endif
 	ifeq (x$(__embtk_incenabled-y),xy)
 		ROOTFS_COMPONENTS-y		+= $(pkgv)_install
