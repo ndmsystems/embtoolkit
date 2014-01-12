@@ -23,6 +23,7 @@
 # \date         October 2010
 ################################################################################
 
-#SQLite
-include packages/database/sqlite/sqlite.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_SQLITE) += sqlite_install
+embtk_pkgincdir := packages/database
+
+# SQLite
+$(call embtk_include_pkg,sqlite)
