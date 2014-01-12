@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,26 +23,22 @@
 # \date         May 2012
 ################################################################################
 
+embtk_pkgincdir := packages/net
+
 # fcgi
-include packages/net/fcgi/fcgi.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FCGI) += fcgi_install
+$(call embtk_include_pkg,fcgi)
 
 # Iptables
-include packages/net/iptables/iptables.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_IPTABLES) += iptables_install
+$(call embtk_include_pkg,iptables)
 
 # LIBNL
-include packages/net/libnl/libnl.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBNL) += libnl_install
+$(call embtk_include_pkg,libnl)
 
 # libpcap
-include packages/net/libpcap/libpcap.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPCAP) += libpcap_install
+$(call embtk_include_pkg,libpcap)
 
 # libtirpc
-include packages/net/libtirpc/libtirpc.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBTIRPC) += libtirpc_install
+$(call embtk_include_pkg,libtirpc)
 
 # tcpdump
-include packages/net/tcpdump/tcpdump.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_TCPDUMP) += tcpdump_install
+$(call embtk_include_pkg,tcpdump)
