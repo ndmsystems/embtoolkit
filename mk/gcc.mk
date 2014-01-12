@@ -112,6 +112,7 @@ GCC1_PACKAGE		:= $(GCC_PACKAGE)
 GCC1_SRC_DIR		:= $(GCC_SRC_DIR)
 GCC1_BUILD_DIR		:= $(embtk_toolsb)/gcc1-build
 GCC1_KCONFIGS_NAME	:= GCC
+GCC1_KEEP_SRC_DIR	:= y
 
 GCC1_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC1_PREFIX		:= $(embtk_tools)
@@ -141,6 +142,7 @@ GCC2_PACKAGE		:= $(GCC_PACKAGE)
 GCC2_SRC_DIR		:= $(GCC_SRC_DIR)
 GCC2_BUILD_DIR		:= $(embtk_toolsb)/gcc2-build
 GCC2_KCONFIGS_NAME	:= GCC
+GCC2_KEEP_SRC_DIR	:= y
 
 GCC2_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC2_PREFIX		:= $(embtk_tools)
