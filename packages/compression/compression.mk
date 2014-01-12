@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,11 +23,11 @@
 # \date         August 2010
 ################################################################################
 
-#lzo for host and target
-include packages/compression/lzo/lzo.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LZO) += lzo_install
-HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LZO) += lzo_host_install
+embtk_pkgincdir := packages/compression
 
-#zlib for target
-include packages/compression/zlib/zlib.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_ZLIB) += zlib_install
+# lzo for host and target
+$(call embtk_include_pkg,lzo)
+$(call embtk_include_hostpkg,lzo_host)
+
+# zlib for target
+$(call embtk_include_pkg,zlib)
