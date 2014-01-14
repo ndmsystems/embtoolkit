@@ -200,7 +200,7 @@ define embtk_postinstallonce_gcc3
 	$(__embtk_postinstall_gcc2_gcc3)
 	$(if $(CONFIG_EMBTK_WIPEOUTWORKSPACES),
 		$(embtk_cleanup_gcc1)
-		$(embtk_cleanup_gcc3)
+		$(embtk_cleanup_gcc2)
 		$(embtk_cleanup_gcc3))
 endef
 
