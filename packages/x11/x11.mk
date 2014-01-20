@@ -23,181 +23,150 @@
 # \date         March 2010
 ################################################################################
 
+embtk_pkgincdir := packages/x11
+
 #########
 # X Tools
 #########
-#utilmacros
-include packages/x11/utilmacros/utilmacros.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_UTILMACROS) += utilmacros_install
 
-#xcb-util
-include packages/x11/xcbutil/xcbutil.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XCBUTIL) += xcbutil_install
+# utilmacros
+$(call embtk_include_pkg,utilmacros)
+
+# xcb-util
+$(call embtk_include_pkg,xcbutil)
 
 ##############
 # X prototypes
 ##############
-#bigreqsproto
-include packages/x11/bigreqsproto/bigreqsproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_BIGREQSPROTO) += bigreqsproto_install
 
-#compositeproto
-include packages/x11/compositeproto/compositeproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_COMPOSITEPROTO) += compositeproto_install
+# bigreqsproto
+$(call embtk_include_pkg,bigreqsproto)
 
-#damageproto
-include packages/x11/damageproto/damageproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_DAMAGEPROTO) += damageproto_install
+# compositeproto
+$(call embtk_include_pkg,compositeproto)
 
-#fixesproto
-include packages/x11/fixesproto/fixesproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FIXESPROTO) += fixesproto_install
+# damageproto
+$(call embtk_include_pkg,damageproto)
 
-#fontsproto
-include packages/x11/fontsproto/fontsproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_FONTSPROTO) += fontsproto_install
+# fixesproto
+$(call embtk_include_pkg,fixesproto)
 
-#inputproto
-include packages/x11/inputproto/inputproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_INPUTPROTO) += inputproto_install
+# fontsproto
+$(call embtk_include_pkg,fontsproto)
 
-#kbproto
-include packages/x11/kbproto/kbproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_INPUTPROTO) += kbproto_install
+# inputproto
+$(call embtk_include_pkg,inputproto)
 
-#randrproto
-include packages/x11/randrproto/randrproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_RANDRPROTO) += randrproto_install
+# kbproto
+$(call embtk_include_pkg,kbproto)
 
-#recordproto
-include packages/x11/recordproto/recordproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_RECORDPROTO) += recordproto_install
+# randrproto
+$(call embtk_include_pkg,randrproto)
 
-#renderproto
-include packages/x11/renderproto/renderproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_RENDERPROTO) += renderproto_install
+# recordproto
+$(call embtk_include_pkg,recordproto)
 
-#resourceproto
-include packages/x11/resourceproto/resourceproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_RESOURCEPROTO) += resourceproto_install
+# renderproto
+$(call embtk_include_pkg,renderproto)
 
-#videoproto
-include packages/x11/videoproto/videoproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_VIDEOPROTO) += videoproto_install
+# resourceproto
+$(call embtk_include_pkg,resourceproto)
 
-#xcbproto
-include packages/x11/xcbproto/xcbproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XCBPROTO) += xcbproto_install
+# videoproto
+$(call embtk_include_pkg,videoproto)
 
-#xcmiscproto
-include packages/x11/xcmiscproto/xcmiscproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XCMISCPROTO) += xcmiscproto_install
+# xcbproto
+$(call embtk_include_pkg,xcbproto)
 
-#xextcproto
-include packages/x11/xextproto/xextproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XEXTPROTO) += xextproto_install
+# xcmiscproto
+$(call embtk_include_pkg,xcmiscproto)
 
-#xproto
-include packages/x11/xproto/xproto.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XPROTO) += xproto_install
+# xextcproto
+$(call embtk_include_pkg,xextproto)
+
+# xproto
+$(call embtk_include_pkg,xproto)
 
 #####################################
 # X windowing system library packages
 #####################################
-#libfontenc
-include packages/x11/libfontenc/libfontenc.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBFONTENC) += libfontenc_install
 
-#libpthreadstubs
-include packages/x11/libpthreadstubs/libpthreadstubs.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPTHREADSTUBS) += libpthreadstubs_install
+# libfontenc
+$(call embtk_include_pkg,libfontenc)
 
-#libpciaccess
-include packages/x11/libpciaccess/libpciaccess.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBPCIACCESS) += libpciaccess_install
+# libpthreadstubs
+$(call embtk_include_pkg,libpthreadstubs)
 
-#libx11
-include packages/x11/libx11/libx11.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBX11) += libx11_install
+# libpciaccess
+$(call embtk_include_pkg,libpciaccess)
 
-#libxau
-include packages/x11/libxau/libxau.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXAU) += libxau_install
+# libx11
+$(call embtk_include_pkg,libx11)
 
-#libxi
-include packages/x11/libxi/libxi.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXI) += libxi_install
+# libxau
+$(call embtk_include_pkg,libxau)
 
-#libxcb
-include packages/x11/libxcb/libxcb.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXCB) += libxcb_install
+# libxi
+$(call embtk_include_pkg,libxi)
 
-#libxcomposite
-include packages/x11/libxcomposite/libxcomposite.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXCOMPOSITE) += libxcomposite_install
+# libxcb
+$(call embtk_include_pkg,libxcb)
 
-#libXext
-include packages/x11/libxext/libxext.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXEXT) += libxext_install
+# libxcomposite
+$(call embtk_include_pkg,libxcomposite)
 
-#libxfixes
-include packages/x11/libxfixes/libxfixes.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXFIXES) += libxfixes_install
+# libXext
+$(call embtk_include_pkg,libxext)
 
-#libxfont
-include packages/x11/libxfont/libxfont.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXFONT) += libxfont_install
+# libxfixes
+$(call embtk_include_pkg,libxfixes)
 
-#libXft
-include packages/x11/libxft/libxft.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXFT) += libxft_install
+# libxfont
+$(call embtk_include_pkg,libxfont)
 
-#libxkbfile
-include packages/x11/libxkbfile/libxkbfile.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXKBFILE) += libxkbfile_install
+# libXft
+$(call embtk_include_pkg,libxft)
 
-#libxrandr
-include packages/x11/libxrandr/libxrandr.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXRANDR) += libxrandr_install
+# libxkbfile
+$(call embtk_include_pkg,libxkbfile)
 
-#libxrender
-include packages/x11/libxrender/libxrender.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXRENDER) += libxrender_install
+# libxrandr
+$(call embtk_include_pkg,libxrandr)
+
+# libxrender
+$(call embtk_include_pkg,libxrender)
 
 #########################################
 # X windowing system application packages
 #########################################
-#xinput
-include packages/x11/xinput/xinput.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XINPUT) += xinput_install
 
-#xkbcomp
-include packages/x11/xkbcomp/xkbcomp.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XKBCOMP) += xkbcomp_install
+# xinput
+$(call embtk_include_pkg,xinput)
 
-#xkeyboard-config
-include packages/x11/xkeyboardconfig/xkeyboardconfig.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XKEYBOARDCONFIG) += xkeyboardconfig_install
+# xkbcomp
+$(call embtk_include_pkg,xkbcomp)
 
-#xtrans
-include packages/x11/xtrans/xtrans.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XTRANS) += xtrans_install
+# xkeyboard-config
+$(call embtk_include_pkg,xkeyboardconfig)
+
+# xtrans
+$(call embtk_include_pkg,xtrans)
 
 ##########
 # X server
 ##########
-#kdrive and Xorg
-include packages/x11/xserver/xserver.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XSERVER) += xserver_install
+
+# kdrive and Xorg
+$(call embtk_include_pkg,xserver)
 
 # X server input drivers
 ########################
-#xf86inputevdev
-include packages/x11/xf86inputevdev/xf86inputevdev.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XF86INPUTEVDEV) += xf86inputevdev_install
+
+# xf86inputevdev
+$(call embtk_include_pkg,xf86inputevdev)
 
 # X server video drivers
 ########################
-#xf86videofbdev
-include packages/x11/xf86videofbdev/xf86videofbdev.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_XF86VIDEOFBDEV) += xf86videofbdev_install
+
+# xf86videofbdev
+$(call embtk_include_pkg,xf86videofbdev)
