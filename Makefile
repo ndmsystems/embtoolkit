@@ -63,8 +63,26 @@ HOST_ARCH		:= $(shell $(CONFIG_EMBTK_SHELL) $(EMBTK_ROOT)/scripts/config.guess)
 HOST_BUILD		:= $(HOST_ARCH)
 export HOST_ARCH HOST_BUILD
 
-HOSTCC			:= gcc
-HOSTCXX			:= g++
+HOSTCC			:=							\
+	$(shell									\
+	if [ -n "$$(command -v gcc 2>/dev/null)" ]; then			\
+		echo "$$(command -v gcc)";					\
+	elif [ -n "$$(command -v cc 2>/dev/null)" ]; then			\
+		echo "$$(command -v cc 2>/dev/null)";				\
+	else									\
+		echo gcc;							\
+	fi)
+
+HOSTCXX			:=							\
+	$(shell									\
+	if [ -n "$$(command -v g++ 2>/dev/null)" ]; then			\
+		echo "$$(command -v g++)";					\
+	elif [ -n "$$(command -v c++ 2>/dev/null)" ]; then			\
+		echo "$$(command -v c++ 2>/dev/null)";				\
+	else									\
+		echo g++;							\
+	fi)
+
 HOSTCFLAGS		:= -Wall
 HOSTCXXFLAGS		:= -O2
 export HOSTCC HOSTCXX HOSTCFLAGS HOSTCXXFLAGS
