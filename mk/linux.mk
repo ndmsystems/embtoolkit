@@ -52,6 +52,7 @@ LINUX_HEADERS_KEEP_SRC_DIR	:= $(CONFIG_EMBTK_BUILD_LINUX_KERNEL)
 LINUX_MAKE_OPTS	:= quiet=quiet_
 LINUX_MAKE_OPTS	+= ARCH=$(LINUX_ARCH)
 LINUX_MAKE_OPTS	+= CROSS_COMPILE=$(CROSS_COMPILE_CACHED)
+LINUX_MAKE_OPTS	+= HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)"
 
 define __embtk_install_linux_headers
 	$(call embtk_pinfo,"Installing linux-$(LINUX_VERSION) headers...")
