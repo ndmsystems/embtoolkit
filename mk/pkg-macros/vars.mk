@@ -24,13 +24,19 @@
 ################################################################################
 
 #
-# Get passed package variables prefix and set some helpers macros.
+# Some helper variables
 #
 embtk_ftp			:= ftp://ftp.embtoolkit.org/embtoolkit.org
 embtk_ftp/packages-mirror	:= $(embtk_ftp)/packages-mirror
 embtk_toolchain_use_llvm-y	:= $(or $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN))
 embtk_toolchain_has_llvm-y	:= $(or $(CONFIG_EMBTK_GCC_AND_LLVM_TOOLCHAIN),$(embtk_toolchain_use_llvm-y))
 
+__embtk_hostcc-v		:= $(shell outv=$$($(HOSTCC) -v 2>&1); echo $$outv)
+embtk_hostcc_clang-y		:= $(if $(findstring clang,$(__embtk_hostcc-v)),y)
+
+#
+# Get passed package variables prefix and set some helpers macros.
+#
 PKGV				= $(call embtk_ucase,$(1))
 pkgv				= $(call embtk_lcase,$(1))
 __embtk_pkg_name		= $(or $(strip $($(PKGV)_NAME)),$(pkgv))
