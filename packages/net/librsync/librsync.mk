@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012-2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,31 +17,22 @@
 #
 ################################################################################
 #
-# \file         net.mk
-# \brief	net.mk of Embtoolkit
+# \file         librsync.mk
+# \brief	librsync.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2012
+# \date         January 2014
 ################################################################################
 
-embtk_pkgincdir := packages/net
+LIBRSYNC_NAME		:= librsync
+LIBRSYNC_VERSION	:= $(call embtk_get_pkgversion,librsync)
+LIBRSYNC_SITE		:= http://prdownloads.sourceforge.net/librsync
+LIBRSYNC_PACKAGE	:= librsync-$(LIBRSYNC_VERSION).tar.gz
+LIBRSYNC_SRC_DIR	:= $(embtk_pkgb)/librsync-$(LIBRSYNC_VERSION)
+LIBRSYNC_BUILD_DIR	:= $(embtk_pkgb)/librsync-$(LIBRSYNC_VERSION)
 
-# fcgi
-$(call embtk_include_pkg,fcgi)
+LIBRSYNC_BINS		:= rdiff
+LIBRSYNC_INCLUDES	:= librsync-config.h librsync.h
+LIBRSYNC_LIBS		:= librsync.*
+LIBRSYNC_CONFIGURE_OPTS	:= --enable-shared --disable-trace
 
-# Iptables
-$(call embtk_include_pkg,iptables)
-
-# LIBNL
-$(call embtk_include_pkg,libnl)
-
-# libpcap
-$(call embtk_include_pkg,libpcap)
-
-# librsync
-$(call embtk_include_pkg,librsync)
-
-# libtirpc
-$(call embtk_include_pkg,libtirpc)
-
-# tcpdump
-$(call embtk_include_pkg,tcpdump)
+LIBRSYNC_DEPS		:= popt_install
