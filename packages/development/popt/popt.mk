@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,31 +17,19 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
+# \file         popt.mk
+# \brief	popt.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \date         January 2014
 ################################################################################
 
-embtk_pkgincdir := packages/development
+POPT_NAME		:= popt
+POPT_VERSION		:= $(call embtk_get_pkgversion,popt)
+POPT_SITE		:= http://rpm5.org/files/popt
+POPT_PACKAGE		:= popt-$(POPT_VERSION).tar.gz
+POPT_SRC_DIR		:= $(embtk_pkgb)/popt-$(POPT_VERSION)
+POPT_BUILD_DIR		:= $(embtk_pkgb)/popt-$(POPT_VERSION)
 
-# libbsd
-$(call embtk_include_pkg,libbsd)
-
-# libevent
-$(call embtk_include_pkg,libevent)
-
-# gtest
-$(call embtk_include_pkg,gtest)
-
-# libnih
-$(call embtk_include_pkg,libnih)
-
-# libsigsegv
-$(call embtk_include_pkg,libsigsegv)
-
-# libunwind
-$(call embtk_include_pkg,libunwind)
-
-# popt
-$(call embtk_include_pkg,popt)
+POPT_INCLUDES		:= popt.h
+POPT_LIBS		:= libpopt.*
+POPT_PKGCONFIGS		:= popt.pc
