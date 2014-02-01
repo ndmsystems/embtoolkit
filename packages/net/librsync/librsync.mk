@@ -28,7 +28,7 @@ LIBRSYNC_VERSION	:= $(call embtk_get_pkgversion,librsync)
 LIBRSYNC_SITE		:= http://prdownloads.sourceforge.net/librsync
 LIBRSYNC_PACKAGE	:= librsync-$(LIBRSYNC_VERSION).tar.gz
 LIBRSYNC_SRC_DIR	:= $(embtk_pkgb)/librsync-$(LIBRSYNC_VERSION)
-LIBRSYNC_BUILD_DIR	:= $(embtk_pkgb)/librsync-$(LIBRSYNC_VERSION)
+LIBRSYNC_BUILD_DIR	:= $(embtk_pkgb)/librsync-$(LIBRSYNC_VERSION)-build
 
 LIBRSYNC_BINS		:= rdiff
 LIBRSYNC_INCLUDES	:= librsync-config.h librsync.h
