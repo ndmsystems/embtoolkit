@@ -43,6 +43,7 @@ choice
 
 	config  EMBTK_LIBRSYNC_VERSION_0_9_7
 		bool "librsync-0.9.7"
+		select EMBTK_LIBRSYNC_NEED_PATCH
 endchoice
 
 config EMBTK_LIBRSYNC_VERSION_STRING
