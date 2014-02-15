@@ -25,6 +25,8 @@
 
 config EMBTK_HAVE_LIBRSYNC
 	bool "Have librsync"
+	select EMBTK_HAVE_POPT
+
 	help
 	 The librsync library implements network delta-compression of streams
 	 and files. The algorithm is similar to that used in the rsync(1) and
