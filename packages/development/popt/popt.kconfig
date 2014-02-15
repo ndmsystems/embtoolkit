@@ -25,6 +25,9 @@
 
 config EMBTK_HAVE_POPT
 	bool "Have popt"
+	select KEMBTK_UCLIBC_UCLIBC_HAS_GLOB if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_HAS_GNU_GLOB if EMBTK_CLIB_UCLIBC
+
 	help
 	 This is the popt command line option parsing library.
 	 While it is similar to getopt(3), it contains a number of enhancements,
