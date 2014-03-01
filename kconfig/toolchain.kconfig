@@ -109,6 +109,7 @@ choice
 		 EGLIBC is suitable for source and binary compatibility with
 		 glibc, but care is also taken to satisfy embedded systems
 		 constraints.
+
 		 see http://www.eglibc.org for more information about eglibc.
 
 	config EMBTK_CLIB_GLIBC
@@ -116,6 +117,19 @@ choice
 		help
 		 GNU GLIBC is the well known general purpose c library found on
 		 most general purpose GNU Linux distribution.
+
+		 See http://www.gnu.org/software/libc for more information about
+		 glibc.
+
+	config EMBTK_CLIB_MUSL
+		bool "musl"
+		depends on EMBTK_TARGET_ARCH_32BITS
+		help
+		 musl is a new general-purpose implementation of the C library.
+		 It is lightweight, fast, simple, free, and aims to be correct
+		 in the sense of standards-conformance and safety.
+
+		 see http://www.musl-libc.org for more information about musl.
 
 	config EMBTK_CLIB_UCLIBC
 		bool "uClibc"
@@ -135,6 +149,10 @@ endif
 
 if EMBTK_CLIB_GLIBC
 source "kconfig/glibc.kconfig"
+endif
+
+if EMBTK_CLIB_MUSL
+source "kconfig/musl.kconfig"
 endif
 
 if EMBTK_CLIB_UCLIBC

@@ -73,6 +73,7 @@ define embtk_configure_pkg
 	$(call __embtk_configure_autoreconfpkg,$(1))
 	$(Q)test -e $(__embtk_pkg_srcdir)/configure || exit 1
 	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
+	$(if $(CONFIG_EMBTK_CLIB_MUSL),$(call __embtk_fixgconfigsfor_pkg,$(1)))
 	$(Q)cd $(__embtk_pkg_builddir);						\
 	CC=$(TARGETCC_CACHED)							\
 	$(if $(CONFIG_EMBTK_GCC_LANGUAGE_CPP),CXX=$(TARGETCXX_CACHED))		\

@@ -41,6 +41,7 @@ BINUTILS_CONFIGURE_OPTS	+= --target=$(STRICT_GNU_TARGET)
 BINUTILS_PREFIX		:= $(embtk_tools)
 
 define embtk_beforeinstall_binutils
+	$(if $(CONFIG_EMBTK_CLIB_MUSL),$(call __embtk_fixgconfigsfor_pkg,binutils))
 	$(if $(findstring freebsd,$(embtk_buildhost_os)),
 		bfdmk=$(call __embtk_pkg_srcdir,binutils)/bfd/Makefile.in;	\
 		goldmk=$(call __embtk_pkg_srcdir,binutils)/gold/Makefile.in;	\
