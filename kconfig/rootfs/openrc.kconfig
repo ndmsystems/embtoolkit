@@ -27,6 +27,7 @@ config EMBTK_HAVE_OPENRC
 	default y
 	select KEMBTK_UCLIBC_UCLIBC_HAS_SYSLOG if EMBTK_CLIB_UCLIBC
 	select KEMBTK_UCLIBC_UCLIBC_HAS_LIBUTIL if EMBTK_CLIB_UCLIBC
+	select EMBTK_OPENRC_NEED_PATCH
 	help
 	 OpenRC is a dependency-based init system that works with the system
 	 provided init program, normally /sbin/init.
