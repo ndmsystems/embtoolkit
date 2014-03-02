@@ -73,6 +73,15 @@ EMBTK_TARGET_FLOAT_CFLAGS := $(strip $(if $(CONFIG_EMBTK_SOFTFLOAT),		\
 EMBTK_TARGET_MCPU	:= -mcpu=$(EMBTK_MCU_FLAG)
 EMBTK_TARGET_MARCH	:=
 
+#
+# musl options
+#
+embtk_musl_dlinker	:= ld-musl-arm$(__embtk_arm_endian)$(if $(CONFIG_EMBTK_HARDFLOAT),hf)
+
+#
+# misc
+#
+
 # Some cross compiler variables
 __xtools_env_float	:= $(if $(CONFIG_EMBTK_SOFTFLOAT),sf,hf)
 __xtools_archos		:= $(GNU_TARGET)

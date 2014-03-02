@@ -57,8 +57,8 @@ define __embtk_install_musl
 	$(Q)$(MAKE) -C $(MUSL_BUILD_DIR)					\
 		DESTDIR=$(embtk_sysroot) install-libs install-headers
 	cd $(embtk_sysroot)/$(LIBDIR);						\
-	ln -sf libc.so ld-musl-$(LINUX_ARCH).so.1;				\
-	ln -sf ld-musl-$(LINUX_ARCH).so.1 ld-musl.so.1
+		ln -sf libc.so $(embtk_musl_dlinker).so.1;			\
+		ln -sf $(embtk_musl_dlinker).so.1 ld-musl.so.1
 	$(call __embtk_setinstalled_pkg,musl)
 	$(call __embtk_pkg_gen_dotkconfig_f,musl)
 endef

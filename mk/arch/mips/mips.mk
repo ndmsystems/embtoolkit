@@ -136,6 +136,15 @@ endif
 EMBTK_TARGET_MCPU		:=
 EMBTK_TARGET_MARCH		:= -march=$(EMBTK_MCU_FLAG)
 
+#
+# musl options
+#
+embtk_musl_dlinker	:= ld-musl-mips$(__embtk_mips_endian)$(if $(CONFIG_EMBTK_SOFTFLOAT),-sf)
+
+#
+# misc
+#
+
 # Some cross compiler variables
 __xtools_archos			:= mips$(__embtk_mips_64bit)$(__embtk_mips_endian)-$(embtk_os)
 __xtools_env			:= $(GNU_TARGET_ARCH)$(__xtools_env_float)-$(__xtools_env_abi)
