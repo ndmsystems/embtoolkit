@@ -121,6 +121,7 @@ define embtk_configure_hostpkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
 	$(call embtk_pinfo,"Configure $(__embtk_pkg_package) for host..."))
 	$(call __embtk_configure_autoreconfpkg,$(1))
+	$(if $(CONFIG_EMBTK_CLIB_MUSL),$(call __embtk_fixgconfigsfor_pkg,$(1)))
 	$(Q)test -e $(__embtk_pkg_srcdir)/configure || exit 1
 	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
 	$(Q)cd $(__embtk_pkg_builddir);						\
