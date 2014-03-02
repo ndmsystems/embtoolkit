@@ -104,6 +104,9 @@ define embtk_postinstall_openrc
 		$(embtk_rootfs)/etc/defaultdomain || exit $$?
 	install -m 0644 $(embtk_openrc_mk)/etc/rc.conf				\
 		$(embtk_rootfs)/etc/rc.conf || exit $$?
+	$(if $(CONFIG_EMBTK_OS_LINUX),
+		install -m 0644 $(embtk_openrc_mk)/etc/issue.linux		\
+			$(embtk_rootfs)/etc/issue)
 	$(call __embtk_install_openrc_runlevel,sysinit)
 	$(call __embtk_install_openrc_runlevel,boot)
 	$(call __embtk_install_openrc_runlevel,default)
