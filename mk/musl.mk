@@ -31,6 +31,9 @@ MUSL_PACKAGE		:= musl-$(MUSL_VERSION).tar.gz
 MUSL_SRC_DIR		:= $(embtk_toolsb)/musl-$(MUSL_VERSION)
 MUSL_BUILD_DIR		:= $(call __embtk_pkg_srcdir,musl)
 
+__embtk_musl_v	:= "$(MUSL_VERSION) From EmbToolkit v$(EMBTK_VERSION) -"
+__embtk_musl_v	+= "Compiled on $(shell uname -s -r -p)"
+
 define embtk_beforeinstall_musl
 	cd $(MUSL_SRC_DIR);							\
 		CC=$(TARGETCC_CACHED)						\
@@ -41,8 +44,7 @@ define embtk_beforeinstall_musl
 		--disable-gcc-wrapper --prefix=/				\
 		--syslibdir=/$(LIBDIR) --libdir=/$(LIBDIR) 			\
 		--includedir=/usr/include
-	echo "$(MUSL_VERSION) From EmbToolkit v$(EMBTK_VERSION)"		\
-		> $(MUSL_SRC_DIR)/VERSION
+		echo "$(__embtk_musl_v)" > $(MUSL_SRC_DIR)/VERSION
 	$(call __embtk_setconfigured_pkg,musl)
 endef
 
