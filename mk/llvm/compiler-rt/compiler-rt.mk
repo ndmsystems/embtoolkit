@@ -44,6 +44,10 @@ ifeq ($(CONFIG_EMBTK_CLANG_VERSION_3_3),y)
 __embtk_compiler-rt_cflags += -DASAN_INTERFACE_VERSION=3
 endif
 
+ifeq ($(CONFIG_EMBTK_CLIB_MUSL),y)
+__embtk_compiler-rt_cflags += -D_FILE_OFFSET_BITS=64
+endif
+
 COMPILER-RT_MAKE_OPTS	:= CC="$(TARGETCC)" CFLAGS="$(__embtk_compiler-rt_cflags)"
 COMPILER-RT_MAKE_OPTS	+= CXX="$(TARGETCXX)" LIBDIR="$(LIBDIR)"
 COMPILER-RT_MAKE_OPTS	+= AR=$(TARGETAR) RANLIB=$(TARGETRANLIB)
