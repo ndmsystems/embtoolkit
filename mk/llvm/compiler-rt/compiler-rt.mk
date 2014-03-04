@@ -45,7 +45,7 @@ __embtk_compiler-rt_cflags += -DASAN_INTERFACE_VERSION=3
 endif
 
 ifeq ($(CONFIG_EMBTK_CLIB_MUSL),y)
-__embtk_compiler-rt_cflags += -D_FILE_OFFSET_BITS=64
+__embtk_compiler-rt_cflags += -D_FILE_OFFSET_BITS=64 -D__MUSL__
 endif
 
 COMPILER-RT_MAKE_OPTS	:= CC="$(TARGETCC)" CFLAGS="$(__embtk_compiler-rt_cflags)"
