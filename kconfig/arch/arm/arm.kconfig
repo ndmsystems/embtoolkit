@@ -59,44 +59,44 @@ choice
 	 Select ARM core family you want to use.
 
 	config EMBTK_ARCH_ARM_FAMILY_ARM7TDMI
-		bool "arm7tdmi"
+		bool "[arm7tdmi  Architecture: ARMv4t    ]"
 
 	config EMBTK_ARCH_ARM_FAMILY_STRONGARM
-		bool "StrongARM"
+		bool "[StrongARM Architecture: ARMv4     ]"
 
 	config EMBTK_ARCH_ARM_FAMILY_ARM8
-		bool "arm8"
+		bool "[arm8      Architecture: ARMv4     ]"
 
 	config EMBTK_ARCH_ARM_FAMILY_ARM9TDMI
-		bool "arm9tdmi"
+		bool "[arm9tdmi  Architecture: ARMv4t    ]"
 
 	config EMBTK_ARCH_ARM_FAMILY_ARM9E
-		bool "arm9e"
+		bool "[arm9e     Architecture: ARMv5tej  ]"
 		select EMBTK_TARGET_ARCH_MAYUSE_FPU
 		select EMBTK_ARCH_ARM_MAYUSE_FPU_ALL if EMBTK_HARDFLOAT
 
 	config EMBTK_ARCH_ARM_FAMILY_ARM10E
-		bool "arm10e"
+		bool "[arm10e    Architecture: ARMv5te{j}]"
 		select EMBTK_TARGET_ARCH_MAYUSE_FPU
 		select EMBTK_ARCH_ARM_MAYUSE_FPU_ALL if EMBTK_HARDFLOAT
 
 	config EMBTK_ARCH_ARM_FAMILY_XSCALE
-		bool "xscale"
+		bool "[xscale    Architecture: ARMv5te   ]"
 		select EMBTK_TARGET_ARCH_MAYUSE_FPU
 		select EMBTK_ARCH_ARM_MAYUSE_FPU_ALL if EMBTK_HARDFLOAT
 
 	config EMBTK_ARCH_ARM_FAMILY_ARM11
-		bool "arm11"
+		bool "[arm11     Architecture: ARMv6     ]"
 		select EMBTK_TARGET_ARCH_MAYUSE_FPU
 		select EMBTK_ARCH_ARM_MAYUSE_FPU_ALL if EMBTK_HARDFLOAT
 
 	config EMBTK_ARCH_ARM_FAMILY_CORTEX
-		bool "cortex"
+		bool "[cortex    Architecture: ARMv7-A   ]"
 		select EMBTK_TARGET_ARCH_MAYUSE_FPU
 		select EMBTK_ARCH_ARM_MAYUSE_FPU_ALL if EMBTK_HARDFLOAT
 
 	config EMBTK_ARCH_ARM_FAMILY_IWMMXT
-		bool "iwmmxt"
+		bool "[iwmmxt    Architecture: iwmmxt    ]"
 		select EMBTK_TARGET_ARCH_MAYUSE_FPU
 		select EMBTK_ARCH_ARM_MAYUSE_FPU_ALL if EMBTK_HARDFLOAT
 endchoice
@@ -221,6 +221,7 @@ choice
 		bool "cortex-a8"
 	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A9
 		bool "cortex-a9"
+		bool "cortex-a12"
 	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A15
 		bool "cortex-a15"
 endchoice
