@@ -221,6 +221,7 @@ choice
 		bool "cortex-a8"
 	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A9
 		bool "cortex-a9"
+	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-12
 		bool "cortex-a12"
 	config EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A15
 		bool "cortex-a15"
@@ -266,6 +267,7 @@ config EMBTK_ARM_MCU_STRING
 	default "cortex-a5"	if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A5
 	default "cortex-a8"	if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A8
 	default "cortex-a9"	if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A9
+	default "cortex-a12"	if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A12
 	default "cortex-a15"	if EMBTK_ARCH_ARM_FAMILY_CORTEX_CORTEX-A15
 	default "iwmmxt"	if EMBTK_ARCH_ARM_FAMILY_IWMMXT_IWMMXT
 	default "iwmmxt2"	if EMBTK_ARCH_ARM_FAMILY_IWMMXT_IWMMXT2
