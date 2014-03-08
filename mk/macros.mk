@@ -52,6 +52,16 @@ __embtk_msg_h = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 __embtk_streq = $(if $(subst x$(1),,x$(2)),,y)
 
 #
+# __embtk_strneq:
+# A macro for two strings comparison. It returns y if the strings are different
+# and nothing if they are the same.
+# Note: This macro strips passed parameters
+# Usage:
+# $(call __embtk_strneq,str1,str2)
+#
+__embtk_strneq = $(if $(subst x$(1),,x$(2)),y)
+
+#
 # __embtk_mk_pathexist
 # A macro to test if a path exists. It returns y if the path exists and nothing
 # if not.
