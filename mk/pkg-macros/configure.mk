@@ -129,8 +129,8 @@ define embtk_configure_hostpkg
 	LDFLAGS="$(__embtk_hostpkg_ldflags)"					\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
 	PKG_CONFIG_PATH="$(EMBTK_HOST_PKG_CONFIG_PATH)"				\
-	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CC=$(HOSTCC_CACHED))	\
-	$(if $(call __embtk_mk_strcmp,$(PKGV),CCACHE),,CXX=$(HOSTCXX_CACHED))	\
+	$(if $(call __embtk_streq,$(PKGV),CCACHE),,CC=$(HOSTCC_CACHED))		\
+	$(if $(call __embtk_streq,$(PKGV),CCACHE),,CXX=$(HOSTCXX_CACHED))	\
 	CONFIG_SHELL=$(CONFIG_EMBTK_SHELL)					\
 	$(__embtk_pkg_configureenv)						\
 	$(CONFIG_EMBTK_SHELL) $(__embtk_pkg_srcdir)/configure			\

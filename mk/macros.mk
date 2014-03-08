@@ -42,14 +42,14 @@ embtk_echo_blue		= printf $(__embtk_color_blue)$(1)$(__embtk_no_color)"\n"
 __embtk_msg_h = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
 #
-# __embtk_mk_strcmp:
+# __embtk_streq:
 # A macro for two strings comparison. It returns y if the strings are identical
 # and nothing if not.
 # Note: This macro strips passed parameters
 # Usage:
-# $(call __embtk_mk_strcmp,str1,str2)
+# $(call __embtk_streq,str1,str2)
 #
-__embtk_mk_strcmp = $(shell [ $(strip $(1)) = $(strip $(2)) ] && echo y)
+__embtk_streq = $(if $(subst x$(1),,x$(2)),,y)
 
 #
 # __embtk_mk_pathexist
