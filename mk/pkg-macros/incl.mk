@@ -32,10 +32,10 @@ define embtk_include_pkg
 	$(eval $(call __embtk_include_pkg,$(1),$(2)))
 endef
 define __embtk_include_pkg
-	$(eval __embtk_inckconfig	:= $(or $(2),$(PKGV)))
+	$(eval __embtk_inc_pkgname	:= $(or $(2),$(PKGV)))
 	$(eval __embtk_incmk		:= $(embtk_pkgincdir)/$(pkgv)/$(pkgv).mk)
 	$(eval __embtk_incinstalled-y	:= $(if $(wildcard $(__embtk_pkg_dotinstalled_f)),y))
-	$(eval __embtk_incenabled-y	:= $(CONFIG_EMBTK_HAVE_$(__embtk_inckconfig)))
+	$(eval __embtk_incenabled-y	:= $(CONFIG_EMBTK_HAVE_$(__embtk_inc_pkgname)))
 	$(eval __embtk_incmk-y		:= $(if $(__embtk_incenabled-y)$(__embtk_incinstalled-y),y))
 	# Is it necessary to include the .mk file?
 	$(eval __embtk_incmk-y		:= $(if $(findstring $(__embtk_incmk),$(MAKEFILE_LIST)),,$(__embtk_incmk-y)))
@@ -47,19 +47,21 @@ define __embtk_include_pkg
 	else ifeq (x$(__embtk_incinstalled-y),xy)
 		ROOTFS_COMPONENTS-		+= $(pkgv)_install
 	endif
+	# also include old package kconfig entries if any
+	-include $(__embtk_pkg_dotkconfig_f)
 endef
 
 define embtk_include_hostpkg
 	$(eval $(call __embtk_include_hostpkg,$(1),$(2)))
 endef
 define __embtk_include_hostpkg
-	$(eval __embtk_inckconfig	:= $(or $(2),$(PKGV)))
+	$(eval __embtk_inc_pkgname	:= $(or $(2),$(PKGV)))
 	# Case where foo and foo_host are in the same .mk file
 	$(eval __embtk_incmk0		:= $(embtk_pkgincdir)/$(pkgv)/$(pkgv).mk)
 	$(eval __embtk_incmk1		:= $(embtk_pkgincdir)/$(patsubst %_host,%,$(pkgv))/$(patsubst %_host,%,$(pkgv)).mk)
 	$(eval __embtk_incmk		:= $(or $(wildcard $(__embtk_incmk0)),$(wildcard $(__embtk_incmk1)),$(wildcard $(__embtk_incmk0))))
 	$(eval __embtk_incinstalled-y	:= $(if $(wildcard $(__embtk_pkg_dotinstalled_f)),y))
-	$(eval __embtk_incenabled-y	:= $(CONFIG_EMBTK_HOST_HAVE_$(patsubst %_HOST,%,$(__embtk_inckconfig))))
+	$(eval __embtk_incenabled-y	:= $(CONFIG_EMBTK_HOST_HAVE_$(patsubst %_HOST,%,$(__embtk_inc_pkgname))))
 	$(eval __embtk_incmk-y		:= $(if $(__embtk_incenabled-y)$(__embtk_incinstalled-y),y))
 	# Is it necessary to include the .mk file?
 	$(eval __embtk_incmk-y		:= $(if $(findstring $(__embtk_incmk),$(MAKEFILE_LIST)),,$(__embtk_incmk-y)))
@@ -71,4 +73,6 @@ define __embtk_include_hostpkg
 	else ifeq (x$(__embtk_incinstalled-y),xy)
 		HOSTTOOLS_COMPONENTS-		+= $(pkgv)_install
 	endif
+	# also include old package kconfig entries if any
+	-include $(__embtk_pkg_dotkconfig_f)
 endef

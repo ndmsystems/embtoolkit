@@ -105,40 +105,19 @@ __embtk_pkg_configured-y	= $(call __embtk_mk_pathexist,$(__embtk_pkg_dotconfigur
 __embtk_pkg_notconfigured-y	= $(call __embtk_mk_pathnotexist,$(__embtk_pkg_dotconfigured_f))
 
 #
-# A macro to print kconfig entries of a package
-#
-__embtk_pkg_printkconfigs	=						\
-	grep 'CONFIG_K*EMBTK_.*$(__embtk_pkg_kconfigsname)_.*'			\
-	$(EMBTK_DOTCONFIG)
-
-#
 # A macro to generate a package __embtk_pkg_dotkconfig_f file.
 #
 define __embtk_pkg_gen_dotkconfig_f
-	$(call __embtk_pkg_printkconfigs,$(1))					\
-			> $(__embtk_pkg_dotkconfig_f) 2>/dev/null		\
-	$(if $(__embtk_pkg_deps),						\
-		$(foreach dep,$(call __embtk_pkg_depspkgv,$(1)),;		\
-			$(call __embtk_pkg_printkconfigs,$(dep))		\
-					>> $(__embtk_pkg_dotkconfig_f)))
+	echo '__embtk_$(pkgv)_okconfigs := $(__embtk_pkg_kconfigs_all_v)' > $(__embtk_pkg_dotkconfig_f)
 endef
 
 #
-# A macro to test if a package is already installed.
-# It returns y if installed and nothing if not.
+# A macro to test if a package build recipe needs to be run or not.
 #
-__installed_f		= $(__embtk_pkg_dotinstalled_f)
-__pkgkconfig_f		= $(__embtk_pkg_dotkconfig_f)
-__pkgkconfig_f_old	= $(__embtk_pkg_dotkconfig_f).old
-__embtk_pkg_installed-y = $(shell						\
-	if [ -e $(__installed_f) ] && [ -e $(__pkgkconfig_f) ]; then		\
-		cp $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
-		$(call __embtk_pkg_gen_dotkconfig_f,$(1));			\
-		cmp -s $(__pkgkconfig_f) $(__pkgkconfig_f_old);			\
-		if [ "x$$?" = "x0" ]; then					\
-			echo y;							\
-		fi;								\
-	fi;)
+__embtk_pkg_runrecipe-y		= $(or $(__embtk_pkg_ninstalled-y),$(__embtk_pkg_confchanged-y))
+__embtk_pkg_installed-y		= $(or $(__embtk_$(pkgv)_installed),$(wildcard $(__embtk_pkg_dotinstalled_f)))
+__embtk_pkg_ninstalled-y	= $(if $(__embtk_pkg_installed-y),,y)
+__embtk_pkg_confchanged-y	= $(call __embtk_strneq,$(__embtk_pkg_kconfigs_all_v),$(__embtk_$(pkgv)_okconfigs))
 
 #
 # Various helpers macros for different steps while installing packages.
@@ -197,6 +176,7 @@ define __embtk_install_pkg_make
 		$(call __embtk_fix_pkgconfig_files))
 	$(call __embtk_setinstalled_pkg,$(1))
 	$(call __embtk_pkg_gen_dotkconfig_f,$(1))
+	$(eval __embtk_$(pkgv)_installed := y)
 endef
 define __embtk_install_hostpkg_make
 	$(Q)$(if $(__embtk_pkg_deps),$(MAKE) $(__embtk_pkg_deps))
@@ -213,6 +193,7 @@ define __embtk_install_hostpkg_make
 		$(__embtk_single_make_hostinstall))
 	$(call __embtk_setinstalled_pkg,$(1))
 	$(call __embtk_pkg_gen_dotkconfig_f,$(1))
+	$(eval __embtk_$(pkgv)_installed := y)
 endef
 
 #
@@ -267,7 +248,7 @@ __embtk_xinstall_xpkg_allvarset-y = $(and $(__embtk_pkg_name),			\
 # $(call embtk_install_pkg,package)
 #
 define __embtk_install_pkg
-	$(if $(__embtk_pkg_installed-y),,
+	$(if $(__embtk_pkg_runrecipe-y),
 		$(Q)mkdir -p $(__embtk_pkg_builddir)
 		$(Q)$(call __embtk_install_pkg_make,$(1),autotools)
 		$(embtk_postinstallonce_$(pkgv))
@@ -290,7 +271,7 @@ endef
 #
 define embtk_makeinstall_pkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
-		$(if $(__embtk_pkg_installed-y),,
+		$(if $(__embtk_pkg_runrecipe-y),
 			$(Q)mkdir -p $(__embtk_pkg_builddir)
 			$(Q)$(call __embtk_install_pkg_make,$(1))
 			$(embtk_postinstallonce_$(pkgv))
@@ -307,7 +288,7 @@ endef
 #
 
 define __embtk_install_hostpkg
-	$(if $(__embtk_pkg_installed-y),,
+	$(if $(__embtk_pkg_runrecipe-y),
 		$(Q)mkdir -p $(__embtk_pkg_builddir)
 		$(Q)$(call __embtk_install_hostpkg_make,$(1),autotools)
 		$(embtk_postinstallonce_$(pkgv))
@@ -328,7 +309,7 @@ endef
 #
 define embtk_makeinstall_hostpkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
-		$(if $(__embtk_pkg_installed-y),,
+		$(if $(__embtk_pkg_runrecipe-y),
 			$(Q)mkdir -p $(__embtk_pkg_builddir)
 			$(Q)$(call __embtk_install_hostpkg_make,$(1))
 			$(embtk_postinstallonce_$(pkgv))

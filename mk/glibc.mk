@@ -91,11 +91,11 @@ define __embtk_install_glibc
 		install_root=$(embtk_sysroot) install
 	$(call __embtk_setinstalled_pkg,glibc)
 	$(call __embtk_pkg_gen_dotkconfig_f,glibc)
+	$(eval __embtk_glibc_installed := y)
 endef
 
 define embtk_install_glibc
-	$(if $(call __embtk_pkg_installed-y,glibc),true,			\
-					$(__embtk_install_glibc))
+	$(if $(call __embtk_pkg_runrecipe-y,glibc),$(__embtk_install_glibc))
 endef
 
 #

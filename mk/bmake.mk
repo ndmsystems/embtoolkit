@@ -39,10 +39,11 @@ define __embtk_install_bmake
 			--prefix=$(embtk_htools)/usr --install
 	$(call __embtk_setinstalled_pkg,bmake)
 	$(call __embtk_pkg_gen_dotkconfig_f,bmake)
+	$(eval __embtk_bmake_installed := y)
 endef
 
 define embtk_install_bmake
-	$(if $(call __embtk_pkg_installed-y,bmake),,$(__embtk_install_bmake))
+	$(if $(call __embtk_pkg_runrecipe-y,bmake),$(__embtk_install_bmake))
 endef
 
 define embtk_cleanup_bmake

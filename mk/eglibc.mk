@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -98,11 +98,11 @@ define __embtk_install_eglibc
 		install_root=$(embtk_sysroot) install
 	$(call __embtk_setinstalled_pkg,eglibc)
 	$(call __embtk_pkg_gen_dotkconfig_f,eglibc)
+	$(eval __embtk_eglibc_installed := y)
 endef
 
 define embtk_install_eglibc
-	$(if $(call __embtk_pkg_installed-y,eglibc),true,			\
-					$(__embtk_install_eglibc))
+	$(if $(call __embtk_pkg_runrecipe-y,eglibc),$(__embtk_install_eglibc))
 endef
 
 #

@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -105,11 +105,11 @@ define __embtk_install_uclibc_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
 	$(__embtk_install_uclibc_dummy)
 	$(call __embtk_setinstalled_pkg,uclibc_headers)
+	$(eval __embtk_uclibc_headers_installed := y)
 endef
 
 define embtk_install_uclibc_headers
-	$(if $(call __embtk_pkg_installed-y,uclubc_headers),,
-		$(__embtk_install_uclibc_headers))
+	$(if $(call __embtk_pkg_runrecipe-y,uclubc_headers),$(__embtk_install_uclibc_headers))
 endef
 
 #

@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -324,20 +324,16 @@ define __embtk_toolchain_build
 		$(__embtk_toolchain_decompress))
 endef
 
-define __embtk_toolchain_core_inst-y
-	 $(and $(call __embtk_pkg_installed-y,toolchain),
-		$(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)))
+define __embtk_toolchain_runrecipe-y
+	 $(or $(call __embtk_pkg_runrecipe-y,toolchain),$(if $(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)),,y))
 endef
-__embtk_toolchain_core_inst = $(if $(strip $(__embtk_toolchain_core_inst-y)),,core)
 
-define __embtk_toolchain_addons_inst-y
-	$(and $(call __embtk_pkg_installed-y,toolchain_addons),
-		$(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)))
+define __embtk_toolchain_addons_runrecipe-y
+	$(or $(call __embtk_pkg_runrecipe-y,toolchain_addons),$(if $(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)),,y))
 endef
-__embtk_toolchain_addons_inst = $(if $(strip $(__embtk_toolchain_addons_inst-y)),,addons)
 
-__embtk_toolchain_buildargs = $(if $(__embtk_toolchain_core_inst),core-addons)
-__embtk_toolchain_buildargs += $(__embtk_toolchain_addons_inst)
+__embtk_toolchain_buildargs := $(if $(strip $(__embtk_toolchain_runrecipe-y)),core-addons)
+__embtk_toolchain_buildargs  +=$(if $(strip $(__embtk_toolchain_addons_runrecipe-y)),addons)
 
 toolchain_install:
 	$(Q)$(call __embtk_toolchain_build,$(__embtk_toolchain_buildargs))

@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ __embtk_msg_h = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Usage:
 # $(call __embtk_streq,str1,str2)
 #
-__embtk_streq = $(if $(subst x$(1),,x$(2)),,y)
+__embtk_streq = $(if $(subst $(1),,$(2)),,y)
 
 #
 # __embtk_strneq:
@@ -59,7 +59,7 @@ __embtk_streq = $(if $(subst x$(1),,x$(2)),,y)
 # Usage:
 # $(call __embtk_strneq,str1,str2)
 #
-__embtk_strneq = $(if $(subst x$(1),,x$(2)),y)
+__embtk_strneq = $(subst $(1),,$(2))
 
 #
 # __embtk_mk_pathexist

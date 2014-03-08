@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -61,10 +61,11 @@ define __embtk_install_musl
 		ln -sf $(embtk_musl_dlinker).so.1 ld-musl.so.1
 	$(call __embtk_setinstalled_pkg,musl)
 	$(call __embtk_pkg_gen_dotkconfig_f,musl)
+	$(eval __embtk_musl_installed := y)
 endef
 
 define embtk_install_musl
-	$(if $(call __embtk_pkg_installed-y,musl),true,$(__embtk_install_musl))
+	$(if $(call __embtk_pkg_runrecipe-y,musl),$(__embtk_install_musl))
 endef
 
 define embtk_cleanup_musl

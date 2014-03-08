@@ -62,10 +62,10 @@ define __embtk_install_linux_headers
 		INSTALL_HDR_PATH=$(embtk_sysroot)/usr headers_install
 	$(call __embtk_setinstalled_pkg,linux_headers)
 	$(call __embtk_pkg_gen_dotkconfig_f,linux_headers)
+	$(eval __embtk_linux_headers_installed := y)
 endef
 define embtk_install_linux_headers
-	$(if $(call __embtk_pkg_installed-y,linux_headers),,
-		$(__embtk_install_linux_headers))
+	$(if $(call __embtk_pkg_runrecipe-y,linux_headers),$(__embtk_install_linux_headers))
 endef
 
 #
@@ -112,10 +112,11 @@ define __embtk_install_linux
 	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS) $(J)
 	$(call __embtk_setinstalled_pkg,linux)
 	$(call __embtk_pkg_gen_dotkconfig_f,linux)
+	$(eval __embtk_linux_installed := y)
 endef
 
 define embtk_install_linux
-	$(if $(call __embtk_pkg_installed-y,linux),true,$(__embtk_install_linux))
+	$(if $(call __embtk_pkg_runrecipe-y,linux),$(__embtk_install_linux))
 	$(if $(__embtk_linux_support_modules),$(embtk_postinstall_linux))
 endef
 
