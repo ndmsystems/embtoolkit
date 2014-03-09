@@ -30,6 +30,7 @@
 # $(call embtk_cleanup_pkg,pkgname)
 #
 define __embtk_cleanup_pkg
+	$(eval __embtk_$(pkgv)_installed =)
 	$(if $(embtk_cleanup_$(pkgv)),$(embtk_cleanup_$(pkgv)))
 	$(if $(__embtk_pkg_etc),
 		rm -rf $(addprefix $(embtk_sysroot)/etc/,$(__embtk_pkg_etc)))
@@ -53,7 +54,6 @@ define __embtk_cleanup_pkg
 		$(call __embtk_unsetinstalled_pkg,$(1)),
 		$(if $(__embtk_pkg_builddir),rm -rf $(__embtk_pkg_builddir)*))
 	$(if $(__embtk_pkg_statedir),rm -rf $(__embtk_pkg_statedir))
-	$(eval __embtk_$(pkgv)_installed =)
 endef
 
 define embtk_cleanup_pkg
