@@ -53,6 +53,7 @@ define __embtk_cleanup_pkg
 		$(call __embtk_unsetinstalled_pkg,$(1)),
 		$(if $(__embtk_pkg_builddir),rm -rf $(__embtk_pkg_builddir)*))
 	$(if $(__embtk_pkg_statedir),rm -rf $(__embtk_pkg_statedir))
+	$(eval __embtk_$(pkgv)_installed :=)
 endef
 
 define embtk_cleanup_pkg
