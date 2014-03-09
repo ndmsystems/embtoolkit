@@ -1,6 +1,6 @@
 ################################################################################
 # EmbToolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -109,6 +109,8 @@ SUFFIXES :=
 %: RCS/%
 %: s.%
 %: SCCS/s.%
+%.mk: ;
+%.kconfig: ;
 
 #
 # Include our config if any

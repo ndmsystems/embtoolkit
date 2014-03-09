@@ -44,11 +44,11 @@ define __embtk_include_pkg
 	endif
 	ifeq (x$(__embtk_incenabled-y),xy)
 		ROOTFS_COMPONENTS-y		+= $(pkgv)_install
+		# also include old package kconfig entries if any
+		-include $(__embtk_pkg_dotkconfig_f)
 	else ifeq (x$(__embtk_incinstalled-y),xy)
 		ROOTFS_COMPONENTS-		+= $(pkgv)_install
 	endif
-	# also include old package kconfig entries if any
-	-include $(__embtk_pkg_dotkconfig_f)
 endef
 
 define embtk_include_hostpkg
@@ -70,9 +70,9 @@ define __embtk_include_hostpkg
 	endif
 	ifeq (x$(__embtk_incenabled-y),xy)
 		HOSTTOOLS_COMPONENTS-y		+= $(pkgv)_install
+		# also include old package kconfig entries if any
+		-include $(__embtk_pkg_dotkconfig_f)
 	else ifeq (x$(__embtk_incinstalled-y),xy)
 		HOSTTOOLS_COMPONENTS-		+= $(pkgv)_install
 	endif
-	# also include old package kconfig entries if any
-	-include $(__embtk_pkg_dotkconfig_f)
 endef
