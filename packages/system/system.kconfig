@@ -23,8 +23,11 @@
 # \date         July 2010
 ################################################################################
 
-#DBUS
+# DBUS
 source packages/system/dbus/dbus.kconfig
 
 # e2fsprogs
 source packages/system/e2fsprogs/e2fsprogs.kconfig
+
+# OpenRC
+source packages/system/openrc/openrc.kconfig

@@ -23,7 +23,6 @@
 # \date         December 2013
 ################################################################################
 
-source "kconfig/rootfs/openrc.kconfig"
 source "kconfig/rootfs/fs.kconfig"
 source "kconfig/mtdutils.kconfig"
 source "kconfig/squashfs.kconfig"

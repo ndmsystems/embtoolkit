@@ -27,8 +27,6 @@ ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 
 # Include various filesystems macros
 include mk/rootfs/fs.mk
-include mk/rootfs/openrc/openrc.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_OPENRC)	+= openrc_install
 
 ROOTFS_JFFS2		:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).jffs2
 ROOTFS_TARBZ2		:= rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).tar.bz2

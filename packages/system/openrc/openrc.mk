@@ -29,7 +29,7 @@ OPENRC_PACKAGE		:= openrc-$(OPENRC_VERSION).tar.bz2
 OPENRC_SRC_DIR		:= $(embtk_pkgb)/openrc-$(OPENRC_VERSION)
 OPENRC_BUILD_DIR	:= $(embtk_pkgb)/openrc-$(OPENRC_VERSION)
 
-embtk_openrc_mk		:= $(EMBTK_ROOT)/mk/rootfs/openrc
+embtk_openrc_mk		:= $(EMBTK_ROOT)/packages/system/openrc
 
 embtk_openrc_hostname	:= EmbToolkit-$(embtk_os)
 

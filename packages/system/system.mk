@@ -31,3 +31,6 @@ $(call embtk_include_pkg,dbus)
 # e2fsprogs
 $(call embtk_include_pkg,e2fsprogs)
 $(call embtk_include_hostpkg,e2fsprogs_host)
+
+# OpenRC
+$(call embtk_include_pkg,openrc)
