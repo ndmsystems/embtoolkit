@@ -27,7 +27,7 @@
 # Macros to include a package in the build system
 #	$(1): pkgname => pkgname/pkgname.mk should exist (required)
 #	$(2): kconfig: package specific kconfig symbol name used in .kconfig
-#	      This is parameter is optional.
+#	      This parameter is optional.
 define embtk_include_pkg
 	$(eval $(call __embtk_include_pkg,$(1),$(2)))
 endef
@@ -48,6 +48,12 @@ define __embtk_include_pkg
 		-include $(__embtk_pkg_dotkconfig_f)
 	else ifeq (x$(__embtk_incinstalled-y),xy)
 		ROOTFS_COMPONENTS-		+= $(pkgv)_install
+	endif
+	# Preset build system installed variable for this packages, if installed
+	ifeq (x$(__embtk_incinstalled-y),xy)
+		__embtk_$(pkgv)_installed = y
+	else
+		__embtk_$(pkgv)_installed =
 	endif
 endef
 
@@ -74,5 +80,11 @@ define __embtk_include_hostpkg
 		-include $(__embtk_pkg_dotkconfig_f)
 	else ifeq (x$(__embtk_incinstalled-y),xy)
 		HOSTTOOLS_COMPONENTS-		+= $(pkgv)_install
+	endif
+	# Preset build system installed variable for this packages, if installed
+	ifeq (x$(__embtk_incinstalled-y),xy)
+		__embtk_$(pkgv)_installed = y
+	else
+		__embtk_$(pkgv)_installed =
 	endif
 endef

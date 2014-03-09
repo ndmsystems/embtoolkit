@@ -176,7 +176,7 @@ define __embtk_install_pkg_make
 		$(call __embtk_fix_pkgconfig_files))
 	$(call __embtk_setinstalled_pkg,$(1))
 	$(call __embtk_pkg_gen_dotkconfig_f,$(1))
-	$(eval __embtk_$(pkgv)_installed := y)
+	$(eval __embtk_$(pkgv)_installed = y)
 endef
 define __embtk_install_hostpkg_make
 	$(Q)$(if $(__embtk_pkg_deps),$(MAKE) $(__embtk_pkg_deps))
@@ -193,7 +193,7 @@ define __embtk_install_hostpkg_make
 		$(__embtk_single_make_hostinstall))
 	$(call __embtk_setinstalled_pkg,$(1))
 	$(call __embtk_pkg_gen_dotkconfig_f,$(1))
-	$(eval __embtk_$(pkgv)_installed := y)
+	$(eval __embtk_$(pkgv)_installed = y)
 endef
 
 #
