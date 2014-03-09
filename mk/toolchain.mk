@@ -172,8 +172,8 @@ __xtools_bins		:= $(__xtools_compiler-y)-$(embtk_clib)-$(embtk_clib_version)
 TOOLCHAIN_PACKAGE	:= toolchain-$(HOST_ARCH)-target-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env).tar.bz2
 TOOLCHAIN_DIR		:= $(embtk_generated)/toolchain-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)
 TOOLCHAIN_NAME		:= toolchain
-TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)
-TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)
+TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain-toolchain
+TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain-toolchain
 
 TOOLCHAIN_PRE_DEPS-y	:= ccache_install $(AUTOTOOLS_INSTALL)
 ifeq ($(embtk_buildhost_os_type),bsd)
@@ -209,10 +209,10 @@ TOOLCHAIN_DEPS-y	+= $(embtk_clib)_install
 TOOLCHAIN_DEPS-y	+= $(__gcc3_toolchain-y) $(__llvm_compiler-rt-y)
 
 TOOLCHAIN_DEPS			:= $(TOOLCHAIN_DEPS-y)
-TOOLCHAIN_ADDONS_NAME		:= toolchain-addons
+TOOLCHAIN_ADDONS_NAME		:= toolchain_addons
 TOOLCHAIN_ADDONS_DEPS		:= $(TOOLCHAIN_ADDONS-y)
-TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_BUILD_DIR)/.addons
-TOOLCHAIN_ADDONS_SRC_DIR	:= $(TOOLCHAIN_BUILD_DIR)/.addons
+TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain_addons-toolchain_addons
+TOOLCHAIN_ADDONS_SRC_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain_addons-toolchain_addons
 
 -include mk/$(embtk_clib).mk
 
