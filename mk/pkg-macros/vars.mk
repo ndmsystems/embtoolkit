@@ -34,6 +34,8 @@ embtk_toolchain_has_llvm-y	:= $(or $(CONFIG_EMBTK_GCC_AND_LLVM_TOOLCHAIN),$(embt
 __embtk_hostcc-v		:= $(shell outv=$$($(HOSTCC) -v 2>&1); echo $$outv)
 embtk_hostcc_clang-y		:= $(if $(findstring clang,$(__embtk_hostcc-v)),y)
 
+embtk_host_uname		:= $(shell uname -s -r -p)
+
 #
 # Get passed package variables prefix and set some helpers macros.
 #

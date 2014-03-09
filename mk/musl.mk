@@ -32,7 +32,7 @@ MUSL_SRC_DIR		:= $(embtk_toolsb)/musl-$(MUSL_VERSION)
 MUSL_BUILD_DIR		:= $(call __embtk_pkg_srcdir,musl)
 
 __embtk_musl_v	:= "$(MUSL_VERSION) From EmbToolkit v$(EMBTK_VERSION) -"
-__embtk_musl_v	+= "Compiled on $(shell uname -s -r -p)"
+__embtk_musl_v	+= "Compiled on $(embtk_host_uname)"
 
 define embtk_beforeinstall_musl
 	cd $(MUSL_SRC_DIR);							\
