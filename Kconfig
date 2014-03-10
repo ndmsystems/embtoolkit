@@ -1,6 +1,6 @@
 ################################################################################
 # Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -50,9 +50,9 @@ source "kconfig/arch.kconfig"
 source "kconfig/arch-variant.kconfig"
 endmenu
 
-#Give ability to build (hide) old packages, instead of remove them in Embtk.
+# Give ability to build (or hide) old packages, instead of remove them in Embtk.
 config EMBTK_OLDPACKAGES
-	bool "Show old revision of some packages"
+	bool "Show old revisions of some packages"
 	help
 	 This will allow you to build old revisions of some packages.
 
@@ -60,7 +60,7 @@ menu "Toolchain configuration"
 source "kconfig/toolchain.kconfig"
 endmenu
 
-menu "Debugging systems (GDB, strace, etc.)"
+menu "Toolchain Addons - Debugging systems"
 source "packages/development/gdb/gdb.kconfig"
 source "packages/misc/ncurses/ncurses.kconfig"
 source "kconfig/strace.kconfig"
