@@ -37,8 +37,10 @@ choice
 
 	config EMBTK_GDB_VERSION_7_6_2
 		bool "gdb-7.6.2"
+		select EMBTK_GDB_NEED_PATCH
 	config EMBTK_GDB_VERSION_7_5_1
 		bool "gdb-7.5.1"
+		select EMBTK_GDB_NEED_PATCH
 endchoice
 
 choice
