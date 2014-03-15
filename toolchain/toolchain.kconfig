@@ -78,7 +78,7 @@ endchoice
 comment "------------------------------------------"
 comment "--- GCC versions"
 comment "------------------------------------------"
-source kconfig/gcc.kconfig
+source toolchain/gcc/gcc.kconfig
 
 if EMBTK_LLVM_ONLY_TOOLCHAIN || EMBTK_GCC_AND_LLVM_TOOLCHAIN
 comment "------------------------------------------"

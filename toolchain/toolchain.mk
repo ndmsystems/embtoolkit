@@ -44,10 +44,12 @@ include mk/mpc.mk
 #
 # binutils
 #
-$(call embtk_include_hostpkg,binutils)
+include toolchain/binutils/binutils.mk
 
+#
 # GCC
-include mk/gcc.mk
+#
+include toolchain/gcc/gcc.mk
 
 # llvm/clang compiler infrastructure
 include mk/llvm/clang.mk
