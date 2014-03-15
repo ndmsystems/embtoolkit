@@ -49,7 +49,7 @@ __embtk_msg_h = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Usage:
 # $(call __embtk_streq,str1,str2)
 #
-__embtk_streq = $(if $(subst $(1),,$(2)),,y)
+__embtk_streq = $(if $(subst $(1),,$(2))$(subst $(2),,$(1)),,y)
 
 #
 # __embtk_strneq:
@@ -59,7 +59,7 @@ __embtk_streq = $(if $(subst $(1),,$(2)),,y)
 # Usage:
 # $(call __embtk_strneq,str1,str2)
 #
-__embtk_strneq = $(subst $(1),,$(2))
+__embtk_strneq = $(if $(subst $(1),,$(2))$(subst $(2),,$(1)),y)
 
 #
 # __embtk_mk_pathexist
