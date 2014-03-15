@@ -57,8 +57,8 @@ config EMBTK_CXXLIB_LLVM_LIBCXX
 	 the MIT license and the UIUC License (a BSD-like license).
 	 See http://libcxx.llvm.org
 
-source "kconfig/libc++/libc++/libcxx.kconfig"
-source "kconfig/libc++/libcxxrt/libcxxrt.kconfig"
+source "toolchain/llvm/libc++/libcxx.kconfig"
+source "toolchain/libcxxrt/libcxxrt.kconfig"
 
 #config EMBTK_GCC_LANGUAGE_JAVA
 #	bool "Support Java"

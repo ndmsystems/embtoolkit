@@ -84,16 +84,16 @@ if EMBTK_LLVM_ONLY_TOOLCHAIN || EMBTK_GCC_AND_LLVM_TOOLCHAIN
 comment "------------------------------------------"
 comment "--- clang/llvm versions"
 comment "------------------------------------------"
-source kconfig/llvm/clang-llvm.kconfig
-source kconfig/llvm/llvm.kconfig
-source kconfig/llvm/clang.kconfig
-source kconfig/llvm/compiler-rt.kconfig
+source toolchain/llvm/clang-llvm.kconfig
+source toolchain/llvm/llvm/llvm.kconfig
+source toolchain/llvm/clang/clang.kconfig
+source toolchain/llvm/compiler-rt/compiler-rt.kconfig
 endif
 
 comment "------------------------------------------"
 comment "--- Additional programming languages"
 comment "------------------------------------------"
-source kconfig/compiler-options.kconfig
+source toolchain/compiler-options.kconfig
 
 endmenu
 

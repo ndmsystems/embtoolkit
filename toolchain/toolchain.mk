@@ -52,11 +52,11 @@ include toolchain/binutils/binutils.mk
 include toolchain/gcc/gcc.mk
 
 # llvm/clang compiler infrastructure
-include mk/llvm/clang.mk
-include mk/llvm/llvm.mk
-include mk/llvm/compiler-rt/compiler-rt.mk
-include mk/libc++/libcxxrt/libcxxrt.mk
-include mk/libc++/libc++/libcxx.mk
+include toolchain/llvm/clang/clang.mk
+include toolchain/llvm/llvm/llvm.mk
+include toolchain/llvm/compiler-rt/compiler-rt.mk
+include toolchain/libcxxrt/libcxxrt.mk
+include toolchain/llvm/libc++/libcxx.mk
 
 # linux kernel headers
 include mk/linux.mk
