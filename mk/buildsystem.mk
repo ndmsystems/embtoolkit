@@ -25,7 +25,6 @@
 
 TOOLS_BUILD		:= $(EMBTK_ROOT)/build/tools_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 PACKAGES_BUILD		:= $(EMBTK_ROOT)/build/packages_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-ROOTFS			:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 DOWNLOAD_DIR		:= $(patsubst %/,%,$(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR))))
 J			:= -j$(or $(CONFIG_EMBTK_NUMBER_BUILD_JOBS),1)
 
@@ -38,7 +37,7 @@ embtk_tools		:= $(embtk_generated)/tools-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 embtk_htools		:= $(embtk_generated)/host-tools-$(EMBTK_MCU_FLAG)
 embtk_toolsb		:= $(TOOLS_BUILD)
 embtk_pkgb		:= $(PACKAGES_BUILD)
-embtk_rootfs		:= $(ROOTFS)
+embtk_rootfs		:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 __embtk_dldir		:= $(patsubst %/,%,$(call __embtk_mk_uquote,$(CONFIG_EMBTK_DOWNLOAD_DIR)))
 embtk_dldir		:= $(or $(__embtk_dldir),$(EMBTK_ROOT)/dl)
 
