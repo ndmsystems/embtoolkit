@@ -22,6 +22,8 @@
 # \date         May 2009
 ################################################################################
 
+embtk_pkgincdir := toolchain
+
 #
 # Toolchain variables
 #
@@ -39,8 +41,10 @@ include mk/mpfr.mk
 # MPC
 include mk/mpc.mk
 
+#
 # binutils
-include mk/binutils.mk
+#
+$(call embtk_include_hostpkg,binutils)
 
 # GCC
 include mk/gcc.mk

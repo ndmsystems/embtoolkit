@@ -162,7 +162,7 @@ endif
 endmenu
 
 menu "Binutils"
-source "kconfig/binutils.kconfig"
+source "toolchain/binutils/binutils.kconfig"
 endmenu
 
 menu "Linux kernel headers"
