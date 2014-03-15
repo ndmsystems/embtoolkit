@@ -23,26 +23,22 @@
 # \date         May 2009
 ################################################################################
 
-SYSROOT			:= $(EMBTK_ROOT)/sysroot-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-TOOLS			:= $(EMBTK_ROOT)/tools-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 TOOLS_BUILD		:= $(EMBTK_ROOT)/build/tools_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 PACKAGES_BUILD		:= $(EMBTK_ROOT)/build/packages_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-EMBTK_GENERATED 	:= $(EMBTK_ROOT)/generated
 ROOTFS			:= $(EMBTK_GENERATED)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-HOSTTOOLS		:= $(EMBTK_ROOT)/host-tools-$(EMBTK_MCU_FLAG)
 DOWNLOAD_DIR		:= $(patsubst %/,%,$(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR))))
 J			:= -j$(or $(CONFIG_EMBTK_NUMBER_BUILD_JOBS),1)
 
 #
 # New version of above variables names. The old names are scheduled for removal
 #
-embtk_sysroot		:= $(SYSROOT)
-embtk_tools		:= $(TOOLS)
+embtk_generated		:= $(EMBTK_ROOT)/generated
+embtk_sysroot		:= $(embtk_generated)/sysroot-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+embtk_tools		:= $(embtk_generated)/tools-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+embtk_htools		:= $(embtk_generated)/host-tools-$(EMBTK_MCU_FLAG)
 embtk_toolsb		:= $(TOOLS_BUILD)
 embtk_pkgb		:= $(PACKAGES_BUILD)
-embtk_generated		:= $(EMBTK_GENERATED)
 embtk_rootfs		:= $(ROOTFS)
-embtk_htools		:= $(HOSTTOOLS)
 __embtk_dldir		:= $(patsubst %/,%,$(call __embtk_mk_uquote,$(CONFIG_EMBTK_DOWNLOAD_DIR)))
 embtk_dldir		:= $(or $(__embtk_dldir),$(EMBTK_ROOT)/dl)
 
@@ -141,7 +137,9 @@ startbuild:
 		$(__embtk_mk_pwarning_restartbuild),$(__embtk_mk_startbuild))
 
 define __embtk_mk_initsysrootdirs
+	mkdir -p $(embtk_generated)
 	mkdir -p $(embtk_sysroot)
+	ln -sf $(embtk_sysroot) $(EMBTK_ROOT)/$(notdir $(embtk_sysroot))
 	mkdir -p $(embtk_sysroot)/etc
 	mkdir -p $(embtk_sysroot)/lib
 	mkdir -p $(embtk_sysroot)/usr
@@ -158,8 +156,11 @@ define __embtk_mk_initsysrootdirs
 endef
 
 define __embtk_mk_inittoolsdirs
+	mkdir -p $(embtk_generated)
+	mkdir -p $(embtk_generated)/toolchains
 	mkdir -p $(embtk_tools)
 	mkdir -p $(embtk_toolsb)
+	ln -sf $(embtk_tools) $(EMBTK_ROOT)/$(notdir $(embtk_tools))
 endef
 
 define __embtk_mk_initpkgdirs
@@ -168,10 +169,12 @@ define __embtk_mk_initpkgdirs
 endef
 
 define __embtk_mk_inithosttoolsdirs
+	mkdir -p $(embtk_generated)
 	mkdir -p $(embtk_htools)
 	mkdir -p $(embtk_htools)/usr
 	mkdir -p $(embtk_htools)/usr/include
 	mkdir -p $(embtk_htools)/usr/local
+	ln -sf $(embtk_htools) $(EMBTK_ROOT)/$(notdir $(embtk_htools))
 endef
 
 define __embtk_kconfig_clean
@@ -197,5 +200,8 @@ endef
 
 rmallpath:
 	$(Q)rm -rf $(embtk_pkgb)* $(embtk_rootfs)* $(embtk_tools)* $(embtk_toolsb)*
+	$(Q)rm -rf $(EMBTK_ROOT)/host-tools-*
+	$(Q)rm -rf $(EMBTK_ROOT)/sysroot-*
+	$(Q)rm -rf $(EMBTK_ROOT)/tools-*
 	$(Q)rm -rf $(embtk_sysroot)* $(embtk_htools)* $(embtk_generated)/rootfs-*
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(embtk_dldir)/*.patch)
