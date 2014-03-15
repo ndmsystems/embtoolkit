@@ -58,7 +58,7 @@ define embtk_install_compiler-rt
 endef
 
 define embtk_beforeinstall_compiler-rt
-	ln -sf $(EMBTK_ROOT)/mk/llvm/compiler-rt/Makefile			\
+	ln -sf $(EMBTK_ROOT)/toolchain/llvm/compiler-rt/Makefile		\
 					$(COMPILER-RT_BUILD_DIR)/Makefile
 endef
 

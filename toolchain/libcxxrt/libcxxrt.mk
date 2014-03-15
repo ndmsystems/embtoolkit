@@ -44,7 +44,7 @@ define embtk_install_libcxxrt
 endef
 
 define embtk_beforeinstall_libcxxrt
-	ln -sf $(EMBTK_ROOT)/mk/libc++/libcxxrt/Makefile			\
+	ln -sf $(EMBTK_ROOT)/toolchain/libcxxrt/Makefile			\
 					$(LIBCXXRT_BUILD_DIR)/Makefile
 endef
 
