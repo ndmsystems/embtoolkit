@@ -139,7 +139,8 @@ startbuild:
 define __embtk_mk_initsysrootdirs
 	mkdir -p $(embtk_generated)
 	mkdir -p $(embtk_sysroot)
-	ln -sf $(embtk_sysroot) $(EMBTK_ROOT)/$(notdir $(embtk_sysroot))
+	[ -L $(EMBTK_ROOT)/$(notdir $(embtk_sysroot)) ] ||			\
+		ln -sf $(embtk_sysroot) $(EMBTK_ROOT)/$(notdir $(embtk_sysroot))
 	mkdir -p $(embtk_sysroot)/etc
 	mkdir -p $(embtk_sysroot)/lib
 	mkdir -p $(embtk_sysroot)/usr
@@ -160,7 +161,8 @@ define __embtk_mk_inittoolsdirs
 	mkdir -p $(embtk_generated)/toolchains
 	mkdir -p $(embtk_tools)
 	mkdir -p $(embtk_toolsb)
-	ln -sf $(embtk_tools) $(EMBTK_ROOT)/$(notdir $(embtk_tools))
+	[ -L $(EMBTK_ROOT)/$(notdir $(embtk_tools)) ] ||			\
+		ln -sf $(embtk_tools) $(EMBTK_ROOT)/$(notdir $(embtk_tools))
 endef
 
 define __embtk_mk_initpkgdirs
@@ -174,7 +176,8 @@ define __embtk_mk_inithosttoolsdirs
 	mkdir -p $(embtk_htools)/usr
 	mkdir -p $(embtk_htools)/usr/include
 	mkdir -p $(embtk_htools)/usr/local
-	ln -sf $(embtk_htools) $(EMBTK_ROOT)/$(notdir $(embtk_htools))
+	[ -L $(EMBTK_ROOT)/$(notdir $(embtk_htools)) ] ||			\
+		ln -sf $(embtk_htools) $(EMBTK_ROOT)/$(notdir $(embtk_htools))
 endef
 
 define __embtk_kconfig_clean
