@@ -125,7 +125,7 @@ include mk/macros.mk
 include mk/targetsys.mk
 include mk/target-mcu.mk
 include mk/buildsystem.mk
-include mk/toolchain.mk
+include toolchain/toolchain.mk
 include mk/packages.mk
 include mk/rootfs/rootfs.mk
 include mk/help.mk
