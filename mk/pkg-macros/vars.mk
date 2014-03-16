@@ -41,7 +41,7 @@ embtk_host_uname		:= $(shell uname -s -r -p)
 #
 PKGV				= $(call embtk_ucase,$(1))
 pkgv				= $(call embtk_lcase,$(1))
-__embtk_pkg_name		= $(or $(strip $($(PKGV)_NAME)),$(pkgv))
+__embtk_pkg_name		= $(or $(strip $($(PKGV)_NAME)),$(patsubst %_host,%,$(pkgv)))
 __embtk_pkg_needpatch		= $(CONFIG_EMBTK_$(PKGV)_NEED_PATCH)
 __embtk_pkg_site		= $(strip $($(PKGV)_SITE))
 __embtk_patch_site		= $(embtk_ftp)
