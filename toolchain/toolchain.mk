@@ -28,6 +28,7 @@ embtk_pkgincdir := toolchain
 # Toolchain variables
 #
 include toolchain/vars.mk
+include packages/htools/ccache/vars.mk
 
 # GMP
 include mk/gmp.mk

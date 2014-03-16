@@ -26,5 +26,4 @@
 embtk_pkgincdir := packages/htools
 
 # cache
-include packages/htools/ccache/vars.mk
 $(call embtk_include_hostpkg,ccache_host)
