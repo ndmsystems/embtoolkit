@@ -17,27 +17,26 @@
 #
 ################################################################################
 #
-# \file         hosttools-buildopts.mk
-# \brief	packages needed for both toolchain and rootfs packages.
+# \file         mtdutils.mk
+# \brief	mtd-utils for host
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         Marsh 2014
 ################################################################################
 
-embtk_pkgincdir := packages/htools
+MTDUTILS_HOST_NAME		:= mtd-utils
+MTDUTILS_HOST_VERSION		:= $(call embtk_get_pkgversion,mtdutils)
+MTDUTILS_HOST_SITE		:= ftp://ftp.infradead.org/pub/mtd-utils
+MTDUTILS_HOST_PACKAGE		:= mtd-utils-$(MTDUTILS_HOST_VERSION).tar.bz2
+MTDUTILS_HOST_SRC_DIR		:= $(embtk_toolsb)/mtd-utils-$(MTDUTILS_HOST_VERSION)
+MTDUTILS_HOST_BUILD_DIR		:= $(embtk_toolsb)/mtd-utils-$(MTDUTILS_HOST_VERSION)
 
-# cache
-$(call embtk_include_hostpkg,ccache_host)
+MTDUTILS_HOST_DEPS := zlib_host_install lzo_host_install e2fsprogs_host_install
 
-# fakeroot
-include packages/htools/fakeroot/vars.mk
-$(call embtk_include_hostpkg,fakeroot_host)
+MTDUTILS_HOST_MAKE_ENV	:= LDFLAGS="-L$(embtk_htools)/usr/lib"
+MTDUTILS_HOST_MAKE_ENV	+= CPPFLAGS="-I. -Iinclude -I../include -I$(embtk_htools)/usr/include"
+MTDUTILS_HOST_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR)
+MTDUTILS_HOST_MAKE_OPTS	:= DESTDIR=$(embtk_htools) WITHOUT_XATTR=1
 
-# mtd-utils
-$(call embtk_include_hostpkg,mtdutils_host)
-
-# pkgconf
-include packages/htools/pkgconf/vars.mk
-$(call embtk_include_hostpkg,pkgconf_host)
-
-# zlib
-$(call embtk_include_hostpkg,zlib_host)
+define embtk_install_mtdutils_host
+	$(call embtk_makeinstall_hostpkg,mtdutils_host)
+endef

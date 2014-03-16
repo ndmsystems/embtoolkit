@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -91,28 +91,3 @@ MTDUTILS_SBINS	+= sumtool
 MTDUTILS_SBINS	+= ubidetach
 MTDUTILS_SBINS	+= ubinfo
 MTDUTILS_SBINS	+= ubirmvol
-
-#
-# mtd-utils for host development machine.
-#
-MTDUTILS_HOST_NAME		:= $(MTDUTILS_NAME)
-MTDUTILS_HOST_VERSION		:= $(MTDUTILS_VERSION)
-MTDUTILS_HOST_SITE		:= $(MTDUTILS_SITE)
-MTDUTILS_HOST_SITE_MIRROR1	:= $(MTDUTILS_SITE_MIRROR1)
-MTDUTILS_SITE_MIRROR2		:= $(MTDUTILS_SITE_MIRROR2)
-MTDUTILS_HOST_SITE_MIRROR3	:= $(MTDUTILS_SITE_MIRROR3)
-MTDUTILS_HOST_PACKAGE		:= $(MTDUTILS_PACKAGE)
-MTDUTILS_HOST_SRC_DIR		:= $(embtk_toolsb)/mtd-utils-$(MTDUTILS_VERSION)
-MTDUTILS_HOST_BUILD_DIR		:= $(embtk_toolsb)/mtd-utils-$(MTDUTILS_VERSION)
-
-MTDUTILS_HOST_DEPS	:= zlib_host_install lzo_host_install \
-			e2fsprogs_host_install
-
-MTDUTILS_HOST_MAKE_ENV	:= LDFLAGS="-L$(embtk_htools)/usr/lib"
-MTDUTILS_HOST_MAKE_ENV	+= CPPFLAGS="-I. -Iinclude -I../include -I$(embtk_htools)/usr/include"
-MTDUTILS_HOST_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR)
-MTDUTILS_HOST_MAKE_OPTS	:= DESTDIR=$(embtk_htools) WITHOUT_XATTR=1
-
-define embtk_install_mtdutils_host
-	$(call embtk_makeinstall_hostpkg,mtdutils_host)
-endef

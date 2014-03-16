@@ -17,27 +17,24 @@
 #
 ################################################################################
 #
-# \file         hosttools-buildopts.mk
-# \brief	packages needed for both toolchain and rootfs packages.
+# \file         mtdutils.kconfig
+# \brief	mtdutils.kconfig of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         Marsh 2014
 ################################################################################
 
-embtk_pkgincdir := packages/htools
+config EMBTK_HOST_HAVE_MTDUTILS
+	bool
+	select EMBTK_HOST_HAVE_E2FSPROGS
+	select EMBTK_HOST_HAVE_ZLIB
+	select EMBTK_HOST_HAVE_LZO
+	select EMBTK_MTDUTILS_HOST_NEED_PATCH
+	help
+	 mtd-utils intented to run on the host development machine.
 
-# cache
-$(call embtk_include_hostpkg,ccache_host)
+config EMBTK_MTDUTILS_HOST_VERSION_STRING
+	string
+	default "1.5.0"
 
-# fakeroot
-include packages/htools/fakeroot/vars.mk
-$(call embtk_include_hostpkg,fakeroot_host)
-
-# mtd-utils
-$(call embtk_include_hostpkg,mtdutils_host)
-
-# pkgconf
-include packages/htools/pkgconf/vars.mk
-$(call embtk_include_hostpkg,pkgconf_host)
-
-# zlib
-$(call embtk_include_hostpkg,zlib_host)
+config EMBTK_MTDUTILS_HOST_NEED_PATCH
+	bool

@@ -123,6 +123,11 @@ source kconfig/bmake.kconfig
 source kconfig/gmake.kconfig
 
 #
+# mtd-utils
+#
+source packages/htools/mtdutils/mtdutils.kconfig
+
+#
 # pkgconf
 #
 source packages/htools/pkgconf/pkgconf.kconfig

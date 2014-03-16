@@ -40,7 +40,6 @@ HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBELF) += libelf_host_install
 
 include mk/makedevs.mk
 include mk/mkimage.mk
-include mk/mtd-utils.mk
 include mk/squashfs.mk
 
 # Install various tools in case of FreeBSD host development machine

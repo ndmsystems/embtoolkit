@@ -37,29 +37,7 @@ endif
 menu "Packages to include in your root filesystem"
 
 menu "Flash manipulation tools"
-#mtd-utils on target
-config EMBTK_HAVE_MTDUTILS
-	bool "Have mtd-utils in your target root filesystem"
-	select EMBTK_HAVE_E2FSPROGS
-	select EMBTK_HAVE_ZLIB
-	select EMBTK_HAVE_LZO
-	select KEMBTK_UCLIBC_UCLIBC_SUSV3_LEGACY_MACROS if EMBTK_CLIB_UCLIBC
-	help
-	 The MTD Utilities are a collection of tools that allow the user to
-	 interact with the MTD subsystem in the kernel to perform operations on
-	 Flash devices. The most commonly used utilities are:
-	 * flash_erase - Erases an erase block of flash
-	 * flash_eraseall - Erases the entire flash device
-	 * flashcp - Copies data into NOR flash
-	 * flash_info - Displays information about Flash devices
-	 * flash_lock - Lock flash pages to prevent writing
-	 * flash_unlock - Unlock flash pages to allow writing
-	 * mkfs.jffs2 - Create a JFFS2 file system image from an existing file
-	   system
-	 * nandwrite - Write an input file (i.e. JFFS2 or YAFFS2 image) to the
-	   NAND Flash device
-	 These utilities are often used to write file system images to the Flash
-	 device on an embedded system.
+source packages/system/mtdutils/mtdutils.kconfig
 endmenu
 
 menu "Compression packages"

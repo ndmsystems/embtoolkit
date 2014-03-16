@@ -34,3 +34,6 @@ $(call embtk_include_hostpkg,e2fsprogs_host)
 
 # OpenRC
 $(call embtk_include_pkg,openrc)
+
+# mtd-utils
+$(call embtk_include_pkg,mtdutils)

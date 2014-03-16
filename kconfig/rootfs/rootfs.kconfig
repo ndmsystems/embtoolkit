@@ -24,6 +24,5 @@
 ################################################################################
 
 source "kconfig/rootfs/fs.kconfig"
-source "kconfig/mtdutils.kconfig"
 source "kconfig/squashfs.kconfig"
 source "kconfig/packages.kconfig"
