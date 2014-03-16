@@ -88,7 +88,9 @@ include mk/bmake.mk
 # GNU make
 include mk/gmake.mk
 
-# Toolchain internals
+#
+# Toolchain virtual package internals
+#
 __xtools_compiler-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= clangllvm-$(LLVM_VERSION)
 __xtools_compiler-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= clangllvm-$(LLVM_VERSION)
 __xtools_compiler-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= gcc-$(GCC_VERSION)
@@ -258,8 +260,8 @@ define __embtk_toolchain_addons_runrecipe-y
 	$(or $(call __embtk_pkg_runrecipe-y,toolchain_addons),$(if $(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)),,y))
 endef
 
-__embtk_toolchain_buildargs := $(if $(strip $(__embtk_toolchain_runrecipe-y)),core-addons)
-__embtk_toolchain_buildargs  +=$(if $(strip $(__embtk_toolchain_addons_runrecipe-y)),addons)
+__embtk_toolchain_buildargs =  $(if $(strip $(__embtk_toolchain_runrecipe-y)),core-addons)
+__embtk_toolchain_buildargs += $(if $(strip $(__embtk_toolchain_addons_runrecipe-y)),addons)
 
 toolchain_install:
 	$(Q)$(call __embtk_toolchain_build,$(__embtk_toolchain_buildargs))
@@ -283,3 +285,6 @@ TOOLCHAIN_ALL_DEPS := $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
 TOOLCHAIN_ALL_DEPS += $(TOOLCHAIN_ADDONS_DEPS)
 
 packages_fetch:: $(patsubst %_install,download_%,$(TOOLCHAIN_ALL_DEPS))
+
+-include $(call __embtk_pkg_dotkconfig_f,toolchain)
+-include $(call __embtk_pkg_dotkconfig_f,toolchain_addons)
