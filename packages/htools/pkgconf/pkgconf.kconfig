@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2011-2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,21 +17,32 @@
 #
 ################################################################################
 #
-# \file         hosttools-buildopts.mk
-# \brief	packages needed for both toolchain and rootfs packages.
+# \file         pkgconf.kconfig
+# \brief	pkgconf.kconfig of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         Marsh 2014
+# \date         January 2011
 ################################################################################
 
-embtk_pkgincdir := packages/htools
+config EMBTK_HOST_HAVE_PKGCONF
+	bool
+	default y
+	select EMBTK_PKGCONF_HOST_NEED_AUTORECONF
+	help
+	 pkgconf for host tools.
 
-# cache
-$(call embtk_include_hostpkg,ccache_host)
+config EMBTK_PKGCONF_HOST_VERSION_STRING
+	string
+	default "0.8.9"
 
-# fakeroot
-include packages/htools/fakeroot/vars.mk
-$(call embtk_include_hostpkg,fakeroot_host)
+config EMBTK_PKGCONF_HOST_VERSION_GIT
+	bool
 
-# pkgconf
-include packages/htools/pkgconf/vars.mk
-$(call embtk_include_hostpkg,pkgconf_host)
+config EMBTK_PKGCONF_HOST_GIT_SITE
+	string
+	default "git://github.com/pkgconf/pkgconf.git"
+	depends on EMBTK_PKGCONF_HOST_VERSION_GIT
+
+config EMBTK_PKGCONF_HOST_NEED_PATCH
+	bool
+config EMBTK_PKGCONF_HOST_NEED_AUTORECONF
+	bool

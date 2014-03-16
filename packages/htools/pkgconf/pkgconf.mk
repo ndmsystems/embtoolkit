@@ -1,6 +1,5 @@
 ################################################################################
-# Embtoolkit
-# Copyright(C) 2011-2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# Copyright(C) 2013-2014 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,32 +16,28 @@
 #
 ################################################################################
 #
-# \file         pkgconf.kconfig
-# \brief	pkgconf.kconfig of Embtoolkit.
+# \file         pkgconf.mk
+# \brief	pkgconf.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         January 2011
+# \date         January 2013
 ################################################################################
 
-config EMBTK_HAVE_PKGCONF
-	bool
-	default y
-	select EMBTK_PKGCONF_NEED_AUTORECONF
-	help
-		pkgconf for host tools.
+PKGCONF_HOST_NAME		:= pkgconf
+PKGCONF_HOST_VERSION		:= $(call embtk_get_pkgversion,pkgconf_host)
+PKGCONF_HOST_SITE		:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
+PKGCONF_HOST_PACKAGE		:= pkgconf-$(PKGCONF_HOST_VERSION).tar.gz
+PKGCONF_HOST_SRC_DIR		:= $(embtk_toolsb)/pkgconf-$(PKGCONF_HOST_VERSION)
+PKGCONF_HOST_BUILD_DIR		:= $(embtk_toolsb)/pkgconf-$(PKGCONF_HOST_VERSION)
 
-config EMBTK_PKGCONF_VERSION_STRING
-	string
-	default "0.8.9"
+PKGCONFIG_BIN		:= $(embtk_htools)/usr/bin/pkg-config
+export PKGCONFIG_BIN
 
-config EMBTK_PKGCONF_VERSION_GIT
-	bool
+#
+# pkgconf install
+#
+PKGCONF_HOST_PREFIX	:= /usr
+PKGCONF_HOST_DESTDIR	:= $(embtk_htools)
 
-config EMBTK_PKGCONF_GIT_SITE
-	string
-	default "git://github.com/pkgconf/pkgconf.git"
-	depends on EMBTK_PKGCONF_VERSION_GIT
-
-config EMBTK_PKGCONF_NEED_PATCH
-	bool
-config EMBTK_PKGCONF_NEED_AUTORECONF
-	bool
+define embtk_postinstallonce_pkgconf_host
+	cd $(embtk_htools)/usr/bin/; ln -sf pkgconf pkg-config
+endef

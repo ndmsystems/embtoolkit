@@ -130,7 +130,7 @@ source kconfig/gmake.kconfig
 #
 # pkgconf
 #
-source kconfig/pkgconf.kconfig
+source packages/htools/pkgconf/pkgconf.kconfig
 
 #
 # fakeroot
