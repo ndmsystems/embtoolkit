@@ -35,3 +35,6 @@ $(call embtk_include_hostpkg,fakeroot_host)
 # pkgconf
 include packages/htools/pkgconf/vars.mk
 $(call embtk_include_hostpkg,pkgconf_host)
+
+# zlib
+$(call embtk_include_hostpkg,zlib_host)

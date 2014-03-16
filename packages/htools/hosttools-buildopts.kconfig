@@ -75,11 +75,6 @@ config EMBTK_HAVE_MKIMAGE
 	 u-boot mkimage tool.
 
 #
-# zlib for host
-#
-source kconfig/zlib_host.kconfig
-
-#
 # gperf for host
 #
 source kconfig/gperf_host.kconfig
@@ -146,3 +141,8 @@ source kconfig/gperf_host.kconfig
 # libelf
 #
 source packages/misc/libelf/libelf.kconfig
+
+#
+# zlib for host
+#
+source packages/htools/zlib/zlib.kconfig
