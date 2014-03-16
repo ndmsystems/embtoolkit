@@ -29,9 +29,6 @@ embtk_pkgincdir := toolchain
 #
 include toolchain/vars.mk
 
-# ccache
-include mk/ccache.mk
-
 # GMP
 include mk/gmp.mk
 
@@ -51,27 +48,37 @@ include toolchain/binutils/binutils.mk
 #
 include toolchain/gcc/gcc.mk
 
+#
 # llvm/clang compiler infrastructure
+#
 include toolchain/llvm/clang/clang.mk
 include toolchain/llvm/llvm/llvm.mk
 include toolchain/llvm/compiler-rt/compiler-rt.mk
 include toolchain/libcxxrt/libcxxrt.mk
 include toolchain/llvm/libc++/libcxx.mk
 
+#
 # linux kernel headers
+#
 include mk/linux.mk
 
+#
 # toolchain addon: strace
+#
 include mk/strace.mk
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_STRACE) += strace_install
 
+#
 # toolchain addon: gdb
+#
 include packages/development/gdb/gdb.mk
-TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDB) += gdb_install
-TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDBSERVER) += gdbserver_install
-TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HOST_HAVE_GDB) += gdb_host_install
+TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDB)	+= gdb_install
+TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDBSERVER)	+= gdbserver_install
+TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HOST_HAVE_GDB)	+= gdb_host_install
 
+#
 # Autotools
+#
 include mk/libtool.mk
 include mk/autoconf.mk
 include mk/automake.mk
