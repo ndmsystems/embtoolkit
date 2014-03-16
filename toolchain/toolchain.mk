@@ -172,6 +172,7 @@ define __embtk_toolchain_symlinktools
 endef
 
 define __embtk_toolchain_compress
+	cd $(embtk_generated);							\
 	tar -cjf $(TOOLCHAIN_PACKAGE)						\
 		$(notdir $(embtk_sysroot)) $(notdir $(embtk_tools)) &&		\
 	mv $(TOOLCHAIN_PACKAGE) $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
@@ -179,7 +180,7 @@ endef
 
 define ___embtk_toolchain_decompress
 	rm -rf $(embtk_sysroot) $(embtk_tools)
-	cd $(EMBTK_ROOT) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
+	cd $(embtk_generated) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 	$(__embtk_toolchain_mkinitdirs)
 	$(MAKE) $(TOOLCHAIN_PRE_DEPS-y)
 endef
