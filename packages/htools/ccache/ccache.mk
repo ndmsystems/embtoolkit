@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 ##
@@ -26,54 +26,13 @@
 # \date         May 2009
 ################################################################################
 
-CCACHE_NAME		:= ccache
-CCACHE_VERSION		:= $(call embtk_get_pkgversion,ccache)
-CCACHE_SITE		:= http://samba.org/ftp/ccache
-CCACHE_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-CCACHE_PATCH_SITE	:= ftp://ftp.embtoolkit.org/embtoolkit.org/ccache/$(CCACHE_VERSION)
-CCACHE_PACKAGE		:= ccache-$(CCACHE_VERSION).tar.bz2
-CCACHE_SRC_DIR		:= $(embtk_toolsb)/ccache-$(CCACHE_VERSION)
-CCACHE_BUILD_DIR	:= $(embtk_toolsb)/ccachehost-build
+CCACHE_HOST_NAME		:= ccache
+CCACHE_HOST_VERSION		:= $(call embtk_get_pkgversion,ccache_host)
+CCACHE_HOST_SITE		:= http://samba.org/ftp/ccache
+CCACHE_HOST_PACKAGE		:= ccache-$(CCACHE_HOST_VERSION).tar.bz2
+CCACHE_HOST_SRC_DIR		:= $(embtk_toolsb)/ccache-$(CCACHE_HOST_VERSION)
+CCACHE_HOST_BUILD_DIR		:= $(embtk_toolsb)/ccachehost-build
 
-CCACHE_DIR		:= $(EMBTK_ROOT)/.ccache
-CCACHE_BIN		:=  $(embtk_htools)/usr/bin/ccache
-
-# Variables for use in env
-__ccache_clang_cflags	:= $(if $(embtk_hostcc_clang-y),-Qunused-arguments -fcolor-diagnostics)
-__HOSTCC_CACHED		:= $(CCACHE_BIN) $(HOSTCC) $(__ccache_clang_cflags)
-HOSTCC_CACHED		:= "$(__HOSTCC_CACHED)"
-__HOSTCXX_CACHED	:= $(CCACHE_BIN) $(HOSTCXX) $(__ccache_clang_cflags)
-HOSTCXX_CACHED		:= "$(__HOSTCXX_CACHED)"
-
-CROSS_COMPILE_CACHED	:= "$(CCACHE_BIN) $(CROSS_COMPILE)"
-TARGETCC_CACHED		:= "$(CCACHE_BIN) $(TARGETCC)"
-TARGETCXX_CACHED	:= "$(CCACHE_BIN) $(TARGETCXX)"
-
-TARGETGCC_CACHED	:= "$(CCACHE_BIN) $(TARGETGCC)"
-TARGETGCXX_CACHED	:= "$(CCACHE_BIN) $(TARGETGCXX)"
-
-TARGETCLANG_CACHED	:= "$(CCACHE_BIN) $(TARGETCLANG)"
-TARGETCLANGXX_CACHED	:= "$(CCACHE_BIN) $(TARGETCLANGXX)"
-
-# Variables for use directly
-hostcc_cached		:= $(CCACHE_BIN) $(HOSTCC)
-hostcxx_cached		:= $(CCACHE_BIN) $(HOSTCXX)
-
-targetcc_cached		:= $(CCACHE_BIN) $(TARGETCC)
-targetcxx_cached	:= $(CCACHE_BIN) $(TARGETCXX)
-
-targetgcc_cached	:= $(CCACHE_BIN) $(TARGETGCC)
-targetgcxx_cached	:= $(CCACHE_BIN) $(TARGETGCXX)
-
-targetclang_cached	:= $(CCACHE_BIN) $(TARGETCLANG)
-targetclangxx_cached	:= $(CCACHE_BIN) $(TARGETCLANGXX)
-
-export CCACHE_DIR HOSTCC_CACHED HOSTCXX_CACHED TARGETCC_CACHED TARGETCXX_CACHED
-
-define embtk_install_ccache
-	$(call __embtk_install_hostpkg,ccache)
-endef
-
-define embtk_postinstallonce_ccache
+define embtk_postinstallonce_ccache_host
 	CCACHE_DIR=$(CCACHE_DIR) $(CCACHE_BIN) --max-size=2GB
 endef

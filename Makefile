@@ -130,3 +130,6 @@ include toolchain/toolchain.mk
 include mk/packages.mk
 include mk/rootfs/rootfs.mk
 include mk/help.mk
+
+testinstall:
+	@echo "$(call __embtk_pkg_runrecipe-y,ccache_host)"

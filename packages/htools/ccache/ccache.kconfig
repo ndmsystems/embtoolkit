@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2011-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2011-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 ##
@@ -25,7 +25,7 @@
 # \date         July 2011
 ################################################################################
 
-config EMBTK_HAVE_CCACHE
+config EMBTK_HOST_HAVE_CCACHE
 	bool
 	default y
 	help
@@ -34,11 +34,11 @@ config EMBTK_HAVE_CCACHE
 		compilation is being done again. Supported languages are C,
 		C++, Objective-C and Objective-C++.
 
-config EMBTK_CCACHE_VERSION_STRING
+config EMBTK_CCACHE_HOST_VERSION_STRING
 	string
 	default "3.1.9"
 
-config EMBTK_CCACHE_NEED_PATCH
+config EMBTK_CCACHE_HOST_NEED_PATCH
 	bool
-config EMBTK_CCACHE_NEED_AUTORECONF
+config EMBTK_CCACHE_HOST_NEED_AUTORECONF
 	bool
