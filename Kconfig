@@ -71,7 +71,7 @@ source "kconfig/targetbuildopts.kconfig"
 endmenu
 
 menu "Embtoolkit build options and host tools"
-source "kconfig/hosttools-buildopts.kconfig"
+source "packages/htools/hosttools-buildopts.kconfig"
 endmenu
 
 if EMBTK_OS_LINUX
