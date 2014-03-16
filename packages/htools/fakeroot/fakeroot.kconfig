@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2011-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,26 +17,23 @@
 #
 ################################################################################
 #
-# \file         fakeroot.mk
-# \brief	fakeroot.mk of Embtoolkit. fakeroot helps building root
-# \brief	filesystem, without the need to be root.
+# \file         fakeroot.kconfig
+# \brief	fakeroot.kconfig of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         June 2009
+# \date         March 2011
 ################################################################################
 
-FAKEROOT_NAME		:= fakeroot
-FAKEROOT_VERSION	:= $(call embtk_get_pkgversion,fakeroot)
-FAKEROOT_SITE		:= http://ftp.debian.org/debian/pool/main/f/fakeroot
-FAKEROOT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-FAKEROOT_PACKAGE	:= fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
-FAKEROOT_SRC_DIR	:= $(embtk_toolsb)/fakeroot-$(FAKEROOT_VERSION)
-FAKEROOT_BUILD_DIR	:= $(embtk_toolsb)/fakeroot-build
+config EMBTK_HOST_HAVE_FAKEROOT
+	bool
+	default y
+	help
+	 fakeroot for host tools.
 
-# fakeroot binaries and env
-FAKEROOT_BIN		:= $(embtk_htools)/usr/bin/fakeroot
-FAKEROOT_ENV_FILE	:= $(EMBTK_ROOT)/.fakeroot.001
-export FAKEROOT_BIN FAKEROOT_ENV_FILE
+config EMBTK_FAKEROOT_HOST_VERSION_STRING
+	string
+	default "1.18.4"
 
-define embtk_install_fakeroot
-	$(call __embtk_install_hostpkg,fakeroot)
-endef	
+config EMBTK_FAKEROOT_HOST_NEED_PATCH
+	bool
+config EMBTK_FAKEROOT_HOST_NEED_AUTORECONF
+	bool

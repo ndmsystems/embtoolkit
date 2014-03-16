@@ -29,9 +29,6 @@ HOSTTOOLS_COMPONENTS-y		:= mkimage_install pkgconf_install
 # Common include for target and host
 #
 
-# fakeroot
-include mk/fakeroot.mk
-
 # gperf
 include mk/gperf_host.mk
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GPERF) += gperf_host_install

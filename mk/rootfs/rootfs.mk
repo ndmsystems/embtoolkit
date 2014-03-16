@@ -33,7 +33,7 @@ ROOTFS_TARBZ2		:= rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).tar.bz2
 ROOTFS_SQUASHFS		:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).squashfs
 ROOTFS_INITRAMFS	:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).initramfs
 
-HOSTTOOLS_COMPONENTS-y += makedevs_install fakeroot_install
+HOSTTOOLS_COMPONENTS-y += makedevs_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2) += mtdutils_host_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS) += squashfs_tools_install
 

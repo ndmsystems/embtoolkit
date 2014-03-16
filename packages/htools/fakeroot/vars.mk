@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2011-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,27 +17,13 @@
 #
 ################################################################################
 #
-# \file         fakeroot.kconfig
-# \brief	fakeroot.kconfig of Embtoolkit.
+# \file         vars.mk
+# \brief	fakeroot variables
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         March 2011
+# \date         Marsh 2014
 ################################################################################
 
-config EMBTK_HAVE_FAKEROOT
-	bool
-	default y
-	help
-		fakeroot for host tools.
-
-config EMBTK_FAKEROOT_VERSION_STRING
-	string
-	default "1.18.4"
-
-config EMBTK_FAKEROOT_NEED_PATCH
-	bool
-config EMBTK_FAKEROOT_NEED_AUTORECONF
-	bool
-config EMBTK_FAKEROOT_PKG_IS_TARGZ
-	bool
-config EMBTK_FAKEROOT_PKG_IS_TARBZ2
-	bool
+# fakeroot binaries and env
+FAKEROOT_BIN		:= $(embtk_htools)/usr/bin/fakeroot
+FAKEROOT_ENV_FILE	:= $(EMBTK_ROOT)/.fakeroot.001
+export FAKEROOT_BIN FAKEROOT_ENV_FILE

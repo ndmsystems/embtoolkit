@@ -135,7 +135,7 @@ source kconfig/pkgconf.kconfig
 #
 # fakeroot
 #
-source kconfig/fakeroot.kconfig
+source packages/htools/fakeroot/fakeroot.kconfig
 
 #
 # gperf for host
