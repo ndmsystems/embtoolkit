@@ -39,9 +39,9 @@ MAKE			= $(__embtk_make_env) $(__embtk_pkg_scanbuild) $(__embtk_make_cmd)
 # Some embtoolkit internal files for packages
 __embtk_pkg_dotdecompressed_f	= $(__embtk_pkg_srcdir)/.embtk.decompressed
 __embtk_pkg_dotpatched_f	= $(__embtk_pkg_srcdir)/.embtk.patched
-__embtk_pkg_dotconfigured_f	= $(__embtk_pkg_statedir)/.$(__embtk_pkg_name).embtk.configured
-__embtk_pkg_dotinstalled_f	= $(__embtk_pkg_statedir)/.$(__embtk_pkg_name).embtk.installed
-__embtk_pkg_dotkconfig_f	= $(__embtk_pkg_statedir)/.$(__embtk_pkg_name).embtk.kconfig
+__embtk_pkg_dotconfigured_f	= $(__embtk_pkg_statedir)/.embtk.configured
+__embtk_pkg_dotinstalled_f	= $(__embtk_pkg_statedir)/.embtk.installed
+__embtk_pkg_dotkconfig_f	= $(__embtk_pkg_statedir)/.embtk.kconfig
 
 __embtk_setdecompressed_pkg	= touch $(__embtk_pkg_dotdecompressed_f)
 __embtk_unsetdecompressed_pkg	= rm -rf $(__embtk_pkg_dotdecompressed_f)
