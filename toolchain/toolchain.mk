@@ -111,7 +111,7 @@ TOOLCHAIN_NAME		:= toolchain
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
 TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
 
-TOOLCHAIN_PRE_DEPS-y	:= ccache_host_install $(AUTOTOOLS_INSTALL)
+TOOLCHAIN_PRE_DEPS-y	:= ccache_host_install $(AUTOTOOLS_INSTALL) pkgconf_host_install
 ifeq ($(embtk_buildhost_os_type),bsd)
 TOOLCHAIN_PRE_DEPS-y	+= gsed_install gmake_install
 endif
