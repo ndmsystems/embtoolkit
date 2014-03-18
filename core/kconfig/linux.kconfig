@@ -139,111 +139,111 @@ choice
 endchoice
 
 if EMBTK_LINUX_VERSION_3_13_X
-source kconfig/linux-kconfigs/linux-3.13.kconfig
+source core/kconfig/linux-kconfigs/linux-3.13.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_12_X
-source kconfig/linux-kconfigs/linux-3.12.kconfig
+source core/kconfig/linux-kconfigs/linux-3.12.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_11_X
-source kconfig/linux-kconfigs/linux-3.11.kconfig
+source core/kconfig/linux-kconfigs/linux-3.11.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_10_X
-source kconfig/linux-kconfigs/linux-3.10.kconfig
+source core/kconfig/linux-kconfigs/linux-3.10.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_9_X
-source kconfig/linux-kconfigs/linux-3.9.kconfig
+source core/kconfig/linux-kconfigs/linux-3.9.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_8_X
-source kconfig/linux-kconfigs/linux-3.8.kconfig
+source core/kconfig/linux-kconfigs/linux-3.8.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_7_X
-source kconfig/linux-kconfigs/linux-3.7.kconfig
+source core/kconfig/linux-kconfigs/linux-3.7.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_6_X
-source kconfig/linux-kconfigs/linux-3.6.kconfig
+source core/kconfig/linux-kconfigs/linux-3.6.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_5_X
-source kconfig/linux-kconfigs/linux-3.5.kconfig
+source core/kconfig/linux-kconfigs/linux-3.5.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_4_X
-source kconfig/linux-kconfigs/linux-3.4.kconfig
+source core/kconfig/linux-kconfigs/linux-3.4.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_3_X
-source kconfig/linux-kconfigs/linux-3.3.kconfig
+source core/kconfig/linux-kconfigs/linux-3.3.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_2_X
-source kconfig/linux-kconfigs/linux-3.2.kconfig
+source core/kconfig/linux-kconfigs/linux-3.2.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_1_X
-source kconfig/linux-kconfigs/linux-3.1.kconfig
+source core/kconfig/linux-kconfigs/linux-3.1.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_3_0_X
-source kconfig/linux-kconfigs/linux-3.0.kconfig
+source core/kconfig/linux-kconfigs/linux-3.0.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_39_X
-source kconfig/linux-kconfigs/linux-2.6.39.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.39.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_38_X
-source kconfig/linux-kconfigs/linux-2.6.38.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.38.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_37_X
-source kconfig/linux-kconfigs/linux-2.6.37.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.37.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_36_X
-source kconfig/linux-kconfigs/linux-2.6.36.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.36.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_35_X
-source kconfig/linux-kconfigs/linux-2.6.35.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.35.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_34_X
-source kconfig/linux-kconfigs/linux-2.6.34.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.34.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_33_X
-source kconfig/linux-kconfigs/linux-2.6.33.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.33.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_32_X
-source kconfig/linux-kconfigs/linux-2.6.32.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.32.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_31_X
-source kconfig/linux-kconfigs/linux-2.6.31.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.31.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_30_X
-source kconfig/linux-kconfigs/linux-2.6.30.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.30.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_29_X
-source kconfig/linux-kconfigs/linux-2.6.29.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.29.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_28_X
-source kconfig/linux-kconfigs/linux-2.6.28.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.28.kconfig
 endif
 
 if EMBTK_LINUX_VERSION_2_6_27_X
-source kconfig/linux-kconfigs/linux-2.6.27.kconfig
+source core/kconfig/linux-kconfigs/linux-2.6.27.kconfig
 endif
 
 config EMBTK_LINUX_HAVE_MIRROR

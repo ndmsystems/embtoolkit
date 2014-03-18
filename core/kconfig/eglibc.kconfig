@@ -105,10 +105,10 @@ config EMBTK_EGLIBC_DISABLE_VERSIONING
 
 
 if EMBTK_EGLIBC_VERSION_2_17
-source "kconfig/eglibc-kconfigs/eglibc-2.17.kconfig"
+source "core/kconfig/eglibc-kconfigs/eglibc-2.17.kconfig"
 endif
 
 if EMBTK_EGLIBC_VERSION_TRUNK
-source "kconfig/eglibc-kconfigs/eglibc-trunk.kconfig"
+source "core/kconfig/eglibc-kconfigs/eglibc-trunk.kconfig"
 endif
 

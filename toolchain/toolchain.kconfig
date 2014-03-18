@@ -144,19 +144,19 @@ endchoice
 
 
 if EMBTK_CLIB_EGLIBC
-source "kconfig/eglibc.kconfig"
+source "core/kconfig/eglibc.kconfig"
 endif
 
 if EMBTK_CLIB_GLIBC
-source "kconfig/glibc.kconfig"
+source "core/kconfig/glibc.kconfig"
 endif
 
 if EMBTK_CLIB_MUSL
-source "kconfig/musl.kconfig"
+source "core/kconfig/musl.kconfig"
 endif
 
 if EMBTK_CLIB_UCLIBC
-source "kconfig/uclibc-kconfigs/embtk-uclibc.kconfig"
+source "core/kconfig/uclibc-kconfigs/embtk-uclibc.kconfig"
 endif
 
 endmenu
@@ -166,7 +166,7 @@ source "toolchain/binutils/binutils.kconfig"
 endmenu
 
 menu "Linux kernel headers"
-source "kconfig/linux.kconfig"
+source "core/kconfig/linux.kconfig"
 endmenu
 
 #

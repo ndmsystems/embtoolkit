@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,12 +17,40 @@
 #
 ################################################################################
 #
-# \file         rootfs.kconfig
-# \brief	rootfs.kconfig of Embtoolkit
+# \file         arch-variant.kconfig
+# \brief	arch-variant.kconfig of EmbToolkit, here we give users the
+# \brief	ability to choose which variant of CPU to use.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         December 2013
+# \date         May 2009
 ################################################################################
 
-source "kconfig/rootfs/fs.kconfig"
-source "kconfig/squashfs.kconfig"
-source "kconfig/packages.kconfig"
+if EMBTK_ARCH_ARM
+source core/kconfig/arch/arm/arm.kconfig
+endif
+
+if EMBTK_ARCH_MIPS
+source core/kconfig/arch/mips/mips.kconfig
+endif
+
+choice
+	prompt "Floating point type"
+	help
+	 Select the floating point type you want to use.
+
+config EMBTK_SOFTFLOAT
+	bool "Soft floating point"
+	help
+	 Select if your CPU does not have hardware floating point unit or
+	 kernel floating point emulation.
+
+config EMBTK_HARDFLOAT
+	bool "Hard floating point"
+	depends on EMBTK_TARGET_ARCH_MAYUSE_FPU
+	select KEMBTK_UCLIBC_UCLIBC_HAS_FPU if EMBTK_CLIB_UCLIBC
+	help
+	 Select if your CPU has a hardware floating point unit.
+endchoice
+
+if EMBTK_ARCH_ARM && EMBTK_HARDFLOAT
+source core/kconfig/arch/arm/fpu.kconfig
+endif

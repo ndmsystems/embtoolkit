@@ -119,18 +119,18 @@ comment "Target Architecture Features and Options"
 comment "----------------"
 
 if KEMBTK_UCLIBC_TARGET_arm
-source kconfig/uclibc-kconfigs/uclibc-arm.kconfig
+source core/kconfig/uclibc-kconfigs/uclibc-arm.kconfig
 endif
 
 if KEMBTK_UCLIBC_TARGET_mips
-source kconfig/uclibc-kconfigs/uclibc-mips.kconfig
+source core/kconfig/uclibc-kconfigs/uclibc-mips.kconfig
 endif
 
 config KEMBTK_UCLIBC_TARGET_SUBARCH
 	string
 	default ""
 
-source kconfig/uclibc-kconfigs/uclibc-arch.kconfig
+source core/kconfig/uclibc-kconfigs/uclibc-arch.kconfig
 
 
 comment "----------------"

@@ -83,9 +83,9 @@ endmenu
 endmenu
 
 menu "Support native languages in root filesystem"
-source kconfig/nls.kconfig
+source core/kconfig/nls.kconfig
 endmenu
 
 menu "Support timezone in root filesystem"
-source kconfig/timez.kconfig
+source core/kconfig/timez.kconfig
 endmenu

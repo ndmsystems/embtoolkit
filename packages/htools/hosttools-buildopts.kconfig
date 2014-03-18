@@ -77,22 +77,22 @@ config EMBTK_HAVE_MKIMAGE
 #
 # gperf for host
 #
-source kconfig/gperf_host.kconfig
+source core/kconfig/gperf_host.kconfig
 
 #
 # GMP
 #
-source kconfig/gmp.kconfig
+source core/kconfig/gmp.kconfig
 
 #
 # MPFR
 #
-source kconfig/mpfr.kconfig
+source core/kconfig/mpfr.kconfig
 
 #
 # MPC
 #
-source kconfig/mpc.kconfig
+source core/kconfig/mpc.kconfig
 
 #
 # ccache
@@ -102,25 +102,25 @@ source packages/htools/ccache/ccache.kconfig
 #
 # Autotools
 #
-source kconfig/m4.kconfig
-source kconfig/libtool.kconfig
-source kconfig/autoconf.kconfig
-source kconfig/automake.kconfig
+source core/kconfig/m4.kconfig
+source core/kconfig/libtool.kconfig
+source core/kconfig/autoconf.kconfig
+source core/kconfig/automake.kconfig
 
 #
 # GNU sed
 #
-source kconfig/gsed.kconfig
+source core/kconfig/gsed.kconfig
 
 #
 # BSD make
 #
-source kconfig/bmake.kconfig
+source core/kconfig/bmake.kconfig
 
 #
 # GNU make
 #
-source kconfig/gmake.kconfig
+source core/kconfig/gmake.kconfig
 
 #
 # mtd-utils
@@ -140,7 +140,7 @@ source packages/htools/fakeroot/fakeroot.kconfig
 #
 # gperf for host
 #
-source kconfig/gperf_host.kconfig
+source core/kconfig/gperf_host.kconfig
 
 #
 # libelf

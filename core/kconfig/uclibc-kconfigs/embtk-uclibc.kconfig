@@ -76,4 +76,4 @@ config EMBTK_UCLIBC_NEED_AUTORECONF
 #
 # uClibc specific
 #
-source kconfig/uclibc-kconfigs/uclibc.kconfig
+source core/kconfig/uclibc-kconfigs/uclibc.kconfig
