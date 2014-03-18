@@ -122,11 +122,11 @@ endef
 
 #
 # Packages management macros
-include mk/pkg-macros/vars.mk
-include mk/pkg-macros/incl.mk
-include mk/pkg-macros/pkg-config.mk
-include mk/pkg-macros/libtool.mk
-include mk/pkg-macros/download.mk
-include mk/pkg-macros/configure.mk
-include mk/pkg-macros/install.mk
-include mk/pkg-macros/clean.mk
+include core/mk/pkg-macros/vars.mk
+include core/mk/pkg-macros/incl.mk
+include core/mk/pkg-macros/pkg-config.mk
+include core/mk/pkg-macros/libtool.mk
+include core/mk/pkg-macros/download.mk
+include core/mk/pkg-macros/configure.mk
+include core/mk/pkg-macros/install.mk
+include core/mk/pkg-macros/clean.mk

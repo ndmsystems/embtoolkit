@@ -31,13 +31,13 @@ include toolchain/vars.mk
 include packages/htools/ccache/vars.mk
 
 # GMP
-include mk/gmp.mk
+include core/mk/gmp.mk
 
 # MPFR
-include mk/mpfr.mk
+include core/mk/mpfr.mk
 
 # MPC
-include mk/mpc.mk
+include core/mk/mpc.mk
 
 #
 # binutils
@@ -61,12 +61,12 @@ include toolchain/llvm/libc++/libcxx.mk
 #
 # linux kernel headers
 #
-include mk/linux.mk
+include core/mk/linux.mk
 
 #
 # toolchain addon: strace
 #
-include mk/strace.mk
+include core/mk/strace.mk
 TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_STRACE) += strace_install
 
 #
@@ -80,21 +80,21 @@ TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HOST_HAVE_GDB)	+= gdb_host_install
 #
 # Autotools
 #
-include mk/libtool.mk
-include mk/autoconf.mk
-include mk/automake.mk
-include mk/m4.mk
+include core/mk/libtool.mk
+include core/mk/autoconf.mk
+include core/mk/automake.mk
+include core/mk/m4.mk
 AUTOTOOLS_INSTALL	:= m4_install libtool_install autoconf_install
 AUTOTOOLS_INSTALL	+= automake_install
 
 # GNU sed
-include mk/gsed.mk
+include core/mk/gsed.mk
 
 # BSD make
-include mk/bmake.mk
+include core/mk/bmake.mk
 
 # GNU make
-include mk/gmake.mk
+include core/mk/gmake.mk
 
 #
 # Toolchain virtual package internals
@@ -150,7 +150,7 @@ TOOLCHAIN_ADDONS_DEPS		:= $(TOOLCHAIN_ADDONS-y)
 TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain_addons
 TOOLCHAIN_ADDONS_SRC_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain_addons
 
--include mk/$(embtk_clib).mk
+-include core/mk/$(embtk_clib).mk
 
 define __embtk_toolchain_mkinitdirs
 	mkdir -p $(embtk_generated)

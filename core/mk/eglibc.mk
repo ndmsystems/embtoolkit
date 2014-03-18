@@ -45,7 +45,7 @@ embtk_eglibc_versioning-$(CONFIG_EMBTK_EGLIBC_DISABLE_VERSIONING) :=		\
 embtk_eglibc-sunrpc-$(CONFIG_KEMBTK_EGLIBC_OPTION_EGLIBC_SUNRPC) :=		\
 						--enable-obsolete-rpc=yes
 
-embtk_eglibc_optgroups_f	:= $(EMBTK_ROOT)/mk/eglibc/eglibc-$(EGLIBC_VERSION)-options.mk
+embtk_eglibc_optgroups_f	:= $(EMBTK_ROOT)/core/mk/eglibc/eglibc-$(EGLIBC_VERSION)-options.mk
 eglibc_optgroups_f		:= $(EGLIBC_BUILD_DIR)/option-groups.config
 
 ifeq ($(embtk_buildhost_os_type),bsd)

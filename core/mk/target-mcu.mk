@@ -24,10 +24,10 @@
 
 # ARM
 ifeq ($(CONFIG_EMBTK_ARCH_ARM),y)
-include mk/arch/arm/arm.mk
+include core/mk/arch/arm/arm.mk
 endif
 
 # MIPS
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS),y)
-include mk/arch/mips/mips.mk
+include core/mk/arch/mips/mips.mk
 endif

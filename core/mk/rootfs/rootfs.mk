@@ -26,7 +26,7 @@
 ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
 
 # Include various filesystems macros
-include mk/rootfs/fs.mk
+include core/mk/rootfs/fs.mk
 
 ROOTFS_JFFS2		:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).jffs2
 ROOTFS_TARBZ2		:= rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)-$(embtk_clib).tar.bz2

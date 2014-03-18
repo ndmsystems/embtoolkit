@@ -121,12 +121,12 @@ EMBTK_BUILD := $(if $(CONFIG_EMBTK_DOTCONFIG),startbuild,xconfig)
 
 All: $(EMBTK_BUILD)
 
-include mk/macros.mk
-include mk/targetsys.mk
-include mk/target-mcu.mk
-include mk/buildsystem.mk
+include core/mk/macros.mk
+include core/mk/targetsys.mk
+include core/mk/target-mcu.mk
+include core/mk/buildsystem.mk
 include toolchain/toolchain.mk
-include mk/packages.mk
+include core/mk/packages.mk
 include packages/htools/hosttools-buildopts.mk
-include mk/rootfs/rootfs.mk
-include mk/help.mk
+include core/mk/rootfs/rootfs.mk
+include core/mk/help.mk

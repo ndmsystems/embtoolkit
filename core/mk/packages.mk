@@ -30,7 +30,7 @@ HOSTTOOLS_COMPONENTS-y		:= mkimage_install
 #
 
 # gperf
-include mk/gperf_host.mk
+include core/mk/gperf_host.mk
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GPERF) += gperf_host_install
 
 # libelf
@@ -38,9 +38,9 @@ include packages/misc/libelf/libelf.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBELF) += libelf_install
 HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBELF) += libelf_host_install
 
-include mk/makedevs.mk
-include mk/mkimage.mk
-include mk/squashfs.mk
+include core/mk/makedevs.mk
+include core/mk/mkimage.mk
+include core/mk/squashfs.mk
 
 # Install various tools in case of FreeBSD host development machine
 ifeq ($(embtk_buildhost_os_type),bsd)
