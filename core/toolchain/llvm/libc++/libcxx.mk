@@ -49,7 +49,7 @@ define embtk_install_libcxx
 endef
 
 define embtk_beforeinstall_libcxx
-	ln -sf $(EMBTK_ROOT)/toolchain/llvm/libc++/Makefile			\
+	ln -sf $(EMBTK_ROOT)/core/toolchain/llvm/libc++/Makefile			\
 					$(LIBCXX_BUILD_DIR)/Makefile
 endef
 

@@ -57,7 +57,7 @@ config EMBTK_OLDPACKAGES
 	 This will allow you to build old revisions of some packages.
 
 menu "Toolchain configuration"
-source "toolchain/toolchain.kconfig"
+source "core/toolchain/toolchain.kconfig"
 endmenu
 
 menu "Toolchain Addons - Debugging systems"

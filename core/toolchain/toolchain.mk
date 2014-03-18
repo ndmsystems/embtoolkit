@@ -27,7 +27,7 @@ embtk_pkgincdir := toolchain
 #
 # Toolchain variables
 #
-include toolchain/vars.mk
+include core/toolchain/vars.mk
 include packages/htools/ccache/vars.mk
 
 # GMP
@@ -42,21 +42,21 @@ include core/mk/mpc.mk
 #
 # binutils
 #
-include toolchain/binutils/binutils.mk
+include core/toolchain/binutils/binutils.mk
 
 #
 # GCC
 #
-include toolchain/gcc/gcc.mk
+include core/toolchain/gcc/gcc.mk
 
 #
 # llvm/clang compiler infrastructure
 #
-include toolchain/llvm/clang/clang.mk
-include toolchain/llvm/llvm/llvm.mk
-include toolchain/llvm/compiler-rt/compiler-rt.mk
-include toolchain/libcxxrt/libcxxrt.mk
-include toolchain/llvm/libc++/libcxx.mk
+include core/toolchain/llvm/clang/clang.mk
+include core/toolchain/llvm/llvm/llvm.mk
+include core/toolchain/llvm/compiler-rt/compiler-rt.mk
+include core/toolchain/libcxxrt/libcxxrt.mk
+include core/toolchain/llvm/libc++/libcxx.mk
 
 #
 # linux kernel headers

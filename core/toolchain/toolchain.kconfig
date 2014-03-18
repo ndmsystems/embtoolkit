@@ -78,22 +78,22 @@ endchoice
 comment "------------------------------------------"
 comment "--- GCC versions"
 comment "------------------------------------------"
-source toolchain/gcc/gcc.kconfig
+source core/toolchain/gcc/gcc.kconfig
 
 if EMBTK_LLVM_ONLY_TOOLCHAIN || EMBTK_GCC_AND_LLVM_TOOLCHAIN
 comment "------------------------------------------"
 comment "--- clang/llvm versions"
 comment "------------------------------------------"
-source toolchain/llvm/clang-llvm.kconfig
-source toolchain/llvm/llvm/llvm.kconfig
-source toolchain/llvm/clang/clang.kconfig
-source toolchain/llvm/compiler-rt/compiler-rt.kconfig
+source core/toolchain/llvm/clang-llvm.kconfig
+source core/toolchain/llvm/llvm/llvm.kconfig
+source core/toolchain/llvm/clang/clang.kconfig
+source core/toolchain/llvm/compiler-rt/compiler-rt.kconfig
 endif
 
 comment "------------------------------------------"
 comment "--- Additional programming languages"
 comment "------------------------------------------"
-source toolchain/compiler-options.kconfig
+source core/toolchain/compiler-options.kconfig
 
 endmenu
 
@@ -162,7 +162,7 @@ endif
 endmenu
 
 menu "Binutils"
-source "toolchain/binutils/binutils.kconfig"
+source "core/toolchain/binutils/binutils.kconfig"
 endmenu
 
 menu "Linux kernel headers"

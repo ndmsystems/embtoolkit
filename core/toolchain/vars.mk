@@ -16,7 +16,7 @@
 #
 ################################################################################
 #
-# \file         toolchain/vars.mk
+# \file         core/toolchain/vars.mk
 # \brief	toolchain variables
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         Marsh 2014
