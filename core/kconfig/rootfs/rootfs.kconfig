@@ -24,5 +24,5 @@
 ################################################################################
 
 source "core/kconfig/rootfs/fs.kconfig"
-source "core/kconfig/squashfs.kconfig"
+source "packages/htools/squashfs/squashfs.kconfig"
 source "core/kconfig/packages.kconfig"

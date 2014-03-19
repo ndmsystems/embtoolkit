@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2011-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 # \date         August 2011
 ################################################################################
 
-config EMBTK_HAVE_SQUASHFS_TOOLS
+config EMBTK_HOST_HAVE_SQUASHFS
 	bool "Have squashfs host tools"
 	select EMBK_HOST_HAVE_ZLIB
 	help
@@ -38,28 +38,24 @@ config EMBTK_HAVE_SQUASHFS_TOOLS
 
 choice
 	prompt "squashfs tool version you wish"
-	depends on EMBTK_HAVE_SQUASHFS_TOOLS
+	depends on EMBTK_HOST_HAVE_SQUASHFS
 	help
 		Here you can choose which version of squashfs you want to use.
 
-	config  EMBTK_SQUASHFS_TOOLS_VERSION_4_2
+	config  EMBTK_SQUASHFS_HOST_VERSION_4_2
 		bool "squashfs4.2"
-		select EMBTK_SQUASHFS_TOOLS_NEED_PATCH
-	config  EMBTK_SQUASHFS_TOOLS_VERSION_3_4
+		select EMBTK_SQUASHFS_HOST_NEED_PATCH
+	config  EMBTK_SQUASHFS_HOST_VERSION_3_4
 		bool "squashfs3.4"
-		select EMBTK_SQUASHFS_TOOLS_NEED_PATCH
+		select EMBTK_SQUASHFS_HOST_NEED_PATCH
 endchoice
 
-config EMBTK_SQUASHFS_TOOLS_VERSION_STRING
+config EMBTK_SQUASHFS_HOST_VERSION_STRING
 	string
-	default "4.2"		if EMBTK_SQUASHFS_TOOLS_VERSION_4_2
-	default "3.4"		if EMBTK_SQUASHFS_TOOLS_VERSION_3_4
+	default "4.2"		if EMBTK_SQUASHFS_HOST_VERSION_4_2
+	default "3.4"		if EMBTK_SQUASHFS_HOST_VERSION_3_4
 
-config EMBTK_SQUASHFS_TOOLS_NEED_PATCH
+config EMBTK_SQUASHFS_HOST_NEED_PATCH
 	bool
-config EMBTK_SQUASHFS_TOOLS_NEED_AUTORECONF
-	bool
-config EMBTK_SQUASHFS_TOOLS_PKG_IS_TARGZ
-	bool
-config EMBTK_SQUASHFS_TOOLS_PKG_IS_TARBZ2
+config EMBTK_SQUASHFS_HOST_NEED_AUTORECONF
 	bool

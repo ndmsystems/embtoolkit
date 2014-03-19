@@ -39,5 +39,11 @@ $(call embtk_include_hostpkg,mtdutils_host)
 include packages/htools/pkgconf/vars.mk
 $(call embtk_include_hostpkg,pkgconf_host)
 
+# squashfs
+$(call embtk_include_hostpkg,squashfs_host)
+
 # zlib
 $(call embtk_include_hostpkg,zlib_host)
+
+testinstall:
+	@echo $(call __embtk_pkg_confchanged-y,squashfs_host)
