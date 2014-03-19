@@ -92,7 +92,7 @@ endef
 
 define __embtk_rootfs_cleanup
 	$(foreach pkg-n,$(__embtk_rootfs_pkgs-n),
-		$(call __embtk_cleanup_pkg,$(pkg-n)) &&:)
+		$(call __embtk_cleanup_pkg,$(pkg-n)))
 	rm -rf $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)*
 endef
 
