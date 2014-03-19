@@ -44,6 +44,3 @@ $(call embtk_include_hostpkg,squashfs_host)
 
 # zlib
 $(call embtk_include_hostpkg,zlib_host)
-
-testinstall:
-	@echo $(call __embtk_pkg_confchanged-y,squashfs_host)
