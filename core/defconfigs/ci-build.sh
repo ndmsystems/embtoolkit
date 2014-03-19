@@ -117,12 +117,12 @@ if [ "x$arch" = "x" ]; then
 	exit 1
 fi
 
-if [ ! -d $workspace/defconfigs/$arch ]; then
+if [ ! -d $workspace/core/defconfigs/$arch ]; then
 	perror "Architecture $arch seems not be supported"
 	exit 1
 fi
 
-if [ ! -e $workspace/defconfigs/$arch/$arch-ci-build.sh ]; then
+if [ ! -e $workspace/core/defconfigs/$arch/$arch-ci-build.sh ]; then
 	perror "Architecture $arch does not provide specifics"
 	exit 1
 fi
@@ -150,7 +150,7 @@ pinfo "Generating .config file"
 #
 # arch script
 #
-. $workspace/defconfigs/$arch/$arch-ci-build.sh
+. $workspace/core/defconfigs/$arch/$arch-ci-build.sh
 
 #
 # toolchain and OS
@@ -169,7 +169,7 @@ if [ ! "x$downloaddir" = "x" ]; then
 		rm -rf $downloaddir/*.patch
 	fi
 fi
-cat $workspace/defconfigs/common.kconfig >> $workspace/.config
+cat $workspace/core/defconfigs/common.kconfig >> $workspace/.config
 
 pinfo "Starting toolchain build"
 set --
