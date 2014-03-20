@@ -24,36 +24,19 @@
 ################################################################################
 
 config EMBTK_HOST_HAVE_SQUASHFS
-	bool "Have squashfs host tools"
+	bool
 	select EMBK_HOST_HAVE_ZLIB
 	help
-		Say Y to build host tools needed to generate squashfs
-		filesystem.
-
-		Squashfs is a compressed read-only filesystem for Linux.
-		Squashfs is intended for general read-only filesystem use,
-		for archival use (i.e. in cases where a .tar.gz file may be
-		used), and in constrained block device/memory systems
-		(e.g. embedded systems) where low overhead is needed.
-
-choice
-	prompt "squashfs tool version you wish"
-	depends on EMBTK_HOST_HAVE_SQUASHFS
-	help
-		Here you can choose which version of squashfs you want to use.
-
-	config  EMBTK_SQUASHFS_HOST_VERSION_4_2
-		bool "squashfs4.2"
-		select EMBTK_SQUASHFS_HOST_NEED_PATCH
-	config  EMBTK_SQUASHFS_HOST_VERSION_3_4
-		bool "squashfs3.4"
-		select EMBTK_SQUASHFS_HOST_NEED_PATCH
-endchoice
+	 Say Y to build host tools needed to generate squashfs filesystem.
+	 Squashfs is a compressed read-only filesystem for Linux.
+	 Squashfs is intended for general read-only filesystem use, for archival
+	 use (i.e. in cases where a .tar.gz file may be used), and in
+	 constrained block device/memory systems (e.g. embedded systems) where
+	 low overhead is needed.
 
 config EMBTK_SQUASHFS_HOST_VERSION_STRING
 	string
-	default "4.2"		if EMBTK_SQUASHFS_HOST_VERSION_4_2
-	default "3.4"		if EMBTK_SQUASHFS_HOST_VERSION_3_4
+	default "4.2"
 
 config EMBTK_SQUASHFS_HOST_NEED_PATCH
 	bool
