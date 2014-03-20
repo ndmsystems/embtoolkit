@@ -116,26 +116,6 @@ choice
 		bool "linux-2.6.32.x"
 		help
 		 Use a linux-2.6.32.x version.
-	config EMBTK_LINUX_VERSION_2_6_31_X
-		bool "linux-2.6.31.x"
-		help
-		 Use a linux-2.6.31.x version.
-	config EMBTK_LINUX_VERSION_2_6_30_X
-		bool "linux-2.6.30.x"
-		help
-		 Use a linux-2.6.30.x version.
-	config EMBTK_LINUX_VERSION_2_6_29_X
-		bool "linux-2.6.29.x"
-		help
-		 Use a linux-2.6.29.x version.
-	config EMBTK_LINUX_VERSION_2_6_28_X
-		bool "linux-2.6.28.x"
-		help
-		 Use a linux-2.6.28.x version.
-	config EMBTK_LINUX_VERSION_2_6_27_X
-		bool "linux-2.6.27.x"
-		help
-		 Use a linux-2.6.27.x version.
 endchoice
 
 if EMBTK_LINUX_VERSION_3_13_X
@@ -224,26 +204,6 @@ endif
 
 if EMBTK_LINUX_VERSION_2_6_32_X
 source core/kconfig/linux-kconfigs/linux-2.6.32.kconfig
-endif
-
-if EMBTK_LINUX_VERSION_2_6_31_X
-source core/kconfig/linux-kconfigs/linux-2.6.31.kconfig
-endif
-
-if EMBTK_LINUX_VERSION_2_6_30_X
-source core/kconfig/linux-kconfigs/linux-2.6.30.kconfig
-endif
-
-if EMBTK_LINUX_VERSION_2_6_29_X
-source core/kconfig/linux-kconfigs/linux-2.6.29.kconfig
-endif
-
-if EMBTK_LINUX_VERSION_2_6_28_X
-source core/kconfig/linux-kconfigs/linux-2.6.28.kconfig
-endif
-
-if EMBTK_LINUX_VERSION_2_6_27_X
-source core/kconfig/linux-kconfigs/linux-2.6.27.kconfig
 endif
 
 config EMBTK_LINUX_HAVE_MIRROR
