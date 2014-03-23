@@ -3,6 +3,10 @@
 .fakeroot*
 .ccache
 build/
+dl/*.bz2
+dl/*.gz
+dl/*.patch
+dl/*.xz
 generated/
 host-tools-*
 tools-*

@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 
 TOOLS_BUILD		:= $(EMBTK_ROOT)/build/tools_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
 PACKAGES_BUILD		:= $(EMBTK_ROOT)/build/packages_build-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-DOWNLOAD_DIR		:= $(patsubst %/,%,$(subst ",,$(strip $(CONFIG_EMBTK_DOWNLOAD_DIR))))
 J			:= -j$(or $(CONFIG_EMBTK_NUMBER_BUILD_JOBS),1)
 
 #
@@ -165,6 +164,7 @@ define __embtk_mk_inittoolsdirs
 endef
 
 define __embtk_mk_initpkgdirs
+	mkdir -p $(embtk_dldir)
 	mkdir -p $(EMBTK_ROOT)/build
 	mkdir -p $(embtk_pkgb)
 endef
