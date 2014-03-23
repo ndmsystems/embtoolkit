@@ -127,6 +127,5 @@ include core/mk/target-mcu.mk
 include core/mk/buildsystem.mk
 include core/toolchain/toolchain.mk
 include core/mk/packages.mk
-include packages/htools/hosttools-buildopts.mk
 include core/mk/rootfs/rootfs.mk
 include core/mk/help.mk

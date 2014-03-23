@@ -25,9 +25,11 @@
 
 ROOTFS_COMPONENTS-y		:=
 HOSTTOOLS_COMPONENTS-y		:= mkimage_install
+
 #
-# Common include for target and host
+# Packages for host and target
 #
+include packages/htools/hosttools-buildopts.mk
 
 # gperf
 include core/mk/gperf_host.mk
@@ -45,11 +47,6 @@ include core/mk/mkimage.mk
 ifeq ($(embtk_buildhost_os_type),bsd)
 HOSTTOOLS_COMPONENTS-y += gsed_install gmake_install
 endif
-
-
-#
-# Packages for TARGET and HOST
-#
 
 # Flash manipulation tools: mtd-utils
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MTDUTILS) += mtdutils_install
