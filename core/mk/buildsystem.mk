@@ -205,5 +205,6 @@ rmallpath:
 	$(Q)rm -rf $(EMBTK_ROOT)/host-tools-*
 	$(Q)rm -rf $(EMBTK_ROOT)/sysroot-*
 	$(Q)rm -rf $(EMBTK_ROOT)/tools-*
+	$(Q)rm -rf $(EMBTK_ROOT)/build
 	$(Q)rm -rf $(embtk_sysroot)* $(embtk_htools)* $(embtk_generated)/rootfs-*
 	$(Q)$(if $(CONFIG_EMBTK_CACHE_PATCHES),,rm -rf $(embtk_dldir)/*.patch)
