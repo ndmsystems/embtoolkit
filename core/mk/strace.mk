@@ -26,6 +26,7 @@
 STRACE_NAME		:= strace
 STRACE_VERSION		:= $(call embtk_get_pkgversion,strace)
 STRACE_SITE		:= http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
+STRACE_GIT_SITE		:= git://git.code.sf.net/p/strace/code
 STRACE_PACKAGE		:= strace-$(STRACE_VERSION).tar.bz2
 STRACE_SRC_DIR		:= $(embtk_pkgb)/strace-$(STRACE_VERSION)
 STRACE_BUILD_DIR	:= $(embtk_pkgb)/strace-build

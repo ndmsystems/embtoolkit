@@ -36,12 +36,36 @@ choice
 	config EMBTK_STRACE_VERSION_4_8
 		bool "strace-embtk-4.8"
 		select EMBTK_STRACE_NEED_PATCH
+	config EMBTK_STRACE_VERSION_GIT
+		bool "Use strace git repository"
+		select EMBTK_STRACE_NEED_AUTORECONF
+		help
+		 Say Y here to use strace development version from its git
+		 repository.
 endchoice
 
+config EMBTK_STRACE_GIT_BRANCH
+	string "Branch to use"
+	default "master"
+	depends on EMBTK_STRACE_VERSION_GIT
+	help
+	 The branch of the git repository to use, the default is master.
+
+config EMBTK_FOO_REFSPEC
+	string
+	default "toolchain"
+
+#
+# Versions strings
+#
 config EMBTK_STRACE_VERSION_STRING
 	string
 	default "embtk-4.8"	if EMBTK_STRACE_VERSION_4_8
+	default "git"           if EMBTK_STRACE_VERSION_GIT
 
+#
+# autoreconf and patch
+#
 config EMBTK_STRACE_NEED_PATCH
 	bool
 config EMBTK_STRACE_NEED_AUTORECONF
