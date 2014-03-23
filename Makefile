@@ -96,6 +96,15 @@ endif
 export Q
 
 #
+# Include our config if any
+#
+-include .config
+
+EMBTK_BUILD := $(if $(CONFIG_EMBTK_DOTCONFIG),startbuild,xconfig)
+
+All: $(EMBTK_BUILD)
+
+#
 # Performance hack
 #
 MAKEFLAGS += --no-builtin-rules --no-builtin-variables
@@ -113,13 +122,8 @@ SUFFIXES :=
 %.kconfig: ;
 
 #
-# Include our config if any
+# Build system makefiles
 #
--include .config
-
-EMBTK_BUILD := $(if $(CONFIG_EMBTK_DOTCONFIG),startbuild,xconfig)
-
-All: $(EMBTK_BUILD)
 
 include core/mk/macros.mk
 include core/mk/targetsys.mk
