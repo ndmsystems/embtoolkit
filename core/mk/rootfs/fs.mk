@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -78,10 +78,7 @@ define embtk_rootfs_mksquashfs
 	$(call embtk_pinfo,"Generating SQUASHFS rootfs...")
 	$(FAKEROOT_BIN) -i $(FAKEROOT_ENV_FILE) --				\
 	$(__embtk_mksquashfs)							\
-		$(__embtk_squashfs_rootdir) $(__embtk_squashfs_rootfs)		\
-		$(if $(CONFIG_EMBTK_SQUASHFS_TOOLS_VERSION_3_4),		\
-			$(if $(CONFIG_EMBTK_TARGET_ARCH_LITTLE_ENDIAN),-le,-be))\
-		-all-root
+		$(__embtk_squashfs_rootdir) $(__embtk_squashfs_rootfs) -all-root
 endef
 
 #
