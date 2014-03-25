@@ -31,10 +31,6 @@ HOSTTOOLS_COMPONENTS-y		:= mkimage_install
 #
 include packages/htools/hosttools-buildopts.mk
 
-# gperf
-include core/mk/gperf_host.mk
-HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_GPERF) += gperf_host_install
-
 # libelf
 include packages/misc/libelf/libelf.mk
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBELF) += libelf_install

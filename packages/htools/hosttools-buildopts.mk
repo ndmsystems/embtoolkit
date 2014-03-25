@@ -44,3 +44,6 @@ $(call embtk_include_hostpkg,squashfs_host)
 
 # zlib
 $(call embtk_include_hostpkg,zlib_host)
+
+# gperf
+$(call embtk_include_hostpkg,gperf_host)

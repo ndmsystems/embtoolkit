@@ -77,7 +77,7 @@ config EMBTK_HAVE_MKIMAGE
 #
 # gperf for host
 #
-source core/kconfig/gperf_host.kconfig
+source packages/htools/gperf/gperf.kconfig
 
 #
 # GMP
@@ -136,11 +136,6 @@ source packages/htools/pkgconf/pkgconf.kconfig
 # fakeroot
 #
 source packages/htools/fakeroot/fakeroot.kconfig
-
-#
-# gperf for host
-#
-source core/kconfig/gperf_host.kconfig
 
 #
 # libelf
