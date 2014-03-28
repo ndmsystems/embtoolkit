@@ -25,6 +25,7 @@
 
 config EMBTK_HOST_HAVE_SQUASHFS
 	bool
+	select EMBTK_SQUASHFS_HOST_NEED_PATCH
 	select EMBK_HOST_HAVE_ZLIB
 	help
 	 Say Y to build host tools needed to generate squashfs filesystem.
