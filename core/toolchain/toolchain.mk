@@ -126,12 +126,15 @@ __gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC) 	:= gcc3_install
 __gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP)	:= gcc3_install
 
 #
-# Handle clang/llvm/uClibc based toolchain where linuxthread.old is used or non
-# threading is used at all.
-# FIXME: print a warning
+# FIXME:
+# 1- Handle clang/llvm/uClibc based toolchain where linuxthread.old is used or
+# no threading is used at all.
+# 2- Handle clang/llvm/musl MIPS based toolchain
+#
 
 ifeq ($(CONFIG_EMBTK_HAVE_COMPILER-RT)$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD),yy)
 else ifeq ($(CONFIG_EMBTK_HAVE_COMPILER-RT)$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD),yy)
+else ifeq ($(CONFIG_EMBTK_HAVE_COMPILER-RT)$(CONFIG_EMBTK_CLIBC_MUSL)$(CONFIG_EMBTK_ARCH_MIPS),yyy)
 else
 __llvm_compiler-rt-$(CONFIG_EMBTK_HAVE_COMPILER-RT) := compiler-rt_install
 endif
