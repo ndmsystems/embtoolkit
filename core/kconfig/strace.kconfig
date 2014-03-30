@@ -52,7 +52,7 @@ config EMBTK_STRACE_GIT_BRANCH
 	help
 	 The branch of the git repository to use, the default is master.
 
-config EMBTK_FOO_REFSPEC
+config EMBTK_STRACE_REFSPEC
 	string
 	default "toolchain"
 
