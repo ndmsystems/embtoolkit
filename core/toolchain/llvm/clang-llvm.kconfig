@@ -31,17 +31,17 @@ choice
 	help
 	 Version of llvm you wish
 
-	config EMBTK_CLANG_HOST_LLVM_VERSION_3_3
+	config EMBTK_CLANG_HOST_LLVM_HOST_VERSION_3_3
 		bool "clang/llvm-3.3"
-		select EMBTK_LLVM_VERSION_3_3
+		select EMBTK_LLVM_HOST_VERSION_3_3
 		select EMBTK_CLANG_HOST_VERSION_3_3
-	config EMBTK_CLANG_HOST_LLVM_VERSION_3_2
+	config EMBTK_CLANG_HOST_LLVM_HOST_VERSION_3_2
 		bool "clang/llvm-3.2"
-		select EMBTK_LLVM_VERSION_3_2
+		select EMBTK_LLVM_HOST_VERSION_3_2
 		select EMBTK_CLANG_HOST_VERSION_3_2
-	config EMBTK_CLANG_HOST_LLVM_VERSION_GIT
+	config EMBTK_CLANG_HOST_LLVM_HOST_VERSION_GIT
 		bool "Use clang/llvm git repository"
-		select EMBTK_LLVM_VERSION_GIT
+		select EMBTK_LLVM_HOST_VERSION_GIT
 		select EMBTK_CLANG_HOST_VERSION_GIT
 		help
 		 Answer Y here if you want to build your toolchain based on

@@ -99,8 +99,8 @@ include core/mk/gmake.mk
 #
 # Toolchain virtual package internals
 #
-__xtools_compiler-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= clangllvm-$(LLVM_VERSION)
-__xtools_compiler-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= clangllvm-$(LLVM_VERSION)
+__xtools_compiler-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= clangllvm-$(LLVM_HOST_VERSION)
+__xtools_compiler-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= clangllvm-$(LLVM_HOST_VERSION)
 __xtools_compiler-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= gcc-$(GCC_VERSION)
 __xtools_compiler-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)		:= gcc-$(GCC_VERSION)
 __xtools_bins		:= $(__xtools_compiler-y)-$(embtk_clib)-$(embtk_clib_version)
@@ -141,7 +141,7 @@ endif
 
 TOOLCHAIN_DEPS-y	:= linux_headers_install gmp_host_install
 TOOLCHAIN_DEPS-y	+= mpfr_host_install mpc_host_install binutils_install
-TOOLCHAIN_DEPS-$(CONFIG_EMBTK_HAVE_LLVM) += llvm_install
+TOOLCHAIN_DEPS-$(CONFIG_EMBTK_HOST_HAVE_LLVM) += llvm_host_install
 TOOLCHAIN_DEPS-y	+= gcc1_install
 TOOLCHAIN_DEPS-$(CONFIG_EMBTK_CLIB_UCLIBC) += $(embtk_clib)_headers_install gcc2_install
 TOOLCHAIN_DEPS-y	+= $(embtk_clib)_install

@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ STRICT_GNU_TARGET	:= arm$(__embtk_arm_endian)-unknown-$(embtk_os)-$(__embtk_arm_
 # GCC/LLVM configure options
 #
 GCC_WITH_CPU		:= --with-cpu=$(EMBTK_MCU_FLAG)
-LLVM_WITH_CPU		:= --with-default-cpu=$(EMBTK_MCU_FLAG)
+LLVM_HOST_WITH_CPU	:= --with-default-cpu=$(EMBTK_MCU_FLAG)
 
 # GCC extra configure options for arm
 GCC3_CONFIGURE_EXTRA_OPTIONS += $(strip $(if $(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),	\
@@ -46,8 +46,8 @@ GCC3_CONFIGURE_EXTRA_OPTIONS += $(strip $(if $(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),	
 # Hard or soft floating point for GCC/LLVM?
 GCC_WITH_FLOAT-$(CONFIG_EMBTK_SOFTFLOAT)		:= soft
 GCC_WITH_FLOAT-$(CONFIG_EMBTK_HARDFLOAT)		:= softfp
-GCC_WITH_FLOAT	:= --with-float=$(GCC_WITH_FLOAT-y)
-LLVM_WITH_FLOAT	:= --with-default-float=$(GCC_WITH_FLOAT-y)
+GCC_WITH_FLOAT		:= --with-float=$(GCC_WITH_FLOAT-y)
+LLVM_HOST_WITH_FLOAT	:= --with-default-float=$(GCC_WITH_FLOAT-y)
 
 GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_VFP)		:= vfp
 GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_VFPV3)		:= vfpv3
@@ -63,7 +63,7 @@ GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_NEON)		:= neon
 GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_NEON_FP16)	:= neon-fp16
 GCC_WITH_FPU-$(CONFIG_EMBTK_ARCH_ARM_FPU_NEON_VFPV4)	:= neon-vfpv4
 GCC_WITH_FPU	:= $(if $(GCC_WITH_FPU-y),--with-fpu=$(GCC_WITH_FPU-y))
-LLVM_WITH_FPU	:= $(if $(GCC_WITH_FPU-y),--with-default-fpu=$(GCC_WITH_FPU-y))
+LLVM_HOST_WITH_FPU	:= $(if $(GCC_WITH_FPU-y),--with-default-fpu=$(GCC_WITH_FPU-y))
 
 # Hard or soft floating point?
 EMBTK_TARGET_FLOAT_CFLAGS := $(strip $(if $(CONFIG_EMBTK_SOFTFLOAT),		\

@@ -23,58 +23,54 @@
 # \date         October 2012
 ################################################################################
 
-LLVM_NAME		:= llvm
-LLVM_VERSION		:= $(call embtk_get_pkgversion,llvm)
-LLVM_SITE		:= http://llvm.org/releases/$(LLVM_VERSION)
-#LLVM_GIT_SITE		:= http://llvm.org/git/llvm.git
-LLVM_GIT_SITE		:= git://www.embtoolkit.org/llvm.git
-LLVM_PACKAGE		:= llvm-$(LLVM_VERSION).src.tar.gz
-LLVM_SRC_DIR		:= $(embtk_toolsb)/llvm-$(LLVM_VERSION).src
-LLVM_BUILD_DIR		:= $(embtk_toolsb)/llvm-build
+LLVM_HOST_NAME		:= llvm
+LLVM_HOST_VERSION	:= $(call embtk_get_pkgversion,llvm_host)
+LLVM_HOST_SITE		:= http://llvm.org/releases/$(LLVM_HOST_VERSION)
+#LLVM_HOST_GIT_SITE	:= http://llvm.org/git/llvm.git
+LLVM_HOST_GIT_SITE	:= git://www.embtoolkit.org/llvm.git
+LLVM_HOST_PACKAGE	:= llvm-$(LLVM_HOST_VERSION).src.tar.gz
+LLVM_HOST_SRC_DIR	:= $(embtk_toolsb)/llvm-$(LLVM_HOST_VERSION).src
+LLVM_HOST_BUILD_DIR	:= $(embtk_toolsb)/llvm-build
 
-LLVM_DEPS		:= binutils_install clang_host_install
+LLVM_HOST_DEPS			:= binutils_install clang_host_install
 
-LLVM_WITH_HASHSTYLE	:= $(if $(CONFIG_EMBTK_CLIB_UCLIBC),--with-default-hash-style=sysv)
+LLVM_HOST_WITH_HASHSTYLE	:= $(if $(CONFIG_EMBTK_CLIB_UCLIBC),--with-default-hash-style=sysv)
 
-__embtk_binutils_inc	:= $(call __embtk_pkg_srcdir,binutils)/include
+__embtk_binutils_inc		:= $(call __embtk_pkg_srcdir,binutils)/include
 
-LLVM_CONFIGURE_OPTS	:= --target=$(STRICT_GNU_TARGET)
-LLVM_CONFIGURE_OPTS	+= --enable-targets=$(LINUX_ARCH),x86
-LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_CPU) $(LLVM_WITH_ABI)
-LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_FLOAT) $(LLVM_WITH_FPU)
-LLVM_CONFIGURE_OPTS	+= $(LLVM_WITH_HASHSTYLE)
-LLVM_CONFIGURE_OPTS	+= --with-default-sysroot=$(embtk_sysroot)
-LLVM_CONFIGURE_OPTS	+= --enable-optimized --disable-jit --disable-zlib
-LLVM_CONFIGURE_OPTS	+= --with-bug-report-url=$(EMBTK_BUGURL)
-LLVM_CONFIGURE_OPTS	+= --with-binutils-include=$(__embtk_binutils_inc)
+LLVM_HOST_CONFIGURE_OPTS	:= --target=$(STRICT_GNU_TARGET)
+LLVM_HOST_CONFIGURE_OPTS	+= --enable-targets=$(LINUX_ARCH),x86
+LLVM_HOST_CONFIGURE_OPTS	+= $(LLVM_HOST_WITH_CPU) $(LLVM_HOST_WITH_ABI)
+LLVM_HOST_CONFIGURE_OPTS	+= $(LLVM_HOST_WITH_FLOAT) $(LLVM_HOST_WITH_FPU)
+LLVM_HOST_CONFIGURE_OPTS	+= $(LLVM_HOST_WITH_HASHSTYLE)
+LLVM_HOST_CONFIGURE_OPTS	+= --with-default-sysroot=$(embtk_sysroot)
+LLVM_HOST_CONFIGURE_OPTS	+= --enable-optimized --disable-jit --disable-zlib
+LLVM_HOST_CONFIGURE_OPTS	+= --with-bug-report-url=$(EMBTK_BUGURL)
+LLVM_HOST_CONFIGURE_OPTS	+= --with-binutils-include=$(__embtk_binutils_inc)
 
-LLVM_MAKE_OPTS		:= NO_UNITTESTS=1
-LLVM_MAKE_OPTS		+= CLANG_VENDOR="EmbToolkit(v$(EMBTK_VERSION))"
+LLVM_HOST_MAKE_OPTS		:= NO_UNITTESTS=1
+LLVM_HOST_MAKE_OPTS		+= CLANG_VENDOR="EmbToolkit(v$(EMBTK_VERSION))"
 
-LLVM_PREFIX		:= $(embtk_tools)
+LLVM_HOST_PREFIX		:= $(embtk_tools)
 
 __embtk_clang_arch	:= $(firstword $(subst -, ,$(STRICT_GNU_TARGET)))
 __embtk_clang_rversion	= `ls $(embtk_tools)/lib/clang/`
 __embtk_clang_libdir	= $(embtk_tools)/lib/clang/$(__embtk_clang_rversion)/lib/linux
 __embtk_clang_incdir	= $(embtk_tools)/lib/clang/$(__embtk_clang_rversion)/include
 
-define embtk_install_llvm
-	$(call __embtk_install_hostpkg,llvm)
-endef
-
-define embtk_beforeinstall_llvm
-	[ -e $(call __embtk_pkg_srcdir,llvm)/tools/clang ] ||			\
+define embtk_beforeinstall_llvm_host
+	[ -e $(call __embtk_pkg_srcdir,llvm_host)/tools/clang ] ||		\
 		ln -sf $(call __embtk_pkg_srcdir,clang_host)			\
-				$(call __embtk_pkg_srcdir,llvm)/tools/clang
+			$(call __embtk_pkg_srcdir,llvm_host)/tools/clang
 	mkdir -p $(embtk_tools)/bin/clang-scan-build
-	cp -R $(call __embtk_pkg_srcdir,llvm)/tools/clang/tools/scan-build/*	\
+	cp -R $(call __embtk_pkg_srcdir,llvm_host)/tools/clang/tools/scan-build/* \
 		$(embtk_tools)/bin/clang-scan-build
 	mkdir -p $(embtk_tools)/bin/clang-scan-view
-	cp -R $(call __embtk_pkg_srcdir,llvm)/tools/clang/tools/scan-view/*	\
+	cp -R $(call __embtk_pkg_srcdir,llvm_host)/tools/clang/tools/scan-view/* \
 		$(embtk_tools)/bin/clang-scan-view
 endef
 
-define embtk_postinstallonce_llvm
+define embtk_postinstallonce_llvm_host
 	mkdir -p $(embtk_tools)/lib/bfd-plugins
 	cd $(embtk_tools)/lib/bfd-plugins;					\
 		ln -sf ../libLTO.so libLTO.so;					\
@@ -83,6 +79,6 @@ define embtk_postinstallonce_llvm
 	mkdir -p $(embtk_tools)/lib/clang/$(__embtk_clang_rversion)/lib/linux
 endef
 
-define embtk_cleanup_llvm
-	$(Q)rm -rf $(LLVM_BUILD_DIR)
+define embtk_cleanup_llvm_host
+	$(Q)rm -rf $(LLVM_HOST_BUILD_DIR)
 endef

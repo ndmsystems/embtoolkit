@@ -94,12 +94,12 @@ GCC_WITH_ARCH			:= --with-arch=$(GNU_TARGET_ARCH)
 # Hard or soft floating point for GCC?
 ifeq ($(CONFIG_EMBTK_HARDFLOAT),y)
 GCC_WITH_FLOAT			:= --with-float=hard
-LLVM_WITH_FLOAT			:= --with-default-float=hard
+LLVM_HOST_WITH_FLOAT		:= --with-default-float=hard
 EMBTK_TARGET_FLOAT_CFLAGS	:= -mhard-float
 __xtools_env_float		:= hf
 else
 GCC_WITH_FLOAT			:= --with-float=soft
-LLVM_WITH_FLOAT			:= --with-default-float=soft
+LLVM_HOST_WITH_FLOAT		:= --with-default-float=soft
 EMBTK_TARGET_FLOAT_CFLAGS	:= -msoft-float
 __xtools_env_float		:= sf
 endif
@@ -107,13 +107,13 @@ endif
 # ABI part
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_O32),y)
 GCC_WITH_ABI			:= --with-abi=32
-LLVM_WITH_ABI			:= --with-default-abi=o32
+LLVM_HOST_WITH_ABI		:= --with-default-abi=o32
 EMBTK_TARGET_ABI		:= -mabi=32
 __xtools_env_abi		:= o32
 
 else ifeq ($(CONFIG_EMBTK_ARCH_MIPS_ABI_N32),y)
 GCC_WITH_ABI			:= --with-abi=n32
-LLVM_WITH_ABI			:= --with-default-abi=n32
+LLVM_HOST_WITH_ABI		:= --with-default-abi=n32
 EMBTK_TARGET_ABI		:= -mabi=n32
 __xtools_env_abi		:= n32
 
@@ -127,7 +127,7 @@ __xtools_env_abi		:= n32
 
 else
 GCC_WITH_ABI			:= --with-abi=64
-LLVM_WITH_ABI			:= --with-default-abi=n64
+LLVM_HOST_WITH_ABI		:= --with-default-abi=n64
 EMBTK_TARGET_ABI		:= -mabi=64
 __xtools_env_abi		:= n64
 endif
