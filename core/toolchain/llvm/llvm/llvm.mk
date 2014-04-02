@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2012-2014 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ LLVM_PACKAGE		:= llvm-$(LLVM_VERSION).src.tar.gz
 LLVM_SRC_DIR		:= $(embtk_toolsb)/llvm-$(LLVM_VERSION).src
 LLVM_BUILD_DIR		:= $(embtk_toolsb)/llvm-build
 
-LLVM_DEPS		:= binutils_install clang_install
+LLVM_DEPS		:= binutils_install clang_host_install
 
 LLVM_WITH_HASHSTYLE	:= $(if $(CONFIG_EMBTK_CLIB_UCLIBC),--with-default-hash-style=sysv)
 
@@ -64,7 +64,7 @@ endef
 
 define embtk_beforeinstall_llvm
 	[ -e $(call __embtk_pkg_srcdir,llvm)/tools/clang ] ||			\
-		ln -sf $(call __embtk_pkg_srcdir,clang)				\
+		ln -sf $(call __embtk_pkg_srcdir,clang_host)			\
 				$(call __embtk_pkg_srcdir,llvm)/tools/clang
 	mkdir -p $(embtk_tools)/bin/clang-scan-build
 	cp -R $(call __embtk_pkg_srcdir,llvm)/tools/clang/tools/scan-build/*	\

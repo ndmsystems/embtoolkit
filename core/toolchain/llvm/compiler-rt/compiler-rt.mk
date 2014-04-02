@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012-2013 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2012-2014 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@ ifeq ($(TARGETCXX),$(TARGETGCXX))
 __embtk_compiler-rt_cflags	:= $(filter-out $(__clang_cflags),$(__embtk_compiler-rt_cflags))
 endif
 
-ifeq ($(CONFIG_EMBTK_CLANG_VERSION_3_3),y)
+ifeq ($(CONFIG_EMBTK_CLANG_HOST_VERSION_3_3),y)
 __embtk_compiler-rt_cflags += -DASAN_INTERFACE_VERSION=3
 endif
 

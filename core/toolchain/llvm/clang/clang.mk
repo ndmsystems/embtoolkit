@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2012-2014 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,17 +23,17 @@
 # \date         October 2012
 ################################################################################
 
-CLANG_NAME		:= clang
-CLANG_VERSION		:= $(call embtk_get_pkgversion,clang)
-CLANG_SITE		:= http://llvm.org/releases/$(CLANG_VERSION)
-#CLANG_GIT_SITE		:= http://llvm.org/git/clang.git
-CLANG_GIT_SITE		:= git://www.embtoolkit.org/clang.git
-CLANG_PACKAGE		:= clang-$(CLANG_VERSION).src.tar.gz
-CLANG_SRC_DIR		:= $(embtk_toolsb)/clang-$(CLANG_VERSION).src
-CLANG_BUILD_DIR		:= $(embtk_toolsb)/clang-build
+CLANG_HOST_NAME		:= clang
+CLANG_HOST_VERSION	:= $(call embtk_get_pkgversion,clang_host)
+CLANG_HOST_SITE		:= http://llvm.org/releases/$(CLANG_HOST_VERSION)
+#CLANG_HOST_GIT_SITE	:= http://llvm.org/git/clang.git
+CLANG_HOST_GIT_SITE	:= git://www.embtoolkit.org/clang.git
+CLANG_HOST_PACKAGE	:= clang-$(CLANG_HOST_VERSION).src.tar.gz
+CLANG_HOST_SRC_DIR	:= $(embtk_toolsb)/clang-$(CLANG_HOST_VERSION).src
+CLANG_HOST_BUILD_DIR	:= $(embtk_toolsb)/clang-$(CLANG_HOST_VERSION)-build
 
-define embtk_install_clang
+define embtk_install_clang_host
 	$(call embtk_pinfo,"Compile/Install of clang will be done within llvm...")
-	$(call embtk_download_pkg,clang)
-	$(call embtk_decompress_pkg,clang)
+	$(call embtk_download_pkg,clang_host)
+	$(call embtk_decompress_pkg,clang_host)
 endef
