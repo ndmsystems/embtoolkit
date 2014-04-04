@@ -26,14 +26,14 @@
 config EMBTK_HAVE_GDB_SYSTEM
 	bool "Have GDB: Gnu debugging system"
 	help
-		Have GNU debugger components on your embedded target and/or on
-		your development machine.
+	 Have GNU debugger components in your embedded target and/or in your
+	 development machine.
 
 choice
 	prompt "GDB version to use"
 	depends on EMBTK_HAVE_GDB_SYSTEM
 	help
-		Choose which version of gdb to use.
+	 Choose which version of gdb to use.
 
 	config EMBTK_GDB_VERSION_7_6_2
 		bool "gdb-7.6.2"
@@ -53,8 +53,8 @@ choice
 		select KEMBTK_UCLIBC_UCLIBC_HAS_WCHAR if EMBTK_CLIB_UCLIBC
 		select KEMBTK_UCLIBC_UCLIBC_SUSV3_LEGACY if EMBTK_CLIB_UCLIBC
 		help
-			Say yes if you want to have only gdbserver on your
-			embedded system target.
+		 Say yes if you want to have only gdbserver in your embedded
+		 system target.
 
 	config EMBTK_HAVE_GDB
 		bool "Have gdb on target"
@@ -63,16 +63,15 @@ choice
 		select KEMBTK_UCLIBC_UCLIBC_HAS_WCHAR if EMBTK_CLIB_UCLIBC
 		select KEMBTK_UCLIBC_UCLIBC_SUSV3_LEGACY if EMBTK_CLIB_UCLIBC
 		help
-			Say yes if you want to have full gdb on your embedded
-			system target.
+		 Say yes if you want to have full gdb in your embedded system
+		 target.
 endchoice
 
 config EMBTK_HOST_HAVE_GDB
 	bool "Have gdb on host your development machine"
 	depends on EMBTK_HAVE_GDB_SYSTEM
 	help
-		Say yes if you want to have gdb on your host development
-		machine.
+	 Say yes if you want to have gdb in your host development machine.
 
 
 config EMBTK_GDB_VERSION_STRING
