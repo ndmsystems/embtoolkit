@@ -34,15 +34,18 @@ MUSL_BUILD_DIR		:= $(call __embtk_pkg_srcdir,musl)
 __embtk_musl_v	:= "$(MUSL_VERSION) From EmbToolkit v$(EMBTK_VERSION) -"
 __embtk_musl_v	+= "Cross Compiled under $(embtk_host_uname)"
 
+__embtk_musl_cflags := $(TARGET_CFLAGS)
+__embtk_musl_cflags += $(if $(embtk_toolchain_use_llvm-y),-Wno-unknown-warning-option)
+
 define embtk_beforeinstall_musl
 	cd $(MUSL_SRC_DIR);							\
 		CC=$(TARGETCC_CACHED)						\
 		CROSS_COMPILE="$(CROSS_COMPILE)"				\
-		CFLAGS="$(TARGET_CFLAGS)"					\
+		CFLAGS="$(__embtk_musl_cflags)"					\
 		$(CONFIG_SHELL) $(MUSL_SRC_DIR)/configure			\
 		--target=$(LINUX_ARCH) --host=$(LINUX_ARCH)			\
-		--disable-gcc-wrapper --prefix=/				\
-		--syslibdir=/$(LIBDIR) --libdir=/$(LIBDIR) 			\
+		--disable-gcc-wrapper --enable-warnings				\
+		--prefix=/ --syslibdir=/$(LIBDIR) --libdir=/$(LIBDIR) 		\
 		--includedir=/usr/include
 		echo "$(__embtk_musl_v)" > $(MUSL_SRC_DIR)/VERSION
 	$(call __embtk_setconfigured_pkg,musl)
