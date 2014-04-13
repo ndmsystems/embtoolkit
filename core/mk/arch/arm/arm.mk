@@ -26,6 +26,7 @@ __embtk_arm_endian	:= $(if $(CONFIG_EMBTK_TARGET_ARCH_BIG_ENDIAN),eb)
 __embtk_arm_abi-$(CONFIG_EMBTK_CLIB_EGLIBC)	:= gnueabi
 __embtk_arm_abi-$(CONFIG_EMBTK_CLIB_GLIBC)	:= gnueabi
 __embtk_arm_abi		:= $(or $(__embtk_arm_abi-y),$(embtk_clib)eabi)
+__embtk_arm_abi		:= $(__embtk_arm_abi)$(if $(CONFIG_EMBTK_HARDFLOAT),hf)
 
 LINUX_ARCH		:= arm
 GNU_TARGET_ARCH		:= arm
