@@ -24,7 +24,7 @@
 ################################################################################
 
 MTDUTILS_HOST_NAME		:= mtd-utils
-MTDUTILS_HOST_VERSION		:= $(call embtk_get_pkgversion,mtdutils)
+MTDUTILS_HOST_VERSION		:= $(call embtk_get_pkgversion,mtdutils_host)
 MTDUTILS_HOST_SITE		:= ftp://ftp.infradead.org/pub/mtd-utils
 MTDUTILS_HOST_PACKAGE		:= mtd-utils-$(MTDUTILS_HOST_VERSION).tar.bz2
 MTDUTILS_HOST_SRC_DIR		:= $(embtk_toolsb)/mtd-utils-$(MTDUTILS_HOST_VERSION)
