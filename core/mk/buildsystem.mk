@@ -87,37 +87,8 @@ endef
 
 define __embtk_mk_print_selectedfeatures
 	$(call embtk_pinfo,"Starting build of selected features...")
-	$(call embtk_echo_blue," ~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"| Toolchain |")
-	$(call embtk_echo_blue," ~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"\tEmbToolkit          : v$(EMBTK_VERSION)")
-	$(call embtk_echo_blue,"\tArchitecture        : $(LINUX_ARCH) ($(EMBTK_MCU_FLAG))")
-	$(call embtk_echo_blue,"\tLinux kernel headers: linux-$(call __embtk_pkg_version,linux)")
-	$(call embtk_echo_blue,"\tBinutils            : binutils-$(call  __embtk_pkg_version,binutils)")
-	$(if $(CONFIG_EMBTK_HAVE_LLVM),
-	$(call embtk_echo_blue,"\tCLANG/LLVM          : clang/llvm-$(call __embtk_pkg_version,llvm)"))
-	$(call embtk_echo_blue,"\tGCC                 : gcc-$(call __embtk_pkg_version,gcc)")
-	$(call embtk_echo_blue,"\tC library           : $(call __embtk_pkg_name,$(embtk_clib))-$(call __embtk_pkg_version,$(embtk_clib))")
-	$(if $(CONFIG_EMBTK_HAVE_GDB_SYSTEM),
-	$(call embtk_echo_blue,"\tGDB                 : gdb-$(call __embtk_pkg_version,gdb)"))
-	$(if $(CONFIG_EMBTK_HAVE_STRACE),
-	$(call embtk_echo_blue,"\tStrace              : strace-$(call __embtk_pkg_version,strace)"))
-	$(call embtk_echo_blue," ~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"| Host tools |")
-	$(call embtk_echo_blue," ~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"\tNumber of host tools packages needed:$(__embtk_hosttools_nrpkgs-y)")
-	$(if $(CONFIG_EMBTK_HAVE_ROOTFS),
-		$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~ ")
-		$(call embtk_echo_blue,"| Root FS packages |")
-		$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~ ")
-		$(call embtk_echo_blue,"\tNumber of root FS packages:$(__embtk_rootfs_nrpkgs-y)")
-		$(call embtk_echo_blue," ~~~~~~~~~~~~~~~ ")
-		$(call embtk_echo_blue,"| Root FS types |")
-		$(call embtk_echo_blue," ~~~~~~~~~~~~~~~ ")
-		$(call embtk_echo_blue,"\tTAR.BZ2    : Yes")
-		$(call embtk_echo_blue,"\tInitramfs  : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),Yes,No)")
-		$(call embtk_echo_blue,"\tsquashFS   : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),Yes,No)")
-		$(call embtk_echo_blue,"\tJFFS2      : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),Yes,No)"))
+	$(help_toolchain_summary)
+	$(help_rootfs_summary)
 endef
 
 __embtk_mk_startbuild-y						:= toolchain_install

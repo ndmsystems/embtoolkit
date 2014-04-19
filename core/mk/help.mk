@@ -72,33 +72,16 @@ help:
 
 # Successful build of EmbToolkit message
 successful_build:
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"| Toolchain build log |")
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"$(GNU_TARGET) ($(EMBTK_MCU_FLAG)) toolchain successfully generated.")
-	$(call embtk_echo_blue,"Generated tools (compilers, Binutils, etc.) are in:")
-	$(call embtk_echo_blue,"    $(embtk_tools)/bin")
-	$(call embtk_echo_blue,"The packaged toolchain (for external use) is in:")
-	$(call embtk_echo_blue,"    $(embtk_generated)")
-	@echo
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"| Root file system build log |")
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-ifeq ($(CONFIG_EMBTK_HAVE_ROOTFS),y)
-	$(call embtk_echo_blue,"Generated root filesystems are located in the")
-	$(call embtk_echo_blue,"'generated' sub-directory of EmbToolkit.")
-else
-	$(call embtk_echo_green,"Build of root filesystem not selected.")
-endif
-	@echo
+	$(help_toolchain_summary)
+	$(help_rootfs_summary)
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"| Embedded systems Toolkit   |")
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"We hope that EmbToolkit will be useful for your project !!!")
 	$(call embtk_echo_blue,"We will be happy to know it at embtk-users@embtoolkit.org")
+	@echo
 	$(call embtk_echo_blue,"Please report any bugs/suggestion at:")
 	$(call embtk_echo_blue,"   $(EMBTK_BUGURL)")
-	$(call embtk_echo_blue,"You can also visit the wiki at:")
+	$(call embtk_echo_blue,"You can also visit the project web site at:")
 	$(call embtk_echo_blue,"   http://www.embtoolkit.org")
-	@echo
 	$(call embtk_echo_blue,$(__embtk_msg_h))
