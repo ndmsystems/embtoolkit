@@ -77,13 +77,6 @@ distclean: clean
 	$(Q)rm -rf dl/* src/*.git src/*.svn .config.old
 	$(Q)rm -rf $(embtk_generated)
 
-define __embtk_mk_pwarning_restartbuild
-	$(call embtk_pwarning,"Wrong make target - Use correct make target")
-	$(call embtk_echo_yellow,"You are trying to restart all the build while it is already")
-	$(call embtk_echo_yellow,"done. Please use the correct make target!!!")
-	echo
-	$(MAKE) help
-endef
 
 define __embtk_mk_print_selectedfeatures
 	$(call embtk_pinfo,"Starting build of selected features...")
@@ -91,19 +84,17 @@ define __embtk_mk_print_selectedfeatures
 	$(help_rootfs_summary)
 endef
 
-__embtk_mk_startbuild-y						:= toolchain_install
+__embtk_mk_startbuild-y						:= __startbuild_msg
+__embtk_mk_startbuild-y						+= toolchain_install
 __embtk_mk_startbuild-$(CONFIG_EMBTK_BUILD_LINUX_KERNEL)	+= linux_install
 __embtk_mk_startbuild-$(CONFIG_EMBTK_HAVE_ROOTFS)		+= rootfs_build
 __embtk_mk_startbuild-y						+= successful_build
-define __embtk_mk_startbuild
-	$(__embtk_mk_print_selectedfeatures)
-	$(MAKE) $(__embtk_mk_startbuild-y)
-endef
 
-__bsystem_toolchain_decompressed := $(wildcard $(call __embtk_pkg_dotdecompressed_f,toolchain))
-startbuild:
-	$(if $(__bsystem_toolchain_decompressed),				\
-		$(__embtk_mk_pwarning_restartbuild),$(__embtk_mk_startbuild))
+__startbuild_msg:
+	$(__embtk_mk_print_selectedfeatures)
+
+startbuild: $(__embtk_mk_startbuild-y)
+	@:
 
 define __embtk_mk_initsysrootdirs
 	mkdir -p $(embtk_generated)
