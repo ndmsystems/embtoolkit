@@ -140,7 +140,7 @@ define help_toolchain_summary
 	$(call embtk_echo_blue,"| Toolchain |")
 	$(call embtk_echo_blue," ~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"\tEmbToolkit          : v$(EMBTK_VERSION)")
-	$(call embtk_echo_blue,"\tArchitecture        : $(LINUX_ARCH) ($(EMBTK_MCU_FLAG))")
+	$(call embtk_echo_blue,"\tArchitecture        : $(call embtk_ucase,$(LINUX_ARCH)) ($(EMBTK_MCU_FLAG))")
 	$(call embtk_echo_blue,"\tLinux kernel headers: linux-$(call __embtk_pkg_version,linux)")
 	$(call embtk_echo_blue,"\tBinutils            : binutils-$(call  __embtk_pkg_version,binutils)")
 	$(if $(CONFIG_EMBTK_HOST_HAVE_LLVM),
