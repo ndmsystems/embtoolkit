@@ -88,10 +88,16 @@ __embtk_mk_startbuild-y						:= __startbuild_msg
 __embtk_mk_startbuild-y						+= toolchain_install
 __embtk_mk_startbuild-$(CONFIG_EMBTK_BUILD_LINUX_KERNEL)	+= linux_install
 __embtk_mk_startbuild-$(CONFIG_EMBTK_HAVE_ROOTFS)		+= rootfs_build
-__embtk_mk_startbuild-y						+= successful_build
+__embtk_mk_startbuild-y						+= __endbuild_msg
 
 __startbuild_msg:
 	$(__embtk_mk_print_selectedfeatures)
+
+__endbuild_msg:
+	$(call embtk_pinfo,"Selected features built successfully...")
+	$(help_toolchain_summary)
+	$(help_rootfs_summary)
+	$(help_successful_build)
 
 startbuild: $(__embtk_mk_startbuild-y)
 	@:

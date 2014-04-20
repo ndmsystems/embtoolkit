@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -183,9 +183,14 @@ __rootfs_prebuild_targets += __rootfs_components_install
 __rootfs_prebuild_targets += $(strip $(if $(CONFIG_EMBTK_TARGET_STRIPPED),	\
 						__rootfs_components_strip))
 
+define __rootfs_build_end
+	$(call embtk_pinfo,"Selected root filesystems built successfully...")
+	$(if $(findstring rootfs_build,$(MAKECMDGOALS)),$(help_rootfs_summary))
+endef
+
 rootfs_build: toolchain_install host_packages_build $(__rootfs_prebuild_targets)
 	$(Q)$(__embtk_rootfs_fs_generate)
-	$(call embtk_pinfo,"Selected root filesystems built successfully!")
+	$(Q)$(__rootfs_build_end)
 else
 # Build of root file system not selected
 rootfs_build:

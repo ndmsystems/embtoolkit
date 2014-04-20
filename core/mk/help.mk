@@ -1,6 +1,6 @@
 ################################################################################
 # EmbToolkit
-# Copyright(C) 2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2011-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -69,19 +69,3 @@ help:
 	@echo "                 This should be used after configuration and if"
 	@echo "                 you want to do an offline build."
 	@echo
-
-# Successful build of EmbToolkit message
-successful_build:
-	$(help_toolchain_summary)
-	$(help_rootfs_summary)
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"| Embedded systems Toolkit   |")
-	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"We hope that EmbToolkit will be useful for your project !!!")
-	$(call embtk_echo_blue,"We will be happy to know it at embtk-users@embtoolkit.org")
-	@echo
-	$(call embtk_echo_blue,"Please report any bugs/suggestion at:")
-	$(call embtk_echo_blue,"   $(EMBTK_BUGURL)")
-	$(call embtk_echo_blue,"You can also visit the project web site at:")
-	$(call embtk_echo_blue,"   http://www.embtoolkit.org")
-	$(call embtk_echo_blue,$(__embtk_msg_h))

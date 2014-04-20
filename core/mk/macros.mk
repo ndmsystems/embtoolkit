@@ -139,6 +139,7 @@ define help_toolchain_summary
 	$(call embtk_echo_blue," ~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"| Toolchain |")
 	$(call embtk_echo_blue," ~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"\tEmbToolkit          : v$(EMBTK_VERSION)")
 	$(call embtk_echo_blue,"\tArchitecture        : $(LINUX_ARCH) ($(EMBTK_MCU_FLAG))")
 	$(call embtk_echo_blue,"\tLinux kernel headers: linux-$(call __embtk_pkg_version,linux)")
 	$(call embtk_echo_blue,"\tBinutils            : binutils-$(call  __embtk_pkg_version,binutils)")
@@ -171,6 +172,20 @@ define help_rootfs_summary
 	$(call embtk_echo_blue,"\tInitramfs      : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_INITRAMFS_CPIO),Yes,No)")
 	$(call embtk_echo_blue,"\tsquashFS       : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),Yes,No)")
 	$(call embtk_echo_blue,"\tJFFS2          : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),Yes,No)")
-	$(call embtk_echo_blue,"\tRootFS location:")
+	$(call embtk_echo_blue,"\tImages location:")
 	$(call embtk_echo_blue,"\t\`-->generated"))
+endef
+
+define help_successful_build
+	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"| Embedded systems Toolkit   |")
+	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ")
+	$(call embtk_echo_blue,"We hope that EmbToolkit will be useful for your project !!!")
+	$(call embtk_echo_blue,"We will be happy to know it at embtk-users@embtoolkit.org")
+	@echo
+	$(call embtk_echo_blue,"Please report any bugs/suggestion at:")
+	$(call embtk_echo_blue,"   $(EMBTK_BUGURL)")
+	$(call embtk_echo_blue,"You can also visit the project web site at:")
+	$(call embtk_echo_blue,"   http://www.embtoolkit.org")
+	$(call embtk_echo_blue,$(__embtk_msg_h))
 endef
