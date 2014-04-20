@@ -46,8 +46,11 @@ endef
 # $(call embtk_download_pkg,PACKAGE)
 #
 
-__embtk_pkg_depof = $(strip $(foreach p,$(__embtk_pkgs_all-y) toolchain toolchain_addons,\
-		$(if $(findstring $(pkgv),$($(call PKGV,$(p)_deps))),$(p))))
+__embtk_pkg_depof = $(strip $(sort $(___embtk_pkg_depof)))
+define ___embtk_pkg_depof
+	$(foreach p,$(__embtk_pkgs_all-y) toolchain toolchain_addons,
+		$(if $(findstring $(pkgv),$($(call PKGV,$(p)_deps))),$(p)))
+endef
 
 __embtk_pkg_needpatch_yesno = $(if $(__embtk_pkg_needpatch),Yes,No)
 
