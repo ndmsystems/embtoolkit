@@ -184,8 +184,9 @@ __rootfs_prebuild_targets += $(strip $(if $(CONFIG_EMBTK_TARGET_STRIPPED),	\
 						__rootfs_components_strip))
 
 define __rootfs_build_end
-	$(call embtk_pinfo,"Selected root filesystems built successfully...")
-	$(if $(findstring rootfs_build,$(MAKECMDGOALS)),$(help_rootfs_summary))
+	$(if $(findstring rootfs_build,$(MAKECMDGOALS)),
+		$(call embtk_pinfo,"Selected root filesystems built successfully...")
+		$(help_rootfs_summary))
 endef
 
 rootfs_build: toolchain_install host_packages_build $(__rootfs_prebuild_targets)
