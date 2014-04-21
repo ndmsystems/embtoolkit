@@ -34,6 +34,10 @@ embtk_toolchain_has_llvm-y	:= $(or $(CONFIG_EMBTK_GCC_AND_LLVM_TOOLCHAIN),$(embt
 __embtk_hostcc-v		:= $(shell outv=$$($(HOSTCC) -v 2>&1); echo $$outv)
 embtk_hostcc_clang-y		:= $(if $(findstring clang,$(__embtk_hostcc-v)),y)
 
+__embtk_targetclang-v		= llvm+clang-$(call __embtk_pkg_version,clang_host)
+__embtk_targetgcc-v		= gcc-$(call __embtk_pkg_version,gcc)
+embtk_targetcc_name-v		= $(if $(embtk_toolchain_use_llvm-y),$(__embtk_targetclang-v),$(__embtk_targetgcc-v))
+
 embtk_host_uname		:= $(shell uname -s -r -p)
 
 #

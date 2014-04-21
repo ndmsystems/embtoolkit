@@ -32,7 +32,7 @@ MUSL_SRC_DIR		:= $(embtk_toolsb)/musl-$(MUSL_VERSION)
 MUSL_BUILD_DIR		:= $(call __embtk_pkg_srcdir,musl)
 
 __embtk_musl_v	:= "$(MUSL_VERSION) From EmbToolkit v$(EMBTK_VERSION) -"
-__embtk_musl_v	+= "Cross Compiled under $(embtk_host_uname)"
+__embtk_musl_v	+= "Cross Compiler $(embtk_targetcc_name-v) [$(embtk_host_uname)]"
 
 __embtk_musl_cflags := $(TARGET_CFLAGS)
 __embtk_musl_cflags += $(if $(embtk_toolchain_use_llvm-y),-Wno-unknown-warning-option)
