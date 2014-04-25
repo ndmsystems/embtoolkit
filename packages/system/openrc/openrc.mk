@@ -99,6 +99,7 @@ endef
 
 define embtk_postinstall_openrc
 	$(__embtk_install_openrc_confd)
+	rm -rf $(embtk_rootfs)/etc/init.d
 	install -d $(embtk_rootfs)/etc/init.d || exit $$?
 	install -m 0644 $(embtk_openrc_mk)/etc/defaultdomain			\
 		$(embtk_rootfs)/etc/defaultdomain || exit $$?
