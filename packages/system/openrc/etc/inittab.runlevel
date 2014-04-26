@@ -1,0 +1,8 @@
+# Initial system critical filesystems mounting (/proc, /dev, /sys, etc.)
+::sysinit:/sbin/openrc sysinit
+
+# Goto other runlevels now
+::wait:/sbin/openrc boot
+::wait:/sbin/openrc default
+::wait:/sbin/openrc
+

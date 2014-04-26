@@ -97,8 +97,23 @@ define __embtk_install_openrc_confd
 		> $(embtk_rootfs)/etc/hostname
 endef
 
+__embtk_rootfs_tty		:= $(call embtk_uquote,$(CONFIG_EMBTK_ROOTFS_TTY))
+__embtk_rootfs_tty_baudrate	:= $(call embtk_uquote,$(CONFIG_EMBTK_ROOTFS_TTY_BAUDRATE))
+define __embtk_install_openrc_inittab
+	cat $(embtk_openrc_mk)/etc/inittab.runlevel				\
+		> $(embtk_rootfs)/etc/inittab
+	cat $(embtk_openrc_mk)/etc/inittab.tty |				\
+	sed	-e 's;{ROOTFS_TTY};$(__embtk_rootfs_tty);g'			\
+		-e 's;{ROOTFS_TTY_BAUDRATE};$(__embtk_rootfs_tty_baudrate);g'	\
+		>> $(embtk_rootfs)/etc/inittab
+	cat $(embtk_openrc_mk)/etc/inittab.logging				\
+		>> $(embtk_rootfs)/etc/inittab
+	cat $(embtk_openrc_mk)/etc/inittab.reboot				\
+		>> $(embtk_rootfs)/etc/inittab
+endef
 define embtk_postinstall_openrc
 	$(__embtk_install_openrc_confd)
+	$(__embtk_install_openrc_inittab)
 	rm -rf $(embtk_rootfs)/etc/init.d
 	install -d $(embtk_rootfs)/etc/init.d || exit $$?
 	install -m 0644 $(embtk_openrc_mk)/etc/defaultdomain			\

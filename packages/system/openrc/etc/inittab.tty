@@ -1,0 +1,3 @@
+# Put a getty on the serial port
+{ROOTFS_TTY}::respawn:/sbin/getty -L {ROOTFS_TTY} {ROOTFS_TTY_BAUDRATE} vt100
+

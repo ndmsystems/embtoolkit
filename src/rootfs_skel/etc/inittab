@@ -1,24 +1,29 @@
-# Initial system critical filesystems mounting (/proc, /dev, /sys, etc.)
-::sysinit:/sbin/openrc sysinit
+# Filesystem
+null::sysinit:/bin/mount -o remount,rw /
+null::sysinit:/bin/mount -t proc proc /proc
+null::sysinit:/bin/mount -a
 
-# Goto other runlevels now
-::wait:/sbin/openrc boot
-::wait:/sbin/openrc default
-::wait:/sbin/openrc
+# Networking
+null::sysinit:/bin/hostname -F /etc/hostname
+null::sysinit:/sbin/ifconfig lo 127.0.0.1 up
+null::sysinit:/sbin/route add -net 127.0.0.0 netmask 255.0.0.0 lo
+null::sysinit:/sbin/udhcpc
 
-# Put a getty on the serial port
+# Runlevel script
+::sysinit:/etc/init.d/rcS
+
+# Serial console
 ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100
 
-# Logging junk
 null::sysinit:/bin/touch /var/log/messages
 null::respawn:/sbin/syslogd -n -m 0
 null::respawn:/sbin/klogd -n
+#tty3::respawn:/usr/bin/tail -f /var/log/messages
 
-# What to do at the "Three Finger Salute"
 ::ctrlaltdel:/sbin/reboot
 
-# Stuff to do before rebooting
-null::shutdown:/sbin/openrc shutdown
+# Reboot
+null::shutdown:/usr/bin/killall klogd
+null::shutdown:/usr/bin/killall syslogd
 null::shutdown:/bin/umount -a -r
 null::shutdown:/sbin/swapoff -a
-

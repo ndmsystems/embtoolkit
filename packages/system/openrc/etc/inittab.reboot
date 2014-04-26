@@ -1,0 +1,6 @@
+# Reboot
+::ctrlaltdel:/sbin/reboot
+null::shutdown:/sbin/openrc shutdown
+null::shutdown:/bin/umount -a -r
+null::shutdown:/sbin/swapoff -a
+

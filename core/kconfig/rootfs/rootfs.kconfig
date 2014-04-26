@@ -23,6 +23,7 @@
 # \date         December 2013
 ################################################################################
 
+source "core/kconfig/rootfs/rootfs-config.kconfig"
 source "core/kconfig/rootfs/fs.kconfig"
 source "packages/htools/squashfs/squashfs.kconfig"
 source "core/kconfig/packages.kconfig"
