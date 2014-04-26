@@ -33,8 +33,8 @@ choice
 	help
 	 Which musl version to use.
 
-	config EMBTK_MUSL_VERSION_0_9_15
-		bool "musl-0.9.15"
+	config EMBTK_MUSL_VERSION_1_1_0
+		bool "musl-1.1.0"
 		select EMBTK_MUSL_NEED_PATCH
 	config EMBTK_MUSL_VERSION_GIT
 		bool "Use a branch of musl git repository"
@@ -44,7 +44,7 @@ endchoice
 
 config EMBTK_MUSL_VERSION_STRING
 	string
-	default "0.9.15"	if EMBTK_MUSL_VERSION_0_9_15
+	default "1.1.0"		if EMBTK_MUSL_VERSION_1_1_0
 	default "git"		if EMBTK_MUSL_VERSION_GIT
 
 config EMBTK_MUSL_REFSPEC
