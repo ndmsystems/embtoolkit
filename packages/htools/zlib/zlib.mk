@@ -38,6 +38,7 @@ endef
 
 define embtk_configure_zlib_host
 	$(Q)cd $(ZLIB_HOST_BUILD_DIR);						\
+	CFLAGS="-fPIC -O2"							\
 	CPPFLAGS="-I$(embtk_htools)/usr/include"				\
 	LDFLAGS="-L$(embtk_htools)/$(LIBDIR) -L$(embtk_htools)/usr/$(LIBDIR)"	\
 	$(ZLIB_HOST_CONFIGURE_ENV)						\
