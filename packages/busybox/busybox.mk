@@ -38,7 +38,8 @@ __embtk_cflags_bb 	+= -fno-unwind-tables -fno-asynchronous-unwind-tables
 
 BB_NODESTDIR	:= y
 BB_MAKE_ENV	:= CFLAGS="$(__embtk_cflags_bb)"
-BB_MAKE_OPTS	:= CROSS_COMPILE="$(CROSS_COMPILE)" CC="$(TARGETCC)"
+BB_MAKE_OPTS	:= CROSS_COMPILE="$(CROSS_COMPILE)"
+BB_MAKE_OPTS	+= CC="$(TARGETCC)" HOSTCC="$(HOSTCC)"
 BB_MAKE_OPTS	+= CONFIG_PREFIX="$(embtk_rootfs)" CONFIG_EXTRA_LDFLAGS=""
 BB_MAKE_OPTS	+= CONFIG_EXT_DEFINED_OPTIMIZATION=y
 
