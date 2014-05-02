@@ -49,6 +49,9 @@ define embtk_beforeinstall_binutils
 			mv $$bfdmk.tmp $$bfdmk;					\
 		sed -e 's/-ldl//g' < $$goldmk > $$goldmk.tmp;			\
 			mv $$goldmk.tmp $$goldmk;)
+	bfdtxi=$(call __embtk_pkg_srcdir,binutils)/bfd/doc/bfd.texinfo;	\
+	sed -e 's/@colophon/@@colophon/' -e 's/doc@cygnus.com/doc@@cygnus.com/'	\
+		< $$bfdtxi > $$bfdtxi.tmp; mv $$bfdtxi.tmp $$bfdtxi
 endef
 
 define embtk_install_binutils
