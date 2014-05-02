@@ -157,9 +157,13 @@ __embtk_single_make_hostinstall = $(__embtk_pkg_makeenv)			\
 	$(if $(__embtk_pkg_destdir),DESTDIR=$(__embtk_pkg_destdir))		\
 	$(__embtk_pkg_makeopts) install
 
+define __embtk_install_pkgdeps
+	$(foreach dep,$(__embtk_pkg_depspkgv),$(call embtk_install_xpkg,$(dep)))
+endef
+
 __embtk_autotoolspkg-y=$(2)
 define __embtk_install_pkg_make
-	$(foreach dep,$(__embtk_pkg_depspkgv),$(call embtk_install_xpkg,$(dep)))
+	$(call __embtk_install_pkgdeps,$(1))
 	$(call embtk_pinfo,"Compile/Install $(__embtk_pkg_name)-$(__embtk_pkg_version) in your root filesystem...")
 	$(call embtk_download_pkg,$(1))
 	$(call embtk_decompress_pkg,$(1))
@@ -179,7 +183,7 @@ define __embtk_install_pkg_make
 	$(eval __embtk_$(pkgv)_installed = y)
 endef
 define __embtk_install_hostpkg_make
-	$(Q)$(if $(__embtk_pkg_deps),$(MAKE) $(__embtk_pkg_deps))
+	$(call __embtk_install_pkgdeps,$(1))
 	$(call embtk_pinfo,"Compile/Install $(__embtk_pkg_name)-$(__embtk_pkg_version) for host...")
 	$(call embtk_download_pkg,$(1))
 	$(call embtk_decompress_pkg,$(1))
