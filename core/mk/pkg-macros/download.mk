@@ -64,9 +64,7 @@ define __embtk_download_pkg_patches
 endef
 
 define __embtk_download_pkg_exitfailure
-	($(call embtk_perror,"On $(notdir $(1)) download!");			\
-		$(if $(notdir $(1)),rm -rf $(1);)				\
-		exit 1)
+	($(call embtk_perror,"On $(notdir $(1)) download!") && $(if $(notdir $(1)),rm -rf $(1) &&) exit 1)
 endef
 
 define __embtk_svncheckout_pkg
@@ -129,25 +127,24 @@ define __embtk_download_pkg_from_tarball
 		$(call embtk_wget,						\
 			$(__embtk_pkg_package),					\
 			$(__embtk_pkg_mirror1),					\
-			$(__embtk_pkg_package)),false) ||			\
+			$(__embtk_pkg_package)) ||)				\
 	$(if $(__embtk_pkg_mirror2),						\
 		$(call embtk_wget,						\
 			$(__embtk_pkg_package),					\
 			$(__embtk_pkg_mirror2),					\
-			$(__embtk_pkg_package)),false) ||			\
+			$(__embtk_pkg_package)) ||)				\
 	$(if $(__embtk_pkg_mirror3),						\
 		$(call embtk_wget,						\
 			$(__embtk_pkg_package),					\
 			$(__embtk_pkg_mirror3),					\
-			$(__embtk_pkg_package)),false) ||			\
-	$(if $(__embtk_pkg_mirror),						\
-		$(call embtk_wget,						\
-			$(__embtk_pkg_package),					\
-			$(__embtk_pkg_mirror),					\
-			$(__embtk_pkg_package)),false) ||			\
+			$(__embtk_pkg_package)) ||)				\
+	$(call embtk_wget,							\
+		$(__embtk_pkg_package),						\
+		$(__embtk_pkg_mirror),						\
+		$(__embtk_pkg_package)) ||					\
 	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_package_f))
 	$(call __embtk_download_pkg_patches,$(1)) ||				\
-	 $(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
+	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
 endef
 
 __embtk_pkgdl_src = $(or $(__embtk_pkg_usegit),$(__embtk_pkg_usesvn),tarball)
