@@ -69,7 +69,7 @@ define embtk_configure_glibc
 	--target=$(STRICT_GNU_TARGET)						\
 	--build=$(HOST_BUILD)							\
 	$(embtk_glibc_floattype) --disable-profile --without-gd --without-cvs	\
-	--without-selinux --enable-add-ons --enable-kernel="2.6.27"		\
+	--without-selinux --enable-add-ons --enable-kernel="2.6.32"		\
 	--enable-obsolete-rpc --disable-build-nscd --disable-nscd		\
 	--with-bugurl=$(EMBTK_BUGURL)						\
 	--with-pkgversion="GLIBC from embtoolkit-$(EMBTK_VERSION)"

@@ -75,7 +75,7 @@ define embtk_configure_eglibc
 	--target=$(STRICT_GNU_TARGET)						\
 	--build=$(HOST_BUILD)							\
 	$(embtk_eglibc_floattype) --disable-profile --without-gd --without-cvs	\
-	--enable-add-ons --enable-kernel="2.6.27"				\
+	--enable-add-ons --enable-kernel="2.6.32"				\
 	$(embtk_eglibc_versioning-y)						\
 	$(embtk_eglibc-sunrpc-y)						\
 	--with-bugurl=$(EMBTK_BUGURL)						\
