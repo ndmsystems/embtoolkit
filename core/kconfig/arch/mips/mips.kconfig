@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -87,6 +87,16 @@ choice
 
 	config EMBTK_ARCH_MIPS_OCTEON
 		bool "Octeon"
+		select EMBTK_TARGET_ARCH_64BITS
+		select KEMBTK_UCLIBC_CONFIG_MIPS_ISA_MIPS64 if EMBTK_CLIB_UCLIBC
+
+	config EMBTK_ARCH_MIPS_OCTEON_PLUS
+		bool "Octeon+"
+		select EMBTK_TARGET_ARCH_64BITS
+		select KEMBTK_UCLIBC_CONFIG_MIPS_ISA_MIPS64 if EMBTK_CLIB_UCLIBC
+
+	config EMBTK_ARCH_MIPS_OCTEON2
+		bool "Octeon2"
 		select EMBTK_TARGET_ARCH_64BITS
 		select KEMBTK_UCLIBC_CONFIG_MIPS_ISA_MIPS64 if EMBTK_CLIB_UCLIBC
 endchoice

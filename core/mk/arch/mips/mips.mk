@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -82,6 +82,18 @@ ifeq ($(CONFIG_EMBTK_ARCH_MIPS_OCTEON),y)
 GNU_TARGET		:= mips64octeon$(__embtk_mips_endian)-$(embtk_os)
 STRICT_GNU_TARGET	:= mips64octeon$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
 GNU_TARGET_ARCH		:= octeon
+endif
+
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_OCTEON_PLUS),y)
+GNU_TARGET		:= mips64octeon$(__embtk_mips_endian)-$(embtk_os)
+STRICT_GNU_TARGET	:= mips64octeon$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
+GNU_TARGET_ARCH		:= octeon+
+endif
+
+ifeq ($(CONFIG_EMBTK_ARCH_MIPS_OCTEON2),y)
+GNU_TARGET		:= mips64octeon$(__embtk_mips_endian)-$(embtk_os)
+STRICT_GNU_TARGET	:= mips64octeon$(__embtk_mips_endian)-unknown-$(embtk_os)-$(__embtk_mips_abi)
+GNU_TARGET_ARCH		:= octeon2
 endif
 
 EMBTK_MCU_FLAG		:= $(GNU_TARGET_ARCH)
