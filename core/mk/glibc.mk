@@ -43,7 +43,7 @@ embtk_glibc_cflags	:= $(subst -O0,-O1,$(__embtk_glibc_cflags))
 embtk_glibc_floattype := $(if $(CONFIG_EMBTK_SOFTFLOAT),--with-fp=no,--with-fp=yes)
 
 ifeq ($(embtk_buildhost_os_type),bsd)
-embtk_glibc_buildcflags		:= -I/usr/local/include
+embtk_glibc_buildcflags		:= -I/usr/local/include -Dstat64=stat
 embtk_glibc_buildldflags	:= -L/usr/local/lib -lintl
 endif
 
