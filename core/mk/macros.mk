@@ -153,11 +153,11 @@ define help_toolchain_summary
 	$(if $(CONFIG_EMBTK_HAVE_STRACE),
 	$(call embtk_echo_blue,"\tStrace              : strace-$(call __embtk_pkg_version,strace)"))
 	$(call embtk_echo_blue,"\tToolchain location  :")
-	$(call embtk_echo_blue,"\t|\`-->generated")
-	$(call embtk_echo_blue,"\t|    |\`-->[ sysroot ] $(notdir $(embtk_sysroot))")
-	$(call embtk_echo_blue,"\t|     \`-->[ xtools  ] $(notdir $(embtk_tools))")
-	$(call embtk_echo_blue,"\t\`-->generated/toolchains")
-	$(call embtk_echo_blue,"\t      \`-->[ tarball ] toolchain-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)")
+	$(call embtk_echo_blue,"\t├── generated")
+	$(call embtk_echo_blue,"\t│   ├─[ sysroot ] $(notdir $(embtk_sysroot))")
+	$(call embtk_echo_blue,"\t│   └─[ xtools  ] $(notdir $(embtk_tools))")
+	$(call embtk_echo_blue,"\t└── generated/toolchains")
+	$(call embtk_echo_blue,"\t    └─[ tarball ] toolchain-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)")
 endef
 
 define help_rootfs_summary
@@ -174,7 +174,7 @@ define help_rootfs_summary
 	$(call embtk_echo_blue,"\tsquashFS       : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_SQUASHFS),Yes,No)")
 	$(call embtk_echo_blue,"\tJFFS2          : $(if $(CONFIG_EMBTK_ROOTFS_HAVE_JFFS2),Yes,No)")
 	$(call embtk_echo_blue,"\tImages location:")
-	$(call embtk_echo_blue,"\t\`-->generated"))
+	$(call embtk_echo_blue,"\t└── generated"))
 endef
 
 define help_successful_build
