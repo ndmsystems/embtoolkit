@@ -67,6 +67,9 @@ endef
 
 __embtk_pkg_ildflags	= -L$(embtk_sysroot)/$(LIBDIR)
 __embtk_pkg_ildflags	+= -L$(embtk_sysroot)/usr/$(LIBDIR)
+__embtk_pkg_cc		= CC=$(if $(__embtk_pkg_noccache),$(TARGETCC),$(TARGETCC_CACHED))
+___embtk_pkg_cxx	= CXX=$(if $(__embtk_pkg_noccache),$(TARGETCXX_CACHED),$(TARGETCXX_CACHED))
+__embtk_pkg_cxx		= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_CPP),$(___embtk_pkg_cxx))
 define embtk_configure_pkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
 		$(call embtk_pinfo,"Configure $(__embtk_pkg_package)..."))
@@ -75,8 +78,8 @@ define embtk_configure_pkg
 	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
 	$(if $(CONFIG_EMBTK_CLIB_MUSL),$(call __embtk_fixgconfigsfor_pkg,$(1)))
 	$(Q)cd $(__embtk_pkg_builddir);						\
-	CC=$(TARGETCC_CACHED)							\
-	$(if $(CONFIG_EMBTK_GCC_LANGUAGE_CPP),CXX=$(TARGETCXX_CACHED))		\
+	$(__embtk_pkg_cc)							\
+	$(__embtk_pkg_cxx)							\
 	AR=$(TARGETAR)								\
 	RANLIB=$(TARGETRANLIB)							\
 	AS=$(CROSS_COMPILE)as							\
@@ -129,8 +132,8 @@ define embtk_configure_hostpkg
 	LDFLAGS="$(__embtk_hostpkg_ldflags)"					\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
 	PKG_CONFIG_PATH="$(EMBTK_HOST_PKG_CONFIG_PATH)"				\
-	$(if $(call __embtk_streq,$(PKGV),CCACHE_HOST),,CC=$(HOSTCC_CACHED))	\
-	$(if $(call __embtk_streq,$(PKGV),CCACHE_HOST),,CXX=$(HOSTCXX_CACHED))	\
+	$(if $(__embtk_pkg_noccache),,CC=$(HOSTCC_CACHED))			\
+	$(if $(__embtk_pkg_noccache),,CXX=$(HOSTCXX_CACHED))			\
 	CONFIG_SHELL=$(CONFIG_EMBTK_SHELL)					\
 	$(__embtk_pkg_configureenv)						\
 	$(CONFIG_EMBTK_SHELL) $(__embtk_pkg_srcdir)/configure			\

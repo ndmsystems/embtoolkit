@@ -120,7 +120,7 @@ __embtk_pkg_cflags		= $(strip $($(PKGV)_CFLAGS))
 __embtk_pkg_cppflags		= $(strip $($(PKGV)_CPPFLAGS))
 __embtk_pkg_cxxflags		= $(strip $($(PKGV)_CXXFLAGS))
 __embtk_pkg_ldflags		= $(strip $($(PKGV)_LDFLAGS))
-
+__embtk_pkg_noccache		= $(CONFIG_EMBTK_$(PKGV)_NOCCACHE)
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
 __embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
 __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))

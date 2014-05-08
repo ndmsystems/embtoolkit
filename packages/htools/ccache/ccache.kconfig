@@ -38,6 +38,9 @@ config EMBTK_CCACHE_HOST_VERSION_STRING
 	string
 	default "3.1.9"
 
+config EMBTK_CCACHE_HOST_NOCCACHE
+	bool
+	default y
 config EMBTK_CCACHE_HOST_NEED_PATCH
 	bool
 config EMBTK_CCACHE_HOST_NEED_AUTORECONF
