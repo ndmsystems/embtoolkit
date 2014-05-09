@@ -32,8 +32,13 @@ MTDUTILS_HOST_BUILD_DIR		:= $(embtk_toolsb)/mtd-utils-$(MTDUTILS_HOST_VERSION)
 
 MTDUTILS_HOST_DEPS := zlib_host_install lzo_host_install e2fsprogs_host_install
 
+embtk_mtdutils_host_cppflags	:= -I. -Iinclude -I../include -I$(embtk_htools)/usr/include
+ifneq ($(embtk_buildhost_os_type),linux)
+embtk_mtdutils_host_cppflags	+= -Dloff_t=off_t -include endian.h
+endif
+
 MTDUTILS_HOST_MAKE_ENV	:= LDFLAGS="-L$(embtk_htools)/usr/lib"
-MTDUTILS_HOST_MAKE_ENV	+= CPPFLAGS="-I. -Iinclude -I../include -I$(embtk_htools)/usr/include"
+MTDUTILS_HOST_MAKE_ENV	+= CPPFLAGS="$(embtk_mtdutils_host_cppflags)"
 MTDUTILS_HOST_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR)
 MTDUTILS_HOST_MAKE_OPTS	:= CC=$(HOSTCC_CACHED)
 MTDUTILS_HOST_MAKE_OPTS	+= DESTDIR=$(embtk_htools) WITHOUT_XATTR=1
