@@ -40,14 +40,14 @@ choice
 	help
 	 Version of mtd-utils to use.
 
-	config EMBTK_MTDUTILS_VERSION_1_5_0
-		bool "mtd-utils-1.5.0"
+	config EMBTK_MTDUTILS_VERSION_1_5_1
+		bool "mtd-utils-1.5.1"
 		select EMBTK_MTDUTILS_NEED_PATCH
 endchoice
 
 config EMBTK_MTDUTILS_VERSION_STRING
 	string
-	default "1.5.0"		if EMBTK_MTDUTILS_VERSION_1_5_0
+	default "1.5.1"		if EMBTK_MTDUTILS_VERSION_1_5_1
 
 config EMBTK_MTDUTILS_NEED_PATCH
 	bool

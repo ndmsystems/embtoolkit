@@ -20,7 +20,7 @@
 # \file         mtdutils.kconfig
 # \brief	mtdutils.kconfig of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         Marsh 2014
+# \date         March 2014
 ################################################################################
 
 config EMBTK_HOST_HAVE_MTDUTILS
@@ -34,7 +34,7 @@ config EMBTK_HOST_HAVE_MTDUTILS
 
 config EMBTK_MTDUTILS_HOST_VERSION_STRING
 	string
-	default "1.5.0"
+	default "1.5.1"
 
 config EMBTK_MTDUTILS_HOST_NEED_PATCH
 	bool
