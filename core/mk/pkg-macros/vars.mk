@@ -116,13 +116,18 @@ __embtk_pkg_kconfigs		= $(sort $(filter CONFIG_EMBTK_$(__embtk_pkg_kconfigsname)
 __embtk_pkg_kconfigs_v		= $(foreach k,$(__embtk_pkg_kconfigs),$(k)=$($(k)))
 __embtk_pkg_deps_kconfigs_v	= $(foreach d,$(__embtk_pkg_depspkgv),$(call __embtk_pkg_kconfigs_v,$(d)))
 __embtk_pkg_kconfigs_all_v	= $(strip $(__embtk_pkg_kconfigs_v) $(__embtk_pkg_deps_kconfigs_v))
+
 __embtk_pkg_cflags		= $(strip $($(PKGV)_CFLAGS))
 __embtk_pkg_cppflags		= $(strip $($(PKGV)_CPPFLAGS))
 __embtk_pkg_cxxflags		= $(strip $($(PKGV)_CXXFLAGS))
 __embtk_pkg_ldflags		= $(strip $($(PKGV)_LDFLAGS))
+
 __embtk_pkg_noccache		= $(CONFIG_EMBTK_$(PKGV)_NOCCACHE)
+__embtk_pkg_scanbuild-y		= $(and $(CONFIG_EMBTK_$(PKGV)_USE_SCANBUILD),$(embtk_toolchain_has_llvm-y))
+__embtk_pkg_scanbuild		= $(if $(__embtk_pkg_scanbuild-y),$(TARGETSCANBUILD) -o $(__embtk_pkg_srcdir)-scanbuild-results)
+
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
 __embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
 __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))
-__embtk_pkg_scanbuild-y		= $(and $(CONFIG_EMBTK_$(PKGV)_USE_SCANBUILD),$(embtk_toolchain_has_llvm-y))
-__embtk_pkg_scanbuild		= $(if $(__embtk_pkg_scanbuild-y),$(TARGETSCANBUILD) -o $(__embtk_pkg_srcdir)-scanbuild-results)
+
+__embtk_pkg_usewaf-y		= $(CONFIG_EMBTK_$(PKGV)_USE_WAF)

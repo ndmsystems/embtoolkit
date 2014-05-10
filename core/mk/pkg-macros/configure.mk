@@ -143,3 +143,60 @@ define embtk_configure_hostpkg
 	$(__embtk_pkg_configureopts)
 	$(Q)$(call __embtk_setconfigured_pkg,$(1))
 endef
+
+#
+#
+# Usage:
+# $(call embtk_wafconfigure_pkg,xxxx)
+#
+define embtk_wafconfigure_pkg
+	$(Q)test -e $(__embtk_pkg_srcdir)/wscript || exit 1
+	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
+	$(Q)cd $(__embtk_pkg_srcdir);						\
+	$(__embtk_pkg_cc)							\
+	$(__embtk_pkg_cxx)							\
+	AR=$(TARGETAR)								\
+	RANLIB=$(TARGETRANLIB)							\
+	AS=$(CROSS_COMPILE)as							\
+	NM=$(TARGETNM)								\
+	STRIP=$(TARGETSTRIP)							\
+	OBJDUMP=$(TARGETOBJDUMP)						\
+	OBJCOPY=$(TARGETOBJCOPY)						\
+	CFLAGS="$(__embtk_pkg_cflags) $(TARGET_CFLAGS)"				\
+	CXXFLAGS="$(__embtk_pkg_cxxflags) $(TARGET_CXXFLAGS)"			\
+	LDFLAGS="$(__embtk_pkg_ildflags) $(__embtk_pkg_ldflags)"		\
+	CPPFLAGS="-I$(embtk_sysroot)/usr/include $(__embtk_pkg_cppflags)"	\
+	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
+	PKG_CONFIG_PATH="$(EMBTK_PKG_CONFIG_PATH)"				\
+	PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"				\
+	$(__embtk_pkg_configureenv) $(__embtk_pkg_scanbuild)			\
+	$(embtk_waf) configure							\
+		--prefix=/usr							\
+		--out=$(__embtk_pkg_builddir)					\
+		$(__embtk_pkg_configureopts)
+	$(Q)$(call __embtk_setconfigured_pkg,$(1))
+endef
+
+#
+#
+# Usage:
+# $(call embtk_wafconfigure_hostpkg,xxxx)
+#
+define embtk_wafconfigure_hostpkg
+	$(Q)test -e $(__embtk_pkg_srcdir)/wscript || exit 1
+	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
+	$(Q)cd $(__embtk_pkg_srcdir);						\
+	CPPFLAGS="$(__embtk_hostpkg_cppflags)"					\
+	LDFLAGS="$(__embtk_hostpkg_ldflags)"					\
+	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
+	PKG_CONFIG_PATH="$(EMBTK_HOST_PKG_CONFIG_PATH)"				\
+	$(if $(__embtk_pkg_noccache),,CC=$(HOSTCC_CACHED))			\
+	$(if $(__embtk_pkg_noccache),,CXX=$(HOSTCXX_CACHED))			\
+	$(__embtk_pkg_configureenv)						\
+	$(embtk_waf) configure							\
+		--prefix=$(strip $(if $(__embtk_pkg_prefix),			\
+				$(__embtk_pkg_prefix),$(embtk_htools)/usr))	\
+		--out=$(__embtk_pkg_builddir)					\
+		$(__embtk_pkg_configureopts)
+	$(Q)$(call __embtk_setconfigured_pkg,$(1))
+endef

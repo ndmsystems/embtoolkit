@@ -210,6 +210,34 @@ define __embtk_install_hostpkg_make
 	$(call __embtk_postinstall_pkg,$(1))
 endef
 
+__embtk_waf_build	= cd $(__embtk_pkg_builddir);				\
+	$(embtk_waf) build $(J) --progress
+
+__embtk_waf_install	= cd $(__embtk_pkg_builddir);				\
+	$(embtk_waf) install --progress						\
+	$(if $(__embtk_pkg_nodestdir),,						\
+		--destdir=$(embtk_sysroot)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix)))
+
+__embtk_waf_hostinstall	= cd $(__embtk_pkg_builddir);				\
+	$(embtk_waf) install --progress						\
+	$(if $(__embtk_pkg_destdir),--destdir=$(__embtk_pkg_destdir))
+
+define __embtk_install_pkg_waf
+	$(call __embtk_preinstall_pkg,$(1))
+	$(call embtk_wafconfigure_pkg,$(1))
+	$(call __embtk_waf_build,$(1))
+	$(call __embtk_waf_install,$(1))
+	$(call __embtk_postinstall_pkg,$(1))
+endef
+
+define __embtk_install_hostpkg_waf
+	$(call __embtk_preinstall_pkg,$(1))
+	$(call embtk_wafconfigure_hostpkg,$(1))
+	$(call __embtk_waf_build,$(1))
+	$(call __embtk_waf_hostinstall,$(1))
+	$(call __embtk_postinstall_pkg,$(1))
+endef
+
 #
 # A macro to exit with error when needed package variables not define.
 # Usage:
@@ -269,7 +297,9 @@ endef
 define __embtk_install_pkg
 	$(if $(__embtk_pkg_runrecipe-y),
 		$(Q)mkdir -p $(__embtk_pkg_builddir)
-		$(Q)$(call __embtk_install_pkg_make,$(1),autotools))
+		$(if $(__embtk_pkg_usewaf-y),
+			$(Q)$(call __embtk_install_pkg_waf,$(1)),
+			$(Q)$(call __embtk_install_pkg_make,$(1),autotools)))
 	$(embtk_postinstall_$(pkgv))
 endef
 
@@ -302,7 +332,9 @@ endef
 define __embtk_install_hostpkg
 	$(if $(__embtk_pkg_runrecipe-y),
 		$(Q)mkdir -p $(__embtk_pkg_builddir)
-		$(Q)$(call __embtk_install_hostpkg_make,$(1),autotools))
+		$(if $(__embtk_pkg_usewaf-y),
+			$(Q)$(call __embtk_install_hostpkg_waf,$(1)),
+			$(Q)$(call __embtk_install_hostpkg_make,$(1),autotools)))
 	$(embtk_postinstall_$(pkgv))
 endef
 
