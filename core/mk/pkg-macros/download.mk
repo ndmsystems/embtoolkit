@@ -29,7 +29,7 @@
 #
 __wget_outfile		= $(patsubst %/,%,$(embtk_dldir))/$(strip $(1))
 __wget_remotesite	= $(patsubst %/,%,$(strip $(2)))
-__wget_foreignfiles	= $(strip $(3))
+__wget_foreignfiles	= $(or $(strip $(3)),$(strip $(1)))
 __wget_opts		:= --tries=5 --timeout=10 --waitretry=5
 __wget_opts		+= --no-check-certificate
 
