@@ -17,37 +17,15 @@
 #
 ################################################################################
 #
-# \file         hosttools-buildopts.mk
-# \brief	packages needed for both toolchain and rootfs packages.
+# \file         waf.kconfig
+# \brief	waf.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         Marsh 2014
+# \date         May 2014
 ################################################################################
 
-embtk_pkgincdir := packages/htools
+config EMBTK_HOST_HAVE_WAF
+	bool
 
-# cache
-$(call embtk_include_hostpkg,ccache_host)
-
-# fakeroot
-include packages/htools/fakeroot/vars.mk
-$(call embtk_include_hostpkg,fakeroot_host)
-
-# mtd-utils
-$(call embtk_include_hostpkg,mtdutils_host)
-
-# pkgconf
-include packages/htools/pkgconf/vars.mk
-$(call embtk_include_hostpkg,pkgconf_host)
-
-# squashfs
-$(call embtk_include_hostpkg,squashfs_host)
-
-# waf
-include packages/htools/waf/vars.mk
-$(call embtk_include_hostpkg,waf_host)
-
-# zlib
-$(call embtk_include_hostpkg,zlib_host)
-
-# gperf
-$(call embtk_include_hostpkg,gperf_host)
+config EMBTK_WAF_HOST_VERSION_STRING
+	string
+	default "1.7.16"

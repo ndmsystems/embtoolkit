@@ -17,37 +17,32 @@
 #
 ################################################################################
 #
-# \file         hosttools-buildopts.mk
-# \brief	packages needed for both toolchain and rootfs packages.
+# \file         waf.mk
+# \brief	waf.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         Marsh 2014
+# \date         May 2014
 ################################################################################
 
-embtk_pkgincdir := packages/htools
+WAF_HOST_NAME		:= waf
+WAF_HOST_VERSION	:= $(call embtk_get_pkgversion,waf_host)
+WAF_HOST_SITE		:= http://ftp.waf.io/pub/release
+WAF_HOST_PACKAGE	:= waf-$(WAF_HOST_VERSION)
+WAF_HOST_SRC_DIR	:= $(embtk_toolsb)/waf-$(WAF_HOST_VERSION)
+WAF_HOST_BUILD_DIR	:= $(embtk_toolsb)/waf-$(WAF_HOST_VERSION)
 
-# cache
-$(call embtk_include_hostpkg,ccache_host)
+define embtk_download_waf_host
+	[ -e $(embtk_dldir)/$(WAF_HOST_PACKAGE) ] || \
+		$(call embtk_wget,$(WAF_HOST_PACKAGE),$(WAF_HOST_SITE))
+endef
 
-# fakeroot
-include packages/htools/fakeroot/vars.mk
-$(call embtk_include_hostpkg,fakeroot_host)
+define embtk_install_waf_host
+	$(embtk_download_waf_host)
+	[ -e $(embtk_waf) ] || $(embtk_postinstallonce_waf_host)
+endef
 
-# mtd-utils
-$(call embtk_include_hostpkg,mtdutils_host)
+define embtk_postinstallonce_waf_host
+	install -D -m 0755 $(embtk_dldir)/$(WAF_HOST_PACKAGE) $(embtk_waf)
+endef
 
-# pkgconf
-include packages/htools/pkgconf/vars.mk
-$(call embtk_include_hostpkg,pkgconf_host)
-
-# squashfs
-$(call embtk_include_hostpkg,squashfs_host)
-
-# waf
-include packages/htools/waf/vars.mk
-$(call embtk_include_hostpkg,waf_host)
-
-# zlib
-$(call embtk_include_hostpkg,zlib_host)
-
-# gperf
-$(call embtk_include_hostpkg,gperf_host)
+download_waf_host waf_host_download:
+	$(embtk_download_waf_host)
