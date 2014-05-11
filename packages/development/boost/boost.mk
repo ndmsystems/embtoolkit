@@ -44,6 +44,9 @@ BOOST_MAKE_OPTS		+= --without-atomic --without-coroutine
 BOOST_MAKE_OPTS		+= --without-log --without-python
 BOOST_MAKE_OPTS		+= link=shared runtime-link=shared
 BOOST_MAKE_OPTS		+= threading=multi toolset=gcc
+ifeq ($(CONFIG_EMBTK_CLIB_UCLIBC),y)
+BOOST_MAKE_OPTS		+= boost.locale.posix=off
+endif
 
 BOOST_DEPS		:= zlib_install
 
