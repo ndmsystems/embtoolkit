@@ -48,7 +48,7 @@ BOOST_MAKE_OPTS		+= threading=multi toolset=gcc
 BOOST_DEPS		:= zlib_install
 
 # FIXME: consider using clang++ when libc++ will be fully integrated
-embtk_boost_cxx		= using gcc : $(shell $(TARGETGCC) -dumpversion) : $(TARGETGCC)
+embtk_boost_cxx		= using gcc : $(shell $(TARGETGCC) -dumpversion) : $(TARGETGCXX_CACHED)
 embtk_boost_flags	:= <compileflags>\"$(BOOST_CXXFALGS)\"
 embtk_boost_flags	+= <linkflags>\"$(BOOST_LDFALGS)\"
 embtk_boost_userjam	:= $(BOOST_SRC_DIR)/user-config.jam
