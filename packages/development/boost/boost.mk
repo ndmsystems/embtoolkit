@@ -38,8 +38,8 @@ BOOST_CXXFALGS		:= $(TARGET_CXXFLAGS)
 BOOST_LDFALGS		:= -L$(embtk_sysroot)/$(LIBDIR)
 BOOST_LDFALGS		+= -L$(embtk_sysroot)/usr/$(LIBDIR)
 
-BOOST_CONFIGURE_OPTS	:= --without-icu
-BOOST_MAKE_OPTS		:= -q variant=release
+BOOST_CONFIGURE_OPTS	:= --without-icu --with-toolset=gcc
+BOOST_MAKE_OPTS		:= -q variant=release -sNO_BZIP2=1
 BOOST_MAKE_OPTS		+= --without-atomic --without-coroutine
 BOOST_MAKE_OPTS		+= --without-log --without-python
 BOOST_MAKE_OPTS		+= link=shared runtime-link=shared
@@ -48,16 +48,19 @@ BOOST_MAKE_OPTS		+= threading=multi toolset=gcc
 BOOST_DEPS		:= zlib_install
 
 # FIXME: consider using clang++ when libc++ will be fully integrated
-embtk_boost_cxx		= using gcc:$(shell $(TARGETGCC) -dumpversion):$(TARGETGCC)
+embtk_boost_cxx		= using gcc : $(shell $(TARGETGCC) -dumpversion) : $(TARGETGCC)
 embtk_boost_flags	:= <compileflags>\"$(BOOST_CXXFALGS)\"
 embtk_boost_flags	+= <linkflags>\"$(BOOST_LDFALGS)\"
 embtk_boost_userjam	:= $(BOOST_SRC_DIR)/user-config.jam
 
 define embtk_configure_boost
-	cd $(BOOST_SRC_DIR);							\
-	$(CONFIG_EMBTK_SHELL) $(BOOST_SRC_DIR)/bootstrap.sh			\
-		$(BOOST_CONFIGURE_OPTS)
-	echo "$(embtk_boost_cxx):$(embtk_boost_flags);"	> $(embtk_boost_userjam)
+	cd $(BOOST_SRC_DIR)/tools/build/v2/engine/;				\
+	./build.sh $(notdir $(HOSTCC))
+	for f in $(BOOST_SRC_DIR)/tools/build/v2/engine/bin.*/*; do		\
+		cp $$f $(BOOST_SRC_DIR);					\
+	done
+	echo "$(embtk_boost_cxx) : $(embtk_boost_flags) ;"			\
+		> $(embtk_boost_userjam)
 	echo "" >> $(embtk_boost_userjam)
 endef
 
