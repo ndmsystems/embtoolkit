@@ -25,6 +25,9 @@
 
 embtk_pkgincdir := packages/development
 
+# boost
+$(call embtk_include_pkg,boost)
+
 # libbsd
 $(call embtk_include_pkg,libbsd)
 
