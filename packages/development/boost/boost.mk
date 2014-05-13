@@ -32,11 +32,11 @@ BOOST_BUILD_DIR		:= $(embtk_pkgb)/boost_$(BOOST_VERSION)
 
 BOOST_INCLUDES		:= boost
 BOOST_LIBS		:= libboost_*
-BOOST_CFALGS		:= $(TARGET_CXXFLAGS)
-BOOST_CPPFALGS		:=
-BOOST_CXXFALGS		:= $(TARGET_CXXFLAGS)
-BOOST_LDFALGS		:= -L$(embtk_sysroot)/$(LIBDIR)
-BOOST_LDFALGS		+= -L$(embtk_sysroot)/usr/$(LIBDIR)
+BOOST_CFLAGS		:= $(TARGET_CXXFLAGS)
+BOOST_CPPFLAGS		:=
+BOOST_CXXFLAGS		:= $(TARGET_CXXFLAGS)
+BOOST_LDFLAGS		:= -L$(embtk_sysroot)/$(LIBDIR)
+BOOST_LDFLAGS		+= -L$(embtk_sysroot)/usr/$(LIBDIR)
 
 BOOST_CONFIGURE_OPTS	:= --without-icu --with-toolset=gcc
 BOOST_MAKE_OPTS		:= -q variant=release -sNO_BZIP2=1
@@ -52,8 +52,8 @@ BOOST_DEPS		:= zlib_install
 
 # FIXME: consider using clang++ when libc++ will be fully integrated
 embtk_boost_cxx		= using gcc : $(shell $(TARGETGCC) -dumpversion) : $(TARGETGCXX_CACHED)
-embtk_boost_flags	:= <compileflags>\"$(BOOST_CXXFALGS)\"
-embtk_boost_flags	+= <linkflags>\"$(BOOST_LDFALGS)\"
+embtk_boost_flags	:= <compileflags>\"$(BOOST_CXXFLAGS)\"
+embtk_boost_flags	+= <linkflags>\"$(BOOST_LDFLAGS)\"
 embtk_boost_userjam	:= $(BOOST_SRC_DIR)/user-config.jam
 
 define embtk_configure_boost

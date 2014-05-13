@@ -34,5 +34,5 @@ FCGI_INCLUDES	:= fastcgi.h fcgiapp.h fcgi_config.h fcgimisc.h fcgio.h
 FCGI_INCLUDES	+= fcgios.h fcgi_stdio.h
 FCGI_LIBS	:= libfcgi.*
 
-FCGI_CFALGS	:= -fno-strict-aliasing
-FCGI_CXXFALGS	:= $(FCGI_CFALGS)
+FCGI_CFLAGS	:= -fno-strict-aliasing
+FCGI_CXXFLAGS	:= $(FCGI_CFLAGS)
