@@ -36,7 +36,7 @@ GETTEXT_BINS =	autopoint gettext gettext.sh msgcat msgcomm msgen	\
 		msgfilter msggrep msgmerge msguniq recode-sr-latin	\
 		envsubst gettextize msgattrib msgcmp msgconv msgexec	\
 		msgfmt msginit msgunfmt ngettext xgettext
-GETTEXT_SBINS =
+
 GETTEXT_INCLUDES = autosprintf.h gettext-po.h libintl.h
 GETTEXT_LIBS = gettext libgettext* libasprintf* libintl*
 GETTEXT_PKGCONFIGS =
@@ -47,11 +47,11 @@ GETTEXT_CONFIGURE_ENV	:= gl_cv_func_wcwidth_works=yes			\
 			gt_cv_int_divbyzero_sigfpe=no
 GETTEXT_CONFIGURE_OPTS	:= --enable-relocatable --with-included-gettext	\
 			--disable-rpath --disable-openmp --disable-java	\
-			--with-libxml2-prefix=$(embtk_sysroot)/usr		\
-			--disable-openmp
+			--with-libxml2-prefix=$(embtk_sysroot)/usr	\
+			--disable-openmp --disable-csharp		\
+			--without-emacs
 
-GETTEXT_DEPS = ncurses_install libxml2_install
-
+GETTEXT_DEPS		:= ncurses_install libxml2_install
 
 define embtk_postinstallonce_gettext
 	$(MAKE) $(GETTEXT_BUILD_DIR)/.patchlibtool
