@@ -28,14 +28,17 @@ embtk_pkgincdir := packages/development
 # boost
 $(call embtk_include_pkg,boost)
 
+# fftw
+$(call embtk_include_pkg,fftw)
+
+# gtest
+$(call embtk_include_pkg,gtest)
+
 # libbsd
 $(call embtk_include_pkg,libbsd)
 
 # libevent
 $(call embtk_include_pkg,libevent)
-
-# gtest
-$(call embtk_include_pkg,gtest)
 
 # libnih
 $(call embtk_include_pkg,libnih)
