@@ -47,6 +47,9 @@ endif
 # Flash manipulation tools: mtd-utils
 ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_MTDUTILS) += mtdutils_install
 
+# audio packages
+include packages/audio/audio.mk
+
 # Compression packages
 include packages/compression/compression.mk
 
