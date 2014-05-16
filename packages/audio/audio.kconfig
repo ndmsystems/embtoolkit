@@ -25,3 +25,6 @@
 
 # libsndfile
 source packages/audio/libsndfile/libsndfile.kconfig
+
+# lv2
+source packages/audio/lv2/lv2.kconfig

@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2014 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,16 +17,24 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \file         lv2.mk
+# \brief        lv2.mk of Embtoolkit.
+# \author       Ricardo Crudo <ricardo.crudo@gmail.com>
 # \date         May 2014
 ################################################################################
 
-embtk_pkgincdir := packages/audio
+LV2_NAME	:= lv2
+LV2_VERSION	:= $(call embtk_get_pkgversion,lv2)
+LV2_SITE	:= http://lv2plug.in/spec
+LV2_PACKAGE	:= lv2-$(LV2_VERSION).tar.bz2
+LV2_SRC_DIR	:= $(embtk_pkgb)/lv2-$(LV2_VERSION)
+LV2_BUILD_DIR	:= $(embtk_pkgb)/lv2-$(LV2_VERSION)
 
-# libsndfile
-$(call embtk_include_pkg,libsndfile)
 
-# lv2
-$(call embtk_include_pkg,lv2)
+LV2_BINS	:= lv2specgen.py
+LV2_INCLUDES	:= lv2 lv2.h
+LV2_LIBS	:= lv2
+LV2_PKGCONFIGS	:= lv2.pc lv2core.pc
+LV2_SHARES	:= lv2specgen
+
+LV2_CONFIGURE_OPTS  := --no-plugins
