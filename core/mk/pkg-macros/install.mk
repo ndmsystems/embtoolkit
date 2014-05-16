@@ -210,16 +210,13 @@ define __embtk_install_hostpkg_make
 	$(call __embtk_postinstall_pkg,$(1))
 endef
 
-__embtk_waf_build	= cd $(__embtk_pkg_builddir);				\
-	$(embtk_waf) build $(J) --progress
+__embtk_waf_build	= cd $(__embtk_pkg_srcdir); ./waf build $(J) --progress
 
-__embtk_waf_install	= cd $(__embtk_pkg_builddir);				\
-	$(embtk_waf) install --progress						\
+__embtk_waf_install	= cd $(__embtk_pkg_srcdir); ./waf install --progress	\
 	$(if $(__embtk_pkg_nodestdir),,						\
 		--destdir=$(embtk_sysroot)$(if $(__embtk_pkg_sysrootsuffix),/$(__embtk_pkg_sysrootsuffix)))
 
-__embtk_waf_hostinstall	= cd $(__embtk_pkg_builddir);				\
-	$(embtk_waf) install --progress						\
+__embtk_waf_hostinstall	= cd $(__embtk_pkg_srcdir); ./waf install --progress	\
 	$(if $(__embtk_pkg_destdir),--destdir=$(__embtk_pkg_destdir))
 
 define __embtk_install_pkg_waf

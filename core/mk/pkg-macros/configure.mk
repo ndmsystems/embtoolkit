@@ -170,9 +170,8 @@ define embtk_wafconfigure_pkg
 	PKG_CONFIG_PATH="$(EMBTK_PKG_CONFIG_PATH)"				\
 	PKG_CONFIG_LIBDIR="$(EMBTK_PKG_CONFIG_LIBDIR)"				\
 	$(__embtk_pkg_configureenv) $(__embtk_pkg_scanbuild)			\
-	$(embtk_waf) configure							\
+	./waf configure								\
 		--prefix=/usr							\
-		--out=$(__embtk_pkg_builddir)					\
 		$(__embtk_pkg_configureopts)
 	$(Q)$(call __embtk_setconfigured_pkg,$(1))
 endef
@@ -193,10 +192,9 @@ define embtk_wafconfigure_hostpkg
 	$(if $(__embtk_pkg_noccache),,CC=$(HOSTCC_CACHED))			\
 	$(if $(__embtk_pkg_noccache),,CXX=$(HOSTCXX_CACHED))			\
 	$(__embtk_pkg_configureenv)						\
-	$(embtk_waf) configure							\
+	./waf configure								\
 		--prefix=$(strip $(if $(__embtk_pkg_prefix),			\
 				$(__embtk_pkg_prefix),$(embtk_htools)/usr))	\
-		--out=$(__embtk_pkg_builddir)					\
 		$(__embtk_pkg_configureopts)
 	$(Q)$(call __embtk_setconfigured_pkg,$(1))
 endef
