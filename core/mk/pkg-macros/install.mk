@@ -224,6 +224,9 @@ define __embtk_install_pkg_waf
 	$(call embtk_wafconfigure_pkg,$(1))
 	$(call __embtk_waf_build,$(1))
 	$(call __embtk_waf_install,$(1))
+	$(if $(__embtk_pkg_pkgconfigs),
+		$(call __embtk_fix_libtool_files)
+		$(call __embtk_fix_pkgconfig_files))
 	$(call __embtk_postinstall_pkg,$(1))
 endef
 
