@@ -17,8 +17,8 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
+# \file         audio.mk
+# \brief	audio.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2014
 ################################################################################
@@ -27,6 +27,9 @@ embtk_pkgincdir := packages/audio
 
 # libsndfile
 $(call embtk_include_pkg,libsndfile)
+
+# lilv
+$(call embtk_include_pkg,lilv)
 
 # lv2
 $(call embtk_include_pkg,lv2)

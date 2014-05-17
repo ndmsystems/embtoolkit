@@ -17,14 +17,17 @@
 #
 ################################################################################
 #
-# \file         misc.kconfig
-# \brief	misc.kconfig of Embtoolkit
+# \file         audio.kconfig
+# \brief	audio.kconfig of Embtoolkit
 # \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
 # \date         May 2014
 ################################################################################
 
 # libsndfile
 source packages/audio/libsndfile/libsndfile.kconfig
+
+# lilv
+source packages/audio/lilv/lilv.kconfig
 
 # lv2
 source packages/audio/lv2/lv2.kconfig
