@@ -66,7 +66,7 @@ define __embtk_fix_pkgconfig_files
 	for i in $$__conf_files0 $$__conf_files1; do				\
 		sed -e 's;prefix=.*;$(__pkgconfig_prefix);'			\
 		-e 's;includedir=$${prefix}/include;$(__pkgconfig_includedir);'	\
-		-e 's;includedir=/usr/include;$(__pkgconfig_includedir);'	\
+		-e 's;\(includedir=/usr/include\)\(.*\);$(__pkgconfig_includedir)\2;' \
 		-e 's;libdir=.*;$(__pkgconfig_libdir);' < $$i > $$i.new;	\
 		mv $$i.new $$i;							\
 	done
