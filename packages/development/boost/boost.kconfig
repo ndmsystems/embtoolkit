@@ -51,6 +51,7 @@ if EMBTK_HAVE_BOOST
 comment "Boost options"
 config EMBTK_BOOST_WITH_ICU
 	bool "Build boot with icu support"
+	select EMBTK_HAVE_ICU
 config EMBTK_BOOST_WITH_ATOMIC
 	bool "Build boot with atomic support"
 config EMBTK_BOOST_WITH_COROUTINE
