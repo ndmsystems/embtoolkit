@@ -25,6 +25,9 @@
 
 config EMBTK_HAVE_BOOST
 	bool "Have boost"
+	select EMBTK_HAVE_GETTEXT
+	select EMBTK_HAVE_BZIP2
+	select EMBTK_HAVE_ZLIB
 	select EMBTK_GCC_LANGUAGE_CPP
 	select KEMBTK_UCLIBC_UCLIBC_HAS_LOCALE if EMBTK_CLIB_UCLIBC
 	select KEMBTK_UCLIBC_UCLIBC_HAS_XLOCALE if EMBTK_CLIB_UCLIBC
@@ -43,6 +46,18 @@ choice
 	config  EMBTK_BOOST_VERSION_1_55_0
 		bool "boost-1.55.0"
 endchoice
+
+if EMBTK_HAVE_BOOST
+comment "Boost options"
+config EMBTK_BOOST_WITH_ICU
+	bool "Build boot with icu support"
+config EMBTK_BOOST_WITH_ATOMIC
+	bool "Build boot with atomic support"
+config EMBTK_BOOST_WITH_COROUTINE
+	bool "Build boot with coroutine support"
+config EMBTK_BOOST_WITH_LOG
+	bool "Build boot with log support"
+endif
 
 config EMBTK_BOOST_VERSION_STRING
 	string

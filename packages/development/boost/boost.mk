@@ -38,17 +38,22 @@ BOOST_CXXFLAGS		:= $(TARGET_CXXFLAGS)
 BOOST_LDFLAGS		:= -L$(embtk_sysroot)/$(LIBDIR)
 BOOST_LDFLAGS		+= -L$(embtk_sysroot)/usr/$(LIBDIR)
 
-BOOST_CONFIGURE_OPTS	:= --without-icu --with-toolset=gcc
-BOOST_MAKE_OPTS		:= -q variant=release -sNO_BZIP2=1
-BOOST_MAKE_OPTS		+= --without-atomic --without-coroutine
-BOOST_MAKE_OPTS		+= --without-log --without-python
+BOOST_CONFIGURE_OPTS	:= $(if $(CONFIG_EMBTK_BOOST_WITH_ICU),--with-icu,--without-icu)
+BOOST_CONFIGURE_OPTS	+= --with-toolset=gcc
+
+BOOST_MAKE_OPTS		:= $(if $(CONFIG_EMBTK_BOOST_WITH_ATOMIC),,--without-atomic)
+BOOST_MAKE_OPTS		+= $(if $(CONFIG_EMBTK_BOOST_WITH_COROUTINE),,--without-coroutine)
+BOOST_MAKE_OPTS		+= $(if $(CONFIG_EMBTK_BOOST_WITH_LOG),,--without-log)
+BOOST_MAKE_OPTS		+= --without-python
+BOOST_MAKE_OPTS		+= -q variant=release
 BOOST_MAKE_OPTS		+= link=shared runtime-link=shared
 BOOST_MAKE_OPTS		+= threading=multi toolset=gcc
 ifeq ($(CONFIG_EMBTK_CLIB_UCLIBC),y)
 BOOST_MAKE_OPTS		+= boost.locale.posix=off
 endif
 
-BOOST_DEPS		:= zlib_install
+BOOST_DEPS-$(CONFIG_EMBTK_BOOST_WITH_ICU) := icu_install
+BOOST_DEPS	:= zlib_install bzip2_install gettext_install $(BOOST_DEPS-y)
 
 # FIXME: consider using clang++ when libc++ will be fully integrated
 embtk_boost_cxx		= using gcc : $(shell $(TARGETGCC) -dumpversion) : $(TARGETGCXX_CACHED)
