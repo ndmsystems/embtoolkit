@@ -47,16 +47,26 @@ define embtk_pkgconfig-cflags
 		$(PKGCONFIG_BIN) $(strip $(1)) --cflags)
 endef
 
+#
+# FIXME: Get rid of this macro, each package should indicate its .pc files
 # Macro to adapt pkg-config files for cross compiling
+#
 __pkgconfig_includedir	= includedir=$(embtk_sysroot)/usr/include
 __pkgconfig_prefix	= prefix=$(embtk_sysroot)/usr
 __pkgconfig_libdir	= libdir=$(embtk_sysroot)/usr/$(LIBDIR)
+__embtk_pkgconfig_dir0	= $(embtk_sysroot)/usr/$(LIBDIR)/pkgconfig
+__embtk_pkgconfig_dir1	= $(embtk_sysroot)/usr/share/pkgconfig
 define __embtk_fix_pkgconfig_files
-	__conf_files0=$$(find $(embtk_sysroot)/usr/$(LIBDIR)/pkgconfig -name *.pc);	\
-	__conf_files1=$$(find $(embtk_sysroot)/usr/share/pkgconfig -name *.pc);	\
+	if [ -d $(__embtk_pkgconfig_dir0) ]; then				\
+		__conf_files0=$$(find $(__embtk_pkgconfig_dir0) -name *.pc);	\
+	fi;									\
+	if [ -d $(__embtk_pkgconfig_dir1) ]; then				\
+		__conf_files1=$$(find $(__embtk_pkgconfig_dir1) -name *.pc);	\
+	fi;									\
 	for i in $$__conf_files0 $$__conf_files1; do				\
 		sed -e 's;prefix=.*;$(__pkgconfig_prefix);'			\
 		-e 's;includedir=$${prefix}/include;$(__pkgconfig_includedir);'	\
+		-e 's;includedir=/usr/include;$(__pkgconfig_includedir);'	\
 		-e 's;libdir=.*;$(__pkgconfig_libdir);' < $$i > $$i.new;	\
 		mv $$i.new $$i;							\
 	done
