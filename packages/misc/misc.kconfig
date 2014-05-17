@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2012 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2010-2014 GAYE Abdoulaye Walsimou.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,10 +23,25 @@
 # \date         February 2010
 ################################################################################
 
+# expat
 source packages/misc/expat/expat.kconfig
+
+# gettext
 source packages/misc/gettext/gettext.kconfig
+
+# glib
 source packages/misc/glib/glib.kconfig
+
+# inttltool
 source packages/misc/intltool/intltool.kconfig
+
+# libxml
 source packages/misc/libxml/libxml.kconfig
+
 # ncurses included in main Kconfig
+
+# serd
+source packages/misc/serd/serd.kconfig
+
+# tslib
 source packages/misc/tslib/tslib.kconfig

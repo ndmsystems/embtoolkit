@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2014 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,37 +17,30 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \file		serd.mk
+# \brief	serd.mk of Embtoolkit.
+# \author	Ricardo Crudo <ricardo.crudo@gmail.com>
+# \date		May 2014
 ################################################################################
 
-embtk_pkgincdir := packages/misc
+SERD_NAME	:= serd
+SERD_VERSION	:= $(call embtk_get_pkgversion,serd)
+SERD_SITE	:= http://download.drobilla.net
+SERD_PACKAGE	:= serd-$(SERD_VERSION).tar.bz2
+SERD_SRC_DIR	:= $(embtk_pkgb)/serd-$(SERD_VERSION)
+SERD_BUILD_DIR	:= $(embtk_pkgb)/serd-$(SERD_VERSION)
 
-# expat
-$(call embtk_include_pkg,expat)
+SERD_BINS	:= serdi
+SERD_INCLUDES	:= serd-0
+SERD_LIBS	:= libserd*
+SERD_PKGCONFIGS := serd-0.pc
+SERD_SHARES	:= man/*/serdi*
 
-# gettext
-$(call embtk_include_pkg,gettext)
-$(call embtk_include_hostpkg,gettext_host)
-
-# glib
-$(call embtk_include_pkg,glib)
-$(call embtk_include_hostpkg,glib_host)
-
-# intltool
-$(call embtk_include_hostpkg,intltool_host)
-
-# libxml2
-include packages/misc/libxml/libxml.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXML2) += libxml2_install
-
-# ncurses
-$(call embtk_include_pkg,ncurses)
-
-# serd
-$(call embtk_include_pkg,serd)
-
-# tslib
-$(call embtk_include_pkg,tslib)
+# FIXME: uses python2 to execute the waf due a bug with waflib and python 3.4.0
+define embtk_beforeinstall_serd
+	cp $(SERD_SRC_DIR)/waf $(SERD_SRC_DIR)/waf.bak
+	sed -e 's;env[[:space:]]python;env python2;'				\
+		< $(SERD_SRC_DIR)/waf > $(SERD_SRC_DIR)/waf.new
+	mv $(SERD_SRC_DIR)/waf.new $(SERD_SRC_DIR)/waf
+	chmod +x $(SERD_SRC_DIR)/waf
+endef
