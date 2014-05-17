@@ -34,6 +34,10 @@ $(call embtk_include_pkg,fftw)
 # gtest
 $(call embtk_include_pkg,gtest)
 
+# icu
+$(call embtk_include_pkg,icu)
+$(call embtk_include_hostpkg,icu_host)
+
 # libbsd
 $(call embtk_include_pkg,libbsd)
 

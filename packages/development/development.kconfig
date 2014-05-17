@@ -32,6 +32,9 @@ source packages/development/fftw/fftw.kconfig
 # gtest
 source packages/development/gtest/gtest.kconfig
 
+# icu
+source packages/development/icu/icu.kconfig
+
 # libbsd
 source packages/development/libbsd/libbsd.kconfig
 
