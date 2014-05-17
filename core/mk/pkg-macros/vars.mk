@@ -129,5 +129,7 @@ __embtk_pkg_scanbuild		= $(if $(__embtk_pkg_scanbuild-y),$(TARGETSCANBUILD) -o $
 __embtk_pkg_makedirs		= $(strip $($(PKGV)_MAKE_DIRS))
 __embtk_pkg_makeenv		= $(strip $($(PKGV)_MAKE_ENV))
 __embtk_pkg_makeopts		= $(strip $($(PKGV)_MAKE_OPTS))
+___embtk_pkg_configuredir	= $(strip $($(PKGV)_CONFIGURE_DIR))
+__embtk_pkg_configuredir	= $(if $(___embtk_pkg_configuredir),$(___embtk_pkg_configuredir)/)
 
 __embtk_pkg_usewaf-y		= $(CONFIG_EMBTK_$(PKGV)_USE_WAF)

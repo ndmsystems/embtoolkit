@@ -48,6 +48,7 @@ FOO_CONFIGURE_OPTS	:=
 FOO_MAKE_ENV		:=
 FOO_MAKE_OPTS		:=
 FOO_MAKE_DIRS		:=
+FOO_CONFIGURE_DIR	:= # relative path in foo source where to find the configure script
 
 FOO_DEPS		:=
 

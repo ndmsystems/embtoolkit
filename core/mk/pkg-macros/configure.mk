@@ -65,6 +65,8 @@ define __embtk_print_configure_opts
 	echo
 endef
 
+__embtk_pkg_configurescript = $(__embtk_pkg_srcdir)/$(__embtk_pkg_configuredir)configure
+
 __embtk_pkg_ildflags	= -L$(embtk_sysroot)/$(LIBDIR)
 __embtk_pkg_ildflags	+= -L$(embtk_sysroot)/usr/$(LIBDIR)
 __embtk_pkg_cc		= CC=$(if $(__embtk_pkg_noccache),$(TARGETCC),$(TARGETCC_CACHED))
@@ -74,7 +76,7 @@ define embtk_configure_pkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
 		$(call embtk_pinfo,"Configure $(__embtk_pkg_package)..."))
 	$(call __embtk_configure_autoreconfpkg,$(1))
-	$(Q)test -e $(__embtk_pkg_srcdir)/configure || exit 1
+	$(Q)test -e $(__embtk_pkg_configurescript) || exit 1
 	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
 	$(if $(CONFIG_EMBTK_CLIB_MUSL),$(call __embtk_fixgconfigsfor_pkg,$(1)))
 	$(Q)cd $(__embtk_pkg_builddir);						\
@@ -98,7 +100,7 @@ define embtk_configure_pkg
 	ac_cv_func_realloc_0_nonnull=yes					\
 	CONFIG_SHELL=$(CONFIG_EMBTK_SHELL)					\
 	$(__embtk_pkg_configureenv) $(__embtk_pkg_scanbuild)			\
-	$(CONFIG_EMBTK_SHELL) $(__embtk_pkg_srcdir)/configure			\
+	$(CONFIG_EMBTK_SHELL) $(__embtk_pkg_configurescript)			\
 	--build=$(HOST_BUILD) --host=$(STRICT_GNU_TARGET)			\
 	--target=$(STRICT_GNU_TARGET) --libdir=/usr/$(LIBDIR)			\
 	--prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-rpath	\
@@ -125,7 +127,7 @@ define embtk_configure_hostpkg
 	$(call embtk_pinfo,"Configure $(__embtk_pkg_package) for host..."))
 	$(call __embtk_configure_autoreconfpkg,$(1))
 	$(if $(CONFIG_EMBTK_CLIB_MUSL),$(call __embtk_fixgconfigsfor_pkg,$(1)))
-	$(Q)test -e $(__embtk_pkg_srcdir)/configure || exit 1
+	$(Q)test -e $(__embtk_pkg_configurescript) || exit 1
 	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
 	$(Q)cd $(__embtk_pkg_builddir);						\
 	CPPFLAGS="$(__embtk_hostpkg_cppflags)"					\
@@ -136,7 +138,7 @@ define embtk_configure_hostpkg
 	$(if $(__embtk_pkg_noccache),,CXX=$(HOSTCXX_CACHED))			\
 	CONFIG_SHELL=$(CONFIG_EMBTK_SHELL)					\
 	$(__embtk_pkg_configureenv)						\
-	$(CONFIG_EMBTK_SHELL) $(__embtk_pkg_srcdir)/configure			\
+	$(CONFIG_EMBTK_SHELL) $(__embtk_pkg_configurescript)			\
 	--build=$(HOST_BUILD) --host=$(HOST_ARCH)				\
 	--prefix=$(strip $(if $(__embtk_pkg_prefix),				\
 				$(__embtk_pkg_prefix),$(embtk_htools)/usr))	\
