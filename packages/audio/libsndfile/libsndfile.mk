@@ -30,6 +30,12 @@ LIBSNDFILE_PACKAGE	:= libsndfile-$(LIBSNDFILE_VERSION).tar.gz
 LIBSNDFILE_SRC_DIR	:= $(embtk_pkgb)/libsndfile-$(LIBSNDFILE_VERSION)
 LIBSNDFILE_BUILD_DIR	:= $(embtk_pkgb)/libsndfile-$(LIBSNDFILE_VERSION)
 
-LIBSNDFILE_INCLUDES	:= sndfile.h
+LIBSNDFILE_BINS		:= sndfile-cmp sndfile-concat sndfile-convert
+LIBSNDFILE_BINS		+= sndfile-deinterleave sndfile-info sndfile-interleave
+LIBSNDFILE_BINS		+= sndfile-metadata-get sndfile-metadata-set
+LIBSNDFILE_BINS		+= sndfile-play sndfile-regtest sndfile-salvage
+LIBSNDFILE_INCLUDES	:= sndfile.h sndfile.hh
 LIBSNDFILE_LIBS		:= libsndfile.*
 LIBSNDFILE_PKGCONFIGS	:= sndfile.pc
+
+LIBSNDFILE_CONFIGURE_OPTS := --program-transform-name='s;$(STRICT_GNU_TARGET)-;;'
