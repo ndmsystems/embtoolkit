@@ -49,5 +49,8 @@ $(call embtk_include_pkg,ncurses)
 # serd
 $(call embtk_include_pkg,serd)
 
+# sord
+$(call embtk_include_pkg,sord)
+
 # tslib
 $(call embtk_include_pkg,tslib)
