@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,20 +17,28 @@
 #
 ################################################################################
 #
-# \file         compression.mk
-# \brief	compression.mk of Embtoolkit.
-# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         August 2010
+# \file         bzip2.mk
+# \brief        bzip2.mk of Embtoolkit.
+# \author       Ricardo Crudo <ricardo.crudo@gmail.com>
+# \date         May 2014
 ################################################################################
 
-embtk_pkgincdir := packages/compression
+BZIP2_NAME	:= bzip2
+BZIP2_VERSION	:= $(call embtk_get_pkgversion,bzip2)
+BZIP2_SITE	:= http://www.bzip.org/$(BZIP2_VERSION)
+BZIP2_PACKAGE	:= bzip2-$(BZIP2_VERSION).tar.gz
+BZIP2_SRC_DIR	:= $(embtk_pkgb)/bzip2-$(BZIP2_VERSION)
+BZIP2_BUILD_DIR	:= $(embtk_pkgb)/bzip2-$(BZIP2_VERSION)
 
-# bzip2 for target
-$(call embtk_include_pkg,bzip2)
+BZIP2_BINS	:= bzip2 bunzip2 bzcat bzip2recover bz*grep bzmore bzless bzdiff
+BZIP2_INCLUDES	:= bzlib.h
+BZIP2_LIBS	:= libbz*
 
-# lzo for host and target
-$(call embtk_include_pkg,lzo)
-$(call embtk_include_hostpkg,lzo_host)
+BZIP2_MAKE_ENV	:= CC=$(TARGETCC_CACHED) AR=$(TARGETAR) RANLIB=$(TARGETRANLIB)
+BZIP2_MAKE_ENV	+= CFLAGS="$(TARGET_CFLAGS)" PREFIX="$(embtk_sysroot)/usr"
+BZIP2_MAKE_ENV	+= LIBDIR=$(LIBDIR)
 
-# zlib for target
-$(call embtk_include_pkg,zlib)
+define embtk_install_bzip2
+	$(call embtk_makeinstall_pkg,bzip2)
+endef
+

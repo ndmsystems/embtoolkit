@@ -17,20 +17,36 @@
 #
 ################################################################################
 #
-# \file         compression.mk
-# \brief	compression.mk of Embtoolkit.
-# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         August 2010
+# \file         bzip2.kconfig
+# \brief        bzip2.kconfig of Embtoolkit.
+# \author       Ricardo Crudo <ricardo.crudo@gmail.com>
+# \date         May 2014
 ################################################################################
 
-embtk_pkgincdir := packages/compression
+config EMBTK_HAVE_BZIP2
+	bool "Have bzip2"
+	help
+	 bzip2 is a freely available, patent free (see below), high-quality data
+	 compressor.
+	 It typically compresses files to within 10% to 15% of the best
+	 available techniques (the PPM family of statistical compressors),
+	 whilst being around twice as fast at compression and six times faster
+	 at decompression.
 
-# bzip2 for target
-$(call embtk_include_pkg,bzip2)
+choice
+	prompt "bzip2 version to use"
+	depends on EMBTK_HAVE_BZIP2
+	help
+	 bzip2 version to use
 
-# lzo for host and target
-$(call embtk_include_pkg,lzo)
-$(call embtk_include_hostpkg,lzo_host)
+	config EMBTK_BZIP2_VERSION_1_0_6
+		bool "bzip2-1.0.6"
+		select EMBTK_BZIP2_NEED_PATCH
+endchoice
 
-# zlib for target
-$(call embtk_include_pkg,zlib)
+config EMBTK_BZIP2_VERSION_STRING
+    string
+    default "1.0.6"     if EMBTK_BZIP2_VERSION_1_0_6
+
+config EMBTK_BZIP2_NEED_PATCH
+    bool
