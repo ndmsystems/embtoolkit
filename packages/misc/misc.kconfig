@@ -46,5 +46,8 @@ source packages/misc/serd/serd.kconfig
 # sord
 source packages/misc/sord/sord.kconfig
 
+# sratom
+source packages/misc/sratom/sratom.kconfig
+
 # tslib
 source packages/misc/tslib/tslib.kconfig
