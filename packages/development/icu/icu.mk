@@ -56,7 +56,7 @@ ICU_HOST_PACKAGE	:= $(ICU_PACKAGE)
 ICU_HOST_SRC_DIR	:= $(embtk_toolsb)/icu
 ICU_HOST_BUILD_DIR	= $(embtk_toolsb)/icu-$(ICU_VERSION)-build
 
-ICU_HOST_CONFIGURE_OPTS := --disable-extras --enable-tests=no --disable-samples
+ICU_HOST_CONFIGURE_OPTS := --disable-extras --disable-tests --disable-samples
 ICU_HOST_CONFIGURE_OPTS += --enable-release
 
 ICU_HOST_KEEP_SRC_DIR	:= y
