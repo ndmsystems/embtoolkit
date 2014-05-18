@@ -29,8 +29,8 @@ OPENBLAS_SRC_DIR	:= $(call __embtk_pkg_srcdir,openblas)
 OPENBLAS_BUILD_DIR	:= $(OPENBLAS_SRC_DIR)
 
 OPENBLAS_LIBS		:= libopenblas*
-OPENBLAS_INCLUDE	:= cblas.h f77blas.h lapacke_config.h lapacke.h
-OPENBLAS_INCLUDE	+= lapacke_mangling.h lapacke_utils.h openblas_config.h
+OPENBLAS_INCLUDES	:= cblas.h f77blas.h lapacke_config.h lapacke.h
+OPENBLAS_INCLUDES	+= lapacke_mangling.h lapacke_utils.h openblas_config.h
 
 OPENBLAS_MAKE_OPTS	:= PREFIX=/usr AR=$(TARGETAR) RANLIB=$(TARGETRANLIB)
 OPENBLAS_MAKE_OPTS	+= LD=$(TARGETLD) NM=$(TARGETNM)
