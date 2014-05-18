@@ -66,6 +66,7 @@ endif
 #
 # Some binutils components.
 #
+TARGETAS		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-as
 TARGETAR		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ar
 TARGETRANLIB		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ranlib
 TARGETLD		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-ld
