@@ -39,7 +39,7 @@ SERD_SHARES	:= man/*/serdi*
 # FIXME: uses python2 to execute the waf due a bug with waflib and python 3.4.0
 define embtk_beforeinstall_serd
 	cp $(SERD_SRC_DIR)/waf $(SERD_SRC_DIR)/waf.bak
-	sed -e 's;env[[:space:]]python;env python2;'				\
+	sed -e 's;env[[:space:]]python$$;env python2;'				\
 		< $(SERD_SRC_DIR)/waf > $(SERD_SRC_DIR)/waf.new
 	mv $(SERD_SRC_DIR)/waf.new $(SERD_SRC_DIR)/waf
 	chmod +x $(SERD_SRC_DIR)/waf

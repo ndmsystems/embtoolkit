@@ -40,7 +40,7 @@ SORD_SHARES	:= man/*/sord*
 # uses python2 to execute the waf due a bug with waflib and python 3.4.0
 define embtk_beforeinstall_sord
 	cp $(SORD_SRC_DIR)/waf $(SORD_SRC_DIR)/waf.bak
-	sed -e 's;env[[:space:]]python;env python2;'				\
+	sed -e 's;env[[:space:]]python$$;env python2;'				\
 		< $(SORD_SRC_DIR)/waf > $(SORD_SRC_DIR)/waf.new
 	mv $(SORD_SRC_DIR)/waf.new $(SORD_SRC_DIR)/waf
 	chmod +x $(SORD_SRC_DIR)/waf

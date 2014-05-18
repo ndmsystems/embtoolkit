@@ -42,7 +42,7 @@ LILV_CONFIGURE_OPTS := --default-lv2-path=~/.lv2
 # FIXME: uses python2 to execute the waf due a bug with waflib and python 3.4.0
 define embtk_beforeinstall_lilv
 	cp $(LILV_SRC_DIR)/waf $(LILV_SRC_DIR)/waf.bak
-	sed -e 's;env[[:space:]]python;env python2;'				\
+	sed -e 's;env[[:space:]]python$$;env python2;'				\
 		< $(LILV_SRC_DIR)/waf > $(LILV_SRC_DIR)/waf.new
 	mv $(LILV_SRC_DIR)/waf.new $(LILV_SRC_DIR)/waf
 	chmod +x $(LILV_SRC_DIR)/waf

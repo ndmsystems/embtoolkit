@@ -38,7 +38,7 @@ SRATOM_PKGCONFIGS	:= sratom-0.pc
 # FIXME: uses python2 to execute the waf due a bug with waflib and python 3.4.0
 define embtk_beforeinstall_sratom
 	cp $(SRATOM_SRC_DIR)/waf $(SRATOM_SRC_DIR)/waf.bak
-	sed -e 's;env[[:space:]]python;env python2;'				\
+	sed -e 's;env[[:space:]]python$$;env python2;'				\
 		< $(SRATOM_SRC_DIR)/waf > $(SRATOM_SRC_DIR)/waf.new
 	mv $(SRATOM_SRC_DIR)/waf.new $(SRATOM_SRC_DIR)/waf
 	chmod +x $(SRATOM_SRC_DIR)/waf
