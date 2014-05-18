@@ -158,7 +158,7 @@ __embtk_single_make_hostinstall = $(__embtk_pkg_makeenv)			\
 	$(__embtk_pkg_makeopts) install
 
 define __embtk_install_pkgdeps
-	$(foreach dep,$(__embtk_pkg_depspkgv),$(call embtk_install_xpkg,$(dep)))
+	$(if $(__embtk_pkg_deps),$(MAKE) $(__embtk_pkg_deps))
 endef
 
 define __embtk_preinstall_pkg
