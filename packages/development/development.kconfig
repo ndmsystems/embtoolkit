@@ -50,5 +50,8 @@ source packages/development/libsigsegv/libsigsegv.kconfig
 # libunwind
 source packages/development/libunwind/libunwind.kconfig
 
+# openblas
+source packages/development/openblas/openblas.kconfig
+
 # popt
 source packages/development/popt/popt.kconfig

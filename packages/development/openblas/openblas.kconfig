@@ -17,44 +17,41 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \file         openblas.kconfig
+# \brief        openblas.kconfig of Embtoolkit.
+# \author       Ricardo Crudo <ricardo.crudo@gmail.com>
+# \date         May 2014
 ################################################################################
 
-embtk_pkgincdir := packages/development
+config EMBTK_HAVE_OPENBLAS
+	bool "Have openblas"
+	select EMBTK_GCC_LANGUAGE_FORTRAN
+	depends on (EMBTK_ARCH_ARM_FAMILY_ARM11 || EMBTK_ARCH_ARM_FAMILY_CORTEX)
+	depends on EMBTK_HARDFLOAT
+	help
+	 OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD
+	 version.
+	 Please read the documents on OpenBLAS wiki pages
+	 http://github.com/xianyi/OpenBLAS/wiki.
 
-# boost
-$(call embtk_include_pkg,boost)
+choice
+	prompt "OpenBLAS version to use"
+	depends on EMBTK_HAVE_OPENBLAS
+	help
+	 Which OpenBLAS version to use.
 
-# fftw
-$(call embtk_include_pkg,fftw)
+	config EMBTK_OPENBLAS_VERSION_GIT
+		bool "Use a branch of OpenBLAS git repository"
+		help
+		 see https://github.com/xianyi/OpenBLAS
+endchoice
 
-# gtest
-$(call embtk_include_pkg,gtest)
+config EMBTK_OPENBLAS_VERSION_STRING
+	string
+	default "git"
+config EMBTK_OPENBLAS_REFSPEC
+	string
+	default "development"
 
-# icu
-$(call embtk_include_pkg,icu)
-$(call embtk_include_hostpkg,icu_host)
-
-# libbsd
-$(call embtk_include_pkg,libbsd)
-
-# libevent
-$(call embtk_include_pkg,libevent)
-
-# libnih
-$(call embtk_include_pkg,libnih)
-
-# libsigsegv
-$(call embtk_include_pkg,libsigsegv)
-
-# libunwind
-$(call embtk_include_pkg,libunwind)
-
-# openblas
-$(call embtk_include_pkg,openblas)
-
-# popt
-$(call embtk_include_pkg,popt)
+config EMBTK_OPENBLAS_NEED_PATCH
+	bool
