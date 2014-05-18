@@ -19,9 +19,10 @@
 # \file         core/toolchain/vars.mk
 # \brief	toolchain variables
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         Marsh 2014
+# \date         March 2014
 ################################################################################
 
+TARGETFC		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-gfortran
 TARGETGCC		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-gcc
 TARGETGCXX		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-g++
 TARGETCLANG		:= $(embtk_tools)/bin/$(STRICT_GNU_TARGET)-clang
