@@ -62,6 +62,9 @@ include packages/development/development.mk
 # Graphics packages
 include packages/graphics/graphics.mk
 
+# Mathematics packages
+include packages/math/math.mk
+
 # Networking packages
 include packages/net/net.mk
 

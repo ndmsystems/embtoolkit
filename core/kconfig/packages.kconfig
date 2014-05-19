@@ -60,6 +60,10 @@ menu "Graphics packages"
 source packages/graphics/graphics.kconfig
 endmenu
 
+menu "Mathematics packages"
+source packages/math/math.kconfig
+endmenu
+
 menu "Networking packages"
 source packages/net/net.kconfig
 endmenu
