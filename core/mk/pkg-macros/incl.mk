@@ -55,6 +55,10 @@ define __embtk_include_pkg
 	else
 		__embtk_$(pkgv)_installed =
 	endif
+	# preset some variables
+	$(eval __embtk_$(pkgv)_category  := $(call __embtk_mk_uquote,$(or $(CONFIG_EMBTK_$(PKGV)_REFSPEC),$(CONFIG_EMBTK_$(PKGV)_CATEGORY))))
+	$(eval __embtk_xpkg_category     := $(lastword $(subst /,$(embtk_space),$(embtk_pkgincdir))))
+	__embtk_$(pkgv)_category         := $(or $(___embtk_$(pkgv)_category),$(__embtk_xpkg_category))
 endef
 
 define embtk_include_hostpkg
