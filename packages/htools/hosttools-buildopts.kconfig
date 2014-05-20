@@ -143,11 +143,6 @@ source packages/htools/fakeroot/fakeroot.kconfig
 source packages/misc/libelf/libelf.kconfig
 
 #
-# waf host tool
-#
-source packages/htools/waf/waf.kconfig
-
-#
 # zlib for host
 #
 source packages/htools/zlib/zlib.kconfig

@@ -49,7 +49,6 @@ endchoice
 config EMBTK_LILV_USE_WAF
 	bool
 	default y
-	select EMBTK_HOST_HAVE_WAF
 
 config EMBTK_LILV_VERSION_STRING
 	string

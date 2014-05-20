@@ -42,10 +42,6 @@ $(call embtk_include_hostpkg,pkgconf_host)
 # squashfs
 $(call embtk_include_hostpkg,squashfs_host)
 
-# waf
-include packages/htools/waf/vars.mk
-$(call embtk_include_hostpkg,waf_host)
-
 # zlib
 $(call embtk_include_hostpkg,zlib_host)
 
