@@ -29,7 +29,6 @@ embtk_pkgincdir := packages/misc
 $(call embtk_include_pkg,expat)
 
 # gettext
-$(call embtk_include_pkg,gettext)
 $(call embtk_include_hostpkg,gettext_host)
 
 # glib

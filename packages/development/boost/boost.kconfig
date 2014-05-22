@@ -25,7 +25,7 @@
 
 config EMBTK_HAVE_BOOST
 	bool "Have boost"
-	select EMBTK_HAVE_GETTEXT
+	select EMBTK_HAVE_GETTEXT-INTL
 	select EMBTK_HAVE_BZIP2
 	select EMBTK_HAVE_ZLIB
 	select EMBTK_GCC_LANGUAGE_CPP

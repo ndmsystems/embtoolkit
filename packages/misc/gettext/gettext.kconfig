@@ -28,57 +28,9 @@ config EMBTK_HOST_HAVE_GETTEXT
 	help
 	 gettext for host development machine.
 
-config EMBTK_HAVE_GETTEXT
-	bool "Have gettext"
-	select EMBTK_HAVE_NCURSES
-	select EMBTK_HAVE_LIBXML2
-	select KEMBTK_EGLIBC_OPTION_POSIX_C_LANG_WIDE_CHAR if EMBTK_CLIB_EGLIBC
-	select KEMBTK_EGLIBC_OPTION_POSIX_WIDE_CHAR_DEVICE_IO if EMBTK_CLIB_EGLIBC
-	select KEMBTK_EGLIBC_OPTION_EGLIBC_LOCALE_CODE if EMBTK_CLIB_EGLIBC
-	select KEMBTK_UCLIBC_UCLIBC_HAS_WCHAR if EMBTK_CLIB_UCLIBC
-	select KEMBTK_UCLIBC_UCLIBC_HAS_LOCALE if EMBTK_CLIB_UCLIBC
-	select KEMBTK_UCLIBC_UCLIBC_SUSV4_LEGACY if EMBTK_CLIB_UCLIBC
-	help
-	 GNU `gettext' is an important step for the GNU Translation
-	 Project, as it is an asset on which we may build many other
-	 steps. This package offers to programmers, translators, and even
-	 users, a well integrated set of tools and documentation.
-	 Specifically, the GNU `gettext' utilities are a set of tools
-	 that provides a framework to help other GNU packages produce
-	 multi-lingual messages. These tools include a set of conventions
-	 about how programs should be written to support message
-	 catalogs, a directory and file naming organization for the
-	 message catalogs themselves, a runtime library supporting the
-	 retrieval of translated messages, and a few stand-alone programs
-	 to massage in various ways the sets of translatable strings, or
-	 already translated strings. A special GNU Emacs mode also helps
-	 interested parties in preparing these sets, or bringing them up
-	 to date.
-	 Online Manual is available at:
-	 www.gnu.org/software/gettext/manual/gettext.html
-	 The Frequently Asked Questions and their answers are at:
-	 www.gnu.org/software/gettext/FAQ.html
-
-choice
-	prompt "gettext version you wish"
-	depends on EMBTK_HAVE_GETTEXT || EMBTK_HOST_HAVE_GETTEXT
-	help
-	 Here you can choose which version of gettext you want to use.
-
-	config  EMBTK_GETTEXT_VERSION_0_18_3_2
-		bool "gettext-0.18.3.2"
-endchoice
-
-config EMBTK_GETTEXT_VERSION_STRING
+config EMBTK_GETTEXT_HOST_VERSION_STRING
 	string
-	default "0.18.3.2"		if EMBTK_GETTEXT_VERSION_0_18_3_2
-
-config EMBTK_GETTEXT_NEED_PATCH
-	bool
-	select EMBTK_GETTEXT_HOST_NEED_PATCH
-config EMBTK_GETTEXT_NEED_AUTORECONF
-	bool
-	select EMBTK_GETTEXT_HOST_NEED_AUTORECONF
+	default "0.18.3.2"
 
 config EMBTK_GETTEXT_HOST_NEED_PATCH
 	bool

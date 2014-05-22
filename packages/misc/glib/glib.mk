@@ -49,7 +49,7 @@ GLIB_CONFIGURE_ENV	:= glib_cv_stack_grows=no			\
 			ac_cv_func_posix_getgrgid_r=yes
 GLIB_CONFIGURE_OPTS	:= --disable-fam
 
-GLIB_DEPS		:= zlib_install gettext_install glib_host_install
+GLIB_DEPS		:= zlib_install gettext-intl_install glib_host_install
 
 #
 # glib for host

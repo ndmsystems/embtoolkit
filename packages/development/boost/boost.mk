@@ -53,7 +53,8 @@ BOOST_MAKE_OPTS		+= boost.locale.posix=off
 endif
 
 BOOST_DEPS-$(CONFIG_EMBTK_BOOST_WITH_ICU) := icu_install
-BOOST_DEPS	:= zlib_install bzip2_install gettext_install $(BOOST_DEPS-y)
+BOOST_DEPS	:= zlib_install bzip2_install gettext-intl_install
+BOOST_DEPS	+= $(BOOST_DEPS-y)
 
 # FIXME: consider using clang++ when libc++ will be fully integrated
 embtk_boost_cxx		= using gcc : $(shell $(TARGETGCC) -dumpversion) : $(TARGETGCXX_CACHED)

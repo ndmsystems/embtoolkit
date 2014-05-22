@@ -23,64 +23,17 @@
 # \date         December 2009
 ################################################################################
 
-GETTEXT_NAME		:= gettext
-GETTEXT_VERSION		:= $(call embtk_get_pkgversion,gettext)
-GETTEXT_SITE		:= http://ftp.gnu.org/pub/gnu/gettext
-GETTEXT_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-GETTEXT_PACKAGE		:= gettext-$(GETTEXT_VERSION).tar.gz
-GETTEXT_SRC_DIR		:= $(embtk_pkgb)/gettext-$(GETTEXT_VERSION)
-GETTEXT_BUILD_DIR	:= $(embtk_pkgb)/gettext-$(GETTEXT_VERSION)
+GETTEXT_HOST_NAME		:= gettext
+GETTEXT_HOST_VERSION		:= $(call embtk_get_pkgversion,gettext_host)
+GETTEXT_HOST_SITE		:= http://ftp.gnu.org/pub/gnu/gettext
+GETTEXT_HOST_PACKAGE		:= gettext-$(GETTEXT_HOST_VERSION).tar.gz
+GETTEXT_HOST_SRC_DIR		:= $(embtk_toolsb)/gettext-$(GETTEXT_HOST_VERSION)
+GETTEXT_HOST_BUILD_DIR		:= $(embtk_toolsb)/gettext-$(GETTEXT_HOST_VERSION)
 
-# gettext for target
-GETTEXT_BINS =	autopoint gettext gettext.sh msgcat msgcomm msgen	\
-		msgfilter msggrep msgmerge msguniq recode-sr-latin	\
-		envsubst gettextize msgattrib msgcmp msgconv msgexec	\
-		msgfmt msginit msgunfmt ngettext xgettext
-
-GETTEXT_INCLUDES = autosprintf.h gettext-po.h libintl.h
-GETTEXT_LIBS = gettext libgettext* libasprintf* libintl*
-GETTEXT_PKGCONFIGS =
-
-GETTEXT_CONFIGURE_ENV	:= gl_cv_func_wcwidth_works=yes			\
-			am_cv_func_iconv_works=yes			\
-			gt_cv_func_printf_posix=yes			\
-			gt_cv_int_divbyzero_sigfpe=no
-GETTEXT_CONFIGURE_OPTS	:= --enable-relocatable --with-included-gettext	\
-			--disable-rpath --disable-openmp --disable-java	\
-			--with-libxml2-prefix=$(embtk_sysroot)/usr	\
-			--disable-openmp --disable-csharp		\
-			--without-emacs
-
-GETTEXT_DEPS		:= ncurses_install libxml2_install
-
-define embtk_postinstallonce_gettext
-	$(MAKE) $(GETTEXT_BUILD_DIR)/.patchlibtool
-endef
-
-#FIXME: this should be fixed in gettext project
-$(GETTEXT_BUILD_DIR)/.patchlibtool:
-	$(Q)sed \
-	-i "s;/usr/$(LIBDIR)/libintl.la;$(embtk_sysroot)/$(LIBDIR)/libintl.la;" \
-	$(embtk_sysroot)/usr/$(LIBDIR)/libgettextlib.la \
-	$(embtk_sysroot)/usr/$(LIBDIR)/libgettextpo.la \
-	$(embtk_sysroot)/usr/$(LIBDIR)/libgettextsrc.la
-	$(Q)sed \
-	-i "s;/usr/$(LIBDIR)/libgettextlib.la;$(embtk_sysroot)/$(LIBDIR)/libgettextlib.la;" \
-	$(embtk_sysroot)/usr/$(LIBDIR)/libgettextsrc.la
-
-# gettext for host development machine
-GETTEXT_HOST_NAME		:= $(GETTEXT_NAME)
-GETTEXT_HOST_VERSION		:= $(GETTEXT_VERSION)
-GETTEXT_HOST_SITE		:= $(GETTEXT_SITE)
-GETTEXT_HOST_SITE_MIRROR1	:= $(GETTEXT_SITE_MIRROR1)
-GETTEXT_HOST_SITE_MIRROR2	:= $(GETTEXT_SITE_MIRROR2)
-GETTEXT_HOST_SITE_MIRROR3	:= $(GETTEXT_SITE_MIRROR3)
-GETTEXT_HOST_PATCH_SITE		:= $(GETTEXT_PATCH_SITE)
-GETTEXT_HOST_PACKAGE		:= $(GETTEXT_PACKAGE)
-GETTEXT_HOST_SRC_DIR		:= $(embtk_toolsb)/gettext-$(GETTEXT_VERSION)
-GETTEXT_HOST_BUILD_DIR		:= $(embtk_toolsb)/gettext-$(GETTEXT_VERSION)
-
-GETTEXT_HOST_CONFIGURE_OPTS	:= --disable-java --disable-native-java	\
-	--disable-openmp --with-included-gettext --with-included-glib	\
-	--with-included-libcroco --with-included-libxml
-
+GETTEXT_HOST_CONFIGURE_OPTS := --disable-java
+GETTEXT_HOST_CONFIGURE_OPTS += --disable-native-java
+GETTEXT_HOST_CONFIGURE_OPTS += --disable-openmp
+GETTEXT_HOST_CONFIGURE_OPTS += --with-included-gettext
+GETTEXT_HOST_CONFIGURE_OPTS += --with-included-glib
+GETTEXT_HOST_CONFIGURE_OPTS += --with-included-libcroco
+GETTEXT_HOST_CONFIGURE_OPTS += --with-included-libxml
