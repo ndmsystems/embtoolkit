@@ -17,47 +17,28 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
+# \file         gettext-intl.mk
+# \brief	gettext-intl.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \date         May 2014
 ################################################################################
 
-embtk_pkgincdir := packages/development
+GETTEXT-INTL_NAME		:= gettext-intl
+GETTEXT-INTL_VERSION		:= $(call embtk_get_pkgversion,gettext-intl)
+GETTEXT-INTL_SITE		:= http://ftp.gnu.org/pub/gnu/gettext
+GETTEXT-INTL_PACKAGE		:= gettext-$(GETTEXT-INTL_VERSION).tar.gz
+GETTEXT-INTL_SRC_DIR		:= $(embtk_pkgb)/gettext-$(GETTEXT-INTL_VERSION)
+GETTEXT-INTL_BUILD_DIR		:= $(embtk_pkgb)/gettext-intl-$(GETTEXT-INTL_VERSION)
 
-# boost
-$(call embtk_include_pkg,boost)
+GETTEXT-INTL_INCLUDES		:= libintl.h
+GETTEXT-INTL_LIBS		:= libint.*
 
-# fftw
-$(call embtk_include_pkg,fftw)
+GETTEXT-INTL_CONFIGURE_OPTS	:= --disable-relocatable
+GETTEXT-INTL_CONFIGURE_OPTS	+= --disable-csharp
+GETTEXT-INTL_CONFIGURE_OPTS	+= --disable-openmp
+GETTEXT-INTL_CONFIGURE_OPTS	+= --disable-native-java
+GETTEXT-INTL_CONFIGURE_OPTS	+= --without-emacs
+GETTEXT-INTL_CONFIGURE_OPTS	+= --disable-libasprintf
 
-# gtest
-$(call embtk_include_pkg,gtest)
-
-# gettext-intl
-$(call embtk_include_pkg,gettext-intl)
-
-# icu
-$(call embtk_include_pkg,icu)
-$(call embtk_include_hostpkg,icu_host)
-
-# libbsd
-$(call embtk_include_pkg,libbsd)
-
-# libevent
-$(call embtk_include_pkg,libevent)
-
-# libnih
-$(call embtk_include_pkg,libnih)
-
-# libsigsegv
-$(call embtk_include_pkg,libsigsegv)
-
-# libunwind
-$(call embtk_include_pkg,libunwind)
-
-# openblas
-$(call embtk_include_pkg,openblas)
-
-# popt
-$(call embtk_include_pkg,popt)
+GETTEXT-INTL_MAKE_DIRS		:= intl
+GETTEXT-INTL_CONFIGURE_DIR	:= gettext-runtime

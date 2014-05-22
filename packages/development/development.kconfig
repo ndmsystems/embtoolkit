@@ -32,6 +32,9 @@ source packages/development/fftw/fftw.kconfig
 # gtest
 source packages/development/gtest/gtest.kconfig
 
+# gettext-intl
+source packages/development/gettext-intl/gettext-intl.kconfig
+
 # icu
 source packages/development/icu/icu.kconfig
 
