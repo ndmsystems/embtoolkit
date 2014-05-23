@@ -78,6 +78,8 @@ define __embtk_download_pkg_from_svn
 	$(call embtk_echo_blue,"\tIn            : $(or $(__embtk_pkg_refspec),src)")
 	$(call embtk_echo_blue,"\tCheckout URL  : $(__embtk_pkg_svnsite)")
 	$(call embtk_echo_blue,"\tPatched       : $(__embtk_pkg_needpatch_yesno)")
+	$(if $(__embtk_$(pkgv)_category),
+	$(call embtk_echo_blue,"\tCategory      : $(__embtk_$(pkgv)_category)"))
 	$(call embtk_echo_blue,"\tDependency of : $(or $(__embtk_pkg_depof),N/A)")
 	test -e $(__embtk_pkg_localsvn) ||					\
 	$(call __embtk_svncheckout_pkg,$(1)) ||					\
@@ -107,6 +109,8 @@ define __embtk_download_pkg_from_git
 	$(call embtk_echo_blue,"\tIn            : $(or $(__embtk_pkg_refspec),src)")
 	$(call embtk_echo_blue,"\tClone URL     : $(__embtk_pkg_gitsite)")
 	$(call embtk_echo_blue,"\tPatched       : $(__embtk_pkg_needpatch_yesno)")
+	$(if $(__embtk_$(pkgv)_category),
+	$(call embtk_echo_blue,"\tCategory      : $(__embtk_$(pkgv)_category)"))
 	$(call embtk_echo_blue,"\tDependency of : $(or $(__embtk_pkg_depof),N/A)")
 	test -e $(__embtk_pkg_localgit) || $(call __embtk_gitclone_pkg,$(1))
 endef
@@ -117,6 +121,8 @@ define __embtk_download_pkg_from_tarball
 	$(call embtk_echo_blue,"\tFrom          : $(__embtk_pkg_site)")
 	$(call embtk_echo_blue,"\tIn            : $(__embtk_pkg_package_f)")
 	$(call embtk_echo_blue,"\tPatched       : $(__embtk_pkg_needpatch_yesno)")
+	$(if $(__embtk_$(pkgv)_category),
+	$(call embtk_echo_blue,"\tCategory      : $(__embtk_$(pkgv)_category)"))
 	$(call embtk_echo_blue,"\tDependency of : $(or $(__embtk_pkg_depof),N/A)")
 	test -e $(__embtk_pkg_package_f) ||					\
 	$(call embtk_wget,							\
