@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012-2013 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2012-2014 GAYE Abdoulaye Walsimou.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,18 +33,18 @@ choice
 	help
 	 Which musl version to use.
 
-	config EMBTK_MUSL_VERSION_1_1_0
-		bool "musl-1.1.0"
+	config EMBTK_MUSL_VERSION_1_1_1
+		bool "musl-1.1.1"
 		select EMBTK_MUSL_NEED_PATCH
 	config EMBTK_MUSL_VERSION_GIT
-		bool "Use a branch of musl git repository"
+		bool "Use musl git"
 		help
 		 see http://git.musl-libc.org/cgit/musl
 endchoice
 
 config EMBTK_MUSL_VERSION_STRING
 	string
-	default "1.1.0"		if EMBTK_MUSL_VERSION_1_1_0
+	default "1.1.1"		if EMBTK_MUSL_VERSION_1_1_1
 	default "git"		if EMBTK_MUSL_VERSION_GIT
 
 config EMBTK_MUSL_REFSPEC
