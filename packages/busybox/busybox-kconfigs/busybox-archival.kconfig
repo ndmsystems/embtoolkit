@@ -77,8 +77,8 @@ config KEMBTK_BUSYB_FEATURE_AR_CREATE
 	  This enables archive creation (-c and -r) with busybox ar.
 
 config KEMBTK_BUSYB_BUNZIP2
-	bool "bunzip2"
-	default y
+	bool
+	default n
 	help
 	  bunzip2 is a compression utility using the Burrows-Wheeler block
 	  sorting text compression algorithm, and Huffman coding. Compression
@@ -90,8 +90,8 @@ config KEMBTK_BUSYB_BUNZIP2
 	  should probably say N here.
 
 config KEMBTK_BUSYB_BZIP2
-	bool "bzip2"
-	default y
+	bool
+	default n
 	help
 	  bzip2 is a compression utility using the Burrows-Wheeler block
 	  sorting text compression algorithm, and Huffman coding. Compression
