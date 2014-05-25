@@ -36,6 +36,8 @@ choice
 	help
 	 EGLIBC branch to use.
 
+	config EMBTK_EGLIBC_VERSION_2_19
+		bool "eglibc-2.19"
 	config EMBTK_EGLIBC_VERSION_2_17
 		bool "eglibc-2.17"
 	config EMBTK_EGLIBC_VERSION_TRUNK
@@ -45,26 +47,30 @@ endchoice
 config EMBTK_EGLIBC_SVN_REVISION
 	int "EGLIBC SVN revision to checkout (Please read the help below)"
 	help
-		EGLIBC svn revision to use.
-		This revision is the latest at EmbToolkit release. If at the
-		moment you build your toolchain new revision is available,
-		you can increase this value.
+	 EGLIBC svn revision to use.
+	 This revision is the latest at EmbToolkit release.
+	 If at the moment you build your toolchain new revision is available,
+	 you can increase this value.
 
-	default 25090	if EMBTK_EGLIBC_VERSION_2_17
-	default 25088	if EMBTK_EGLIBC_VERSION_TRUNK
+	default 25243	if EMBTK_EGLIBC_VERSION_2_19
+	default 25239	if EMBTK_EGLIBC_VERSION_2_17
+	default 25237	if EMBTK_EGLIBC_VERSION_TRUNK
 
 comment "At EmbToolkit release, valid eglibc svn revisions are:"
-comment "svn revision 25090	for eglibc-2.17"
-comment "svn revision 25088	for eglibc-trunk (development version)"
+comment "svn revision 25243	for eglibc-2.19"
+comment "svn revision 25239	for eglibc-2.17"
+comment "svn revision 25237	for eglibc-trunk (development version)"
 comment ""
 
 config EMBTK_EGLIBC_SVN_BRANCH
 	string
+	default "branches/eglibc-2_19"		if EMBTK_EGLIBC_VERSION_2_19
 	default "branches/eglibc-2_17"		if EMBTK_EGLIBC_VERSION_2_17
 	default "trunk"				if EMBTK_EGLIBC_VERSION_TRUNK
 
 config EMBTK_EGLIBC_VERSION_STRING
 	string
+	default "2.19"		if EMBTK_EGLIBC_VERSION_2_19
 	default "2.17"		if EMBTK_EGLIBC_VERSION_2_17
 	default "trunk"		if EMBTK_EGLIBC_VERSION_TRUNK
 
@@ -103,6 +109,10 @@ config EMBTK_EGLIBC_DISABLE_VERSIONING
 	 To build EGLIBC without compatibility code and symbol
 	 versioning, answer yes here.
 
+
+if EMBTK_EGLIBC_VERSION_2_19
+source "core/kconfig/eglibc-kconfigs/eglibc-2.19.kconfig"
+endif
 
 if EMBTK_EGLIBC_VERSION_2_17
 source "core/kconfig/eglibc-kconfigs/eglibc-2.17.kconfig"
