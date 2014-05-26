@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012-2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,13 +28,13 @@ choice
 	help
 	 Linux v3.4.x series exact version used.
 
-	config EMBTK_LINUX_VERSION_3_4_82
-		bool "linux-3.4.82"
+	config EMBTK_LINUX_VERSION_3_4_91
+		bool "linux-3.4.91"
 endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
-	default "3.4.82"
+	default "3.4.91"
 
 config EMBTK_LINUX_MAJOR_VERSION_STRING
 	string
