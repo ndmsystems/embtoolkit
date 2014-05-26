@@ -49,7 +49,7 @@ embtk_eglibc_optgroups_f	:= $(EMBTK_ROOT)/core/mk/eglibc/eglibc-$(EGLIBC_VERSION
 eglibc_optgroups_f		:= $(EGLIBC_BUILD_DIR)/option-groups.config
 
 ifeq ($(embtk_buildhost_os_type),bsd)
-embtk_eglibc_buildcflags	:= -I/usr/local/include
+embtk_eglibc_buildcflags	:= -I/usr/local/include -Dstat64=stat
 embtk_eglibc_buildldflags	:= -L/usr/local/lib -lintl
 endif
 
