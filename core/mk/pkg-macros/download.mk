@@ -112,7 +112,7 @@ define __embtk_download_pkg_from_git
 	$(if $(__embtk_$(pkgv)_category),
 	$(call embtk_echo_blue,"\tCategory      : $(__embtk_$(pkgv)_category)"))
 	$(call embtk_echo_blue,"\tDependency of : $(or $(__embtk_pkg_depof),N/A)")
-	test -e $(__embtk_pkg_localgit) || $(call __embtk_gitclone_pkg,$(1))
+	test -e $(__embtk_pkg_localgit)/.git || $(call __embtk_gitclone_pkg,$(1))
 endef
 
 define __embtk_download_pkg_from_tarball
