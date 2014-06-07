@@ -63,6 +63,5 @@ define embtk_beforeinstall_openblas
 endef
 
 define embtk_install_openblas
-	$(call embtk_download_pkg,openblas)
 	$(call embtk_makeinstall_pkg,openblas)
 endef
