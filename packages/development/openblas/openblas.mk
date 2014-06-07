@@ -53,6 +53,8 @@ OPENBLAS_MAKE_ENV	+= TARGET=$(pembtk_openblas_target)
 
 define embtk_beforeinstall_openblas
 	$(if $(pembtk_openblas_armfpu),
+	[ -e $(OPENBLAS_SRC_DIR)/Makefile.arm.bak ] && \
+	cp $(OPENBLAS_SRC_DIR)/Makefile.arm.bak $(OPENBLAS_SRC_DIR)/Makefile.arm || true
 	cp $(OPENBLAS_SRC_DIR)/Makefile.arm $(OPENBLAS_SRC_DIR)/Makefile.arm.bak
 	sed -e 's/-mfpu=[[:alnum:]]*/-mfpu=$(pembtk_openblas_armfpu)/g'		\
 		< $(OPENBLAS_SRC_DIR)/Makefile.arm				\
@@ -61,6 +63,6 @@ define embtk_beforeinstall_openblas
 endef
 
 define embtk_install_openblas
-	$(embtk_beforeinstall_openblas)
-        $(call embtk_makeinstall_pkg,openblas)
+	$(call embtk_download_pkg,openblas)
+	$(call embtk_makeinstall_pkg,openblas)
 endef
