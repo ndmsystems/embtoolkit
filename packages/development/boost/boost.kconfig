@@ -50,14 +50,14 @@ endchoice
 if EMBTK_HAVE_BOOST
 comment "Boost options"
 config EMBTK_BOOST_WITH_ICU
-	bool "Build boot with icu support"
+	bool "Build boost with icu support"
 	select EMBTK_HAVE_ICU
 config EMBTK_BOOST_WITH_ATOMIC
-	bool "Build boot with atomic support"
+	bool "Build boost with atomic support"
 config EMBTK_BOOST_WITH_COROUTINE
-	bool "Build boot with coroutine support"
+	bool "Build boost with coroutine support"
 config EMBTK_BOOST_WITH_LOG
-	bool "Build boot with log support"
+	bool "Build boost with log support"
 endif
 
 config EMBTK_BOOST_VERSION_STRING
