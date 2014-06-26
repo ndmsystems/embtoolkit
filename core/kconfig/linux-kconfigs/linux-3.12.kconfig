@@ -28,13 +28,13 @@ choice
 	help
 	 Linux v3.12.x series exact version used.
 
-	config EMBTK_LINUX_VERSION_3_12_20
-		bool "linux-3.12.20"
+	config EMBTK_LINUX_VERSION_3_12_22
+		bool "linux-3.12.22"
 endchoice
 
 config EMBTK_LINUX_VERSION_STRING
 	string
-	default "3.12.20"
+	default "3.12.22"
 
 config EMBTK_LINUX_MAJOR_VERSION_STRING
 	string
