@@ -49,7 +49,7 @@ LLVM_HOST_CONFIGURE_OPTS	+= --with-bug-report-url=$(EMBTK_BUGURL)
 LLVM_HOST_CONFIGURE_OPTS	+= --with-binutils-include=$(__embtk_binutils_inc)
 
 LLVM_HOST_MAKE_OPTS		:= NO_UNITTESTS=1
-LLVM_HOST_MAKE_OPTS		+= CLANG_VENDOR="EmbToolkit(v$(EMBTK_VERSION))"
+LLVM_HOST_MAKE_OPTS		+= CLANG_VENDOR="EmbToolkit [v$(EMBTK_VERSION)]"
 
 LLVM_HOST_PREFIX		:= $(embtk_tools)
 

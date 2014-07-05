@@ -31,12 +31,18 @@ embtk_ftp/packages-mirror	:= $(embtk_ftp)/packages-mirror
 embtk_toolchain_use_llvm-y	:= $(or $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN))
 embtk_toolchain_has_llvm-y	:= $(or $(CONFIG_EMBTK_GCC_AND_LLVM_TOOLCHAIN),$(embtk_toolchain_use_llvm-y))
 
-__embtk_hostcc-v		:= $(shell outv=$$($(HOSTCC) -v 2>&1); echo $$outv)
-embtk_hostcc_clang-y		:= $(if $(findstring clang,$(__embtk_hostcc-v)),y)
+#
+# Compilers helper macros/variables
+#
+__embtk_clang-version		= "$(shell $(1) --version 2>/dev/null | sed -e '2,$$d' -e 's/\(.*\) \((.*)\) \((.*)\)/\1/')"
+__embtk_clang-git-version	= "$(shell $(1) --version 2>/dev/null | sed -e '2,$$d' -e 's/\(.*\) \((.*)\) \((.*)\) \((.*)\)/\1 \4/')"
+__embtk_gcc-version		= "$(shell $(1) --version 2>/dev/null | sed -e '2,$$d' -e 's/\(.*\)-gcc[[:space:]]\(.*\)/gcc \2/')"
 
-__embtk_targetclang-v		= llvm+clang-$(call __embtk_pkg_version,clang_host)
-__embtk_targetgcc-v		= gcc-$(call __embtk_pkg_version,gcc)
-embtk_targetcc_name-v		= $(if $(embtk_toolchain_use_llvm-y),$(__embtk_targetclang-v),$(__embtk_targetgcc-v))
+__embtk_hostcc-version		:= $(shell $(HOSTCC) --version 2>/dev/null | sed -e '2,$$d')
+embtk_hostcc_clang-y		:= $(if $(findstring clang,$(__embtk_hostcc-version)),y)
+
+__embtk_targetclang-v		= $(if $(call __embtk_pkg_usegit,clang),$(call __embtk_clang-git-version,$(TARGETCLANG)),$(call __embtk_clang-version,$(TARGETCLANG)))
+embtk_targetcc_name-v		= $(if $(embtk_toolchain_use_llvm-y),$(__embtk_targetclang-v),$(call __embtk_gcc-version,$(TARGETGCC)))
 
 embtk_host_uname		:= $(shell uname -s -r -p)
 
