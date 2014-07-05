@@ -43,9 +43,6 @@ MTDUTILS_MAKE_ENV	+= CROSS=$(CROSS_COMPILE)
 MTDUTILS_MAKE_OPTS	:= CC=$(TARGETCC_CACHED)
 MTDUTILS_MAKE_OPTS	+= DESTDIR=$(embtk_sysroot) WITHOUT_XATTR=1
 
-define __embtk_install_mtdutils
-	$(call embtk_makeinstall_pkg,mtdutils)
-endef
 define embtk_install_mtdutils
 	$(call embtk_makeinstall_pkg,mtdutils)
 endef
