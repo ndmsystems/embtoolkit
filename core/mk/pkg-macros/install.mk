@@ -164,16 +164,18 @@ endef
 define __embtk_preinstall_pkg
 	$(call __embtk_install_pkgdeps,$(1))
 	$(call embtk_pinfo,"Compile/Install $(__embtk_pkg_name)-$(__embtk_pkg_version) in your root filesystem...")
+	mkdir -p $(__embtk_pkg_builddir)
 	$(call embtk_download_pkg,$(1))
 	$(call embtk_decompress_pkg,$(1))
-	$(if $(embtk_beforeinstall_$(pkgv)),$(embtk_beforeinstall_$(pkgv)))
+	$(embtk_beforeinstall_$(pkgv))
 endef
 define __embtk_preinstall_hostpkg
 	$(call __embtk_install_pkgdeps,$(1))
 	$(call embtk_pinfo,"Compile/Install $(__embtk_pkg_name)-$(__embtk_pkg_version) for host...")
+	mkdir -p $(__embtk_pkg_builddir)
 	$(call embtk_download_pkg,$(1))
 	$(call embtk_decompress_pkg,$(1))
-	$(if $(embtk_beforeinstall_$(pkgv)),$(embtk_beforeinstall_$(pkgv)))
+	$(embtk_beforeinstall_$(pkgv))
 endef
 define __embtk_postinstall_pkg
 	$(call __embtk_setinstalled_pkg,$(1))
@@ -296,7 +298,6 @@ define embtk_install_pkg
 endef
 define __embtk_install_pkg
 	$(if $(__embtk_pkg_runrecipe-y),
-		$(Q)mkdir -p $(__embtk_pkg_builddir)
 		$(if $(__embtk_pkg_usewaf-y),
 			$(Q)$(call __embtk_install_pkg_waf,$(1)),
 			$(Q)$(call __embtk_install_pkg_make,$(1),autotools)))
@@ -312,7 +313,6 @@ endef
 define embtk_makeinstall_pkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
 		$(if $(__embtk_pkg_runrecipe-y),
-			$(Q)mkdir -p $(__embtk_pkg_builddir)
 			$(Q)$(call __embtk_install_pkg_make,$(1)))
 		$(embtk_postinstall_$(pkgv)),
 		$(call __embtk_install_paramsfailure,$(1)))
@@ -331,7 +331,6 @@ define embtk_install_hostpkg
 endef
 define __embtk_install_hostpkg
 	$(if $(__embtk_pkg_runrecipe-y),
-		$(Q)mkdir -p $(__embtk_pkg_builddir)
 		$(if $(__embtk_pkg_usewaf-y),
 			$(Q)$(call __embtk_install_hostpkg_waf,$(1)),
 			$(Q)$(call __embtk_install_hostpkg_make,$(1),autotools)))
@@ -347,7 +346,6 @@ endef
 define embtk_makeinstall_hostpkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
 		$(if $(__embtk_pkg_runrecipe-y),
-			$(Q)mkdir -p $(__embtk_pkg_builddir)
 			$(Q)$(call __embtk_install_hostpkg_make,$(1)))
 		$(embtk_postinstall_$(pkgv)),
 		$(call __embtk_install_paramsfailure,$(1)))
