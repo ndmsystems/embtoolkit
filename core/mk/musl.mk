@@ -31,7 +31,7 @@ MUSL_PACKAGE		:= musl-$(MUSL_VERSION).tar.gz
 MUSL_SRC_DIR		:= $(embtk_toolsb)/musl-$(MUSL_VERSION)
 MUSL_BUILD_DIR		:= $(call __embtk_pkg_srcdir,musl)
 
-__embtk_musl_v	 = "$(MUSL_VERSION) From EmbToolkit [v$(EMBTK_VERSION)] -"
+__embtk_musl_v	 = "$(MUSL_VERSION) -"
 __embtk_musl_v	+= "Cross Compiler $(embtk_targetcc_name-v) [$(embtk_host_uname)]"
 
 __embtk_musl_cflags := $(TARGET_CFLAGS)
