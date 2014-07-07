@@ -187,7 +187,6 @@ endef
 
 __embtk_autotoolspkg-y=$(2)
 define __embtk_install_pkg_make
-	$(call __embtk_preinstall_pkg,$(1))
 	$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_pkg,$(1)))
 	$(if $(__embtk_pkg_makedirs),						\
 		$(__embtk_multi_make),						\
@@ -198,10 +197,8 @@ define __embtk_install_pkg_make
 	$(if $(__embtk_autotoolspkg-y)$(__embtk_pkg_pkgconfigs),
 		$(call __embtk_fix_libtool_files)
 		$(call __embtk_fix_pkgconfig_files))
-	$(call __embtk_postinstall_pkg,$(1))
 endef
 define __embtk_install_hostpkg_make
-	$(call __embtk_preinstall_hostpkg,$(1))
 	$(if $(__embtk_autotoolspkg-y),$(call embtk_configure_hostpkg,$(1)))
 	$(if $(__embtk_pkg_makedirs),						\
 		$(__embtk_multi_make),						\
@@ -209,7 +206,6 @@ define __embtk_install_hostpkg_make
 	$(if $(__embtk_pkg_makedirs),						\
 		$(__embtk_multi_make_hostinstall),				\
 		$(__embtk_single_make_hostinstall))
-	$(call __embtk_postinstall_pkg,$(1))
 endef
 
 __embtk_waf_build	= cd $(__embtk_pkg_srcdir); ./waf build $(J) --progress
@@ -222,22 +218,18 @@ __embtk_waf_hostinstall	= cd $(__embtk_pkg_srcdir); ./waf install --progress	\
 	$(if $(__embtk_pkg_destdir),--destdir=$(__embtk_pkg_destdir))
 
 define __embtk_install_pkg_waf
-	$(call __embtk_preinstall_pkg,$(1))
 	$(call embtk_wafconfigure_pkg,$(1))
 	$(call __embtk_waf_build,$(1))
 	$(call __embtk_waf_install,$(1))
 	$(if $(__embtk_pkg_pkgconfigs),
 		$(call __embtk_fix_libtool_files)
 		$(call __embtk_fix_pkgconfig_files))
-	$(call __embtk_postinstall_pkg,$(1))
 endef
 
 define __embtk_install_hostpkg_waf
-	$(call __embtk_preinstall_pkg,$(1))
 	$(call embtk_wafconfigure_hostpkg,$(1))
 	$(call __embtk_waf_build,$(1))
 	$(call __embtk_waf_hostinstall,$(1))
-	$(call __embtk_postinstall_pkg,$(1))
 endef
 
 #
@@ -298,9 +290,11 @@ define embtk_install_pkg
 endef
 define __embtk_install_pkg
 	$(if $(__embtk_pkg_runrecipe-y),
+		$(call __embtk_preinstall_pkg,$(1))
 		$(if $(__embtk_pkg_usewaf-y),
-			$(Q)$(call __embtk_install_pkg_waf,$(1)),
-			$(Q)$(call __embtk_install_pkg_make,$(1),autotools)))
+			$(call __embtk_install_pkg_waf,$(1)),
+			$(call __embtk_install_pkg_make,$(1),autotools))
+		$(call __embtk_postinstall_pkg,$(1)))
 	$(embtk_postinstall_$(pkgv))
 endef
 
@@ -313,7 +307,9 @@ endef
 define embtk_makeinstall_pkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
 		$(if $(__embtk_pkg_runrecipe-y),
-			$(Q)$(call __embtk_install_pkg_make,$(1)))
+			$(call __embtk_preinstall_pkg,$(1))
+			$(call __embtk_install_pkg_make,$(1))
+			$(call __embtk_postinstall_pkg,$(1)))
 		$(embtk_postinstall_$(pkgv)),
 		$(call __embtk_install_paramsfailure,$(1)))
 endef
@@ -331,9 +327,11 @@ define embtk_install_hostpkg
 endef
 define __embtk_install_hostpkg
 	$(if $(__embtk_pkg_runrecipe-y),
+		$(call __embtk_preinstall_hostpkg,$(1))
 		$(if $(__embtk_pkg_usewaf-y),
-			$(Q)$(call __embtk_install_hostpkg_waf,$(1)),
-			$(Q)$(call __embtk_install_hostpkg_make,$(1),autotools)))
+			$(call __embtk_install_hostpkg_waf,$(1)),
+			$(call __embtk_install_hostpkg_make,$(1),autotools))
+		$(call __embtk_postinstall_pkg,$(1)))
 	$(embtk_postinstall_$(pkgv))
 endef
 
@@ -346,7 +344,9 @@ endef
 define embtk_makeinstall_hostpkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
 		$(if $(__embtk_pkg_runrecipe-y),
-			$(Q)$(call __embtk_install_hostpkg_make,$(1)))
+			$(call __embtk_preinstall_hostpkg,$(1))
+			$(call __embtk_install_hostpkg_make,$(1))
+			$(call __embtk_postinstall_pkg,$(1)))
 		$(embtk_postinstall_$(pkgv)),
 		$(call __embtk_install_paramsfailure,$(1)))
 endef
