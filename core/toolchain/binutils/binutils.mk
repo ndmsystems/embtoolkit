@@ -55,5 +55,5 @@ define embtk_beforeinstall_binutils
 endef
 
 define embtk_install_binutils
-	$(call __embtk_install_hostpkg,binutils)
+	$(call embtk_makeinstall_hostpkg,binutils,autotooled)
 endef

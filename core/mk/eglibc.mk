@@ -84,8 +84,6 @@ define embtk_configure_eglibc
 endef
 
 define __embtk_install_eglibc
-	$(call embtk_pinfo,"Installing eglibc...")
-	$(call embtk_download_pkg,eglibc)
 	touch `find $(EGLIBC_SRC_DIR) -name configure`
 	$(embtk_parse_eglibc_optgroups)
 	$(embtk_configure_eglibc)
@@ -96,13 +94,10 @@ define __embtk_install_eglibc
 		BUILD_CFLAGS="$(embtk_eglibc_buildcflags)"			\
 		BUILD_LDFLAGS="$(embtk_eglibc_buildldflags)"			\
 		install_root=$(embtk_sysroot) install
-	$(call __embtk_setinstalled_pkg,eglibc)
-	$(call __embtk_pkg_gen_dotkconfig_f,eglibc)
-	$(eval __embtk_eglibc_installed := y)
 endef
 
 define embtk_install_eglibc
-	$(if $(call __embtk_pkg_runrecipe-y,eglibc),$(__embtk_install_eglibc))
+	$(__embtk_install_eglibc)
 endef
 
 #

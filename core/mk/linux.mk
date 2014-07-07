@@ -40,7 +40,7 @@ LINUX_SRC_DIR		:= $(embtk_toolsb)/linux-$(LINUX_VERSION)
 LINUX_BUILD_DIR		:= $(embtk_toolsb)/linux-$(LINUX_VERSION)
 LINUX_KEEP_SRC_DIR	:= $(CONFIG_EMBTK_BUILD_LINUX_KERNEL)
 
-LINUX_HEADERS_NAME	:= linux_headers
+LINUX_HEADERS_NAME	:= linux
 LINUX_HEADERS_VERSION	:= $(LINUX_VERSION)
 LINUX_HEADERS_SITE	:= $(LINUX_SITE)
 LINUX_HEADERS_PACKAGE	:= $(LINUX_PACKAGE)
@@ -54,18 +54,15 @@ LINUX_MAKE_OPTS	+= ARCH=$(LINUX_ARCH)
 LINUX_MAKE_OPTS	+= CROSS_COMPILE=$(CROSS_COMPILE_CACHED)
 LINUX_MAKE_OPTS	+= HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)"
 
+#
+# linux headers install
+#
+define embtk_install_linux_headers
+	$(__embtk_install_linux_headers)
+endef
 define __embtk_install_linux_headers
-	$(call embtk_pinfo,"Installing linux-$(LINUX_VERSION) headers...")
-	$(call embtk_download_pkg,linux)
-	$(call embtk_decompress_pkg,linux)
 	$(MAKE) -C $(LINUX_BUILD_DIR) $(LINUX_MAKE_OPTS)			\
 		INSTALL_HDR_PATH=$(embtk_sysroot)/usr headers_install
-	$(call __embtk_setinstalled_pkg,linux_headers)
-	$(call __embtk_pkg_gen_dotkconfig_f,linux_headers)
-	$(eval __embtk_linux_headers_installed := y)
-endef
-define embtk_install_linux_headers
-	$(if $(call __embtk_pkg_runrecipe-y,linux_headers),$(__embtk_install_linux_headers))
 endef
 
 #
@@ -99,7 +96,6 @@ define __embtk_install_linux_check_extsrc
 endef
 
 define __embtk_install_linux
-	$(call embtk_pinfo,"Generating linux kernel image...")
 	$(__embtk_install_linux_check_config)
 	$(if $(CONFIG_EMBTK_LINUX_BUILD_USE_EXTSRC),
 		$(__embtk_install_linux_check_extsrc))
@@ -110,22 +106,20 @@ define __embtk_install_linux
 	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(__embtk_linux_srcdir)/.config
 	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS) silentoldconfig
 	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS) $(J)
-	$(call __embtk_setinstalled_pkg,linux)
-	$(call __embtk_pkg_gen_dotkconfig_f,linux)
-	$(eval __embtk_linux_installed := y)
 endef
 
 define embtk_install_linux
-	$(if $(call __embtk_pkg_runrecipe-y,linux),$(__embtk_install_linux))
-	$(if $(__embtk_linux_support_modules),$(embtk_postinstall_linux))
+	$(__embtk_install_linux)
 endef
 
 define embtk_postinstall_linux
+	$(if $(__embtk_linux_support_modules),$(__embtk_postinstall_linux))
+endef
+define __embtk_postinstall_linux
 	$(call embtk_pinfo,"Install linux kernel modules...")
 	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS)			\
 		INSTALL_MOD_PATH=$(embtk_rootfs) modules_install
 endef
-
 #
 # clean target and macros
 #

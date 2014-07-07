@@ -31,7 +31,7 @@ UCLIBC_PACKAGE		:= uClibc-$(UCLIBC_VERSION).tar.bz2
 UCLIBC_SRC_DIR		:= $(embtk_toolsb)/uClibc-$(UCLIBC_VERSION)
 UCLIBC_BUILD_DIR	:= $(call __embtk_pkg_srcdir,uClibc)
 
-UCLIBC_HEADERS_NAME		:= uClibc_headers
+UCLIBC_HEADERS_NAME		:= uClibc
 UCLIBC_HEADERS_VERSION		:= $(UCLIBC_VERSION)
 UCLIBC_HEADERS_SITE		:= $(UCLIBC_SITE)
 UCLIBC_HEADERS_GIT_SITE		:= $(UCLIBC_GIT_SITE)
@@ -39,6 +39,7 @@ UCLIBC_HEADERS_PACKAGE		:= $(UCLIBC_PACKAGE)
 UCLIBC_HEADERS_SRC_DIR		:= $(UCLIBC_SRC_DIR)
 UCLIBC_HEADERS_BUILD_DIR	:= $(UCLIBC_BUILD_DIR)
 UCLIBC_HEADERS_KCONFIGS_NAME	:= UCLIBC
+UCLIBC_HEADERS_KEEP_SRC_DIR	:= y
 
 UCLIBC_DOTCONFIG	:= $(UCLIBC_BUILD_DIR)/.config
 EMBTK_UCLIBC_CFLAGS	:= $(filter-out $(__clang_cflags),$(TARGET_CFLAGS))
@@ -95,21 +96,16 @@ endef
 # Uclibc headers install
 #
 define __embtk_install_uclibc_headers
-	$(call embtk_pinfo,"Install uClibc-$(UCLIBC_VERSION) headers ...")
-	$(call embtk_download_pkg,uClibc)
-	$(call embtk_decompress_pkg,uClibc)
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) distclean
 	$(embtk_configure_uclibc)
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) silentoldconfig
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
 	$(__embtk_install_uclibc_dummy)
-	$(call __embtk_setinstalled_pkg,uclibc_headers)
-	$(eval __embtk_uclibc_headers_installed := y)
 endef
 
 define embtk_install_uclibc_headers
-	$(if $(call __embtk_pkg_runrecipe-y,uclubc_headers),$(__embtk_install_uclibc_headers))
+	$(__embtk_install_uclibc_headers)
 endef
 
 #

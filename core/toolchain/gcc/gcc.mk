@@ -64,15 +64,15 @@ define embtk_beforeinstall_gcc1_notused
 endef
 
 define embtk_install_gcc1
-	$(call __embtk_install_hostpkg,gcc1)
+	$(call embtk_makeinstall_hostpkg,gcc1,autootooled)
 endef
 
 define embtk_install_gcc2
-	$(call __embtk_install_hostpkg,gcc2)
+	$(call embtk_makeinstall_hostpkg,gcc2,autootooled)
 endef
 
 define embtk_install_gcc3
-	$(call __embtk_install_hostpkg,gcc3)
+	$(call embtk_makeinstall_hostpkg,gcc3,autootooled)
 endef
 
 define __embtk_postinstall_libgcc

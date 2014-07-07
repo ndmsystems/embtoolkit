@@ -285,33 +285,30 @@ __embtk_xinstall_xpkg_allvarset-y = $(and $(__embtk_pkg_name),			\
 #
 define embtk_install_pkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
-		$(or $(embtk_install_$(pkgv)),$(call __embtk_install_pkg,$(1))),
+		$(call __embtk_install_pkg,$(1)),
 		$(call __embtk_install_paramsfailure,$(1)))
 endef
 define __embtk_install_pkg
 	$(if $(__embtk_pkg_runrecipe-y),
 		$(call __embtk_preinstall_pkg,$(1))
-		$(if $(__embtk_pkg_usewaf-y),
-			$(call __embtk_install_pkg_waf,$(1)),
-			$(call __embtk_install_pkg_make,$(1),autotools))
+		$(or $(embtk_install_$(pkgv)),$(call ___embtk_install_pkg,$(1)))
 		$(call __embtk_postinstall_pkg,$(1)))
 	$(embtk_postinstall_$(pkgv))
 endef
-
+define ___embtk_install_pkg
+	$(if $(__embtk_pkg_usewaf-y),
+		$(call __embtk_install_pkg_waf,$(1)),
+		$(call __embtk_install_pkg_make,$(1),autotools))
+endef
 #
 # A macro to automatically install a package intended to run on the target,
 # using simple Makefile and an nstall target.
 # Usage:
-# $(call embtk_makeinstall_pkg,package)
+# # autotooled: add this optional string to install an autotooled package
+# $(call embtk_makeinstall_pkg,package[,autotooled])
 #
 define embtk_makeinstall_pkg
-	$(if $(__embtk_xinstall_xpkg_allvarset-y),
-		$(if $(__embtk_pkg_runrecipe-y),
-			$(call __embtk_preinstall_pkg,$(1))
-			$(call __embtk_install_pkg_make,$(1))
-			$(call __embtk_postinstall_pkg,$(1)))
-		$(embtk_postinstall_$(pkgv)),
-		$(call __embtk_install_paramsfailure,$(1)))
+	$(call __embtk_install_pkg_make,$(1),$(2))
 endef
 
 #
@@ -322,33 +319,31 @@ endef
 #
 define embtk_install_hostpkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
-		$(or $(embtk_install_$(pkgv)),$(call __embtk_install_hostpkg,$(1))),
+		$(call __embtk_install_hostpkg,$(1)),
 		$(call __embtk_install_paramsfailure,$(1)))
 endef
 define __embtk_install_hostpkg
 	$(if $(__embtk_pkg_runrecipe-y),
 		$(call __embtk_preinstall_hostpkg,$(1))
-		$(if $(__embtk_pkg_usewaf-y),
-			$(call __embtk_install_hostpkg_waf,$(1)),
-			$(call __embtk_install_hostpkg_make,$(1),autotools))
+		$(or $(embtk_install_$(pkgv)),$(call ___embtk_install_hostpkg,$(1)))
 		$(call __embtk_postinstall_pkg,$(1)))
 	$(embtk_postinstall_$(pkgv))
+endef
+define ___embtk_install_hostpkg
+	$(if $(__embtk_pkg_usewaf-y),
+		$(call __embtk_install_hostpkg_waf,$(1)),
+		$(call __embtk_install_hostpkg_make,$(1),autotools))
 endef
 
 #
 # A macro to automatically install a package intended to run on the host
 # development machine, using simple Makefile and an install target.
 # Usage:
-# $(call embtk_makeinstall_hostpkg,package)
+# autotooled: add this optional string to install an autotooled package
+# $(call embtk_makeinstall_hostpkg,package[,autotooled])
 #
 define embtk_makeinstall_hostpkg
-	$(if $(__embtk_xinstall_xpkg_allvarset-y),
-		$(if $(__embtk_pkg_runrecipe-y),
-			$(call __embtk_preinstall_hostpkg,$(1))
-			$(call __embtk_install_hostpkg_make,$(1))
-			$(call __embtk_postinstall_pkg,$(1)))
-		$(embtk_postinstall_$(pkgv)),
-		$(call __embtk_install_paramsfailure,$(1)))
+	$(call __embtk_install_hostpkg_make,$(1),$(2))
 endef
 
 #

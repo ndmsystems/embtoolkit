@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2013-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,19 +31,13 @@ BMAKE_SRC_DIR		:= $(embtk_toolsb)/bmake
 BMAKE_BUILD_DIR		:= $(embtk_toolsb)/bmake-build
 
 define __embtk_install_bmake
-	$(call embtk_pinfo,"Install bmake-$(BMAKE_VERSION)...")
-	$(call embtk_download_pkg,bmake)
-	$(call embtk_decompress_pkg,bmake)
 	cd $(BMAKE_BUILD_DIR) && MAKEFLAGS=""					\
 		$(BMAKE_SRC_DIR)/boot-strap					\
 			--prefix=$(embtk_htools)/usr --install
-	$(call __embtk_setinstalled_pkg,bmake)
-	$(call __embtk_pkg_gen_dotkconfig_f,bmake)
-	$(eval __embtk_bmake_installed := y)
 endef
 
 define embtk_install_bmake
-	$(if $(call __embtk_pkg_runrecipe-y,bmake),$(__embtk_install_bmake))
+	$(__embtk_install_bmake)
 endef
 
 define embtk_cleanup_bmake

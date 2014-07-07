@@ -77,9 +77,6 @@ define embtk_configure_glibc
 endef
 
 define __embtk_install_glibc
-	$(call embtk_pinfo,"Installing glibc...")
-	$(call embtk_download_pkg,glibc)
-	$(call embtk_decompress_pkg,glibc)
 	mkdir -p $(GLIBC_BUILD_DIR)
 	$(embtk_configure_glibc)
 	PATH=$(PATH):$(embtk_tools)/bin/ $(MAKE) -C $(GLIBC_BUILD_DIR) $(J)	\
@@ -89,13 +86,10 @@ define __embtk_install_glibc
 		BUILD_CFLAGS="$(embtk_glibc_buildcflags)"			\
 		BUILD_LDFLAGS="$(embtk_glibc_buildldflags)"			\
 		install_root=$(embtk_sysroot) install
-	$(call __embtk_setinstalled_pkg,glibc)
-	$(call __embtk_pkg_gen_dotkconfig_f,glibc)
-	$(eval __embtk_glibc_installed := y)
 endef
 
 define embtk_install_glibc
-	$(if $(call __embtk_pkg_runrecipe-y,glibc),$(__embtk_install_glibc))
+	$(__embtk_install_glibc)
 endef
 
 #

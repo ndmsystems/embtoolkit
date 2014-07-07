@@ -38,6 +38,7 @@ __embtk_musl_cflags := $(TARGET_CFLAGS)
 __embtk_musl_cflags += $(if $(embtk_toolchain_use_llvm-y),-Wno-unknown-warning-option)
 
 define embtk_beforeinstall_musl
+	$(MAKE) -C $(MUSL_BUILD_DIR) distclean
 	cd $(MUSL_SRC_DIR);							\
 		CC=$(TARGETCC_CACHED)						\
 		CROSS_COMPILE="$(CROSS_COMPILE)"				\
@@ -52,22 +53,14 @@ define embtk_beforeinstall_musl
 endef
 
 define __embtk_install_musl
-	$(call embtk_pinfo,"Build and install musl-$(MUSL_VERSION) ...")
-	$(call embtk_download_pkg,musl)
-	$(call embtk_decompress_pkg,musl)
-	$(Q)$(MAKE) -C $(MUSL_BUILD_DIR) distclean
-	$(embtk_beforeinstall_musl)
 	$(Q)$(MAKE) -C $(MUSL_BUILD_DIR)					\
 		DESTDIR=$(embtk_sysroot) install-libs install-headers
 	$(Q)cd $(embtk_sysroot)/$(LIBDIR);					\
 		ln -sf libc.so $(embtk_musl_dlinker).so.1
-	$(call __embtk_setinstalled_pkg,musl)
-	$(call __embtk_pkg_gen_dotkconfig_f,musl)
-	$(eval __embtk_musl_installed := y)
 endef
 
 define embtk_install_musl
-	$(if $(call __embtk_pkg_runrecipe-y,musl),$(__embtk_install_musl))
+	$(__embtk_install_musl)
 endef
 
 define embtk_cleanup_musl

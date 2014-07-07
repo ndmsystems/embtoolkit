@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2009-2014 GAYE Abdoulaye Walsimou.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,17 +60,36 @@ config EMBTK_UCLIBC_GIT_BRANCH
 	default "master"
 	depends on EMBTK_UCLIBC_VERSION_GIT
 	help
-		The branch of the git repository to use, the default is master.
+	 The branch of the git repository to use, the default is master.
 
 config EMBTK_UCLIBC_GIT_REVISION
 	string "Checkout a specific revision instead of the latest"
 	depends on EMBTK_UCLIBC_VERSION_GIT
 	help
-		Chechout a specific revision instead of the latest.
+	 Chechout a specific revision instead of the latest.
 
 config EMBTK_UCLIBC_NEED_PATCH
 	bool
-config EMBTK_UCLIBC_NEED_AUTORECONF
+	select EMBTK_UCLIBC_HEADERS_NEED_PATCH
+
+
+config EMBTK_UCLIBC_HEADERS_VERSION_STRING
+	string
+	default EMBTK_UCLIBC_VERSION_STRING
+
+config EMBTK_UCLIBC_HEADERS_REFSPEC
+	string
+	default EMBTK_UCLIBC_REFSPEC
+
+config EMBTK_UCLIBC_HEADERS_GIT_BRANCH
+	string
+	default EMBTK_UCLIBC_GIT_BRANCH
+
+config EMBTK_UCLIBC_HEADERS_GIT_REVISION
+	string
+	default EMBTK_UCLIBC_GIT_REVISION
+
+config EMBTK_UCLIBC_HEADERS_NEED_PATCH
 	bool
 
 #

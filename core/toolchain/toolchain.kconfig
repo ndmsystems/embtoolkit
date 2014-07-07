@@ -113,7 +113,7 @@ choice
 		 see http://www.eglibc.org for more information about eglibc.
 
 	config EMBTK_CLIB_GLIBC
-		bool "GLIBC"
+		bool "glibc"
 		help
 		 GNU GLIBC is the well known general purpose c library found on
 		 most general purpose GNU Linux distribution.
