@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2013-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,23 +17,23 @@
 #
 ################################################################################
 #
-# \file         gmake.mk
-# \brief	gmake.mk of Embtoolkit.
+# \file         gmake.kconfig
+# \brief	gmake.kconfig of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2013
 ################################################################################
 
-GMAKE_NAME	:= gmake
-GMAKE_VERSION	:= $(call embtk_get_pkgversion,gmake)
-GMAKE_SITE	:= http://ftp.gnu.org/gnu/make
-GMAKE_PACKAGE	:= make-$(GMAKE_VERSION).tar.bz2
-GMAKE_SRC_DIR	:= $(embtk_toolsb)/make-$(GMAKE_VERSION)
-GMAKE_BUILD_DIR	:= $(embtk_toolsb)/make-$(GMAKE_VERSION)
+config EMBTK_HOST_HAVE_GMAKE
+	bool
+	default y if EMBTK_HOST_OSTYPE=bsd
+	help
+	 GNU make.
 
-define embtk_install_gmake
-	$(call __embtk_install_hostpkg,gmake)
-endef
+config EMBTK_GMAKE_HOST_VERSION_STRING
+	string
+	default "3.81"
 
-define embtk_postinstallonce_gmake
-	mv $(embtk_htools)/usr/bin/make $(embtk_htools)/usr/bin/gmake
-endef
+config EMBTK_GMAKE_HOST_NEED_PATCH
+	bool
+config EMBTK_GMAKE_HOST_NEED_AUTORECONF
+	bool

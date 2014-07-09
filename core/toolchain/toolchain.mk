@@ -90,9 +90,6 @@ AUTOTOOLS_INSTALL	+= autoconf_host_install automake_host_install
 # BSD make
 include core/mk/bmake.mk
 
-# GNU make
-include core/mk/gmake.mk
-
 #
 # Toolchain virtual package internals
 #
@@ -110,7 +107,7 @@ TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
 
 TOOLCHAIN_PRE_DEPS-y	:= ccache_host_install $(AUTOTOOLS_INSTALL) pkgconf_host_install
 ifeq ($(embtk_buildhost_os_type),bsd)
-TOOLCHAIN_PRE_DEPS-y	+= gsed_host_install gmake_install
+TOOLCHAIN_PRE_DEPS-y	+= gsed_host_install gmake_host_install
 endif
 TOOLCHAIN_PRE_DEPS-$(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST) += gperf_host_install
 

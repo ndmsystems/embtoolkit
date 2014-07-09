@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2013-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,23 +17,17 @@
 #
 ################################################################################
 #
-# \file         gmake.kconfig
-# \brief	gmake.kconfig of Embtoolkit.
+# \file         gmake.mk
+# \brief	gmake.mk of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2013
 ################################################################################
 
-config EMBTK_HAVE_GMAKE
-	bool
-	default y
-	help
-	 GNU make.
+GMAKE_HOST_NAME		:= gmake
+GMAKE_HOST_VERSION	:= $(call embtk_get_pkgversion,gmake_host)
+GMAKE_HOST_SITE		:= http://ftp.gnu.org/gnu/make
+GMAKE_HOST_PACKAGE	:= make-$(GMAKE_HOST_VERSION).tar.bz2
+GMAKE_HOST_SRC_DIR	:= $(embtk_toolsb)/make-$(GMAKE_HOST_VERSION)
+GMAKE_HOST_BUILD_DIR	:= $(embtk_toolsb)/make-$(GMAKE_HOST_VERSION)
 
-config EMBTK_GMAKE_VERSION_STRING
-	string
-	default "3.81"
-
-config EMBTK_GMAKE_NEED_PATCH
-	bool
-config EMBTK_GMAKE_NEED_AUTORECONF
-	bool
+GMAKE_HOST_CONFIGURE_OPTS := --program-transform-name='s;make;gmake;'

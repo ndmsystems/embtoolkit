@@ -120,7 +120,7 @@ source core/kconfig/bmake.kconfig
 #
 # GNU make
 #
-source core/kconfig/gmake.kconfig
+source packages/htools/gmake/gmake.kconfig
 
 #
 # mtd-utils
