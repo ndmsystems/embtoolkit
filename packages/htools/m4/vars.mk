@@ -17,26 +17,14 @@
 #
 ################################################################################
 #
-# \file         m4.mk
-# \brief	m4.mk of Embtoolkit.
+# \file         vars.mk
+# \brief	vars.mk of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         February 2010
 ################################################################################
-
-M4_NAME		:= m4
-M4_VERSION	:= $(call embtk_get_pkgversion,m4)
-M4_SITE		:= http://ftp.gnu.org/gnu/m4
-M4_SITE_MIRROR3	:= ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror
-M4_PACKAGE	:= m4-$(M4_VERSION).tar.bz2
-M4_SRC_DIR	:= $(embtk_toolsb)/m4-$(M4_VERSION)
-M4_BUILD_DIR	:= $(embtk_toolsb)/m4-$(M4_VERSION)
 
 # m4 binaries
 M4_DIR	:= $(embtk_htools)/usr
 M4_BIN	:= $(M4_DIR)/bin/m4
 M4	:= $(M4_BIN)
 export M4
-
-define embtk_install_m4
-	$(call __embtk_install_hostpkg,m4)
-endef

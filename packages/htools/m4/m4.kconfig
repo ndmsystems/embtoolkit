@@ -23,18 +23,18 @@
 # \date         January 2011
 ################################################################################
 
-config EMBTK_HAVE_M4
+config EMBTK_HOST_HAVE_M4
 	bool
 	default y
-	select EMBTK_M4_NEED_PATCH
+	select EMBTK_M4_HOST_NEED_PATCH
 	help
 	 m4 for autotools.
 
-config EMBTK_M4_VERSION_STRING
+config EMBTK_M4_HOST_VERSION_STRING
 	string
 	default "1.4.17"
 
-config EMBTK_M4_NEED_PATCH
+config EMBTK_M4_HOST_NEED_PATCH
 	bool
-config EMBTK_M4_NEED_AUTORECONF
+config EMBTK_M4_HOST_NEED_AUTORECONF
 	bool

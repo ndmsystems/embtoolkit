@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2013 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,36 +17,15 @@
 #
 ################################################################################
 #
-# \file         hosttools-buildopts.mk
-# \brief	packages needed for both toolchain and rootfs packages.
+# \file         m4.mk
+# \brief	m4.mk of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         Marsh 2014
+# \date         February 2010
 ################################################################################
 
-embtk_pkgincdir := packages/htools
-
-# cache
-$(call embtk_include_hostpkg,ccache_host)
-
-# fakeroot
-include packages/htools/fakeroot/vars.mk
-$(call embtk_include_hostpkg,fakeroot_host)
-
-# mtd-utils
-$(call embtk_include_hostpkg,mtdutils_host)
-
-# m4
-$(call embtk_include_hostpkg,m4_host)
-
-# pkgconf
-include packages/htools/pkgconf/vars.mk
-$(call embtk_include_hostpkg,pkgconf_host)
-
-# squashfs
-$(call embtk_include_hostpkg,squashfs_host)
-
-# zlib
-$(call embtk_include_hostpkg,zlib_host)
-
-# gperf
-$(call embtk_include_hostpkg,gperf_host)
+M4_HOST_NAME		:= m4
+M4_HOST_VERSION		:= $(call embtk_get_pkgversion,m4_host)
+M4_HOST_SITE		:= http://ftp.gnu.org/gnu/m4
+M4_HOST_PACKAGE		:= m4-$(M4_HOST_VERSION).tar.bz2
+M4_HOST_SRC_DIR		:= $(embtk_toolsb)/m4-$(M4_HOST_VERSION)
+M4_HOST_BUILD_DIR	:= $(embtk_toolsb)/m4-$(M4_HOST_VERSION)
