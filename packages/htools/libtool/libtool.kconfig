@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,39 +17,23 @@
 #
 ################################################################################
 #
-# \file         hosttools-buildopts.mk
-# \brief	packages needed for both toolchain and rootfs packages.
+# \file         libtool.kconfig
+# \brief	libtool.kconfig of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         Marsh 2014
+# \date         January 2011
 ################################################################################
 
-embtk_pkgincdir := packages/htools
+config EMBTK_HOST_HAVE_LIBTOOL
+	bool
+	default y
+	help
+	 libtool for autotools.
 
-# cache
-$(call embtk_include_hostpkg,ccache_host)
+config EMBTK_LIBTOOL_HOST_VERSION_STRING
+	string
+	default "2.4.2"
 
-# fakeroot
-include packages/htools/fakeroot/vars.mk
-$(call embtk_include_hostpkg,fakeroot_host)
-
-# libtool
-$(call embtk_include_hostpkg,libtool_host)
-
-# mtd-utils
-$(call embtk_include_hostpkg,mtdutils_host)
-
-# m4
-$(call embtk_include_hostpkg,m4_host)
-
-# pkgconf
-include packages/htools/pkgconf/vars.mk
-$(call embtk_include_hostpkg,pkgconf_host)
-
-# squashfs
-$(call embtk_include_hostpkg,squashfs_host)
-
-# zlib
-$(call embtk_include_hostpkg,zlib_host)
-
-# gperf
-$(call embtk_include_hostpkg,gperf_host)
+config EMBTK_LIBTOOL_HOST_NEED_PATCH
+	bool
+config EMBTK_LIBTOOL_HOST_NEED_AUTORECONF
+	bool

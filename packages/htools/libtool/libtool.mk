@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2011-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,23 +17,15 @@
 #
 ################################################################################
 #
-# \file         libtool.kconfig
-# \brief	libtool.kconfig of Embtoolkit.
+# \file         libtool.mk
+# \brief	libtool.mk of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         January 2011
+# \date         March 2010
 ################################################################################
 
-config EMBTK_HAVE_LIBTOOL
-	bool
-	default y
-	help
-		libtool for autotools.
-
-config EMBTK_LIBTOOL_VERSION_STRING
-	string
-	default "2.4.2"
-
-config EMBTK_LIBTOOL_NEED_PATCH
-	bool
-config EMBTK_LIBTOOL_NEED_AUTORECONF
-	bool
+LIBTOOL_HOST_NAME	:= libtool
+LIBTOOL_HOST_VERSION	:= $(call embtk_get_pkgversion,libtool_host)
+LIBTOOL_HOST_SITE	:= http://ftp.gnu.org/gnu/libtool
+LIBTOOL_HOST_PACKAGE	:= libtool-$(LIBTOOL_HOST_VERSION).tar.gz
+LIBTOOL_HOST_SRC_DIR	:= $(embtk_toolsb)/libtool-$(LIBTOOL_HOST_VERSION)
+LIBTOOL_HOST_BUILD_DIR	:= $(embtk_toolsb)/libtool-$(LIBTOOL_HOST_VERSION)

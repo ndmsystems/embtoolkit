@@ -103,7 +103,7 @@ source packages/htools/ccache/ccache.kconfig
 # Autotools
 #
 source packages/htools/m4/m4.kconfig
-source core/kconfig/libtool.kconfig
+source packages/htools/libtool/libtool.kconfig
 source core/kconfig/autoconf.kconfig
 source core/kconfig/automake.kconfig
 
