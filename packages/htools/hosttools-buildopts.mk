@@ -38,6 +38,9 @@ $(call embtk_include_hostpkg,ccache_host)
 include packages/htools/fakeroot/vars.mk
 $(call embtk_include_hostpkg,fakeroot_host)
 
+# gsed
+$(call embtk_include_hostpkg,gsed_host)
+
 # libtool
 $(call embtk_include_hostpkg,libtool_host)
 

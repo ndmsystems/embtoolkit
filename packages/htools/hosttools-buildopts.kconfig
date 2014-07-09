@@ -110,7 +110,7 @@ source packages/htools/automake/automake.kconfig
 #
 # GNU sed
 #
-source core/kconfig/gsed.kconfig
+source packages/htools/gsed/gsed.kconfig
 
 #
 # BSD make

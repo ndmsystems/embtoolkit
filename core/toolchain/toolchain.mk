@@ -87,9 +87,6 @@ TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HOST_HAVE_GDB)	+= gdb_host_install
 AUTOTOOLS_INSTALL	:= m4_host_install libtool_host_install
 AUTOTOOLS_INSTALL	+= autoconf_host_install automake_host_install
 
-# GNU sed
-include core/mk/gsed.mk
-
 # BSD make
 include core/mk/bmake.mk
 
@@ -113,7 +110,7 @@ TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
 
 TOOLCHAIN_PRE_DEPS-y	:= ccache_host_install $(AUTOTOOLS_INSTALL) pkgconf_host_install
 ifeq ($(embtk_buildhost_os_type),bsd)
-TOOLCHAIN_PRE_DEPS-y	+= gsed_install gmake_install
+TOOLCHAIN_PRE_DEPS-y	+= gsed_host_install gmake_install
 endif
 TOOLCHAIN_PRE_DEPS-$(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST) += gperf_host_install
 

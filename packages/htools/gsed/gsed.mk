@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2013-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,23 +17,15 @@
 #
 ################################################################################
 #
-# \file         gsed.kconfig
-# \brief	gsed.kconfig of Embtoolkit.
+# \file         gsed.mk
+# \brief	gsed.mk of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         March 2013
 ################################################################################
 
-config EMBTK_HAVE_GSED
-	bool
-	default y
-	help
-	 gnu sed.
-
-config EMBTK_GSED_VERSION_STRING
-	string
-	default "4.2.1"
-
-config EMBTK_GSED_NEED_PATCH
-	bool
-config EMBTK_GSED_NEED_AUTORECONF
-	bool
+GSED_HOST_NAME		:= gsed
+GSED_HOST_VERSION	:= $(call embtk_get_pkgversion,gsed_host)
+GSED_HOST_SITE		:= http://ftp.gnu.org/gnu/sed
+GSED_HOST_PACKAGE	:= sed-$(GSED_HOST_VERSION).tar.bz2
+GSED_HOST_SRC_DIR	:= $(embtk_toolsb)/sed-$(GSED_HOST_VERSION)
+GSED_HOST_BUILD_DIR	:= $(embtk_toolsb)/sed-$(GSED_HOST_VERSION)
