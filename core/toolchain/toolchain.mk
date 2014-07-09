@@ -31,6 +31,7 @@ include core/toolchain/vars.mk
 include packages/htools/ccache/vars.mk
 include packages/htools/m4/vars.mk
 include packages/htools/libtool/vars.mk
+include packages/htools/autoconf/vars.mk
 
 # GMP
 include core/mk/gmp.mk
@@ -82,10 +83,9 @@ TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HOST_HAVE_GDB)	+= gdb_host_install
 #
 # Autotools
 #
-include core/mk/autoconf.mk
 include core/mk/automake.mk
-AUTOTOOLS_INSTALL	:= m4_host_install libtool_host_install autoconf_install
-AUTOTOOLS_INSTALL	+= automake_install
+AUTOTOOLS_INSTALL	:= m4_host_install libtool_host_install
+AUTOTOOLS_INSTALL	+= autoconf_host_install automake_install
 
 # GNU sed
 include core/mk/gsed.mk

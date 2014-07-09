@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2013 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,22 +17,20 @@
 #
 ################################################################################
 #
-# \file         autoconf.kconfig
-# \brief	autoconf.kconfig of Embtoolkit.
+# \file         autoconf.mk
+# \brief	autoconf.mk of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         January 2011
+# \date         February 2010
 ################################################################################
 
+# autoconf binaries
+AUTOCONF_DIR	:= $(embtk_htools)/usr
+AUTOCONF	:= $(AUTOCONF_DIR)/bin/autoconf
+AUTOHEADER	:= $(AUTOCONF_DIR)/bin/autoheader
+AUTOM4TE	:= $(AUTOCONF_DIR)/bin/autom4te
+AUTORECONF	:= $(AUTOCONF_DIR)/bin/autoreconf
+AUTOSCAN	:= $(AUTOCONF_DIR)/bin/autoscan
+AUTOUPDATE	:= $(AUTOCONF_DIR)/bin/autoupdate
+IFNAMES		:= $(AUTOCONF_DIR)/bin/ifnames
 
-#
-# Default autoconf version
-#
-config EMBTK_HAVE_AUTOCONF
-	bool
-	default y
-	help
-	 autoconf for autotools.
-
-config EMBTK_AUTOCONF_VERSION_STRING
-	string
-	default	"2.68"
+export AUTOCONF AUTOHEADER AUTOM4TE AUTORECONF AUTOSCAN AUTOUPDATE IFNAMES

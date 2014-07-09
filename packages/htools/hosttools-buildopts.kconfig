@@ -104,7 +104,7 @@ source packages/htools/ccache/ccache.kconfig
 #
 source packages/htools/m4/m4.kconfig
 source packages/htools/libtool/libtool.kconfig
-source core/kconfig/autoconf.kconfig
+source packages/htools/autoconf/autoconf.kconfig
 source core/kconfig/automake.kconfig
 
 #

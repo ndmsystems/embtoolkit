@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,24 +23,9 @@
 # \date         February 2010
 ################################################################################
 
-AUTOCONF_NAME		:= autoconf
-AUTOCONF_VERSION	:= $(call embtk_get_pkgversion,autoconf)
-AUTOCONF_SITE		:= http://ftp.gnu.org/gnu/autoconf
-AUTOCONF_PACKAGE	:= autoconf-$(AUTOCONF_VERSION).tar.bz2
-AUTOCONF_SRC_DIR	:= $(embtk_toolsb)/autoconf-$(AUTOCONF_VERSION)
-AUTOCONF_BUILD_DIR	:= $(embtk_toolsb)/autoconf-$(AUTOCONF_VERSION)
-
-# autoconf binaries
-AUTOCONF_DIR	:= $(embtk_htools)/usr
-AUTOCONF	:= $(AUTOCONF_DIR)/bin/autoconf
-AUTOHEADER	:= $(AUTOCONF_DIR)/bin/autoheader
-AUTOM4TE	:= $(AUTOCONF_DIR)/bin/autom4te
-AUTORECONF	:= $(AUTOCONF_DIR)/bin/autoreconf
-AUTOSCAN	:= $(AUTOCONF_DIR)/bin/autoscan
-AUTOUPDATE	:= $(AUTOCONF_DIR)/bin/autoupdate
-IFNAMES		:= $(AUTOCONF_DIR)/bin/ifnames
-export AUTOCONF AUTOHEADER AUTOM4TE AUTORECONF AUTOSCAN AUTOUPDATE IFNAMES
-
-define embtk_install_autoconf
-	$(call __embtk_install_hostpkg,autoconf)
-endef
+AUTOCONF_HOST_NAME	:= autoconf
+AUTOCONF_HOST_VERSION	:= $(call embtk_get_pkgversion,autoconf_host)
+AUTOCONF_HOST_SITE	:= http://ftp.gnu.org/gnu/autoconf
+AUTOCONF_HOST_PACKAGE	:= autoconf-$(AUTOCONF_HOST_VERSION).tar.bz2
+AUTOCONF_HOST_SRC_DIR	:= $(embtk_toolsb)/autoconf-$(AUTOCONF_HOST_VERSION)
+AUTOCONF_HOST_BUILD_DIR	:= $(embtk_toolsb)/autoconf-$(AUTOCONF_HOST_VERSION)
