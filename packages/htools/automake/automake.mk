@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,18 +23,9 @@
 # \date         February 2010
 ################################################################################
 
-AUTOMAKE_NAME		:= automake
-AUTOMAKE_VERSION	:= $(call embtk_get_pkgversion,AUTOMAKE)
-AUTOMAKE_SITE		:= http://ftp.gnu.org/gnu/automake
-AUTOMAKE_PACKAGE	:= automake-$(AUTOMAKE_VERSION).tar.xz
-AUTOMAKE_SRC_DIR	:= $(embtk_toolsb)/automake-$(AUTOMAKE_VERSION)
-AUTOMAKE_BUILD_DIR	:= $(embtk_toolsb)/automake-$(AUTOMAKE_VERSION)
-
-AUTOMAKE_DIR	:= $(embtk_htools)/usr
-ACLOCAL		:= $(AUTOMAKE_DIR)/bin/aclocal
-AUTOMAKE	:= $(AUTOMAKE_DIR)/bin/automake
-export ACLOCAL AUTOMAKE
-
-define embtk_install_automake
-	$(call __embtk_install_hostpkg,automake)
-endef
+AUTOMAKE_HOST_NAME	:= automake
+AUTOMAKE_HOST_VERSION	:= $(call embtk_get_pkgversion,automake_host)
+AUTOMAKE_HOST_SITE	:= http://ftp.gnu.org/gnu/automake
+AUTOMAKE_HOST_PACKAGE	:= automake-$(AUTOMAKE_HOST_VERSION).tar.xz
+AUTOMAKE_HOST_SRC_DIR	:= $(embtk_toolsb)/automake-$(AUTOMAKE_HOST_VERSION)
+AUTOMAKE_HOST_BUILD_DIR	:= $(embtk_toolsb)/automake-$(AUTOMAKE_HOST_VERSION)

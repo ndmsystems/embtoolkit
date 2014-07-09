@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2011-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,23 +17,13 @@
 #
 ################################################################################
 #
-# \file         automake.kconfig
-# \brief	automake.kconfig of Embtoolkit.
+# \file         automake.mk
+# \brief	automake.mk of Embtoolkit.
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         January 2011
+# \date         February 2010
 ################################################################################
 
-config EMBTK_HAVE_AUTOMAKE
-	bool
-	default y
-	help
-		automake for autotools.
-
-config EMBTK_AUTOMAKE_VERSION_STRING
-	string
-	default "1.11.6"
-
-config EMBTK_AUTOMAKE_NEED_PATCH
-	bool
-config EMBTK_AUTOMAKE_NEED_AUTORECONF
-	bool
+AUTOMAKE_DIR	:= $(embtk_htools)/usr
+ACLOCAL		:= $(AUTOMAKE_DIR)/bin/aclocal
+AUTOMAKE	:= $(AUTOMAKE_DIR)/bin/automake
+export ACLOCAL AUTOMAKE
