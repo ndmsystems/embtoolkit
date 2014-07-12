@@ -31,9 +31,8 @@ CLANG_HOST_GIT_SITE	:= git://www.embtoolkit.org/clang.git
 CLANG_HOST_PACKAGE	:= clang-$(CLANG_HOST_VERSION).src.tar.gz
 CLANG_HOST_SRC_DIR	:= $(embtk_toolsb)/clang-$(CLANG_HOST_VERSION).src
 CLANG_HOST_BUILD_DIR	:= $(embtk_toolsb)/clang-$(CLANG_HOST_VERSION)-build
+CLANG_HOST_KEEP_SRC_DIR	:= y
 
 define embtk_install_clang_host
 	$(call embtk_pinfo,"Compile/Install of clang will be done within llvm...")
-	$(call embtk_download_pkg,clang_host)
-	$(call embtk_decompress_pkg,clang_host)
 endef
