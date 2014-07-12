@@ -41,7 +41,7 @@ include core/mk/mkimage.mk
 
 # Install various tools in case of FreeBSD host development machine
 ifeq ($(embtk_buildhost_os_type),bsd)
-HOSTTOOLS_COMPONENTS-y += gsed_install gmake_install
+HOSTTOOLS_COMPONENTS-y += gsed_host_install gmake_host_install
 endif
 
 # Flash manipulation tools: mtd-utils
