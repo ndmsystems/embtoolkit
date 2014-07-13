@@ -37,7 +37,6 @@ choice
 
 	config  EMBTK_LIBRESSL_VERSION_2_0_1
 		bool "LibreSSL-2.0.1"
-		select EMBTK_LIBRESSL_NEED_AUTORECONF
 endchoice
 
 config EMBTK_LIBRESSL_VERSION_STRING

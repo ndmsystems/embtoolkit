@@ -35,16 +35,3 @@ LIBRESSL_INCLUDES	:= openssl
 LIBRESSL_LIBS		:= libcrypto.* libssl.*
 
 LIBRESSL_CONFIGURE_OPTS	:= --program-transform-name='s;$(STRICT_GNU_TARGET)-;;'
-
-#
-# remove -Werror and -O2 compiler switches
-#
-define embtk_beforeinstall_libressl
-	find $(LIBRESSL_SRC_DIR) -type f -name '*.m4' -exec chmod 0664 {} +
-	for f in $$(grep -Rl '\-Werror' $(LIBRESSL_SRC_DIR)/*); do \
-		sed -e 's/-Werror//g' < $$f > $$f.tmp; mv $$f.tmp $$f; \
-	done
-	for f in $$(grep -Rl '\-O2' $(LIBRESSL_SRC_DIR)/*); do \
-		sed -e 's/-O2//g' < $$f > $$f.tmp; mv $$f.tmp $$f; \
-	done
-endef
