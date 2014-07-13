@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2012 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2010-2014 GAYE Abdoulaye Walsimou.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,5 +23,5 @@
 # \date         February 2010
 ################################################################################
 
-# OpenSSL
-source packages/security/openssl/openssl.kconfig
+# LibreSSL
+source packages/security/libressl/libressl.kconfig

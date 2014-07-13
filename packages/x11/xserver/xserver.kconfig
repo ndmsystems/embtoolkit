@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ config EMBTK_HAVE_XSERVER
 	select EMBTK_HAVE_LIBXFONT
 	select EMBTK_HAVE_LIBXKBFILE
 	select EMBTK_HAVE_XTRANS
-	select EMBTK_HAVE_OPENSSL
+	select EMBTK_HAVE_LIBRESSL
 	select EMBTK_HAVE_PIXMAN
 	help
 		Have a X server in your root file system
@@ -122,8 +122,4 @@ config EMBTK_XSERVER_VERSION_STRING
 config EMBTK_XSERVER_NEED_PATCH
 	bool
 config EMBTK_XSERVER_NEED_AUTORECONF
-	bool
-config EMBTK_XSERVER_PKG_IS_TARGZ
-	bool
-config EMBTK_XSERVER_PKG_IS_TARBZ2
 	bool
