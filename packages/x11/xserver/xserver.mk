@@ -47,7 +47,7 @@ XSERVER_DEPS := utilmacros_install bigreqsproto_install compositeproto_install	\
 		recordproto_install renderproto_install resourceproto_install	\
 		videoproto_install xcbproto_install xcmiscproto_install		\
 		xextproto_install xproto_install libxfont_install		\
-		libxkbfile_install xtrans_install openssl_install
+		libxkbfile_install xtrans_install libressl_install
 XSERVER_DEPS += $(if $(CONFIG_EMBTK_HAVE_XSERVER_XORG),libpciaccess_install)
 
 XSERVER_CONFIGURE_OPTS := $(XSERVER_VARIANT) --with-sha1=libcrypto \
