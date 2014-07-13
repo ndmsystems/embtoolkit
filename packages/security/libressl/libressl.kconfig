@@ -35,14 +35,14 @@ choice
 	help
 	 Here you can choose which version of libressl you want to use.
 
-	config  EMBTK_LIBRESSL_VERSION_2_0_0
-		bool "LibreSSL-2.0.0"
+	config  EMBTK_LIBRESSL_VERSION_2_0_1
+		bool "LibreSSL-2.0.1"
 		select EMBTK_LIBRESSL_NEED_AUTORECONF
 endchoice
 
 config EMBTK_LIBRESSL_VERSION_STRING
 	string
-	default "2.0.0"		if EMBTK_LIBRESSL_VERSION_2_0_0
+	default "2.0.1"		if EMBTK_LIBRESSL_VERSION_2_0_1
 
 config EMBTK_LIBRESSL_NEED_PATCH
 	bool
