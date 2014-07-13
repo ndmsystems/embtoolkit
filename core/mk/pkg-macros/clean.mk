@@ -52,6 +52,7 @@ define __embtk_cleanup_pkg
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),
 		$(call __embtk_unsetconfigured_pkg,$(1))
 		$(call __embtk_unsetinstalled_pkg,$(1)),
+		$(if $(__embtk_pkg_srcdir),rm -rf $(__embtk_pkg_srcdir)*)
 		$(if $(__embtk_pkg_builddir),rm -rf $(__embtk_pkg_builddir)*))
 	$(if $(__embtk_pkg_statedir),rm -rf $(__embtk_pkg_statedir))
 endef
