@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,18 +17,21 @@
 #
 ################################################################################
 #
-# \file         scripting-languages.kconfig
-# \brief	scripting-languages.kconfig of Embtoolkit
+# \file         lutok.mk
+# \brief	lutok.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \date         June 2014
 ################################################################################
 
-# LUA and modules
-source packages/scripting-languages/lua/lua.kconfig
-comment "------------------------------------"
-comment "---- Lua Modules"
-comment "------------------------------------"
-source packages/scripting-languages/lua-modules/cgilua/cgilua.kconfig
-source packages/scripting-languages/lua-modules/lutok/lutok.kconfig
-source packages/scripting-languages/lua-modules/luafilesystem/luafilesystem.kconfig
-source packages/scripting-languages/lua-modules/rings/rings.kconfig
+LUTOK_NAME		:= lutok
+LUTOK_VERSION		:= $(call embtk_get_pkgversion,lutok)
+LUTOK_SITE		:= https://github.com/jmmv/lutok/archive
+LUTOK_PACKAGE		:= lutok-$(LUTOK_VERSION).tar.gz
+LUTOK_SRC_DIR		:= $(embtk_pkgb)/lutok-$(LUTOK_VERSION)
+LUTOK_BUILD_DIR		:= $(embtk_pkgb)/lutok-$(LUTOK_VERSION)-build
+
+LUTOK_LIBS		:= liblutok*
+LUTOK_PKGCONFIGS	:= lutok.pc
+LUTOK_SHARES		:= doc/lutok
+
+LUTOK_DEPS		:= lua_install

@@ -35,13 +35,16 @@ $(call embtk_include_pkg,lua)
 #
 embtk_pkgincdir := packages/scripting-languages/lua-modules
 
+# cgilua
+$(call embtk_include_pkg,cgilua)
+
 # luafilesystem
 $(call embtk_include_pkg,luafilesystem)
 
+# lutok
+$(call embtk_include_pkg,lutok)
+
 # rings
 $(call embtk_include_pkg,rings)
-
-# cgilua
-$(call embtk_include_pkg,cgilua)
 
 embtk_pkgincdir :=
