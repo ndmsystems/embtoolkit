@@ -25,7 +25,7 @@
 
 LUTOK_NAME		:= lutok
 LUTOK_VERSION		:= $(call embtk_get_pkgversion,lutok)
-LUTOK_SITE		:= https://github.com/jmmv/lutok/archive
+LUTOK_SITE		:= $(embtk_ftp/packages-mirror)
 LUTOK_PACKAGE		:= lutok-$(LUTOK_VERSION).tar.gz
 LUTOK_SRC_DIR		:= $(embtk_pkgb)/lutok-$(LUTOK_VERSION)
 LUTOK_BUILD_DIR		:= $(embtk_pkgb)/lutok-$(LUTOK_VERSION)-build
