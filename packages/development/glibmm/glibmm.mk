@@ -17,56 +17,23 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \file         glibmm.mk
+# \brief	glibmm.mk of Embtoolkit
+# \author       Ricardo Crudo <ricardo.crudo@gmail.com>
+# \date         Jun 2014
 ################################################################################
 
-embtk_pkgincdir := packages/development
+GLIBMM_NAME		:= glibmm
+GLIBMM_MAJOR_VERSION	:= $(call embtk_get_pkgversion,glibmm_major)
+GLIBMM_VERSION		:= $(call embtk_get_pkgversion,glibmm)
+GLIBMM_SITE		:= http://ftp.gnome.org/pub/gnome/sources/glibmm/$(GLIBMM_MAJOR_VERSION)
+GLIBMM_PACKAGE		:= glibmm-$(GLIBMM_VERSION).tar.bz2
+GLIBMM_SRC_DIR		:= $(embtk_pkgb)/glibmm-$(GLIBMM_VERSION)
+GLIBMM_BUILD_DIR	:= $(embtk_pkgb)/glibmm-$(GLIBMM_VERSION)
 
-# atf
-$(call embtk_include_pkg,atf)
+GLIBMM_INCLUDES		:= glibmm-* giomm*
+GLIBMM_LIBS		:= glibmm-* libglibmm* libgiomm*
+GLIBMM_PKGCONFIGS       := glibmm*.pc giomm*.pc
+GLIBMM_SHARE		:= glibmm* doc/glibmm* devhelp/books/glibmm* aclocal/glibmm*
 
-# boost
-$(call embtk_include_pkg,boost)
-
-# fftw
-$(call embtk_include_pkg,fftw)
-
-# gettext-intl
-$(call embtk_include_pkg,gettext-intl)
-
-# glibmm
-$(call embtk_include_pkg,glibmm)
-
-# gtest
-$(call embtk_include_pkg,gtest)
-
-# icu
-$(call embtk_include_pkg,icu)
-$(call embtk_include_hostpkg,icu_host)
-
-# libbsd
-$(call embtk_include_pkg,libbsd)
-
-# libevent
-$(call embtk_include_pkg,libevent)
-
-# libnih
-$(call embtk_include_pkg,libnih)
-
-# libsigc++
-$(call embtk_include_pkg,libsigcpp)
-
-# libsigsegv
-$(call embtk_include_pkg,libsigsegv)
-
-# libunwind
-$(call embtk_include_pkg,libunwind)
-
-# openblas
-$(call embtk_include_pkg,openblas)
-
-# popt
-$(call embtk_include_pkg,popt)
+GLIBMM_DEPS		:= glib_install libsigcpp_install
