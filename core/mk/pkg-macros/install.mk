@@ -285,7 +285,7 @@ __embtk_xinstall_xpkg_allvarset-y = $(and $(__embtk_pkg_name),			\
 #
 define embtk_install_pkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
-		$(call __embtk_install_pkg,$(1)),
+		$(Q)$(call __embtk_install_pkg,$(1)),
 		$(call __embtk_install_paramsfailure,$(1)))
 endef
 define __embtk_install_pkg
@@ -308,7 +308,7 @@ endef
 # $(call embtk_makeinstall_pkg,package[,autotooled])
 #
 define embtk_makeinstall_pkg
-	$(call __embtk_install_pkg_make,$(1),$(2))
+	$(Q)$(call __embtk_install_pkg_make,$(1),$(2))
 endef
 
 #
@@ -319,7 +319,7 @@ endef
 #
 define embtk_install_hostpkg
 	$(if $(__embtk_xinstall_xpkg_allvarset-y),
-		$(call __embtk_install_hostpkg,$(1)),
+		$(Q)$(call __embtk_install_hostpkg,$(1)),
 		$(call __embtk_install_paramsfailure,$(1)))
 endef
 define __embtk_install_hostpkg
@@ -343,7 +343,7 @@ endef
 # $(call embtk_makeinstall_hostpkg,package[,autotooled])
 #
 define embtk_makeinstall_hostpkg
-	$(call __embtk_install_hostpkg_make,$(1),$(2))
+	$(Q)$(call __embtk_install_hostpkg_make,$(1),$(2))
 endef
 
 #
