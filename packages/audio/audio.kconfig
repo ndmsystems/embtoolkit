@@ -23,6 +23,9 @@
 # \date         May 2014
 ################################################################################
 
+# ladspa
+source packages/audio/ladspa/ladspa.kconfig
+
 # libsndfile
 source packages/audio/libsndfile/libsndfile.kconfig
 

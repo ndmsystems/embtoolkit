@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2014 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,22 +17,21 @@
 #
 ################################################################################
 #
-# \file         audio.mk
-# \brief	audio.mk of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2014
+# \file         ladspa.mk
+# \brief        ladspa.mk of Embtoolkit.
+# \author       Ricardo Crudo <ricardo.crudo@gmail.com>
+# \date         Jul 2014
 ################################################################################
 
-embtk_pkgincdir := packages/audio
+LADSPA_NAME		:= ladspa
+LADSPA_VERSION		:= $(call embtk_get_pkgversion,ladspa)
+LADSPA_SITE		:= http://www.ladspa.org/download
+LADSPA_PACKAGE		:= ladspa_sdk_$(LADSPA_VERSION).tgz
+LADSPA_SRC_DIR		:= $(embtk_pkgb)/ladspa_sdk
+LADSPA_BUILD_DIR	:= $(embtk_pkgb)/ladspa_sdk
 
-# ladspa
-$(call embtk_include_pkg,ladspa)
+LADSPA_INCLUDES	:= ladspa.h
 
-# libsndfile
-$(call embtk_include_pkg,libsndfile)
-
-# lilv
-$(call embtk_include_pkg,lilv)
-
-# lv2
-$(call embtk_include_pkg,lv2)
+define embtk_install_ladspa
+	cp $(LADSPA_BUILD_DIR)/src/ladspa.h $(embtk_sysroot)/usr/include
+endef
