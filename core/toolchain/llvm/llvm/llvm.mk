@@ -32,7 +32,7 @@ LLVM_HOST_PACKAGE	:= llvm-$(LLVM_HOST_VERSION).src.tar.gz
 LLVM_HOST_SRC_DIR	:= $(embtk_toolsb)/llvm-$(LLVM_HOST_VERSION).src
 LLVM_HOST_BUILD_DIR	:= $(embtk_toolsb)/llvm-build
 
-LLVM_HOST_DEPS			:= binutils_install clang_host_install
+LLVM_HOST_DEPS			:= clang_host_install
 
 LLVM_HOST_WITH_HASHSTYLE	:= $(if $(CONFIG_EMBTK_CLIB_UCLIBC),--with-default-hash-style=sysv)
 
