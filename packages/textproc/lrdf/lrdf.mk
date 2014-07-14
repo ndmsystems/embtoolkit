@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2014 GAYE Abdoulaye Walsimou.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,19 +17,26 @@
 #
 ################################################################################
 #
-# \file         textproc.kconfig
-# \brief	text processing packages and libraries
-# \author       GAYE Abdoulaye Walsimou, <walsimou@walsimou.com>
-# \date         July 2014
+# \file         lrdf.mk
+# \brief        lrdf.mk of Embtoolkit
+# \author       Ricardo Crudo <ricardo.crudo@gmail.com>
+# \date         Jun 2014
 ################################################################################
 
-embtk_pkgincdir := packages/textproc
+LRDF_NAME		:= lrdf
+LRDF_VERSION		:= $(call embtk_get_pkgversion,lrdf)
+LRDF_SITE		:= http://sourceforge.net/projects/lrdf/files/liblrdf/$(LRDF_VERSION)
+LRDF_PACKAGE		:= liblrdf-$(LRDF_VERSION).tar.gz
+LRDF_SRC_DIR		:= $(embtk_pkgb)/liblrdf-$(LRDF_VERSION)
+LRDF_BUILD_DIR		:= $(embtk_pkgb)/liblrdf-$(LRDF_VERSION)
 
-# libxml2
-$(call embtk_include_pkg,libxml2)
+LRDF_INCLUDES		:= lrdf*
+LRDF_LIBS		:= liblrdf*
+LRDF_PKGCONFIGS		:= lrdf.pc
+LRDF_SHARES		:= ladspa/rdf/ladspa.rdfs
 
-# lrdf
-$(call embtk_include_pkg,lrdf)
+LRDF_DEPS		:= ladspa_install raptor_install
 
-# raptor
-$(call embtk_include_pkg,raptor)
+define embtk_beforeinstall_lrdf
+	$(call __embtk_fixgconfigsfor_pkg,lrdf)
+endef

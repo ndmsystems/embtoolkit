@@ -26,5 +26,8 @@
 # libxml2
 source packages/textproc/libxml2/libxml2.kconfig
 
+# lrdf
+source packages/textproc/lrdf/lrdf.kconfig
+
 # raptor
-source packages/misc/raptor/raptor.kconfig
+source packages/textproc/raptor/raptor.kconfig
