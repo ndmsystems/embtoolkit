@@ -23,6 +23,9 @@
 # \date         October 2009
 ################################################################################
 
+# atf
+source packages/development/atf/atf.kconfig
+
 # boost
 source packages/development/boost/boost.kconfig
 

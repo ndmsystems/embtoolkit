@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,50 +17,31 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
+# \file         atf.mk
+# \brief	atf.mk of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \date         July 2014
 ################################################################################
 
-embtk_pkgincdir := packages/development
+ATF_NAME	:= atf
+ATF_VERSION	:= $(call embtk_get_pkgversion,atf)
+ATF_SITE	:= $(embtk_ftp/packages-mirror)
+ATF_PACKAGE	:= atf-$(ATF_VERSION).tar.gz
+ATF_SRC_DIR	:= $(embtk_pkgb)/atf-$(ATF_VERSION)
+ATF_BUILD_DIR	:= $(embtk_pkgb)/atf-$(ATF_VERSION)-build
 
-# atf
-$(call embtk_include_pkg,atf)
+ATF_BINS	:= atf-sh
+ATF_INCLUDES	:= atf-c atf-c++ atf-c.h atf-c++.hpp
+ATF_LIBS	:= libatf-*
+ATF_LIBEXECS	:= atf-check
+ATF_PKGCONFIGS	:= atf-*.pc
+ATF_SHARES	:= aclocal/atf-*.m4 atf doc/atf man/man*/atf-*
 
-# boost
-$(call embtk_include_pkg,boost)
+ATF_CONFIGURE_ENV	:= kyua_cv_getopt_plus=yes
+ATF_CONFIGURE_ENV	+= kyua_cv_attribute_noreturn=yes
+ATF_CONFIGURE_ENV	+= kyua_cv_getcwd_works=yes
+ATF_CONFIGURE_OPTS	:= --program-transform-name='s;$(STRICT_GNU_TARGET)-;;'
 
-# fftw
-$(call embtk_include_pkg,fftw)
-
-# gtest
-$(call embtk_include_pkg,gtest)
-
-# gettext-intl
-$(call embtk_include_pkg,gettext-intl)
-
-# icu
-$(call embtk_include_pkg,icu)
-$(call embtk_include_hostpkg,icu_host)
-
-# libbsd
-$(call embtk_include_pkg,libbsd)
-
-# libevent
-$(call embtk_include_pkg,libevent)
-
-# libnih
-$(call embtk_include_pkg,libnih)
-
-# libsigsegv
-$(call embtk_include_pkg,libsigsegv)
-
-# libunwind
-$(call embtk_include_pkg,libunwind)
-
-# openblas
-$(call embtk_include_pkg,openblas)
-
-# popt
-$(call embtk_include_pkg,popt)
+define embtk_cleanup_atf
+	$(Q)rm -rf $(embtk_sysroot)/usr/tests/atf
+endef

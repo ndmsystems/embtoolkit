@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,50 +17,34 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
+# \file         atf.kconfig
+# \brief	atf.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \date         July 2014
 ################################################################################
 
-embtk_pkgincdir := packages/development
+config EMBTK_HAVE_ATF
+	bool "Have atf"
+	help
+	 C, C++ and shell libraries to write ATF-compliant test programs.
+	 see https://github.com/jmmv/atf
 
-# atf
-$(call embtk_include_pkg,atf)
+choice
+	prompt "atf version you wish"
+	depends on EMBTK_HAVE_ATF
+	help
+	 Here you can choose which version of atf you want to use.
 
-# boost
-$(call embtk_include_pkg,boost)
+	config  EMBTK_ATF_VERSION_0_20
+		bool "atf-0.20"
+		select EMBTK_ATF_NEED_AUTORECONF
+endchoice
 
-# fftw
-$(call embtk_include_pkg,fftw)
+config EMBTK_ATF_VERSION_STRING
+	string
+	default "0.20"	if EMBTK_ATF_VERSION_0_20
 
-# gtest
-$(call embtk_include_pkg,gtest)
-
-# gettext-intl
-$(call embtk_include_pkg,gettext-intl)
-
-# icu
-$(call embtk_include_pkg,icu)
-$(call embtk_include_hostpkg,icu_host)
-
-# libbsd
-$(call embtk_include_pkg,libbsd)
-
-# libevent
-$(call embtk_include_pkg,libevent)
-
-# libnih
-$(call embtk_include_pkg,libnih)
-
-# libsigsegv
-$(call embtk_include_pkg,libsigsegv)
-
-# libunwind
-$(call embtk_include_pkg,libunwind)
-
-# openblas
-$(call embtk_include_pkg,openblas)
-
-# popt
-$(call embtk_include_pkg,popt)
+config EMBTK_ATF_NEED_PATCH
+	bool
+config EMBTK_ATF_NEED_AUTORECONF
+	bool
