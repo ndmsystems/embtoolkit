@@ -50,6 +50,9 @@ source packages/development/libevent/libevent.kconfig
 # libnih
 source packages/development/libnih/libnih.kconfig
 
+# libsigc++
+source packages/development/libsigcpp/libsigcpp.kconfig
+
 # libsigsegv
 source packages/development/libsigsegv/libsigsegv.kconfig
 

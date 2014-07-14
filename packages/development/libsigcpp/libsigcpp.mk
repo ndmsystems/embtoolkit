@@ -17,53 +17,21 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \file         libsigcpp.mk
+# \brief        libsigcpp.mk of Embtoolkit
+# \author       Ricardo Crudo <ricardo.crudo@gmail.com>
+# \date         July 2014
 ################################################################################
 
-embtk_pkgincdir := packages/development
+LIBSIGCPP_NAME		:= libsigcpp
+LIBSIGCPP_MAJOR_VERSION := $(call embtk_get_pkgversion,libsigcpp_major)
+LIBSIGCPP_VERSION	:= $(call embtk_get_pkgversion,libsigcpp)
+LIBSIGCPP_SITE		:= http://ftp.gnome.org/pub/GNOME/sources/libsigc++/$(LIBSIGCPP_MAJOR_VERSION)
+LIBSIGCPP_PACKAGE	:= libsigc++-$(LIBSIGCPP_VERSION).tar.xz
+LIBSIGCPP_SRC_DIR	:= $(embtk_pkgb)/libsigc++-$(LIBSIGCPP_VERSION)
+LIBSIGCPP_BUILD_DIR	:= $(embtk_pkgb)/libsigc++-$(LIBSIGCPP_VERSION)
 
-# atf
-$(call embtk_include_pkg,atf)
-
-# boost
-$(call embtk_include_pkg,boost)
-
-# fftw
-$(call embtk_include_pkg,fftw)
-
-# gtest
-$(call embtk_include_pkg,gtest)
-
-# gettext-intl
-$(call embtk_include_pkg,gettext-intl)
-
-# icu
-$(call embtk_include_pkg,icu)
-$(call embtk_include_hostpkg,icu_host)
-
-# libbsd
-$(call embtk_include_pkg,libbsd)
-
-# libevent
-$(call embtk_include_pkg,libevent)
-
-# libnih
-$(call embtk_include_pkg,libnih)
-
-# libsigc++
-$(call embtk_include_pkg,libsigcpp)
-
-# libsigsegv
-$(call embtk_include_pkg,libsigsegv)
-
-# libunwind
-$(call embtk_include_pkg,libunwind)
-
-# openblas
-$(call embtk_include_pkg,openblas)
-
-# popt
-$(call embtk_include_pkg,popt)
+LIBSIGCPP_INCLUDES	:= sigc++-2.0
+LIBSIGCPP_LIBS		:= libsigc* sigc++-2.0
+LIBSIGCPP_PKGCONFIGS	:= sigc++*.pc
+LIBSIGCPP_SHARES	:= doc/libsigc++-2.0 devhelp/books/libsigc++-2.0
