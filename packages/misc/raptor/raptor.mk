@@ -39,6 +39,7 @@ RAPTOR_SHARES		+= man/man1/raptor-config.1
 RAPTOR_SHARES		+= man/man3/libraptor.3 gtk-doc/html/raptor
 
 RAPTOR_DEPS		:= libxml2_install
+RAPTOR_CONFIGURE_OPTS	:= --with-xml2-config=$(embtk_sysroot)/usr/bin/xml2-config
 
 #
 # FIXME: should be fixed upstream - curl/types.h was removed from curl
