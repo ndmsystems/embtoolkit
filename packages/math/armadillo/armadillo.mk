@@ -30,6 +30,7 @@ ARMADILLO_PACKAGE	:= armadillo-$(ARMADILLO_VERSION).tar.gz
 ARMADILLO_SRC_DIR	:= $(embtk_pkgb)/armadillo-$(ARMADILLO_VERSION)
 ARMADILLO_BUILD_DIR	:= $(embtk_pkgb)/armadillo-$(ARMADILLO_VERSION)
 
+ARMADILLO_DEPS		:= openblas_install
 ARMADILLO_INCLUDES	:= armadillo*
 ARMADILLO_LIBS		:= libarmadillo*
 ARMADILLO_SHARES	:= Armadillo
