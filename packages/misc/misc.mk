@@ -41,9 +41,6 @@ $(call embtk_include_hostpkg,intltool_host)
 # ncurses
 $(call embtk_include_pkg,ncurses)
 
-# raptor
-$(call embtk_include_pkg,raptor)
-
 # serd
 $(call embtk_include_pkg,serd)
 

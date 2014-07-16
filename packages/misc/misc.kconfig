@@ -37,9 +37,6 @@ source packages/misc/intltool/intltool.kconfig
 
 # ncurses included in main Kconfig
 
-# raptor
-source packages/misc/raptor/raptor.kconfig
-
 # serd
 source packages/misc/serd/serd.kconfig
 
