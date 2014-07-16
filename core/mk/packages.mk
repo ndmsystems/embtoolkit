@@ -77,6 +77,9 @@ include packages/security/security.mk
 # System packages
 include packages/system/system.mk
 
+# System packages
+include packages/textproc/textproc.mk
+
 # X window system packages
 include packages/x11/x11.mk
 

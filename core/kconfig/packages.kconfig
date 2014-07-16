@@ -80,6 +80,10 @@ menu "System packages"
 source packages/system/system.kconfig
 endmenu
 
+menu "Text processing packages"
+source packages/textproc/textproc.kconfig
+endmenu
+
 menu "Miscellaneous packages"
 source packages/misc/misc.kconfig
 endmenu

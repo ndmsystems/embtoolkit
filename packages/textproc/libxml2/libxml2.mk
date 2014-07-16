@@ -38,9 +38,15 @@ LIBXML2_PKGCONFIGS	:= libxml*.pc
 LIBXML2_CONFIGURE_OPTS	:= --without-python
 
 # FIXME: this should be fixed from upstream libxml2
-pembtk_libxml2conf := $(embtk_sysroot)/usr/$(LIBDIR)/xml2Conf.sh
+pembtk_libxml2conf	:= $(embtk_sysroot)/usr/$(LIBDIR)/xml2Conf.sh
+pembtk_xml2config	:= $(embtk_sysroot)/usr/bin/xml2-config
 define embtk_postinstallonce_libxml2
 	sed -e 's;/usr;$(embtk_sysroot)/usr;g'					\
 		< $(pembtk_libxml2conf) > $(pembtk_libxml2conf).tmp;		\
 	mv $(pembtk_libxml2conf).tmp $(pembtk_libxml2conf)
+	chmod +x $(pembtk_libxml2conf)
+	sed -e 's;=/usr;=$(embtk_sysroot)/usr;g'				\
+		< $(pembtk_xml2config) > $(pembtk_xml2config).tmp;		\
+	mv $(pembtk_xml2config).tmp $(pembtk_xml2config)
+	chmod +x $(pembtk_xml2config)
 endef

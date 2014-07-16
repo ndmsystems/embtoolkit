@@ -38,10 +38,6 @@ $(call embtk_include_hostpkg,glib_host)
 # intltool
 $(call embtk_include_hostpkg,intltool_host)
 
-# libxml2
-include packages/misc/libxml/libxml.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBXML2) += libxml2_install
-
 # ncurses
 $(call embtk_include_pkg,ncurses)
 

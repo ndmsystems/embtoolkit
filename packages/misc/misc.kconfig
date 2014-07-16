@@ -35,9 +35,6 @@ source packages/misc/glib/glib.kconfig
 # inttltool
 source packages/misc/intltool/intltool.kconfig
 
-# libxml
-source packages/misc/libxml/libxml.kconfig
-
 # ncurses included in main Kconfig
 
 # raptor
