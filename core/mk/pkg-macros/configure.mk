@@ -49,13 +49,26 @@ endef
 # Usage:
 # $(call embtk_configure_pkg,PACKAGE)
 #
-define __embtk_configure_autoreconfpkg
-if [ "x$(CONFIG_EMBTK_$(PKGV)_NEED_AUTORECONF)" = "xy" ]; then			\
+__embtk_pkg_autoreconf-y = $(CONFIG_EMBTK_$(PKGV)_NEED_AUTORECONF)
+define embtk_autoreconf_pkg
+	$(if $(__embtk_pkg_autoreconf-y),$(call __embtk_autoreconf_pkg,$(1)))
+endef
+define __embtk_autoreconf_pkg
 	test -e $(__embtk_pkg_srcdir)/configure.ac ||				\
-	test -e $(__embtk_pkg_srcdir)/configure.in || exit 1;			\
-	cd $(__embtk_pkg_srcdir);						\
-	$(AUTORECONF) --install -f;						\
-fi
+	test -e $(__embtk_pkg_srcdir)/configure.in ||				\
+	($(call embtk_perror,"Can not autoreconf $(__embtk_pkg_name)"); exit 1)
+	cd $(__embtk_pkg_srcdir); $(AUTORECONF)					\
+		--install -f --include=$(embtk_sysroot)/usr/share/aclocal
+endef
+
+define embtk_autoreconf_hostpkg
+	$(if $(__embtk_pkg_autoreconf-y),$(call __embtk_autoreconf_pkg,$(1)))
+endef
+define __embtk_autoreconf_hostpkg
+	test -e $(__embtk_pkg_srcdir)/configure.ac ||				\
+	test -e $(__embtk_pkg_srcdir)/configure.in ||				\
+	($(call embtk_perror,"Can not autoreconf $(__embtk_pkg_name)"); exit 1)
+	cd $(__embtk_pkg_srcdir); $(AUTORECONF) --install -f
 endef
 
 __embtk_parse_configure_opts = $(subst $(embtk_space),"\\n\\t",$(strip $(1)))
@@ -75,7 +88,7 @@ __embtk_pkg_cxx		= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_CPP),$(___embtk_pkg_cxx))
 define embtk_configure_pkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
 		$(call embtk_pinfo,"Configure $(__embtk_pkg_package)..."))
-	$(call __embtk_configure_autoreconfpkg,$(1))
+	$(call embtk_autoreconf_pkg,$(1))
 	$(Q)test -e $(__embtk_pkg_configurescript) || exit 1
 	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
 	$(if $(CONFIG_EMBTK_CLIB_MUSL),$(call __embtk_fixgconfigsfor_pkg,$(1)))
@@ -125,7 +138,7 @@ __embtk_hostpkg_cppflags	= -I$(embtk_htools)/usr/include
 define embtk_configure_hostpkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
 	$(call embtk_pinfo,"Configure $(__embtk_pkg_package) for host..."))
-	$(call __embtk_configure_autoreconfpkg,$(1))
+	$(call embtk_autoreconf_hostpkg,$(1))
 	$(if $(CONFIG_EMBTK_CLIB_MUSL),$(call __embtk_fixgconfigsfor_pkg,$(1)))
 	$(Q)test -e $(__embtk_pkg_configurescript) || exit 1
 	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
