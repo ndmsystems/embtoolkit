@@ -62,7 +62,7 @@ define __embtk_autoreconf_pkg
 endef
 
 define embtk_autoreconf_hostpkg
-	$(if $(__embtk_pkg_autoreconf-y),$(call __embtk_autoreconf_pkg,$(1)))
+	$(if $(__embtk_pkg_autoreconf-y),$(call __embtk_autoreconf_hostpkg,$(1)))
 endef
 define __embtk_autoreconf_hostpkg
 	test -e $(__embtk_pkg_srcdir)/configure.ac ||				\
