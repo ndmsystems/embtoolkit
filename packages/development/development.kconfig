@@ -44,6 +44,9 @@ source packages/development/gtest/gtest.kconfig
 # icu
 source packages/development/icu/icu.kconfig
 
+# icu
+source packages/development/kyua-testers/kyua-testers.kconfig
+
 # libbsd
 source packages/development/libbsd/libbsd.kconfig
 

@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,59 +17,36 @@
 #
 ################################################################################
 #
-# \file         misc.mk
-# \brief	misc.mk of Embtoolkit
+# \file         kyua-testers.kconfig
+# \brief	kyua-testers.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         February 2010
+# \date         July 2014
 ################################################################################
 
-embtk_pkgincdir := packages/development
+config EMBTK_HAVE_KYUA-TESTERS
+	bool "Have kyua-testers"
+	select EMBTK_HAVE_ATF
+	help
+	 Kyua (automated testing framework) - Testers
+	 see https://github.com/jmmv/kyua
 
-# atf
-$(call embtk_include_pkg,atf)
+choice
+	prompt "kyua-testers version you wish"
+	depends on EMBTK_HAVE_KYUA-TESTERS
+	help
+	 Here you can choose which version of kyua-testers you want to use.
 
-# boost
-$(call embtk_include_pkg,boost)
+	config  EMBTK_KYUA-TESTERS_VERSION_0_2
+		bool "kyua-testers-0.2"
+		select EMBTK_KYUA-TESTERS_NEED_AUTORECONF
+		select EMBTK_KYUA-TESTERS_NEED_PATCH
+endchoice
 
-# fftw
-$(call embtk_include_pkg,fftw)
+config EMBTK_KYUA-TESTERS_VERSION_STRING
+	string
+	default "0.2"		if EMBTK_KYUA-TESTERS_VERSION_0_2
 
-# gettext-intl
-$(call embtk_include_pkg,gettext-intl)
-
-# glibmm
-$(call embtk_include_pkg,glibmm)
-
-# gtest
-$(call embtk_include_pkg,gtest)
-
-# icu
-$(call embtk_include_pkg,icu)
-$(call embtk_include_hostpkg,icu_host)
-
-# kyua-testers
-$(call embtk_include_pkg,kyua-testers)
-
-# libbsd
-$(call embtk_include_pkg,libbsd)
-
-# libevent
-$(call embtk_include_pkg,libevent)
-
-# libnih
-$(call embtk_include_pkg,libnih)
-
-# libsigc++
-$(call embtk_include_pkg,libsigcpp)
-
-# libsigsegv
-$(call embtk_include_pkg,libsigsegv)
-
-# libunwind
-$(call embtk_include_pkg,libunwind)
-
-# openblas
-$(call embtk_include_pkg,openblas)
-
-# popt
-$(call embtk_include_pkg,popt)
+config EMBTK_KYUA-TESTERS_NEED_PATCH
+	bool
+config EMBTK_KYUA-TESTERS_NEED_AUTORECONF
+	bool
