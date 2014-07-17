@@ -25,7 +25,7 @@
 
 ATF_NAME	:= atf
 ATF_VERSION	:= $(call embtk_get_pkgversion,atf)
-ATF_SITE	:= $(embtk_ftp/packages-mirror)
+ATF_SITE	:= https://github.com/jmmv/atf/releases/download/atf-$(ATF_VERSION)
 ATF_PACKAGE	:= atf-$(ATF_VERSION).tar.gz
 ATF_SRC_DIR	:= $(embtk_pkgb)/atf-$(ATF_VERSION)
 ATF_BUILD_DIR	:= $(embtk_pkgb)/atf-$(ATF_VERSION)-build
@@ -37,7 +37,7 @@ ATF_LIBEXECS	:= atf-check
 ATF_PKGCONFIGS	:= atf-*.pc
 ATF_SHARES	:= aclocal/atf-*.m4 atf doc/atf man/man*/atf-*
 
-ATF_CONFIGURE_ENV	:= kyua_cv_getopt_plus=yes
+ATF_CONFIGURE_ENV	:= kyua_cv_getopt_plus=no
 ATF_CONFIGURE_ENV	+= kyua_cv_attribute_noreturn=yes
 ATF_CONFIGURE_ENV	+= kyua_cv_getcwd_works=yes
 ATF_CONFIGURE_OPTS	:= --program-transform-name='s;$(STRICT_GNU_TARGET)-;;'

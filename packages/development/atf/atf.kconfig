@@ -37,7 +37,6 @@ choice
 
 	config  EMBTK_ATF_VERSION_0_20
 		bool "atf-0.20"
-		select EMBTK_ATF_NEED_AUTORECONF
 endchoice
 
 config EMBTK_ATF_VERSION_STRING
