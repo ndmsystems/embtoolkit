@@ -34,4 +34,6 @@ KYUA-ATF-COMPAT_BINS		:= atf2kyua atf-report atf-run
 KYUA-ATF-COMPAT_SHARES		:= doc/kyua-atf-compat kyua-atf-compat
 KYUA-ATF-COMPAT_SHARES		+= man/man1/atf2kyua.1
 
+KYUA-ATF-COMPAT_CONFIGURE_OPTS	:= --with-atf=no
+
 KYUA-ATF-COMPAT_DEPS		:= kyua-testers_install
