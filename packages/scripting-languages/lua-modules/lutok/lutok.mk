@@ -25,7 +25,7 @@
 
 LUTOK_NAME		:= lutok
 LUTOK_VERSION		:= $(call embtk_get_pkgversion,lutok)
-LUTOK_SITE		:= $(embtk_ftp/packages-mirror)
+LUTOK_SITE		:= https://github.com/jmmv/lutok/releases/download/lutok-$(LUTOK_VERSION)
 LUTOK_PACKAGE		:= lutok-$(LUTOK_VERSION).tar.gz
 LUTOK_SRC_DIR		:= $(embtk_pkgb)/lutok-$(LUTOK_VERSION)
 LUTOK_BUILD_DIR		:= $(embtk_pkgb)/lutok-$(LUTOK_VERSION)-build
@@ -33,5 +33,6 @@ LUTOK_BUILD_DIR		:= $(embtk_pkgb)/lutok-$(LUTOK_VERSION)-build
 LUTOK_LIBS		:= liblutok*
 LUTOK_PKGCONFIGS	:= lutok.pc
 LUTOK_SHARES		:= doc/lutok
+LUTOK_LDFLAGS		:= -llua
 
 LUTOK_DEPS		:= lua_install
