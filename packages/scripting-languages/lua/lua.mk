@@ -45,7 +45,7 @@ LUA_MAKE_OPTS	:= INSTALL_TOP=$(embtk_sysroot)/usr/ LIBDIR=$(LIBDIR) PLAT=ansi
 LUA_MAKE_OPTS	+= CC=$(TARGETCC_CACHED)
 LUA_MAKE_OPTS	+= AR="$(TARGETAR) rcu" RANLIB=$(TARGETRANLIB)
 LUA_MAKE_OPTS	+= LDFLAGS="-L$(embtk_sysroot)/$(LIBDIR) -L$(embtk_sysroot)/usr/$(LIBDIR)"
-LUA_MAKE_OPTS	+= CFLAGS="$(TARGET_CFLAGS) -I$(embtk_sysroot)/usr/include $(LUACONF_H_OPTS)"
+LUA_MAKE_OPTS	+= CFLAGS="$(TARGET_CFLAGS) -I$(embtk_sysroot)/usr/include $(LUACONF_H_OPTS) -fPIC -DPIC"
 
 define embtk_install_lua
 	$(call embtk_makeinstall_pkg,lua)
