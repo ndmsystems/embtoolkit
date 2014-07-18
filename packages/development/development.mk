@@ -53,6 +53,9 @@ $(call embtk_include_pkg,kyua-testers)
 # kyua-atf-compat
 $(call embtk_include_pkg,kyua-atf-compat)
 
+# kyua-cli
+$(call embtk_include_pkg,kyua-cli)
+
 # libbsd
 $(call embtk_include_pkg,libbsd)
 
