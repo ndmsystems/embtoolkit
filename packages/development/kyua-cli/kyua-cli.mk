@@ -42,3 +42,4 @@ KYUA-CLI_CONFIGURE_ENV	+= kyua_cv_getcwd_null_0_works=yes
 KYUA-CLI_CONFIGURE_OPTS	:= --with-atf=no --with-doxygen=no
 
 KYUA-CLI_DEPS		:= lutok_install kyua-testers_install
+KYUA-CLI_DEPS		+= sqlite_install

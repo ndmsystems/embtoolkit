@@ -27,6 +27,7 @@ config EMBTK_HAVE_KYUA-CLI
 	bool "Have kyua-cli"
 	select EMBTK_HAVE_KYUA-TESTERS
 	select EMBTK_HAVE_LUTOK
+	select EMBTK_HAVE_SQLITE
 	help
 	 kyua-cli provides the command-line interface to the Kyua runtime system.
 	 The major purpose of this tool is to run test cases and generate
