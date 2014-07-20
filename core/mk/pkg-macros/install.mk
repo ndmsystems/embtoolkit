@@ -163,7 +163,7 @@ endef
 
 define __embtk_preinstall_pkg
 	$(call __embtk_install_pkgdeps,$(1))
-	$(call embtk_pinfo,"Compile/Install $(__embtk_pkg_name)-$(__embtk_pkg_version) in your root filesystem...")
+	$(call embtk_pinfo,"Compile/Install $(__embtk_pkg_name)-$(__embtk_pkg_version) in target system...")
 	mkdir -p $(__embtk_pkg_builddir)
 	$(call embtk_download_pkg,$(1))
 	$(call embtk_decompress_pkg,$(1))
