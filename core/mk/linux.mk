@@ -30,6 +30,9 @@ __LINUX_SITE		= $(strip $(if $(CONFIG_EMBTK_LINUX_HAVE_MIRROR),	\
 	$(patsubst '"',,$(strip $(CONFIG_EMBTK_LINUX_HAVE_MIRROR_SITE))),	\
 	$(__LINUX_SITE_BASE)/$(LINUX_MAJORV)$(__LINUX_SITE_LONGTERM)))
 
+#
+# linux kernel part
+#
 LINUX_NAME		:= linux
 LINUX_MAJORV		:= $(call embtk_get_pkgversion,linux_major)
 LINUX_LONGTERMV		:= $(call embtk_get_pkgversion,linux_longterm)
@@ -40,6 +43,9 @@ LINUX_SRC_DIR		:= $(embtk_toolsb)/linux-$(LINUX_VERSION)
 LINUX_BUILD_DIR		:= $(embtk_toolsb)/linux-$(LINUX_VERSION)
 LINUX_KEEP_SRC_DIR	:= $(CONFIG_EMBTK_BUILD_LINUX_KERNEL)
 
+#
+# linux headers part
+#
 LINUX_HEADERS_NAME	:= linux
 LINUX_HEADERS_VERSION	:= $(LINUX_VERSION)
 LINUX_HEADERS_SITE	:= $(LINUX_SITE)
@@ -49,6 +55,21 @@ LINUX_HEADERS_BUILD_DIR	:= $(LINUX_BUILD_DIR)
 LINUX_HEADERS_KCONFIGS_NAME	:= LINUX
 LINUX_HEADERS_KEEP_SRC_DIR	:= $(CONFIG_EMBTK_BUILD_LINUX_KERNEL)
 
+#
+# linux modules part
+#
+LINUX_MODULES_NAME	:= linux
+LINUX_MODULES_VERSION	:= $(LINUX_VERSION)
+LINUX_MODULES_SITE	:= $(LINUX_SITE)
+LINUX_MODULES_PACKAGE	:= $(LINUX_PACKAGE)
+LINUX_MODULES_SRC_DIR	:= $(LINUX_SRC_DIR)
+LINUX_MODULES_BUILD_DIR	:= $(LINUX_BUILD_DIR)
+LINUX_MODULES_KCONFIGS_NAME	:= LINUX
+LINUX_MODULES_KEEP_SRC_DIR	:= $(CONFIG_EMBTK_BUILD_LINUX_KERNEL)
+
+#
+# common options
+#
 LINUX_MAKE_OPTS	:= quiet=quiet_
 LINUX_MAKE_OPTS	+= ARCH=$(LINUX_ARCH)
 LINUX_MAKE_OPTS	+= CROSS_COMPILE=$(CROSS_COMPILE_CACHED)
@@ -58,9 +79,6 @@ LINUX_MAKE_OPTS	+= HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)"
 # linux headers install
 #
 define embtk_install_linux_headers
-	$(__embtk_install_linux_headers)
-endef
-define __embtk_install_linux_headers
 	$(MAKE) -C $(LINUX_BUILD_DIR) $(LINUX_MAKE_OPTS)			\
 		INSTALL_HDR_PATH=$(embtk_sysroot)/usr headers_install
 endef
@@ -69,57 +87,58 @@ endef
 # linux install macros
 #
 
-__embtk_linux_dotconfig_f	:= $(call __embtk_mk_uquote,$(CONFIG_EMBTK_LINUX_DOTCONFIG))
-__embtk_linux_srcdir		:= $(call __embtk_mk_uquote,$(or $(CONFIG_EMBTK_LINUX_BUILD_EXTSRC),$(LINUX_SRC_DIR)))
-__embtk_linux_support_modules	:= $(shell grep MODULES=y "$(__embtk_linux_dotconfig_f)" 2>/dev/null)
+pembtk_linux_dotconfig_f	:= $(call __embtk_mk_uquote,$(CONFIG_EMBTK_LINUX_DOTCONFIG))
+pembtk_linux_extsrc-y		:= $(CONFIG_EMBTK_LINUX_BUILD_USE_EXTSRC)
+pembtk_linux_srcdir		:= $(call __embtk_mk_uquote,$(or $(CONFIG_EMBTK_LINUX_BUILD_EXTSRC),$(LINUX_SRC_DIR)))
+pembtk_linux_modules-y		:= $(shell grep MODULES=y "$(pembtk_linux_dotconfig_f)" 2>/dev/null)
 
-define __embtk_install_linux_check_config
-	if [ "x" = "x$(__embtk_linux_dotconfig_f)" ]; then			\
-	$(call embtk_perror,"Unable to build linux kernel image: no config file");\
-	exit 1;									\
+define pembtk_linux_check_dotconfig
+	if [ "x" = "x$(pembtk_linux_dotconfig_f)" ]; then			\
+		$(call embtk_perror,"No kernel config file specified");		\
+		exit 1;								\
 	fi
-	if [ ! -e $(__embtk_linux_dotconfig_f) ]; then				\
-	$(call embtk_perror,"Unable to build linux kernel image: config file $(__embtk_linux_dotconfig_f) not found");\
-	exit 1;									\
+	if [ ! -e $(pembtk_linux_dotconfig_f) ]; then				\
+		$(call embtk_perror,"Kernel config file $(pembtk_linux_dotconfig_f) not found");\
+		exit 1;								\
 	fi
 endef
 
-define __embtk_install_linux_check_extsrc
-	if [ "x" = "x$(__embtk_linux_srcdir)" ]; then				\
-	$(call embtk_perror,"Unable to build linux kernel image: External source tree not specified");\
-	exit 1;									\
+define pembtk_linux_check_extsrc
+	if [ "x" = "x$(pembtk_linux_srcdir)" ]; then				\
+		$(call embtk_perror,"kernel source tree not specified");	\
+		exit 1;								\
 	fi
-	if [ ! -d $(__embtk_linux_srcdir) ]; then				\
-	$(call embtk_perror,"Unable to build linux kernel image: External source tree $(__embtk_linux_srcdir) not found");\
-	exit 1;									\
+	if [ ! -d $(pembtk_linux_srcdir) ]; then				\
+		$(call embtk_perror,"kernel source tree $(pembtk_linux_srcdir) not found");\
+		exit 1;								\
 	fi
-endef
-
-define __embtk_install_linux
-	$(__embtk_install_linux_check_config)
-	$(if $(CONFIG_EMBTK_LINUX_BUILD_USE_EXTSRC),
-		$(__embtk_install_linux_check_extsrc))
-	$(if $(CONFIG_EMBTK_LINUX_BUILD_TOOLCHAIN_SRC),
-		$(call embtk_download_pkg,linux)
-		$(call embtk_decompress_pkg,linux))
-	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS) distclean
-	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(__embtk_linux_srcdir)/.config
-	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS) silentoldconfig
-	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS) $(J)
 endef
 
 define embtk_install_linux
-	$(__embtk_install_linux)
+	$(pembtk_linux_check_dotconfig)
+	$(if $(pembtk_linux_extsrc-y),$(pembtk_linux_check_extsrc))
+	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(pembtk_linux_srcdir)/.config
+	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) silentoldconfig
+	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) $(J)
 endef
 
-define embtk_postinstall_linux
-	$(if $(__embtk_linux_support_modules),$(__embtk_postinstall_linux))
+#
+# linux modules install
+#
+define embtk_install_linux_modules
+	$(if $(pembtk_linux_modules-y),$(pembtk_install_linux_modules))
 endef
-define __embtk_postinstall_linux
+define pembtk_install_linux_modules
 	$(call embtk_pinfo,"Install linux kernel modules...")
-	$(MAKE) -C $(__embtk_linux_srcdir) $(LINUX_MAKE_OPTS)			\
+	$(embtk_install_linux)
+	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS)			\
 		INSTALL_MOD_PATH=$(embtk_rootfs) modules_install
 endef
+define embtk_postinstall_linux_modules
+	rm -rf $(embtk_rootfs)/lib/modules/*/build
+	rm -rf $(embtk_rootfs)/lib/modules/*/source
+endef
+
 #
 # clean target and macros
 #
@@ -129,4 +148,8 @@ endef
 
 define embtk_cleanup_linux_headers
 	[ -d $(LINUX_BUILD_DIR) ] && $(call __embtk_unsetinstalled_pkg,linux_headers) ||:
+endef
+
+define embtk_cleanup_linux_modules
+	[ -d $(LINUX_BUILD_DIR) ] && $(call __embtk_unsetinstalled_pkg,linux_modules) ||:
 endef

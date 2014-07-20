@@ -180,8 +180,8 @@ __rootfs_prebuild_targets += __rootfs_mkinitpath
 __rootfs_prebuild_targets += __rootfs_components_build
 __rootfs_prebuild_targets += __rootfs_mkdevnodes
 __rootfs_prebuild_targets += __rootfs_components_install
-__rootfs_prebuild_targets += $(strip $(if $(CONFIG_EMBTK_TARGET_STRIPPED),	\
-						__rootfs_components_strip))
+__rootfs_prebuild_targets += $(if $(CONFIG_EMBTK_BUILD_LINUX_KERNEL),linux_modules_install)
+__rootfs_prebuild_targets += $(if $(CONFIG_EMBTK_TARGET_STRIPPED),__rootfs_components_strip)
 
 define __rootfs_build_end
 	$(if $(findstring rootfs_build,$(MAKECMDGOALS)),
