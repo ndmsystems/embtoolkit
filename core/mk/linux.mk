@@ -114,12 +114,33 @@ define pembtk_linux_check_extsrc
 	fi
 endef
 
+pembtk_linux_generated		:= $(embtk_generated)/linux-images-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
+pembtk_linux_generated/boot	:= $(pembtk_linux_generated)/boot
+pembtk_linux_generated/boot/dts	:= $(pembtk_linux_generated/boot)/dts
+pembtk_linux_bootdir		:= $(pembtk_linux_srcdir)/arch/$(LINUX_ARCH)/boot
+pembtk_linux_bootfiles		:= Image zImage xipImage bootpImage uImage
+pembtk_linux_bootfiles		+= vmlinux.ecoff vmlinux.bin vmlinux.srec
+pembtk_linux_bootfiles		+= uImage.gz
+
 define embtk_install_linux
 	$(pembtk_linux_check_dotconfig)
 	$(if $(pembtk_linux_extsrc-y),$(pembtk_linux_check_extsrc))
 	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(pembtk_linux_srcdir)/.config
 	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) silentoldconfig
 	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) $(J)
+	cp $(pembtk_linux_srcdir)/vmlinux $(pembtk_linux_generated)
+	[ -e $(pembtk_linux_generated/boot) ] ||				\
+		install -d $(pembtk_linux_generated/boot)
+	[ -e $(pembtk_linux_generated/boot/dts) ] ||				\
+		install -d $(pembtk_linux_generated/boot/dts)
+	cd $(pembtk_linux_bootdir);						\
+	for b in $(pembtk_linux_bootfiles); do					\
+		if [ -e $$b ]; then cp $$b $(pembtk_linux_generated/boot); fi;	\
+	done
+	for b in $$(ls $(pembtk_linux_generated/boot/dts)/*.dtb 2>/dev/null);	\
+	do									\
+		cp $$b $(pembtk_linux_generated/boot/dts);			\
+	done
 endef
 
 #
