@@ -165,6 +165,7 @@ endef
 #
 define embtk_cleanup_linux
 	[ -d $(LINUX_BUILD_DIR) ] && $(call __embtk_unsetinstalled_pkg,linux) ||:
+	rm -rf $(pembtk_linux_generated)
 endef
 
 define embtk_cleanup_linux_headers
