@@ -128,16 +128,16 @@ define embtk_install_linux
 	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(pembtk_linux_srcdir)/.config
 	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) silentoldconfig
 	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) $(J)
-	cp $(pembtk_linux_srcdir)/vmlinux $(pembtk_linux_generated)
 	[ -e $(pembtk_linux_generated/boot) ] ||				\
 		install -d $(pembtk_linux_generated/boot)
 	[ -e $(pembtk_linux_generated/boot/dts) ] ||				\
 		install -d $(pembtk_linux_generated/boot/dts)
+	cp $(pembtk_linux_srcdir)/vmlinux $(pembtk_linux_generated)
 	cd $(pembtk_linux_bootdir);						\
 	for b in $(pembtk_linux_bootfiles); do					\
 		if [ -e $$b ]; then cp $$b $(pembtk_linux_generated/boot); fi;	\
 	done
-	for b in $$(ls $(pembtk_linux_generated/boot/dts)/*.dtb 2>/dev/null);	\
+	for b in $$(ls $(pembtk_linux_bootdir)/dts/*.dtb 2>/dev/null);	\
 	do									\
 		cp $$b $(pembtk_linux_generated/boot/dts);			\
 	done
