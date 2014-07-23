@@ -43,3 +43,13 @@ KYUA-CLI_CONFIGURE_OPTS	:= --with-atf=no --with-doxygen=no
 
 KYUA-CLI_DEPS		:= lutok_install kyua-testers_install
 KYUA-CLI_DEPS		+= sqlite_install
+
+pembtk_kyua-cli_shared	:= misc store
+define embtk_postinstall_kyua-cli
+	rm -rf $(embtk_rootfs)/usr/share/kyua-cli
+	install -d $(embtk_rootfs)/usr/share/kyua-cli
+	for s in $(pembtk_kyua-cli_shared); do					\
+		cp -R $(embtk_sysroot)/usr/share/kyua-cli/$$s			\
+			$(embtk_rootfs)/usr/share/kyua-cli/$$s;			\
+	done
+endef
