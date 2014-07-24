@@ -56,6 +56,9 @@ source packages/development/kyua-cli/kyua-cli.kconfig
 # libbsd
 source packages/development/libbsd/libbsd.kconfig
 
+# libelf
+source packages/development/libelf/libelf.kconfig
+
 # libevent
 source packages/development/libevent/libevent.kconfig
 

@@ -44,6 +44,9 @@ $(call embtk_include_hostpkg,gmake_host)
 # gsed
 $(call embtk_include_hostpkg,gsed_host)
 
+# libelf
+$(call embtk_include_hostpkg,libelf_host)
+
 # libtool
 $(call embtk_include_hostpkg,libtool_host)
 

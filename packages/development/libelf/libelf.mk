@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2010-2014 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,23 +30,8 @@ LIBELF_PACKAGE		:= libelf-$(LIBELF_VERSION).tar.gz
 LIBELF_SRC_DIR		:= $(embtk_pkgb)/libelf-$(LIBELF_VERSION)
 LIBELF_BUILD_DIR	:= $(embtk_pkgb)/libelf-$(LIBELF_VERSION)
 
-LIBELF_BINS		:=
-LIBELF_SBINS		:=
 LIBELF_INCLUDES		:= libelf gelf.h libelf.h nlist.h
 LIBELF_LIBS		:= libelf.a
 LIBELF_PKGCONFIGS	:= libelf.pc
 
 LIBELF_CONFIGURE_OPTS	:= --enable-elf64 --disable-nls
-
-#
-# libelf for host development machine
-#
-
-LIBELF_HOST_NAME	:= $(LIBELF_NAME)
-LIBELF_HOST_VERSION	:= $(LIBELF_VERSION)
-LIBELF_HOST_SITE	:= $(LIBELF_SITE)
-LIBELF_HOST_PACKAGE	:= $(LIBELF_PACKAGE)
-LIBELF_HOST_SRC_DIR	:= $(embtk_toolsb)/libelf-$(LIBELF_VERSION)
-LIBELF_HOST_BUILD_DIR	:= $(embtk_toolsb)/libelf-$(LIBELF_VERSION)
-
-LIBELF_HOST_CONFIGURE_OPTS	:= --enable-elf64 --disable-nls

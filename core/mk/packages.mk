@@ -31,11 +31,6 @@ HOSTTOOLS_COMPONENTS-y		:= mkimage_install
 #
 include packages/htools/hosttools-buildopts.mk
 
-# libelf
-include packages/misc/libelf/libelf.mk
-ROOTFS_COMPONENTS-$(CONFIG_EMBTK_HAVE_LIBELF) += libelf_install
-HOSTTOOLS_COMPONENTS-$(CONFIG_EMBTK_HOST_HAVE_LIBELF) += libelf_host_install
-
 include core/mk/makedevs.mk
 include core/mk/mkimage.mk
 

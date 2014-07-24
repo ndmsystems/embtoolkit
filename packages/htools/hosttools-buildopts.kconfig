@@ -140,7 +140,7 @@ source packages/htools/fakeroot/fakeroot.kconfig
 #
 # libelf
 #
-source packages/misc/libelf/libelf.kconfig
+source packages/htools/libelf/libelf.kconfig
 
 #
 # zlib for host

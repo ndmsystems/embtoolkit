@@ -59,6 +59,9 @@ $(call embtk_include_pkg,kyua-cli)
 # libbsd
 $(call embtk_include_pkg,libbsd)
 
+# libelf
+$(call embtk_include_pkg,libelf)
+
 # libevent
 $(call embtk_include_pkg,libevent)
 
