@@ -64,7 +64,7 @@ __embtk_pkg_mirror2		= $(strip $($(PKGV)_MIRROR2))
 __embtk_pkg_mirror3		= $(strip $($(PKGV)_MIRROR3))
 __embtk_pkg_package		= $(strip $($(PKGV)_PACKAGE))
 
-__embtk_pkg_refspec		= $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_REFSPEC))
+__embtk_pkg_refspec		= $(or $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_REFSPEC)),$(__embtk_$(pkgv)_category))
 
 __embtk_pkg_usesvn		= $(if $(CONFIG_EMBTK_$(PKGV)_VERSION_SVN),svn)
 __embtk_pkg_svnsite		= $(or $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_SVN_SITE)),$(strip $($(PKGV)_SVN_SITE)))
