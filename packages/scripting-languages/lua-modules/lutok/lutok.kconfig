@@ -25,7 +25,7 @@
 
 config EMBTK_HAVE_LUTOK
 	bool "Have lutok"
-	depends on EMBTK_HAVE_LUA
+	select EMBTK_HAVE_LUA
 	select EMBTK_GCC_LANGUAGE_CPP
 	help
 	 Lutok is a lightweight C++ API library for Lua.
