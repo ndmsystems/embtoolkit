@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_ATF
 	bool "Have atf"
+	select EMBTK_GCC_LANGUAGE_CPP
 	help
 	 C, C++ and shell libraries to write ATF-compliant test programs.
 	 see https://github.com/jmmv/atf
