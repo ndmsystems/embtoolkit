@@ -165,7 +165,7 @@ define help_rootfs_summary
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"| Root FS packages |")
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~~~~ ")
-	$(call embtk_echo_blue,"\tNumber of root FS packages:$(__embtk_rootfs_nrpkgs-y)")
+	$(call embtk_echo_blue,"\tNumber of root FS packages: $(__embtk_rootfs_nrpkgs-y)")
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~ ")
 	$(call embtk_echo_blue,"| Root FS types |")
 	$(call embtk_echo_blue," ~~~~~~~~~~~~~~~ ")
