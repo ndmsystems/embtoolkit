@@ -28,8 +28,8 @@ choice
 	help
 	 Linux v3.10.x series exact version used.
 
-	config EMBTK_LINUX_VERSION_3_10_44
-		bool "linux-3.10.44"
+	config EMBTK_LINUX_VERSION_3_10_51
+		bool "linux-3.10.51"
 endchoice
 
 config EMBTK_LINUX_VERSION_STRING
