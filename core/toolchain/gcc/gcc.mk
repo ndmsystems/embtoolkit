@@ -50,7 +50,7 @@ GCC_CXA_ATEXIT-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP) := --enable-__cxa_atexi
 #
 # Final GCC extra configure options
 #
-__gcc3_extra_opts-y :=
+__gcc3_extra_opts-y := --disable-symvers
 __gcc3_extra_opts-$(CONFIG_EMBTK_GCC_LANGUAGE_JAVA) += --enable-java-home
 __gcc3_extra_opts-$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD) += --disable-tls
 GCC3_CONFIGURE_EXTRA_OPTIONS += $(__gcc3_extra_opts-y)
