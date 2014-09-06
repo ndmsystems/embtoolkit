@@ -44,14 +44,8 @@ source packages/development/gtest/gtest.kconfig
 # icu
 source packages/development/icu/icu.kconfig
 
-# kyua-testers
-source packages/development/kyua-testers/kyua-testers.kconfig
-
-# kyua-atf-compat
-source packages/development/kyua-atf-compat/kyua-atf-compat.kconfig
-
-# kyua-cli
-source packages/development/kyua-cli/kyua-cli.kconfig
+# kyua
+source packages/development/kyua/kyua.kconfig
 
 # libbsd
 source packages/development/libbsd/libbsd.kconfig

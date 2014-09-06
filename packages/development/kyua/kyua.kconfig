@@ -17,39 +17,43 @@
 #
 ################################################################################
 #
-# \file         kyua-cli.kconfig
-# \brief	kyua-cli.kconfig of Embtoolkit
+# \file         kyua.kconfig
+# \brief	kyua.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         July 2014
 ################################################################################
 
-config EMBTK_HAVE_KYUA-CLI
-	bool "Have kyua-cli"
-	select EMBTK_HAVE_KYUA-TESTERS
+config EMBTK_HAVE_KYUA
+	bool "Have kyua"
+	select EMBTK_HAVE_ATF
 	select EMBTK_HAVE_LUTOK
 	select EMBTK_HAVE_SQLITE
 	help
-	 kyua-cli provides the command-line interface to the Kyua runtime system.
-	 The major purpose of this tool is to run test cases and generate
-	 unified reports for their results.
+	 Kyua is a testing framework for infrastructure software, originally
+	 designed to equip BSD-based operating systems with a test suite.
+	 This means that Kyua is lightweight and simple, and that Kyua
+	 integrates well with various build systems and continuous integration
+	 frameworks.
+	 Kyua features an expressive test suite definition language, a safe
+	 runtime engine for test suites and a powerful report generation engine.
 
 choice
-	prompt "kyua-cli version you wish"
-	depends on EMBTK_HAVE_KYUA-CLI
+	prompt "kyua version you wish"
+	depends on EMBTK_HAVE_KYUA
 	help
-	 Here you can choose which version of kyua-cli you want to use.
+	 Here you can choose which version of kyua you want to use.
 
-	config  EMBTK_KYUA-CLI_VERSION_0_8
-		bool "kyua-cli-0.8"
-		select EMBTK_KYUA-CLI_NEED_PATCH
-		select EMBTK_KYUA-CLI_NEED_AUTORECONF
+	config  EMBTK_KYUA_VERSION_0_10
+		bool "kyua-0.10"
+		select EMBTK_KYUA_NEED_AUTORECONF
+		select EMBTK_KYUA_NEED_PATCH
 endchoice
 
-config EMBTK_KYUA-CLI_VERSION_STRING
+config EMBTK_KYUA_VERSION_STRING
 	string
-	default "0.8"	if EMBTK_KYUA-CLI_VERSION_0_8
+	default "0.10"		if EMBTK_KYUA_VERSION_0_10
 
-config EMBTK_KYUA-CLI_NEED_PATCH
+config EMBTK_KYUA_NEED_PATCH
 	bool
-config EMBTK_KYUA-CLI_NEED_AUTORECONF
+config EMBTK_KYUA_NEED_AUTORECONF
 	bool

@@ -47,14 +47,8 @@ $(call embtk_include_pkg,gtest)
 $(call embtk_include_pkg,icu)
 $(call embtk_include_hostpkg,icu_host)
 
-# kyua-testers
-$(call embtk_include_pkg,kyua-testers)
-
-# kyua-atf-compat
-$(call embtk_include_pkg,kyua-atf-compat)
-
-# kyua-cli
-$(call embtk_include_pkg,kyua-cli)
+# kyua
+$(call embtk_include_pkg,kyua)
 
 # libbsd
 $(call embtk_include_pkg,libbsd)
