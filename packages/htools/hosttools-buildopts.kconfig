@@ -82,17 +82,17 @@ source packages/htools/gperf/gperf.kconfig
 #
 # GMP
 #
-source core/kconfig/gmp.kconfig
+source packages/htools/gmp/gmp.kconfig
 
 #
 # MPFR
 #
-source core/kconfig/mpfr.kconfig
+source packages/htools/mpfr/mpfr.kconfig
 
 #
 # MPC
 #
-source core/kconfig/mpc.kconfig
+source packages/htools/mpc/mpc.kconfig
 
 #
 # ccache

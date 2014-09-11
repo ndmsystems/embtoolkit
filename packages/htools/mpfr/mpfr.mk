@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,25 +17,20 @@
 #
 ################################################################################
 #
-# \file         gmp.mk
-# \brief	gmp.mk of Embtoolkit for toolchain
+# \file         mpfr.mk
+# \brief	mpfr.mk of Embtoolkit for toolchain
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
 
-GMP_HOST_NAME		:= gmp
-GMP_HOST_VERSION	:= $(call embtk_get_pkgversion,gmp_host)
-GMP_HOST_SITE		:= ftp://ftp.gmplib.org/pub/gmp-$(GMP_HOST_VERSION)
-GMP_HOST_PACKAGE	:= gmp-$(GMP_HOST_VERSION).tar.bz2
-GMP_HOST_SRC_DIR	:= $(embtk_toolsb)/gmp-$(GMP_HOST_VERSION)
-GMP_HOST_BUILD_DIR	:= $(embtk_toolsb)/gmp-build
-GMP_HOST_DIR		:= $(embtk_htools)/usr/local/gmp-host
+MPFR_HOST_NAME		:= mpfr
+MPFR_HOST_VERSION	:= $(call embtk_get_pkgversion,mpfr_host)
+MPFR_HOST_SITE		:= http://www.mpfr.org/mpfr-$(MPFR_HOST_VERSION)
+MPFR_HOST_PACKAGE	:= mpfr-$(MPFR_HOST_VERSION).tar.bz2
+MPFR_HOST_SRC_DIR	:= $(embtk_toolsb)/mpfr-$(MPFR_HOST_VERSION)
+MPFR_HOST_BUILD_DIR	:= $(embtk_toolsb)/mpfr-$(MPFR_HOST_VERSION)-build
 
-export GMP_HOST_DIR
+MPFR_HOST_DEPS	:= gmp_host_install
 
-GMP_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
-GMP_HOST_PREFIX		:= $(GMP_HOST_DIR)
-
-define embtk_cleanup_gmp_host
-	rm -rf $(GMP_HOST_BUILD_DIR)
-endef
+MPFR_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
+MPFR_HOST_CONFIGURE_OPTS	+= --with-gmp=$(embtk_htools)

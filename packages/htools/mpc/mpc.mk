@@ -17,26 +17,21 @@
 #
 ################################################################################
 #
-# \file         mpfr.mk
-# \brief	mpfr.mk of Embtoolkit for toolchain
+# \file         mpc.mk
+# \brief	mpch.mk of Embtoolkit for toolchain
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2009
+# \date         Jan 2010
 ################################################################################
 
-MPFR_HOST_NAME		:= mpfr
-MPFR_HOST_VERSION	:= $(call embtk_get_pkgversion,mpfr_host)
-MPFR_HOST_SITE		:= http://www.mpfr.org/mpfr-$(MPFR_HOST_VERSION)
-MPFR_HOST_PACKAGE	:= mpfr-$(MPFR_HOST_VERSION).tar.bz2
-MPFR_HOST_SRC_DIR	:= $(embtk_toolsb)/mpfr-$(MPFR_HOST_VERSION)
-MPFR_HOST_BUILD_DIR	:= $(embtk_toolsb)/mpfr-build
-MPFR_HOST_DIR		:= $(embtk_htools)/usr/local/mpfr-host
+MPC_HOST_NAME		:= mpc
+MPC_HOST_VERSION	:= $(call embtk_get_pkgversion,mpc_host)
+MPC_HOST_SITE		:= http://www.multiprecision.org/mpc/download
+MPC_HOST_PACKAGE	:= mpc-$(MPC_HOST_VERSION).tar.gz
+MPC_HOST_SRC_DIR	:= $(embtk_toolsb)/mpc-$(MPC_HOST_VERSION)
+MPC_HOST_BUILD_DIR	:= $(embtk_toolsb)/mpc-$(MPC_HOST_VERSION)-build
 
-export MPFR_HOST_DIR
+MPC_HOST_DEPS	:= gmp_host_install mpfr_host_install
 
-MPFR_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
-MPFR_HOST_CONFIGURE_OPTS	+= --with-gmp=$(GMP_HOST_DIR)
-MPFR_HOST_PREFIX		:= $(MPFR_HOST_DIR)
-
-define embtk_cleanup_mpfr_host
-	rm -rf $(MPFR_HOST_BUILD_DIR)
-endef
+MPC_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
+MPC_HOST_CONFIGURE_OPTS	+= --with-gmp=$(embtk_htools)
+MPC_HOST_CONFIGURE_OPTS	+= --with-mpfr=$(embtk_htools)

@@ -31,6 +31,7 @@ GCC_PACKAGE	:= gcc-$(GCC_VERSION).tar.bz2
 GCC_SRC_DIR	:= $(embtk_toolsb)/gcc-$(GCC_VERSION)
 
 GCC_MULTILIB	:= --disable-multilib
+GCC_DEPS	:= gmp_host_install mpfr_host_install mpc_host_install
 
 #
 # Selected languages to support in the toolchain
@@ -114,14 +115,16 @@ GCC1_BUILD_DIR		:= $(embtk_toolsb)/gcc1-build
 GCC1_KCONFIGS_NAME	:= GCC
 GCC1_KEEP_SRC_DIR	:= y
 
+GCC1_DEPS		:= $(GCC_DEPS)
+
 GCC1_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC1_PREFIX		:= $(embtk_tools)
 GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
 	$(GCC_MULTILIB)								\
-	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)			\
-	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
+	--with-gmp=$(embtk_htools) --with-mpfr=$(embtk_htools)			\
+	--with-mpc=$(embtk_htools) --with-bugurl=$(EMBTK_BUGURL)		\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
 	--without-headers --with-newlib --disable-shared --disable-threads	\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
@@ -144,14 +147,16 @@ GCC2_BUILD_DIR		:= $(embtk_toolsb)/gcc2-build
 GCC2_KCONFIGS_NAME	:= GCC
 GCC2_KEEP_SRC_DIR	:= y
 
+GCC2_DEPS		:= $(GCC_DEPS)
+
 GCC2_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC2_PREFIX		:= $(embtk_tools)
 GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
 	$(GCC_MULTILIB)								\
-	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)			\
-	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
+	--with-gmp=$(embtk_htools) --with-mpfr=$(embtk_htools)			\
+	--with-mpc=$(embtk_htools) --with-bugurl=$(EMBTK_BUGURL)		\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
 	--disable-libquadmath							\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
@@ -178,14 +183,16 @@ GCC3_SRC_DIR		:= $(GCC_SRC_DIR)
 GCC3_BUILD_DIR		:= $(embtk_toolsb)/gcc3-build
 GCC3_KCONFIGS_NAME	:= GCC
 
+GCC3_DEPS		:= $(GCC_DEPS)
+
 GCC3_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC3_PREFIX		:= $(embtk_tools)
 GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
 	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
 	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
 	$(GCC_MULTILIB)								\
-	--with-gmp=$(GMP_HOST_DIR) --with-mpfr=$(MPFR_HOST_DIR)			\
-	--with-mpc=$(MPC_HOST_DIR) --with-bugurl=$(EMBTK_BUGURL)		\
+	--with-gmp=$(embtk_htools)/usr --with-mpfr=$(embtk_htools)/usr		\
+	--with-mpc=$(embtk_htools)/usr --with-bugurl=$(EMBTK_BUGURL)		\
 	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
 	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
 	--disable-libquadmath							\

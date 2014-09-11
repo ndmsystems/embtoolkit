@@ -34,15 +34,6 @@ include packages/htools/libtool/vars.mk
 include packages/htools/autoconf/vars.mk
 include packages/htools/automake/vars.mk
 
-# GMP
-include core/mk/gmp.mk
-
-# MPFR
-include core/mk/mpfr.mk
-
-# MPC
-include core/mk/mpc.mk
-
 #
 # binutils
 #
@@ -133,8 +124,7 @@ else
 __llvm_compiler-rt-$(CONFIG_EMBTK_HAVE_COMPILER-RT) := compiler-rt_install
 endif
 
-TOOLCHAIN_DEPS-y	:= linux_headers_install gmp_host_install
-TOOLCHAIN_DEPS-y	+= mpfr_host_install mpc_host_install binutils_install
+TOOLCHAIN_DEPS-y	:= linux_headers_install binutils_install
 TOOLCHAIN_DEPS-$(CONFIG_EMBTK_HOST_HAVE_LLVM) += llvm_host_install
 TOOLCHAIN_DEPS-y	+= gcc1_install
 TOOLCHAIN_DEPS-$(CONFIG_EMBTK_CLIB_UCLIBC) += $(embtk_clib)_headers_install gcc2_install

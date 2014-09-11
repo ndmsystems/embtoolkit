@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2011 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,27 +17,17 @@
 #
 ################################################################################
 #
-# \file         mpc.mk
-# \brief	mpch.mk of Embtoolkit for toolchain
+# \file         gmp.mk
+# \brief	gmp.mk of Embtoolkit for toolchain
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         Jan 2010
+# \date         May 2009
 ################################################################################
 
-MPC_HOST_NAME		:= mpc
-MPC_HOST_VERSION	:= $(call embtk_get_pkgversion,mpc_host)
-MPC_HOST_SITE		:= http://www.multiprecision.org/mpc/download
-MPC_HOST_PACKAGE	:= mpc-$(MPC_HOST_VERSION).tar.gz
-MPC_HOST_SRC_DIR	:= $(embtk_toolsb)/mpc-$(MPC_HOST_VERSION)
-MPC_HOST_BUILD_DIR	:= $(embtk_toolsb)/mpc-build
-MPC_HOST_DIR		:= $(embtk_htools)/usr/local/mpc-host
+GMP_HOST_NAME		:= gmp
+GMP_HOST_VERSION	:= $(call embtk_get_pkgversion,gmp_host)
+GMP_HOST_SITE		:= ftp://ftp.gmplib.org/pub/gmp-$(GMP_HOST_VERSION)
+GMP_HOST_PACKAGE	:= gmp-$(GMP_HOST_VERSION).tar.bz2
+GMP_HOST_SRC_DIR	:= $(embtk_toolsb)/gmp-$(GMP_HOST_VERSION)
+GMP_HOST_BUILD_DIR	:= $(embtk_toolsb)/gmp-build
 
-export MPC_HOST_DIR
-
-MPC_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static	\
-				--with-gmp=$(GMP_HOST_DIR)	\
-				--with-mpfr=$(MPFR_HOST_DIR)
-MPC_HOST_PREFIX		:= $(MPC_HOST_DIR)
-
-define embtk_cleanup_mpc_host
-	rm -rf $(MPC_HOST_BUILD_DIR)
-endef
+GMP_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
