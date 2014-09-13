@@ -33,4 +33,4 @@ MPFR_HOST_BUILD_DIR	:= $(embtk_toolsb)/mpfr-$(MPFR_HOST_VERSION)-build
 MPFR_HOST_DEPS	:= gmp_host_install
 
 MPFR_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
-MPFR_HOST_CONFIGURE_OPTS	+= --with-gmp=$(embtk_htools)
+MPFR_HOST_CONFIGURE_OPTS	+= --with-gmp=$(embtk_htools)/usr
