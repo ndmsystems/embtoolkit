@@ -33,5 +33,5 @@ MPC_HOST_BUILD_DIR	:= $(embtk_toolsb)/mpc-$(MPC_HOST_VERSION)-build
 MPC_HOST_DEPS	:= gmp_host_install mpfr_host_install
 
 MPC_HOST_CONFIGURE_OPTS	:= --disable-shared --enable-static
-MPC_HOST_CONFIGURE_OPTS	+= --with-gmp=$(embtk_htools)
-MPC_HOST_CONFIGURE_OPTS	+= --with-mpfr=$(embtk_htools)
+MPC_HOST_CONFIGURE_OPTS	+= --with-gmp=$(embtk_htools)/usr
+MPC_HOST_CONFIGURE_OPTS	+= --with-mpfr=$(embtk_htools)/usr
