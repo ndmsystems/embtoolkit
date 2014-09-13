@@ -149,15 +149,6 @@ define __embtk_toolchain_mkinitdirs
 	$(__embtk_mk_initpkgdirs)
 endef
 
-define __embtk_toolchain_symlinktools
-	cd $(embtk_tools)/bin;							\
-	tools=$$(ls $(STRICT_GNU_TARGET)-*);					\
-	toolsnames=$$(echo $$tools | sed 's/$(STRICT_GNU_TARGET)-*//g');	\
-	for tool in $$toolsnames; do						\
-		ln -sf $(STRICT_GNU_TARGET)-$$tool $(GNU_TARGET)-$$tool;	\
-	done
-endef
-
 define __embtk_toolchain_compress
 	cd $(embtk_generated);							\
 	tar -cjf $(TOOLCHAIN_PACKAGE)						\
@@ -239,7 +230,6 @@ define __embtk_toolchain_build
 	$(if $(findstring core,$(1)),$(__embtk_toolchain_build_core))
 	$(if $(findstring addons,$(1)),$(__embtk_toolchain_build_addons))
 	$(if $(findstring core,$(1))$(findstring addons,$(1)),
-		$(__embtk_toolchain_symlinktools)
 		$(call embtk_pinfo,"Packaging new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
 		$(__embtk_toolchain_compress)
 		$(call __embtk_setdecompressed_pkg,toolchain)
