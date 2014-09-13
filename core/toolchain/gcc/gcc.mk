@@ -23,84 +23,7 @@
 # \date         May 2009
 ################################################################################
 
-GCC_NAME	:= gcc
-GCC_VERSION	:= $(call embtk_get_pkgversion,gcc)
-GCC_SITE	:= http://ftp.gnu.org/gnu/gcc/gcc-$(GCC_VERSION)
-GCC_GIT_SITE	:= git://gcc.gnu.org/git/gcc.git
-GCC_PACKAGE	:= gcc-$(GCC_VERSION).tar.bz2
-GCC_SRC_DIR	:= $(embtk_toolsb)/gcc-$(GCC_VERSION)
-
-GCC_MULTILIB	:= --disable-multilib
-GCC_DEPS	:= gmp_host_install mpfr_host_install mpc_host_install
-
-#
-# Selected languages to support in the toolchain
-#
-__GCC_LANGUAGES	:= c
-__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_CPP),c++)
-__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_JAVA),java)
-__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC),objc)
-__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP),obj-c++)
-__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_FORTRAN),fortran)
-__GCC_LANGUAGES	+= $(if $(CONFIG_EMBTK_GCC_LANGUAGE_ADA),ada)
-GCC_LANGUAGES	:= $(subst $(embtk_space),$(embtk_comma),$(strip $(__GCC_LANGUAGES)))
-
-GCC_CXA_ATEXIT-$(CONFIG_EMBTK_GCC_LANGUAGE_CPP) := --enable-__cxa_atexit
-GCC_CXA_ATEXIT-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP) := --enable-__cxa_atexit
-
-#
-# Final GCC extra configure options
-#
-__gcc3_extra_opts-y := --disable-symvers
-__gcc3_extra_opts-$(CONFIG_EMBTK_GCC_LANGUAGE_JAVA) += --enable-java-home
-__gcc3_extra_opts-$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD) += --disable-tls
-GCC3_CONFIGURE_EXTRA_OPTIONS += $(__gcc3_extra_opts-y)
-
-define embtk_beforeinstall_gcc1_notused
-	fixincludes_mk=$(call __embtk_pkg_srcdir,gcc)/gcc/Makefile.in;		\
-	cp $$fixincludes_mk $$fixincludes_mk.old;				\
-	sed -e 's@\./fixinc\.sh@-c true@'					\
-		< $$fixincludes_mk > $$fixincludes_mk.tmp;			\
-	mv $$fixincludes_mk.tmp $$fixincludes_mk
-endef
-
-define embtk_install_gcc1
-	$(call embtk_makeinstall_hostpkg,gcc1,autotooled)
-endef
-
-define embtk_install_gcc2
-	$(call embtk_makeinstall_hostpkg,gcc2,autotooled)
-endef
-
-define embtk_install_gcc3
-	$(call embtk_makeinstall_hostpkg,gcc3,autotooled)
-endef
-
-define __embtk_postinstall_libgcc
-	$(if $(CONFIG_EMBTK_32BITS_FS),							\
-		(cd $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/ && tar -cf - *.so*)	\
-			| tar -xf - -C $(embtk_sysroot)/lib/ &&				\
-		cp $(embtk_tools)/$(STRICT_GNU_TARGET)/lib/*.a				\
-			$(embtk_sysroot)/usr/lib/ 2>/dev/null || true)			\
-	$(if $(CONFIG_EMBTK_64BITS_FS),							\
-		(cd $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/ && tar -cf - *.so*)	\
-			| tar -xf - -C $(embtk_sysroot)/lib/ &&				\
-		cp $(embtk_tools)/$(STRICT_GNU_TARGET)/lib64/*.a			\
-			$(embtk_sysroot)/usr/lib/ 2>/dev/null || true)			\
-	$(if $(CONFIG_EMBTK_64BITS_FS_COMPAT32),					\
-		(cd $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/ && tar -cf - *.so*)	\
-			| tar -xf - -C $(embtk_sysroot)/lib32/ &&			\
-		cp $(embtk_tools)/$(STRICT_GNU_TARGET)/lib32/*.a			\
-			$(embtk_sysroot)/usr/lib32/ 2>/dev/null || true)
-endef
-
-define __embtk_postinstall_gcc2_gcc3
-	$(__embtk_postinstall_libgcc)						\
-	$(if $(CONFIG_EMBTK_64BITS_FS),						\
-		$(if $(CONFIG_EMBTK_CLIB_UCLIBC),				\
-			&& cd $(embtk_sysroot)/lib/;				\
-				ln -sf ld-uClibc.so.0 ld64-uClibc.so.0))
-endef
+include core/toolchain/gcc/common.mk
 
 #
 # GCC first stage
@@ -119,20 +42,20 @@ GCC1_DEPS		:= $(GCC_DEPS)
 
 GCC1_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC1_PREFIX		:= $(embtk_tools)
-GCC1_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
-	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
-	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
-	$(GCC_MULTILIB)								\
-	--with-gmp=$(embtk_htools) --with-mpfr=$(embtk_htools)			\
-	--with-mpc=$(embtk_htools) --with-bugurl=$(EMBTK_BUGURL)		\
-	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
-	--without-headers --with-newlib --disable-shared --disable-threads	\
-	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
-	--enable-languages=c --enable-target-optspace --disable-libquadmath	\
-	--disable-libatomic
+
+GCC1_CONFIGURE_OPTS	:= $(pembtk_gcc_common_opts) --enable-languages=c
+GCC1_CONFIGURE_OPTS	+= --without-headers
+GCC1_CONFIGURE_OPTS	+= --with-newlib
+GCC1_CONFIGURE_OPTS	+= --disable-shared
+GCC1_CONFIGURE_OPTS	+= --disable-threads
+GCC1_CONFIGURE_OPTS	+= --disable-libatomic
 
 CONFIG_EMBTK_GCC1_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC1_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
+
+define embtk_install_gcc1
+	$(call embtk_makeinstall_hostpkg,gcc1,autotooled)
+endef
 
 #
 # GCC second stage
@@ -151,24 +74,23 @@ GCC2_DEPS		:= $(GCC_DEPS)
 
 GCC2_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC2_PREFIX		:= $(embtk_tools)
-GCC2_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
-	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
-	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
-	$(GCC_MULTILIB)								\
-	--with-gmp=$(embtk_htools) --with-mpfr=$(embtk_htools)			\
-	--with-mpc=$(embtk_htools) --with-bugurl=$(EMBTK_BUGURL)		\
-	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
-	--disable-libquadmath							\
-	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
-	--enable-languages=c --enable-target-optspace --enable-threads		\
-	--disable-libatomic $(GCC_CXA_ATEXIT-y)
+
+GCC2_CONFIGURE_OPTS	:= $(pembtk_gcc_common_opts) --enable-languages=c
+GCC2_CONFIGURE_OPTS	+= --enable-threads
+GCC2_CONFIGURE_OPTS	+= --disable-libatomic
+GCC2_CONFIGURE_OPTS	+= --disable-symvers
+GCC2_CONFIGURE_OPTS	+= $(GCC_CXA_ATEXIT-y)
 
 CONFIG_EMBTK_GCC2_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC2_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
+define embtk_install_gcc2
+	$(call embtk_makeinstall_hostpkg,gcc2,autotooled)
+endef
+
 define embtk_postinstallonce_gcc2
 	$(if $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),				\
-		$(__embtk_postinstall_gcc2_gcc3))
+		$(pembtk_postinstall_gcc2_gcc3))
 endef
 
 #
@@ -183,28 +105,44 @@ GCC3_SRC_DIR		:= $(GCC_SRC_DIR)
 GCC3_BUILD_DIR		:= $(embtk_toolsb)/gcc3-build
 GCC3_KCONFIGS_NAME	:= GCC
 
+# extra gcc3 configure options
+pembtk_gcc3_extraopts-y := --disable-symvers
+pembtk_gcc3_extraopts-$(CONFIG_EMBTK_GCC_LANGUAGE_JAVA)        += --enable-java-home
+pembtk_gcc3_extraopts-$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD) += --disable-tls
+
+GCC3_CONFIGURE_EXTRA_OPTIONS += $(pembtk_gcc3_extraopts-y)
+
+# Selected languages to support in the toolchain
+pembtk_gcc_langopts-y	:= c
+pembtk_gcc_langopts-$(CONFIG_EMBTK_GCC_LANGUAGE_CPP)          += c++
+pembtk_gcc_langopts-$(CONFIG_EMBTK_GCC_LANGUAGE_JAVA)         += java
+pembtk_gcc_langopts-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC)   += objc
+pembtk_gcc_langopts-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP) += obj-c++
+pembtk_gcc_langopts-$(CONFIG_EMBTK_GCC_LANGUAGE_FORTRAN)      += fortran
+pembtk_gcc_langopts-$(CONFIG_EMBTK_GCC_LANGUAGE_ADA)          += ada
+pembtk_gcc_langopts	:= $(subst $(embtk_space),$(embtk_comma),$(pembtk_gcc_langopts-y))
+
 GCC3_DEPS		:= $(GCC_DEPS)
 
 GCC3_MAKE_ENV		:= PATH=$(PATH):$(embtk_tools)/bin
 GCC3_PREFIX		:= $(embtk_tools)
-GCC3_CONFIGURE_OPTS	:= --with-sysroot=$(embtk_sysroot)			\
-	--target=$(STRICT_GNU_TARGET) $(GCC_WITH_ABI) $(GCC_WITH_ARCH)		\
-	$(GCC_WITH_CPU) $(GCC_WITH_FLOAT) $(GCC_WITH_FPU) $(GCC_WITH_TUNE)	\
-	$(GCC_MULTILIB)								\
-	--with-gmp=$(embtk_htools)/usr --with-mpfr=$(embtk_htools)/usr		\
-	--with-mpc=$(embtk_htools)/usr --with-bugurl=$(EMBTK_BUGURL)		\
-	--with-pkgversion=embtoolkit-$(EMBTK_VERSION)				\
-	--disable-libssp --disable-libgomp --disable-libmudflap --disable-nls	\
-	--disable-libquadmath							\
-	--enable-languages=$(GCC_LANGUAGES) $(GCC_CXA_ATEXIT-y)			\
-	--enable-threads --enable-shared --enable-target-optspace		\
-	$(GCC3_CONFIGURE_EXTRA_OPTIONS)
+
+GCC3_CONFIGURE_OPTS	:= $(pembtk_gcc_common_opts)
+GCC3_CONFIGURE_OPTS	+= --enable-languages=$(pembtk_gcc_langopts)
+GCC3_CONFIGURE_OPTS	+= --enable-threads
+GCC3_CONFIGURE_OPTS	+= --enable-shared
+GCC3_CONFIGURE_OPTS	+= $(GCC_CXA_ATEXIT-y)
+GCC3_CONFIGURE_OPTS	+= $(GCC3_CONFIGURE_EXTRA_OPTIONS)
 
 CONFIG_EMBTK_GCC3_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
 CONFIG_EMBTK_GCC3_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
+define embtk_install_gcc3
+	$(call embtk_makeinstall_hostpkg,gcc3,autotooled)
+endef
+
 define embtk_postinstallonce_gcc3
-	$(__embtk_postinstall_gcc2_gcc3)
+	$(pembtk_postinstall_gcc2_gcc3)
 	$(if $(CONFIG_EMBTK_WIPEOUTWORKSPACES),
 		$(embtk_cleanup_gcc1)
 		$(embtk_cleanup_gcc2)
