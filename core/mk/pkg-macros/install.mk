@@ -81,7 +81,7 @@ __embtk_pkgs_nrall-y		= $(words $(__embtk_pkgs_all-y))
 __embtk_pkg_depof = $(strip $(sort $(___embtk_pkg_depof)))
 define ___embtk_pkg_depof
 	$(foreach p,$(__embtk_pkgs_all-y) $(__embtk_toolchain_deps-y) $(__embtk_toolchain_predeps-y) $(__embtk_toolchain_addons-y),
-		$(if $(findstring $(pkgv),$($(call PKGV,$(p)_deps))),$(p)))
+		$(if $(findstring $(pkgv)_install,$($(call PKGV,$(p)_deps))),$(p)))
 endef
 
 #
