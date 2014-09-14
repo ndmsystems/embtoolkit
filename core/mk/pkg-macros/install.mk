@@ -78,6 +78,12 @@ __embtk_hosttools_nrpkgs-n	= $(words $(__embtk_hosttools_pkgs-n))
 __embtk_pkgs_all-y		= $(__embtk_rootfs_pkgs-y) $(__embtk_hosttools_pkgs-y)
 __embtk_pkgs_nrall-y		= $(words $(__embtk_pkgs_all-y))
 
+__embtk_pkg_depof = $(strip $(sort $(___embtk_pkg_depof)))
+define ___embtk_pkg_depof
+	$(foreach p,$(__embtk_pkgs_all-y) $(__embtk_toolchain_deps-y) $(__embtk_toolchain_predeps-y) $(__embtk_toolchain_addons-y),
+		$(if $(findstring $(pkgv),$($(call PKGV,$(p)_deps))),$(p)))
+endef
+
 #
 # A macro to get packages version from .config file.
 # usage: $(call embtk_get_pkgversion,PACKAGE)
