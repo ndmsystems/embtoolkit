@@ -82,33 +82,36 @@ AUTOTOOLS_INSTALL	+= autoconf_host_install automake_host_install
 include core/mk/bmake.mk
 
 #
-# Toolchain virtual package internals
+# Toolchain internal  virtual packages
 #
 __xtools_compiler-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= clangllvm-$(LLVM_HOST_VERSION)
 __xtools_compiler-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= clangllvm-$(LLVM_HOST_VERSION)
 __xtools_compiler-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= gcc-$(GCC_VERSION)
 __xtools_compiler-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)		:= gcc-$(GCC_VERSION)
-__xtools_bins		:= $(__xtools_compiler-y)-$(embtk_clib)-$(embtk_clib_version)
+__xtools_bins := $(__xtools_compiler-y)-$(embtk_clib)-$(embtk_clib_version)
 
-TOOLCHAIN_PACKAGE	:= toolchain-$(HOST_ARCH)-target-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env).tar.bz2
-TOOLCHAIN_DIR		:= $(embtk_generated)/toolchains/toolchain-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)
+# Toolchain virtual package
 TOOLCHAIN_NAME		:= toolchain
-TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
+TOOLCHAIN_VERSION	:= $(HOST_ARCH)-target-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)
+TOOLCHAIN_PACKAGE	:= toolchain-$(TOOLCHAIN_VERSION).tar.bz2
+TOOLCHAIN_DIR		:= $(embtk_generated)/toolchains/toolchain-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)
 TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
+TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
 
-TOOLCHAIN_PRE_DEPS-y	:= ccache_host_install $(AUTOTOOLS_INSTALL) pkgconf_host_install
+TOOLCHAIN_PREDEPS-y	:= ccache_host_install $(AUTOTOOLS_INSTALL) pkgconf_host_install
 ifeq ($(embtk_buildhost_os_type),bsd)
-TOOLCHAIN_PRE_DEPS-y	+= gsed_host_install gmake_host_install
+TOOLCHAIN_PREDEPS-y	+= gsed_host_install gmake_host_install
 endif
-TOOLCHAIN_PRE_DEPS-$(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST) += gperf_host_install
+TOOLCHAIN_PREDEPS-$(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST) += gperf_host_install
 
-__gcc3_toolchain-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)		:= gcc3_install
-__gcc3_toolchain-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)		:= gcc3_install
+__embtk_toolchain_gcc3-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)        := gcc3_install
+__embtk_toolchain_gcc3-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)     := gcc3_install
+
 # FIXME: When libc++ will be used with clang/llvm toolchain, remove this
-__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_CPP)		:= gcc3_install
+__embtk_toolchain_gcc3-$(CONFIG_EMBTK_GCC_LANGUAGE_CPP)          := gcc3_install
 
-__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC) 	:= gcc3_install
-__gcc3_toolchain-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP)	:= gcc3_install
+__embtk_toolchain_gcc3-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVEC)   := gcc3_install
+__embtk_toolchain_gcc3-$(CONFIG_EMBTK_GCC_LANGUAGE_OBJECTIVECPP) := gcc3_install
 
 #
 # FIXME:
@@ -129,13 +132,14 @@ TOOLCHAIN_DEPS-$(CONFIG_EMBTK_HOST_HAVE_LLVM) += llvm_host_install
 TOOLCHAIN_DEPS-y	+= gcc1_install
 TOOLCHAIN_DEPS-$(CONFIG_EMBTK_CLIB_UCLIBC) += $(embtk_clib)_headers_install gcc2_install
 TOOLCHAIN_DEPS-y	+= $(embtk_clib)_install
-TOOLCHAIN_DEPS-y	+= $(__gcc3_toolchain-y) $(__llvm_compiler-rt-y)
+TOOLCHAIN_DEPS-y	+= $(__embtk_toolchain_gcc3-y) $(__llvm_compiler-rt-y)
+TOOLCHAIN_DEPS		:= $(TOOLCHAIN_DEPS-y)
 
-TOOLCHAIN_DEPS			:= $(TOOLCHAIN_DEPS-y)
+# toolchain addons virtual package
 TOOLCHAIN_ADDONS_NAME		:= toolchain_addons
 TOOLCHAIN_ADDONS_DEPS		:= $(TOOLCHAIN_ADDONS-y)
-TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain_addons
 TOOLCHAIN_ADDONS_SRC_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain_addons
+TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain_addons
 
 -include core/mk/$(embtk_clib).mk
 
@@ -160,7 +164,7 @@ define ___embtk_toolchain_decompress
 	rm -rf $(embtk_sysroot) $(embtk_tools)
 	cd $(embtk_generated) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 	$(__embtk_toolchain_mkinitdirs)
-	$(MAKE) $(TOOLCHAIN_PRE_DEPS-y)
+	$(MAKE) $(TOOLCHAIN_PREDEPS-y)
 endef
 
 define __embtk_toolchain_decompress
@@ -171,7 +175,7 @@ define __embtk_toolchain_decompress
 endef
 
 __embtk_toolchain_deps-y	= $(patsubst %_install,%,$(TOOLCHAIN_DEPS))
-__embtk_toolchain_predeps-y	= $(patsubst %_install,%,$(TOOLCHAIN_PRE_DEPS-y))
+__embtk_toolchain_predeps-y	= $(patsubst %_install,%,$(TOOLCHAIN_PREDEPS-y))
 __embtk_toolchain_addons-y	= $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-y))
 __embtk_toolchain_addons-n	= $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-))
 __embtk_toolchain_built_msg	= $(call embtk_pinfo,"New $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain successfully built!")
@@ -264,10 +268,10 @@ pembtk_toolchain_mkinitdirs:
 
 pembtk_toolchain_predeps_install:
 	$(call __embtk_toolchain_mkinitdirs)
-	$(MAKE) $(TOOLCHAIN_PRE_DEPS-y)
+	$(MAKE) $(TOOLCHAIN_PREDEPS-y)
 
 # Download target for offline build
-TOOLCHAIN_ALL_DEPS := $(TOOLCHAIN_PRE_DEPS-y) $(TOOLCHAIN_DEPS)
+TOOLCHAIN_ALL_DEPS := $(TOOLCHAIN_PREDEPS-y) $(TOOLCHAIN_DEPS)
 TOOLCHAIN_ALL_DEPS += $(TOOLCHAIN_ADDONS_DEPS)
 
 packages_fetch:: $(patsubst %_install,download_%,$(TOOLCHAIN_ALL_DEPS))
