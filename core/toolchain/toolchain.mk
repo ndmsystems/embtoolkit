@@ -25,7 +25,7 @@
 embtk_pkgincdir := toolchain
 
 #
-# Toolchain variables
+# Toolchain variables and macros
 #
 include core/toolchain/vars.mk
 include packages/htools/ccache/vars.mk
@@ -33,6 +33,20 @@ include packages/htools/m4/vars.mk
 include packages/htools/libtool/vars.mk
 include packages/htools/autoconf/vars.mk
 include packages/htools/automake/vars.mk
+
+__embtk_toolchain_runrecipe-y = $(strip $(___embtk_toolchain_runrecipe-y))
+define ___embtk_toolchain_runrecipe-y
+	$(eval __xtool_changed-y   := $(call __embtk_pkg_runrecipe-y,toolchain))
+	$(eval __xtool_exists-y    := $(if $(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)),,y))
+	$(eval __xtool_runrecipe-y := $(or $(__xtool_changed-y),$(__xtool_exists-y)))$(__xtool_runrecipe-y)
+endef
+
+__embtk_toolchain_addons_runrecipe-y = $(strip $(___embtk_toolchain_addons_runrecipe-y))
+define ___embtk_toolchain_addons_runrecipe-y
+	$(eval __xtool_addons_changed-y := $(call __embtk_pkg_runrecipe-y,toolchain_addons))
+	$(eval __xtool_exists-y         := $(if $(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)),,y))
+	$(eval __xtool_runrecipe-y      := $(or $(__xtool_addons_changed-y),$(__xtool_exists-y)))$(__xtool_runrecipe-y)
+endef
 
 #
 # binutils
@@ -240,20 +254,6 @@ define __embtk_toolchain_build
 		$(call __embtk_setdecompressed_pkg,toolchain_addons)
 		$(__embtk_toolchain_built_msg),
 		$(__embtk_toolchain_decompress))
-endef
-
-__embtk_toolchain_runrecipe-y = $(strip $(___embtk_toolchain_runrecipe-y))
-define ___embtk_toolchain_runrecipe-y
-	$(eval __xtool_changed-y   := $(call __embtk_pkg_runrecipe-y,toolchain))
-	$(eval __xtool_exists-y    := $(if $(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)),,y))
-	$(eval __xtool_runrecipe-y := $(or $(__xtool_changed-y),$(__xtool_exists-y)))$(__xtool_runrecipe-y)
-endef
-
-__embtk_toolchain_addons_runrecipe-y = $(strip $(___embtk_toolchain_addons_runrecipe-y))
-define ___embtk_toolchain_addons_runrecipe-y
-	$(eval __xtool_addons_changed-y := $(call __embtk_pkg_runrecipe-y,toolchain_addons))
-	$(eval __xtool_exists-y         := $(if $(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)),,y))
-	$(eval __xtool_runrecipe-y      := $(or $(__xtool_addons_changed-y),$(__xtool_exists-y)))$(__xtool_runrecipe-y)
 endef
 
 __embtk_toolchain_buildargs =  $(if $(strip $(__embtk_toolchain_runrecipe-y)),core-addons)
