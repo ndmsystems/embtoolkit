@@ -88,7 +88,8 @@ endef
 # A macro to get packages version from .config file.
 # usage: $(call embtk_get_pkgversion,PACKAGE)
 #
-embtk_get_pkgversion = $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_VERSION_STRING))
+embtk_pkg_version    = $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_VERSION_STRING))
+embtk_get_pkgversion = $(embtk_pkg_version)
 
 
 #
