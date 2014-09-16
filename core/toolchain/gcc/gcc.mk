@@ -34,8 +34,7 @@ GCC1_SITE		:= $(GCC_SITE)
 GCC1_GIT_SITE		:= $(GCC_GIT_SITE)
 GCC1_PACKAGE		:= $(GCC_PACKAGE)
 GCC1_SRC_DIR		:= $(GCC_SRC_DIR)
-GCC1_BUILD_DIR		:= $(embtk_toolsb)/gcc1-build
-GCC1_KCONFIGS_NAME	:= GCC
+GCC1_BUILD_DIR		:= $(embtk_toolsb)/gcc1-$(GCC_VERSION)-build
 GCC1_KEEP_SRC_DIR	:= y
 
 GCC1_DEPS		:= $(GCC_DEPS)
@@ -50,9 +49,6 @@ GCC1_CONFIGURE_OPTS	+= --disable-shared
 GCC1_CONFIGURE_OPTS	+= --disable-threads
 GCC1_CONFIGURE_OPTS	+= --disable-libatomic
 
-CONFIG_EMBTK_GCC1_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
-CONFIG_EMBTK_GCC1_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
-
 define embtk_install_gcc1
 	$(call embtk_makeinstall_hostpkg,gcc1,autotooled)
 endef
@@ -66,8 +62,7 @@ GCC2_SITE		:= $(GCC_SITE)
 GCC2_GIT_SITE		:= $(GCC_GIT_SITE)
 GCC2_PACKAGE		:= $(GCC_PACKAGE)
 GCC2_SRC_DIR		:= $(GCC_SRC_DIR)
-GCC2_BUILD_DIR		:= $(embtk_toolsb)/gcc2-build
-GCC2_KCONFIGS_NAME	:= GCC
+GCC2_BUILD_DIR		:= $(embtk_toolsb)/gcc2-$(GCC_VERSION)-build
 GCC2_KEEP_SRC_DIR	:= y
 
 GCC2_DEPS		:= $(GCC_DEPS)
@@ -80,9 +75,6 @@ GCC2_CONFIGURE_OPTS	+= --enable-threads
 GCC2_CONFIGURE_OPTS	+= --disable-libatomic
 GCC2_CONFIGURE_OPTS	+= --disable-symvers
 GCC2_CONFIGURE_OPTS	+= $(GCC_CXA_ATEXIT-y)
-
-CONFIG_EMBTK_GCC2_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
-CONFIG_EMBTK_GCC2_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
 define embtk_install_gcc2
 	$(call embtk_makeinstall_hostpkg,gcc2,autotooled)
@@ -102,7 +94,7 @@ GCC3_SITE		:= $(GCC_SITE)
 GCC3_GIT_SITE		:= $(GCC_GIT_SITE)
 GCC3_PACKAGE		:= $(GCC_PACKAGE)
 GCC3_SRC_DIR		:= $(GCC_SRC_DIR)
-GCC3_BUILD_DIR		:= $(embtk_toolsb)/gcc3-build
+GCC3_BUILD_DIR		:= $(embtk_toolsb)/gcc3-$(GCC_VERSION)-build
 GCC3_KCONFIGS_NAME	:= GCC
 
 # extra gcc3 configure options
@@ -133,9 +125,6 @@ GCC3_CONFIGURE_OPTS	+= --enable-threads
 GCC3_CONFIGURE_OPTS	+= --enable-shared
 GCC3_CONFIGURE_OPTS	+= $(GCC_CXA_ATEXIT-y)
 GCC3_CONFIGURE_OPTS	+= $(GCC3_CONFIGURE_EXTRA_OPTIONS)
-
-CONFIG_EMBTK_GCC3_VERSION_GIT	:= $(CONFIG_EMBTK_GCC_VERSION_GIT)
-CONFIG_EMBTK_GCC3_REFSPEC	:= $(CONFIG_EMBTK_GCC_REFSPEC)
 
 define embtk_install_gcc3
 	$(call embtk_makeinstall_hostpkg,gcc3,autotooled)
