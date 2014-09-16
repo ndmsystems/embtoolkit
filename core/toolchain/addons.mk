@@ -33,23 +33,23 @@ TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain_addons
 #
 # Addon: strace
 #
-TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_STRACE) += strace_install
+EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HAVE_STRACE) += strace_install
 
 #
 # Addon: gdb
 #
-TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDB)	+= gdb_install
-TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HAVE_GDBSERVER) += gdbserver_install
-TOOLCHAIN_ADDONS-$(CONFIG_EMBTK_HOST_HAVE_GDB)  += gdb_host_install
+EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HAVE_GDB)	   += gdb_install
+EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HAVE_GDBSERVER) += gdbserver_install
+EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HOST_HAVE_GDB)  += gdb_host_install
 
-TOOLCHAIN_ADDONS_DEPS := $(TOOLCHAIN_ADDONS-y)
+TOOLCHAIN_ADDONS_DEPS := $(EMBTK_TOOLCHAIN_ADDONS_DEPS-y)
 
 
 #
 # Toolchain addons build recipe
 #
-__embtk_toolchain_addons-y    = $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-y))
-__embtk_toolchain_addons-n    = $(patsubst %_install,%,$(TOOLCHAIN_ADDONS-))
+__embtk_toolchain_addons-y    = $(patsubst %_install,%,$(EMBTK_TOOLCHAIN_ADDONS_DEPS-y))
+__embtk_toolchain_addons-n    = $(patsubst %_install,%,$(EMBTK_TOOLCHAIN_ADDONS_DEPS-))
 __embtk_toolsaddons_build_msg = $(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain ADDONS - please wait...")
 
 define __embtk_toolchain_addons_build
@@ -66,16 +66,16 @@ define __embtk_toolchain_addons_build
 	$(if $(findstring core,$(1)),
 		$(foreach addon,$(__embtk_toolchain_addons-y),
 				$(call embtk_cleanup_pkg,$(addon))))
-	$(if $(TOOLCHAIN_ADDONS-),
+	$(if $(EMBTK_TOOLCHAIN_ADDONS_DEPS-),
 		$(foreach addon,$(__embtk_toolchain_addons-n),
 				$(call embtk_cleanup_pkg,$(addon))))
-	$(if $(TOOLCHAIN_ADDONS-y),
+	$(if $(EMBTK_TOOLCHAIN_ADDONS_DEPS-y),
 		$(foreach pdep,$(__embtk_toolchain_predeps-y),
 				$(call embtk_install_xpkg,$(pdep)))
 		$(foreach addon,$(__embtk_toolchain_addons-y),
 				$(call embtk_install_xpkg,$(addon))))
 	$(call __embtk_setinstalled_pkg,toolchain_addons)
-	$(if $(TOOLCHAIN_ADDONS-y),
+	$(if $(EMBTK_TOOLCHAIN_ADDONS_DEPS-y),
 		$(call __embtk_pkg_gen_dotkconfig_f,toolchain_addons),
 		$(call __embtk_pkg_setkconfigured,toolchain_addons))
 endef

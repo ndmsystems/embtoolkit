@@ -55,20 +55,20 @@ else
 __embtk_xtool_compiler-rt-$(CONFIG_EMBTK_HAVE_COMPILER-RT) := compiler-rt_install
 endif
 
-TOOLCHAIN_DEPS-y	:= linux_headers_install binutils_install
-TOOLCHAIN_DEPS-$(CONFIG_EMBTK_HOST_HAVE_LLVM) += llvm_host_install
-TOOLCHAIN_DEPS-y	+= gcc1_install
-TOOLCHAIN_DEPS-$(CONFIG_EMBTK_CLIB_UCLIBC) += $(embtk_clib)_headers_install gcc2_install
-TOOLCHAIN_DEPS-y	+= $(embtk_clib)_install
-TOOLCHAIN_DEPS-y	+= $(__embtk_xtool_gcc3-y)
-TOOLCHAIN_DEPS-y	+= $(__embtk_xtool_compiler-rt-y)
-TOOLCHAIN_DEPS		:= $(TOOLCHAIN_DEPS-y)
+EMBTK_TOOLCHAIN_DEPS-y	:= linux_headers_install binutils_install
+EMBTK_TOOLCHAIN_DEPS-$(CONFIG_EMBTK_HOST_HAVE_LLVM) += llvm_host_install
+EMBTK_TOOLCHAIN_DEPS-y	+= gcc1_install
+EMBTK_TOOLCHAIN_DEPS-$(CONFIG_EMBTK_CLIB_UCLIBC) += $(embtk_clib)_headers_install gcc2_install
+EMBTK_TOOLCHAIN_DEPS-y	+= $(embtk_clib)_install
+EMBTK_TOOLCHAIN_DEPS-y	+= $(__embtk_xtool_gcc3-y)
+EMBTK_TOOLCHAIN_DEPS-y	+= $(__embtk_xtool_compiler-rt-y)
+TOOLCHAIN_DEPS		:= $(EMBTK_TOOLCHAIN_DEPS-y)
 
 #
 # Toolchain core build recipe
 #
-__embtk_toolchain_deps-y	= $(patsubst %_install,%,$(TOOLCHAIN_DEPS))
-__embtk_toolchain_predeps-y	= $(patsubst %_install,%,$(TOOLCHAIN_PREDEPS-y))
+__embtk_toolchain_predeps-y	= $(patsubst %_install,%,$(EMBTK_TOOLCHAIN_PREDEPS-y))
+__embtk_toolchain_deps-y	= $(patsubst %_install,%,$(EMBTK_TOOLCHAIN_DEPS-y))
 __embtk_toolchain_built_msg	= $(call embtk_pinfo,"New $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain successfully built!")
 __embtk_toolchain_building_msg	= $(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) CORE toolchain - please wait...")
 

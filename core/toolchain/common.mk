@@ -44,16 +44,16 @@ TOOLCHAIN_DIR := $(embtk_generated)/toolchains/toolchain-$(__xtools_archos)-$(__
 #
 # Toolchain pre-dependencies
 #
-TOOLCHAIN_PREDEPS-y := ccache_host_install
-TOOLCHAIN_PREDEPS-y += m4_host_install
-TOOLCHAIN_PREDEPS-y += libtool_host_install
-TOOLCHAIN_PREDEPS-y += autoconf_host_install
-TOOLCHAIN_PREDEPS-y += automake_host_install
-TOOLCHAIN_PREDEPS-y += pkgconf_host_install
+EMBTK_TOOLCHAIN_PREDEPS-y := ccache_host_install
+EMBTK_TOOLCHAIN_PREDEPS-y += m4_host_install
+EMBTK_TOOLCHAIN_PREDEPS-y += libtool_host_install
+EMBTK_TOOLCHAIN_PREDEPS-y += autoconf_host_install
+EMBTK_TOOLCHAIN_PREDEPS-y += automake_host_install
+EMBTK_TOOLCHAIN_PREDEPS-y += pkgconf_host_install
 ifeq ($(embtk_buildhost_os_type),bsd)
-TOOLCHAIN_PREDEPS-y += gsed_host_install gmake_host_install
+EMBTK_TOOLCHAIN_PREDEPS-y += gsed_host_install gmake_host_install
 endif
-TOOLCHAIN_PREDEPS-$(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST) += gperf_host_install
+EMBTK_TOOLCHAIN_PREDEPS-$(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST) += gperf_host_install
 
 #
 # Toolchain macros evaluating if core and addons need to be built
@@ -105,5 +105,5 @@ define ___embtk_toolchain_decompress
 	rm -rf $(embtk_sysroot) $(embtk_tools)
 	cd $(embtk_generated) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 	$(__embtk_toolchain_mkinitdirs)
-	$(MAKE) $(TOOLCHAIN_PREDEPS-y)
+	$(MAKE) $(EMBTK_TOOLCHAIN_PREDEPS-y)
 endef

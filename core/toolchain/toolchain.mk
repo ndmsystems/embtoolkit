@@ -72,10 +72,10 @@ pembtk_toolchain_mkinitdirs:
 
 pembtk_toolchain_predeps_install:
 	$(__embtk_toolchain_mkinitdirs)
-	$(MAKE) $(TOOLCHAIN_PREDEPS-y)
+	$(MAKE) $(EMBTK_TOOLCHAIN_PREDEPS-y)
 
 # Download target for offline build
-TOOLCHAIN_ALL_DEPS := $(TOOLCHAIN_PREDEPS-y) $(TOOLCHAIN_DEPS)
-TOOLCHAIN_ALL_DEPS += $(TOOLCHAIN_ADDONS_DEPS)
+TOOLCHAIN_ALL_DEPS := $(EMBTK_TOOLCHAIN_PREDEPS-y) $(EMBTK_TOOLCHAIN_DEPS-y)
+TOOLCHAIN_ALL_DEPS += $(EMBTK_TOOLCHAIN_ADDONS_DEPS-y)
 
 packages_fetch:: $(patsubst %_install,download_%,$(TOOLCHAIN_ALL_DEPS))
