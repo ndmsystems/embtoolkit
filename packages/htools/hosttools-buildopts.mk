@@ -41,9 +41,6 @@ $(call embtk_include_hostpkg,fakeroot_host)
 # gmake
 $(call embtk_include_hostpkg,gmake_host)
 
-# gmp
-$(call embtk_include_hostpkg,gmp_host)
-
 # gperf
 $(call embtk_include_hostpkg,gperf_host)
 
@@ -55,12 +52,6 @@ $(call embtk_include_hostpkg,libelf_host)
 
 # libtool
 $(call embtk_include_hostpkg,libtool_host)
-
-# mpc
-$(call embtk_include_hostpkg,mpc_host)
-
-# mpfr
-$(call embtk_include_hostpkg,mpfr_host)
 
 # mtd-utils
 $(call embtk_include_hostpkg,mtdutils_host)

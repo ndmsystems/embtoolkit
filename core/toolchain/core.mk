@@ -55,15 +55,6 @@ else
 __embtk_xtool_compiler-rt-$(CONFIG_EMBTK_HAVE_COMPILER-RT) := compiler-rt_install
 endif
 
-EMBTK_TOOLCHAIN_DEPS-y	:= linux_headers_install binutils_install
-EMBTK_TOOLCHAIN_DEPS-$(CONFIG_EMBTK_HOST_HAVE_LLVM) += llvm_host_install
-EMBTK_TOOLCHAIN_DEPS-y	+= gcc1_install
-EMBTK_TOOLCHAIN_DEPS-$(CONFIG_EMBTK_CLIB_UCLIBC) += $(embtk_clib)_headers_install gcc2_install
-EMBTK_TOOLCHAIN_DEPS-y	+= $(embtk_clib)_install
-EMBTK_TOOLCHAIN_DEPS-y	+= $(__embtk_xtool_gcc3-y)
-EMBTK_TOOLCHAIN_DEPS-y	+= $(__embtk_xtool_compiler-rt-y)
-TOOLCHAIN_DEPS		:= $(EMBTK_TOOLCHAIN_DEPS-y)
-
 #
 # Toolchain core build recipe
 #
@@ -91,6 +82,31 @@ define __embtk_toolchain_core_build
 	$(call __embtk_setinstalled_pkg,toolchain)
 	$(call __embtk_pkg_gen_dotkconfig_f,toolchain)
 endef
+
+
+#
+# Toolchain core dependencies
+#
+embtk_pkgincdir := packages/htools
+
+# gmp
+$(call embtk_include_xtoolpkg,gmp_host,toolchain_deps)
+
+# mpfr
+$(call embtk_include_xtoolpkg,mpfr_host,toolchain_deps)
+
+# mpc
+$(call embtk_include_xtoolpkg,mpc_host,toolchain_deps)
+
+EMBTK_TOOLCHAIN_DEPS-y	+= linux_headers_install binutils_install
+EMBTK_TOOLCHAIN_DEPS-$(CONFIG_EMBTK_HOST_HAVE_LLVM) += llvm_host_install
+EMBTK_TOOLCHAIN_DEPS-y	+= gcc1_install
+EMBTK_TOOLCHAIN_DEPS-$(CONFIG_EMBTK_CLIB_UCLIBC) += $(embtk_clib)_headers_install gcc2_install
+EMBTK_TOOLCHAIN_DEPS-y	+= $(embtk_clib)_install
+EMBTK_TOOLCHAIN_DEPS-y	+= $(__embtk_xtool_gcc3-y)
+EMBTK_TOOLCHAIN_DEPS-y	+= $(__embtk_xtool_compiler-rt-y)
+TOOLCHAIN_DEPS		:= $(EMBTK_TOOLCHAIN_DEPS-y)
+
 
 #
 # binutils
