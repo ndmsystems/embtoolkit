@@ -30,20 +30,6 @@ TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain_addons
 # Include .kconfig symbols if any
 -include $(call __embtk_pkg_dotkconfig_f,toolchain_addons)
 
-#
-# Addon: strace
-#
-EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HAVE_STRACE) += strace_install
-
-#
-# Addon: gdb
-#
-EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HAVE_GDB)	   += gdb_install
-EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HAVE_GDBSERVER) += gdbserver_install
-EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HOST_HAVE_GDB)  += gdb_host_install
-
-TOOLCHAIN_ADDONS_DEPS := $(EMBTK_TOOLCHAIN_ADDONS_DEPS-y)
-
 
 #
 # Toolchain addons build recipe
@@ -81,7 +67,17 @@ define __embtk_toolchain_addons_build
 endef
 
 #
-# Addons Makefile
+# Toolchain addons dependencies
 #
-include core/mk/strace.mk
+embtk_pkgincdir := core/toolchain/addons
+
+# strace
+$(call embtk_include_xtoolpkg,strace,toolchain_addons)
+
+# Addon: gdb
+EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HAVE_GDB)	   += gdb_install
+EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HAVE_GDBSERVER) += gdbserver_install
+EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HOST_HAVE_GDB)  += gdb_host_install
 include packages/development/gdb/gdb.mk
+
+TOOLCHAIN_ADDONS_DEPS := $(EMBTK_TOOLCHAIN_ADDONS_DEPS-y)

@@ -67,7 +67,7 @@ endmenu
 menu "Toolchain Addons - Debugging systems"
 source "packages/development/gdb/gdb.kconfig"
 source "packages/misc/ncurses/ncurses.kconfig"
-source "core/kconfig/strace.kconfig"
+source "core/toolchain/addons/strace/strace.kconfig"
 endmenu
 
 menu "Target build options"
