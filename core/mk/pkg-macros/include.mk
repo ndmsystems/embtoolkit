@@ -111,6 +111,9 @@ define __embtk_include_xtoolpkg
 	$(eval __embtk_incmk1		:= $(embtk_pkgincdir)/$(patsubst %_host,%,$(pkgv))/$(patsubst %_host,%,$(pkgv)).mk)
 	$(eval __embtk_incmk		:= $(or $(wildcard $(__embtk_incmk0)),$(wildcard $(__embtk_incmk1)),$(wildcard $(__embtk_incmk0))))
 	$(eval __embtk_incinstalled-y	:= $(if $(wildcard $(__embtk_pkg_dotinstalled_f)),y))
+	$(eval __embtk_incenabled0-y	:= $(CONFIG_EMBTK_HAVE_$(__embtk_inc_pkgname)))
+	$(eval __embtk_incenabled1-y	:= $(CONFIG_EMBTK_HOST_HAVE_$(patsubst %_HOST,%,$(__embtk_inc_pkgname))))
+	$(eval __embtk_incenabled-y	:= $(or $(__embtk_incenabled0-y),$(__embtk_incenabled1-y)))
 	$(eval __embtk_incmk-y		:= $(if $(__embtk_incenabled-y)$(__embtk_incinstalled-y),y))
 	# Is it necessary to include the .mk file?
 	$(eval __embtk_incmk-y		:= $(if $(findstring $(__embtk_incmk),$(MAKEFILE_LIST)),,$(__embtk_incmk-y)))
