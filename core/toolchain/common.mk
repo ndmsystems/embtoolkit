@@ -104,5 +104,4 @@ define ___embtk_toolchain_decompress
 	rm -rf $(embtk_sysroot) $(embtk_tools)
 	cd $(embtk_generated) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 	$(__embtk_toolchain_mkinitdirs)
-	$(MAKE) $(EMBTK_TOOLCHAIN_PREDEPS-y)
 endef

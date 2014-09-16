@@ -58,7 +58,6 @@ endif
 #
 # Toolchain core build recipe
 #
-__embtk_toolchain_predeps-y	= $(patsubst %_install,%,$(EMBTK_TOOLCHAIN_PREDEPS-y))
 __embtk_toolchain_deps-y	= $(patsubst %_install,%,$(EMBTK_TOOLCHAIN_DEPS-y))
 __embtk_toolchain_built_msg	= $(call embtk_pinfo,"New $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain successfully built!")
 __embtk_toolchain_building_msg	= $(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) CORE toolchain - please wait...")
@@ -75,8 +74,6 @@ define __embtk_toolchain_core_build
 				$(call embtk_cleanup_pkg,$(pkgn)))
 	rm -rf $(embtk_sysroot) $(embtk_tools)
 	$(__embtk_toolchain_mkinitdirs)
-	$(foreach pdep,$(__embtk_toolchain_predeps-y),
-				$(call embtk_install_xpkg,$(pdep)))
 	$(foreach dep,$(__embtk_toolchain_deps-y),
 				$(call embtk_install_xpkg,$(dep)))
 	$(call __embtk_setinstalled_pkg,toolchain)

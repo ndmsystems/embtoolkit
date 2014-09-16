@@ -39,10 +39,13 @@ include packages/htools/automake/vars.mk
 include core/toolchain/core.mk
 include core/toolchain/addons.mk
 
+__embtk_toolchain_predeps-y = $(patsubst %_install,%,$(EMBTK_TOOLCHAIN_PREDEPS-y))
 define __embtk_toolchain_build
 	$(eval __xtool_build        := $(if $(__embtk_toolchain_runrecipe-y),core))
 	$(eval __xtool_addons_build := $(if $(__embtk_toolchain_addons_runrecipe-y),addons))
 	$(eval __xtool_build_args   := $(strip $(__xtool_build) $(__xtool_addons_build)))
+	$(__embtk_toolchain_mkinitdirs)
+	$(foreach pdep,$(__embtk_toolchain_predeps-y),$(call embtk_install_xpkg,$(pdep)))
 	$(if $(__xtool_build),
 		$(call __embtk_toolchain_core_build,$(__xtool_build_args)))
 	$(if $(__xtool_addons_build),
