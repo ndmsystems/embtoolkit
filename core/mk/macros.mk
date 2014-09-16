@@ -125,7 +125,7 @@ endef
 # Packages management macros
 #
 include core/mk/pkg-macros/vars.mk
-include core/mk/pkg-macros/incl.mk
+include core/mk/pkg-macros/include.mk
 include core/mk/pkg-macros/pkg-config.mk
 include core/mk/pkg-macros/libtool.mk
 include core/mk/pkg-macros/download.mk
