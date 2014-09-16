@@ -24,6 +24,13 @@
 ################################################################################
 
 #
+# Toolchain components init
+#
+EMBTK_TOOLCHAIN_PREDEPS-y     :=
+EMBTK_TOOLCHAIN_DEPS-y        :=
+EMBTK_TOOLCHAIN_ADDONS_DEPS-y :=
+
+#
 # Toolchain base directory definition
 #
 __xtools_compiler-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)    := clangllvm-$(call embtk_pkg_version,llvm_host)

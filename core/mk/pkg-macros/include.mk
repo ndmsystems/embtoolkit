@@ -92,3 +92,45 @@ define __embtk_include_hostpkg
 		__embtk_$(pkgv)_installed =
 	endif
 endef
+
+#
+# Macros to include toolchain packages in the build system
+#	$(1): pkgname => pkgname/pkgname.mk should exist (required)
+#	$(2): xtool component: toolchain_predeps, toolchain_deps or
+#             toolchain_addons_deps (required).
+#	$(3): kconfig: package specific kconfig symbol name used in .kconfig
+#	      This parameter is optional.
+
+define embtk_include_xtoolpkg
+	$(eval $(call __embtk_include_xtoolpkg,$(1),$(2),$(3)))
+endef
+define __embtk_include_xtoolpkg
+	$(eval __embtk_inc_pkgname	:= $(or $(3),$(PKGV)))
+	# Case where foo and foo_host are in the same .mk file
+	$(eval __embtk_incmk0		:= $(embtk_pkgincdir)/$(pkgv)/$(pkgv).mk)
+	$(eval __embtk_incmk1		:= $(embtk_pkgincdir)/$(patsubst %_host,%,$(pkgv))/$(patsubst %_host,%,$(pkgv)).mk)
+	$(eval __embtk_incmk		:= $(or $(wildcard $(__embtk_incmk0)),$(wildcard $(__embtk_incmk1)),$(wildcard $(__embtk_incmk0))))
+	$(eval __embtk_incinstalled-y	:= $(if $(wildcard $(__embtk_pkg_dotinstalled_f)),y))
+	$(eval __embtk_incmk-y		:= $(if $(__embtk_incenabled-y)$(__embtk_incinstalled-y),y))
+	# Is it necessary to include the .mk file?
+	$(eval __embtk_incmk-y		:= $(if $(findstring $(__embtk_incmk),$(MAKEFILE_LIST)),,$(__embtk_incmk-y)))
+	ifeq (x$(__embtk_incmk-y),xy)
+		include $(__embtk_incmk)
+	endif
+	ifeq (x$(__embtk_incenabled-y),xy)
+		EMBTK_$(call embtk_ucase,$(2))-y += $(pkgv)_install
+		# also include old package kconfig entries if any
+		-include $(__embtk_pkg_dotkconfig_f)
+	else ifeq (x$(__embtk_incinstalled-y),xy)
+		EMBTK_$(call embtk_ucase,$(2))-  += $(pkgv)_install
+	endif
+	# Preset build system installed variable for this packages, if installed
+	ifeq (x$(__embtk_incinstalled-y),xy)
+		__embtk_$(pkgv)_installed = y
+	else
+		__embtk_$(pkgv)_installed =
+	endif
+	# preset some variables
+	$(eval __embtk_$(pkgv)_category  := $(call __embtk_mk_uquote,$(or $(CONFIG_EMBTK_$(PKGV)_REFSPEC),$(CONFIG_EMBTK_$(PKGV)_CATEGORY))))
+	__embtk_$(pkgv)_category         := $(or $(___embtk_$(pkgv)_category),$(2))
+endef
