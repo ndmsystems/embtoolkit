@@ -121,7 +121,7 @@ __embtk_pkg_kconfigsname	= $(patsubst %_HOST,%,$(___embtk_pkg_kconfigsname))
 __embtk_pkg_kconfigs		= $(sort $(filter CONFIG_EMBTK_$(__embtk_pkg_kconfigsname)_%,$(.VARIABLES)))
 __embtk_pkg_kconfigs_v		= $(foreach k,$(__embtk_pkg_kconfigs),$(k)=$($(k)))
 __embtk_pkg_deps_kconfigs_v	= $(foreach d,$(__embtk_pkg_depspkgv),$(call __embtk_pkg_kconfigs_v,$(d)))
-__embtk_pkg_kconfigs_all_v	= $(strip $(__embtk_pkg_kconfigs_v) $(__embtk_pkg_deps_kconfigs_v))
+__embtk_pkg_kconfigs_all_v	= $(sort $(strip $(__embtk_pkg_kconfigs_v) $(__embtk_pkg_deps_kconfigs_v)))
 
 __embtk_pkg_cflags		= $(strip $($(PKGV)_CFLAGS))
 __embtk_pkg_cppflags		= $(strip $($(PKGV)_CPPFLAGS))
