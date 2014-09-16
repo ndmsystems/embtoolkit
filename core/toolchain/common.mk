@@ -53,7 +53,6 @@ EMBTK_TOOLCHAIN_PREDEPS-y += pkgconf_host_install
 ifeq ($(embtk_buildhost_os_type),bsd)
 EMBTK_TOOLCHAIN_PREDEPS-y += gsed_host_install gmake_host_install
 endif
-EMBTK_TOOLCHAIN_PREDEPS-$(CONFIG_EMBTK_TOOLCHAIN_PREDEP_GPERF_HOST) += gperf_host_install
 
 #
 # Toolchain macros evaluating if core and addons need to be built

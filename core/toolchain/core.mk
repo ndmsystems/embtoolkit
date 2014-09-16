@@ -98,6 +98,9 @@ $(call embtk_include_xtoolpkg,mpfr_host,toolchain_deps)
 # mpc
 $(call embtk_include_xtoolpkg,mpc_host,toolchain_deps)
 
+# gperf
+$(call embtk_include_xtoolpkg,gperf_host)
+
 EMBTK_TOOLCHAIN_DEPS-y	+= linux_headers_install binutils_install
 EMBTK_TOOLCHAIN_DEPS-$(CONFIG_EMBTK_HOST_HAVE_LLVM) += llvm_host_install
 EMBTK_TOOLCHAIN_DEPS-y	+= gcc1_install

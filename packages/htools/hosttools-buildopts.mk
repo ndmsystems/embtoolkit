@@ -41,9 +41,6 @@ $(call embtk_include_hostpkg,fakeroot_host)
 # gmake
 $(call embtk_include_hostpkg,gmake_host)
 
-# gperf
-$(call embtk_include_hostpkg,gperf_host)
-
 # gsed
 $(call embtk_include_hostpkg,gsed_host)
 
