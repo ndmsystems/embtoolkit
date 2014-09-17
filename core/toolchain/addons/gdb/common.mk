@@ -25,7 +25,10 @@
 
 GDBCOMMON_DEPS := ncurses_install
 
-GDBCOMMON_CONFIGURE_OPTS := --disable-werror --disable-sim --disable-nls
+GDBCOMMON_CONFIGURE_OPTS := --disable-werror
+GDBCOMMON_CONFIGURE_OPTS += --disable-sim
+GDBCOMMON_CONFIGURE_OPTS += --disable-nls
+GDBCOMMON_CONFIGURE_OPTS += --with-zlib=no
 GDBCOMMON_CONFIGURE_OPTS += --with-bugurl="$(EMBTK_BUGURL)"
 GDBCOMMON_CONFIGURE_OPTS += --with-pkgversion="embtk-$(EMBTK_VERSION)"
 
