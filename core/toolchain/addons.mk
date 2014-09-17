@@ -70,7 +70,7 @@ endef
 embtk_pkgincdir := core/toolchain/addons
 
 # strace
-$(call embtk_include_xtoolpkg,strace,toolchain_addons)
+$(call embtk_include_xtoolpkg,strace,toolchain_addons_deps)
 
 # Addon: gdb
 EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HAVE_GDB)	   += gdb_install
