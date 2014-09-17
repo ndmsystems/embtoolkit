@@ -65,7 +65,7 @@ source "core/toolchain/toolchain.kconfig"
 endmenu
 
 menu "Toolchain Addons - Debugging systems"
-source "packages/development/gdb/gdb.kconfig"
+source "core/toolchain/addons/gdb/gdb.kconfig"
 source "packages/misc/ncurses/ncurses.kconfig"
 source "core/toolchain/addons/strace/strace.kconfig"
 endmenu

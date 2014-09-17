@@ -72,9 +72,12 @@ embtk_pkgincdir := core/toolchain/addons
 $(call embtk_include_xtoolpkg,strace,toolchain_addons_deps)
 
 # Addon: gdb
-EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HAVE_GDB)	   += gdb_install
-EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HAVE_GDBSERVER) += gdbserver_install
-EMBTK_TOOLCHAIN_ADDONS_DEPS-$(CONFIG_EMBTK_HOST_HAVE_GDB)  += gdb_host_install
-include packages/development/gdb/gdb.mk
+embtk_pkgincdir := core/toolchain/addons/gdb
+ifeq ($(CONFIG_EMBTK_HAVE_GDBSERVER)$(CONFIG_EMBTK_HAVE_GDB),y)
+include core/toolchain/addons/gdb/common.mk
+endif
+$(call embtk_include_xtoolpkg,gdbserver,toolchain_addons_deps)
+$(call embtk_include_xtoolpkg,gdb,toolchain_addons_deps)
+$(call embtk_include_xtoolpkg,gdb_host,toolchain_addons_deps)
 
 TOOLCHAIN_ADDONS_DEPS := $(EMBTK_TOOLCHAIN_ADDONS_DEPS-y)
