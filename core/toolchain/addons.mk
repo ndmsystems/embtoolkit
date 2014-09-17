@@ -59,9 +59,8 @@ define __embtk_toolchain_addons_build
 		$(foreach addon,$(__embtk_toolchain_addons-y),
 				$(call embtk_install_xpkg,$(addon))))
 	$(call __embtk_setinstalled_pkg,toolchain_addons)
-	$(if $(EMBTK_TOOLCHAIN_ADDONS_DEPS-y),
-		$(call __embtk_pkg_gen_dotkconfig_f,toolchain_addons),
-		$(call __embtk_pkg_setkconfigured,toolchain_addons))
+	$(call __embtk_pkg_gen_dotkconfig_f,toolchain_addons)
+	$(call __embtk_pkg_setkconfigured,toolchain_addons)
 endef
 
 #
