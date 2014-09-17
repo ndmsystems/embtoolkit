@@ -28,7 +28,7 @@ config EMBTK_HOST_HAVE_GMP
 
 config EMBTK_GMP_HOST_VERSION_STRING
 	string
-	default "5.0.4"
+	default "6.0.0"
 
 config EMBTK_GMP_HOST_NEED_PATCH
 	bool
