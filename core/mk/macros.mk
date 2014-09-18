@@ -153,6 +153,8 @@ define help_toolchain_summary
 	$(call embtk_echo_blue,"\tC library           : $(call __embtk_pkg_name,$(embtk_clib))-$(call __embtk_pkg_version,$(embtk_clib))")
 	$(if $(CONFIG_EMBTK_HAVE_GDB_SYSTEM),
 	$(call embtk_echo_blue,"\tGDB                 : gdb-$(call __embtk_pkg_version,gdb)"))
+	$(if $(CONFIG_EMBTK_HAVE_LTRACE),
+	$(call embtk_echo_blue,"\tltrace              : ltrace-$(call __embtk_pkg_version,ltrace)"))
 	$(if $(CONFIG_EMBTK_HAVE_STRACE),
 	$(call embtk_echo_blue,"\tStrace              : strace-$(call __embtk_pkg_version,strace)"))
 	$(call embtk_echo_blue,"\tToolchain location  :")
