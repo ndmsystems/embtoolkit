@@ -37,13 +37,13 @@ choice
 	help
 	 Here you can choose which version of sqlite you want to use.
 
-	config  EMBTK_SQLITE_VERSION_3_8_1
-		bool "sqlite-3.8.1"
+	config  EMBTK_SQLITE_VERSION_3_8_6
+		bool "sqlite-3.8.6"
 endchoice
 
 config EMBTK_SQLITE_VERSION_STRING
 	string
-	default "3080100"	if EMBTK_SQLITE_VERSION_3_8_1
+	default "3080600"	if EMBTK_SQLITE_VERSION_3_8_6
 
 
 config EMBTK_SQLITE_NEED_PATCH
