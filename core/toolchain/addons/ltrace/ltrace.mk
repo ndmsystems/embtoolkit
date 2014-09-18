@@ -38,12 +38,6 @@ LTRACE_CONFIGURE_OPTS	:= --disable-werror --with-elfutils=no
 
 LTRACE_DEPS		:= libelf_install
 
-define embtk_beforeinstall_ltrace
-	for d in config/autoconf config/m4; do					\
-		mkdir -p $(call __embtk_pkg_srcdir,ltrace)/$$d;			\
-	done
-endef
-
 define embtk_postinstall_ltrace
 	rm -rf $(embtk_rootfs)/usr/share/ltrace
 	install -d $(embtk_rootfs)/usr/share/ltrace
