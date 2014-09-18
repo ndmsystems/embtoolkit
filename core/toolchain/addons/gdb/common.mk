@@ -33,6 +33,6 @@ GDBCOMMON_CONFIGURE_OPTS += --with-bugurl="$(EMBTK_BUGURL)"
 GDBCOMMON_CONFIGURE_OPTS += --with-pkgversion="embtk-$(EMBTK_VERSION)"
 
 GDBCOMMON_INCLUDES := ansidecl.h bfd.h bfdlink.h dis-asm.h symcat.h gdb
-GDBCOMMON_LIBS     := lib*-sim.a  libbfd.*  libiberty.* libopcodes.*
-GDBCOMMON_BINS     := gdb gdbtui run
+GDBCOMMON_LIBS     := lib*-sim.a libbfd.* libiberty.* libopcodes.*
+GDBCOMMON_BINS     := gcore gdb gdbtui run
 
