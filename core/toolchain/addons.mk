@@ -68,6 +68,9 @@ endef
 #
 embtk_pkgincdir := core/toolchain/addons
 
+# ltrace
+$(call embtk_include_xtoolpkg,ltrace,toolchain_addons_deps)
+
 # strace
 $(call embtk_include_xtoolpkg,strace,toolchain_addons_deps)
 
