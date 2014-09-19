@@ -28,6 +28,9 @@ choice
 	help
 	 Here you can choose which version of glibc you want to use.
 
+	config  EMBTK_GLIBC_VERSION_2_20
+		bool "glibc-2.20"
+		select EMBTK_GLIBC_NEED_PATCH
 	config  EMBTK_GLIBC_VERSION_2_19
 		bool "glibc-2.19"
 		select EMBTK_GLIBC_NEED_PATCH
@@ -38,9 +41,8 @@ endchoice
 
 config EMBTK_GLIBC_VERSION_STRING
 	string
+	default "2.20"		if EMBTK_GLIBC_VERSION_2_20
 	default "2.19"		if EMBTK_GLIBC_VERSION_2_19
-config EMBTK_GLIBC_VERSION_STRING
-	string
 	default "2.17"		if EMBTK_GLIBC_VERSION_2_17
 
 config EMBTK_GLIBC_REFSPEC
