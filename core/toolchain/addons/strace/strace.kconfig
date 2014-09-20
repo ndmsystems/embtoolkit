@@ -34,7 +34,7 @@ choice
 	depends on EMBTK_HAVE_STRACE
 
 	config EMBTK_STRACE_VERSION_4_9
-		bool "strace-embtk-pre4.9"
+		bool "strace-embtk-4.9"
 		select EMBTK_STRACE_NEED_PATCH
 	config EMBTK_STRACE_VERSION_GIT
 		bool "strace-git"
@@ -60,7 +60,7 @@ config EMBTK_STRACE_REFSPEC
 #
 config EMBTK_STRACE_VERSION_STRING
 	string
-	default "embtk-pre4.9"	if EMBTK_STRACE_VERSION_4_9
+	default "embtk-4.9"	if EMBTK_STRACE_VERSION_4_9
 	default "git"           if EMBTK_STRACE_VERSION_GIT
 
 #

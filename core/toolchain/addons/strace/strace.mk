@@ -29,6 +29,7 @@ STRACE_SITE		:= http://downloads.sourceforge.net/project/strace/strace/$(STRACE_
 STRACE_GIT_SITE		:= git://git.code.sf.net/p/strace/code
 STRACE_PACKAGE		:= strace-$(STRACE_VERSION).tar.bz2
 STRACE_SRC_DIR		:= $(embtk_pkgb)/strace-$(STRACE_VERSION)
-STRACE_BUILD_DIR	:= $(embtk_pkgb)/strace-build
+STRACE_BUILD_DIR	:= $(embtk_pkgb)/strace-$(STRACE_VERSION)-build
 
-STRACE_BINS		:= strace strace-graph strace-log-merge
+STRACE_BINS   := strace strace-graph strace-log-merge
+STRACE_SHARES := man/man*/strace*
