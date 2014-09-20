@@ -60,15 +60,15 @@ endif
 __embtk_toolchain_runrecipe-y = $(strip $(___embtk_toolchain_runrecipe-y))
 define ___embtk_toolchain_runrecipe-y
 	$(eval __xtool_changed-y   := $(call __embtk_pkg_runrecipe-y,toolchain))
-	$(eval __xtool_exists-y    := $(if $(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)),,y))
-	$(eval __xtool_runrecipe-y := $(or $(__xtool_changed-y),$(__xtool_exists-y)))$(__xtool_runrecipe-y)
+	$(eval __xtool_missed-y    := $(if $(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)),,y))
+	$(eval __xtool_runrecipe-y := $(or $(__xtool_changed-y),$(__xtool_missed-y)))$(__xtool_runrecipe-y)
 endef
 
 __embtk_toolchain_addons_runrecipe-y = $(strip $(___embtk_toolchain_addons_runrecipe-y))
 define ___embtk_toolchain_addons_runrecipe-y
 	$(eval __xtool_addons_changed-y := $(call __embtk_pkg_runrecipe-y,toolchain_addons))
-	$(eval __xtool_exists-y         := $(if $(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)),,y))
-	$(eval __xtool_runrecipe-y      := $(or $(__xtool_addons_changed-y),$(__xtool_exists-y)))$(__xtool_runrecipe-y)
+	$(eval __xtool_missed-y         := $(if $(wildcard $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)),,y))
+	$(eval __xtool_runrecipe-y      := $(or $(__xtool_addons_changed-y),$(__xtool_missed-y)))$(__xtool_runrecipe-y)
 endef
 
 #
