@@ -33,5 +33,6 @@ LIBRESSL_BUILD_DIR	:= $(embtk_pkgb)/libressl-$(LIBRESSL_VERSION)-build
 LIBRESSL_BINS		:= openssl
 LIBRESSL_INCLUDES	:= openssl
 LIBRESSL_LIBS		:= libcrypto.* libssl.*
+LIBRESSL_CFLAGS		:= -D_DEFAULT_SOURCE
 
 LIBRESSL_CONFIGURE_OPTS	:= --program-transform-name='s;$(STRICT_GNU_TARGET)-;;'
