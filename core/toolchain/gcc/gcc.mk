@@ -101,6 +101,10 @@ GCC3_KCONFIGS_NAME	:= GCC
 pembtk_gcc3_extraopts-y := --disable-symvers
 pembtk_gcc3_extraopts-$(CONFIG_EMBTK_GCC_LANGUAGE_JAVA)        += --enable-java-home
 pembtk_gcc3_extraopts-$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD) += --disable-tls
+# FIXME: remove this when c++ exceptions will be fixed (in musl,libgcc?)
+ifeq ($(CONFIG_EMBTK_CLIB_MUSL)$(CONFIG_EMBTK_ARCH_MIPS),yy)
+pembtk_gcc3_extraopts-y += --disable-tls
+endif
 
 GCC3_CONFIGURE_EXTRA_OPTIONS += $(pembtk_gcc3_extraopts-y)
 
