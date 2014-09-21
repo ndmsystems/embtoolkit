@@ -34,5 +34,8 @@ LIBRESSL_BINS		:= openssl
 LIBRESSL_INCLUDES	:= openssl
 LIBRESSL_LIBS		:= libcrypto.* libssl.*
 LIBRESSL_CFLAGS		:= -D_DEFAULT_SOURCE
+ifeq ($(CONFIG_EMBTK_CLIB_UCLIBC),y)
+LIBRESSL_LDFLAGS	:= -pthread
+endif
 
 LIBRESSL_CONFIGURE_OPTS	:= --program-transform-name='s;$(STRICT_GNU_TARGET)-;;'
