@@ -43,12 +43,12 @@ BINUTILS_PREFIX		:= $(embtk_tools)
 define embtk_beforeinstall_binutils
 	$(if $(CONFIG_EMBTK_CLIB_MUSL),$(call __embtk_fixgconfigsfor_pkg,binutils))
 	$(if $(findstring bsd,$(embtk_buildhost_os_type)),
-		bfdmk=$(call __embtk_pkg_srcdir,binutils)/bfd/Makefile.in;	\
-		goldmk=$(call __embtk_pkg_srcdir,binutils)/gold/Makefile.in;	\
-		sed -e 's/-ldl//g' < $$bfdmk > $$bfdmk.tmp;			\
-			mv $$bfdmk.tmp $$bfdmk;					\
-		sed -e 's/-ldl//g' < $$goldmk > $$goldmk.tmp;			\
-			mv $$goldmk.tmp $$goldmk;)
+		__srcdir=$(call __embtk_pkg_srcdir,binutils);			\
+		mkfiles=$$(find $${__srcdir} -type f -name 'Makefile.in');	\
+		for m in $${mkfiles}; do					\
+			sed -e 's/-ldl//g' < $$m > $$m.tmp;			\
+			mv $$m.tmp $$m;						\
+		done;)
 	bfdtxi=$(call __embtk_pkg_srcdir,binutils)/bfd/doc/bfd.texinfo;		\
 	sed -e 's/[[:space:]]@colophon/ @@colophon/'				\
 		-e 's/doc@cygnus.com/doc@@cygnus.com/'				\
