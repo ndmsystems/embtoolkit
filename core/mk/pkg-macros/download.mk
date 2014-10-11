@@ -182,7 +182,7 @@ __embtk_decompress_pkg =							\
 			tar -C $(dir $(__embtk_pkg_srcdir)) -xzf		\
 						$(__embtk_pkg_package_f)	\
 			;;							\
-		*.tar.xz)							\
+		*.tar.xz | *.txz)						\
 			tar -C $(dir $(__embtk_pkg_srcdir)) -xJf		\
 						$(__embtk_pkg_package_f)	\
 			;;							\
