@@ -46,7 +46,8 @@ define embtk_beforeinstall_binutils
 		__srcdir=$(call __embtk_pkg_srcdir,binutils);			\
 		mkfiles=$$(find $${__srcdir} -type f -name 'Makefile.in');	\
 		for m in $${mkfiles}; do					\
-			sed -e 's/-ldl//g' < $$m > $$m.tmp;			\
+			sed -e 's/-ldl//g' -e 's/@DLOPEN_LIBS@//g'		\
+				< $$m > $$m.tmp;				\
 			mv $$m.tmp $$m;						\
 		done;)
 	bfdtxi=$(call __embtk_pkg_srcdir,binutils)/bfd/doc/bfd.texinfo;		\
