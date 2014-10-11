@@ -31,21 +31,20 @@ choice
 	prompt "Version of binutils you wish"
 	depends on EMBTK_HAVE_BINUTILS
 	help
-		Here you can choose which version of binutils your toochain
-		will use.
+	 Here you can choose which version of binutils your toochain will use.
 
+	config EMBTK_BINUTILS_VERSION_2_24
+		bool "binutils-2.24"
+		select EMBTK_BINUTILS_NEED_PATCH
 	config EMBTK_BINUTILS_VERSION_2_23_2
 		bool "binutils-2.23.2"
-		select EMBTK_BINUTILS_NEED_PATCH
-	config EMBTK_BINUTILS_VERSION_2_22
-		bool "binutils-2.22"
 		select EMBTK_BINUTILS_NEED_PATCH
 	config EMBTK_BINUTILS_VERSION_GIT
 		bool "Use binutils git repository"
 		help
-			Answer Y here if you want to build your toolchain based
-			on binutils sources from its GIT repository.
-			See http://sourceware.org/git/?p=binutils.git
+		 Answer Y here if you want to build your toolchain based on
+		 binutils sources from its GIT repository.
+		 See http://sourceware.org/git/?p=binutils-gdb.git
 endchoice
 
 #
@@ -56,13 +55,13 @@ config EMBTK_BINUTILS_GIT_BRANCH
 	default "master"
 	depends on EMBTK_BINUTILS_VERSION_GIT
 	help
-		The branch of the git repository to use, the default is master.
+	 The branch of the git repository to use, the default is master.
 
 config EMBTK_BINUTILS_GIT_REVISION
 	string "Checkout a specific revision instead of the latest"
 	depends on EMBTK_BINUTILS_VERSION_GIT
 	help
-		Chechout a specific revision instead of the latest.
+	 Chechout a specific revision instead of the latest.
 
 config EMBTK_BINUTILS_REFSPEC
 	string
@@ -73,8 +72,8 @@ config EMBTK_BINUTILS_REFSPEC
 #
 config EMBTK_BINUTILS_VERSION_STRING
 	string
+	default "2.24"		if EMBTK_BINUTILS_VERSION_2_24
 	default "2.23.2"	if EMBTK_BINUTILS_VERSION_2_23_2
-	default "2.22"		if EMBTK_BINUTILS_VERSION_2_22
 
 config EMBTK_BINUTILS_NEED_PATCH
 	bool
