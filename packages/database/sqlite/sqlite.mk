@@ -25,7 +25,7 @@
 
 SQLITE_NAME		:= sqlite
 SQLITE_VERSION		:= $(call embtk_get_pkgversion,sqlite)
-SQLITE_SITE		:= http://www.sqlite.org
+SQLITE_SITE		:= $(embtk_ftp/packages-mirror)
 SQLITE_PACKAGE		:= sqlite-autoconf-$(SQLITE_VERSION).tar.gz
 SQLITE_SRC_DIR		:= $(embtk_pkgb)/sqlite-autoconf-$(SQLITE_VERSION)
 SQLITE_BUILD_DIR	:= $(embtk_pkgb)/sqlite-autoconf-$(SQLITE_VERSION)
