@@ -76,7 +76,7 @@ HOSTLDFLAGS		:=
 
 ifeq ($(embtk_buildhost_os),macos)
 HOSTCFLAGS		+= -I/opt/local/include
-HOSTLDFLAGS		+= -L/opt/local/lib
+HOSTLDFLAGS		+= -L/opt/local/lib -lintl
 endif
 HOSTCXXFLAGS		:= $(HOSTCFLAGS)
 
