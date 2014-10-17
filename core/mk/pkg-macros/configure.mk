@@ -133,8 +133,8 @@ __embtk_hostpkg_rpathldflags	= "-Wl,-rpath,$(embtk_htools)/usr/lib"
 __embtk_hostpkg_rpath		= $(strip $(if $(__embtk_pkg_setrpath),		\
 					$(__embtk_hostpkg_rpathldflags)))
 
-__embtk_hostpkg_ldflags		= -L$(embtk_htools)/usr/lib $(__embtk_hostpkg_rpath)
-__embtk_hostpkg_cppflags	= -I$(embtk_htools)/usr/include
+__embtk_hostpkg_ldflags		= -L$(embtk_htools)/usr/lib -L/opt/local/lib $(__embtk_hostpkg_rpath)
+__embtk_hostpkg_cppflags	= -I$(embtk_htools)/usr/include -I/opt/local/include
 define embtk_configure_hostpkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
 	$(call embtk_pinfo,"Configure $(__embtk_pkg_package) for host..."))
