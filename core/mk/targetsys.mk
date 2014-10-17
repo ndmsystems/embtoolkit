@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software; you can distribute it and/or modify it
 # under the terms of the GNU General Public License
@@ -23,6 +23,9 @@
 # \date         October 2012
 ################################################################################
 
+#
+# Target machine info
+#
 embtk_os-$(CONFIG_EMBTK_OS_LINUX)	:= linux
 embtk_os				:= $(or $(embtk_os-y),invalid-os)
 
@@ -32,25 +35,3 @@ embtk_clib-$(CONFIG_EMBTK_CLIB_MUSL)	:= musl
 embtk_clib-$(CONFIG_EMBTK_CLIB_UCLIBC)	:= uclibc
 embtk_clib				:= $(or $(embtk_clib-y),invalid-clib)
 embtk_clib_version			:= $(call embtk_get_pkgversion,$(embtk_clib))
-
-#
-# Host development machine info
-#
-ifeq ($(findstring linux,$(HOST_ARCH)),linux)
-embtk_buildhost_os			:= linux
-embtk_buildhost_os_type			:= linux
-else ifeq ($(findstring freebsd,$(HOST_ARCH)),freebsd)
-embtk_buildhost_os			:= freebsd
-embtk_buildhost_os_type			:= bsd
-else ifeq ($(findstring netbsd,$(HOST_ARCH)),netbsd)
-embtk_buildhost_os			:= netbsd
-embtk_buildhost_os_type			:= bsd
-else ifeq ($(findstring openbsd,$(HOST_ARCH)),openbsd)
-embtk_buildhost_os			:= openbsd
-embtk_buildhost_os_type			:= bsd
-else ifeq ($(findstring apple,$(HOST_ARCH)),apple)
-embtk_buildhost_os			:= macos
-embtk_buildhost_os_type			:= bsd
-else
-embtk_buildhost_os			:= unknown-host-os
-endif

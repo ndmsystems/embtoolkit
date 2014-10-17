@@ -39,53 +39,13 @@ EMBTK_VERSION		:= 							\
 			echo $$version;						\
 		fi;								\
 	else echo $$dversion; fi)
-EMBTK_BUGURL		= "http://bugs.embtoolkit.org/projects/embtoolkit"
-EMBTK_HOMEURL		= "http://www.embtoolkit.org"
-export EMBTK_BUGURL EMBTK_HOMEURL EMBTK_VERSION
+EMBTK_BUGURL		:= "http://bugs.embtoolkit.org/projects/embtoolkit"
+EMBTK_HOMEURL		:= "http://www.embtoolkit.org"
 
 EMBTK_ROOT		:= $(shell pwd)
-EMBTK_DOTCONFIG 	:= $(EMBTK_ROOT)/.config
+EMBTK_DOTCONFIG 	:= "$(EMBTK_ROOT)/.config"
 
-# SHELL used by kbuild
-CONFIG_EMBTK_SHELL		:=						\
-	$(shell									\
-	if [ -x "$$BASH" ]; then						\
-		echo $$BASH;							\
-	else									\
-		if [ -x /bin/bash ]; then					\
-			echo /bin/bash;						\
-		else								\
-			echo /bin/sh;						\
-		fi;								\
-	fi)
-
-HOST_ARCH		:= $(shell $(CONFIG_EMBTK_SHELL) $(EMBTK_ROOT)/scripts/config.guess)
-HOST_BUILD		:= $(HOST_ARCH)
-export HOST_ARCH HOST_BUILD
-
-HOSTCC			:=							\
-	$(shell									\
-	if [ -n "$$(command -v gcc 2>/dev/null)" ]; then			\
-		echo "$$(command -v gcc)";					\
-	elif [ -n "$$(command -v cc 2>/dev/null)" ]; then			\
-		echo "$$(command -v cc 2>/dev/null)";				\
-	else									\
-		echo gcc;							\
-	fi)
-
-HOSTCXX			:=							\
-	$(shell									\
-	if [ -n "$$(command -v g++ 2>/dev/null)" ]; then			\
-		echo "$$(command -v g++)";					\
-	elif [ -n "$$(command -v c++ 2>/dev/null)" ]; then			\
-		echo "$$(command -v c++ 2>/dev/null)";				\
-	else									\
-		echo g++;							\
-	fi)
-
-HOSTCFLAGS		:= -Wall
-HOSTCXXFLAGS		:= -O2
-export HOSTCC HOSTCXX HOSTCFLAGS HOSTCXXFLAGS
+include core/mk/host-support.mk
 
 ifeq ($(V),)
 Q := @
