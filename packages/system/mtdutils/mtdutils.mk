@@ -30,7 +30,7 @@ MTDUTILS_PACKAGE		:= mtd-utils-$(MTDUTILS_VERSION).tar.bz2
 MTDUTILS_SRC_DIR		:= $(embtk_pkgb)/mtd-utils-$(MTDUTILS_VERSION)
 MTDUTILS_BUILD_DIR		:= $(embtk_pkgb)/mtd-utils-$(MTDUTILS_VERSION)
 
-MTDUTILS_DEPS		:= zlib_install lzo_install e2fsprogs_install
+MTDUTILS_DEPS		:= zlib_install lzo_install e2fsprogs-libuuid_install
 
 __embtk_mtdutils_cflags	:= $(TARGET_CFLAGS)
 

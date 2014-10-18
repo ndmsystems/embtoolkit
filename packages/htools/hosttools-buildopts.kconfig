@@ -123,6 +123,11 @@ source core/kconfig/bmake.kconfig
 source packages/htools/gmake/gmake.kconfig
 
 #
+# libuuid
+#
+source packages/htools/e2fsprogs-libuuid/e2fsprogs-libuuid.kconfig
+
+#
 # mtd-utils
 #
 source packages/htools/mtdutils/mtdutils.kconfig

@@ -30,7 +30,7 @@ MTDUTILS_HOST_PACKAGE		:= mtd-utils-$(MTDUTILS_HOST_VERSION).tar.bz2
 MTDUTILS_HOST_SRC_DIR		:= $(embtk_toolsb)/mtd-utils-$(MTDUTILS_HOST_VERSION)
 MTDUTILS_HOST_BUILD_DIR		:= $(embtk_toolsb)/mtd-utils-$(MTDUTILS_HOST_VERSION)
 
-MTDUTILS_HOST_DEPS := zlib_host_install lzo_host_install e2fsprogs_host_install
+MTDUTILS_HOST_DEPS := zlib_host_install lzo_host_install e2fsprogs-libuuid_host_install
 
 embtk_mtdutils_host_cppflags	:= -I. -Iinclude -I../include -I$(embtk_htools)/usr/include
 ifneq ($(embtk_buildhost_os_type),linux)

@@ -71,6 +71,9 @@ $(call embtk_include_pkg,libsigsegv)
 # libunwind
 $(call embtk_include_pkg,libunwind)
 
+# libuuid
+$(call embtk_include_pkg,e2fsprogs-libuuid)
+
 # openblas
 $(call embtk_include_pkg,openblas)
 

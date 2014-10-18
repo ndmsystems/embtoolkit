@@ -50,6 +50,9 @@ $(call embtk_include_hostpkg,libelf_host)
 # libtool
 $(call embtk_include_hostpkg,libtool_host)
 
+# libuuid
+$(call embtk_include_hostpkg,e2fsprogs-libuuid_host)
+
 # mtd-utils
 $(call embtk_include_hostpkg,mtdutils_host)
 

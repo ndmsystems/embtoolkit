@@ -68,6 +68,9 @@ source packages/development/libsigsegv/libsigsegv.kconfig
 # libunwind
 source packages/development/libunwind/libunwind.kconfig
 
+# libuuid
+source packages/development/e2fsprogs-libuuid/e2fsprogs-libuuid.kconfig
+
 # openblas
 source packages/development/openblas/openblas.kconfig
 
