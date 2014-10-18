@@ -38,8 +38,8 @@ ZLIB_INCLUDES		:= zconf.h zlib.h
 ZLIB_LIBS		:= libz.*
 ZLIB_PKGCONFIGS		:= zlib.pc
 
-ZLIB_CONFIGURE_ENV	:=
 ZLIB_CONFIGURE_OPTS	:= --enable-shared
+ZLIB_MAKE_OPTS		:= ARFLAGS="rcvs" AR="$(TARGETAR)"
 
 define embtk_install_zlib
 	$(call embtk_makeinstall_pkg,zlib)
