@@ -71,6 +71,13 @@ UCLIBC_MAKE_OPTS	+= CONFIG_MIPS_N64_ABI=""
 UCLIBC_MAKE_OPTS	+= CONFIG_MIPS_N32_ABI=""
 endif
 
+ifeq ($(embtk_buildhost_os),macos)
+define embtk_beforeinstall_uclibc
+	cp $(EMBTK_ROOT)/scripts/unifdef.c \
+		$(UCLIBC_BUILD_DIR)/extra/scripts/unifdef.c
+endef
+endif
+
 #
 # Install dummy uClibc needed to build gcc stage 2
 #
@@ -105,6 +112,7 @@ define __embtk_install_uclibc_headers
 endef
 
 define embtk_install_uclibc_headers
+	$(embtk_beforeinstall_uclibc)
 	$(__embtk_install_uclibc_headers)
 endef
 
