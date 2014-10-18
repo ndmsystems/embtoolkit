@@ -78,6 +78,13 @@ LINUX_MAKE_OPTS	+= HOSTCC="$(HOSTCC)" HOSTCXX="$(HOSTCXX)"
 #
 # linux headers install
 #
+ifeq ($(embtk_buildhost_os),macos)
+define embtk_beforeinstall_linux_headers
+	cp $(EMBTK_ROOT)/scripts/unifdef.c \
+		$(LINUX_HEADERS_SRC_DIR)/scripts/unifdef.c
+endef
+endif
+
 define embtk_install_linux_headers
 	$(MAKE) -C $(LINUX_BUILD_DIR) $(LINUX_MAKE_OPTS)			\
 		INSTALL_HDR_PATH=$(embtk_sysroot)/usr headers_install
