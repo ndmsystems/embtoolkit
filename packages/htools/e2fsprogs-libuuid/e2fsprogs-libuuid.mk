@@ -35,7 +35,7 @@ E2FSPROGS-LIBUUID_HOST_MAKE_DIRS := util lib/uuid
 
 E2FSPROGS-LIBUUID_HOST_CONFIGURE_OPTS := --disable-compression
 E2FSPROGS-LIBUUID_HOST_CONFIGURE_OPTS += --disable-htree
-ifeq ($(embtk_buildhost_os_type),bsd)
+ifeq ($(embtk_buildhost_os_type),macos)
 E2FSPROGS-LIBUUID_HOST_CONFIGURE_OPTS += --disable-elf-shlibs
 E2FSPROGS-LIBUUID_HOST_CONFIGURE_OPTS += --enable-bsd-shlibs
 else
