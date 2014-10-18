@@ -44,7 +44,7 @@ embtk_hostcc_clang-y		:= $(if $(findstring clang,$(__embtk_hostcc-version)),y)
 __embtk_targetclang-v		= $(if $(call __embtk_pkg_usegit,clang),$(call __embtk_clang-git-version,$(TARGETCLANG)),$(call __embtk_clang-version,$(TARGETCLANG)))
 embtk_targetcc_name-v		= $(if $(embtk_toolchain_use_llvm-y),$(__embtk_targetclang-v),$(call __embtk_gcc-version,$(TARGETGCC)))
 
-embtk_host_uname		:= $(shell uname -s -r -p)
+embtk_host_uname		:= $(shell uname -s -r -m)
 
 #
 # Get passed package variables prefix and set some helpers macros.
