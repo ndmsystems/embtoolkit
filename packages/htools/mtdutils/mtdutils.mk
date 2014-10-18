@@ -42,6 +42,9 @@ MTDUTILS_HOST_MAKE_ENV	+= CPPFLAGS="$(embtk_mtdutils_host_cppflags)"
 MTDUTILS_HOST_MAKE_ENV	+= BUILDDIR=$(MTDUTILS_HOST_BUILD_DIR)
 MTDUTILS_HOST_MAKE_OPTS	:= CC=$(HOSTCC_CACHED)
 MTDUTILS_HOST_MAKE_OPTS	+= DESTDIR=$(embtk_htools) WITHOUT_XATTR=1
+ifeq ($(embtk_buildhost_os),macos)
+MTDUTILS_HOST_MAKE_OPTS	+= SECTION_CFLAGS=""
+endif
 
 define embtk_install_mtdutils_host
 	$(call embtk_makeinstall_hostpkg,mtdutils_host)
