@@ -26,7 +26,14 @@
 # Host development machine info
 #
 
-CONFIG_EMBTK_SHELL	:= /bin/sh
+CONFIG_EMBTK_SHELL	:=							\
+	$(shell									\
+	if [ -n "$$(command -v bash 2>/dev/null)" ]; then			\
+		echo "$$(command -v bash)";					\
+	else									\
+		echo "/bin/sh";							\
+	fi)
+
 HOST_ARCH		:= $(shell $(CONFIG_EMBTK_SHELL) $(EMBTK_ROOT)/scripts/config.guess)
 HOST_BUILD		:= $(HOST_ARCH)
 export HOST_ARCH HOST_BUILD
