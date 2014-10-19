@@ -26,9 +26,6 @@
 # expat
 source packages/misc/expat/expat.kconfig
 
-# gettext
-source packages/misc/gettext/gettext.kconfig
-
 # glib
 source packages/misc/glib/glib.kconfig
 

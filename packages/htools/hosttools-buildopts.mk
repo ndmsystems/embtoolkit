@@ -38,6 +38,9 @@ $(call embtk_include_hostpkg,ccache_host)
 include packages/htools/fakeroot/vars.mk
 $(call embtk_include_hostpkg,fakeroot_host)
 
+# gettext
+$(call embtk_include_hostpkg,gettext_host)
+
 # gmake
 $(call embtk_include_hostpkg,gmake_host)
 

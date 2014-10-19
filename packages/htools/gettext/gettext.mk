@@ -23,12 +23,12 @@
 # \date         December 2009
 ################################################################################
 
-GETTEXT_HOST_NAME		:= gettext
-GETTEXT_HOST_VERSION		:= $(call embtk_get_pkgversion,gettext_host)
-GETTEXT_HOST_SITE		:= http://ftp.gnu.org/pub/gnu/gettext
-GETTEXT_HOST_PACKAGE		:= gettext-$(GETTEXT_HOST_VERSION).tar.gz
-GETTEXT_HOST_SRC_DIR		:= $(embtk_toolsb)/gettext-$(GETTEXT_HOST_VERSION)
-GETTEXT_HOST_BUILD_DIR		:= $(embtk_toolsb)/gettext-$(GETTEXT_HOST_VERSION)
+GETTEXT_HOST_NAME	:= gettext
+GETTEXT_HOST_VERSION	:= $(call embtk_pkg_version,gettext_host)
+GETTEXT_HOST_SITE	:= http://ftp.gnu.org/pub/gnu/gettext
+GETTEXT_HOST_PACKAGE	:= gettext-$(GETTEXT_HOST_VERSION).tar.gz
+GETTEXT_HOST_SRC_DIR	:= $(embtk_toolsb)/gettext-$(GETTEXT_HOST_VERSION)
+GETTEXT_HOST_BUILD_DIR	:= $(embtk_toolsb)/gettext-$(GETTEXT_HOST_VERSION)-build
 
 GETTEXT_HOST_CONFIGURE_OPTS := --disable-java
 GETTEXT_HOST_CONFIGURE_OPTS += --disable-native-java
@@ -37,3 +37,4 @@ GETTEXT_HOST_CONFIGURE_OPTS += --with-included-gettext
 GETTEXT_HOST_CONFIGURE_OPTS += --with-included-glib
 GETTEXT_HOST_CONFIGURE_OPTS += --with-included-libcroco
 GETTEXT_HOST_CONFIGURE_OPTS += --with-included-libxml
+GETTEXT_HOST_CONFIGURE_OPTS += --enable-static --disable-shared

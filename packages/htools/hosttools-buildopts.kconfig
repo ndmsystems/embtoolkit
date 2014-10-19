@@ -75,6 +75,11 @@ config EMBTK_HAVE_MKIMAGE
 	 u-boot mkimage tool.
 
 #
+# gettext
+#
+source packages/htools/gettext/gettext.kconfig
+
+#
 # gperf for host
 #
 source packages/htools/gperf/gperf.kconfig
