@@ -33,7 +33,9 @@ help:
 	@echo "                 configure your toolchain and your root"
 	@echo "                 filesystem (if selected)."
 	@echo
-	@echo "make menuconfig: Same as xconfig but using this time ncurse GUI."
+	@echo "make menuconfig: Same as xconfig but using this time lxdialog GUI."
+	@echo
+	@echo "make nconfig:    Same as xconfig but using this time ncurses GUI."
 	@echo
 	@echo "make olddefconfig: Update silently current config utilising a"
 	@echo "                 provided .config as base, and sets new"

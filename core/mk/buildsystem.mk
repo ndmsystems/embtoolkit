@@ -60,7 +60,7 @@ define __embtk_mk_xconfig
 	$(call __embtk_kconfig_buildrun,$(1))
 endef
 
-xconfig menuconfig olddefconfig: embtk_kconfig_basic
+xconfig menuconfig nconfig olddefconfig: embtk_kconfig_basic
 	$(Q)$(call __embtk_mk_xconfig,$@)
 
 embtk_kconfig_basic:
