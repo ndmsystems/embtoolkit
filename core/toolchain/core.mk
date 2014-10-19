@@ -128,9 +128,13 @@ include core/toolchain/libcxxrt/libcxxrt.mk
 include core/toolchain/llvm/libc++/libcxx.mk
 
 #
-# linux kernel headers
+# linux kernel
 #
-include core/mk/linux.mk
+include core/toolchain/linux/common.mk
+include core/toolchain/linux/headers.mk
+ifeq ($(CONFIG_EMBTK_BUILD_LINUX_KERNEL),y)
+include core/toolchain/linux/linux.mk
+endif
 
 #
 # C library
