@@ -44,6 +44,9 @@ embtk_glibc_floattype := $(if $(CONFIG_EMBTK_SOFTFLOAT),--with-fp=no,--with-fp=y
 
 ifeq ($(embtk_buildhost_os_type),bsd)
 embtk_glibc_buildcflags		:= -I/opt/local/include -I/usr/local/include -Dstat64=stat
+ifeq ($(embtk_buildhost_os),macos)
+embtk_eglibc_buildcflags	:= $(filter-out -Dstat64=stat,$(embtk_eglibc_buildcflags))
+endif
 embtk_glibc_buildldflags	:= -L/opt/local/lib -L/usr/local/lib -lintl
 endif
 
