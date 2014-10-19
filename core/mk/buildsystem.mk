@@ -45,6 +45,7 @@ define __embtk_kconfig_buildrun
 	PKG_CONFIG_PATH=$(EMBTK_HOST_PKG_CONFIG_PATH)				\
 	$(MAKE) -f scripts/Makefile.build					\
 		obj=$(EMBTK_ROOT)/scripts/kconfig				\
+		EMBTK_HOST_OS="$(embtk_buildhost_os)"				\
 		EMBTK_HOST_OSTYPE="$(embtk_buildhost_os_type)"			\
 		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
 		EMBTK_VERSION=$(EMBTK_VERSION)					\

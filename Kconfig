@@ -40,6 +40,10 @@ config EMBTK_HOST_OSTYPE
 	string
 	option env="EMBTK_HOST_OSTYPE"
 
+config EMBTK_HOST_OS
+	string
+	option env="EMBTK_HOST_OS"
+
 menu "Target OS Selection"
 choice
 	prompt "Choose target OS"
