@@ -143,7 +143,7 @@ define embtk_configure_hostpkg
 	$(Q)test -e $(__embtk_pkg_configurescript) || exit 1
 	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
 	$(Q)cd $(__embtk_pkg_builddir);						\
-	CPPFLAGS="$(__embtk_hostpkg_cppflags) $(__embtk_pkg_cppflags)"		\
+	CPPFLAGS="$(__embtk_pkg_cppflags) $(__embtk_hostpkg_cppflags)"		\
 	$(if $(__embtk_pkg_cflags),CFLAGS="$(__embtk_pkg_cflags)")		\
 	LDFLAGS="$(__embtk_hostpkg_ldflags)"					\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
