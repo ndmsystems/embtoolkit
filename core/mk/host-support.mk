@@ -77,14 +77,14 @@ HOSTCXX			:=							\
 		echo g++;							\
 	fi)
 
-HOSTCFLAGS		:= -Wall -O2
-HOSTCXXFLAGS		:= -Wall -O2
-HOSTLDFLAGS		:=
+HOSTCFLAGS		= -Wall -O2 -I$(embtk_htools)/usr/include
+HOSTCXXFLAGS		= -Wall -O2 -I$(embtk_htools)/usr/include
+HOSTLDFLAGS		=
 
 ifeq ($(embtk_buildhost_os),macos)
 HOSTCFLAGS		+= -I/opt/local/include
 HOSTLDFLAGS		+= -L/opt/local/lib -lintl
 endif
-HOSTCXXFLAGS		:= $(HOSTCFLAGS)
+HOSTCXXFLAGS		= $(HOSTCFLAGS)
 
 export HOSTCC HOSTCXX HOSTCFLAGS HOSTCXXFLAGS HOSTLDFLAGS
