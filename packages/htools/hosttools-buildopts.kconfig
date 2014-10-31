@@ -148,6 +148,11 @@ source packages/htools/pkgconf/pkgconf.kconfig
 source packages/htools/fakeroot/fakeroot.kconfig
 
 #
+# findutils
+#
+source packages/htools/findutils/findutils.kconfig
+
+#
 # libelf
 #
 source packages/htools/libelf/libelf.kconfig
