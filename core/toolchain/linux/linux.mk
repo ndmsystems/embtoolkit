@@ -27,6 +27,10 @@
 # linux install macros
 #
 
+ifeq ($(embtk_buildhost_os),macos)
+LINUX_DEPS := libelf_host_install
+endif
+
 pembtk_linux_dotconfig_f	:= $(call embtk_uquote,$(CONFIG_EMBTK_LINUX_DOTCONFIG))
 pembtk_linux_extsrc-y		:= $(CONFIG_EMBTK_LINUX_BUILD_USE_EXTSRC)
 pembtk_linux_srcdir		:= $(call embtk_uquote,$(or $(CONFIG_EMBTK_LINUX_BUILD_EXTSRC),$(LINUX_SRC_DIR)))
@@ -106,6 +110,8 @@ LINUX_MODULES_SRC_DIR	:= $(LINUX_SRC_DIR)
 LINUX_MODULES_BUILD_DIR	:= $(LINUX_BUILD_DIR)
 LINUX_MODULES_KCONFIGS_NAME := LINUX
 LINUX_MODULES_KEEP_SRC_DIR  := $(LINUX_KEEP_SRC_DIR)
+
+LINUX_MODULES_DEPS := $(LINUX_DEPS)
 
 define embtk_install_linux_modules
 	$(if $(pembtk_linux_modules-y),$(pembtk_install_linux_modules))

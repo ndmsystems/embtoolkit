@@ -86,6 +86,7 @@ endmenu
 if EMBTK_OS_LINUX
 config EMBTK_BUILD_LINUX_KERNEL
 	bool "Build linux kernel image"
+	select EMBTK_HOST_HAVE_LIBELF if EMBTK_HOST_OS=macos
 
 if EMBTK_BUILD_LINUX_KERNEL
 source "core/kconfig/linux-kernel-build.kconfig"
