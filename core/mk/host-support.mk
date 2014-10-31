@@ -82,7 +82,7 @@ HOSTCXXFLAGS		= -Wall -O2 -I$(embtk_htools)/usr/include
 HOSTLDFLAGS		=
 
 ifeq ($(embtk_buildhost_os),macos)
-HOSTCFLAGS		+= -I/opt/local/include
+HOSTCFLAGS		+= -I/opt/local/include -I$(embtk_includedir)
 HOSTLDFLAGS		+= -L/opt/local/lib -lintl
 endif
 HOSTCXXFLAGS		= $(HOSTCFLAGS)
