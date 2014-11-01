@@ -122,22 +122,22 @@ define __embtk_download_pkg_from_tarball
 	$(call embtk_wget,							\
 		$(__embtk_pkg_package),						\
 		$(__embtk_pkg_site),						\
-		$(__embtk_pkg_foreignpackage)) ||				\
+		$(__embtk_pkg_package_remote)) ||				\
 	$(if $(__embtk_pkg_mirror1),						\
 		$(call embtk_wget,						\
 			$(__embtk_pkg_package),					\
 			$(__embtk_pkg_mirror1),					\
-			$(__embtk_pkg_foreignpackage)) ||)			\
+			$(__embtk_pkg_package_remote)) ||)			\
 	$(if $(__embtk_pkg_mirror2),						\
 		$(call embtk_wget,						\
 			$(__embtk_pkg_package),					\
 			$(__embtk_pkg_mirror2),					\
-			$(__embtk_pkg_foreignpackage)) ||)			\
+			$(__embtk_pkg_package_remote)) ||)			\
 	$(if $(__embtk_pkg_mirror3),						\
 		$(call embtk_wget,						\
 			$(__embtk_pkg_package),					\
 			$(__embtk_pkg_mirror3),					\
-			$(__embtk_pkg_foreignpackage)) ||)			\
+			$(__embtk_pkg_package_remote)) ||)			\
 	$(call embtk_wget,							\
 		$(__embtk_pkg_package),						\
 		$(__embtk_pkg_mirror),						\
