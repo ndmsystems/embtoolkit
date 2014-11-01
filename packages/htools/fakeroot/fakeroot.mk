@@ -29,4 +29,4 @@ FAKEROOT_HOST_VERSION	:= $(call embtk_get_pkgversion,fakeroot_host)
 FAKEROOT_HOST_SITE	:= http://ftp.debian.org/debian/pool/main/f/fakeroot
 FAKEROOT_HOST_PACKAGE	:= fakeroot_$(FAKEROOT_HOST_VERSION).orig.tar.bz2
 FAKEROOT_HOST_SRC_DIR	:= $(embtk_toolsb)/fakeroot-$(FAKEROOT_HOST_VERSION)
-FAKEROOT_HOST_BUILD_DIR	:= $(embtk_toolsb)/fakeroot-build
+FAKEROOT_HOST_BUILD_DIR	:= $(embtk_toolsb)/fakeroot-$(FAKEROOT_HOST_VERSION)-build

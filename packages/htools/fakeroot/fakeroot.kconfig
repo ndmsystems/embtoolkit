@@ -26,6 +26,7 @@
 config EMBTK_HOST_HAVE_FAKEROOT
 	bool
 	default y
+	select EMBTK_FAKEROOT_HOST_NEED_PATCH
 	help
 	 fakeroot for host tools.
 
