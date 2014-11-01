@@ -23,12 +23,13 @@
 # \date         Oct 2014
 ################################################################################
 
-JACK2_NAME	:= jack2
-JACK2_VERSION	:= $(call embtk_pkg_version,jack2)
-JACK2_SITE	:= https://github.com/jackaudio/jack2/archive
-JACK2_PACKAGE	:= v$(JACK2_VERSION).tar.gz
-JACK2_SRC_DIR	:= $(embtk_pkgb)/jack2-$(JACK2_VERSION)
-JACK2_BUILD_DIR	:= $(embtk_pkgb)/jack2-$(JACK2_VERSION)
+JACK2_NAME           := jack2
+JACK2_VERSION        := $(call embtk_pkg_version,jack2)
+JACK2_SITE           := https://github.com/jackaudio/jack2/archive
+JACK2_PACKAGE        := jack2-$(JACK2_VERSION).tar.gz
+JACK2_PACKAGE_REMOTE := v$(JACK2_VERSION).tar.gz
+JACK2_SRC_DIR        := $(embtk_pkgb)/jack2-$(JACK2_VERSION)
+JACK2_BUILD_DIR      := $(embtk_pkgb)/jack2-$(JACK2_VERSION)
 
 JACK2_BINS       := jackd jack_*
 JACK2_INCLUDES   := jack
