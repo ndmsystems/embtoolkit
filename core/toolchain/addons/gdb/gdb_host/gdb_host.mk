@@ -25,8 +25,8 @@
 
 GDB_HOST_NAME		:= gdb
 GDB_HOST_VERSION	:= $(call embtk_pkg_version,gdb_host)
-GDB_HOST_SITE		:= gdb-$(GDB_HOST_VERSION).tar.bz2
-GDB_HOST_PACKAGE	:= gdb-$(GDB_HOST_VERSION).tar.bz2
+GDB_HOST_SITE		:= http://ftp.gnu.org/gnu/gdb
+GDB_HOST_PACKAGE	:= gdb-$(GDB_HOST_VERSION).tar.xz
 GDB_HOST_SRC_DIR	:= $(embtk_toolsb)/gdb-$(GDB_HOST_VERSION)
 GDB_HOST_BUILD_DIR	:= $(embtk_toolsb)/gdb-$(GDB_HOST_VERSION)
 

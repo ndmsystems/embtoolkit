@@ -26,7 +26,7 @@
 GDBSERVER_NAME		:= gdb
 GDBSERVER_VERSION	:= $(call embtk_pkg_version,gdbserver)
 GDBSERVER_SITE		:= http://ftp.gnu.org/gnu/gdb
-GDBSERVER_PACKAGE	:= gdb-$(GDBSERVER_VERSION).tar.bz2
+GDBSERVER_PACKAGE	:= gdb-$(GDBSERVER_VERSION).tar.xz
 GDBSERVER_SRC_DIR	:= $(embtk_pkgb)/gdb-$(GDBSERVER_VERSION)
 GDBSERVER_BUILD_DIR	:= $(embtk_pkgb)/gdbserver-$(GDBSERVER_VERSION)-build
 

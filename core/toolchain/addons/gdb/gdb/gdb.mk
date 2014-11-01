@@ -26,7 +26,7 @@
 GDB_NAME	:= gdb
 GDB_VERSION	:= $(call embtk_get_pkgversion,gdb)
 GDB_SITE	:= http://ftp.gnu.org/gnu/gdb
-GDB_PACKAGE	:= gdb-$(GDB_VERSION).tar.bz2
+GDB_PACKAGE	:= gdb-$(GDB_VERSION).tar.xz
 GDB_SRC_DIR	:= $(embtk_pkgb)/gdb-$(GDB_VERSION)
 GDB_BUILD_DIR	:= $(embtk_pkgb)/gdb-$(GDB_VERSION)-build
 
