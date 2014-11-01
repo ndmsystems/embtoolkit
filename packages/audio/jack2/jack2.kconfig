@@ -52,6 +52,7 @@ if EMBTK_HAVE_JACK2
 comment "JACK2 options"
 config EMBTK_JACK2_WITH_ALSA
 	bool "Build JACK2 with alsa driver support"
+	select EMBTK_HAVE_ALSA-LIB
 #config EMBTK_JACK2_WITH_DBUS
 #	bool "Build JACK2 with D-Bus support"
 # TODO: solve dependencies
