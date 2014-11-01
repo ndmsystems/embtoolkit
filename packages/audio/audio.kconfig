@@ -23,14 +23,23 @@
 # \date         May 2014
 ################################################################################
 
+# alsa-lib
+source packages/audio/alsa-lib/alsa-lib.kconfig
+
 # ladspa
 source packages/audio/ladspa/ladspa.kconfig
 
 # libsndfile
 source packages/audio/libsndfile/libsndfile.kconfig
 
+# libsamplerate
+source packages/audio/libsamplerate/libsamplerate.kconfig
+
 # lilv
 source packages/audio/lilv/lilv.kconfig
 
 # lv2
 source packages/audio/lv2/lv2.kconfig
+
+# jack2
+source packages/audio/jack2/jack2.kconfig

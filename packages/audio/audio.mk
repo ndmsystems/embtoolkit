@@ -25,14 +25,23 @@
 
 embtk_pkgincdir := packages/audio
 
+# alsa-lib
+$(call embtk_include_pkg,alsa-lib)
+
 # ladspa
 $(call embtk_include_pkg,ladspa)
 
 # libsndfile
 $(call embtk_include_pkg,libsndfile)
 
+# libsamplerate
+$(call embtk_include_pkg,libsamplerate)
+
 # lilv
 $(call embtk_include_pkg,lilv)
 
 # lv2
 $(call embtk_include_pkg,lv2)
+
+# jack2
+$(call embtk_include_pkg,jack2)
