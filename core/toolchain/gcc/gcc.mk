@@ -105,6 +105,7 @@ pembtk_gcc3_extraopts-$(CONFIG_KEMBTK_UCLIBC_LINUXTHREADS_OLD) += --disable-tls
 ifeq ($(CONFIG_EMBTK_CLIB_MUSL)$(CONFIG_EMBTK_ARCH_MIPS),yy)
 pembtk_gcc3_extraopts-y += --disable-tls
 endif
+pembtk_gcc3_extraopts-$(CONFIG_EMBTK_CLIB_MUSL) += --disable-libsanitizer
 
 GCC3_CONFIGURE_EXTRA_OPTIONS += $(pembtk_gcc3_extraopts-y)
 

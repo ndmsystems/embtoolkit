@@ -123,7 +123,7 @@ choice
 
 	config EMBTK_CLIB_MUSL
 		bool "musl"
-		depends on (EMBTK_TARGET_ARCH_32BITS && EMBTK_GCC_VERSION_4_8_X)
+		depends on EMBTK_TARGET_ARCH_32BITS && (EMBTK_GCC_VERSION_4_8_X || EMBTK_GCC_VERSION_4_9_X)
 		help
 		 musl is a new general-purpose implementation of the C library.
 		 It is lightweight, fast, simple, free, and aims to be correct
