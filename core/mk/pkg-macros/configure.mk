@@ -145,6 +145,7 @@ define embtk_configure_hostpkg
 	$(Q)cd $(__embtk_pkg_builddir);						\
 	CPPFLAGS="$(__embtk_pkg_cppflags) $(__embtk_hostpkg_cppflags)"		\
 	$(if $(__embtk_pkg_cflags),CFLAGS="$(__embtk_pkg_cflags)")		\
+	$(if $(__embtk_pkg_cxxflags),CXXFLAGS="$(__embtk_pkg_cxxflags)")	\
 	LDFLAGS="$(__embtk_hostpkg_ldflags)"					\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
 	PKG_CONFIG_PATH="$(EMBTK_HOST_PKG_CONFIG_PATH)"				\
