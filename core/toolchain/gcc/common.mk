@@ -33,6 +33,14 @@ GCC_SRC_DIR	:= $(embtk_toolsb)/gcc-$(GCC_VERSION)
 GCC_MULTILIB	:= --disable-multilib
 GCC_DEPS	:= gmp_host_install mpfr_host_install mpc_host_install
 
+ifeq ($(embtk_hostcc_clang-y),y)
+GCC_CFLAGS	:= -g -O2 -fbracket-depth=1024
+GCC_CXXFLAGS	:= $(GCC_CFLAGS)
+endif
+
+GCC_MAKE_OPTS := CFLAGS_FOR_TARGET="$(TARGET_CFLAGS)"
+GCC_MAKE_OPTS += CXXFLAGS_FOR_TARGET="$(TARGET_CFLAGS)"
+
 pembtk_gcc_common_opts := --with-sysroot=$(embtk_sysroot)
 pembtk_gcc_common_opts += --target=$(STRICT_GNU_TARGET)
 pembtk_gcc_common_opts += $(GCC_WITH_ARCH)

@@ -49,6 +49,13 @@ GCC1_CONFIGURE_OPTS	+= --disable-shared
 GCC1_CONFIGURE_OPTS	+= --disable-threads
 GCC1_CONFIGURE_OPTS	+= --disable-libatomic
 
+GCC1_CONFIGURE_ENV	:= $(GCC_CONFIGURE_ENV)
+
+GCC1_CFLAGS		:= $(GCC_CFLAGS)
+GCC1_CXXFLAGS		:= $(GCC_CXXFLAGS)
+
+GCC1_MAKE_OPTS		:= $(GCC_MAKE_OPTS)
+
 define embtk_install_gcc1
 	$(call embtk_makeinstall_hostpkg,gcc1,autotooled)
 endef
@@ -75,6 +82,13 @@ GCC2_CONFIGURE_OPTS	+= --enable-threads
 GCC2_CONFIGURE_OPTS	+= --disable-libatomic
 GCC2_CONFIGURE_OPTS	+= --disable-symvers
 GCC2_CONFIGURE_OPTS	+= $(GCC_CXA_ATEXIT-y)
+
+GCC2_CONFIGURE_ENV	:= $(GCC_CONFIGURE_ENV)
+
+GCC2_CFLAGS		:= $(GCC_CFLAGS)
+GCC2_CXXFLAGS		:= $(GCC_CXXFLAGS)
+
+GCC2_MAKE_OPTS		:= $(GCC_MAKE_OPTS)
 
 define embtk_install_gcc2
 	$(call embtk_makeinstall_hostpkg,gcc2,autotooled)
@@ -130,6 +144,13 @@ GCC3_CONFIGURE_OPTS	+= --enable-threads
 GCC3_CONFIGURE_OPTS	+= --enable-shared
 GCC3_CONFIGURE_OPTS	+= $(GCC_CXA_ATEXIT-y)
 GCC3_CONFIGURE_OPTS	+= $(GCC3_CONFIGURE_EXTRA_OPTIONS)
+
+GCC3_CONFIGURE_ENV	:= $(GCC_CONFIGURE_ENV)
+
+GCC3_CFLAGS		:= $(GCC_CFLAGS)
+GCC3_CXXFLAGS		:= $(GCC_CXXFLAGS)
+
+GCC3_MAKE_OPTS		:= $(GCC_MAKE_OPTS)
 
 define embtk_install_gcc3
 	$(call embtk_makeinstall_hostpkg,gcc3,autotooled)
