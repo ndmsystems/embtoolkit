@@ -38,8 +38,10 @@ GCC_CFLAGS	:= -g -O2 -fbracket-depth=1024
 GCC_CXXFLAGS	:= $(GCC_CFLAGS)
 endif
 
-GCC_MAKE_OPTS := CFLAGS_FOR_TARGET="$(TARGET_CFLAGS)"
-GCC_MAKE_OPTS += CXXFLAGS_FOR_TARGET="$(TARGET_CFLAGS)"
+pembtk_gcc_target_cflags := $(filter-out $(__clang_cflags),$(TARGET_CFLAGS))
+
+GCC_MAKE_OPTS := CFLAGS_FOR_TARGET="$(pembtk_gcc_target_cflags)"
+GCC_MAKE_OPTS += CXXFLAGS_FOR_TARGET="$(pembtk_gcc_target_cflags)"
 
 pembtk_gcc_common_opts := --with-sysroot=$(embtk_sysroot)
 pembtk_gcc_common_opts += --target=$(STRICT_GNU_TARGET)
