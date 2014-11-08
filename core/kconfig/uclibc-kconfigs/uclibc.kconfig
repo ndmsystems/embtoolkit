@@ -238,6 +238,32 @@ config KEMBTK_UCLIBC_LDSO_BASE_FILENAME
 	  WARNING: Changing the default prefix could cause problems with
 	           binutils' ld !
 
+config KEMBTK_UCLIBC_LDSO_STANDALONE_SUPPORT
+	bool "Dynamic linker stand-alone mode support"
+	depends on KEMBTK_UCLIBC_HAVE_SHARED
+	help
+	  The dynamic linker can be run either indirectly through running some
+	  dynamically linked program or library (in which case no command line
+	  options to the dynamic linker can be passed and, in the ELF case, the
+	  dynamic linker which is stored in the .interp section of the program
+	  is executed) or directly by running:
+
+	  /lib/ld-uClibc.so.*  [OPTIONS] [PROGRAM [ARGUMENTS]]
+
+	  Stand-alone execution is a prerequisite for adding prelink
+	  capabilities to uClibc dynamic linker, as well useful for testing an
+	  updated version of the dynamic linker without breaking the system.
+
+config KEMBTK_UCLIBC_LDSO_PRELINK_SUPPORT
+	bool "Dynamic linker prelink support"
+	depends on KEMBTK_UCLIBC_HAVE_SHARED
+	select KEMBTK_UCLIBC_LDSO_STANDALONE_SUPPORT
+	help
+	  The dynamic linker can be used in stand-alone mode by the prelink tool
+	  for prelinking ELF shared libraries and binaries to speed up startup
+	  time. It also is able to load and handle prelinked libraries and
+	  binaries at runtime.
+
 config KEMBTK_UCLIBC_UCLIBC_STATIC_LDCONFIG
 	bool "Link ldconfig statically"
 	depends on KEMBTK_UCLIBC_HAVE_SHARED
@@ -276,6 +302,28 @@ config KEMBTK_UCLIBC_LDSO_SEARCH_INTERP_PATH
 	  library search with /foo/boo/
 
 	  If unsure, simply say Y here.
+
+config KEMBTK_UCLIBC_LDSO_LD_LIBRARY_PATH
+	bool "Add LD_LIBRARY_PATH to lib search path"
+	depends on KEMBTK_UCLIBC_HAVE_SHARED
+	default y
+	help
+	  On hardened system it could be useful to disable the use of
+	  LD_LIBRARY_PATH environment variable (a colon-separated list of
+	  directories in which to search for ELF libraries at execution-time).
+
+	  If unsure, simply say Y here.
+
+config KEMBTK_UCLIBC_LDSO_NO_CLEANUP
+	bool "Disable automatic unloading of dynamically loaded shared objects"
+	depends on KEMBTK_UCLIBC_HAVE_SHARED
+	help
+	  If you need complete allocation traces when debugging memory leaks
+	  using Valgrind in a process that dynamically loads shared objects,
+	  then answer Y here. Unlike glibc, uClibc unloads all dynamically
+	  loaded shared objects when a process exits, which prevents Valgrind
+	  from correctly resolving the symbols from the unloaded shared objects.
+	  Unless you know you need this, you should answer N.
 
 config KEMBTK_UCLIBC_UCLIBC_CTOR_DTOR
 	bool "Support global constructors and destructors"
@@ -776,9 +824,18 @@ config KEMBTK_UCLIBC_UCLIBC_GRP_BUFFER_SIZE
 
 comment "Support various families of functions"
 
+config KEMBTK_UCLIBC_UCLIBC_LINUX_MODULE_26
+	bool "Linux kernel module functions (2.6)"
+	default y
+	help
+	  delete_module, init_module
+	  are used in linux for loadable kernel modules.
+
+	  Say N if you do not use kernel modules.
+
 config KEMBTK_UCLIBC_UCLIBC_LINUX_MODULE_24
 	bool "Linux kernel module functions"
-	default !(KEMBTK_UCLIBC_TARGET_bfin)
+	depends on !KEMBTK_UCLIBC_TARGET_bfin && !KEMBTK_UCLIBC_TARGET_c6x
 	help
 	  create_module, query_module
 	  are used in linux (prior to 2.6) for loadable kernel modules.
@@ -1009,6 +1066,20 @@ config KEMBTK_UCLIBC_UCLIBC_HAS_CRYPT_IMPL
 	help
 	  libcrypt contains crypt(), setkey() and encrypt()
 
+config KEMBTK_UCLIBC_UCLIBC_HAS_SHA256_CRYPT_IMPL
+	bool "libcrypt SHA256 support"
+	depends on KEMBTK_UCLIBC_UCLIBC_HAS_CRYPT_IMPL
+	help
+	  This adds support for SHA256 password hashing via the crypt() function.
+	  Say N here if you do not need SHA256 crypt support.
+
+config KEMBTK_UCLIBC_UCLIBC_HAS_SHA512_CRYPT_IMPL
+	bool "libcrypt SHA512 support"
+	depends on KEMBTK_UCLIBC_UCLIBC_HAS_CRYPT_IMPL
+	help
+	  This adds support for SHA512 password hashing via the crypt() function.
+	  Say N here if you do not need SHA512 crypt support.
+
 config KEMBTK_UCLIBC_UCLIBC_HAS_CRYPT_STUB
 	bool "libcrypt stubs"
 	default y
@@ -1136,6 +1207,18 @@ config KEMBTK_UCLIBC_UCLIBC_HAS_EXTRA_COMPAT_RES_STATE
 	help
 	  Answer Y if selecting KEMBTK_UCLIBC_UCLIBC_HAS_COMPAT_RES_STATE is not enough.
 	  As far as I can say, this should never be needed.
+
+config KEMBTK_UCLIBC_UCLIBC_HAS_RESOLVER_SUPPORT
+	bool "DNS resolver functions"
+	select KEMBTK_UCLIBC_UCLIBC_HAS_COMPAT_RES_STATE
+	depends on KEMBTK_UCLIBC_UCLIBC_HAS_IPV4 || KEMBTK_UCLIBC_UCLIBC_HAS_IPV6
+	default y
+	help
+	  Provide implementations for DNS resolver functions.
+	  In particular, the following functions will be added to the
+	  library:
+
+	  ns_get16, ns_get32, ns_put16, ns_put32
 
 config KEMBTK_UCLIBC_UCLIBC_HAS_LIBRESOLV_STUB
 	bool "Provide libresolv stub"
@@ -1525,7 +1608,7 @@ config KEMBTK_UCLIBC_UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION
 	  fflush function or to a file positioning function (fseek, fsetpos,
 	  or rewind), and input shall not be directly followed by output without
 	  an intervening call to a file positioning function, unless the input
-	  operation encounters end­of­file.
+	  operation encounters end of file.
 
 	  Most people will answer Y.
 
@@ -1545,6 +1628,15 @@ config KEMBTK_UCLIBC_UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE
 	  Answer Y to support a glibc extension to allow passing
 	  additional 'x' flag in the mode string for fopen() to specify that
 	  the file should be open()ed with the O_EXCL flag set.
+
+	  Most people will answer N.
+
+config KEMBTK_UCLIBC_UCLIBC_HAS_FOPEN_CLOSEEXEC_MODE
+	bool "Support an fopen() 'e' flag for close-on-exec mode (glibc-compat)"
+	help
+	  Answer Y to support a glibc extension to allow passing
+	  additional 'e' flag in the mode string for fopen() to specify that
+	  the file should be open()ed with the O_CLOEXEC flag set.
 
 	  Most people will answer N.
 

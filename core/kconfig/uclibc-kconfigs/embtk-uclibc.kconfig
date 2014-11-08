@@ -37,8 +37,8 @@ choice
 	help
 	 Which uClibc version to use.
 
-	config EMBTK_UCLIBC_VERSION_0_9_32
-		bool "uClibc-0.9.32"
+	config EMBTK_UCLIBC_VERSION_0_9_33_2
+		bool "uClibc-0.9.33.2"
 		select EMBTK_UCLIBC_NEED_PATCH
 	config EMBTK_UCLIBC_VERSION_GIT
 		bool "Use a branch of uClibc git repository"
@@ -48,7 +48,7 @@ endchoice
 
 config EMBTK_UCLIBC_VERSION_STRING
 	string
-	default "0.9.32"	if EMBTK_UCLIBC_VERSION_0_9_32
+	default "0.9.33.2"	if EMBTK_UCLIBC_VERSION_0_9_33_2
 	default "git"		if EMBTK_UCLIBC_VERSION_GIT
 
 config EMBTK_UCLIBC_REFSPEC
