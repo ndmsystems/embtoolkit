@@ -34,9 +34,9 @@ embtk_toolchain_has_llvm-y	:= $(or $(CONFIG_EMBTK_GCC_AND_LLVM_TOOLCHAIN),$(embt
 #
 # Compilers helper macros/variables
 #
-__embtk_clang-version		= "`$(1) --version 2>/dev/null | sed -e '2,$$d' -e 's/\(.*\) \((.*)\) \((.*)\)/\1/'`"
-__embtk_clang-git-version	= "`$(1) --version 2>/dev/null | sed -e '2,$$d' -e 's/\(.*\) \((.*)\) \((.*)\) \((.*)\)/\1 \4/'`"
-__embtk_gcc-version		= "`$(1) --version 2>/dev/null | sed -e '2,$$d' -e 's/\(.*\)-gcc[[:space:]]\(.*\)/gcc \2/'`"
+__embtk_clang-version		= $$($(1) --version 2>/dev/null | sed -e '2,$$d' -e 's/\(.*\) \((.*)\) \((.*)\)/\1/')
+__embtk_clang-git-version	= $$($(1) --version 2>/dev/null | sed -e '2,$$d' -e 's/\(.*\) \((.*)\) \((.*)\) \((.*)\)/\1 \4/')
+__embtk_gcc-version		= $$($(1) --version 2>/dev/null | sed -e '2,$$d' -e 's/\(.*\)-gcc[[:space:]]\(.*\)/gcc \2/')
 
 __embtk_hostcc-version		:= $(shell $(HOSTCC) --version 2>/dev/null | sed -e '2,$$d')
 embtk_hostcc_clang-y		:= $(if $(findstring clang,$(__embtk_hostcc-version)),y)
