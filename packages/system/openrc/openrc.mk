@@ -112,6 +112,20 @@ define __embtk_install_openrc_inittab
 	cat $(embtk_openrc_mk)/etc/inittab.reboot				\
 		>> $(embtk_rootfs)/etc/inittab
 endef
+
+__embtk_rootfs_builder     := $$USER@$$(uname -n) $$(date +%Y%m%d.%H%M%S.%Z)
+__embtk_rootfs_clibraryenv := $(call __embtk_pkg_name,$(embtk_clib)) v$(call __embtk_pkg_version,$(embtk_clib))
+__embtk_rootfs_xcompileenv  = $(embtk_targetcc_name-v)
+define __embtk_install_openrc_issue
+	cat $(embtk_openrc_mk)/etc/issue.linux |				\
+	sed	-e "s;{EMBTK_VERSION};$(EMBTK_VERSION);"			\
+		-e "s;{EMBTK_BUILDER};$(__embtk_rootfs_builder);"		\
+		-e "s;{EMBTK_XCOMPILE_ENV};$(__embtk_rootfs_xcompileenv);"	\
+		-e "s;{EMBTK_CLIBRARY_ENV};$(__embtk_rootfs_clibraryenv);"	\
+		>> $(embtk_rootfs)/etc/issue
+	chmod 0644 $(embtk_rootfs)/etc/issue
+endef
+
 define embtk_postinstall_openrc
 	$(__embtk_install_openrc_confd)
 	$(__embtk_install_openrc_inittab)
@@ -121,9 +135,7 @@ define embtk_postinstall_openrc
 		$(embtk_rootfs)/etc/defaultdomain || exit $$?
 	install -m 0644 $(embtk_openrc_mk)/etc/rc.conf				\
 		$(embtk_rootfs)/etc/rc.conf || exit $$?
-	$(if $(CONFIG_EMBTK_OS_LINUX),
-		install -m 0644 $(embtk_openrc_mk)/etc/issue.linux		\
-			$(embtk_rootfs)/etc/issue)
+	$(__embtk_install_openrc_issue)
 	$(call __embtk_install_openrc_runlevel,sysinit)
 	$(call __embtk_install_openrc_runlevel,boot)
 	$(call __embtk_install_openrc_runlevel,default)
