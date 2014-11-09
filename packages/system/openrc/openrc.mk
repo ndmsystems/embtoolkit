@@ -115,7 +115,7 @@ endef
 
 __embtk_rootfs_builder     := $$USER@$$(uname -n) $$(date +%Y%m%d.%H%M%S.%Z)
 __embtk_rootfs_clibraryenv := $(call __embtk_pkg_name,$(embtk_clib)) v$(call __embtk_pkg_version,$(embtk_clib))
-__embtk_rootfs_xcompileenv  = $(embtk_targetcc_name-v)
+__embtk_rootfs_xcompileenv  = $(embtk_targetcc_name-v) [$(embtk_host_uname)]
 define __embtk_install_openrc_issue
 	cat $(embtk_openrc_mk)/etc/issue.linux |				\
 	sed	-e "s;{EMBTK_VERSION};$(EMBTK_VERSION);"			\

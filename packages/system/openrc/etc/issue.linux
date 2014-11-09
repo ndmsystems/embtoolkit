@@ -17,5 +17,9 @@
                 888      888 888  888 Y88b 888 .d8""8b.                             
                 88888888 888 888  888  "Y88888 888  888                             
                                                                                     
-{{EMBTK_BUILDER} - {EMBTK_XCOMPILE_ENV} - {EMBTK_CLIBRARY_ENV}}
+{                                                                   
+      builder   : {EMBTK_BUILDER}
+      xcompiler : {EMBTK_XCOMPILE_ENV}
+      C library : {EMBTK_CLIBRARY_ENV}
+}                                                                   
 
