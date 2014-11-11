@@ -113,13 +113,24 @@ define __embtk_install_openrc_inittab
 		>> $(embtk_rootfs)/etc/inittab
 endef
 
+#
+# issue banner
+#
 __embtk_rootfs_builder     := $$USER@$$(uname -n) $$(date +%Y%m%d.%H%M%S.%Z)
-__embtk_rootfs_clibraryenv := $(call __embtk_pkg_name,$(embtk_clib)) v$(call __embtk_pkg_version,$(embtk_clib))
+__embtk_rootfs_archenv     := $(call embtk_ucase,$(LINUX_ARCH)) ($(EMBTK_MCU_FLAG))
+
+__embtk_rootfs_clibraryenv := $(call __embtk_pkg_name,$(embtk_clib)): {
+__embtk_rootfs_clibraryenv += version: $(call __embtk_pkg_version,$(embtk_clib)),
+__embtk_rootfs_clibraryenv += float: $(if $(CONFIG_EMBTK_SOFTFLOAT),Soft,Hard)
+__embtk_rootfs_clibraryenv += $(if $(GCC_WITH_FPU-y),$(embtk_comma) fpu: $(GCC_WITH_FPU-y))
+__embtk_rootfs_clibraryenv += $(if $(__xtools_env_abi),$(embtk_comma) abi: $(__xtools_env_abi))
+__embtk_rootfs_clibraryenv := $(strip $(__embtk_rootfs_clibraryenv)) }
+
 __embtk_rootfs_xcompileenv  = $(embtk_targetcc_name-v) [$(embtk_host_uname)]
 define __embtk_install_openrc_issue
 	cat $(embtk_openrc_mk)/etc/issue.linux |				\
-	sed	-e "s;{EMBTK_VERSION};$(EMBTK_VERSION);"			\
-		-e "s;{EMBTK_BUILDER};$(__embtk_rootfs_builder);"		\
+	sed	-e "s;{EMBTK_BUILDER};$(__embtk_rootfs_builder);"		\
+		-e "s;{EMBTK_ARCH};$(__embtk_rootfs_archenv);"			\
 		-e "s;{EMBTK_XCOMPILE_ENV};$(__embtk_rootfs_xcompileenv);"	\
 		-e "s;{EMBTK_CLIBRARY_ENV};$(__embtk_rootfs_clibraryenv);"	\
 		>> $(embtk_rootfs)/etc/issue
