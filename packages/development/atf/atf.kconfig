@@ -40,6 +40,15 @@ choice
 		bool "atf-0.20"
 endchoice
 
+if EMBTK_HAVE_ATF
+comment "atf options"
+
+config EMBTK_HAVE_ATF_WITH_SELFTESTS
+	bool "Install atf self testcases"
+	help
+	 Install atf self testcases in the generated root filesystem.
+endif
+
 config EMBTK_ATF_VERSION_STRING
 	string
 	default "0.20"	if EMBTK_ATF_VERSION_0_20

@@ -43,9 +43,12 @@ ATF_CONFIGURE_ENV	+= kyua_cv_getcwd_works=yes
 ATF_CONFIGURE_OPTS	:= --program-transform-name='s;$(STRICT_GNU_TARGET)-;;'
 
 define embtk_postinstall_atf
-	[ -e $(embtk_rootfs)/usr/share/atf ] || \
+	[ -e $(embtk_rootfs)/usr/share/atf ] ||					\
 		install -d $(embtk_rootfs)/usr/share/atf
 	cp -R $(embtk_sysroot)/usr/share/atf/* $(embtk_rootfs)/usr/share/atf
+	$(if $(CONFIG_EMBTK_HAVE_ATF_WITH_SELFTESTS),
+	[ -d $(embtk_rootfs)/usr/tests ] || install -d $(embtk_rootfs)/usr/tests
+	cp -R $(embtk_sysroot)/usr/tests/atf $(embtk_rootfs)/usr/tests)
 endef
 
 define embtk_cleanup_atf
