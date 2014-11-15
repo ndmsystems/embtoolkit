@@ -133,7 +133,7 @@ define __embtk_install_openrc_issue
 		-e "s;{EMBTK_ARCH};$(__embtk_rootfs_archenv);"			\
 		-e "s;{EMBTK_XCOMPILE_ENV};$(__embtk_rootfs_xcompileenv);"	\
 		-e "s;{EMBTK_CLIBRARY_ENV};$(__embtk_rootfs_clibraryenv);"	\
-		>> $(embtk_rootfs)/etc/issue
+		> $(embtk_rootfs)/etc/issue
 	chmod 0644 $(embtk_rootfs)/etc/issue
 endef
 
