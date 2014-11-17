@@ -36,7 +36,7 @@ config EMBTK_HOST_HAVE_CCACHE
 
 config EMBTK_CCACHE_HOST_VERSION_STRING
 	string
-	default "3.1.10"
+	default "3.2"
 
 config EMBTK_CCACHE_HOST_NOCCACHE
 	bool

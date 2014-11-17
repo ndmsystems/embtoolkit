@@ -29,7 +29,7 @@ CCACHE_DIR		:= $(EMBTK_ROOT)/.ccache
 CCACHE_BIN		:= $(embtk_htools)/usr/bin/ccache
 
 # Variables for use in env
-__ccache_clang_cflags	:= $(if $(embtk_hostcc_clang-y),-Qunused-arguments -fcolor-diagnostics)
+__ccache_clang_cflags	:= $(if $(embtk_hostcc_clang-y),-Qunused-arguments)
 __HOSTCC_CACHED		:= $(CCACHE_BIN) $(HOSTCC) $(__ccache_clang_cflags)
 HOSTCC_CACHED		:= "$(__HOSTCC_CACHED)"
 __HOSTCXX_CACHED	:= $(CCACHE_BIN) $(HOSTCXX) $(__ccache_clang_cflags)
