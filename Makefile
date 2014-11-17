@@ -23,7 +23,7 @@
 # \date         May 2009
 ################################################################################
 VERSION			:= 1
-PATCHLEVEL		:= 7
+PATCHLEVEL		:= 8
 SUBLEVEL		:= 0
 EXTRAVERSION		:=
 EMBTK_VERSION		:= 							\
