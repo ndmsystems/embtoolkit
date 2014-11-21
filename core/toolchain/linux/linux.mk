@@ -77,7 +77,7 @@ define embtk_install_linux
 	$(pembtk_linux_check_dotconfig)
 	$(if $(pembtk_linux_extsrc-y),$(pembtk_linux_check_extsrc))
 	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(pembtk_linux_srcdir)/.config
-	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) olddefconfig
+	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) silentoldconfig
 	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) $(J)
 	[ -e $(pembtk_linux_generated/boot) ] ||				\
 		install -d $(pembtk_linux_generated/boot)
