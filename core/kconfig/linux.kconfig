@@ -233,13 +233,13 @@ endif
 config EMBTK_LINUX_HAVE_MIRROR
 	bool "Use a linux mirror"
 	help
-		specify an alternate location where to download linux sources.
+	 specify an alternate location where to download linux sources.
 config EMBTK_LINUX_HAVE_MIRROR_SITE
 	depends on EMBTK_LINUX_HAVE_MIRROR
 	string "Mirror site"
 	default "ftp://ftp.embtoolkit.org/embtoolkit.org/packages-mirror"
 	help
-		specify an alternate location where to download linux sources
+	 specify an alternate location where to download linux sources
 
 config EMBTK_LINUX_NEED_PATCH
 	bool

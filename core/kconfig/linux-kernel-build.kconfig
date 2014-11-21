@@ -48,10 +48,17 @@ choice
 		 Select this option to use an external linux source tree.
 endchoice
 
+comment "Linux kernel image/modules build options"
+
 config EMBTK_LINUX_BUILD_EXTSRC
 	string "External linux source tree path"
 	depends on EMBTK_LINUX_BUILD_USE_EXTSRC
 	help
 	 Please specify your external linux source tree path.
 
+config EMBTK_LINUX_BUILD_EXTRACMD
+	string "Additional command line options"
+	help
+	 Here you can add additional command line options to pass to the linux
+	 build system while generating the kernel image.
 endmenu

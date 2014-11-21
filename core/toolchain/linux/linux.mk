@@ -35,6 +35,7 @@ pembtk_linux_dotconfig_f	:= $(call embtk_uquote,$(CONFIG_EMBTK_LINUX_DOTCONFIG))
 pembtk_linux_extsrc-y		:= $(CONFIG_EMBTK_LINUX_BUILD_USE_EXTSRC)
 pembtk_linux_srcdir		:= $(call embtk_uquote,$(or $(CONFIG_EMBTK_LINUX_BUILD_EXTSRC),$(LINUX_SRC_DIR)))
 pembtk_linux_modules-y		:= $(shell grep MODULES=y "$(pembtk_linux_dotconfig_f)" 2>/dev/null)
+pembtk_linux_extracmd		:= $(call embtk_uquote,$(CONFIG_EMBTK_LINUX_BUILD_EXTRACMD))
 
 define pembtk_linux_check_dotconfig
 	if [ "x" = "x$(pembtk_linux_dotconfig_f)" ]; then			\
@@ -78,14 +79,15 @@ define embtk_install_linux
 	$(if $(pembtk_linux_extsrc-y),$(pembtk_linux_check_extsrc))
 	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(pembtk_linux_srcdir)/.config
 	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) silentoldconfig
-	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) $(J)
+	$(MAKE) -C $(pembtk_linux_srcdir)					\
+		$(LINUX_MAKE_OPTS) $(pembtk_linux_extracmd) $(J)
 	[ -e $(pembtk_linux_generated/boot) ] ||				\
 		install -d $(pembtk_linux_generated/boot)
 	[ -e $(pembtk_linux_generated/boot/dts) ] ||				\
 		install -d $(pembtk_linux_generated/boot/dts)
 	cp $(pembtk_linux_srcdir)/vmlinux $(pembtk_linux_generated)
-	cd $(pembtk_linux_bootdir);						\
-	for b in $(pembtk_linux_bootfiles); do					\
+	cd $(pembtk_linux_bootdir); for b in $(pembtk_linux_bootfiles);		\
+	do									\
 		if [ -e $$b ]; then cp $$b $(pembtk_linux_generated/boot); fi;	\
 	done
 	for b in $$(ls $(pembtk_linux_bootdir)/dts/*.dtb 2>/dev/null);		\
