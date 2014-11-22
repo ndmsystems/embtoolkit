@@ -36,6 +36,7 @@ pembtk_linux_extsrc-y		:= $(CONFIG_EMBTK_LINUX_BUILD_USE_EXTSRC)
 pembtk_linux_srcdir		:= $(call embtk_uquote,$(or $(CONFIG_EMBTK_LINUX_BUILD_EXTSRC),$(LINUX_SRC_DIR)))
 pembtk_linux_modules-y		:= $(shell grep MODULES=y "$(pembtk_linux_dotconfig_f)" 2>/dev/null)
 pembtk_linux_extracmd		:= $(call embtk_uquote,$(CONFIG_EMBTK_LINUX_BUILD_EXTRACMD))
+pembtk_linux_extracmd		:= $(filer-out modules_install,$(pembtk_linux_extracmd)
 
 define pembtk_linux_check_dotconfig
 	if [ "x" = "x$(pembtk_linux_dotconfig_f)" ]; then			\
@@ -75,10 +76,7 @@ pembtk_linux_bootfiles		+= vmlinux.ecoff vmlinux.bin vmlinux.srec
 pembtk_linux_bootfiles		+= uImage.gz
 
 define embtk_install_linux
-	$(pembtk_linux_check_dotconfig)
-	$(if $(pembtk_linux_extsrc-y),$(pembtk_linux_check_extsrc))
-	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(pembtk_linux_srcdir)/.config
-	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) silentoldconfig
+	$(embtk_configure_linux)
 	$(MAKE) -C $(pembtk_linux_srcdir)					\
 		$(LINUX_MAKE_OPTS) $(pembtk_linux_extracmd) $(J)
 	[ -e $(pembtk_linux_generated/boot) ] ||				\
@@ -94,6 +92,13 @@ define embtk_install_linux
 	do									\
 		cp $$b $(pembtk_linux_generated/boot/dts);			\
 	done
+endef
+
+define embtk_configure_linux
+	$(pembtk_linux_check_dotconfig)
+	$(if $(pembtk_linux_extsrc-y),$(pembtk_linux_check_extsrc))
+	cp $(CONFIG_EMBTK_LINUX_DOTCONFIG) $(pembtk_linux_srcdir)/.config
+	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) silentoldconfig
 endef
 
 define embtk_cleanup_linux
@@ -116,16 +121,15 @@ LINUX_MODULES_KEEP_SRC_DIR  := $(LINUX_KEEP_SRC_DIR)
 LINUX_MODULES_DEPS := $(LINUX_DEPS)
 
 define embtk_install_linux_modules
+endef
+define embtk_postinstall_linux_modules
 	$(if $(pembtk_linux_modules-y),$(pembtk_install_linux_modules))
 endef
 define pembtk_install_linux_modules
 	$(call embtk_pinfo,"Install linux kernel modules...")
-	$(embtk_install_linux)
+	$(embtk_configure_linux)
 	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS)			\
 		INSTALL_MOD_PATH=$(embtk_rootfs) modules_install
-endef
-
-define embtk_postinstall_linux_modules
 	rm -rf $(embtk_rootfs)/lib/modules/*/build
 	rm -rf $(embtk_rootfs)/lib/modules/*/source
 endef
