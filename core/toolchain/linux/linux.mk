@@ -121,6 +121,7 @@ LINUX_MODULES_KEEP_SRC_DIR  := $(LINUX_KEEP_SRC_DIR)
 LINUX_MODULES_DEPS := $(LINUX_DEPS)
 
 define embtk_install_linux_modules
+	:
 endef
 define embtk_postinstall_linux_modules
 	$(if $(pembtk_linux_modules-y),$(pembtk_install_linux_modules))
