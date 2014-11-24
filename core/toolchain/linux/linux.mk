@@ -31,9 +31,10 @@ ifeq ($(embtk_buildhost_os),macos)
 LINUX_DEPS := libelf_host_install
 endif
 
-pembtk_linux_dotconfig_f	:= $(call embtk_uquote,$(CONFIG_EMBTK_LINUX_DOTCONFIG))
+pembtk_linux_dotconfig_f	:= $(call embtk_abspath,$(CONFIG_EMBTK_LINUX_DOTCONFIG))
 pembtk_linux_extsrc-y		:= $(CONFIG_EMBTK_LINUX_BUILD_USE_EXTSRC)
-pembtk_linux_srcdir		:= $(call embtk_uquote,$(or $(CONFIG_EMBTK_LINUX_BUILD_EXTSRC),$(LINUX_SRC_DIR)))
+pembtk_linux_extsrcdir		:= $(call embtk_abspath,$(CONFIG_EMBTK_LINUX_BUILD_EXTSRC))
+pembtk_linux_srcdir		:= $(or $(pembtk_linux_extsrcdir),$(LINUX_SRC_DIR))
 pembtk_linux_modules-y		:= $(shell grep MODULES=y "$(pembtk_linux_dotconfig_f)" 2>/dev/null)
 pembtk_linux_extracmd		:= $(call embtk_uquote,$(CONFIG_EMBTK_LINUX_BUILD_EXTRACMD))
 pembtk_linux_extracmd		:= $(filer-out modules_install,$(pembtk_linux_extracmd))
