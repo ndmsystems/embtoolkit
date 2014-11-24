@@ -122,6 +122,11 @@ define __embtk_ucase
 endef
 
 #
+# Macro to get path absolute name
+#
+embtk_abspath = $(abspath $(patsubst %/,%,$(call embtk_uquote,$(1))))
+
+#
 # Packages management macros
 #
 include core/mk/pkg-macros/vars.mk
