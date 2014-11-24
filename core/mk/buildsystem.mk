@@ -37,7 +37,7 @@ embtk_htools		:= $(embtk_generated)/host-tools-$(EMBTK_MCU_FLAG)
 embtk_toolsb		:= $(TOOLS_BUILD)
 embtk_pkgb		:= $(PACKAGES_BUILD)
 embtk_rootfs		:= $(embtk_generated)/rootfs-$(GNU_TARGET)-$(EMBTK_MCU_FLAG)
-__embtk_dldir		:= $(patsubst %/,%,$(call __embtk_mk_uquote,$(CONFIG_EMBTK_DOWNLOAD_DIR)))
+__embtk_dldir		:= $(call embtk_abspath,$(CONFIG_EMBTK_DOWNLOAD_DIR))
 embtk_dldir		:= $(or $(__embtk_dldir),$(EMBTK_ROOT)/dl)
 embtk_srcdir		:= $(EMBTK_ROOT)/src
 embtk_includedir	:= $(embtk_srcdir)/embtk/include
@@ -49,7 +49,7 @@ define __embtk_kconfig_buildrun
 		obj=$(EMBTK_ROOT)/scripts/kconfig				\
 		EMBTK_HOST_OS="$(embtk_buildhost_os)"				\
 		EMBTK_HOST_OSTYPE="$(embtk_buildhost_os_type)"			\
-		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
+		EMBTK_DEFAULT_DL="./dl"						\
 		EMBTK_VERSION=$(EMBTK_VERSION)					\
 		CONFIG_SHELL=$(CONFIG_EMBTK_SHELL)				\
 		quiet=quiet_ KBUILD_VERBOSE=0 $(1)
