@@ -128,7 +128,24 @@ choice
 		bool "linux-2.6.32.x"
 		help
 		 Use a linux-2.6.32.x version.
+	config EMBTK_LINUX_VERSION_GIT
+		bool "git"
+		help
+		 Use version from git repository.
 endchoice
+
+config EMBTK_LINUX_GIT_BRANCH
+	string "Branch to use"
+	default "master"
+	depends on EMBTK_LINUX_VERSION_GIT
+	help
+	 The branch of the git repository to use, the default is master.
+
+config EMBTK_LINUX_GIT_REVISION
+	string "Checkout a specific revision instead of the latest"
+	depends on EMBTK_LINUX_VERSION_GIT
+	help
+	 Chechout a specific revision instead of the latest.
 
 if EMBTK_LINUX_VERSION_3_16_X
 source core/kconfig/linux-kconfigs/linux-3.16.kconfig
