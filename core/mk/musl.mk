@@ -31,11 +31,16 @@ MUSL_PACKAGE		:= musl-$(MUSL_VERSION).tar.gz
 MUSL_SRC_DIR		:= $(embtk_toolsb)/musl-$(MUSL_VERSION)
 MUSL_BUILD_DIR		:= $(call __embtk_pkg_srcdir,musl)
 
-__embtk_musl_v	 = "$(MUSL_VERSION) -"
-__embtk_musl_v	+= "Cross Compiler $(embtk_targetcc_name-v) [$(embtk_host_uname)]"
+__embtk_musl_v = "$(MUSL_VERSION) -"
+__embtk_musl_v += "Cross Compiler $(embtk_targetcc_name-v) [$(embtk_host_uname)]"
+
+__embtk_musl_flags_flto := -flto=$(or $(CONFIG_EMBTK_NUMBER_BUILD_JOBS),1)
 
 __embtk_musl_cflags := $(TARGET_CFLAGS)
 __embtk_musl_cflags += $(if $(embtk_toolchain_use_llvm-y),-Wno-unknown-warning-option)
+__embtk_musl_cflags += $(__embtk_musl_flags_flto) -ffunction-sections
+
+__embtk_musl_ldflags := $(__embtk_musl_flags_flto) -Wl,--gc-sections
 
 define embtk_beforeinstall_musl
 	$(MAKE) -C $(MUSL_BUILD_DIR) distclean
@@ -43,6 +48,7 @@ define embtk_beforeinstall_musl
 		CC=$(TARGETCC_CACHED)						\
 		CROSS_COMPILE="$(CROSS_COMPILE)"				\
 		CFLAGS="$(__embtk_musl_cflags)"					\
+		LDFLAGS="$(__embtk_musl_ldflags)"				\
 		$(CONFIG_SHELL) $(MUSL_BUILD_DIR)/configure			\
 		--target=$(LINUX_ARCH) --host=$(LINUX_ARCH)			\
 		--disable-gcc-wrapper --enable-warnings				\
