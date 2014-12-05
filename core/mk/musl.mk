@@ -26,7 +26,7 @@
 MUSL_NAME		:= musl
 MUSL_VERSION		:= $(call embtk_get_pkgversion,musl)
 MUSL_SITE		:= http://www.musl-libc.org/releases
-MUSL_GIT_SITE		:= git://git.musl-libc.org/musl
+MUSL_GIT_SITE		:= ssh://ndl.ru/var/git/musl
 MUSL_PACKAGE		:= musl-$(MUSL_VERSION).tar.gz
 MUSL_SRC_DIR		:= $(embtk_toolsb)/musl-$(MUSL_VERSION)
 MUSL_BUILD_DIR		:= $(call __embtk_pkg_srcdir,musl)
@@ -39,16 +39,16 @@ __embtk_musl_cflags += $(if $(embtk_toolchain_use_llvm-y),-Wno-unknown-warning-o
 
 define embtk_beforeinstall_musl
 	$(MAKE) -C $(MUSL_BUILD_DIR) distclean
-	cd $(MUSL_SRC_DIR);							\
+	cd $(MUSL_BUILD_DIR);							\
 		CC=$(TARGETCC_CACHED)						\
 		CROSS_COMPILE="$(CROSS_COMPILE)"				\
 		CFLAGS="$(__embtk_musl_cflags)"					\
-		$(CONFIG_SHELL) $(MUSL_SRC_DIR)/configure			\
+		$(CONFIG_SHELL) $(MUSL_BUILD_DIR)/configure			\
 		--target=$(LINUX_ARCH) --host=$(LINUX_ARCH)			\
 		--disable-gcc-wrapper --enable-warnings				\
 		--prefix=/ --syslibdir=/$(LIBDIR) --libdir=/$(LIBDIR) 		\
 		--includedir=/usr/include
-		echo "$(__embtk_musl_v)" > $(MUSL_SRC_DIR)/VERSION
+		echo "$(__embtk_musl_v)" > $(MUSL_BUILD_DIR)/VERSION
 	$(call __embtk_setconfigured_pkg,musl)
 endef
 
