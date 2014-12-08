@@ -33,7 +33,7 @@ config EMBTK_NUMBER_BUILD_JOBS
 
 config EMBTK_DOWNLOAD_DIR
 	string "Download directory"
-	default $EMBTK_DEFAULT_DL
+	default "$(EMBTK_ROOT)/dl"
 	help
 	 Directory where downloaded packages are stored.
 
