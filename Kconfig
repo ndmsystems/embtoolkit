@@ -28,10 +28,6 @@ config EMBTK_DOTCONFIG
 	bool
 	default y
 
-config EMBTK_DEFAULT_DL
-	string
-	option env="EMBTK_DEFAULT_DL"
-
 config EMBTK_VERSION
 	string
 	option env="EMBTK_VERSION"

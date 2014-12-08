@@ -49,7 +49,6 @@ define __embtk_kconfig_buildrun
 		obj=$(EMBTK_ROOT)/scripts/kconfig				\
 		EMBTK_HOST_OS="$(embtk_buildhost_os)"				\
 		EMBTK_HOST_OSTYPE="$(embtk_buildhost_os_type)"			\
-		EMBTK_DEFAULT_DL="$(EMBTK_ROOT)/dl/"				\
 		EMBTK_VERSION=$(EMBTK_VERSION)					\
 		CONFIG_SHELL=$(CONFIG_EMBTK_SHELL)				\
 		quiet=quiet_ KBUILD_VERBOSE=0 $(1)
