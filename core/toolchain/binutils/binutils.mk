@@ -38,6 +38,8 @@ BINUTILS_CONFIGURE_OPTS	+= --disable-nls --disable-multilib
 BINUTILS_CONFIGURE_OPTS	+= --enable-gold --enable-plugins
 BINUTILS_CONFIGURE_OPTS	+= --target=$(STRICT_GNU_TARGET)
 
+BINUTILS_MAKE_OPTS	:= LDFLAGS="-all-static"
+
 BINUTILS_PREFIX		:= $(embtk_tools)
 
 define embtk_beforeinstall_binutils
@@ -54,6 +56,10 @@ define embtk_beforeinstall_binutils
 	sed -e 's/[[:space:]]@colophon/ @@colophon/'				\
 		-e 's/doc@cygnus.com/doc@@cygnus.com/'				\
 		< $$bfdtxi > $$bfdtxi.tmp; mv $$bfdtxi.tmp $$bfdtxi
+endef
+
+define embtk_postconfigure_binutils
+	$(MAKE) -C $(BINUTILS_BUILD_DIR) configure-host
 endef
 
 define embtk_install_binutils

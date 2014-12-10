@@ -120,6 +120,7 @@ define embtk_configure_pkg
 	$(__embtk_pkg_configureopts)
 	$(Q)$(call __embtk_setconfigured_pkg,$(1))
 	$(Q)$(call __embtk_kill_lt_rpath,$(__embtk_pkg_builddir))
+	$(embtk_postconfigure_$(1))
 endef
 
 #
@@ -159,6 +160,7 @@ define embtk_configure_hostpkg
 				$(__embtk_pkg_prefix),$(embtk_htools)/usr))	\
 	$(__embtk_pkg_configureopts)
 	$(Q)$(call __embtk_setconfigured_pkg,$(1))
+	$(embtk_postconfigure_$(1))
 endef
 
 #
