@@ -134,7 +134,7 @@ __embtk_hostpkg_rpathldflags	= "-Wl,-rpath,$(embtk_htools)/usr/lib"
 __embtk_hostpkg_rpath		= $(strip $(if $(__embtk_pkg_setrpath),		\
 					$(__embtk_hostpkg_rpathldflags)))
 
-__embtk_hostpkg_ldflags		= -L$(embtk_htools)/usr/lib -L/opt/local/lib $(__embtk_hostpkg_rpath)
+__embtk_hostpkg_ildflags	= -L$(embtk_htools)/usr/lib -L/opt/local/lib $(__embtk_hostpkg_rpath)
 __embtk_hostpkg_cppflags	= -I$(embtk_htools)/usr/include -I/opt/local/include
 define embtk_configure_hostpkg
 	$(if $(EMBTK_BUILDSYS_DEBUG),
@@ -147,7 +147,7 @@ define embtk_configure_hostpkg
 	CPPFLAGS="$(__embtk_pkg_cppflags) $(__embtk_hostpkg_cppflags)"		\
 	$(if $(__embtk_pkg_cflags),CFLAGS="$(__embtk_pkg_cflags)")		\
 	$(if $(__embtk_pkg_cxxflags),CXXFLAGS="$(__embtk_pkg_cxxflags)")	\
-	LDFLAGS="$(__embtk_hostpkg_ldflags)"					\
+	LDFLAGS="$(__embtk_hostpkg_ildflags) $(__embtk_hostpkg_ldflags)"	\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
 	PKG_CONFIG_PATH="$(EMBTK_HOST_PKG_CONFIG_PATH)"				\
 	$(if $(__embtk_pkg_noccache),,CC=$(HOSTCC_CACHED))			\
@@ -205,7 +205,7 @@ define embtk_wafconfigure_hostpkg
 	$(call __embtk_print_configure_opts,$(__embtk_pkg_configureopts))
 	$(Q)cd $(__embtk_pkg_srcdir);						\
 	CPPFLAGS="$(__embtk_hostpkg_cppflags)"					\
-	LDFLAGS="$(__embtk_hostpkg_ldflags)"					\
+	LDFLAGS="$(__embtk_hostpkg_ildflags) $(__embtk_hostpkg_ldflags)"	\
 	PKG_CONFIG="$(PKGCONFIG_BIN)"						\
 	PKG_CONFIG_PATH="$(EMBTK_HOST_PKG_CONFIG_PATH)"				\
 	$(if $(__embtk_pkg_noccache),,CC=$(HOSTCC_CACHED))			\
