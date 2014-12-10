@@ -128,6 +128,9 @@ __embtk_pkg_cppflags		= $(strip $($(PKGV)_CPPFLAGS))
 __embtk_pkg_cxxflags		= $(strip $($(PKGV)_CXXFLAGS))
 __embtk_pkg_ldflags		= $(strip $($(PKGV)_LDFLAGS))
 
+# Duplicating configure ldflags for host packages.
+__embtk_hostpkg_ldflags		= $(__embtk_pkg_ldflags)
+
 __embtk_pkg_noccache		= $(CONFIG_EMBTK_$(PKGV)_NOCCACHE)
 __embtk_pkg_scanbuild-y		= $(and $(CONFIG_EMBTK_$(PKGV)_USE_SCANBUILD),$(embtk_toolchain_has_llvm-y))
 __embtk_pkg_scanbuild		= $(if $(__embtk_pkg_scanbuild-y),$(TARGETSCANBUILD) -o $(__embtk_pkg_srcdir)-scanbuild-results)
