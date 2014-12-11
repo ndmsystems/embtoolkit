@@ -22,7 +22,7 @@
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
-mainmenu "Embedded systems toolkit - v$EMBTK_VERSION - configuration "
+mainmenu "Embedded systems toolkit - v$EMBTK_VERSION - configuration"
 
 config EMBTK_DOTCONFIG
 	bool
