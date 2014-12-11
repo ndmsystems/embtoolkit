@@ -12,3 +12,5 @@ generated/
 host-tools-*
 tools-*
 sysroot-*
+*~
+*.swp
