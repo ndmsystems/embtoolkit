@@ -1,0 +1,83 @@
+From 69b790c2f6e8e3dfb10c4175fe4d1d249a0aaf80 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Fri, 24 Jan 2014 14:23:37 +1030
+Subject: [PATCH 067/330] Fixes powerpc64le ld segfaults when --emit-relocs is
+ used.
+
+ELFv2 needs fewer relocs to annotate plt call stubs.  I correctly
+allocated a smaller buffer and wrote the proper relocs, but stupidly
+bumped the reloc count as for ELFv1.
+
+Also backport a couple of other minor fixes.
+
+	* elf64-ppc.c (ppc_build_one_stub): Correct reloc count passed
+	to get_relocs for ELFv2.
+	(STK_LINKER): Comment typo fix.
+
+	2013-12-16  Andreas Schwab  <schwab@suse.de>
+	* elf64-ppc.c (ppc64_elf_relocate_section): Add newline to error
+	message.
+---
+ bfd/ChangeLog   | 10 ++++++++++
+ bfd/elf64-ppc.c | 13 +++++++------
+ 2 files changed, 17 insertions(+), 6 deletions(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index 2918efe..af251c9 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,3 +1,13 @@
++2014-01-24  Alan Modra  <amodra@gmail.com>
++
++	* elf64-ppc.c (ppc_build_one_stub): Correct reloc count passed
++	to get_relocs for ELFv2.
++	(STK_LINKER): Comment typo fix.
++
++	2013-12-16  Andreas Schwab  <schwab@suse.de>
++	* elf64-ppc.c (ppc64_elf_relocate_section): Add newline to error
++	message.
++
+ 2013-12-20  Alan Modra  <amodra@gmail.com>
+ 
+ 	* elflink.c (_bfd_elf_merge_symbol): If merging a new weak
+diff --git a/bfd/elf64-ppc.c b/bfd/elf64-ppc.c
+index 96719a9..9e40fcf 100644
+--- a/bfd/elf64-ppc.c
++++ b/bfd/elf64-ppc.c
+@@ -134,7 +134,7 @@ static bfd_vma opd_entry_value
+ /* Offsets to some stack save slots.  */
+ #define STK_LR 16
+ #define STK_TOC(htab) (htab->opd_abi ? 40 : 24)
+-/* This one is dodgy.  ABIv2 does not have a linker word, so use the
++/* This one is dodgy.  ELFv2 does not have a linker word, so use the
+    CR save slot.  Used only by optimised __tls_get_addr call stub,
+    relying on __tls_get_addr_opt not saving CR..  */
+ #define STK_LINKER(htab) (htab->opd_abi ? 32 : 8)
+@@ -10751,10 +10751,11 @@ ppc_build_one_stub (struct bfd_hash_entry *gen_entry, void *in_arg)
+       if (info->emitrelocations)
+ 	{
+ 	  r = get_relocs (stub_entry->stub_sec,
+-			  (2
+-			   + (PPC_HA (off) != 0)
+-			   + (htab->plt_static_chain
+-			      && PPC_HA (off + 16) == PPC_HA (off))));
++			  ((PPC_HA (off) != 0)
++			   + (htab->opd_abi
++			      ? 2 + (htab->plt_static_chain
++				     && PPC_HA (off + 16) == PPC_HA (off))
++			      : 1)));
+ 	  if (r == NULL)
+ 	    return FALSE;
+ 	  r[0].r_offset = loc - stub_entry->stub_sec->contents;
+@@ -13653,7 +13654,7 @@ ppc64_elf_relocate_section (bfd *output_bfd,
+ 		{
+ 		  info->callbacks->einfo
+ 		    (_("%P: %H: call to `%T' lacks nop, can't restore toc; "
+-		       "recompile with -fPIC"),
++		       "recompile with -fPIC\n"),
+ 		     input_bfd, input_section, rel->r_offset, sym_name);
+ 
+ 		  bfd_set_error (bfd_error_bad_value);
+-- 
+2.0.3
+

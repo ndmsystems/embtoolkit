@@ -1,0 +1,74 @@
+From 44f814ce5066f10a3bed29c45d10e0d38f4fa433 Mon Sep 17 00:00:00 2001
+From: Marcus Shawcroft <marcus.shawcroft@arm.com>
+Date: Tue, 15 Apr 2014 17:46:07 +0100
+Subject: [PATCH 167/330] [AArch64] Fix off by one error in instruction
+ relaxation mask.
+
+The AArch64 TLSDESC to IE relaxation code uses a bit mask intended to
+ensure that destination register in a relaxed ldr instruction is
+always X0.  The mask has an off by one error resulting in the most
+significant bit of the destination register being retained in the
+relaxed instruction.  The issue generally appears when the compiler
+emits TLS accesses code under high register pressure resulting in a
+broken code sequence.
+---
+ bfd/ChangeLog                                | 4 ++++
+ bfd/elfnn-aarch64.c                          | 2 +-
+ ld/testsuite/ChangeLog                       | 5 +++++
+ ld/testsuite/ld-aarch64/tls-relax-gdesc-ie.s | 2 +-
+ 4 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index b8f896f..8e17da3 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,3 +1,7 @@
++2014-04-15  Marcus Shawcroft  <marcus.shawcroft@arm.com>
++
++	* (elfNN_aarch64_tls_relax): Fix instruction mask.
++
+ 2014-03-07  Michael Hudson-Doyle  <michael.hudson@linaro.org>
+ 	    Kugan Vivekanandarajah  <kugan.vivekanandarajah@linaro.org>
+ 
+diff --git a/bfd/elfnn-aarch64.c b/bfd/elfnn-aarch64.c
+index 42c83fb..8503419 100644
+--- a/bfd/elfnn-aarch64.c
++++ b/bfd/elfnn-aarch64.c
+@@ -3957,7 +3957,7 @@ elfNN_aarch64_tls_relax (struct elf_aarch64_link_hash_table *globals,
+ 	     ldr xd, [x0, #:tlsdesc_lo12:var] => ldr x0, [x0, #:gottprel_lo12:var]
+ 	   */
+ 	  insn = bfd_getl32 (contents + rel->r_offset);
+-	  insn &= 0xfffffff0;
++	  insn &= 0xffffffe0;
+ 	  bfd_putl32 (insn, contents + rel->r_offset);
+ 	  return bfd_reloc_continue;
+ 	}
+diff --git a/ld/testsuite/ChangeLog b/ld/testsuite/ChangeLog
+index e3de45e..7ac96ed 100644
+--- a/ld/testsuite/ChangeLog
++++ b/ld/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-04-15  Marcus Shawcroft  <marcus.shawcroft@arm.com>
++
++	* ld-aarch64/tls-relax-gdesc-ie.s (var): Adjust test case
++	to include all 5 bits of LDR destination register.
++
+ 2014-03-06  Roland McGrath  <mcgrathr@google.com>
+ 
+ 	* ld-arm/gc-hidden-1.d: Remove target, add not-target to match
+diff --git a/ld/testsuite/ld-aarch64/tls-relax-gdesc-ie.s b/ld/testsuite/ld-aarch64/tls-relax-gdesc-ie.s
+index c20690c..38b3721 100644
+--- a/ld/testsuite/ld-aarch64/tls-relax-gdesc-ie.s
++++ b/ld/testsuite/ld-aarch64/tls-relax-gdesc-ie.s
+@@ -4,7 +4,7 @@ var:
+ 	.word	2
+ 	.text
+ 	adrp	x0, :tlsdesc:var
+-	ldr	x1, [x0, #:tlsdesc_lo12:var]
++	ldr	x17, [x0, #:tlsdesc_lo12:var]
+ 	add	x0, x0, :tlsdesc_lo12:var
+ 	.tlsdesccall	var
+ 	blr	x1
+-- 
+2.0.3
+

@@ -1,0 +1,240 @@
+From da8e61c01a4442ad794975475c9ea06a77a536db Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Sat, 7 Jun 2014 12:09:04 +0930
+Subject: [PATCH 254/330] Allow both signed and unsigned fields in PowerPC
+ cmpli insn
+
+There are legitimate reasons to allow a signed value in a cmpli insn
+field, for example to test for a "stw r1,lock@sdarel(r13)" instruction
+in user code, a kernel might use
+	subis r3,r3,STW_R1_0R13@ha	# subtract off high part
+	cmplwi r3,lock@sdarel		# is low part accessing lock?
+Since the lock@sdarel may take a range of -32768 to 32767,
+the allowed range of cmpli immediate must be at least [-32768,65535].
+
+bfd/
+	* elf32-ppc.c (ppc_elf_relocate_section): Treat field of cmpli
+	insn as a bitfield; Use complain_overflow_bitfield.
+	* elf64-ppc.c (ppc64_elf_relocate_section): Likewise.
+opcodes/
+	* ppc-opc.c (UISIGNOPT): Define and use with cmpli.
+gas/
+	* config/tc-ppc.c (ppc_insert_operand): Handle PPC_OPERAND_SIGNOPT
+	on unsigned fields.  Comment on PPC_OPERAND_SIGNOPT signed fields
+	in 64-bit mode.
+gold/
+	* powerpc.cc (relocate): Treat field of cmpli insn as a bitfield.
+---
+ bfd/ChangeLog       |  5 +++++
+ bfd/elf32-ppc.c     |  9 +++++----
+ bfd/elf64-ppc.c     | 17 +++++++++--------
+ gas/ChangeLog       |  8 ++++++++
+ gas/config/tc-ppc.c | 19 ++++++++++++++++---
+ gold/ChangeLog      |  3 +++
+ gold/powerpc.cc     | 17 +++++++++--------
+ opcodes/ChangeLog   |  6 ++++++
+ opcodes/ppc-opc.c   | 13 ++++++++-----
+ 9 files changed, 69 insertions(+), 28 deletions(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index e211161..10702f2 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,6 +1,11 @@
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Backport mainline patches
++	2014-06-07  Alan Modra  <amodra@gmail.com>
++	* elf32-ppc.c (ppc_elf_relocate_section): Treat field of cmpli
++	insn as a bitfield; Use complain_overflow_bitfield.
++	* elf64-ppc.c (ppc64_elf_relocate_section): Likewise.
++
+ 	2014-06-03  Alan Modra  <amodra@gmail.com>
+ 	* elf64-ppc.c (ADDIS_R12_R2): Define.
+ 	(build_plt_stub): Support fusion on ELFv2 stub.
+diff --git a/bfd/elf32-ppc.c b/bfd/elf32-ppc.c
+index 14083b9..75fcf6e 100644
+--- a/bfd/elf32-ppc.c
++++ b/bfd/elf32-ppc.c
+@@ -9136,10 +9136,11 @@ ppc_elf_relocate_section (bfd *output_bfd,
+ 	      unsigned int insn;
+ 
+ 	      insn = bfd_get_32 (input_bfd, contents + (rel->r_offset & ~3));
+-	      if ((insn & (0x3f << 26)) == 28u << 26 /* andi */
+-		  || (insn & (0x3f << 26)) == 24u << 26 /* ori */
+-		  || (insn & (0x3f << 26)) == 26u << 26 /* xori */
+-		  || (insn & (0x3f << 26)) == 10u << 26 /* cmpli */)
++	      if ((insn & (0x3f << 26)) == 10u << 26 /* cmpli */)
++		complain = complain_overflow_bitfield;
++	      else if ((insn & (0x3f << 26)) == 28u << 26 /* andi */
++		       || (insn & (0x3f << 26)) == 24u << 26 /* ori */
++		       || (insn & (0x3f << 26)) == 26u << 26 /* xori */)
+ 		complain = complain_overflow_unsigned;
+ 	    }
+ 	  if (howto->complain_on_overflow != complain)
+diff --git a/bfd/elf64-ppc.c b/bfd/elf64-ppc.c
+index 6cd1302..b3466d7 100644
+--- a/bfd/elf64-ppc.c
++++ b/bfd/elf64-ppc.c
+@@ -14592,14 +14592,15 @@ ppc64_elf_relocate_section (bfd *output_bfd,
+ 	  enum complain_overflow complain = complain_overflow_signed;
+ 
+ 	  insn = bfd_get_32 (input_bfd, contents + (rel->r_offset & ~3));
+-	  if (howto->rightshift == 0
+-	      ? ((insn & (0x3f << 26)) == 28u << 26 /* andi */
+-		 || (insn & (0x3f << 26)) == 24u << 26 /* ori */
+-		 || (insn & (0x3f << 26)) == 26u << 26 /* xori */
+-		 || (insn & (0x3f << 26)) == 10u << 26 /* cmpli */)
+-	      : ((insn & (0x3f << 26)) == 29u << 26 /* andis */
+-		 || (insn & (0x3f << 26)) == 25u << 26 /* oris */
+-		 || (insn & (0x3f << 26)) == 27u << 26 /* xoris */))
++	  if ((insn & (0x3f << 26)) == 10u << 26 /* cmpli */)
++	    complain = complain_overflow_bitfield;
++	  else if (howto->rightshift == 0
++		   ? ((insn & (0x3f << 26)) == 28u << 26 /* andi */
++		      || (insn & (0x3f << 26)) == 24u << 26 /* ori */
++		      || (insn & (0x3f << 26)) == 26u << 26 /* xori */)
++		   : ((insn & (0x3f << 26)) == 29u << 26 /* andis */
++		      || (insn & (0x3f << 26)) == 25u << 26 /* oris */
++		      || (insn & (0x3f << 26)) == 27u << 26 /* xoris */))
+ 	    complain = complain_overflow_unsigned;
+ 	  if (howto->complain_on_overflow != complain)
+ 	    {
+diff --git a/gas/ChangeLog b/gas/ChangeLog
+index 7d8c1d9..cbdf74f 100644
+--- a/gas/ChangeLog
++++ b/gas/ChangeLog
+@@ -1,3 +1,11 @@
++2014-06-12  Alan Modra  <amodra@gmail.com>
++
++	Backport mainline patches
++	2014-06-07  Alan Modra  <amodra@gmail.com>
++	* config/tc-ppc.c (ppc_insert_operand): Handle PPC_OPERAND_SIGNOPT
++	on unsigned fields.  Comment on PPC_OPERAND_SIGNOPT signed fields
++	in 64-bit mode.
++
+ 2014-04-16  Alan Modra  <amodra@gmail.com>
+ 
+ 	Apply mainline patches for ppc476 workaround
+diff --git a/gas/config/tc-ppc.c b/gas/config/tc-ppc.c
+index 07d89ca..6c3c103 100644
+--- a/gas/config/tc-ppc.c
++++ b/gas/config/tc-ppc.c
+@@ -1788,10 +1788,23 @@ ppc_insert_operand (unsigned long insn,
+   right = max & -max;
+   min = 0;
+ 
+-  if ((operand->flags & PPC_OPERAND_SIGNED) != 0)
++  if ((operand->flags & PPC_OPERAND_SIGNOPT) != 0)
++    {
++      /* Extend the allowed range for addis to [-65536, 65535].
++	 Similarly for some VLE high part insns.  For 64-bit it
++	 would be good to disable this for signed fields since the
++	 value is sign extended into the high 32 bits of the register.
++	 If the value is, say, an address, then we might care about
++	 the high bits.  However, gcc as of 2014-06 uses unsigned
++	 values when loading the high part of 64-bit constants using
++	 lis.
++	 Use the same extended range for cmpli, to allow at least
++	 [-32768, 65535].  */
++      min = ~max & -right;
++    }
++  else if ((operand->flags & PPC_OPERAND_SIGNED) != 0)
+     {
+-      if ((operand->flags & PPC_OPERAND_SIGNOPT) == 0)
+-	max = (max >> 1) & -right;
++      max = (max >> 1) & -right;
+       min = ~max & -right;
+     }
+ 
+diff --git a/gold/ChangeLog b/gold/ChangeLog
+index 8143675..9e4b966 100644
+--- a/gold/ChangeLog
++++ b/gold/ChangeLog
+@@ -1,6 +1,9 @@
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Backport mainline patches
++	2014-06-07  Alan Modra  <amodra@gmail.com>
++	* powerpc.cc (relocate): Treat field of cmpli insn as a bitfield.
++
+ 	2014-06-03  Alan Modra  <amodra@gmail.com>
+ 	* powerpc.cc (addis_12_2): Define.
+ 	(Stub_table::do_write): Support fusion on ELFv2 stubs.
+diff --git a/gold/powerpc.cc b/gold/powerpc.cc
+index 84fb8f9..b93e797 100644
+--- a/gold/powerpc.cc
++++ b/gold/powerpc.cc
+@@ -7398,14 +7398,15 @@ Target_powerpc<size, big_endian>::Relocate::relocate(
+       Insn insn = elfcpp::Swap<32, big_endian>::readval(iview);
+ 
+       overflow = Reloc::CHECK_SIGNED;
+-      if (overflow == Reloc::CHECK_LOW_INSN
+-	  ? ((insn & (0x3f << 26)) == 28u << 26 /* andi */
+-	     || (insn & (0x3f << 26)) == 24u << 26 /* ori */
+-	     || (insn & (0x3f << 26)) == 26u << 26 /* xori */
+-	     || (insn & (0x3f << 26)) == 10u << 26 /* cmpli */)
+-	  : ((insn & (0x3f << 26)) == 29u << 26 /* andis */
+-	     || (insn & (0x3f << 26)) == 25u << 26 /* oris */
+-	     || (insn & (0x3f << 26)) == 27u << 26 /* xoris */))
++      if ((insn & (0x3f << 26)) == 10u << 26 /* cmpli */)
++	overflow = Reloc::CHECK_BITFIELD;
++      else if (overflow == Reloc::CHECK_LOW_INSN
++	       ? ((insn & (0x3f << 26)) == 28u << 26 /* andi */
++		  || (insn & (0x3f << 26)) == 24u << 26 /* ori */
++		  || (insn & (0x3f << 26)) == 26u << 26 /* xori */)
++	       : ((insn & (0x3f << 26)) == 29u << 26 /* andis */
++		  || (insn & (0x3f << 26)) == 25u << 26 /* oris */
++		  || (insn & (0x3f << 26)) == 27u << 26 /* xoris */))
+ 	overflow = Reloc::CHECK_UNSIGNED;
+     }
+ 
+diff --git a/opcodes/ChangeLog b/opcodes/ChangeLog
+index 041a5af..2a05d31 100644
+--- a/opcodes/ChangeLog
++++ b/opcodes/ChangeLog
+@@ -1,3 +1,9 @@
++2014-06-12  Alan Modra  <amodra@gmail.com>
++
++	Backport mainline patches
++	2014-06-07  Alan Modra  <amodra@gmail.com>
++	* ppc-opc.c (UISIGNOPT): Define and use with cmpli.
++
+ 2014-03-26  Jiong Wang  <jiong.wang@arm.com>
+ 
+ 	* aarch64-dis.c (aarch64_ext_ldst_elemlist): Check H/S undefined
+diff --git a/opcodes/ppc-opc.c b/opcodes/ppc-opc.c
+index 82f4f12..258d757 100644
+--- a/opcodes/ppc-opc.c
++++ b/opcodes/ppc-opc.c
+@@ -656,8 +656,11 @@ const struct powerpc_operand powerpc_operands[] =
+ #define UI TO + 1
+   { 0xffff, 0, NULL, NULL, 0 },
+ 
++#define UISIGNOPT UI + 1
++  { 0xffff, 0, NULL, NULL, PPC_OPERAND_SIGNOPT },
++
+   /* The IMM field in an SE_IM5 instruction.  */
+-#define UI5 UI + 1
++#define UI5 UISIGNOPT + 1
+   { 0x1f, 4, NULL, NULL, 0 },
+ 
+   /* The OIMM field in an SE_OIM5 instruction.  */
+@@ -3502,10 +3505,10 @@ const struct powerpc_opcode powerpc_opcodes[] = {
+ 
+ {"dozi",	OP(9),		OP_MASK,     M601,	PPCNONE,	{RT, RA, SI}},
+ 
+-{"cmplwi",	OPL(10,0),	OPL_MASK,    PPCCOM,	PPCNONE,	{OBF, RA, UI}},
+-{"cmpldi",	OPL(10,1),	OPL_MASK,    PPC64,	PPCNONE,	{OBF, RA, UI}},
+-{"cmpli",	OP(10),		OP_MASK,     PPC,	PPCNONE,	{BF, L, RA, UI}},
+-{"cmpli",	OP(10),		OP_MASK,     PWRCOM,	PPC,		{BF, RA, UI}},
++{"cmplwi",	OPL(10,0),	OPL_MASK,    PPCCOM,	PPCNONE,	{OBF, RA, UISIGNOPT}},
++{"cmpldi",	OPL(10,1),	OPL_MASK,    PPC64,	PPCNONE,	{OBF, RA, UISIGNOPT}},
++{"cmpli",	OP(10),		OP_MASK,     PPC,	PPCNONE,	{BF, L, RA, UISIGNOPT}},
++{"cmpli",	OP(10),		OP_MASK,     PWRCOM,	PPC,		{BF, RA, UISIGNOPT}},
+ 
+ {"cmpwi",	OPL(11,0),	OPL_MASK,    PPCCOM,	PPCNONE,	{OBF, RA, SI}},
+ {"cmpdi",	OPL(11,1),	OPL_MASK,    PPC64,	PPCNONE,	{OBF, RA, SI}},
+-- 
+2.0.3
+

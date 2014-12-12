@@ -1,0 +1,81 @@
+From 3c24c443ac6d3c0d774f5bc04a73f469ccfdf00d Mon Sep 17 00:00:00 2001
+From: Christophe Lyon <christophe.lyon@st.com>
+Date: Tue, 14 Jan 2014 15:53:50 +0100
+Subject: [PATCH 118/330] 2014-03-07  Michael Hudson-Doyle 
+ <michael.hudson@linaro.org> 	    Kugan Vivekanandarajah 
+ <kugan.vivekanandarajah@linaro.org>
+
+	bfd/
+	* elfnn-aarch64.c (elfNN_aarch64_final_link_relocate): Use correct
+	offset while calculating relocation address.
+	(elfNN_aarch64_create_small_pltn_entry): Likewise.
+	(elfNN_aarch64_init_small_plt0_entry): Likewise.
+
+ (cherry-pick from commit f44a1f8e513b37bcc52ba9ea0c172c3e94852756)
+---
+ bfd/ChangeLog       | 8 ++++++++
+ bfd/elfnn-aarch64.c | 9 ++++-----
+ 2 files changed, 12 insertions(+), 5 deletions(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index ee61788..b8f896f 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,3 +1,11 @@
++2014-03-07  Michael Hudson-Doyle  <michael.hudson@linaro.org>
++	    Kugan Vivekanandarajah  <kugan.vivekanandarajah@linaro.org>
++
++	* elfnn-aarch64.c (elfNN_aarch64_final_link_relocate): Use correct
++	offset while calculating relocation address.
++	(elfNN_aarch64_create_small_pltn_entry): Likewise.
++	(elfNN_aarch64_init_small_plt0_entry): Likewise.
++
+ 2014-02-28  Alan Modra  <amodra@gmail.com>
+ 
+ 	PR ld/16643
+diff --git a/bfd/elfnn-aarch64.c b/bfd/elfnn-aarch64.c
+index 9053635..42c83fb 100644
+--- a/bfd/elfnn-aarch64.c
++++ b/bfd/elfnn-aarch64.c
+@@ -3844,7 +3844,7 @@ elfNN_aarch64_final_link_relocate (reloc_howto_type *howto,
+ 
+       value = (symbol_got_offset (input_bfd, h, r_symndx)
+ 	       + globals->root.sgot->output_section->vma
+-	       + globals->root.sgot->output_section->output_offset);
++	       + globals->root.sgot->output_offset);
+ 
+       value = _bfd_aarch64_elf_resolve_relocation (bfd_r_type, place, value,
+ 						   0, weak_undef_p);
+@@ -3873,10 +3873,9 @@ elfNN_aarch64_final_link_relocate (reloc_howto_type *howto,
+     case BFD_RELOC_AARCH64_TLSDESC_LDR:
+       if (globals->root.sgot == NULL)
+ 	return bfd_reloc_notsupported;
+-
+       value = (symbol_tlsdesc_got_offset (input_bfd, h, r_symndx)
+ 	       + globals->root.sgotplt->output_section->vma
+-	       + globals->root.sgotplt->output_section->output_offset
++	       + globals->root.sgotplt->output_offset
+ 	       + globals->sgotplt_jump_table_size);
+ 
+       value = _bfd_aarch64_elf_resolve_relocation (bfd_r_type, place, value,
+@@ -6652,7 +6651,7 @@ elfNN_aarch64_create_small_pltn_entry (struct elf_link_hash_entry *h,
+ 
+   plt_entry = plt->contents + h->plt.offset;
+   plt_entry_address = plt->output_section->vma
+-    + plt->output_section->output_offset + h->plt.offset;
++    + plt->output_offset + h->plt.offset;
+   gotplt_entry_address = gotplt->output_section->vma +
+     gotplt->output_offset + got_offset;
+ 
+@@ -6959,7 +6958,7 @@ elfNN_aarch64_init_small_plt0_entry (bfd *output_bfd ATTRIBUTE_UNUSED,
+ 		  + GOT_ENTRY_SIZE * 2);
+ 
+   plt_base = htab->root.splt->output_section->vma +
+-    htab->root.splt->output_section->output_offset;
++    htab->root.splt->output_offset;
+ 
+   /* Fill in the top 21 bits for this: ADRP x16, PLT_GOT + n * 8.
+      ADRP:   ((PG(S+A)-PG(P)) >> 12) & 0x1fffff */
+-- 
+2.0.3
+

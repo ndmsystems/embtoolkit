@@ -1,0 +1,78 @@
+From 1bc232742451359cdbb73b2084b31e096dc815b1 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Fri, 21 Feb 2014 10:18:01 +1030
+Subject: [PATCH 172/330] Add ppc476 workaround bootstrap test
+
+I was running this by hand to test out --ppc476-workaround.  Another
+bootstrap test doesn't take all that long, so let's add it to the
+testsuite.
+
+	* ld-bootstrap/bootstrap.exp: Add ppc476 workaround test.
+	* ld-bootstrap/ppc476.t: New file.
+---
+ ld/testsuite/ChangeLog                  |  5 +++++
+ ld/testsuite/ld-bootstrap/bootstrap.exp | 12 ++++++++++--
+ ld/testsuite/ld-bootstrap/ppc476.t      |  7 +++++++
+ 3 files changed, 22 insertions(+), 2 deletions(-)
+ create mode 100644 ld/testsuite/ld-bootstrap/ppc476.t
+
+diff --git a/ld/testsuite/ChangeLog b/ld/testsuite/ChangeLog
+index 7ac96ed..c1aa618 100644
+--- a/ld/testsuite/ChangeLog
++++ b/ld/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-04-16  Alan Modra  <amodra@gmail.com>
++
++	* ld-bootstrap/bootstrap.exp: Add ppc476 workaround test.
++	* ld-bootstrap/ppc476.t: New file.
++
+ 2014-04-15  Marcus Shawcroft  <marcus.shawcroft@arm.com>
+ 
+ 	* ld-aarch64/tls-relax-gdesc-ie.s (var): Adjust test case
+diff --git a/ld/testsuite/ld-bootstrap/bootstrap.exp b/ld/testsuite/ld-bootstrap/bootstrap.exp
+index 1893873..bf38000 100644
+--- a/ld/testsuite/ld-bootstrap/bootstrap.exp
++++ b/ld/testsuite/ld-bootstrap/bootstrap.exp
+@@ -49,9 +49,13 @@ if [check_plugin_api_available] {
+ # order to test -r.  Then link the result into an executable, ld1, to
+ # really test -r.  Use ld1 to link a fresh ld, ld2.  Use ld2 to link a
+ # new ld, ld3.  ld2 and ld3 should be identical.
++set test_flags {"" "strip" "--static" "--traditional-format"
++		"--no-keep-memory" "--relax"}
++if { [istarget "powerpc-*-*"] } {
++    lappend test_flags "--ppc476-workaround"
++}
+ 
+-foreach flags {"" "strip" "--static" "--traditional-format"
+-	       "--no-keep-memory" "--relax"} {
++foreach flags $test_flags {
+     set do_strip "no"
+     if {"$flags" == "strip"} { 
+ 	set testname "bootstrap with $flags"
+@@ -69,6 +73,10 @@ foreach flags {"" "strip" "--static" "--traditional-format"
+ 	set partial_flags ""
+     }
+ 
++    if { $partial_flags == "--ppc476-workaround" } {
++	append partial_flags " -T $srcdir/$subdir/ppc476.t"
++    }
++
+     # This test can only be run if we have the ld build directory,
+     # since we need the object files.
+     if {$ld != "$objdir/ld-new"} {
+diff --git a/ld/testsuite/ld-bootstrap/ppc476.t b/ld/testsuite/ld-bootstrap/ppc476.t
+new file mode 100644
+index 0000000..46ab8a7
+--- /dev/null
++++ b/ld/testsuite/ld-bootstrap/ppc476.t
+@@ -0,0 +1,7 @@
++SECTIONS
++{
++  .text : ALIGN (4096)
++  {
++    *(.text .text.* .gnu.linkonce.t*)
++  }
++}
+-- 
+2.0.3
+

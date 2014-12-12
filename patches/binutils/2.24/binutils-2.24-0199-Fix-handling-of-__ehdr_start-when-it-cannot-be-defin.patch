@@ -1,0 +1,935 @@
+From 367f1035d2f7da6fbad69f659208bdb7da3d55dc Mon Sep 17 00:00:00 2001
+From: Cary Coutant <ccoutant@google.com>
+Date: Wed, 2 Apr 2014 14:21:14 -0700
+Subject: [PATCH 199/330] Fix handling of __ehdr_start when it cannot be
+ defined.
+
+gold/
+	* defstd.cc (in_segment): Define __ehdr_start here...
+	* layout.cc (Layout::finalize): ...Instead of here.  Set the
+	output segment when known.
+	* resolve.cc (Symbol::override_base_with_special): Remember
+	the original binding.
+	* symtab.cc (Symbol::set_output_segment): New function.
+	(Symbol::set_undefined): New function.
+	* symtab.h (Symbol::is_weak_undefined): Check original undef
+	binding.
+	(Symbol::is_strong_undefined): New function.
+	(Symbol::set_output_segment): New function.
+	(Symbol::set_undefined): New function.
+	* target-reloc.h (is_strong_undefined): Remove.
+	(issue_undefined_symbol_error): Call Symbol::is_weak_undefined.
+	Check for hidden undefs.
+	(relocate_section): Call Symbol::is_strong_undefined.
+
+	* testsuite/Makefile.am (ehdr_start_test_1)
+	(ehdr_start_test_2, ehdr_start_test_3)
+	(ehdr_start_test_4, ehdr_start_test_5): New test cases.
+	* testsuite/Makefile.in: Regenerate.
+	* testsuite/ehdr_start_def.cc: New source file.
+	* testsuite/ehdr_start_test.cc: New source file.
+	* testsuite/ehdr_start_test.t: New linker script.
+	* testsuite/ehdr_start_test_4.sh: New shell script.
+---
+ gold/ChangeLog                      |  28 +++++
+ gold/defstd.cc                      |  14 +++
+ gold/layout.cc                      |  14 ++-
+ gold/resolve.cc                     |   4 +
+ gold/symtab.cc                      |  25 ++++
+ gold/symtab.h                       |  34 +++++-
+ gold/target-reloc.h                 |   8 +-
+ gold/testsuite/Makefile.am          |  44 +++++++
+ gold/testsuite/Makefile.in          | 223 ++++++++++++++++++++++++++++++++----
+ gold/testsuite/ehdr_start_def.cc    |  26 +++++
+ gold/testsuite/ehdr_start_test.cc   |  67 +++++++++++
+ gold/testsuite/ehdr_start_test.t    |  42 +++++++
+ gold/testsuite/ehdr_start_test_4.sh |  40 +++++++
+ 13 files changed, 532 insertions(+), 37 deletions(-)
+ create mode 100644 gold/testsuite/ehdr_start_def.cc
+ create mode 100644 gold/testsuite/ehdr_start_test.cc
+ create mode 100644 gold/testsuite/ehdr_start_test.t
+ create mode 100755 gold/testsuite/ehdr_start_test_4.sh
+
+diff --git a/gold/ChangeLog b/gold/ChangeLog
+index cf40e42..e067ee9 100644
+--- a/gold/ChangeLog
++++ b/gold/ChangeLog
+@@ -1,3 +1,31 @@
++2014-05-02  Cary Coutant  <ccoutant@google.com>
++
++    	* defstd.cc (in_segment): Define __ehdr_start here...
++    	* layout.cc (Layout::finalize): ...Instead of here.  Set the
++    	output segment when known.
++    	* resolve.cc (Symbol::override_base_with_special): Remember
++    	the original binding.
++    	* symtab.cc (Symbol::set_output_segment): New function.
++    	(Symbol::set_undefined): New function.
++    	* symtab.h (Symbol::is_weak_undefined): Check original undef
++    	binding.
++    	(Symbol::is_strong_undefined): New function.
++    	(Symbol::set_output_segment): New function.
++    	(Symbol::set_undefined): New function.
++    	* target-reloc.h (is_strong_undefined): Remove.
++    	(issue_undefined_symbol_error): Call Symbol::is_weak_undefined.
++    	Check for hidden undefs.
++    	(relocate_section): Call Symbol::is_strong_undefined.
++    
++    	* testsuite/Makefile.am (ehdr_start_test_1)
++    	(ehdr_start_test_2, ehdr_start_test_3)
++    	(ehdr_start_test_4, ehdr_start_test_5): New test cases.
++    	* testsuite/Makefile.in: Regenerate.
++    	* testsuite/ehdr_start_def.cc: New source file.
++    	* testsuite/ehdr_start_test.cc: New source file.
++    	* testsuite/ehdr_start_test.t: New linker script.
++    	* testsuite/ehdr_start_test_4.sh: New shell script.
++
+ 2014-04-23  Cary Coutant  <ccoutant@google.com>
+ 
+ 	PR gold/16870
+diff --git a/gold/defstd.cc b/gold/defstd.cc
+index a7a57e4..9096736 100644
+--- a/gold/defstd.cc
++++ b/gold/defstd.cc
+@@ -141,6 +141,20 @@ const Define_symbol_in_segment in_segment[] =
+     true			// only_if_ref
+   },
+   {
++    "__ehdr_start",		// name
++    elfcpp::PT_LOAD,		// segment_type
++    elfcpp::PF(0),		// segment_flags_set
++    elfcpp::PF(0),		// segment_flags_clear
++    0,				// value
++    0,				// size
++    elfcpp::STT_NOTYPE,		// type
++    elfcpp::STB_GLOBAL,		// binding
++    elfcpp::STV_HIDDEN,		// visibility
++    0,				// nonvis
++    Symbol::SEGMENT_START,	// offset_from_base
++    true			// only_if_ref
++  },
++  {
+     "etext",			// name
+     elfcpp::PT_LOAD,		// segment_type
+     elfcpp::PF_X,		// segment_flags_set
+diff --git a/gold/layout.cc b/gold/layout.cc
+index 38fd272..7d977fe 100644
+--- a/gold/layout.cc
++++ b/gold/layout.cc
+@@ -2744,12 +2744,14 @@ Layout::finalize(const Input_objects* input_objects, Symbol_table* symtab,
+   // If there is a load segment that contains the file and program headers,
+   // provide a symbol __ehdr_start pointing there.
+   // A program can use this to examine itself robustly.
+-  if (load_seg != NULL)
+-    symtab->define_in_output_segment("__ehdr_start", NULL,
+-				     Symbol_table::PREDEFINED, load_seg, 0, 0,
+-				     elfcpp::STT_NOTYPE, elfcpp::STB_GLOBAL,
+-				     elfcpp::STV_HIDDEN, 0,
+-				     Symbol::SEGMENT_START, true);
++  Symbol *ehdr_start = symtab->lookup("__ehdr_start");
++  if (ehdr_start != NULL && ehdr_start->is_predefined())
++    {
++      if (load_seg != NULL)
++	ehdr_start->set_output_segment(load_seg, Symbol::SEGMENT_START);
++      else
++        ehdr_start->set_undefined();
++    }
+ 
+   // Set the file offsets of all the non-data sections we've seen so
+   // far which don't have to wait for the input sections.  We need
+diff --git a/gold/resolve.cc b/gold/resolve.cc
+index 3b6e706..dc092e1 100644
+--- a/gold/resolve.cc
++++ b/gold/resolve.cc
+@@ -915,6 +915,10 @@ Symbol::override_base_with_special(const Symbol* from)
+   bool same_name = this->name_ == from->name_;
+   gold_assert(same_name || this->has_alias());
+ 
++  // If we are overriding an undef, remember the original binding.
++  if (this->is_undefined())
++    this->set_undef_binding(this->binding_);
++
+   this->source_ = from->source_;
+   switch (from->source_)
+     {
+diff --git a/gold/symtab.cc b/gold/symtab.cc
+index 2e17529..76581b4 100644
+--- a/gold/symtab.cc
++++ b/gold/symtab.cc
+@@ -527,6 +527,31 @@ Symbol::set_output_section(Output_section* os)
+     }
+ }
+ 
++// Set the symbol's output segment.  This is used for pre-defined
++// symbols whose segments aren't known until after layout is done
++// (e.g., __ehdr_start).
++
++void
++Symbol::set_output_segment(Output_segment* os, Segment_offset_base base)
++{
++  gold_assert(this->is_predefined_);
++  this->source_ = IN_OUTPUT_SEGMENT;
++  this->u_.in_output_segment.output_segment = os;
++  this->u_.in_output_segment.offset_base = base;
++}
++
++// Set the symbol to undefined.  This is used for pre-defined
++// symbols whose segments aren't known until after layout is done
++// (e.g., __ehdr_start).
++
++void
++Symbol::set_undefined()
++{
++  gold_assert(this->is_predefined_);
++  this->source_ = IS_UNDEFINED;
++  this->is_predefined_ = false;
++}
++
+ // Class Symbol_table.
+ 
+ Symbol_table::Symbol_table(unsigned int count,
+diff --git a/gold/symtab.h b/gold/symtab.h
+index 1232c97..3db3641 100644
+--- a/gold/symtab.h
++++ b/gold/symtab.h
+@@ -238,7 +238,7 @@ class Symbol
+   override_visibility(elfcpp::STV);
+ 
+   // Set whether the symbol was originally a weak undef or a regular undef
+-  // when resolved by a dynamic def.
++  // when resolved by a dynamic def or by a special symbol.
+   inline void
+   set_undef_binding(elfcpp::STB bind)
+   {
+@@ -249,7 +249,8 @@ class Symbol
+       }
+   }
+ 
+-  // Return TRUE if a weak undef was resolved by a dynamic def.
++  // Return TRUE if a weak undef was resolved by a dynamic def or
++  // by a special symbol.
+   inline bool
+   is_undef_binding_weak() const
+   { return this->undef_binding_weak_; }
+@@ -512,7 +513,20 @@ class Symbol
+   // Return whether this is a weak undefined symbol.
+   bool
+   is_weak_undefined() const
+-  { return this->is_undefined() && this->binding() == elfcpp::STB_WEAK; }
++  {
++    return (this->is_undefined()
++	    && (this->binding() == elfcpp::STB_WEAK
++		|| this->is_undef_binding_weak()));
++  }
++
++  // Return whether this is a strong undefined symbol.
++  bool
++  is_strong_undefined() const
++  {
++    return (this->is_undefined()
++	    && this->binding() != elfcpp::STB_WEAK
++	    && !this->is_undef_binding_weak());
++  }
+ 
+   // Return whether this is an absolute symbol.
+   bool
+@@ -771,6 +785,18 @@ class Symbol
+   void
+   set_output_section(Output_section*);
+ 
++  // Set the symbol's output segment.  This is used for pre-defined
++  // symbols whose segments aren't known until after layout is done
++  // (e.g., __ehdr_start).
++  void
++  set_output_segment(Output_segment*, Segment_offset_base);
++
++  // Set the symbol to undefined.  This is used for pre-defined
++  // symbols whose segments aren't known until after layout is done
++  // (e.g., __ehdr_start).
++  void
++  set_undefined();
++
+   // Return whether there should be a warning for references to this
+   // symbol.
+   bool
+@@ -1019,7 +1045,7 @@ class Symbol
+   // True if UNDEF_BINDING_WEAK_ has been set (bit 32).
+   bool undef_binding_set_ : 1;
+   // True if this symbol was a weak undef resolved by a dynamic def
+-  // (bit 33).
++  // or by a special symbol (bit 33).
+   bool undef_binding_weak_ : 1;
+   // True if this symbol is a predefined linker symbol (bit 34).
+   bool is_predefined_ : 1;
+diff --git a/gold/target-reloc.h b/gold/target-reloc.h
+index b544c78..4d3c106 100644
+--- a/gold/target-reloc.h
++++ b/gold/target-reloc.h
+@@ -185,7 +185,7 @@ issue_undefined_symbol_error(const Symbol* sym)
+     return false;
+ 
+   // We don't report weak symbols.
+-  if (sym->binding() == elfcpp::STB_WEAK)
++  if (sym->is_weak_undefined())
+     return false;
+ 
+   // We don't report symbols defined in discarded sections.
+@@ -211,6 +211,10 @@ issue_undefined_symbol_error(const Symbol* sym)
+ 	return false;
+     }
+ 
++  // If the symbol is hidden, report it.
++  if (sym->visibility() == elfcpp::STV_HIDDEN)
++    return true;
++
+   // When creating a shared library, only report unresolved symbols if
+   // -z defs was used.
+   if (parameters->options().shared() && !parameters->options().defs())
+@@ -420,7 +424,7 @@ relocate_section(
+ 	}
+       else if (sym != NULL
+ 	       && sym->visibility() != elfcpp::STV_DEFAULT
+-	       && (sym->is_undefined() || sym->is_from_dynobj()))
++	       && (sym->is_strong_undefined() || sym->is_from_dynobj()))
+ 	visibility_error(sym);
+ 
+       if (sym != NULL && sym->has_warning())
+diff --git a/gold/testsuite/Makefile.am b/gold/testsuite/Makefile.am
+index e518240..c76c0e6 100644
+--- a/gold/testsuite/Makefile.am
++++ b/gold/testsuite/Makefile.am
+@@ -2147,6 +2147,50 @@ gdb_index_test_4.stdout: gdb_index_test_4
+ 
+ endif HAVE_PUBNAMES
+ 
++# Test that __ehdr_start is defined correctly.
++check_PROGRAMS += ehdr_start_test_1
++ehdr_start_test_1_SOURCES = ehdr_start_test.cc
++ehdr_start_test_1_DEPENDENCIES = gcctestdir/ld
++ehdr_start_test_1_CXXFLAGS =
++ehdr_start_test_1_LDFLAGS = -Bgcctestdir/
++ehdr_start_test_1_LDADD =
++
++# Test that __ehdr_start is defined correctly with a weak reference.
++check_PROGRAMS += ehdr_start_test_2
++ehdr_start_test_2_SOURCES = ehdr_start_test.cc
++ehdr_start_test_2_DEPENDENCIES = gcctestdir/ld
++ehdr_start_test_2_CXXFLAGS = -DEHDR_START_WEAK
++ehdr_start_test_2_LDFLAGS = -Bgcctestdir/
++ehdr_start_test_2_LDADD =
++
++# Test that __ehdr_start is defined correctly when used with a linker script.
++check_PROGRAMS += ehdr_start_test_3
++ehdr_start_test_3_SOURCES = ehdr_start_test.cc
++ehdr_start_test_3_DEPENDENCIES = gcctestdir/ld $(srcdir)/ehdr_start_test.t
++ehdr_start_test_3_CXXFLAGS = -DEHDR_START_WEAK
++ehdr_start_test_3_LDFLAGS = -Bgcctestdir/ -Wl,-T,$(srcdir)/ehdr_start_test.t
++ehdr_start_test_3_LDADD =
++
++# Test that __ehdr_start is left undefined when the text segment is not
++# appropriately aligned.
++check_SCRIPTS += ehdr_start_test_4.sh
++check_DATA += ehdr_start_test_4.syms
++MOSTLYCLEANFILES += ehdr_start_test_4
++ehdr_start_test_4.syms: ehdr_start_test_4
++	$(TEST_NM) ehdr_start_test_4 > $@
++ehdr_start_test_4: ehdr_start_test_4.o gcctestdir/ld
++	$(CXXLINK) -Bgcctestdir/ld/ -Wl,-Ttext=0x100100 $<
++ehdr_start_test_4.o: ehdr_start_test.cc
++	$(CXXCOMPILE) -c -DEHDR_START_WEAK -o $@ $<
++
++# Test that __ehdr_start is not overridden when supplied by the user.
++check_PROGRAMS += ehdr_start_test_5
++ehdr_start_test_5_SOURCES = ehdr_start_test.cc ehdr_start_def.cc
++ehdr_start_test_5_DEPENDENCIES = gcctestdir/ld
++ehdr_start_test_5_CXXFLAGS = -DEHDR_START_USER_DEF
++ehdr_start_test_5_LDFLAGS = -Bgcctestdir/
++ehdr_start_test_5_LDADD =
++
+ # End-to-end incremental linking tests.
+ # Incremental linking is currently supported only on the x86_64 target.
+ 
+diff --git a/gold/testsuite/Makefile.in b/gold/testsuite/Makefile.in
+index 44d5acc..73b84e3 100644
+--- a/gold/testsuite/Makefile.in
++++ b/gold/testsuite/Makefile.in
+@@ -524,7 +524,19 @@ check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_3) \
+ @NATIVE_LINKER_FALSE@ifuncmain7_DEPENDENCIES =
+ 
+ # Test that --start-lib and --end-lib function correctly.
+-@GCC_TRUE@@NATIVE_LINKER_TRUE@am__append_60 = start_lib_test
++
++# Test that __ehdr_start is defined correctly.
++
++# Test that __ehdr_start is defined correctly with a weak reference.
++
++# Test that __ehdr_start is defined correctly when used with a linker script.
++
++# Test that __ehdr_start is not overridden when supplied by the user.
++@GCC_TRUE@@NATIVE_LINKER_TRUE@am__append_60 = start_lib_test \
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	ehdr_start_test_1 \
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	ehdr_start_test_2 \
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	ehdr_start_test_3 \
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	ehdr_start_test_5
+ 
+ # Test that --gdb-index functions correctly without gcc-generated pubnames.
+ @GCC_TRUE@@HAVE_PUBNAMES_TRUE@@NATIVE_LINKER_TRUE@am__append_61 = gdb_index_test_1.sh
+@@ -547,10 +559,24 @@ check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_3) \
+ @GCC_TRUE@@HAVE_PUBNAMES_TRUE@@NATIVE_LINKER_TRUE@	gdb_index_test_3 \
+ @GCC_TRUE@@HAVE_PUBNAMES_TRUE@@NATIVE_LINKER_TRUE@	gdb_index_test_4.stdout \
+ @GCC_TRUE@@HAVE_PUBNAMES_TRUE@@NATIVE_LINKER_TRUE@	gdb_index_test_4
++@GCC_FALSE@ehdr_start_test_1_DEPENDENCIES =
++@NATIVE_LINKER_FALSE@ehdr_start_test_1_DEPENDENCIES =
++@GCC_FALSE@ehdr_start_test_2_DEPENDENCIES =
++@NATIVE_LINKER_FALSE@ehdr_start_test_2_DEPENDENCIES =
++@GCC_FALSE@ehdr_start_test_3_DEPENDENCIES =
++@NATIVE_LINKER_FALSE@ehdr_start_test_3_DEPENDENCIES =
++
++# Test that __ehdr_start is left undefined when the text segment is not
++# appropriately aligned.
++@GCC_TRUE@@NATIVE_LINKER_TRUE@am__append_70 = ehdr_start_test_4.sh
++@GCC_TRUE@@NATIVE_LINKER_TRUE@am__append_71 = ehdr_start_test_4.syms
++@GCC_TRUE@@NATIVE_LINKER_TRUE@am__append_72 = ehdr_start_test_4
++@GCC_FALSE@ehdr_start_test_5_DEPENDENCIES =
++@NATIVE_LINKER_FALSE@ehdr_start_test_5_DEPENDENCIES =
+ 
+ # Test the --incremental-unchanged flag with an archive library.
+ # The second link should not update the library.
+-@DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@am__append_70 = incremental_test_2 \
++@DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@am__append_73 = incremental_test_2 \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@	incremental_test_3 \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@	incremental_test_4 \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@	incremental_test_5 \
+@@ -559,7 +585,7 @@ check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_3) \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@	incremental_common_test_1 \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@	incremental_comdat_test_1 \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@	exception_x86_64_bnd_test
+-@DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@am__append_71 = two_file_test_tmp_2.o \
++@DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@am__append_74 = two_file_test_tmp_2.o \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@	two_file_test_tmp_3.o \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@	incremental_test_4.base \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@	two_file_test_tmp_4.o \
+@@ -569,23 +595,23 @@ check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_3) \
+ # These tests work with native and cross linkers.
+ 
+ # Test script section order.
+-@NATIVE_OR_CROSS_LINKER_TRUE@am__append_72 = script_test_10.sh
+-@NATIVE_OR_CROSS_LINKER_TRUE@am__append_73 = script_test_10.stdout
+-@NATIVE_OR_CROSS_LINKER_TRUE@am__append_74 = script_test_10
++@NATIVE_OR_CROSS_LINKER_TRUE@am__append_75 = script_test_10.sh
++@NATIVE_OR_CROSS_LINKER_TRUE@am__append_76 = script_test_10.stdout
++@NATIVE_OR_CROSS_LINKER_TRUE@am__append_77 = script_test_10
+ 
+ # These tests work with cross linkers only.
+-@DEFAULT_TARGET_I386_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_75 = split_i386.sh
+-@DEFAULT_TARGET_I386_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_76 = split_i386_1.stdout split_i386_2.stdout \
++@DEFAULT_TARGET_I386_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_78 = split_i386.sh
++@DEFAULT_TARGET_I386_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_79 = split_i386_1.stdout split_i386_2.stdout \
+ @DEFAULT_TARGET_I386_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	split_i386_3.stdout split_i386_4.stdout split_i386_r.stdout
+ 
+-@DEFAULT_TARGET_I386_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_77 = split_i386_1 split_i386_2 split_i386_3 \
++@DEFAULT_TARGET_I386_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_80 = split_i386_1 split_i386_2 split_i386_3 \
+ @DEFAULT_TARGET_I386_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	split_i386_4 split_i386_r
+ 
+-@DEFAULT_TARGET_X86_64_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_78 = split_x86_64.sh
+-@DEFAULT_TARGET_X86_64_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_79 = split_x86_64_1.stdout split_x86_64_2.stdout \
++@DEFAULT_TARGET_X86_64_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_81 = split_x86_64.sh
++@DEFAULT_TARGET_X86_64_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_82 = split_x86_64_1.stdout split_x86_64_2.stdout \
+ @DEFAULT_TARGET_X86_64_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	split_x86_64_3.stdout split_x86_64_4.stdout split_x86_64_r.stdout
+ 
+-@DEFAULT_TARGET_X86_64_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_80 = split_x86_64_1 split_x86_64_2 split_x86_64_3 \
++@DEFAULT_TARGET_X86_64_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_83 = split_x86_64_1 split_x86_64_2 split_x86_64_3 \
+ @DEFAULT_TARGET_X86_64_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	split_x86_64_4 split_x86_64_r
+ 
+ 
+@@ -600,7 +626,7 @@ check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_3) \
+ # Check Thumb to Thumb farcall veneers
+ 
+ # Check Thumb to ARM farcall veneers
+-@DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_81 = arm_abs_global.sh \
++@DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_84 = arm_abs_global.sh \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_branch_in_range.sh \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_branch_out_of_range.sh \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_fix_v4bx.sh \
+@@ -614,7 +640,7 @@ check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_3) \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_farcall_arm_thumb.sh \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_farcall_thumb_thumb.sh \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_farcall_thumb_arm.sh
+-@DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_82 = arm_abs_global.stdout \
++@DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_85 = arm_abs_global.stdout \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_bl_in_range.stdout \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_bl_out_of_range.stdout \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	thumb_bl_in_range.stdout \
+@@ -659,7 +685,7 @@ check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_3) \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_farcall_thumb_thumb_6m.stdout \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_farcall_thumb_arm.stdout \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_farcall_thumb_arm_5t.stdout
+-@DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_83 = arm_abs_global \
++@DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@am__append_86 = arm_abs_global \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_bl_in_range \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_bl_out_of_range \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	thumb_bl_in_range \
+@@ -702,10 +728,10 @@ check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_3) \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_farcall_thumb_thumb_6m \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_farcall_thumb_arm \
+ @DEFAULT_TARGET_ARM_TRUE@@NATIVE_OR_CROSS_LINKER_TRUE@	arm_farcall_thumb_arm_5t
+-@DEFAULT_TARGET_X86_64_TRUE@am__append_84 = *.dwo *.dwp
+-@DEFAULT_TARGET_X86_64_TRUE@am__append_85 = dwp_test_1.sh \
++@DEFAULT_TARGET_X86_64_TRUE@am__append_87 = *.dwo *.dwp
++@DEFAULT_TARGET_X86_64_TRUE@am__append_88 = dwp_test_1.sh \
+ @DEFAULT_TARGET_X86_64_TRUE@	dwp_test_2.sh
+-@DEFAULT_TARGET_X86_64_TRUE@am__append_86 = dwp_test_1.stdout \
++@DEFAULT_TARGET_X86_64_TRUE@am__append_89 = dwp_test_1.stdout \
+ @DEFAULT_TARGET_X86_64_TRUE@	dwp_test_2.stdout
+ subdir = testsuite
+ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am
+@@ -886,7 +912,11 @@ libgoldtest_a_OBJECTS = $(am_libgoldtest_a_OBJECTS)
+ @GCC_TRUE@@IFUNC_TRUE@@NATIVE_LINKER_TRUE@	ifuncmain7pic$(EXEEXT) \
+ @GCC_TRUE@@IFUNC_TRUE@@NATIVE_LINKER_TRUE@	ifuncmain7pie$(EXEEXT) \
+ @GCC_TRUE@@IFUNC_TRUE@@NATIVE_LINKER_TRUE@	ifuncvar$(EXEEXT)
+-@GCC_TRUE@@NATIVE_LINKER_TRUE@am__EXEEXT_38 = start_lib_test$(EXEEXT)
++@GCC_TRUE@@NATIVE_LINKER_TRUE@am__EXEEXT_38 = start_lib_test$(EXEEXT) \
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	ehdr_start_test_1$(EXEEXT) \
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	ehdr_start_test_2$(EXEEXT) \
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	ehdr_start_test_3$(EXEEXT) \
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	ehdr_start_test_5$(EXEEXT)
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@am__EXEEXT_39 = incremental_test_2$(EXEEXT) \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@	incremental_test_3$(EXEEXT) \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@	incremental_test_4$(EXEEXT) \
+@@ -975,6 +1005,23 @@ discard_locals_test_DEPENDENCIES = libgoldtest.a ../libgold.a \
+ 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+ discard_locals_test_LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+ 	$(discard_locals_test_LDFLAGS) $(LDFLAGS) -o $@
++@GCC_TRUE@@NATIVE_LINKER_TRUE@am_ehdr_start_test_1_OBJECTS = ehdr_start_test_1-ehdr_start_test.$(OBJEXT)
++ehdr_start_test_1_OBJECTS = $(am_ehdr_start_test_1_OBJECTS)
++ehdr_start_test_1_LINK = $(CXXLD) $(ehdr_start_test_1_CXXFLAGS) \
++	$(CXXFLAGS) $(ehdr_start_test_1_LDFLAGS) $(LDFLAGS) -o $@
++@GCC_TRUE@@NATIVE_LINKER_TRUE@am_ehdr_start_test_2_OBJECTS = ehdr_start_test_2-ehdr_start_test.$(OBJEXT)
++ehdr_start_test_2_OBJECTS = $(am_ehdr_start_test_2_OBJECTS)
++ehdr_start_test_2_LINK = $(CXXLD) $(ehdr_start_test_2_CXXFLAGS) \
++	$(CXXFLAGS) $(ehdr_start_test_2_LDFLAGS) $(LDFLAGS) -o $@
++@GCC_TRUE@@NATIVE_LINKER_TRUE@am_ehdr_start_test_3_OBJECTS = ehdr_start_test_3-ehdr_start_test.$(OBJEXT)
++ehdr_start_test_3_OBJECTS = $(am_ehdr_start_test_3_OBJECTS)
++ehdr_start_test_3_LINK = $(CXXLD) $(ehdr_start_test_3_CXXFLAGS) \
++	$(CXXFLAGS) $(ehdr_start_test_3_LDFLAGS) $(LDFLAGS) -o $@
++@GCC_TRUE@@NATIVE_LINKER_TRUE@am_ehdr_start_test_5_OBJECTS = ehdr_start_test_5-ehdr_start_test.$(OBJEXT) \
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	ehdr_start_test_5-ehdr_start_def.$(OBJEXT)
++ehdr_start_test_5_OBJECTS = $(am_ehdr_start_test_5_OBJECTS)
++ehdr_start_test_5_LINK = $(CXXLD) $(ehdr_start_test_5_CXXFLAGS) \
++	$(CXXFLAGS) $(ehdr_start_test_5_LDFLAGS) $(LDFLAGS) -o $@
+ @GCC_TRUE@@NATIVE_LINKER_TRUE@am_exception_same_shared_test_OBJECTS =  \
+ @GCC_TRUE@@NATIVE_LINKER_TRUE@	exception_test_main.$(OBJEXT)
+ exception_same_shared_test_OBJECTS =  \
+@@ -1782,6 +1829,8 @@ SOURCES = $(libgoldtest_a_SOURCES) basic_pic_test.c basic_pie_test.c \
+ 	$(common_test_1_SOURCES) $(common_test_2_SOURCES) \
+ 	$(constructor_static_test_SOURCES) $(constructor_test_SOURCES) \
+ 	$(copy_test_SOURCES) $(discard_locals_test_SOURCES) \
++	$(ehdr_start_test_1_SOURCES) $(ehdr_start_test_2_SOURCES) \
++	$(ehdr_start_test_3_SOURCES) $(ehdr_start_test_5_SOURCES) \
+ 	$(exception_same_shared_test_SOURCES) \
+ 	$(exception_separate_shared_12_test_SOURCES) \
+ 	$(exception_separate_shared_21_test_SOURCES) \
+@@ -2131,23 +2180,24 @@ MOSTLYCLEANFILES = *.so *.syms *.stdout $(am__append_4) \
+ 	$(am__append_17) $(am__append_26) $(am__append_28) \
+ 	$(am__append_30) $(am__append_36) $(am__append_40) \
+ 	$(am__append_41) $(am__append_47) $(am__append_63) \
+-	$(am__append_66) $(am__append_69) $(am__append_71) \
++	$(am__append_66) $(am__append_69) $(am__append_72) \
+ 	$(am__append_74) $(am__append_77) $(am__append_80) \
+-	$(am__append_83) $(am__append_84)
++	$(am__append_83) $(am__append_86) $(am__append_87)
+ 
+ # We will add to these later, for each individual test.  Note
+ # that we add each test under check_SCRIPTS or check_PROGRAMS;
+ # the TESTS variable is automatically populated from these.
+ check_SCRIPTS = $(am__append_2) $(am__append_34) $(am__append_38) \
+ 	$(am__append_42) $(am__append_45) $(am__append_61) \
+-	$(am__append_64) $(am__append_67) $(am__append_72) \
++	$(am__append_64) $(am__append_67) $(am__append_70) \
+ 	$(am__append_75) $(am__append_78) $(am__append_81) \
+-	$(am__append_85)
++	$(am__append_84) $(am__append_88)
+ check_DATA = $(am__append_3) $(am__append_27) $(am__append_29) \
+ 	$(am__append_35) $(am__append_39) $(am__append_43) \
+ 	$(am__append_46) $(am__append_62) $(am__append_65) \
+-	$(am__append_68) $(am__append_73) $(am__append_76) \
+-	$(am__append_79) $(am__append_82) $(am__append_86)
++	$(am__append_68) $(am__append_71) $(am__append_76) \
++	$(am__append_79) $(am__append_82) $(am__append_85) \
++	$(am__append_89)
+ BUILT_SOURCES = $(am__append_25)
+ TESTS = $(check_SCRIPTS) $(check_PROGRAMS)
+ 
+@@ -2606,6 +2656,26 @@ LDADD = libgoldtest.a ../libgold.a ../../libiberty/libiberty.a $(LIBINTL) \
+ @GCC_TRUE@@IFUNC_TRUE@@NATIVE_LINKER_TRUE@ifuncvar_DEPENDENCIES = gcctestdir/ld ifuncvar.so
+ @GCC_TRUE@@IFUNC_TRUE@@NATIVE_LINKER_TRUE@ifuncvar_LDFLAGS = -Bgcctestdir/ -Wl,-R,.
+ @GCC_TRUE@@IFUNC_TRUE@@NATIVE_LINKER_TRUE@ifuncvar_LDADD = ifuncvar.so
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_1_SOURCES = ehdr_start_test.cc
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_1_DEPENDENCIES = gcctestdir/ld
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_1_CXXFLAGS = 
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_1_LDFLAGS = -Bgcctestdir/
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_1_LDADD = 
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_2_SOURCES = ehdr_start_test.cc
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_2_DEPENDENCIES = gcctestdir/ld
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_2_CXXFLAGS = -DEHDR_START_WEAK
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_2_LDFLAGS = -Bgcctestdir/
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_2_LDADD = 
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_3_SOURCES = ehdr_start_test.cc
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_3_DEPENDENCIES = gcctestdir/ld $(srcdir)/ehdr_start_test.t
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_3_CXXFLAGS = -DEHDR_START_WEAK
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_3_LDFLAGS = -Bgcctestdir/ -Wl,-T,$(srcdir)/ehdr_start_test.t
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_3_LDADD = 
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_5_SOURCES = ehdr_start_test.cc ehdr_start_def.cc
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_5_DEPENDENCIES = gcctestdir/ld
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_5_CXXFLAGS = -DEHDR_START_USER_DEF
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_5_LDFLAGS = -Bgcctestdir/
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_5_LDADD = 
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@exception_x86_64_bnd_test_SOURCES = exception_test_main.cc
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@exception_x86_64_bnd_test_DEPENDENCIES = exception_x86_64_bnd_1.o \
+ @DEFAULT_TARGET_X86_64_TRUE@@GCC_TRUE@@NATIVE_LINKER_TRUE@					 exception_x86_64_bnd_2.o
+@@ -2719,6 +2789,18 @@ copy_test$(EXEEXT): $(copy_test_OBJECTS) $(copy_test_DEPENDENCIES)
+ discard_locals_test$(EXEEXT): $(discard_locals_test_OBJECTS) $(discard_locals_test_DEPENDENCIES) 
+ 	@rm -f discard_locals_test$(EXEEXT)
+ 	$(discard_locals_test_LINK) $(discard_locals_test_OBJECTS) $(discard_locals_test_LDADD) $(LIBS)
++ehdr_start_test_1$(EXEEXT): $(ehdr_start_test_1_OBJECTS) $(ehdr_start_test_1_DEPENDENCIES) 
++	@rm -f ehdr_start_test_1$(EXEEXT)
++	$(ehdr_start_test_1_LINK) $(ehdr_start_test_1_OBJECTS) $(ehdr_start_test_1_LDADD) $(LIBS)
++ehdr_start_test_2$(EXEEXT): $(ehdr_start_test_2_OBJECTS) $(ehdr_start_test_2_DEPENDENCIES) 
++	@rm -f ehdr_start_test_2$(EXEEXT)
++	$(ehdr_start_test_2_LINK) $(ehdr_start_test_2_OBJECTS) $(ehdr_start_test_2_LDADD) $(LIBS)
++ehdr_start_test_3$(EXEEXT): $(ehdr_start_test_3_OBJECTS) $(ehdr_start_test_3_DEPENDENCIES) 
++	@rm -f ehdr_start_test_3$(EXEEXT)
++	$(ehdr_start_test_3_LINK) $(ehdr_start_test_3_OBJECTS) $(ehdr_start_test_3_LDADD) $(LIBS)
++ehdr_start_test_5$(EXEEXT): $(ehdr_start_test_5_OBJECTS) $(ehdr_start_test_5_DEPENDENCIES) 
++	@rm -f ehdr_start_test_5$(EXEEXT)
++	$(ehdr_start_test_5_LINK) $(ehdr_start_test_5_OBJECTS) $(ehdr_start_test_5_LDADD) $(LIBS)
+ exception_same_shared_test$(EXEEXT): $(exception_same_shared_test_OBJECTS) $(exception_same_shared_test_DEPENDENCIES) 
+ 	@rm -f exception_same_shared_test$(EXEEXT)
+ 	$(exception_same_shared_test_LINK) $(exception_same_shared_test_OBJECTS) $(exception_same_shared_test_LDADD) $(LIBS)
+@@ -3457,6 +3539,11 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/constructor_test.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/copy_test.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/discard_locals_test.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ehdr_start_test_1-ehdr_start_test.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ehdr_start_test_2-ehdr_start_test.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ehdr_start_test_3-ehdr_start_test.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ehdr_start_test_5-ehdr_start_def.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ehdr_start_test_5-ehdr_start_test.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exception_test_1.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exception_test_2.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exception_test_main.Po@am__quote@
+@@ -3602,6 +3689,76 @@ large-large.obj: large.c
+ @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+ @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+ 
++ehdr_start_test_1-ehdr_start_test.o: ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_1_CXXFLAGS) $(CXXFLAGS) -MT ehdr_start_test_1-ehdr_start_test.o -MD -MP -MF $(DEPDIR)/ehdr_start_test_1-ehdr_start_test.Tpo -c -o ehdr_start_test_1-ehdr_start_test.o `test -f 'ehdr_start_test.cc' || echo '$(srcdir)/'`ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ehdr_start_test_1-ehdr_start_test.Tpo $(DEPDIR)/ehdr_start_test_1-ehdr_start_test.Po
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ehdr_start_test.cc' object='ehdr_start_test_1-ehdr_start_test.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_1_CXXFLAGS) $(CXXFLAGS) -c -o ehdr_start_test_1-ehdr_start_test.o `test -f 'ehdr_start_test.cc' || echo '$(srcdir)/'`ehdr_start_test.cc
++
++ehdr_start_test_1-ehdr_start_test.obj: ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_1_CXXFLAGS) $(CXXFLAGS) -MT ehdr_start_test_1-ehdr_start_test.obj -MD -MP -MF $(DEPDIR)/ehdr_start_test_1-ehdr_start_test.Tpo -c -o ehdr_start_test_1-ehdr_start_test.obj `if test -f 'ehdr_start_test.cc'; then $(CYGPATH_W) 'ehdr_start_test.cc'; else $(CYGPATH_W) '$(srcdir)/ehdr_start_test.cc'; fi`
++@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ehdr_start_test_1-ehdr_start_test.Tpo $(DEPDIR)/ehdr_start_test_1-ehdr_start_test.Po
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ehdr_start_test.cc' object='ehdr_start_test_1-ehdr_start_test.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_1_CXXFLAGS) $(CXXFLAGS) -c -o ehdr_start_test_1-ehdr_start_test.obj `if test -f 'ehdr_start_test.cc'; then $(CYGPATH_W) 'ehdr_start_test.cc'; else $(CYGPATH_W) '$(srcdir)/ehdr_start_test.cc'; fi`
++
++ehdr_start_test_2-ehdr_start_test.o: ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_2_CXXFLAGS) $(CXXFLAGS) -MT ehdr_start_test_2-ehdr_start_test.o -MD -MP -MF $(DEPDIR)/ehdr_start_test_2-ehdr_start_test.Tpo -c -o ehdr_start_test_2-ehdr_start_test.o `test -f 'ehdr_start_test.cc' || echo '$(srcdir)/'`ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ehdr_start_test_2-ehdr_start_test.Tpo $(DEPDIR)/ehdr_start_test_2-ehdr_start_test.Po
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ehdr_start_test.cc' object='ehdr_start_test_2-ehdr_start_test.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_2_CXXFLAGS) $(CXXFLAGS) -c -o ehdr_start_test_2-ehdr_start_test.o `test -f 'ehdr_start_test.cc' || echo '$(srcdir)/'`ehdr_start_test.cc
++
++ehdr_start_test_2-ehdr_start_test.obj: ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_2_CXXFLAGS) $(CXXFLAGS) -MT ehdr_start_test_2-ehdr_start_test.obj -MD -MP -MF $(DEPDIR)/ehdr_start_test_2-ehdr_start_test.Tpo -c -o ehdr_start_test_2-ehdr_start_test.obj `if test -f 'ehdr_start_test.cc'; then $(CYGPATH_W) 'ehdr_start_test.cc'; else $(CYGPATH_W) '$(srcdir)/ehdr_start_test.cc'; fi`
++@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ehdr_start_test_2-ehdr_start_test.Tpo $(DEPDIR)/ehdr_start_test_2-ehdr_start_test.Po
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ehdr_start_test.cc' object='ehdr_start_test_2-ehdr_start_test.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_2_CXXFLAGS) $(CXXFLAGS) -c -o ehdr_start_test_2-ehdr_start_test.obj `if test -f 'ehdr_start_test.cc'; then $(CYGPATH_W) 'ehdr_start_test.cc'; else $(CYGPATH_W) '$(srcdir)/ehdr_start_test.cc'; fi`
++
++ehdr_start_test_3-ehdr_start_test.o: ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_3_CXXFLAGS) $(CXXFLAGS) -MT ehdr_start_test_3-ehdr_start_test.o -MD -MP -MF $(DEPDIR)/ehdr_start_test_3-ehdr_start_test.Tpo -c -o ehdr_start_test_3-ehdr_start_test.o `test -f 'ehdr_start_test.cc' || echo '$(srcdir)/'`ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ehdr_start_test_3-ehdr_start_test.Tpo $(DEPDIR)/ehdr_start_test_3-ehdr_start_test.Po
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ehdr_start_test.cc' object='ehdr_start_test_3-ehdr_start_test.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_3_CXXFLAGS) $(CXXFLAGS) -c -o ehdr_start_test_3-ehdr_start_test.o `test -f 'ehdr_start_test.cc' || echo '$(srcdir)/'`ehdr_start_test.cc
++
++ehdr_start_test_3-ehdr_start_test.obj: ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_3_CXXFLAGS) $(CXXFLAGS) -MT ehdr_start_test_3-ehdr_start_test.obj -MD -MP -MF $(DEPDIR)/ehdr_start_test_3-ehdr_start_test.Tpo -c -o ehdr_start_test_3-ehdr_start_test.obj `if test -f 'ehdr_start_test.cc'; then $(CYGPATH_W) 'ehdr_start_test.cc'; else $(CYGPATH_W) '$(srcdir)/ehdr_start_test.cc'; fi`
++@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ehdr_start_test_3-ehdr_start_test.Tpo $(DEPDIR)/ehdr_start_test_3-ehdr_start_test.Po
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ehdr_start_test.cc' object='ehdr_start_test_3-ehdr_start_test.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_3_CXXFLAGS) $(CXXFLAGS) -c -o ehdr_start_test_3-ehdr_start_test.obj `if test -f 'ehdr_start_test.cc'; then $(CYGPATH_W) 'ehdr_start_test.cc'; else $(CYGPATH_W) '$(srcdir)/ehdr_start_test.cc'; fi`
++
++ehdr_start_test_5-ehdr_start_test.o: ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_5_CXXFLAGS) $(CXXFLAGS) -MT ehdr_start_test_5-ehdr_start_test.o -MD -MP -MF $(DEPDIR)/ehdr_start_test_5-ehdr_start_test.Tpo -c -o ehdr_start_test_5-ehdr_start_test.o `test -f 'ehdr_start_test.cc' || echo '$(srcdir)/'`ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ehdr_start_test_5-ehdr_start_test.Tpo $(DEPDIR)/ehdr_start_test_5-ehdr_start_test.Po
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ehdr_start_test.cc' object='ehdr_start_test_5-ehdr_start_test.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_5_CXXFLAGS) $(CXXFLAGS) -c -o ehdr_start_test_5-ehdr_start_test.o `test -f 'ehdr_start_test.cc' || echo '$(srcdir)/'`ehdr_start_test.cc
++
++ehdr_start_test_5-ehdr_start_test.obj: ehdr_start_test.cc
++@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_5_CXXFLAGS) $(CXXFLAGS) -MT ehdr_start_test_5-ehdr_start_test.obj -MD -MP -MF $(DEPDIR)/ehdr_start_test_5-ehdr_start_test.Tpo -c -o ehdr_start_test_5-ehdr_start_test.obj `if test -f 'ehdr_start_test.cc'; then $(CYGPATH_W) 'ehdr_start_test.cc'; else $(CYGPATH_W) '$(srcdir)/ehdr_start_test.cc'; fi`
++@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ehdr_start_test_5-ehdr_start_test.Tpo $(DEPDIR)/ehdr_start_test_5-ehdr_start_test.Po
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ehdr_start_test.cc' object='ehdr_start_test_5-ehdr_start_test.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_5_CXXFLAGS) $(CXXFLAGS) -c -o ehdr_start_test_5-ehdr_start_test.obj `if test -f 'ehdr_start_test.cc'; then $(CYGPATH_W) 'ehdr_start_test.cc'; else $(CYGPATH_W) '$(srcdir)/ehdr_start_test.cc'; fi`
++
++ehdr_start_test_5-ehdr_start_def.o: ehdr_start_def.cc
++@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_5_CXXFLAGS) $(CXXFLAGS) -MT ehdr_start_test_5-ehdr_start_def.o -MD -MP -MF $(DEPDIR)/ehdr_start_test_5-ehdr_start_def.Tpo -c -o ehdr_start_test_5-ehdr_start_def.o `test -f 'ehdr_start_def.cc' || echo '$(srcdir)/'`ehdr_start_def.cc
++@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ehdr_start_test_5-ehdr_start_def.Tpo $(DEPDIR)/ehdr_start_test_5-ehdr_start_def.Po
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ehdr_start_def.cc' object='ehdr_start_test_5-ehdr_start_def.o' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_5_CXXFLAGS) $(CXXFLAGS) -c -o ehdr_start_test_5-ehdr_start_def.o `test -f 'ehdr_start_def.cc' || echo '$(srcdir)/'`ehdr_start_def.cc
++
++ehdr_start_test_5-ehdr_start_def.obj: ehdr_start_def.cc
++@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_5_CXXFLAGS) $(CXXFLAGS) -MT ehdr_start_test_5-ehdr_start_def.obj -MD -MP -MF $(DEPDIR)/ehdr_start_test_5-ehdr_start_def.Tpo -c -o ehdr_start_test_5-ehdr_start_def.obj `if test -f 'ehdr_start_def.cc'; then $(CYGPATH_W) 'ehdr_start_def.cc'; else $(CYGPATH_W) '$(srcdir)/ehdr_start_def.cc'; fi`
++@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/ehdr_start_test_5-ehdr_start_def.Tpo $(DEPDIR)/ehdr_start_test_5-ehdr_start_def.Po
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ehdr_start_def.cc' object='ehdr_start_test_5-ehdr_start_def.obj' libtool=no @AMDEPBACKSLASH@
++@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
++@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ehdr_start_test_5_CXXFLAGS) $(CXXFLAGS) -c -o ehdr_start_test_5-ehdr_start_def.obj `if test -f 'ehdr_start_def.cc'; then $(CYGPATH_W) 'ehdr_start_def.cc'; else $(CYGPATH_W) '$(srcdir)/ehdr_start_def.cc'; fi`
++
+ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
+ 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
+ 	unique=`for i in $$list; do \
+@@ -3920,6 +4077,8 @@ gdb_index_test_3.sh.log: gdb_index_test_3.sh
+ 	@p='gdb_index_test_3.sh'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
+ gdb_index_test_4.sh.log: gdb_index_test_4.sh
+ 	@p='gdb_index_test_4.sh'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
++ehdr_start_test_4.sh.log: ehdr_start_test_4.sh
++	@p='ehdr_start_test_4.sh'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
+ script_test_10.sh.log: script_test_10.sh
+ 	@p='script_test_10.sh'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
+ split_i386.sh.log: split_i386.sh
+@@ -4240,6 +4399,14 @@ ifuncvar.log: ifuncvar$(EXEEXT)
+ 	@p='ifuncvar$(EXEEXT)'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
+ start_lib_test.log: start_lib_test$(EXEEXT)
+ 	@p='start_lib_test$(EXEEXT)'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
++ehdr_start_test_1.log: ehdr_start_test_1$(EXEEXT)
++	@p='ehdr_start_test_1$(EXEEXT)'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
++ehdr_start_test_2.log: ehdr_start_test_2$(EXEEXT)
++	@p='ehdr_start_test_2$(EXEEXT)'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
++ehdr_start_test_3.log: ehdr_start_test_3$(EXEEXT)
++	@p='ehdr_start_test_3$(EXEEXT)'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
++ehdr_start_test_5.log: ehdr_start_test_5$(EXEEXT)
++	@p='ehdr_start_test_5$(EXEEXT)'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
+ incremental_test_2.log: incremental_test_2$(EXEEXT)
+ 	@p='incremental_test_2$(EXEEXT)'; $(am__check_pre) $(LOG_COMPILE) "$$tst" $(am__check_post)
+ incremental_test_3.log: incremental_test_3$(EXEEXT)
+@@ -5336,6 +5503,12 @@ uninstall-am:
+ @GCC_TRUE@@HAVE_PUBNAMES_TRUE@@NATIVE_LINKER_TRUE@	$(CXXLINK) -Bgcctestdir/ -Wl,--gdb-index $<
+ @GCC_TRUE@@HAVE_PUBNAMES_TRUE@@NATIVE_LINKER_TRUE@gdb_index_test_4.stdout: gdb_index_test_4
+ @GCC_TRUE@@HAVE_PUBNAMES_TRUE@@NATIVE_LINKER_TRUE@	$(TEST_READELF) --debug-dump=gdb_index $< > $@
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_4.syms: ehdr_start_test_4
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	$(TEST_NM) ehdr_start_test_4 > $@
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_4: ehdr_start_test_4.o gcctestdir/ld
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	$(CXXLINK) -Bgcctestdir/ld/ -Wl,-Ttext=0x100100 $<
++@GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_4.o: ehdr_start_test.cc
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	$(CXXCOMPILE) -c -DEHDR_START_WEAK -o $@ $<
+ 
+ # End-to-end incremental linking tests.
+ # Incremental linking is currently supported only on the x86_64 target.
+diff --git a/gold/testsuite/ehdr_start_def.cc b/gold/testsuite/ehdr_start_def.cc
+new file mode 100644
+index 0000000..f102a78
+--- /dev/null
++++ b/gold/testsuite/ehdr_start_def.cc
+@@ -0,0 +1,26 @@
++// ehdr_start_def.cc -- test for __ehdr_start linker-defined symbol.
++
++// Copyright (C) 2014 Free Software Foundation, Inc.
++// Written by Cary Coutant <ccoutant@google.com>.
++
++// This file is part of gold.
++
++// This program is free software; you can redistribute it and/or modify
++// it under the terms of the GNU General Public License as published by
++// the Free Software Foundation; either version 3 of the License, or
++// (at your option) any later version.
++
++// This program is distributed in the hope that it will be useful,
++// but WITHOUT ANY WARRANTY; without even the implied warranty of
++// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++// GNU General Public License for more details.
++
++// You should have received a copy of the GNU General Public License
++// along with this program; if not, write to the Free Software
++// Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston,
++// MA 02110-1301, USA.
++
++// We provide a user-defined __ehdr_start, to make sure that the
++// linker does not override this with the linker-defined symbol.
++
++char __ehdr_start[] = { 'a', 'b', 'c', 'd' };
+diff --git a/gold/testsuite/ehdr_start_test.cc b/gold/testsuite/ehdr_start_test.cc
+new file mode 100644
+index 0000000..a119b5e
+--- /dev/null
++++ b/gold/testsuite/ehdr_start_test.cc
+@@ -0,0 +1,67 @@
++// ehdr_start_test.cc -- test for __ehdr_start linker-defined symbol.
++
++// Copyright (C) 2014 Free Software Foundation, Inc.
++// Written by Cary Coutant <ccoutant@google.com>.
++
++// This file is part of gold.
++
++// This program is free software; you can redistribute it and/or modify
++// it under the terms of the GNU General Public License as published by
++// the Free Software Foundation; either version 3 of the License, or
++// (at your option) any later version.
++
++// This program is distributed in the hope that it will be useful,
++// but WITHOUT ANY WARRANTY; without even the implied warranty of
++// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++// GNU General Public License for more details.
++
++// You should have received a copy of the GNU General Public License
++// along with this program; if not, write to the Free Software
++// Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston,
++// MA 02110-1301, USA.
++
++// The goal of this program is to produce as many different types of
++// relocations as we can in a stand-alone program that does not use
++// TLS.  This program is compiled without optimization.
++
++#include "config.h"
++
++#include <cassert>
++#include <cstdio>
++
++#include "elfcpp.h"
++
++#ifdef EHDR_START_WEAK
++#define WEAK_ATTR __attribute__ ((weak))
++#else
++#define WEAK_ATTR
++#endif
++
++extern char __ehdr_start[] WEAK_ATTR;
++
++int
++main() {
++  printf("&__ehdr_start = %p\n", &__ehdr_start);
++
++#ifdef EHDR_START_UNDEF
++  assert(&__ehdr_start == 0);
++#else
++  assert(&__ehdr_start != NULL);
++
++  printf("ELF header: \\x%02x%c%c%c\n", __ehdr_start[0], __ehdr_start[1],
++	 __ehdr_start[2], __ehdr_start[3]);
++#ifdef EHDR_START_USER_DEF
++  assert(__ehdr_start[0] == 'a'
++	 && __ehdr_start[1] == 'b'
++	 && __ehdr_start[2] == 'c'
++	 && __ehdr_start[3] == 'd');
++#else
++  assert(__ehdr_start[elfcpp::EI_MAG0] == elfcpp::ELFMAG0
++	 && __ehdr_start[elfcpp::EI_MAG1] == elfcpp::ELFMAG1
++	 && __ehdr_start[elfcpp::EI_MAG2] == elfcpp::ELFMAG2
++	 && __ehdr_start[elfcpp::EI_MAG3] == elfcpp::ELFMAG3);
++#endif
++#endif
++
++  return 0;
++}
+diff --git a/gold/testsuite/ehdr_start_test.t b/gold/testsuite/ehdr_start_test.t
+new file mode 100644
+index 0000000..50daa64
+--- /dev/null
++++ b/gold/testsuite/ehdr_start_test.t
+@@ -0,0 +1,42 @@
++/* ehdr_start_test.t -- __ehdr_start test for gold
++
++   Copyright (C) 2008-2014 Free Software Foundation, Inc.
++   Written by Ian Lance Taylor <iant@google.com>.
++
++   This file is part of gold.
++
++   This program is free software; you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation; either version 3 of the License, or
++   (at your option) any later version.
++
++   This program is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program; if not, write to the Free Software
++   Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston,
++   MA 02110-1301, USA.  */
++
++/* With luck this will work on all platforms.  */
++
++SECTIONS
++{
++  /* Set the text segment to start on a non-page boundary.  */
++  . = 0x10000040;
++
++  .text : { *(.text) }
++  . += 0x100000;
++  . = ALIGN(0x100);
++
++  .tdata : { *(.tdata .tdata.* .gnu.linkonce.td.*) }
++  .tbss : { *(.tbss .tbss.* .gnu.linkonce.tb.*) *(.tcommon) }
++  .data.rel.ro : { *(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
++		   *(.data.rel.ro* .gnu.linkonce.d.rel.ro.*) }
++  .dynamic : { *(.dynamic) }
++  .got : { *(.got) }
++  .got.plt : { *(.got.plt) }
++  .data : { *(.data .data.* .gnu.linkonce.d.*) }
++}
+diff --git a/gold/testsuite/ehdr_start_test_4.sh b/gold/testsuite/ehdr_start_test_4.sh
+new file mode 100755
+index 0000000..ad0a5a7
+--- /dev/null
++++ b/gold/testsuite/ehdr_start_test_4.sh
+@@ -0,0 +1,40 @@
++#!/bin/sh
++
++# ehdr_start_test_4.sh -- test that __ehdr_start symbol is undefined.
++
++# Copyright (C) 2014 Free Software Foundation, Inc.
++# Written by Cary Coutant <ccoutant@google.com>.
++
++# This file is part of gold.
++
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 3 of the License, or
++# (at your option) any later version.
++
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston,
++# MA 02110-1301, USA.
++
++check()
++{
++    if ! grep -q "$2" "$1"
++    then
++	echo "Did not find expected symbol in $1:"
++	echo "   $2"
++	echo ""
++	echo "Actual output below:"
++	cat "$1"
++	exit 1
++    fi
++}
++
++check ehdr_start_test_4.syms "w __ehdr_start"
++
++exit 0
+-- 
+2.0.3
+

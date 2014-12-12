@@ -1,0 +1,42 @@
+From cb25fe47b0a76573ba04c33a76e0aaab0700b551 Mon Sep 17 00:00:00 2001
+From: Cary Coutant <ccoutant@google.com>
+Date: Wed, 23 Apr 2014 15:17:16 -0700
+Subject: [PATCH 185/330] Add missing break statement for case
+ elfcpp::R_X86_64_PLTOFF64.
+
+gold/
+	PR gold/16870
+	* x86_64.cc (Target_x86_64::Relocate::relocate): Add missing break.
+---
+ gold/ChangeLog | 5 +++++
+ gold/x86_64.cc | 1 +
+ 2 files changed, 6 insertions(+)
+
+diff --git a/gold/ChangeLog b/gold/ChangeLog
+index 227d342..cf40e42 100644
+--- a/gold/ChangeLog
++++ b/gold/ChangeLog
+@@ -1,3 +1,8 @@
++2014-04-23  Cary Coutant  <ccoutant@google.com>
++
++	PR gold/16870
++	* x86_64.cc (Target_x86_64::Relocate::relocate): Add missing break.
++
+ 2013-12-10  Roland McGrath  <mcgrathr@google.com>
+ 
+ 	* Makefile.am (install-exec-local): Prefix $(INSTALL_PROGRAM) uses
+diff --git a/gold/x86_64.cc b/gold/x86_64.cc
+index a0c4fce..8562957 100644
+--- a/gold/x86_64.cc
++++ b/gold/x86_64.cc
+@@ -3393,6 +3393,7 @@ Target_x86_64<size>::Relocate::relocate(
+ 	Relocate_functions<size, false>::rela64(view, object, psymval,
+ 						addend - got_address);
+       }
++      break;
+ 
+     case elfcpp::R_X86_64_GOT32:
+       gold_assert(have_got_offset);
+-- 
+2.0.3
+

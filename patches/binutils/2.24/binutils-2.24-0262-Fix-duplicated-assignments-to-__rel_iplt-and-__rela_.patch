@@ -1,0 +1,62 @@
+From b8dc5a646dcd42eb0f36423d344589ed814bd822 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Mon, 16 Jun 2014 22:21:16 +0930
+Subject: [PATCH 262/330] Fix duplicated assignments to __rel_iplt and
+ __rela_iplt symbols
+
+	* scripttempl/elf.sc: Edit out __rela_iplt symbol assignments from
+	.rel sections, and __rel_iplt from .rela sections.
+---
+ ld/ChangeLog          | 5 +++++
+ ld/scripttempl/elf.sc | 8 ++++----
+ 2 files changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/ld/ChangeLog b/ld/ChangeLog
+index 0a8eb72..a6e8d3c 100644
+--- a/ld/ChangeLog
++++ b/ld/ChangeLog
+@@ -1,3 +1,8 @@
++2014-06-17  Alan Modra  <amodra@gmail.com>
++
++	* scripttempl/elf.sc: Edit out __rela_iplt symbol assignments from
++	.rel sections, and __rel_iplt from .rela sections.
++
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Backport mainline patches
+diff --git a/ld/scripttempl/elf.sc b/ld/scripttempl/elf.sc
+index e8126cb..6d0d13d 100644
+--- a/ld/scripttempl/elf.sc
++++ b/ld/scripttempl/elf.sc
+@@ -410,13 +410,13 @@ cat >> ldscripts/dyntmp.$$ <<EOF
+   .rel.dyn      ${RELOCATING-0} :
+     {
+ EOF
+-sed -e '/^[ 	]*[{}][ 	]*$/d;/:[ 	]*$/d;/\.rela\./d;s/^.*: { *\(.*\)}$/      \1/' $COMBRELOC >> ldscripts/dyntmp.$$
++sed -e '/^[ 	]*[{}][ 	]*$/d;/:[ 	]*$/d;/\.rela\./d;/__rela_iplt_/d;s/^.*: { *\(.*\)}$/      \1/' $COMBRELOC >> ldscripts/dyntmp.$$
+ cat >> ldscripts/dyntmp.$$ <<EOF
+     }
+   .rela.dyn     ${RELOCATING-0} :
+     {
+ EOF
+-sed -e '/^[ 	]*[{}][ 	]*$/d;/:[ 	]*$/d;/\.rel\./d;s/^.*: { *\(.*\)}/      \1/' $COMBRELOC >> ldscripts/dyntmp.$$
++sed -e '/^[ 	]*[{}][ 	]*$/d;/:[ 	]*$/d;/\.rel\./d;/__rel_iplt_/d;s/^.*: { *\(.*\)}/      \1/' $COMBRELOC >> ldscripts/dyntmp.$$
+ cat >> ldscripts/dyntmp.$$ <<EOF
+     }
+ EOF
+@@ -446,10 +446,10 @@ emit_dyn()
+     cat ldscripts/dyntmp.$$
+   else
+     if test -z "${NO_REL_RELOCS}"; then
+-      sed -e '/^[ 	]*\.rela\.[^}]*$/,/}/d' -e '/^[ 	]*\.rela\./d' ldscripts/dyntmp.$$
++      sed -e '/^[ 	]*\.rela\.[^}]*$/,/}/d;/^[ 	]*\.rela\./d;/__rela_iplt_/d' ldscripts/dyntmp.$$
+     fi
+     if test -z "${NO_RELA_RELOCS}"; then
+-      sed -e '/^[ 	]*\.rel\.[^}]*$/,/}/d' -e '/^[ 	]*\.rel\./d' ldscripts/dyntmp.$$
++      sed -e '/^[ 	]*\.rel\.[^}]*$/,/}/d;/^[ 	]*\.rel\./d;/__rel_iplt_/d' ldscripts/dyntmp.$$
+     fi
+   fi
+   rm -f ldscripts/dyntmp.$$
+-- 
+2.0.3
+

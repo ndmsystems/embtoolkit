@@ -1,0 +1,60 @@
+From 72f758d066732d56d50851a97dd67a31f331e2b3 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Sun, 8 Dec 2013 15:26:12 +1030
+Subject: [PATCH 010/330] Fix --as-needed undefined symbol references from
+ dynamic libraries.
+
+libx.so refers to some_sym, liby.so provides some_sym@some_version
+wasn't seen as satisfying the reference.
+
+	* elf64-ppc.c (_bfd_elf_add_default_symbol): Set dynamic_def
+	and ref_dynamic_nonweak when chaining together indirect
+	symbols.
+---
+ bfd/ChangeLog | 6 ++++++
+ bfd/elflink.c | 8 ++++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index 597e161..1011b28 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,3 +1,9 @@
++2013-12-08  Alan Modra  <amodra@gmail.com>
++
++	* elf64-ppc.c (_bfd_elf_add_default_symbol): Set dynamic_def
++	and ref_dynamic_nonweak when chaining together indirect
++	symbols.
++
+ 2013-12-05  Alan Modra  <amodra@gmail.com>
+ 
+ 	* elf64-ppc.c (ppc_build_one_stub <ppc_stub_plt_branch_r2off>):
+diff --git a/bfd/elflink.c b/bfd/elflink.c
+index 99b7ca1..78eb67b 100644
+--- a/bfd/elflink.c
++++ b/bfd/elflink.c
+@@ -1702,6 +1702,12 @@ _bfd_elf_add_default_symbol (bfd *abfd,
+       ht = (struct elf_link_hash_entry *) hi->root.u.i.link;
+       (*bed->elf_backend_copy_indirect_symbol) (info, ht, hi);
+ 
++      /* A reference to the SHORTNAME symbol from a dynamic library
++	 will be satisfied by the versioned symbol at runtime.  In
++	 effect, we have a reference to the versioned symbol.  */
++      ht->ref_dynamic_nonweak |= hi->ref_dynamic_nonweak;
++      hi->dynamic_def |= ht->dynamic_def;
++
+       /* See if the new flags lead us to realize that the symbol must
+ 	 be dynamic.  */
+       if (! *dynsym)
+@@ -1771,6 +1777,8 @@ nondefault:
+       if (hi->root.type == bfd_link_hash_indirect)
+ 	{
+ 	  (*bed->elf_backend_copy_indirect_symbol) (info, h, hi);
++	  h->ref_dynamic_nonweak |= hi->ref_dynamic_nonweak;
++	  hi->dynamic_def |= h->dynamic_def;
+ 
+ 	  /* See if the new flags lead us to realize that the symbol
+ 	     must be dynamic.  */
+-- 
+2.0.3
+

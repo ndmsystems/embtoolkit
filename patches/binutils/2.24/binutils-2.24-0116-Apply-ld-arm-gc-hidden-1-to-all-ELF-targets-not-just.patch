@@ -1,0 +1,73 @@
+From 7deface59753c3b249ac08d854d471951796343f Mon Sep 17 00:00:00 2001
+From: Roland McGrath <mcgrathr@google.com>
+Date: Thu, 6 Mar 2014 09:46:15 -0800
+Subject: [PATCH 116/330] Apply ld-arm/gc-hidden-1 to all ELF targets, not just
+ *eabi* targets
+
+ld/testsuite/
+	* ld-arm/gc-hidden-1.d: Remove target, add not-target to match
+	other ELF-only tests in this directory.  Loosen regexps so they
+	don't care what the exact addresses are.
+
+(cherry picked from commit c125dbfb8c4c6755e188815de1bb65bcb7f1f159)
+---
+ ld/testsuite/ChangeLog            |  6 ++++++
+ ld/testsuite/ld-arm/gc-hidden-1.d | 17 +++++++++--------
+ 2 files changed, 15 insertions(+), 8 deletions(-)
+
+diff --git a/ld/testsuite/ChangeLog b/ld/testsuite/ChangeLog
+index 0f87f11..e3de45e 100644
+--- a/ld/testsuite/ChangeLog
++++ b/ld/testsuite/ChangeLog
+@@ -1,3 +1,9 @@
++2014-03-06  Roland McGrath  <mcgrathr@google.com>
++
++	* ld-arm/gc-hidden-1.d: Remove target, add not-target to match
++	other ELF-only tests in this directory.  Loosen regexps so they
++	don't care what the exact addresses are.
++
+ 2013-12-11  Will Newton  <will.newton@linaro.org>
+ 
+ 	* ld-aarch64/ifunc-21.d: Make test more generic to support
+diff --git a/ld/testsuite/ld-arm/gc-hidden-1.d b/ld/testsuite/ld-arm/gc-hidden-1.d
+index fe77abc..f0f1fd4 100644
+--- a/ld/testsuite/ld-arm/gc-hidden-1.d
++++ b/ld/testsuite/ld-arm/gc-hidden-1.d
+@@ -1,9 +1,10 @@
+-#target: arm*-*-*eabi*
+ #source: main.s
+ #source: gcdfn.s
+ #source: hidfn.s
+ #ld: --gc-sections --shared --version-script hideall.ld
+ #objdump: -dRT
++# This test is only valid on ELF based ports.
++# not-target: *-*-*coff *-*-pe *-*-wince *-*-*aout* *-*-netbsd *-*-riscix*
+ 
+ # See PR ld/13990: a forced-local PLT reference to a
+ # forced-local symbol is GC'ed, trigging a BFD_ASSERT.
+@@ -11,15 +12,15 @@
+ .*:     file format elf32-.*
+ 
+ DYNAMIC SYMBOL TABLE:
+-0+124 l    d  .text	0+              .text
++0+[0-9a-f]+ l    d  .text	0+              .text
+ 0+ g    DO \*ABS\*	0+  NS          NS
+ 
+ Disassembly of section .text:
+ 
+-0+124 <_start>:
+- 124:	e52de004 	push	{lr}		; \(str lr, \[sp, #-4\]!\)
+- 128:	eb000000 	bl	130 <hidfn>
+- 12c:	e8bd8000 	ldmfd	sp!, {pc}
++0+[0-9a-f]+ <_start>:
++\s*[0-9a-f]+:\s+e52de004\s+push	{lr}		; \(str lr, \[sp, #-4\]!\)
++\s*[0-9a-f]+:\s+eb000000\s+bl	[0-9a-f]+ <hidfn>
++\s*[0-9a-f]+:\s+e8bd8000\s+ldmfd	sp!, {pc}
+ 
+-0+130 <hidfn>:
+- 130:	e8bd8000 	ldmfd	sp!, {pc}
++0+[0-9a-f]+ <hidfn>:
++\s*[0-9a-f]+:\s+e8bd8000\s+ldmfd	sp!, {pc}
+-- 
+2.0.3
+

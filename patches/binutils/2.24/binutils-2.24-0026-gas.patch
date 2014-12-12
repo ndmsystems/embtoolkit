@@ -1,0 +1,141 @@
+From 11c875ad977f00a344de2fa89f89abfb8646d6bd Mon Sep 17 00:00:00 2001
+From: Yufeng Zhang <yufeng.zhang@arm.com>
+Date: Wed, 18 Dec 2013 19:20:34 +0000
+Subject: [PATCH 026/330] gas/
+
+	* config/tc-aarch64.c (md_assemble): Defer the feature checking until
+	do_encode () succeeds.
+
+gas/testsuite/
+
+	* gas/aarch64/rm-simd-ext.d: New file.
+	* gas/aarch64/rm-simd-ext.l: Likewise.
+	* gas/aarch64/rm-simd-ext.s: Likewise.
+---
+ gas/ChangeLog                           |  5 +++++
+ gas/config/tc-aarch64.c                 | 16 ++++++++--------
+ gas/testsuite/ChangeLog                 |  6 ++++++
+ gas/testsuite/gas/aarch64/rm-simd-ext.d |  4 ++++
+ gas/testsuite/gas/aarch64/rm-simd-ext.l |  2 ++
+ gas/testsuite/gas/aarch64/rm-simd-ext.s | 28 ++++++++++++++++++++++++++++
+ 6 files changed, 53 insertions(+), 8 deletions(-)
+ create mode 100644 gas/testsuite/gas/aarch64/rm-simd-ext.d
+ create mode 100644 gas/testsuite/gas/aarch64/rm-simd-ext.l
+ create mode 100644 gas/testsuite/gas/aarch64/rm-simd-ext.s
+
+diff --git a/gas/ChangeLog b/gas/ChangeLog
+index 30e63a1..ab68c33 100644
+--- a/gas/ChangeLog
++++ b/gas/ChangeLog
+@@ -1,3 +1,8 @@
++2013-12-18  Yufeng Zhang  <yufeng.zhang@arm.com>
++
++	* config/tc-aarch64.c (md_assemble): Defer the feature checking until
++	do_encode () succeeds.
++
+ 2013-12-10  Roland McGrath  <mcgrathr@google.com>
+ 
+ 	* Makefile.am (install-exec-bindir): Prefix libtool invocation
+diff --git a/gas/config/tc-aarch64.c b/gas/config/tc-aarch64.c
+index fb0ae33..7a69d00 100644
+--- a/gas/config/tc-aarch64.c
++++ b/gas/config/tc-aarch64.c
+@@ -5531,14 +5531,6 @@ md_assemble (char *str)
+ 	dump_opcode_operands (opcode);
+ #endif /* DEBUG_AARCH64 */
+ 
+-      /* Check that this instruction is supported for this CPU.  */
+-      if (!opcode->avariant
+-	  || !AARCH64_CPU_HAS_FEATURE (cpu_variant, *opcode->avariant))
+-	{
+-	  as_bad (_("selected processor does not support `%s'"), str);
+-	  return;
+-	}
+-
+       mapping_state (MAP_INSN);
+ 
+       inst_base = &inst.base;
+@@ -5563,6 +5555,14 @@ md_assemble (char *str)
+ 	  && programmer_friendly_fixup (&inst)
+ 	  && do_encode (inst_base->opcode, &inst.base, &inst_base->value))
+ 	{
++	  /* Check that this instruction is supported for this CPU.  */
++	  if (!opcode->avariant
++	      || !AARCH64_CPU_HAS_FEATURE (cpu_variant, *opcode->avariant))
++	    {
++	      as_bad (_("selected processor does not support `%s'"), str);
++	      return;
++	    }
++
+ 	  if (inst.reloc.type == BFD_RELOC_UNUSED
+ 	      || !inst.reloc.need_libopcodes_p)
+ 	    output_inst (NULL);
+diff --git a/gas/testsuite/ChangeLog b/gas/testsuite/ChangeLog
+index be67b6e..3541bc7 100644
+--- a/gas/testsuite/ChangeLog
++++ b/gas/testsuite/ChangeLog
+@@ -1,3 +1,9 @@
++2013-12-18  Yufeng Zhang  <yufeng.zhang@arm.com>
++
++	* gas/aarch64/rm-simd-ext.d: New file.
++	* gas/aarch64/rm-simd-ext.l: Likewise.
++	* gas/aarch64/rm-simd-ext.s: Likewise.
++
+ 2013-11-20  Yufeng Zhang  <yufeng.zhang@arm.com>
+ 
+ 	* gas/aarch64/msr.s: Add tests.
+diff --git a/gas/testsuite/gas/aarch64/rm-simd-ext.d b/gas/testsuite/gas/aarch64/rm-simd-ext.d
+new file mode 100644
+index 0000000..a60f987
+--- /dev/null
++++ b/gas/testsuite/gas/aarch64/rm-simd-ext.d
+@@ -0,0 +1,4 @@
++#name: SIMD Extension Removal
++#source: rm-simd-ext.s
++#error-output: rm-simd-ext.l
++#as: -mcpu=cortex-a57+nosimd
+diff --git a/gas/testsuite/gas/aarch64/rm-simd-ext.l b/gas/testsuite/gas/aarch64/rm-simd-ext.l
+new file mode 100644
+index 0000000..2e24967
+--- /dev/null
++++ b/gas/testsuite/gas/aarch64/rm-simd-ext.l
+@@ -0,0 +1,2 @@
++[^:]*: Assembler messages:
++[^:]*:27: Error: selected processor does not support `orr v0.16b,v1.16b,v2.16b'
+diff --git a/gas/testsuite/gas/aarch64/rm-simd-ext.s b/gas/testsuite/gas/aarch64/rm-simd-ext.s
+new file mode 100644
+index 0000000..1994a4d
+--- /dev/null
++++ b/gas/testsuite/gas/aarch64/rm-simd-ext.s
+@@ -0,0 +1,28 @@
++/* rm-simd-ext.s Test file for AArch64 extension removal in -mcpu option.
++
++   Copyright 2013 Free Software Foundation, Inc.
++   Contributed by ARM Ltd.
++
++   This file is part of GAS.
++
++   GAS is free software; you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation; either version 3 of the license, or
++   (at your option) any later version.
++
++   GAS is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program; see the file COPYING3. If not,
++   see <http://www.gnu.org/licenses/>.  */
++
++	.text
++	mov	w3, 200
++	mul	w3, w2, w3
++	add	w1, w1, w3
++	add	w2, w0, w2, lsl 2
++	orr	v0.16b, v1.16b, v2.16b
++	orr	w1, w1, w3
+-- 
+2.0.3
+

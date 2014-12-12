@@ -1,0 +1,143 @@
+From 67428c4aa56d4183d0f531e0d752040745a94423 Mon Sep 17 00:00:00 2001
+From: Will Newton <will.newton@linaro.org>
+Date: Mon, 25 Nov 2013 11:07:07 +0000
+Subject: [PATCH 016/330] bfd/elfnn-aarch64.c: Fix miscalculation of GOTPLT
+ offset for ifunc syms.
+
+The .got.plt header size was not being correctly taken into account
+when calculating the offset for relocations against ifunc symbols.
+
+bfd/ChangeLog:
+
+2013-11-26  Will Newton  <will.newton@linaro.org>
+
+	* elfnn-aarch64.c (elfNN_aarch64_final_link_relocate): Ensure
+	PLT_INDEX is calculated using correct header size.
+
+ld/testsuite/ChangeLog:
+
+2013-11-26  Will Newton  <will.newton@linaro.org>
+
+	* ld-aarch64/aarch64-elf.exp: Add ifunc-21 test.
+	* ld-aarch64/ifunc-21.d: New file.
+	* ld-aarch64/ifunc-21.s: Likewise.
+---
+ bfd/ChangeLog                           |  5 +++++
+ bfd/elfnn-aarch64.c                     |  3 ++-
+ ld/testsuite/ChangeLog                  |  6 ++++++
+ ld/testsuite/ld-aarch64/aarch64-elf.exp |  1 +
+ ld/testsuite/ld-aarch64/ifunc-21.d      | 31 +++++++++++++++++++++++++++++++
+ ld/testsuite/ld-aarch64/ifunc-21.s      | 13 +++++++++++++
+ 6 files changed, 58 insertions(+), 1 deletion(-)
+ create mode 100644 ld/testsuite/ld-aarch64/ifunc-21.d
+ create mode 100644 ld/testsuite/ld-aarch64/ifunc-21.s
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index 30543c2..415964b 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,3 +1,8 @@
++2013-11-26  Will Newton  <will.newton@linaro.org>
++
++	* elfnn-aarch64.c (elfNN_aarch64_final_link_relocate): Ensure
++	PLT_INDEX is calculated using correct header size.
++
+ 2013-12-08  Alan Modra  <amodra@gmail.com>
+ 
+ 	* elflink.c (_bfd_elf_add_default_symbol): Set dynamic_def
+diff --git a/bfd/elfnn-aarch64.c b/bfd/elfnn-aarch64.c
+index 6bc414e..3cd3a18 100644
+--- a/bfd/elfnn-aarch64.c
++++ b/bfd/elfnn-aarch64.c
+@@ -3589,7 +3589,8 @@ elfNN_aarch64_final_link_relocate (reloc_howto_type *howto,
+ 
+ 	      if (globals->root.splt != NULL)
+ 		{
+-		  plt_index = h->plt.offset / globals->plt_entry_size - 1;
++		  plt_index = ((h->plt.offset - globals->plt_header_size) /
++			       globals->plt_entry_size);
+ 		  off = (plt_index + 3) * GOT_ENTRY_SIZE;
+ 		  base_got = globals->root.sgotplt;
+ 		}
+diff --git a/ld/testsuite/ChangeLog b/ld/testsuite/ChangeLog
+index 342d5b2..2d5379d 100644
+--- a/ld/testsuite/ChangeLog
++++ b/ld/testsuite/ChangeLog
+@@ -1,3 +1,9 @@
++2013-11-26  Will Newton  <will.newton@linaro.org>
++
++	* ld-aarch64/aarch64-elf.exp: Add ifunc-21 test.
++	* ld-aarch64/ifunc-21.d: New file.
++	* ld-aarch64/ifunc-21.s: Likewise.
++
+ 2013-11-19  Roland McGrath  <mcgrathr@google.com>
+ 
+ 	* ld-elf/ehdr_start-userdef.t: New file.
+diff --git a/ld/testsuite/ld-aarch64/aarch64-elf.exp b/ld/testsuite/ld-aarch64/aarch64-elf.exp
+index 5c150dd..a6b3ea2 100644
+--- a/ld/testsuite/ld-aarch64/aarch64-elf.exp
++++ b/ld/testsuite/ld-aarch64/aarch64-elf.exp
+@@ -155,3 +155,4 @@ run_dump_test "ifunc-18b"
+ run_dump_test "ifunc-19a"
+ run_dump_test "ifunc-19b"
+ run_dump_test "ifunc-20"
++run_dump_test "ifunc-21"
+diff --git a/ld/testsuite/ld-aarch64/ifunc-21.d b/ld/testsuite/ld-aarch64/ifunc-21.d
+new file mode 100644
+index 0000000..fa139b2
+--- /dev/null
++++ b/ld/testsuite/ld-aarch64/ifunc-21.d
+@@ -0,0 +1,31 @@
++#source: ifunc-21.s
++#ld: -shared -z nocombreloc
++#objdump: -d -s -j .got.plt -j .text
++#target: aarch64*-*-*
++
++# Ensure the .got.plt slot used is correct
++
++.*:     file format elf64-(little|big)aarch64
++
++Contents of section .text:
++ 02a0 .*
++Contents of section .got.plt:
++ 103a8 0+ 0+ 0+ 0+  .*
++ 103b8 0+ 0+ [0-9a-f]+ 0+  .*
++
++Disassembly of section .text:
++
++0+2a0 <ifunc>:
++ 2a0:	d65f03c0 	ret
++
++0+2a4 <bar>:
++ 2a4:	90000080 	adrp	x0, 10000 <.*>
++ 2a8:	f941e000 	ldr	x0, \[x0,#960\]
++ 2ac:	d65f03c0 	ret
++
++Disassembly of section .got.plt:
++
++.*:
++.*
++.*
++.*
+diff --git a/ld/testsuite/ld-aarch64/ifunc-21.s b/ld/testsuite/ld-aarch64/ifunc-21.s
+new file mode 100644
+index 0000000..a1563dc
+--- /dev/null
++++ b/ld/testsuite/ld-aarch64/ifunc-21.s
+@@ -0,0 +1,13 @@
++	.text
++	.type ifunc, @gnu_indirect_function
++	.hidden ifunc
++ifunc:
++	ret
++	.size	ifunc, .-ifunc
++	.type bar, @function
++	.globl bar
++bar:
++        adrp    x0, :got:ifunc
++        ldr     x0, [x0, #:got_lo12:ifunc]
++	ret
++	.size	bar, .-bar
+-- 
+2.0.3
+

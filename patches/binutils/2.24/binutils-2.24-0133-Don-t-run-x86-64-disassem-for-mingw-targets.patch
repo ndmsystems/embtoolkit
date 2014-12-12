@@ -1,0 +1,50 @@
+From 113d8cda64512b1d27df6f0f5985ce423d8d131f Mon Sep 17 00:00:00 2001
+From: "H.J. Lu" <hjl.tools@gmail.com>
+Date: Thu, 19 Dec 2013 11:25:46 -0800
+Subject: [PATCH 133/330] Don't run x86-64-disassem for mingw targets
+
+mingw targets pad text sections which won't work with x86-64-disassem.
+
+	* gas/i386/i386.exp: Don't run x86-64-disassem for mingw targets.
+---
+ gas/testsuite/ChangeLog         | 4 ++++
+ gas/testsuite/gas/i386/i386.exp | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/gas/testsuite/ChangeLog b/gas/testsuite/ChangeLog
+index 3b78173..f243d82 100644
+--- a/gas/testsuite/ChangeLog
++++ b/gas/testsuite/ChangeLog
+@@ -1,5 +1,9 @@
+ 2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
+ 
++	* gas/i386/i386.exp: Don't run x86-64-disassem for mingw targets.
++
++2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
++
+ 	Backport from master
+ 	2013-12-17  Michael Zolotukhin  <michael.v.zolotukhin@gmail.com>
+ 
+diff --git a/gas/testsuite/gas/i386/i386.exp b/gas/testsuite/gas/i386/i386.exp
+index 336500a..1d16f9a 100644
+--- a/gas/testsuite/gas/i386/i386.exp
++++ b/gas/testsuite/gas/i386/i386.exp
+@@ -363,6 +363,7 @@ if [expr ([istarget "i*86-*-*"] || [istarget "x86_64-*-*"]) && [gas_64_check]] t
+     run_dump_test "x86-64-intel64"
+     if { ![istarget "*-*-mingw*"] } then {
+       run_dump_test "x86-64-pcrel"
++      run_dump_test "x86-64-disassem"
+     } else {
+       run_dump_test "x86-64-w64-pcrel"
+     }
+@@ -553,7 +554,6 @@ if [expr ([istarget "i*86-*-*"] || [istarget "x86_64-*-*"]) && [gas_64_check]] t
+     run_dump_test "x86-64-mpx-addr32"
+     run_dump_test "x86-64-mpx-add-bnd-prefix"
+     run_dump_test "x86-64-sha"
+-    run_dump_test "x86-64-disassem"
+ 
+     if { ![istarget "*-*-aix*"]
+       && ![istarget "*-*-beos*"]
+-- 
+2.0.3
+

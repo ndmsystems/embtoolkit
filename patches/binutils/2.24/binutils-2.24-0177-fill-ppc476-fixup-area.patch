@@ -1,0 +1,59 @@
+From 424d420f4a30a170a7b518089deb847692cedb16 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Wed, 16 Apr 2014 11:47:13 +0930
+Subject: [PATCH 177/330] fill ppc476 fixup area
+
+Stops false positive warnings from scanner.
+
+	* elf32-ppc.c (ppc_elf_relocate_section): Fill 476 fixup area
+	with "ba 0" rather than zeros.
+---
+ bfd/ChangeLog   |  4 ++++
+ bfd/elf32-ppc.c | 16 ++++++++++++++--
+ 2 files changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index bf70587..aa1ec43 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,6 +1,10 @@
+ 2014-04-16  Alan Modra  <amodra@gmail.com>
+ 
+ 	Apply mainline patches for ppc476 workaround
++	2014-04-16  Alan Modra  <amodra@gmail.com>
++	* elf32-ppc.c (ppc_elf_relocate_section): Fill 476 fixup area
++	with "ba 0" rather than zeros.
++
+ 	2014-04-14  Alan Modra  <amodra@gmail.com>
+ 	* elf32-ppc.c (BA): Define
+ 	(ppc_elf_link_hash_table_create): Correct default_params.
+diff --git a/bfd/elf32-ppc.c b/bfd/elf32-ppc.c
+index 43e77d8..47ef46a 100644
+--- a/bfd/elf32-ppc.c
++++ b/bfd/elf32-ppc.c
+@@ -9173,8 +9173,20 @@ ppc_elf_relocate_section (bfd *output_bfd,
+ 
+       relax_info = elf_section_data (input_section)->sec_info;
+       if (relax_info->workaround_size != 0)
+-	memset (contents + input_section->size - relax_info->workaround_size,
+-		0, relax_info->workaround_size);
++	{
++	  bfd_byte *p;
++	  unsigned int n;
++	  bfd_byte fill[4];
++
++	  bfd_put_32 (input_bfd, BA, fill);
++	  p = contents + input_section->size - relax_info->workaround_size;
++	  n = relax_info->workaround_size >> 2;
++	  while (n--)
++	    {
++	      memcpy (p, fill, 4);
++	      p += 4;
++	    }
++	}
+ 
+       /* The idea is: Replace the last instruction on a page with a
+ 	 branch to a patch area.  Put the insn there followed by a
+-- 
+2.0.3
+

@@ -1,0 +1,212 @@
+From 835bc35500a1115d0f56bf24fdc94f326fdd6039 Mon Sep 17 00:00:00 2001
+From: Yufeng Zhang <yufeng.zhang@arm.com>
+Date: Thu, 27 Feb 2014 15:06:56 +0000
+Subject: [PATCH 107/330] opcodes/
+
+	* aarch64-tbl.h (aarch64_opcode_table): Replace IMM0 with
+	FPIMM0 for fcmeq, fcmgt, fcmge, fcmlt and fcmle.
+
+gas/testsuite/
+
+	* gas/aarch64/fp-const0-parsing.s: New test.
+	* gas/aarch64/fp-const0-parsing.d: Likewise.
+---
+ gas/testsuite/ChangeLog                     |  5 +++
+ gas/testsuite/gas/aarch64/fp-const0-parse.d | 37 ++++++++++++++++++
+ gas/testsuite/gas/aarch64/fp-const0-parse.s | 60 +++++++++++++++++++++++++++++
+ opcodes/ChangeLog                           |  5 +++
+ opcodes/aarch64-tbl.h                       | 20 +++++-----
+ 5 files changed, 117 insertions(+), 10 deletions(-)
+ create mode 100644 gas/testsuite/gas/aarch64/fp-const0-parse.d
+ create mode 100644 gas/testsuite/gas/aarch64/fp-const0-parse.s
+
+diff --git a/gas/testsuite/ChangeLog b/gas/testsuite/ChangeLog
+index 73d5cb9..bb4f14e 100644
+--- a/gas/testsuite/ChangeLog
++++ b/gas/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-02-27  Jiong Wang  <jiong.wang@arm.com>
++
++	* gas/aarch64/fp-const0-parsing.s: New test.
++	* gas/aarch64/fp-const0-parsing.d: Likewise.
++
+ 2014-02-27  Yufeng Zhang  <yufeng.zhang@arm.com>
+ 
+ 	* gas/aarch64/ldst-reg-reg-offset.s: Add tests.
+diff --git a/gas/testsuite/gas/aarch64/fp-const0-parse.d b/gas/testsuite/gas/aarch64/fp-const0-parse.d
+new file mode 100644
+index 0000000..172f35c
+--- /dev/null
++++ b/gas/testsuite/gas/aarch64/fp-const0-parse.d
+@@ -0,0 +1,37 @@
++#objdump: -dr
++
++.*:     file format .*
++
++Disassembly of section \.text:
++
++0000000000000000 <.*>:
++   0:	5ea0dbc0 	fcmeq	s0, s30, #0.0
++   4:	7ea0cba1 	fcmge	s1, s29, #0.0
++   8:	5ea0cb82 	fcmgt	s2, s28, #0.0
++   c:	7ea0db63 	fcmle	s3, s27, #0.0
++  10:	5ea0eb44 	fcmlt	s4, s26, #0.0
++  14:	5ee0dbc0 	fcmeq	d0, d30, #0.0
++  18:	7ee0cba1 	fcmge	d1, d29, #0.0
++  1c:	5ee0cb82 	fcmgt	d2, d28, #0.0
++  20:	7ee0db63 	fcmle	d3, d27, #0.0
++  24:	5ee0eb44 	fcmlt	d4, d26, #0.0
++  28:	0ea0dbc0 	fcmeq	v0.2s, v30.2s, #0.0
++  2c:	6ea0cba1 	fcmge	v1.4s, v29.4s, #0.0
++  30:	4ee0cb82 	fcmgt	v2.2d, v28.2d, #0.0
++  34:	2ea0db63 	fcmle	v3.2s, v27.2s, #0.0
++  38:	4ea0eb44 	fcmlt	v4.4s, v26.4s, #0.0
++  3c:	5ea0dbc0 	fcmeq	s0, s30, #0.0
++  40:	7ea0cba1 	fcmge	s1, s29, #0.0
++  44:	5ea0cb82 	fcmgt	s2, s28, #0.0
++  48:	7ea0db63 	fcmle	s3, s27, #0.0
++  4c:	5ea0eb44 	fcmlt	s4, s26, #0.0
++  50:	5ee0dbc0 	fcmeq	d0, d30, #0.0
++  54:	7ee0cba1 	fcmge	d1, d29, #0.0
++  58:	5ee0cb82 	fcmgt	d2, d28, #0.0
++  5c:	7ee0db63 	fcmle	d3, d27, #0.0
++  60:	5ee0eb44 	fcmlt	d4, d26, #0.0
++  64:	0ea0dbc0 	fcmeq	v0.2s, v30.2s, #0.0
++  68:	6ea0cba1 	fcmge	v1.4s, v29.4s, #0.0
++  6c:	4ee0cb82 	fcmgt	v2.2d, v28.2d, #0.0
++  70:	2ea0db63 	fcmle	v3.2s, v27.2s, #0.0
++  74:	4ea0eb44 	fcmlt	v4.4s, v26.4s, #0.0
+diff --git a/gas/testsuite/gas/aarch64/fp-const0-parse.s b/gas/testsuite/gas/aarch64/fp-const0-parse.s
+new file mode 100644
+index 0000000..b2d4d57
+--- /dev/null
++++ b/gas/testsuite/gas/aarch64/fp-const0-parse.s
+@@ -0,0 +1,60 @@
++/* fp-const0-parse.s Test file For AArch64 float constant 0 parse.
++
++   Copyright 2014 Free Software Foundation, Inc.
++   Contributed by ARM Ltd.
++
++   This file is part of GAS.
++
++   GAS is free software; you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation; either version 3 of the license, or
++   (at your option) any later version.
++
++   GAS is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program; see the file COPYING3. If not,
++   see <http://www.gnu.org/licenses/>.  */
++
++
++	.text
++	// Check #0 with scalar register.
++	fcmeq	s0, s30, #0
++	fcmge	s1, s29, #0
++	fcmgt	s2, s28, #0
++	fcmle	s3, s27, #0
++	fcmlt	s4, s26, #0
++	fcmeq	d0, d30, #0
++	fcmge	d1, d29, #0
++	fcmgt	d2, d28, #0
++	fcmle	d3, d27, #0
++	fcmlt	d4, d26, #0
++
++	// Check #0 with vector register.
++	fcmeq	v0.2s, v30.2s, #0
++	fcmge	v1.4s, v29.4s, #0
++	fcmgt	v2.2d, v28.2d, #0
++	fcmle	v3.2s, v27.2s, #0
++	fcmlt	v4.4s, v26.4s, #0
++
++	// Check #0.0 with scalar register.
++	fcmeq	s0, s30, #0.0
++	fcmge	s1, s29, #0.0
++	fcmgt	s2, s28, #0.0
++	fcmle	s3, s27, #0.0
++	fcmlt	s4, s26, #0.0
++	fcmeq	d0, d30, #0.0
++	fcmge	d1, d29, #0.0
++	fcmgt	d2, d28, #0.0
++	fcmle	d3, d27, #0.0
++	fcmlt	d4, d26, #0.0
++
++	// Check #0.0 with vector register.
++	fcmeq	v0.2s, v30.2s, #0.0
++	fcmge	v1.4s, v29.4s, #0.0
++	fcmgt	v2.2d, v28.2d, #0.0
++	fcmle	v3.2s, v27.2s, #0.0
++	fcmlt	v4.4s, v26.4s, #0.0
+diff --git a/opcodes/ChangeLog b/opcodes/ChangeLog
+index f1d90c2..ec87a6e 100644
+--- a/opcodes/ChangeLog
++++ b/opcodes/ChangeLog
+@@ -1,3 +1,8 @@
++2014-02-27  Jiong Wang  <jiong.wang@arm.com>
++
++	* aarch64-tbl.h (aarch64_opcode_table): Replace IMM0 with
++	FPIMM0 for fcmeq, fcmgt, fcmge, fcmlt and fcmle.
++
+ 2014-02-27  Yufeng Zhang  <yufeng.zhang@arm.com>
+ 
+ 	* aarch64-opc.c (print_register_offset_address): Call
+diff --git a/opcodes/aarch64-tbl.h b/opcodes/aarch64-tbl.h
+index c53794a..70a1727 100644
+--- a/opcodes/aarch64-tbl.h
++++ b/opcodes/aarch64-tbl.h
+@@ -1403,9 +1403,9 @@ struct aarch64_opcode aarch64_opcode_table[] =
+   {"fcvtms", 0xe21b800, 0xbfbffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMESD, F_SIZEQ},
+   {"fcvtas", 0xe21c800, 0xbfbffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMESD, F_SIZEQ},
+   {"scvtf", 0xe21d800, 0xbfbffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMESD, F_SIZEQ},
+-  {"fcmgt", 0xea0c800, 0xbfbffc00, asimdmisc, 0, SIMD, OP3 (Vd, Vn, IMM0), QL_V2SAMESD, F_SIZEQ},
+-  {"fcmeq", 0xea0d800, 0xbfbffc00, asimdmisc, 0, SIMD, OP3 (Vd, Vn, IMM0), QL_V2SAMESD, F_SIZEQ},
+-  {"fcmlt", 0xea0e800, 0xbfbffc00, asimdmisc, 0, SIMD, OP3 (Vd, Vn, IMM0), QL_V2SAMESD, F_SIZEQ},
++  {"fcmgt", 0xea0c800, 0xbfbffc00, asimdmisc, 0, SIMD, OP3 (Vd, Vn, FPIMM0), QL_V2SAMESD, F_SIZEQ},
++  {"fcmeq", 0xea0d800, 0xbfbffc00, asimdmisc, 0, SIMD, OP3 (Vd, Vn, FPIMM0), QL_V2SAMESD, F_SIZEQ},
++  {"fcmlt", 0xea0e800, 0xbfbffc00, asimdmisc, 0, SIMD, OP3 (Vd, Vn, FPIMM0), QL_V2SAMESD, F_SIZEQ},
+   {"fabs", 0xea0f800, 0xbfbffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMESD, F_SIZEQ},
+   {"frintp", 0xea18800, 0xbfbffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMESD, F_SIZEQ},
+   {"frintz", 0xea19800, 0xbfbffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMESD, F_SIZEQ},
+@@ -1439,8 +1439,8 @@ struct aarch64_opcode aarch64_opcode_table[] =
+   {"not", 0x2e205800, 0xbffffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMEB, F_SIZEQ | F_HAS_ALIAS},
+   {"mvn", 0x2e205800, 0xbffffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMEB, F_SIZEQ | F_ALIAS},
+   {"rbit", 0x2e605800, 0xbffffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMEB, F_SIZEQ},
+-  {"fcmge", 0x2ea0c800, 0xbfbffc00, asimdmisc, 0, SIMD, OP3 (Vd, Vn, IMM0), QL_V2SAMESD, F_SIZEQ},
+-  {"fcmle", 0x2ea0d800, 0xbfbffc00, asimdmisc, 0, SIMD, OP3 (Vd, Vn, IMM0), QL_V2SAMESD, F_SIZEQ},
++  {"fcmge", 0x2ea0c800, 0xbfbffc00, asimdmisc, 0, SIMD, OP3 (Vd, Vn, FPIMM0), QL_V2SAMESD, F_SIZEQ},
++  {"fcmle", 0x2ea0d800, 0xbfbffc00, asimdmisc, 0, SIMD, OP3 (Vd, Vn, FPIMM0), QL_V2SAMESD, F_SIZEQ},
+   {"fneg", 0x2ea0f800, 0xbfbffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMESD, F_SIZEQ},
+   {"frinti", 0x2ea19800, 0xbfbffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMESD, F_SIZEQ},
+   {"fcvtpu", 0x2ea1a800, 0xbfbffc00, asimdmisc, 0, SIMD, OP2 (Vd, Vn), QL_V2SAMESD, F_SIZEQ},
+@@ -1650,9 +1650,9 @@ struct aarch64_opcode aarch64_opcode_table[] =
+   {"fcvtms", 0x5e21b800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+   {"fcvtas", 0x5e21c800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+   {"scvtf", 0x5e21d800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+-  {"fcmgt", 0x5ea0c800, 0xffbffc00, asisdmisc, 0, SIMD, OP3 (Sd, Sn, IMM0), QL_SISD_FCMP_0, F_SSIZE},
+-  {"fcmeq", 0x5ea0d800, 0xffbffc00, asisdmisc, 0, SIMD, OP3 (Sd, Sn, IMM0), QL_SISD_FCMP_0, F_SSIZE},
+-  {"fcmlt", 0x5ea0e800, 0xffbffc00, asisdmisc, 0, SIMD, OP3 (Sd, Sn, IMM0), QL_SISD_FCMP_0, F_SSIZE},
++  {"fcmgt", 0x5ea0c800, 0xffbffc00, asisdmisc, 0, SIMD, OP3 (Sd, Sn, FPIMM0), QL_SISD_FCMP_0, F_SSIZE},
++  {"fcmeq", 0x5ea0d800, 0xffbffc00, asisdmisc, 0, SIMD, OP3 (Sd, Sn, FPIMM0), QL_SISD_FCMP_0, F_SSIZE},
++  {"fcmlt", 0x5ea0e800, 0xffbffc00, asisdmisc, 0, SIMD, OP3 (Sd, Sn, FPIMM0), QL_SISD_FCMP_0, F_SSIZE},
+   {"fcvtps", 0x5ea1a800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+   {"fcvtzs", 0x5ea1b800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+   {"frecpe", 0x5ea1d800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+@@ -1669,8 +1669,8 @@ struct aarch64_opcode aarch64_opcode_table[] =
+   {"fcvtmu", 0x7e21b800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+   {"fcvtau", 0x7e21c800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+   {"ucvtf", 0x7e21d800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+-  {"fcmge", 0x7ea0c800, 0xffbffc00, asisdmisc, 0, SIMD, OP3 (Sd, Sn, IMM0), QL_SISD_FCMP_0, F_SSIZE},
+-  {"fcmle", 0x7ea0d800, 0xffbffc00, asisdmisc, 0, SIMD, OP3 (Sd, Sn, IMM0), QL_SISD_FCMP_0, F_SSIZE},
++  {"fcmge", 0x7ea0c800, 0xffbffc00, asisdmisc, 0, SIMD, OP3 (Sd, Sn, FPIMM0), QL_SISD_FCMP_0, F_SSIZE},
++  {"fcmle", 0x7ea0d800, 0xffbffc00, asisdmisc, 0, SIMD, OP3 (Sd, Sn, FPIMM0), QL_SISD_FCMP_0, F_SSIZE},
+   {"fcvtpu", 0x7ea1a800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+   {"fcvtzu", 0x7ea1b800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+   {"frsqrte", 0x7ea1d800, 0xffbffc00, asisdmisc, 0, SIMD, OP2 (Sd, Sn), QL_S_2SAMESD, F_SSIZE},
+-- 
+2.0.3
+

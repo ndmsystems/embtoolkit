@@ -1,0 +1,93 @@
+From f17706ea1111ab537a33ad6f13a094f18c1acaea Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Wed, 12 Feb 2014 21:08:01 +1030
+Subject: [PATCH 242/330] PR15530, mark symbol in executables if it matches
+ dynamic_list
+
+For powerpc64 as HJ did earlier for other ELF targets, and a tidy.
+
+	PR gold/15530
+	* elf64-ppc.c (ppc64_elf_gc_mark_dynamic_ref): Support
+	--export-dynamic and --dynamic-list marking of symbols.
+	* elflink.c (bfd_elf_gc_mark_dynamic_ref_symbol): Reorder
+	cheap tests first.
+---
+ bfd/ChangeLog   |  7 +++++++
+ bfd/elf64-ppc.c |  9 +++++++--
+ bfd/elflink.c   | 11 ++++++-----
+ 3 files changed, 20 insertions(+), 7 deletions(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index cacf158..6cee4e7 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,6 +1,13 @@
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Backport mainline patches
++	2014-02-12  Alan Modra  <amodra@gmail.com>
++	PR gold/15530
++	* elf64-ppc.c (ppc64_elf_gc_mark_dynamic_ref): Support
++	--export-dynamic and --dynamic-list marking of symbols.
++	* elflink.c (bfd_elf_gc_mark_dynamic_ref_symbol): Reorder
++	cheap tests first.
++
+ 	2014-02-10  H.J. Lu  <hongjiu.lu@intel.com>
+ 	PR gold/16530
+ 	* elflink.c (bfd_elf_gc_mark_dynamic_ref_symbol): Mark symbol in
+diff --git a/bfd/elf64-ppc.c b/bfd/elf64-ppc.c
+index 9e40fcf..3ff1dad 100644
+--- a/bfd/elf64-ppc.c
++++ b/bfd/elf64-ppc.c
+@@ -6142,6 +6142,7 @@ ppc64_elf_gc_mark_dynamic_ref (struct elf_link_hash_entry *h, void *inf)
+   struct bfd_link_info *info = (struct bfd_link_info *) inf;
+   struct ppc_link_hash_entry *eh = (struct ppc_link_hash_entry *) h;
+   struct ppc_link_hash_entry *fdh;
++  struct bfd_elf_dynamic_list *d = info->dynamic_list;
+ 
+   /* Dynamic linking info is on the func descriptor sym.  */
+   fdh = defined_func_desc (eh);
+@@ -6151,10 +6152,14 @@ ppc64_elf_gc_mark_dynamic_ref (struct elf_link_hash_entry *h, void *inf)
+   if ((eh->elf.root.type == bfd_link_hash_defined
+        || eh->elf.root.type == bfd_link_hash_defweak)
+       && (eh->elf.ref_dynamic
+-	  || (!info->executable
+-	      && eh->elf.def_regular
++	  || (eh->elf.def_regular
+ 	      && ELF_ST_VISIBILITY (eh->elf.other) != STV_INTERNAL
+ 	      && ELF_ST_VISIBILITY (eh->elf.other) != STV_HIDDEN
++	      && (!info->executable
++		  || info->export_dynamic
++		  || (eh->elf.dynamic
++		      && d != NULL
++		      && (*d->match) (&d->head, NULL, eh->elf.root.root.string)))
+ 	      && (strchr (eh->elf.root.root.string, ELF_VER_CHR) != NULL
+ 		  || !bfd_hide_sym_by_version (info->version_info,
+ 					       eh->elf.root.root.string)))))
+diff --git a/bfd/elflink.c b/bfd/elflink.c
+index b8d357d..923f853 100644
+--- a/bfd/elflink.c
++++ b/bfd/elflink.c
+@@ -12134,13 +12134,14 @@ bfd_elf_gc_mark_dynamic_ref_symbol (struct elf_link_hash_entry *h, void *inf)
+   if ((h->root.type == bfd_link_hash_defined
+        || h->root.type == bfd_link_hash_defweak)
+       && (h->ref_dynamic
+-	  || ((!info->executable
+-	       || info->export_dynamic
+-	       || (d != NULL
+-		   && (*d->match) (&d->head, NULL, h->root.root.string)))
+-	      && h->def_regular
++	  || (h->def_regular
+ 	      && ELF_ST_VISIBILITY (h->other) != STV_INTERNAL
+ 	      && ELF_ST_VISIBILITY (h->other) != STV_HIDDEN
++	      && (!info->executable
++		  || info->export_dynamic
++		  || (h->dynamic
++		      && d != NULL
++		      && (*d->match) (&d->head, NULL, h->root.root.string)))
+ 	      && (strchr (h->root.root.string, ELF_VER_CHR) != NULL
+ 		  || !bfd_hide_sym_by_version (info->version_info,
+ 					       h->root.root.string)))))
+-- 
+2.0.3
+

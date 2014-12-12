@@ -1,0 +1,243 @@
+From da7a0638f46eab9b556b08366d729024b7bdc279 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Wed, 9 Apr 2014 17:43:21 +0930
+Subject: [PATCH 175/330] ppc476 gas warn on data in code sections
+
+    	* config/tc-ppc.c (warn_476, last_insn, last_seg, last_subseg):
+    	New static vars.
+    	(md_longopts, md_parse_option, md_show_usage): Add --ppc476-workaround.
+    	(ppc_elf_cons_fix_check): New function.
+    	(md_assemble): Set last_insn, last_seg, last_subseg.
+    	(ppc_elf_cons, ppc_byte, md_apply_fix): Handle warn_476.
+    	* config/tc-ppc.h (TC_CONS_FIX_CHECK): Define.
+    	(ppc_elf_cons_fix_check): Declare.
+    	* read.c (cons_worker): Invoke TC_CONS_FIX_CHECK.
+---
+ gas/ChangeLog       | 14 +++++++++++
+ gas/config/tc-ppc.c | 72 ++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ gas/config/tc-ppc.h |  4 +++
+ gas/read.c          |  9 +++++++
+ 4 files changed, 98 insertions(+), 1 deletion(-)
+
+diff --git a/gas/ChangeLog b/gas/ChangeLog
+index e548d5e..7d8c1d9 100644
+--- a/gas/ChangeLog
++++ b/gas/ChangeLog
+@@ -1,3 +1,17 @@
++2014-04-16  Alan Modra  <amodra@gmail.com>
++
++	Apply mainline patches for ppc476 workaround
++	2014-04-09  Alan Modra  <amodra@gmail.com>
++    	* config/tc-ppc.c (warn_476, last_insn, last_seg, last_subseg):
++    	New static vars.
++    	(md_longopts, md_parse_option, md_show_usage): Add --ppc476-workaround.
++    	(ppc_elf_cons_fix_check): New function.
++    	(md_assemble): Set last_insn, last_seg, last_subseg.
++    	(ppc_elf_cons, ppc_byte, md_apply_fix): Handle warn_476.
++    	* config/tc-ppc.h (TC_CONS_FIX_CHECK): Define.
++    	(ppc_elf_cons_fix_check): Declare.
++    	* read.c (cons_worker): Invoke TC_CONS_FIX_CHECK.
++
+ 2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
+ 
+ 	Backport from master
+diff --git a/gas/config/tc-ppc.c b/gas/config/tc-ppc.c
+index 7c99e43..07d89ca 100644
+--- a/gas/config/tc-ppc.c
++++ b/gas/config/tc-ppc.c
+@@ -214,6 +214,12 @@ enum {
+   has_large_toc_reloc = 1,
+   has_small_toc_reloc = 2
+ } toc_reloc_types;
++
++/* Warn on emitting data to code sections.  */
++int warn_476;
++unsigned long last_insn;
++segT last_seg;
++subsegT last_subseg;
+ 
+ /* The target specific pseudo-ops which we support.  */
+ 
+@@ -1072,6 +1078,8 @@ const char *const md_shortopts = "um:";
+ #define OPTION_NOPS (OPTION_MD_BASE + 0)
+ const struct option md_longopts[] = {
+   {"nops", required_argument, NULL, OPTION_NOPS},
++  {"ppc476-workaround", no_argument, &warn_476, 1},
++  {"no-ppc476-workaround", no_argument, &warn_476, 0},
+   {NULL, no_argument, NULL, 0}
+ };
+ const size_t md_longopts_size = sizeof (md_longopts);
+@@ -1250,6 +1258,9 @@ md_parse_option (int c, char *arg)
+       }
+       break;
+ 
++    case 0:
++      break;
++
+     default:
+       return 0;
+     }
+@@ -1323,7 +1334,8 @@ PowerPC options:\n\
+ -Qy, -Qn                ignored\n"));
+ #endif
+   fprintf (stream, _("\
+--nops=count             when aligning, more than COUNT nops uses a branch\n"));
++-nops=count             when aligning, more than COUNT nops uses a branch\n\
++-ppc476-workaround      warn if emitting data to code sections\n"));
+ }
+ 
+ /* Set ppc_cpu if it is not already set.  */
+@@ -2067,6 +2079,12 @@ ppc_elf_cons (int nbytes /* 1=.byte, 2=.word, 4=.long, 8=.llong */)
+ 
+   do
+     {
++#ifdef TC_CONS_FIX_CHECK
++      fixS **cur_fix = &frchain_now->fix_tail;
++
++      if (*cur_fix != NULL)
++	cur_fix = &(*cur_fix)->fx_next;
++#endif
+       expression (&exp);
+       if (*input_line_pointer == '@'
+ 	  && (reloc = ppc_elf_suffix (&input_line_pointer,
+@@ -2099,6 +2117,9 @@ ppc_elf_cons (int nbytes /* 1=.byte, 2=.word, 4=.long, 8=.llong */)
+ 	}
+       else
+ 	emit_expr (&exp, (unsigned int) nbytes);
++#ifdef TC_CONS_FIX_CHECK
++      TC_CONS_FIX_CHECK (&exp, nbytes, *cur_fix);
++#endif
+     }
+   while (*input_line_pointer++ == ',');
+ 
+@@ -2107,6 +2128,37 @@ ppc_elf_cons (int nbytes /* 1=.byte, 2=.word, 4=.long, 8=.llong */)
+   demand_empty_rest_of_line ();
+ }
+ 
++/* Warn when emitting data to code sections, unless we are emitting
++   a relocation that ld --ppc476-workaround uses to recognise data
++   *and* there was an unconditional branch prior to the data.  */
++
++void
++ppc_elf_cons_fix_check (expressionS *exp ATTRIBUTE_UNUSED,
++			unsigned int nbytes, fixS *fix)
++{
++  if (warn_476
++      && (now_seg->flags & SEC_CODE) != 0
++      && (nbytes != 4
++	  || fix == NULL
++	  || !(fix->fx_r_type == BFD_RELOC_32
++	       || fix->fx_r_type == BFD_RELOC_CTOR
++	       || fix->fx_r_type == BFD_RELOC_32_PCREL)
++	  || !(last_seg == now_seg && last_subseg == now_subseg)
++	  || !((last_insn & (0x3f << 26)) == (18u << 26)
++	       || ((last_insn & (0x3f << 26)) == (16u << 26)
++		   && (last_insn & (0x14 << 21)) == (0x14 << 21))
++	       || ((last_insn & (0x3f << 26)) == (19u << 26)
++		   && (last_insn & (0x3ff << 1)) == (16u << 1)
++		   && (last_insn & (0x14 << 21)) == (0x14 << 21)))))
++    {
++      /* Flag that we've warned.  */
++      if (fix != NULL)
++	fix->fx_tcbit = 1;
++
++      as_warn (_("data in executable section"));
++    }
++}
++
+ /* Solaris pseduo op to change to the .rodata section.  */
+ static void
+ ppc_elf_rdata (int xxx)
+@@ -3406,6 +3458,9 @@ md_assemble (char *str)
+   frag_now->insn_addr = addr_mod;
+   frag_now->has_code = 1;
+   md_number_to_chars (f, insn, insn_length);
++  last_insn = insn;
++  last_seg = now_seg;
++  last_subseg = now_subseg;
+ 
+ #ifdef OBJ_ELF
+   dwarf2_emit_insn (insn_length);
+@@ -3563,6 +3618,8 @@ ppc_section_flags (flagword flags, bfd_vma attr ATTRIBUTE_UNUSED, int type)
+ static void
+ ppc_byte (int ignore ATTRIBUTE_UNUSED)
+ {
++  int count = 0;
++
+   if (*input_line_pointer != '\"')
+     {
+       cons (1);
+@@ -3586,8 +3643,11 @@ ppc_byte (int ignore ATTRIBUTE_UNUSED)
+ 	}
+ 
+       FRAG_APPEND_1_CHAR (c);
++      ++count;
+     }
+ 
++  if (warn_476 && count != 0 && (now_seg->flags & SEC_CODE) != 0)
++    as_warn (_("data in executable section"));
+   demand_empty_rest_of_line ();
+ }
+ 
+@@ -6984,6 +7044,16 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg ATTRIBUTE_UNUSED)
+       if (fixP->fx_size && APPLY_RELOC)
+ 	md_number_to_chars (fixP->fx_frag->fr_literal + fixP->fx_where,
+ 			    fieldval, fixP->fx_size);
++      if (warn_476
++	  && (seg->flags & SEC_CODE) != 0
++	  && fixP->fx_size == 4
++	  && fixP->fx_done
++	  && !fixP->fx_tcbit
++	  && (fixP->fx_r_type == BFD_RELOC_32
++	      || fixP->fx_r_type == BFD_RELOC_CTOR
++	      || fixP->fx_r_type == BFD_RELOC_32_PCREL))
++	as_warn_where (fixP->fx_file, fixP->fx_line,
++		       _("data in executable section"));
+     }
+ 
+   /* We are only able to convert some relocs to pc-relative.  */
+diff --git a/gas/config/tc-ppc.h b/gas/config/tc-ppc.h
+index 6095416..36b0bb5 100644
+--- a/gas/config/tc-ppc.h
++++ b/gas/config/tc-ppc.h
+@@ -232,6 +232,10 @@ extern int ppc_fix_adjustable (struct fix *);
+ /* Values passed to md_apply_fix don't include symbol values.  */
+ #define MD_APPLY_SYM_VALUE(FIX) 0
+ 
++#define TC_CONS_FIX_CHECK(EXP, NBYTES, FIX) \
++  ppc_elf_cons_fix_check (EXP, NBYTES, FIX)
++extern void ppc_elf_cons_fix_check (expressionS *, unsigned int, struct fix *);
++
+ #define tc_frob_file_before_adjust ppc_frob_file_before_adjust
+ extern void ppc_frob_file_before_adjust (void);
+ 
+diff --git a/gas/read.c b/gas/read.c
+index 082670c..61d10fe 100644
+--- a/gas/read.c
++++ b/gas/read.c
+@@ -3913,6 +3913,12 @@ cons_worker (int nbytes,	/* 1=.byte, 2=.word, 4=.long.  */
+   c = 0;
+   do
+     {
++#ifdef TC_CONS_FIX_CHECK
++      fixS **cur_fix = &frchain_now->fix_tail;
++
++      if (*cur_fix != NULL)
++	cur_fix = &(*cur_fix)->fx_next;
++#endif
+ #ifdef TC_M68K
+       if (flag_m68k_mri)
+ 	parse_mri_cons (&exp, (unsigned int) nbytes);
+@@ -3936,6 +3942,9 @@ cons_worker (int nbytes,	/* 1=.byte, 2=.word, 4=.long.  */
+ 	    as_fatal (_("rva without symbol"));
+ 	}
+       emit_expr (&exp, (unsigned int) nbytes);
++#ifdef TC_CONS_FIX_CHECK
++      TC_CONS_FIX_CHECK (&exp, nbytes, *cur_fix);
++#endif
+       ++c;
+     }
+   while (*input_line_pointer++ == ',');
+-- 
+2.0.3
+

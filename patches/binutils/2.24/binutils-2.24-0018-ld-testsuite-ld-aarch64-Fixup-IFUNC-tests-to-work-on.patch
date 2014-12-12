@@ -1,0 +1,89 @@
+From 1dcf5ce6ddfdf6155e6b5f1f222bc2b1761ef42b Mon Sep 17 00:00:00 2001
+From: Will Newton <will.newton@linaro.org>
+Date: Tue, 10 Dec 2013 22:02:05 +0000
+Subject: [PATCH 018/330] ld/testsuite/ld-aarch64: Fixup IFUNC tests to work on
+ all targets
+
+Make the ifunc-21 and ifunc-22 tests more generic to support
+aarch64_be and ELF targets.
+
+ld/testsuite/ChangeLog:
+
+2013-12-11  Will Newton  <will.newton@linaro.org>
+
+	* ld-aarch64/ifunc-21.d: Make test more generic to support
+	aarch64_be and ELF targets.
+	* ld-aarch64/ifunc-22.d: Likewise.
+---
+ ld/testsuite/ChangeLog             |  6 ++++++
+ ld/testsuite/ld-aarch64/ifunc-21.d | 25 ++++++++++---------------
+ ld/testsuite/ld-aarch64/ifunc-22.d |  2 +-
+ 3 files changed, 17 insertions(+), 16 deletions(-)
+
+diff --git a/ld/testsuite/ChangeLog b/ld/testsuite/ChangeLog
+index d95dc54..0f87f11 100644
+--- a/ld/testsuite/ChangeLog
++++ b/ld/testsuite/ChangeLog
+@@ -1,3 +1,9 @@
++2013-12-11  Will Newton  <will.newton@linaro.org>
++
++	* ld-aarch64/ifunc-21.d: Make test more generic to support
++	aarch64_be and ELF targets.
++	* ld-aarch64/ifunc-22.d: Likewise.
++
+ 2013-11-26  Will Newton  <will.newton@linaro.org>
+ 
+ 	* ld-aarch64/aarch64-elf.exp: Add ifunc-22.
+diff --git a/ld/testsuite/ld-aarch64/ifunc-21.d b/ld/testsuite/ld-aarch64/ifunc-21.d
+index fa139b2..9ea01e6 100644
+--- a/ld/testsuite/ld-aarch64/ifunc-21.d
++++ b/ld/testsuite/ld-aarch64/ifunc-21.d
+@@ -8,24 +8,19 @@
+ .*:     file format elf64-(little|big)aarch64
+ 
+ Contents of section .text:
+- 02a0 .*
++ [0-9a-f]+ .*
+ Contents of section .got.plt:
+- 103a8 0+ 0+ 0+ 0+  .*
+- 103b8 0+ 0+ [0-9a-f]+ 0+  .*
++ [0-9a-f]+ 0+ 0+ 0+ 0+  .*
++ (103b8|10408) 0+ 0+ [0-9a-f]+ [0-9a-f]+  .*
+ 
+ Disassembly of section .text:
+ 
+-0+2a0 <ifunc>:
+- 2a0:	d65f03c0 	ret
++.* <ifunc>:
++ .*:	d65f03c0 	ret
+ 
+-0+2a4 <bar>:
+- 2a4:	90000080 	adrp	x0, 10000 <.*>
+- 2a8:	f941e000 	ldr	x0, \[x0,#960\]
+- 2ac:	d65f03c0 	ret
++.* <bar>:
++ .*:	90000080 	adrp	x0, 10000 <.*>
++ .*:	.* 	ldr	x0, \[x0,#(960|1040)\]
++ .*:	d65f03c0 	ret
+ 
+-Disassembly of section .got.plt:
+-
+-.*:
+-.*
+-.*
+-.*
++#pass
+\ No newline at end of file
+diff --git a/ld/testsuite/ld-aarch64/ifunc-22.d b/ld/testsuite/ld-aarch64/ifunc-22.d
+index f28b039..7f0978d 100644
+--- a/ld/testsuite/ld-aarch64/ifunc-22.d
++++ b/ld/testsuite/ld-aarch64/ifunc-22.d
+@@ -8,4 +8,4 @@
+ .*:     file format elf64-(little|big)aarch64
+ 
+ Contents of section \.got:
+- 4100f0 00000000 00000000 d0004000 00000000  ..........@.....
++ [0-9a-f]+ 00000000 00000000 (d0004000|18004000|00000000) (00000000|004000d0|00400018) .*
+-- 
+2.0.3
+

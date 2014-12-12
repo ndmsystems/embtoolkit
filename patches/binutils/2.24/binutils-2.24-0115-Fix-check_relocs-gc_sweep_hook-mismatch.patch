@@ -1,0 +1,47 @@
+From 9e6df09eff10812e2b6ea16e43fad99f67bcad06 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Fri, 28 Feb 2014 14:38:27 +1030
+Subject: [PATCH 115/330] Fix check_relocs/gc_sweep_hook mismatch
+
+	PR ld/16643
+	* elflink.c (elf_gc_sweep): Call gc_sweep_hook for exactly
+	the same conditions we called check_relocs.
+
+(cherry picked from commit 9850436d9e423d66d67d27135896582b2725782e)
+---
+ bfd/ChangeLog | 6 ++++++
+ bfd/elflink.c | 4 +++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index 0e835c5..ee61788 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,3 +1,9 @@
++2014-02-28  Alan Modra  <amodra@gmail.com>
++
++	PR ld/16643
++	* elflink.c (elf_gc_sweep): Call gc_sweep_hook for exactly
++	the same conditions we called check_relocs.
++
+ 2014-02-07  Rainer Orth  <ro@CeBiTec.Uni-Bielefeld.DE>
+ 
+ 	* cache.c (bfd_cache_max_open): Cast RLIM_INFINITY to rlim_t.
+diff --git a/bfd/elflink.c b/bfd/elflink.c
+index 742996d..d1bc234 100644
+--- a/bfd/elflink.c
++++ b/bfd/elflink.c
+@@ -11979,7 +11979,9 @@ elf_gc_sweep (bfd *abfd, struct bfd_link_info *info)
+ 	     info we collected before.  */
+ 	  if (gc_sweep_hook
+ 	      && (o->flags & SEC_RELOC) != 0
+-	      && o->reloc_count > 0
++	      && o->reloc_count != 0
++	      && !((info->strip == strip_all || info->strip == strip_debugger)
++		   && (o->flags & SEC_DEBUGGING) != 0)
+ 	      && !bfd_is_abs_section (o->output_section))
+ 	    {
+ 	      Elf_Internal_Rela *internal_relocs;
+-- 
+2.0.3
+

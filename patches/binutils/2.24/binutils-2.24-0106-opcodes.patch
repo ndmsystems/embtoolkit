@@ -1,0 +1,94 @@
+From 4ead7c4f16b201691c1440170a478157a1bd0fd5 Mon Sep 17 00:00:00 2001
+From: Yufeng Zhang <yufeng.zhang@arm.com>
+Date: Thu, 27 Feb 2014 14:55:46 +0000
+Subject: [PATCH 106/330] opcodes/
+
+	* aarch64-opc.c (print_register_offset_address): Call
+	get_int_reg_name to prepare the register name.
+
+gas/testsuite/
+
+	* gas/aarch64/ldst-reg-reg-offset.s: Add tests.
+	* gas/aarch64/ldst-reg-reg-offset.d: Update.
+---
+ gas/testsuite/ChangeLog                         | 5 +++++
+ gas/testsuite/gas/aarch64/ldst-reg-reg-offset.d | 4 ++++
+ gas/testsuite/gas/aarch64/ldst-reg-reg-offset.s | 6 ++++++
+ opcodes/ChangeLog                               | 5 +++++
+ opcodes/aarch64-opc.c                           | 7 +++++--
+ 5 files changed, 25 insertions(+), 2 deletions(-)
+
+diff --git a/gas/testsuite/ChangeLog b/gas/testsuite/ChangeLog
+index 33b7c5b..73d5cb9 100644
+--- a/gas/testsuite/ChangeLog
++++ b/gas/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-02-27  Yufeng Zhang  <yufeng.zhang@arm.com>
++
++	* gas/aarch64/ldst-reg-reg-offset.s: Add tests.
++	* gas/aarch64/ldst-reg-reg-offset.d: Update.
++
+ 2014-01-31  Michael Zolotukhin  <michael.v.zolotukhin@gmail.com>
+ 
+ 	PR gas/16488
+diff --git a/gas/testsuite/gas/aarch64/ldst-reg-reg-offset.d b/gas/testsuite/gas/aarch64/ldst-reg-reg-offset.d
+index 486d9c8..b720633 100644
+--- a/gas/testsuite/gas/aarch64/ldst-reg-reg-offset.d
++++ b/gas/testsuite/gas/aarch64/ldst-reg-reg-offset.d
+@@ -85,3 +85,7 @@ Disassembly of section \.text:
+  134:	fc67fbe7 	ldr	d7, \[sp,x7,sxtx #3\]
+  138:	3ce7ebe7 	ldr	q7, \[sp,x7,sxtx\]
+  13c:	3ce7fbe7 	ldr	q7, \[sp,x7,sxtx #4\]
++ 140:	f87ffbe1 	ldr	x1, \[sp,xzr,sxtx #3\]
++ 144:	f83ffbe1 	str	x1, \[sp,xzr,sxtx #3\]
++ 148:	b87fdbe1 	ldr	w1, \[sp,wzr,sxtw #2\]
++ 14c:	b83fdbe1 	str	w1, \[sp,wzr,sxtw #2\]
+diff --git a/gas/testsuite/gas/aarch64/ldst-reg-reg-offset.s b/gas/testsuite/gas/aarch64/ldst-reg-reg-offset.s
+index afa7c4d..195c830 100644
+--- a/gas/testsuite/gas/aarch64/ldst-reg-reg-offset.s
++++ b/gas/testsuite/gas/aarch64/ldst-reg-reg-offset.s
+@@ -86,3 +86,9 @@
+ func:
+ 	ld_or_st	str
+ 	ld_or_st	ldr
++
++	/* When the index register is of register 31, it should be ZR.  */
++	ldr	x1, [sp, xzr, sxtx #3]
++	str	x1, [sp, xzr, sxtx #3]
++	ldr	w1, [sp, wzr, sxtw #2]
++	str	w1, [sp, wzr, sxtw #2]
+diff --git a/opcodes/ChangeLog b/opcodes/ChangeLog
+index eaaa70d..f1d90c2 100644
+--- a/opcodes/ChangeLog
++++ b/opcodes/ChangeLog
+@@ -1,3 +1,8 @@
++2014-02-27  Yufeng Zhang  <yufeng.zhang@arm.com>
++
++	* aarch64-opc.c (print_register_offset_address): Call
++	get_int_reg_name to prepare the register name.
++
+ 2014-01-30  Michael Zolotukhin  <michael.v.zolotukhin@gmail.com>
+ 	    Jan Beulich  <jbeulich@suse.com>
+ 
+diff --git a/opcodes/aarch64-opc.c b/opcodes/aarch64-opc.c
+index 4313327..a84c758 100644
+--- a/opcodes/aarch64-opc.c
++++ b/opcodes/aarch64-opc.c
+@@ -2282,9 +2282,12 @@ print_register_offset_address (char *buf, size_t size,
+   else
+     tb[0] = '\0';
+ 
+-  snprintf (buf, size, "[%s,%c%d%s]",
++  snprintf (buf, size, "[%s,%s%s]",
+ 	    get_64bit_int_reg_name (opnd->addr.base_regno, 1),
+-	    wm_p ? 'w' : 'x', opnd->addr.offset.regno, tb);
++	    get_int_reg_name (opnd->addr.offset.regno,
++			      wm_p ? AARCH64_OPND_QLF_W : AARCH64_OPND_QLF_X,
++			      0 /* sp_reg_p */),
++	    tb);
+ }
+ 
+ /* Generate the string representation of the operand OPNDS[IDX] for OPCODE
+-- 
+2.0.3
+

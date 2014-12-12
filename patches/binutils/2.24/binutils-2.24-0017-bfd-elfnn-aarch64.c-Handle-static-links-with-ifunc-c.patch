@@ -1,0 +1,162 @@
+From 14d96265dd8fd934d868c0b8e1991e2fefbe9fc8 Mon Sep 17 00:00:00 2001
+From: Will Newton <will.newton@linaro.org>
+Date: Mon, 25 Nov 2013 14:44:59 +0000
+Subject: [PATCH 017/330] bfd/elfnn-aarch64.c: Handle static links with ifunc
+ correctly.
+
+The code for handling GOT references to ifunc symbols in static links
+was missing.
+
+bfd/ChangeLog:
+
+2013-11-26  Will Newton  <will.newton@linaro.org>
+
+	* elfnn-aarch64.c (elfNN_aarch64_finish_dynamic_symbol):
+	Handle STT_GNU_IFUNC symbols correctly in static links.
+
+ld/testsuite/ChangeLog:
+
+2013-11-26  Will Newton  <will.newton@linaro.org>
+
+	* ld-aarch64/aarch64-elf.exp: Add ifunc-22.
+	* ld-aarch64/ifunc-22.d: New file.
+	* ld-aarch64/ifunc-22.s: Likewise.
+---
+ bfd/ChangeLog                           |  5 +++++
+ bfd/elfnn-aarch64.c                     | 30 +++++++++++++++++++++++++++++-
+ ld/testsuite/ChangeLog                  |  6 ++++++
+ ld/testsuite/ld-aarch64/aarch64-elf.exp |  1 +
+ ld/testsuite/ld-aarch64/ifunc-22.d      | 11 +++++++++++
+ ld/testsuite/ld-aarch64/ifunc-22.s      | 14 ++++++++++++++
+ 6 files changed, 66 insertions(+), 1 deletion(-)
+ create mode 100644 ld/testsuite/ld-aarch64/ifunc-22.d
+ create mode 100644 ld/testsuite/ld-aarch64/ifunc-22.s
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index 415964b..d00b1c8 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,5 +1,10 @@
+ 2013-11-26  Will Newton  <will.newton@linaro.org>
+ 
++	* elfnn-aarch64.c (elfNN_aarch64_finish_dynamic_symbol):
++	Handle STT_GNU_IFUNC symbols correctly in static links.
++
++2013-11-26  Will Newton  <will.newton@linaro.org>
++
+ 	* elfnn-aarch64.c (elfNN_aarch64_final_link_relocate): Ensure
+ 	PLT_INDEX is calculated using correct header size.
+ 
+diff --git a/bfd/elfnn-aarch64.c b/bfd/elfnn-aarch64.c
+index 3cd3a18..9053635 100644
+--- a/bfd/elfnn-aarch64.c
++++ b/bfd/elfnn-aarch64.c
+@@ -6824,7 +6824,34 @@ elfNN_aarch64_finish_dynamic_symbol (bfd *output_bfd,
+ 		       + htab->root.sgot->output_offset
+ 		       + (h->got.offset & ~(bfd_vma) 1));
+ 
+-      if (info->shared && SYMBOL_REFERENCES_LOCAL (info, h))
++      if (h->def_regular
++	  && h->type == STT_GNU_IFUNC)
++	{
++	  if (info->shared)
++	    {
++	      /* Generate R_AARCH64_GLOB_DAT.  */
++	      goto do_glob_dat;
++	    }
++	  else
++	    {
++	      asection *plt;
++
++	      if (!h->pointer_equality_needed)
++		abort ();
++
++	      /* For non-shared object, we can't use .got.plt, which
++		 contains the real function address if we need pointer
++		 equality.  We load the GOT entry with the PLT entry.  */
++	      plt = htab->root.splt ? htab->root.splt : htab->root.iplt;
++	      bfd_put_NN (output_bfd, (plt->output_section->vma
++				       + plt->output_offset
++				       + h->plt.offset),
++			  htab->root.sgot->contents
++			  + (h->got.offset & ~(bfd_vma) 1));
++	      return TRUE;
++	    }
++	}
++      else if (info->shared && SYMBOL_REFERENCES_LOCAL (info, h))
+ 	{
+ 	  if (!h->def_regular)
+ 	    return FALSE;
+@@ -6837,6 +6864,7 @@ elfNN_aarch64_finish_dynamic_symbol (bfd *output_bfd,
+ 	}
+       else
+ 	{
++do_glob_dat:
+ 	  BFD_ASSERT ((h->got.offset & 1) == 0);
+ 	  bfd_put_NN (output_bfd, (bfd_vma) 0,
+ 		      htab->root.sgot->contents + h->got.offset);
+diff --git a/ld/testsuite/ChangeLog b/ld/testsuite/ChangeLog
+index 2d5379d..d95dc54 100644
+--- a/ld/testsuite/ChangeLog
++++ b/ld/testsuite/ChangeLog
+@@ -1,5 +1,11 @@
+ 2013-11-26  Will Newton  <will.newton@linaro.org>
+ 
++	* ld-aarch64/aarch64-elf.exp: Add ifunc-22.
++	* ld-aarch64/ifunc-22.d: New file.
++	* ld-aarch64/ifunc-22.s: Likewise.
++
++2013-11-26  Will Newton  <will.newton@linaro.org>
++
+ 	* ld-aarch64/aarch64-elf.exp: Add ifunc-21 test.
+ 	* ld-aarch64/ifunc-21.d: New file.
+ 	* ld-aarch64/ifunc-21.s: Likewise.
+diff --git a/ld/testsuite/ld-aarch64/aarch64-elf.exp b/ld/testsuite/ld-aarch64/aarch64-elf.exp
+index a6b3ea2..692bf34 100644
+--- a/ld/testsuite/ld-aarch64/aarch64-elf.exp
++++ b/ld/testsuite/ld-aarch64/aarch64-elf.exp
+@@ -156,3 +156,4 @@ run_dump_test "ifunc-19a"
+ run_dump_test "ifunc-19b"
+ run_dump_test "ifunc-20"
+ run_dump_test "ifunc-21"
++run_dump_test "ifunc-22"
+diff --git a/ld/testsuite/ld-aarch64/ifunc-22.d b/ld/testsuite/ld-aarch64/ifunc-22.d
+new file mode 100644
+index 0000000..f28b039
+--- /dev/null
++++ b/ld/testsuite/ld-aarch64/ifunc-22.d
+@@ -0,0 +1,11 @@
++#source: ifunc-22.s
++#objdump: -s -j .got
++#ld: -static
++#target: aarch64*-*-*
++
++# Ensure GOT is populated correctly in static link
++
++.*:     file format elf64-(little|big)aarch64
++
++Contents of section \.got:
++ 4100f0 00000000 00000000 d0004000 00000000  ..........@.....
+diff --git a/ld/testsuite/ld-aarch64/ifunc-22.s b/ld/testsuite/ld-aarch64/ifunc-22.s
+new file mode 100644
+index 0000000..69a87bb
+--- /dev/null
++++ b/ld/testsuite/ld-aarch64/ifunc-22.s
+@@ -0,0 +1,14 @@
++	.text
++	.type ifunc, @gnu_indirect_function
++	.global ifunc
++ifunc:
++	ret
++	.size	ifunc, .-ifunc
++	.type _start, @function
++	.globl _start
++_start:
++        adrp    x0, :got:ifunc
++        ldr     x0, [x0, #:got_lo12:ifunc]
++	.size	_start, .-_start
++	.data
++	.xword	ifunc
+-- 
+2.0.3
+

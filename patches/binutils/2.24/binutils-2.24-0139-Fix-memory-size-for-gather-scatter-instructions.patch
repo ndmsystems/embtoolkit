@@ -1,0 +1,1119 @@
+From 1e4446288253f744b6ffd521e57623bc85563496 Mon Sep 17 00:00:00 2001
+From: Ilya Tocar <ilya.tocar@intel.com>
+Date: Thu, 20 Mar 2014 13:12:16 +0400
+Subject: [PATCH 139/330] Fix memory size for gather/scatter instructions
+
+For gathers with indices larger than elements (e. g.)
+
+vpgatherqd      ymm6{k1}, ZMMWORD PTR [ebp+zmm7*8-123]
+
+We currently treat memory size as a size of index register, while it is
+actually should be size of destination register:
+
+vpgatherqd      ymm6{k1}, YMMWORD PTR [ebp+zmm7*8-123]
+
+This patch fixes it.
+
+opcodes/
+
+        * i386-opc.tbl: Change memory size for vgatherpf0qps, vgatherpf1qps,
+        vscatterpf0qps, vscatterpf1qps, vgatherqps, vpgatherqd, vpscatterqd,
+        vscatterqps.
+        * i386-tbl.h: Regenerate.
+
+gas/testsuite/
+
+        * gas/i386/avx512pf-intel.d: Change memory size for vgatherpf0qps,
+        vgatherpf1qps, vscatterpf0qps, vscatterpf1qps.
+        * gas/i386/avx512pf.s: Ditto.
+        * gas/i386/x86-64-avx512pf-intel.d: Ditto.
+        * gas/i386/x86-64-avx512pf.s: Ditto.
+        * gas/i386/avx512f-intel.d: Change memory size for vgatherqps,
+        vpgatherqd, vpscatterqd, vscatterqps.
+        * gas/i386/avx512f.s: Ditto.
+        * gas/i386/x86-64-avx512f-intel.d: Ditto.
+        * gas/i386/x86-64-avx512f.s: Ditto.
+---
+ gas/testsuite/ChangeLog                        | 13 ++++++
+ gas/testsuite/gas/i386/avx512f-intel.d         | 64 +++++++++++++-------------
+ gas/testsuite/gas/i386/avx512f.s               | 32 ++++++-------
+ gas/testsuite/gas/i386/avx512pf-intel.d        | 64 +++++++++++++-------------
+ gas/testsuite/gas/i386/avx512pf.s              | 32 ++++++-------
+ gas/testsuite/gas/i386/x86-64-avx512f-intel.d  | 64 +++++++++++++-------------
+ gas/testsuite/gas/i386/x86-64-avx512f.s        | 32 ++++++-------
+ gas/testsuite/gas/i386/x86-64-avx512pf-intel.d | 64 +++++++++++++-------------
+ gas/testsuite/gas/i386/x86-64-avx512pf.s       | 32 ++++++-------
+ opcodes/ChangeLog                              |  7 +++
+ opcodes/i386-dis-evex.h                        | 16 +++----
+ opcodes/i386-dis.c                             | 32 +++++++++++--
+ opcodes/i386-opc.tbl                           | 16 +++----
+ opcodes/i386-tbl.h                             | 16 +++----
+ 14 files changed, 265 insertions(+), 219 deletions(-)
+
+diff --git a/gas/testsuite/ChangeLog b/gas/testsuite/ChangeLog
+index aedbaef..04b20d4 100644
+--- a/gas/testsuite/ChangeLog
++++ b/gas/testsuite/ChangeLog
+@@ -1,3 +1,16 @@
++2014-03-20  Ilya Tocar  <ilya.tocar@intel.com>
++
++	* gas/i386/avx512pf-intel.d: Change memory size for vgatherpf0qps,
++	vgatherpf1qps, vscatterpf0qps, vscatterpf1qps.
++	* gas/i386/avx512pf.s: Ditto.
++	* gas/i386/x86-64-avx512pf-intel.d: Ditto.
++	* gas/i386/x86-64-avx512pf.s: Ditto.
++	* gas/i386/avx512f-intel.d: Change memory size for vgatherqps,
++	vpgatherqd, vpscatterqd, vscatterqps.
++	* gas/i386/avx512f.s: Ditto.
++	* gas/i386/x86-64-avx512f-intel.d: Ditto.
++	* gas/i386/x86-64-avx512f.s: Ditto.
++
+ 2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
+ 
+ 	Backport from master
+diff --git a/gas/testsuite/gas/i386/avx512f-intel.d b/gas/testsuite/gas/i386/avx512f-intel.d
+index 5bc0314..b6b3a2e 100644
+--- a/gas/testsuite/gas/i386/avx512f-intel.d
++++ b/gas/testsuite/gas/i386/avx512f-intel.d
+@@ -3559,10 +3559,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 93 b4 fd 7b 00 00 00 	vgatherqpd zmm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 93 74 38 20 	vgatherqpd zmm6\{k1\},ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 93 b4 b9 00 04 00 00 	vgatherqpd zmm6\{k1\},ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 fd 7b 00 00 00 	vgatherqps ymm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 fd 7b 00 00 00 	vgatherqps ymm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 93 74 38 40 	vgatherqps ymm6\{k1\},ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 b9 00 04 00 00 	vgatherqps ymm6\{k1\},ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 fd 7b 00 00 00 	vgatherqps ymm6\{k1\},YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 fd 7b 00 00 00 	vgatherqps ymm6\{k1\},YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 93 74 38 40 	vgatherqps ymm6\{k1\},YMMWORD PTR \[eax\+zmm7\*1\+0x100\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 b9 00 04 00 00 	vgatherqps ymm6\{k1\},YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 48 42 f5    	vgetexppd zmm6,zmm5
+ [ 	]*[a-f0-9]+:	62 f2 fd 4f 42 f5    	vgetexppd zmm6\{k7\},zmm5
+ [ 	]*[a-f0-9]+:	62 f2 fd cf 42 f5    	vgetexppd zmm6\{k7\}\{z\},zmm5
+@@ -4726,10 +4726,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 90 b4 fd 7b 00 00 00 	vpgatherdq zmm6\{k1\},ZMMWORD PTR \[ebp\+ymm7\*8\+0x7b\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 90 74 38 20 	vpgatherdq zmm6\{k1\},ZMMWORD PTR \[eax\+ymm7\*1\+0x100\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 90 b4 b9 00 04 00 00 	vpgatherdq zmm6\{k1\},ZMMWORD PTR \[ecx\+ymm7\*4\+0x400\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 fd 7b 00 00 00 	vpgatherqd ymm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 fd 7b 00 00 00 	vpgatherqd ymm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 91 74 38 40 	vpgatherqd ymm6\{k1\},ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 b9 00 04 00 00 	vpgatherqd ymm6\{k1\},ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 fd 7b 00 00 00 	vpgatherqd ymm6\{k1\},YMMWORD PTR \[ebp\+zmm7\*8\+0x7b]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 fd 7b 00 00 00 	vpgatherqd ymm6\{k1\},YMMWORD PTR \[ebp\+zmm7\*8\+0x7b]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 91 74 38 40 	vpgatherqd ymm6\{k1\},YMMWORD PTR \[eax\+zmm7\*1\+0x100\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 b9 00 04 00 00 	vpgatherqd ymm6\{k1\},YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 91 b4 fd 7b 00 00 00 	vpgatherqq zmm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 91 b4 fd 7b 00 00 00 	vpgatherqq zmm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 91 74 38 20 	vpgatherqq zmm6\{k1\},ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]
+@@ -5004,10 +5004,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a0 b4 fd 7b 00 00 00 	vpscatterdq ZMMWORD PTR \[ebp\+ymm7\*8\+0x7b\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a0 74 38 20 	vpscatterdq ZMMWORD PTR \[eax\+ymm7\*1\+0x100\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a0 b4 b9 00 04 00 00 	vpscatterdq ZMMWORD PTR \[ecx\+ymm7\*4\+0x400\]\{k1\},zmm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 fd 7b 00 00 00 	vpscatterqd ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 fd 7b 00 00 00 	vpscatterqd ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 74 38 40 	vpscatterqd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 b9 00 04 00 00 	vpscatterqd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 fd 7b 00 00 00 	vpscatterqd YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 fd 7b 00 00 00 	vpscatterqd YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 74 38 40 	vpscatterqd YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 b9 00 04 00 00 	vpscatterqd YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\},ymm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a1 b4 fd 7b 00 00 00 	vpscatterqq ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a1 b4 fd 7b 00 00 00 	vpscatterqq ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a1 74 38 20 	vpscatterqq ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},zmm6
+@@ -5427,10 +5427,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a3 b4 fd 7b 00 00 00 	vscatterqpd ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a3 74 38 20 	vscatterqpd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a3 b4 b9 00 04 00 00 	vscatterqpd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\},zmm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 fd 7b 00 00 00 	vscatterqps ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 fd 7b 00 00 00 	vscatterqps ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 74 38 40 	vscatterqps ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 b9 00 04 00 00 	vscatterqps ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 fd 7b 00 00 00 	vscatterqps YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 fd 7b 00 00 00 	vscatterqps YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 74 38 40 	vscatterqps YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 b9 00 04 00 00 	vscatterqps YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\},ymm6
+ [ 	]*[a-f0-9]+:	62 f1 d5 48 c6 f4 ab 	vshufpd zmm6,zmm5,zmm4,0xab
+ [ 	]*[a-f0-9]+:	62 f1 d5 4f c6 f4 ab 	vshufpd zmm6\{k7\},zmm5,zmm4,0xab
+ [ 	]*[a-f0-9]+:	62 f1 d5 cf c6 f4 ab 	vshufpd zmm6\{k7\}\{z\},zmm5,zmm4,0xab
+@@ -10199,10 +10199,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 93 b4 fd 85 ff ff ff 	vgatherqpd zmm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 93 74 38 20 	vgatherqpd zmm6\{k1\},ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 93 b4 b9 00 04 00 00 	vgatherqpd zmm6\{k1\},ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 fd 85 ff ff ff 	vgatherqps ymm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 fd 85 ff ff ff 	vgatherqps ymm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 93 74 38 40 	vgatherqps ymm6\{k1\},ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 b9 00 04 00 00 	vgatherqps ymm6\{k1\},ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 fd 85 ff ff ff 	vgatherqps ymm6\{k1\},YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 fd 85 ff ff ff 	vgatherqps ymm6\{k1\},YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 93 74 38 40 	vgatherqps ymm6\{k1\},YMMWORD PTR \[eax\+zmm7\*1\+0x100\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 93 b4 b9 00 04 00 00 	vgatherqps ymm6\{k1\},YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 48 42 f5    	vgetexppd zmm6,zmm5
+ [ 	]*[a-f0-9]+:	62 f2 fd 4f 42 f5    	vgetexppd zmm6\{k7\},zmm5
+ [ 	]*[a-f0-9]+:	62 f2 fd cf 42 f5    	vgetexppd zmm6\{k7\}\{z\},zmm5
+@@ -11366,10 +11366,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 90 b4 fd 85 ff ff ff 	vpgatherdq zmm6\{k1\},ZMMWORD PTR \[ebp\+ymm7\*8-0x7b\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 90 74 38 20 	vpgatherdq zmm6\{k1\},ZMMWORD PTR \[eax\+ymm7\*1\+0x100\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 90 b4 b9 00 04 00 00 	vpgatherdq zmm6\{k1\},ZMMWORD PTR \[ecx\+ymm7\*4\+0x400\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 fd 85 ff ff ff 	vpgatherqd ymm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 fd 85 ff ff ff 	vpgatherqd ymm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 91 74 38 40 	vpgatherqd ymm6\{k1\},ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 b9 00 04 00 00 	vpgatherqd ymm6\{k1\},ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 fd 85 ff ff ff 	vpgatherqd ymm6\{k1\},YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 fd 85 ff ff ff 	vpgatherqd ymm6\{k1\},YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 91 74 38 40 	vpgatherqd ymm6\{k1\},YMMWORD PTR \[eax\+zmm7\*1\+0x100\]
++[ 	]*[a-f0-9]+:	62 f2 7d 49 91 b4 b9 00 04 00 00 	vpgatherqd ymm6\{k1\},YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 91 b4 fd 85 ff ff ff 	vpgatherqq zmm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 91 b4 fd 85 ff ff ff 	vpgatherqq zmm6\{k1\},ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 91 74 38 20 	vpgatherqq zmm6\{k1\},ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]
+@@ -11644,10 +11644,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a0 b4 fd 85 ff ff ff 	vpscatterdq ZMMWORD PTR \[ebp\+ymm7\*8-0x7b\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a0 74 38 20 	vpscatterdq ZMMWORD PTR \[eax\+ymm7\*1\+0x100\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a0 b4 b9 00 04 00 00 	vpscatterdq ZMMWORD PTR \[ecx\+ymm7\*4\+0x400\]\{k1\},zmm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 fd 85 ff ff ff 	vpscatterqd ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 fd 85 ff ff ff 	vpscatterqd ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 74 38 40 	vpscatterqd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 b9 00 04 00 00 	vpscatterqd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 fd 85 ff ff ff 	vpscatterqd YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 fd 85 ff ff ff 	vpscatterqd YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 74 38 40 	vpscatterqd YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a1 b4 b9 00 04 00 00 	vpscatterqd YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\},ymm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a1 b4 fd 85 ff ff ff 	vpscatterqq ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a1 b4 fd 85 ff ff ff 	vpscatterqq ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a1 74 38 20 	vpscatterqq ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},zmm6
+@@ -12067,10 +12067,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a3 b4 fd 85 ff ff ff 	vscatterqpd ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a3 74 38 20 	vscatterqpd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 a3 b4 b9 00 04 00 00 	vscatterqpd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\},zmm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 fd 85 ff ff ff 	vscatterqps ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 fd 85 ff ff ff 	vscatterqps ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 74 38 40 	vscatterqps ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},ymm6
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 b9 00 04 00 00 	vscatterqps ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 fd 85 ff ff ff 	vscatterqps YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 fd 85 ff ff ff 	vscatterqps YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 74 38 40 	vscatterqps YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\},ymm6
++[ 	]*[a-f0-9]+:	62 f2 7d 49 a3 b4 b9 00 04 00 00 	vscatterqps YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\},ymm6
+ [ 	]*[a-f0-9]+:	62 f1 d5 48 c6 f4 ab 	vshufpd zmm6,zmm5,zmm4,0xab
+ [ 	]*[a-f0-9]+:	62 f1 d5 4f c6 f4 ab 	vshufpd zmm6\{k7\},zmm5,zmm4,0xab
+ [ 	]*[a-f0-9]+:	62 f1 d5 cf c6 f4 ab 	vshufpd zmm6\{k7\}\{z\},zmm5,zmm4,0xab
+diff --git a/gas/testsuite/gas/i386/avx512f.s b/gas/testsuite/gas/i386/avx512f.s
+index ae11922..25c75ab 100644
+--- a/gas/testsuite/gas/i386/avx512f.s
++++ b/gas/testsuite/gas/i386/avx512f.s
+@@ -11119,10 +11119,10 @@ _start:
+ 	vgatherqpd	zmm6{k1}, ZMMWORD PTR [eax+zmm7+256]	 # AVX512F
+ 	vgatherqpd	zmm6{k1}, ZMMWORD PTR [ecx+zmm7*4+1024]	 # AVX512F
+ 
+-	vgatherqps	ymm6{k1}, ZMMWORD PTR [ebp+zmm7*8-123]	 # AVX512F
+-	vgatherqps	ymm6{k1}, ZMMWORD PTR [ebp+zmm7*8-123]	 # AVX512F
+-	vgatherqps	ymm6{k1}, zMMWORD PTR [eax+zmm7+256]	 # AVX512F
+-	vgatherqps	ymm6{k1}, ZMMWORD PTR [ecx+zmm7*4+1024]	 # AVX512F
++	vgatherqps	ymm6{k1}, YMMWORD PTR [ebp+zmm7*8-123]	 # AVX512F
++	vgatherqps	ymm6{k1}, YMMWORD PTR [ebp+zmm7*8-123]	 # AVX512F
++	vgatherqps	ymm6{k1}, YMMWORD PTR [eax+zmm7+256]	 # AVX512F
++	vgatherqps	ymm6{k1}, YMMWORD PTR [ecx+zmm7*4+1024]	 # AVX512F
+ 
+ 	vgetexppd	zmm6, zmm5	 # AVX512F
+ 	vgetexppd	zmm6{k7}, zmm5	 # AVX512F
+@@ -12406,10 +12406,10 @@ _start:
+ 	vpgatherdq	zmm6{k1}, ZMMWORD PTR [eax+ymm7+256]	 # AVX512F
+ 	vpgatherdq	zmm6{k1}, ZMMWORD PTR [ecx+ymm7*4+1024]	 # AVX512F
+ 
+-	vpgatherqd	ymm6{k1}, ZMMWORD PTR [ebp+zmm7*8-123]	 # AVX512F
+-	vpgatherqd	ymm6{k1}, ZMMWORD PTR [ebp+zmm7*8-123]	 # AVX512F
+-	vpgatherqd	ymm6{k1}, ZMMWORD PTR [eax+zmm7+256]	 # AVX512F
+-	vpgatherqd	ymm6{k1}, ZMMWORD PTR [ecx+zmm7*4+1024]	 # AVX512F
++	vpgatherqd	ymm6{k1}, YMMWORD PTR [ebp+zmm7*8-123]	 # AVX512F
++	vpgatherqd	ymm6{k1}, YMMWORD PTR [ebp+zmm7*8-123]	 # AVX512F
++	vpgatherqd	ymm6{k1}, YMMWORD PTR [eax+zmm7+256]	 # AVX512F
++	vpgatherqd	ymm6{k1}, YMMWORD PTR [ecx+zmm7*4+1024]	 # AVX512F
+ 
+ 	vpgatherqq	zmm6{k1}, ZMMWORD PTR [ebp+zmm7*8-123]	 # AVX512F
+ 	vpgatherqq	zmm6{k1}, ZMMWORD PTR [ebp+zmm7*8-123]	 # AVX512F
+@@ -12711,10 +12711,10 @@ _start:
+ 	vpscatterdq	ZMMWORD PTR [eax+ymm7+256]{k1}, zmm6	 # AVX512F
+ 	vpscatterdq	ZMMWORD PTR [ecx+ymm7*4+1024]{k1}, zmm6	 # AVX512F
+ 
+-	vpscatterqd	ZMMWORD PTR [ebp+zmm7*8-123]{k1}, ymm6	 # AVX512F
+-	vpscatterqd	ZMMWORD PTR [ebp+zmm7*8-123]{k1}, ymm6	 # AVX512F
+-	vpscatterqd	ZMMWORD PTR [eax+zmm7+256]{k1}, ymm6	 # AVX512F
+-	vpscatterqd	ZMMWORD PTR [ecx+zmm7*4+1024]{k1}, ymm6	 # AVX512F
++	vpscatterqd	YMMWORD PTR [ebp+zmm7*8-123]{k1}, ymm6	 # AVX512F
++	vpscatterqd	YMMWORD PTR [ebp+zmm7*8-123]{k1}, ymm6	 # AVX512F
++	vpscatterqd	YMMWORD PTR [eax+zmm7+256]{k1}, ymm6	 # AVX512F
++	vpscatterqd	YMMWORD PTR [ecx+zmm7*4+1024]{k1}, ymm6	 # AVX512F
+ 
+ 	vpscatterqq	ZMMWORD PTR [ebp+zmm7*8-123]{k1}, zmm6	 # AVX512F
+ 	vpscatterqq	ZMMWORD PTR [ebp+zmm7*8-123]{k1}, zmm6	 # AVX512F
+@@ -13172,10 +13172,10 @@ _start:
+ 	vscatterqpd	ZMMWORD PTR [eax+zmm7+256]{k1}, zmm6	 # AVX512F
+ 	vscatterqpd	ZMMWORD PTR [ecx+zmm7*4+1024]{k1}, zmm6	 # AVX512F
+ 
+-	vscatterqps	ZMMWORD PTR [ebp+zmm7*8-123]{k1}, ymm6	 # AVX512F
+-	vscatterqps	ZMMWORD PTR [ebp+zmm7*8-123]{k1}, ymm6	 # AVX512F
+-	vscatterqps	ZMMWORD PTR [eax+zmm7+256]{k1}, ymm6	 # AVX512F
+-	vscatterqps	ZMMWORD PTR [ecx+zmm7*4+1024]{k1}, ymm6	 # AVX512F
++	vscatterqps	YMMWORD PTR [ebp+zmm7*8-123]{k1}, ymm6	 # AVX512F
++	vscatterqps	YMMWORD PTR [ebp+zmm7*8-123]{k1}, ymm6	 # AVX512F
++	vscatterqps	YMMWORD PTR [eax+zmm7+256]{k1}, ymm6	 # AVX512F
++	vscatterqps	YMMWORD PTR [ecx+zmm7*4+1024]{k1}, ymm6	 # AVX512F
+ 
+ 	vshufpd	zmm6, zmm5, zmm4, 0xab	 # AVX512F
+ 	vshufpd	zmm6{k7}, zmm5, zmm4, 0xab	 # AVX512F
+diff --git a/gas/testsuite/gas/i386/avx512pf-intel.d b/gas/testsuite/gas/i386/avx512pf-intel.d
+index 05012dc..05fa69b 100644
+--- a/gas/testsuite/gas/i386/avx512pf-intel.d
++++ b/gas/testsuite/gas/i386/avx512pf-intel.d
+@@ -21,10 +21,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 8c fd 7b 00 00 00 	vgatherpf0qpd ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 4c 38 20 	vgatherpf0qpd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 8c b9 00 04 00 00 	vgatherpf0qpd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c fd 7b 00 00 00 	vgatherpf0qps ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c fd 7b 00 00 00 	vgatherpf0qps ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 4c 38 40 	vgatherpf0qps ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c b9 00 04 00 00 	vgatherpf0qps ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c fd 7b 00 00 00 	vgatherpf0qps YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c fd 7b 00 00 00 	vgatherpf0qps YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 4c 38 40 	vgatherpf0qps YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c b9 00 04 00 00 	vgatherpf0qps YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 94 fd 7b 00 00 00 	vgatherpf1dpd ZMMWORD PTR \[ebp\+ymm7\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 94 fd 7b 00 00 00 	vgatherpf1dpd ZMMWORD PTR \[ebp\+ymm7\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 54 38 20 	vgatherpf1dpd ZMMWORD PTR \[eax\+ymm7\*1\+0x100\]\{k1\}
+@@ -37,10 +37,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 94 fd 7b 00 00 00 	vgatherpf1qpd ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 54 38 20 	vgatherpf1qpd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 94 b9 00 04 00 00 	vgatherpf1qpd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 fd 7b 00 00 00 	vgatherpf1qps ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 fd 7b 00 00 00 	vgatherpf1qps ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 54 38 40 	vgatherpf1qps ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 b9 00 04 00 00 	vgatherpf1qps ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 fd 7b 00 00 00 	vgatherpf1qps YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 fd 7b 00 00 00 	vgatherpf1qps YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 54 38 40 	vgatherpf1qps YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 b9 00 04 00 00 	vgatherpf1qps YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 ac fd 7b 00 00 00 	vscatterpf0dpd ZMMWORD PTR \[ebp\+ymm7\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 ac fd 7b 00 00 00 	vscatterpf0dpd ZMMWORD PTR \[ebp\+ymm7\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 6c 38 20 	vscatterpf0dpd ZMMWORD PTR \[eax\+ymm7\*1\+0x100\]\{k1\}
+@@ -53,10 +53,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 ac fd 7b 00 00 00 	vscatterpf0qpd ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 6c 38 20 	vscatterpf0qpd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 ac b9 00 04 00 00 	vscatterpf0qpd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac fd 7b 00 00 00 	vscatterpf0qps ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac fd 7b 00 00 00 	vscatterpf0qps ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 6c 38 40 	vscatterpf0qps ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac b9 00 04 00 00 	vscatterpf0qps ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac fd 7b 00 00 00 	vscatterpf0qps YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac fd 7b 00 00 00 	vscatterpf0qps YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 6c 38 40 	vscatterpf0qps YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac b9 00 04 00 00 	vscatterpf0qps YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 b4 fd 7b 00 00 00 	vscatterpf1dpd ZMMWORD PTR \[ebp\+ymm7\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 b4 fd 7b 00 00 00 	vscatterpf1dpd ZMMWORD PTR \[ebp\+ymm7\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 74 38 20 	vscatterpf1dpd ZMMWORD PTR \[eax\+ymm7\*1\+0x100\]\{k1\}
+@@ -69,10 +69,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 b4 fd 7b 00 00 00 	vscatterpf1qpd ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 74 38 20 	vscatterpf1qpd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 b4 b9 00 04 00 00 	vscatterpf1qpd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 fd 7b 00 00 00 	vscatterpf1qps ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 fd 7b 00 00 00 	vscatterpf1qps ZMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 74 38 40 	vscatterpf1qps ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 b9 00 04 00 00 	vscatterpf1qps ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 fd 7b 00 00 00 	vscatterpf1qps YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 fd 7b 00 00 00 	vscatterpf1qps YMMWORD PTR \[ebp\+zmm7\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 74 38 40 	vscatterpf1qps YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 b9 00 04 00 00 	vscatterpf1qps YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 8c fd 85 ff ff ff 	vgatherpf0dpd ZMMWORD PTR \[ebp\+ymm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 8c fd 85 ff ff ff 	vgatherpf0dpd ZMMWORD PTR \[ebp\+ymm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 4c 38 20 	vgatherpf0dpd ZMMWORD PTR \[eax\+ymm7\*1\+0x100\]\{k1\}
+@@ -85,10 +85,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 8c fd 85 ff ff ff 	vgatherpf0qpd ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 4c 38 20 	vgatherpf0qpd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 8c b9 00 04 00 00 	vgatherpf0qpd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c fd 85 ff ff ff 	vgatherpf0qps ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c fd 85 ff ff ff 	vgatherpf0qps ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 4c 38 40 	vgatherpf0qps ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c b9 00 04 00 00 	vgatherpf0qps ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c fd 85 ff ff ff 	vgatherpf0qps YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c fd 85 ff ff ff 	vgatherpf0qps YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 4c 38 40 	vgatherpf0qps YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 8c b9 00 04 00 00 	vgatherpf0qps YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 94 fd 85 ff ff ff 	vgatherpf1dpd ZMMWORD PTR \[ebp\+ymm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 94 fd 85 ff ff ff 	vgatherpf1dpd ZMMWORD PTR \[ebp\+ymm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 54 38 20 	vgatherpf1dpd ZMMWORD PTR \[eax\+ymm7\*1\+0x100\]\{k1\}
+@@ -101,10 +101,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 94 fd 85 ff ff ff 	vgatherpf1qpd ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 54 38 20 	vgatherpf1qpd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 94 b9 00 04 00 00 	vgatherpf1qpd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 fd 85 ff ff ff 	vgatherpf1qps ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 fd 85 ff ff ff 	vgatherpf1qps ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 54 38 40 	vgatherpf1qps ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 b9 00 04 00 00 	vgatherpf1qps ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 fd 85 ff ff ff 	vgatherpf1qps YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 fd 85 ff ff ff 	vgatherpf1qps YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 54 38 40 	vgatherpf1qps YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 94 b9 00 04 00 00 	vgatherpf1qps YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 ac fd 85 ff ff ff 	vscatterpf0dpd ZMMWORD PTR \[ebp\+ymm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 ac fd 85 ff ff ff 	vscatterpf0dpd ZMMWORD PTR \[ebp\+ymm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 6c 38 20 	vscatterpf0dpd ZMMWORD PTR \[eax\+ymm7\*1\+0x100\]\{k1\}
+@@ -117,10 +117,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 ac fd 85 ff ff ff 	vscatterpf0qpd ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 6c 38 20 	vscatterpf0qpd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 ac b9 00 04 00 00 	vscatterpf0qpd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac fd 85 ff ff ff 	vscatterpf0qps ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac fd 85 ff ff ff 	vscatterpf0qps ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 6c 38 40 	vscatterpf0qps ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac b9 00 04 00 00 	vscatterpf0qps ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac fd 85 ff ff ff 	vscatterpf0qps YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac fd 85 ff ff ff 	vscatterpf0qps YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 6c 38 40 	vscatterpf0qps YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 ac b9 00 04 00 00 	vscatterpf0qps YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 b4 fd 85 ff ff ff 	vscatterpf1dpd ZMMWORD PTR \[ebp\+ymm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 b4 fd 85 ff ff ff 	vscatterpf1dpd ZMMWORD PTR \[ebp\+ymm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c6 74 38 20 	vscatterpf1dpd ZMMWORD PTR \[eax\+ymm7\*1\+0x100\]\{k1\}
+@@ -133,8 +133,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 b4 fd 85 ff ff ff 	vscatterpf1qpd ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 74 38 20 	vscatterpf1qpd ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 49 c7 b4 b9 00 04 00 00 	vscatterpf1qpd ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 fd 85 ff ff ff 	vscatterpf1qps ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 fd 85 ff ff ff 	vscatterpf1qps ZMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 74 38 40 	vscatterpf1qps ZMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 b9 00 04 00 00 	vscatterpf1qps ZMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 fd 85 ff ff ff 	vscatterpf1qps YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 fd 85 ff ff ff 	vscatterpf1qps YMMWORD PTR \[ebp\+zmm7\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 74 38 40 	vscatterpf1qps YMMWORD PTR \[eax\+zmm7\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 f2 7d 49 c7 b4 b9 00 04 00 00 	vscatterpf1qps YMMWORD PTR \[ecx\+zmm7\*4\+0x400\]\{k1\}
+ #pass
+diff --git a/gas/testsuite/gas/i386/avx512pf.s b/gas/testsuite/gas/i386/avx512pf.s
+index fc6880a..3476660 100644
+--- a/gas/testsuite/gas/i386/avx512pf.s
++++ b/gas/testsuite/gas/i386/avx512pf.s
+@@ -100,10 +100,10 @@ _start:
+ 	vgatherpf0qpd	ZMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
+ 	vgatherpf0qpd	ZMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
+ 
+-	vgatherpf0qps	ZMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
+-	vgatherpf0qps	ZMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
+-	vgatherpf0qps	ZMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
+-	vgatherpf0qps	ZMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
++	vgatherpf0qps	YMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
++	vgatherpf0qps	YMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
++	vgatherpf0qps	YMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
++	vgatherpf0qps	YMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
+ 
+ 	vgatherpf1dpd	ZMMWORD PTR [ebp+ymm7*8-123]{k1}	 # AVX512PF
+ 	vgatherpf1dpd	ZMMWORD PTR [ebp+ymm7*8-123]{k1}	 # AVX512PF
+@@ -120,10 +120,10 @@ _start:
+ 	vgatherpf1qpd	ZMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
+ 	vgatherpf1qpd	ZMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
+ 
+-	vgatherpf1qps	ZMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
+-	vgatherpf1qps	ZMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
+-	vgatherpf1qps	ZMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
+-	vgatherpf1qps	ZMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
++	vgatherpf1qps	YMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
++	vgatherpf1qps	YMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
++	vgatherpf1qps	YMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
++	vgatherpf1qps	YMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
+ 
+ 	vscatterpf0dpd	ZMMWORD PTR [ebp+ymm7*8-123]{k1}	 # AVX512PF
+ 	vscatterpf0dpd	ZMMWORD PTR [ebp+ymm7*8-123]{k1}	 # AVX512PF
+@@ -140,10 +140,10 @@ _start:
+ 	vscatterpf0qpd	ZMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
+ 	vscatterpf0qpd	ZMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
+ 
+-	vscatterpf0qps	ZMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
+-	vscatterpf0qps	ZMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
+-	vscatterpf0qps	ZMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
+-	vscatterpf0qps	ZMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
++	vscatterpf0qps	YMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
++	vscatterpf0qps	YMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
++	vscatterpf0qps	YMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
++	vscatterpf0qps	YMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
+ 
+ 	vscatterpf1dpd	ZMMWORD PTR [ebp+ymm7*8-123]{k1}	 # AVX512PF
+ 	vscatterpf1dpd	ZMMWORD PTR [ebp+ymm7*8-123]{k1}	 # AVX512PF
+@@ -160,8 +160,8 @@ _start:
+ 	vscatterpf1qpd	ZMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
+ 	vscatterpf1qpd	ZMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
+ 
+-	vscatterpf1qps	ZMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
+-	vscatterpf1qps	ZMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
+-	vscatterpf1qps	ZMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
+-	vscatterpf1qps	ZMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
++	vscatterpf1qps	YMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
++	vscatterpf1qps	YMMWORD PTR [ebp+zmm7*8-123]{k1}	 # AVX512PF
++	vscatterpf1qps	YMMWORD PTR [eax+zmm7+256]{k1}	 # AVX512PF
++	vscatterpf1qps	YMMWORD PTR [ecx+zmm7*4+1024]{k1}	 # AVX512PF
+ 
+diff --git a/gas/testsuite/gas/i386/x86-64-avx512f-intel.d b/gas/testsuite/gas/i386/x86-64-avx512f-intel.d
+index 7f2cabe..e6e732a 100644
+--- a/gas/testsuite/gas/i386/x86-64-avx512f-intel.d
++++ b/gas/testsuite/gas/i386/x86-64-avx512f-intel.d
+@@ -3666,10 +3666,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 02 fd 41 93 b4 fe 7b 00 00 00 	vgatherqpd zmm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]
+ [ 	]*[a-f0-9]+:	62 02 fd 41 93 74 39 20 	vgatherqpd zmm30\{k1\},ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]
+ [ 	]*[a-f0-9]+:	62 22 fd 41 93 b4 b9 00 04 00 00 	vgatherqpd zmm30\{k1\},ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 93 b4 fe 7b 00 00 00 	vgatherqps ymm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 93 b4 fe 7b 00 00 00 	vgatherqps ymm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 93 74 39 40 	vgatherqps ymm30\{k1\},ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]
+-[ 	]*[a-f0-9]+:	62 22 7d 41 93 b4 b9 00 04 00 00 	vgatherqps ymm30\{k1\},ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 93 b4 fe 7b 00 00 00 	vgatherqps ymm30\{k1\},YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 93 b4 fe 7b 00 00 00 	vgatherqps ymm30\{k1\},YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 93 74 39 40 	vgatherqps ymm30\{k1\},YMMWORD PTR \[r9\+zmm31\*1\+0x100\]
++[ 	]*[a-f0-9]+:	62 22 7d 41 93 b4 b9 00 04 00 00 	vgatherqps ymm30\{k1\},YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]
+ [ 	]*[a-f0-9]+:	62 02 fd 48 42 f5    	vgetexppd zmm30,zmm29
+ [ 	]*[a-f0-9]+:	62 02 fd 4f 42 f5    	vgetexppd zmm30\{k7\},zmm29
+ [ 	]*[a-f0-9]+:	62 02 fd cf 42 f5    	vgetexppd zmm30\{k7\}\{z\},zmm29
+@@ -4938,10 +4938,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 02 fd 41 90 b4 fe 7b 00 00 00 	vpgatherdq zmm30\{k1\},ZMMWORD PTR \[r14\+ymm31\*8\+0x7b\]
+ [ 	]*[a-f0-9]+:	62 02 fd 41 90 74 39 20 	vpgatherdq zmm30\{k1\},ZMMWORD PTR \[r9\+ymm31\*1\+0x100\]
+ [ 	]*[a-f0-9]+:	62 22 fd 41 90 b4 b9 00 04 00 00 	vpgatherdq zmm30\{k1\},ZMMWORD PTR \[rcx\+ymm31\*4\+0x400\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 91 b4 fe 7b 00 00 00 	vpgatherqd ymm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 91 b4 fe 7b 00 00 00 	vpgatherqd ymm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 91 74 39 40 	vpgatherqd ymm30\{k1\},ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]
+-[ 	]*[a-f0-9]+:	62 22 7d 41 91 b4 b9 00 04 00 00 	vpgatherqd ymm30\{k1\},ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 91 b4 fe 7b 00 00 00 	vpgatherqd ymm30\{k1\},YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 91 b4 fe 7b 00 00 00 	vpgatherqd ymm30\{k1\},YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 91 74 39 40 	vpgatherqd ymm30\{k1\},YMMWORD PTR \[r9\+zmm31\*1\+0x100\]
++[ 	]*[a-f0-9]+:	62 22 7d 41 91 b4 b9 00 04 00 00 	vpgatherqd ymm30\{k1\},YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]
+ [ 	]*[a-f0-9]+:	62 02 fd 41 91 b4 fe 7b 00 00 00 	vpgatherqq zmm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]
+ [ 	]*[a-f0-9]+:	62 02 fd 41 91 b4 fe 7b 00 00 00 	vpgatherqq zmm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]
+ [ 	]*[a-f0-9]+:	62 02 fd 41 91 74 39 20 	vpgatherqq zmm30\{k1\},ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]
+@@ -5216,10 +5216,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a0 b4 fe 7b 00 00 00 	vpscatterdq ZMMWORD PTR \[r14\+ymm31\*8\+0x7b\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a0 74 39 20 	vpscatterdq ZMMWORD PTR \[r9\+ymm31\*1\+0x100\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 22 fd 41 a0 b4 b9 00 04 00 00 	vpscatterdq ZMMWORD PTR \[rcx\+ymm31\*4\+0x400\]\{k1\},zmm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a1 b4 fe 7b 00 00 00 	vpscatterqd ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a1 b4 fe 7b 00 00 00 	vpscatterqd ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a1 74 39 40 	vpscatterqd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 22 7d 41 a1 b4 b9 00 04 00 00 	vpscatterqd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a1 b4 fe 7b 00 00 00 	vpscatterqd YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a1 b4 fe 7b 00 00 00 	vpscatterqd YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a1 74 39 40 	vpscatterqd YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 22 7d 41 a1 b4 b9 00 04 00 00 	vpscatterqd YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\},ymm30
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a1 b4 fe 7b 00 00 00 	vpscatterqq ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a1 b4 fe 7b 00 00 00 	vpscatterqq ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a1 74 39 20 	vpscatterqq ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},zmm30
+@@ -5639,10 +5639,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a3 b4 fe 7b 00 00 00 	vscatterqpd ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a3 74 39 20 	vscatterqpd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 22 fd 41 a3 b4 b9 00 04 00 00 	vscatterqpd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\},zmm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a3 b4 fe 7b 00 00 00 	vscatterqps ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a3 b4 fe 7b 00 00 00 	vscatterqps ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a3 74 39 40 	vscatterqps ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 22 7d 41 a3 b4 b9 00 04 00 00 	vscatterqps ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a3 b4 fe 7b 00 00 00 	vscatterqps YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a3 b4 fe 7b 00 00 00 	vscatterqps YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a3 74 39 40 	vscatterqps YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 22 7d 41 a3 b4 b9 00 04 00 00 	vscatterqps YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\},ymm30
+ [ 	]*[a-f0-9]+:	62 01 95 40 c6 f4 ab 	vshufpd zmm30,zmm29,zmm28,0xab
+ [ 	]*[a-f0-9]+:	62 01 95 47 c6 f4 ab 	vshufpd zmm30\{k7\},zmm29,zmm28,0xab
+ [ 	]*[a-f0-9]+:	62 01 95 c7 c6 f4 ab 	vshufpd zmm30\{k7\}\{z\},zmm29,zmm28,0xab
+@@ -10686,10 +10686,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 02 fd 41 93 b4 fe 85 ff ff ff 	vgatherqpd zmm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]
+ [ 	]*[a-f0-9]+:	62 02 fd 41 93 74 39 20 	vgatherqpd zmm30\{k1\},ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]
+ [ 	]*[a-f0-9]+:	62 22 fd 41 93 b4 b9 00 04 00 00 	vgatherqpd zmm30\{k1\},ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 93 b4 fe 85 ff ff ff 	vgatherqps ymm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 93 b4 fe 85 ff ff ff 	vgatherqps ymm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 93 74 39 40 	vgatherqps ymm30\{k1\},ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]
+-[ 	]*[a-f0-9]+:	62 22 7d 41 93 b4 b9 00 04 00 00 	vgatherqps ymm30\{k1\},ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 93 b4 fe 85 ff ff ff 	vgatherqps ymm30\{k1\},YMMWORD PTR \[r14\+zmm31\*8-0x7b\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 93 b4 fe 85 ff ff ff 	vgatherqps ymm30\{k1\},YMMWORD PTR \[r14\+zmm31\*8-0x7b\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 93 74 39 40 	vgatherqps ymm30\{k1\},YMMWORD PTR \[r9\+zmm31\*1\+0x100\]
++[ 	]*[a-f0-9]+:	62 22 7d 41 93 b4 b9 00 04 00 00 	vgatherqps ymm30\{k1\},YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]
+ [ 	]*[a-f0-9]+:	62 02 fd 48 42 f5    	vgetexppd zmm30,zmm29
+ [ 	]*[a-f0-9]+:	62 02 fd 4f 42 f5    	vgetexppd zmm30\{k7\},zmm29
+ [ 	]*[a-f0-9]+:	62 02 fd cf 42 f5    	vgetexppd zmm30\{k7\}\{z\},zmm29
+@@ -11958,10 +11958,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 02 fd 41 90 b4 fe 85 ff ff ff 	vpgatherdq zmm30\{k1\},ZMMWORD PTR \[r14\+ymm31\*8-0x7b\]
+ [ 	]*[a-f0-9]+:	62 02 fd 41 90 74 39 20 	vpgatherdq zmm30\{k1\},ZMMWORD PTR \[r9\+ymm31\*1\+0x100\]
+ [ 	]*[a-f0-9]+:	62 22 fd 41 90 b4 b9 00 04 00 00 	vpgatherdq zmm30\{k1\},ZMMWORD PTR \[rcx\+ymm31\*4\+0x400\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 91 b4 fe 85 ff ff ff 	vpgatherqd ymm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 91 b4 fe 85 ff ff ff 	vpgatherqd ymm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]
+-[ 	]*[a-f0-9]+:	62 02 7d 41 91 74 39 40 	vpgatherqd ymm30\{k1\},ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]
+-[ 	]*[a-f0-9]+:	62 22 7d 41 91 b4 b9 00 04 00 00 	vpgatherqd ymm30\{k1\},ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 91 b4 fe 85 ff ff ff 	vpgatherqd ymm30\{k1\},YMMWORD PTR \[r14\+zmm31\*8-0x7b\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 91 b4 fe 85 ff ff ff 	vpgatherqd ymm30\{k1\},YMMWORD PTR \[r14\+zmm31\*8-0x7b\]
++[ 	]*[a-f0-9]+:	62 02 7d 41 91 74 39 40 	vpgatherqd ymm30\{k1\},YMMWORD PTR \[r9\+zmm31\*1\+0x100\]
++[ 	]*[a-f0-9]+:	62 22 7d 41 91 b4 b9 00 04 00 00 	vpgatherqd ymm30\{k1\},YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]
+ [ 	]*[a-f0-9]+:	62 02 fd 41 91 b4 fe 85 ff ff ff 	vpgatherqq zmm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]
+ [ 	]*[a-f0-9]+:	62 02 fd 41 91 b4 fe 85 ff ff ff 	vpgatherqq zmm30\{k1\},ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]
+ [ 	]*[a-f0-9]+:	62 02 fd 41 91 74 39 20 	vpgatherqq zmm30\{k1\},ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]
+@@ -12236,10 +12236,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a0 b4 fe 85 ff ff ff 	vpscatterdq ZMMWORD PTR \[r14\+ymm31\*8-0x7b\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a0 74 39 20 	vpscatterdq ZMMWORD PTR \[r9\+ymm31\*1\+0x100\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 22 fd 41 a0 b4 b9 00 04 00 00 	vpscatterdq ZMMWORD PTR \[rcx\+ymm31\*4\+0x400\]\{k1\},zmm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a1 b4 fe 85 ff ff ff 	vpscatterqd ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a1 b4 fe 85 ff ff ff 	vpscatterqd ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a1 74 39 40 	vpscatterqd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 22 7d 41 a1 b4 b9 00 04 00 00 	vpscatterqd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a1 b4 fe 85 ff ff ff 	vpscatterqd YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a1 b4 fe 85 ff ff ff 	vpscatterqd YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a1 74 39 40 	vpscatterqd YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 22 7d 41 a1 b4 b9 00 04 00 00 	vpscatterqd YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\},ymm30
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a1 b4 fe 85 ff ff ff 	vpscatterqq ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a1 b4 fe 85 ff ff ff 	vpscatterqq ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a1 74 39 20 	vpscatterqq ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},zmm30
+@@ -12659,10 +12659,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a3 b4 fe 85 ff ff ff 	vscatterqpd ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 02 fd 41 a3 74 39 20 	vscatterqpd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},zmm30
+ [ 	]*[a-f0-9]+:	62 22 fd 41 a3 b4 b9 00 04 00 00 	vscatterqpd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\},zmm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a3 b4 fe 85 ff ff ff 	vscatterqps ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a3 b4 fe 85 ff ff ff 	vscatterqps ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 02 7d 41 a3 74 39 40 	vscatterqps ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},ymm30
+-[ 	]*[a-f0-9]+:	62 22 7d 41 a3 b4 b9 00 04 00 00 	vscatterqps ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a3 b4 fe 85 ff ff ff 	vscatterqps YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a3 b4 fe 85 ff ff ff 	vscatterqps YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 02 7d 41 a3 74 39 40 	vscatterqps YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\},ymm30
++[ 	]*[a-f0-9]+:	62 22 7d 41 a3 b4 b9 00 04 00 00 	vscatterqps YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\},ymm30
+ [ 	]*[a-f0-9]+:	62 01 95 40 c6 f4 ab 	vshufpd zmm30,zmm29,zmm28,0xab
+ [ 	]*[a-f0-9]+:	62 01 95 47 c6 f4 ab 	vshufpd zmm30\{k7\},zmm29,zmm28,0xab
+ [ 	]*[a-f0-9]+:	62 01 95 c7 c6 f4 ab 	vshufpd zmm30\{k7\}\{z\},zmm29,zmm28,0xab
+diff --git a/gas/testsuite/gas/i386/x86-64-avx512f.s b/gas/testsuite/gas/i386/x86-64-avx512f.s
+index 1bacbda..b8479d9 100644
+--- a/gas/testsuite/gas/i386/x86-64-avx512f.s
++++ b/gas/testsuite/gas/i386/x86-64-avx512f.s
+@@ -11631,10 +11631,10 @@ _start:
+ 	vgatherqpd	zmm30{k1}, ZMMWORD PTR [r9+zmm31+256]	 # AVX512F
+ 	vgatherqpd	zmm30{k1}, ZMMWORD PTR [rcx+zmm31*4+1024]	 # AVX512F
+ 
+-	vgatherqps	ymm30{k1}, ZMMWORD PTR [r14+zmm31*8-123]	 # AVX512F
+-	vgatherqps	ymm30{k1}, ZMMWORD PTR [r14+zmm31*8-123]	 # AVX512F
+-	vgatherqps	ymm30{k1}, ZMMWORD PTR [r9+zmm31+256]	 # AVX512F
+-	vgatherqps	ymm30{k1}, ZMMWORD PTR [rcx+zmm31*4+1024]	 # AVX512F
++	vgatherqps	ymm30{k1}, YMMWORD PTR [r14+zmm31*8-123]	 # AVX512F
++	vgatherqps	ymm30{k1}, YMMWORD PTR [r14+zmm31*8-123]	 # AVX512F
++	vgatherqps	ymm30{k1}, YMMWORD PTR [r9+zmm31+256]	 # AVX512F
++	vgatherqps	ymm30{k1}, YMMWORD PTR [rcx+zmm31*4+1024]	 # AVX512F
+ 
+ 	vgetexppd	zmm30, zmm29	 # AVX512F
+ 	vgetexppd	zmm30{k7}, zmm29	 # AVX512F
+@@ -13028,10 +13028,10 @@ _start:
+ 	vpgatherdq	zmm30{k1}, ZMMWORD PTR [r9+ymm31+256]	 # AVX512F
+ 	vpgatherdq	zmm30{k1}, ZMMWORD PTR [rcx+ymm31*4+1024]	 # AVX512F
+ 
+-	vpgatherqd	ymm30{k1}, ZMMWORD PTR [r14+zmm31*8-123]	 # AVX512F
+-	vpgatherqd	ymm30{k1}, ZMMWORD PTR [r14+zmm31*8-123]	 # AVX512F
+-	vpgatherqd	ymm30{k1}, ZMMWORD PTR [r9+zmm31+256]	 # AVX512F
+-	vpgatherqd	ymm30{k1}, ZMMWORD PTR [rcx+zmm31*4+1024]	 # AVX512F
++	vpgatherqd	ymm30{k1}, YMMWORD PTR [r14+zmm31*8-123]	 # AVX512F
++	vpgatherqd	ymm30{k1}, YMMWORD PTR [r14+zmm31*8-123]	 # AVX512F
++	vpgatherqd	ymm30{k1}, YMMWORD PTR [r9+zmm31+256]	 # AVX512F
++	vpgatherqd	ymm30{k1}, YMMWORD PTR [rcx+zmm31*4+1024]	 # AVX512F
+ 
+ 	vpgatherqq	zmm30{k1}, ZMMWORD PTR [r14+zmm31*8-123]	 # AVX512F
+ 	vpgatherqq	zmm30{k1}, ZMMWORD PTR [r14+zmm31*8-123]	 # AVX512F
+@@ -13333,10 +13333,10 @@ _start:
+ 	vpscatterdq	ZMMWORD PTR [r9+ymm31+256]{k1}, zmm30	 # AVX512F
+ 	vpscatterdq	ZMMWORD PTR [rcx+ymm31*4+1024]{k1}, zmm30	 # AVX512F
+ 
+-	vpscatterqd	ZMMWORD PTR [r14+zmm31*8-123]{k1}, ymm30	 # AVX512F
+-	vpscatterqd	ZMMWORD PTR [r14+zmm31*8-123]{k1}, ymm30	 # AVX512F
+-	vpscatterqd	ZMMWORD PTR [r9+zmm31+256]{k1}, ymm30	 # AVX512F
+-	vpscatterqd	ZMMWORD PTR [rcx+zmm31*4+1024]{k1}, ymm30	 # AVX512F
++	vpscatterqd	YMMWORD PTR [r14+zmm31*8-123]{k1}, ymm30	 # AVX512F
++	vpscatterqd	YMMWORD PTR [r14+zmm31*8-123]{k1}, ymm30	 # AVX512F
++	vpscatterqd	YMMWORD PTR [r9+zmm31+256]{k1}, ymm30	 # AVX512F
++	vpscatterqd	YMMWORD PTR [rcx+zmm31*4+1024]{k1}, ymm30	 # AVX512F
+ 
+ 	vpscatterqq	ZMMWORD PTR [r14+zmm31*8-123]{k1}, zmm30	 # AVX512F
+ 	vpscatterqq	ZMMWORD PTR [r14+zmm31*8-123]{k1}, zmm30	 # AVX512F
+@@ -13794,10 +13794,10 @@ _start:
+ 	vscatterqpd	ZMMWORD PTR [r9+zmm31+256]{k1}, zmm30	 # AVX512F
+ 	vscatterqpd	ZMMWORD PTR [rcx+zmm31*4+1024]{k1}, zmm30	 # AVX512F
+ 
+-	vscatterqps	ZMMWORD PTR [r14+zmm31*8-123]{k1}, ymm30	 # AVX512F
+-	vscatterqps	ZMMWORD PTR [r14+zmm31*8-123]{k1}, ymm30	 # AVX512F
+-	vscatterqps	ZMMWORD PTR [r9+zmm31+256]{k1}, ymm30	 # AVX512F
+-	vscatterqps	ZMMWORD PTR [rcx+zmm31*4+1024]{k1}, ymm30	 # AVX512F
++	vscatterqps	YMMWORD PTR [r14+zmm31*8-123]{k1}, ymm30	 # AVX512F
++	vscatterqps	YMMWORD PTR [r14+zmm31*8-123]{k1}, ymm30	 # AVX512F
++	vscatterqps	YMMWORD PTR [r9+zmm31+256]{k1}, ymm30	 # AVX512F
++	vscatterqps	YMMWORD PTR [rcx+zmm31*4+1024]{k1}, ymm30	 # AVX512F
+ 
+ 	vshufpd	zmm30, zmm29, zmm28, 0xab	 # AVX512F
+ 	vshufpd	zmm30{k7}, zmm29, zmm28, 0xab	 # AVX512F
+diff --git a/gas/testsuite/gas/i386/x86-64-avx512pf-intel.d b/gas/testsuite/gas/i386/x86-64-avx512pf-intel.d
+index c6ee87c..4c8b549 100644
+--- a/gas/testsuite/gas/i386/x86-64-avx512pf-intel.d
++++ b/gas/testsuite/gas/i386/x86-64-avx512pf-intel.d
+@@ -21,10 +21,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 8c fe 7b 00 00 00 	vgatherpf0qpd ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 4c 39 20 	vgatherpf0qpd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 b2 fd 41 c7 8c b9 00 04 00 00 	vgatherpf0qpd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 8c fe 7b 00 00 00 	vgatherpf0qps ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 8c fe 7b 00 00 00 	vgatherpf0qps ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 4c 39 40 	vgatherpf0qps ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 8c b9 00 04 00 00 	vgatherpf0qps ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 8c fe 7b 00 00 00 	vgatherpf0qps YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 8c fe 7b 00 00 00 	vgatherpf0qps YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 4c 39 40 	vgatherpf0qps YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 8c b9 00 04 00 00 	vgatherpf0qps YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 94 fe 7b 00 00 00 	vgatherpf1dpd ZMMWORD PTR \[r14\+ymm31\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 94 fe 7b 00 00 00 	vgatherpf1dpd ZMMWORD PTR \[r14\+ymm31\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 54 39 20 	vgatherpf1dpd ZMMWORD PTR \[r9\+ymm31\*1\+0x100\]\{k1\}
+@@ -37,10 +37,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 94 fe 7b 00 00 00 	vgatherpf1qpd ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 54 39 20 	vgatherpf1qpd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 b2 fd 41 c7 94 b9 00 04 00 00 	vgatherpf1qpd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 94 fe 7b 00 00 00 	vgatherpf1qps ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 94 fe 7b 00 00 00 	vgatherpf1qps ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 54 39 40 	vgatherpf1qps ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 94 b9 00 04 00 00 	vgatherpf1qps ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 94 fe 7b 00 00 00 	vgatherpf1qps YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 94 fe 7b 00 00 00 	vgatherpf1qps YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 54 39 40 	vgatherpf1qps YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 94 b9 00 04 00 00 	vgatherpf1qps YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 ac fe 7b 00 00 00 	vscatterpf0dpd ZMMWORD PTR \[r14\+ymm31\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 ac fe 7b 00 00 00 	vscatterpf0dpd ZMMWORD PTR \[r14\+ymm31\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 6c 39 20 	vscatterpf0dpd ZMMWORD PTR \[r9\+ymm31\*1\+0x100\]\{k1\}
+@@ -53,10 +53,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 ac fe 7b 00 00 00 	vscatterpf0qpd ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 6c 39 20 	vscatterpf0qpd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 b2 fd 41 c7 ac b9 00 04 00 00 	vscatterpf0qpd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 ac fe 7b 00 00 00 	vscatterpf0qps ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 ac fe 7b 00 00 00 	vscatterpf0qps ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 6c 39 40 	vscatterpf0qps ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 ac b9 00 04 00 00 	vscatterpf0qps ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 ac fe 7b 00 00 00 	vscatterpf0qps YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 ac fe 7b 00 00 00 	vscatterpf0qps YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 6c 39 40 	vscatterpf0qps YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 ac b9 00 04 00 00 	vscatterpf0qps YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 b4 fe 7b 00 00 00 	vscatterpf1dpd ZMMWORD PTR \[r14\+ymm31\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 b4 fe 7b 00 00 00 	vscatterpf1dpd ZMMWORD PTR \[r14\+ymm31\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 74 39 20 	vscatterpf1dpd ZMMWORD PTR \[r9\+ymm31\*1\+0x100\]\{k1\}
+@@ -69,10 +69,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 b4 fe 7b 00 00 00 	vscatterpf1qpd ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 74 39 20 	vscatterpf1qpd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 b2 fd 41 c7 b4 b9 00 04 00 00 	vscatterpf1qpd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 b4 fe 7b 00 00 00 	vscatterpf1qps ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 b4 fe 7b 00 00 00 	vscatterpf1qps ZMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 74 39 40 	vscatterpf1qps ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 b4 b9 00 04 00 00 	vscatterpf1qps ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 b4 fe 7b 00 00 00 	vscatterpf1qps YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 b4 fe 7b 00 00 00 	vscatterpf1qps YMMWORD PTR \[r14\+zmm31\*8\+0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 74 39 40 	vscatterpf1qps YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 b4 b9 00 04 00 00 	vscatterpf1qps YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 8c fe 85 ff ff ff 	vgatherpf0dpd ZMMWORD PTR \[r14\+ymm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 8c fe 85 ff ff ff 	vgatherpf0dpd ZMMWORD PTR \[r14\+ymm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 4c 39 20 	vgatherpf0dpd ZMMWORD PTR \[r9\+ymm31\*1\+0x100\]\{k1\}
+@@ -85,10 +85,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 8c fe 85 ff ff ff 	vgatherpf0qpd ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 4c 39 20 	vgatherpf0qpd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 b2 fd 41 c7 8c b9 00 04 00 00 	vgatherpf0qpd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 8c fe 85 ff ff ff 	vgatherpf0qps ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 8c fe 85 ff ff ff 	vgatherpf0qps ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 4c 39 40 	vgatherpf0qps ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 8c b9 00 04 00 00 	vgatherpf0qps ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 8c fe 85 ff ff ff 	vgatherpf0qps YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 8c fe 85 ff ff ff 	vgatherpf0qps YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 4c 39 40 	vgatherpf0qps YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 8c b9 00 04 00 00 	vgatherpf0qps YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 94 fe 85 ff ff ff 	vgatherpf1dpd ZMMWORD PTR \[r14\+ymm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 94 fe 85 ff ff ff 	vgatherpf1dpd ZMMWORD PTR \[r14\+ymm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 54 39 20 	vgatherpf1dpd ZMMWORD PTR \[r9\+ymm31\*1\+0x100\]\{k1\}
+@@ -101,10 +101,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 94 fe 85 ff ff ff 	vgatherpf1qpd ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 54 39 20 	vgatherpf1qpd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 b2 fd 41 c7 94 b9 00 04 00 00 	vgatherpf1qpd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 94 fe 85 ff ff ff 	vgatherpf1qps ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 94 fe 85 ff ff ff 	vgatherpf1qps ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 54 39 40 	vgatherpf1qps ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 94 b9 00 04 00 00 	vgatherpf1qps ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 94 fe 85 ff ff ff 	vgatherpf1qps YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 94 fe 85 ff ff ff 	vgatherpf1qps YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 54 39 40 	vgatherpf1qps YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 94 b9 00 04 00 00 	vgatherpf1qps YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 ac fe 85 ff ff ff 	vscatterpf0dpd ZMMWORD PTR \[r14\+ymm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 ac fe 85 ff ff ff 	vscatterpf0dpd ZMMWORD PTR \[r14\+ymm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 6c 39 20 	vscatterpf0dpd ZMMWORD PTR \[r9\+ymm31\*1\+0x100\]\{k1\}
+@@ -117,10 +117,10 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 ac fe 85 ff ff ff 	vscatterpf0qpd ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 6c 39 20 	vscatterpf0qpd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 b2 fd 41 c7 ac b9 00 04 00 00 	vscatterpf0qpd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 ac fe 85 ff ff ff 	vscatterpf0qps ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 ac fe 85 ff ff ff 	vscatterpf0qps ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 6c 39 40 	vscatterpf0qps ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 ac b9 00 04 00 00 	vscatterpf0qps ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 ac fe 85 ff ff ff 	vscatterpf0qps YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 ac fe 85 ff ff ff 	vscatterpf0qps YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 6c 39 40 	vscatterpf0qps YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 ac b9 00 04 00 00 	vscatterpf0qps YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 b4 fe 85 ff ff ff 	vscatterpf1dpd ZMMWORD PTR \[r14\+ymm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 b4 fe 85 ff ff ff 	vscatterpf1dpd ZMMWORD PTR \[r14\+ymm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c6 74 39 20 	vscatterpf1dpd ZMMWORD PTR \[r9\+ymm31\*1\+0x100\]\{k1\}
+@@ -133,8 +133,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 b4 fe 85 ff ff ff 	vscatterpf1qpd ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 92 fd 41 c7 74 39 20 	vscatterpf1qpd ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+ [ 	]*[a-f0-9]+:	62 b2 fd 41 c7 b4 b9 00 04 00 00 	vscatterpf1qpd ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 b4 fe 85 ff ff ff 	vscatterpf1qps ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 b4 fe 85 ff ff ff 	vscatterpf1qps ZMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 92 7d 41 c7 74 39 40 	vscatterpf1qps ZMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
+-[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 b4 b9 00 04 00 00 	vscatterpf1qps ZMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 b4 fe 85 ff ff ff 	vscatterpf1qps YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 b4 fe 85 ff ff ff 	vscatterpf1qps YMMWORD PTR \[r14\+zmm31\*8-0x7b\]\{k1\}
++[ 	]*[a-f0-9]+:	62 92 7d 41 c7 74 39 40 	vscatterpf1qps YMMWORD PTR \[r9\+zmm31\*1\+0x100\]\{k1\}
++[ 	]*[a-f0-9]+:	62 b2 7d 41 c7 b4 b9 00 04 00 00 	vscatterpf1qps YMMWORD PTR \[rcx\+zmm31\*4\+0x400\]\{k1\}
+ #pass
+diff --git a/gas/testsuite/gas/i386/x86-64-avx512pf.s b/gas/testsuite/gas/i386/x86-64-avx512pf.s
+index f2d3b2b..bceae73 100644
+--- a/gas/testsuite/gas/i386/x86-64-avx512pf.s
++++ b/gas/testsuite/gas/i386/x86-64-avx512pf.s
+@@ -100,10 +100,10 @@ _start:
+ 	vgatherpf0qpd	ZMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
+ 	vgatherpf0qpd	ZMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
+ 
+-	vgatherpf0qps	ZMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
+-	vgatherpf0qps	ZMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
+-	vgatherpf0qps	ZMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
+-	vgatherpf0qps	ZMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
++	vgatherpf0qps	YMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
++	vgatherpf0qps	YMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
++	vgatherpf0qps	YMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
++	vgatherpf0qps	YMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
+ 
+ 	vgatherpf1dpd	ZMMWORD PTR [r14+ymm31*8-123]{k1}	 # AVX512PF
+ 	vgatherpf1dpd	ZMMWORD PTR [r14+ymm31*8-123]{k1}	 # AVX512PF
+@@ -120,10 +120,10 @@ _start:
+ 	vgatherpf1qpd	ZMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
+ 	vgatherpf1qpd	ZMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
+ 
+-	vgatherpf1qps	ZMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
+-	vgatherpf1qps	ZMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
+-	vgatherpf1qps	ZMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
+-	vgatherpf1qps	ZMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
++	vgatherpf1qps	YMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
++	vgatherpf1qps	YMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
++	vgatherpf1qps	YMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
++	vgatherpf1qps	YMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
+ 
+ 	vscatterpf0dpd	ZMMWORD PTR [r14+ymm31*8-123]{k1}	 # AVX512PF
+ 	vscatterpf0dpd	ZMMWORD PTR [r14+ymm31*8-123]{k1}	 # AVX512PF
+@@ -140,10 +140,10 @@ _start:
+ 	vscatterpf0qpd	ZMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
+ 	vscatterpf0qpd	ZMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
+ 
+-	vscatterpf0qps	ZMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
+-	vscatterpf0qps	ZMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
+-	vscatterpf0qps	ZMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
+-	vscatterpf0qps	ZMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
++	vscatterpf0qps	YMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
++	vscatterpf0qps	YMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
++	vscatterpf0qps	YMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
++	vscatterpf0qps	YMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
+ 
+ 	vscatterpf1dpd	ZMMWORD PTR [r14+ymm31*8-123]{k1}	 # AVX512PF
+ 	vscatterpf1dpd	ZMMWORD PTR [r14+ymm31*8-123]{k1}	 # AVX512PF
+@@ -160,8 +160,8 @@ _start:
+ 	vscatterpf1qpd	ZMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
+ 	vscatterpf1qpd	ZMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
+ 
+-	vscatterpf1qps	ZMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
+-	vscatterpf1qps	ZMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
+-	vscatterpf1qps	ZMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
+-	vscatterpf1qps	ZMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
++	vscatterpf1qps	YMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
++	vscatterpf1qps	YMMWORD PTR [r14+zmm31*8-123]{k1}	 # AVX512PF
++	vscatterpf1qps	YMMWORD PTR [r9+zmm31+256]{k1}	 # AVX512PF
++	vscatterpf1qps	YMMWORD PTR [rcx+zmm31*4+1024]{k1}	 # AVX512PF
+ 
+diff --git a/opcodes/ChangeLog b/opcodes/ChangeLog
+index 8999020..3517d4f 100644
+--- a/opcodes/ChangeLog
++++ b/opcodes/ChangeLog
+@@ -1,3 +1,10 @@
++2014-03-20  Ilya Tocar  <ilya.tocar@intel.com>
++
++	* i386-opc.tbl: Change memory size for vgatherpf0qps, vgatherpf1qps,
++	vscatterpf0qps, vscatterpf1qps, vgatherqps, vpgatherqd, vpscatterqd,
++	vscatterqps.
++	* i386-tbl.h: Regenerate.
++
+ 2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
+ 
+ 	Backport from master
+diff --git a/opcodes/i386-dis-evex.h b/opcodes/i386-dis-evex.h
+index c42e7cb..0d17846 100644
+--- a/opcodes/i386-dis-evex.h
++++ b/opcodes/i386-dis-evex.h
+@@ -2906,42 +2906,42 @@ static const struct dis386 evex_table[][256] = {
+   },
+   /* EVEX_W_0F3891_P_2 */
+   {
+-    { "vpgatherqd",	{ XMxmmq, MVexVSIBQWpX } },
++    { "vpgatherqd",	{ XMxmmq, MVexVSIBQDWpX } },
+     { "vpgatherqq",	{ XM, MVexVSIBQWpX } },
+   },
+   /* EVEX_W_0F3893_P_2 */
+   {
+-    { "vgatherqps",	{ XMxmmq, MVexVSIBQWpX } },
++    { "vgatherqps",	{ XMxmmq, MVexVSIBQDWpX } },
+     { "vgatherqpd",	{ XM, MVexVSIBQWpX } },
+   },
+   /* EVEX_W_0F38A1_P_2 */
+   {
+-    { "vpscatterqd",	{ MVexVSIBQWpX, XMxmmq } },
++    { "vpscatterqd",	{ MVexVSIBQDWpX, XMxmmq } },
+     { "vpscatterqq",	{ MVexVSIBQWpX, XM } },
+   },
+   /* EVEX_W_0F38A3_P_2 */
+   {
+-    { "vscatterqps",	{ MVexVSIBQWpX, XMxmmq } },
++    { "vscatterqps",	{ MVexVSIBQDWpX, XMxmmq } },
+     { "vscatterqpd",	{ MVexVSIBQWpX, XM } },
+   },
+   /* EVEX_W_0F38C7_R_1_P_2 */
+   {
+-    { "vgatherpf0qps",  { MVexVSIBDWpX } },
++    { "vgatherpf0qps",  { MVexVSIBDQWpX } },
+     { "vgatherpf0qpd",  { MVexVSIBQWpX } },
+   },
+   /* EVEX_W_0F38C7_R_2_P_2 */
+   {
+-    { "vgatherpf1qps",  { MVexVSIBDWpX } },
++    { "vgatherpf1qps",  { MVexVSIBDQWpX } },
+     { "vgatherpf1qpd",  { MVexVSIBQWpX } },
+   },
+   /* EVEX_W_0F38C7_R_5_P_2 */
+   {
+-    { "vscatterpf0qps",  { MVexVSIBDWpX } },
++    { "vscatterpf0qps",  { MVexVSIBDQWpX } },
+     { "vscatterpf0qpd",  { MVexVSIBQWpX } },
+   },
+   /* EVEX_W_0F38C7_R_6_P_2 */
+   {
+-    { "vscatterpf1qps",  { MVexVSIBDWpX } },
++    { "vscatterpf1qps",  { MVexVSIBDQWpX } },
+     { "vscatterpf1qpd",  { MVexVSIBQWpX } },
+   },
+ 
+diff --git a/opcodes/i386-dis.c b/opcodes/i386-dis.c
+index 126d497..5e6fa99 100644
+--- a/opcodes/i386-dis.c
++++ b/opcodes/i386-dis.c
+@@ -429,7 +429,9 @@ fetch_data (struct disassemble_info *info, bfd_byte *addr)
+ #define MaskVex { OP_VEX, mask_mode }
+ 
+ #define MVexVSIBDWpX { OP_M, vex_vsib_d_w_dq_mode }
++#define MVexVSIBDQWpX { OP_M, vex_vsib_d_w_d_mode }
+ #define MVexVSIBQWpX { OP_M, vex_vsib_q_w_dq_mode }
++#define MVexVSIBQDWpX { OP_M, vex_vsib_q_w_d_mode }
+ 
+ /* Used handle "rep" prefix for string instructions.  */
+ #define Xbr { REP_Fixup, eSI_reg }
+@@ -558,8 +560,12 @@ enum
+ 
+   /* Similar to vex_w_dq_mode, with VSIB dword indices.  */
+   vex_vsib_d_w_dq_mode,
++  /* Similar to vex_vsib_d_w_dq_mode, with smaller memory.  */
++  vex_vsib_d_w_d_mode,
+   /* Similar to vex_w_dq_mode, with VSIB qword indices.  */
+   vex_vsib_q_w_dq_mode,
++  /* Similar to vex_vsib_q_w_dq_mode, with smaller memory.  */
++  vex_vsib_q_w_d_mode,
+ 
+   /* scalar, ignore vector length.  */
+   scalar_mode,
+@@ -14112,6 +14118,14 @@ intel_operand_size (int bytemode, int sizeflag)
+ 	  oappend ("ZMMWORD PTR ");
+ 	}
+       break;
++    case vex_vsib_q_w_d_mode:
++    case vex_vsib_d_w_d_mode:
++      if (!need_vex || !vex.evex || vex.length != 512)
++	abort ();
++
++      oappend ("YMMWORD PTR ");
++
++      break;
+     case mask_mode:
+       if (!need_vex)
+ 	abort ();
+@@ -14229,7 +14243,9 @@ OP_E_memory (int bytemode, int sizeflag)
+       switch (bytemode)
+ 	{
+ 	case vex_vsib_d_w_dq_mode:
++	case vex_vsib_d_w_d_mode:
+ 	case vex_vsib_q_w_dq_mode:
++	case vex_vsib_q_w_d_mode:
+ 	case evex_x_gscat_mode:
+ 	case xmm_mdq_mode:
+ 	  shift = vex.w ? 3 : 2;
+@@ -14348,7 +14364,9 @@ OP_E_memory (int bytemode, int sizeflag)
+ 	  switch (bytemode)
+ 	    {
+ 	    case vex_vsib_d_w_dq_mode:
++	    case vex_vsib_d_w_d_mode:
+ 	    case vex_vsib_q_w_dq_mode:
++	    case vex_vsib_q_w_d_mode:
+ 	      if (!need_vex)
+ 		abort ();
+ 	      if (vex.evex)
+@@ -14364,13 +14382,17 @@ OP_E_memory (int bytemode, int sizeflag)
+ 		  indexes64 = indexes32 = names_xmm;
+ 		  break;
+ 		case 256:
+-		  if (!vex.w || bytemode == vex_vsib_q_w_dq_mode)
++		  if (!vex.w
++		      || bytemode == vex_vsib_q_w_dq_mode
++		      || bytemode == vex_vsib_q_w_d_mode)
+ 		    indexes64 = indexes32 = names_ymm;
+ 		  else
+ 		    indexes64 = indexes32 = names_xmm;
+ 		  break;
+ 		case 512:
+-		  if (!vex.w || bytemode == vex_vsib_q_w_dq_mode)
++		  if (!vex.w
++		      || bytemode == vex_vsib_q_w_dq_mode
++		      || bytemode == vex_vsib_q_w_d_mode)
+ 		    indexes64 = indexes32 = names_zmm;
+ 		  else
+ 		    indexes64 = indexes32 = names_ymm;
+@@ -15368,7 +15390,9 @@ OP_XMM (int bytemode, int sizeflag ATTRIBUTE_UNUSED)
+ 	  names = names_xmm;
+ 	  break;
+ 	case 256:
+-	  if (vex.w || bytemode != vex_vsib_q_w_dq_mode)
++	  if (vex.w
++	      || (bytemode != vex_vsib_q_w_dq_mode
++		  && bytemode != vex_vsib_q_w_d_mode))
+ 	    names = names_ymm;
+ 	  else
+ 	    names = names_xmm;
+@@ -16074,6 +16098,7 @@ OP_VEX (int bytemode, int sizeflag ATTRIBUTE_UNUSED)
+ 	case vex_mode:
+ 	case vex128_mode:
+ 	case vex_vsib_q_w_dq_mode:
++	case vex_vsib_q_w_d_mode:
+ 	  names = names_xmm;
+ 	  break;
+ 	case dq_mode:
+@@ -16098,6 +16123,7 @@ OP_VEX (int bytemode, int sizeflag ATTRIBUTE_UNUSED)
+ 	  names = names_ymm;
+ 	  break;
+ 	case vex_vsib_q_w_dq_mode:
++	case vex_vsib_q_w_d_mode:
+ 	  names = vex.w ? names_ymm : names_xmm;
+ 	  break;
+ 	case mask_mode:
+diff --git a/opcodes/i386-opc.tbl b/opcodes/i386-opc.tbl
+index 5513f8e..f10d62e 100644
+--- a/opcodes/i386-opc.tbl
++++ b/opcodes/i386-opc.tbl
+@@ -3890,8 +3890,8 @@ vgatherdps, 2, 0x6692, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|NoDefMask|Vex
+ vmovntdqa, 2, 0x662A, None, 1, CpuAVX512F, Modrm|EVex=1|VexOpcode=1|VexW=1|Disp8MemShift=6|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM }
+ vpgatherdd, 2, 0x6690, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM }
+ 
+-vgatherqps, 2, 0x6693, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegYMM }
+-vpgatherqd, 2, 0x6691, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegYMM }
++vgatherqps, 2, 0x6693, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { YMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegYMM }
++vpgatherqd, 2, 0x6691, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { YMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegYMM }
+ 
+ vgetexppd, 2, 0x6642, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=1|VexW=2|VecESize=1|Broadcast=2|Disp8MemShift=6|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegZMM|Qword|ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM }
+ vgetexppd, 3, 0x6642, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=1|VexW=2|VecESize=1|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf|SAE, { Imm8, RegZMM, RegZMM }
+@@ -4166,8 +4166,8 @@ vprolq, 3, 0x6672, 1, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=0|VexVVVV=
+ vprorq, 3, 0x6672, 0, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=0|VexVVVV=3|VexW=2|VecESize=1|Broadcast=2|Disp8MemShift=6|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { Imm8, Qword|ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM }
+ vprorq, 3, 0x6672, 0, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=0|VexVVVV=2|VexW=2|VecESize=1|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { Imm8, RegZMM, RegZMM }
+ 
+-vpscatterqd, 2, 0x66A1, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegYMM, ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+-vscatterqps, 2, 0x66A3, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegYMM, ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
++vpscatterqd, 2, 0x66A1, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegYMM, YMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
++vscatterqps, 2, 0x66A3, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegYMM, YMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+ 
+ vpshufd, 3, 0x6670, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=0|VexW=1|Broadcast=1|Disp8MemShift=6|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { Imm8, RegZMM|Dword|ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM }
+ 
+@@ -4278,13 +4278,13 @@ vscatterpf1dpd, 1, 0x66C6, 6, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|V
+ vscatterpf1qpd, 1, 0x66C7, 6, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=2|VecESize=1|Disp8MemShift=3|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+ 
+ vgatherpf0dps, 1, 0x66C6, 1, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+-vgatherpf0qps, 1, 0x66C7, 1, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
++vgatherpf0qps, 1, 0x66C7, 1, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { YMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+ vgatherpf1dps, 1, 0x66C6, 2, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+-vgatherpf1qps, 1, 0x66C7, 2, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
++vgatherpf1qps, 1, 0x66C7, 2, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { YMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+ vscatterpf0dps, 1, 0x66C6, 5, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+-vscatterpf0qps, 1, 0x66C7, 5, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
++vscatterpf0qps, 1, 0x66C7, 5, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { YMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+ vscatterpf1dps, 1, 0x66C6, 6, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+-vscatterpf1qps, 1, 0x66C7, 6, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
++vscatterpf1qps, 1, 0x66C7, 6, 1, CpuAVX512PF, Modrm|EVex=1|Masking=2|NoDefMask|VexOpcode=1|VexW=1|Disp8MemShift=2|VecSIB=3|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { YMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+ 
+ // AVX512PF instructions end.
+ 
+diff --git a/opcodes/i386-tbl.h b/opcodes/i386-tbl.h
+index f1dc40a..30522fa 100644
+--- a/opcodes/i386-tbl.h
++++ b/opcodes/i386-tbl.h
+@@ -43492,7 +43492,7 @@ const insn_template i386_optab[] =
+       0, 0 },
+     { { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } },
++	  0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0 } },
+       { { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+@@ -43645,7 +43645,7 @@ const insn_template i386_optab[] =
+       0, 0 },
+     { { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } },
++	  0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0 } },
+       { { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+@@ -60595,7 +60595,7 @@ const insn_template i386_optab[] =
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+       { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } } } },
++	  0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0 } } } },
+   { "vscatterqps", 2, 0x66A3, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+@@ -60610,7 +60610,7 @@ const insn_template i386_optab[] =
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+       { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } } } },
++	  0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0 } } } },
+   { "vpsraq", 3, 0x66E2, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+@@ -61438,7 +61438,7 @@ const insn_template i386_optab[] =
+       0, 0 },
+     { { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } } } },
++	  0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0 } } } },
+   { "vgatherpf1dps", 1, 0x66C6, 2, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 
+@@ -61462,7 +61462,7 @@ const insn_template i386_optab[] =
+       0, 0 },
+     { { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } } } },
++	  0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0 } } } },
+   { "vscatterpf0dps", 1, 0x66C6, 5, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 
+@@ -61486,7 +61486,7 @@ const insn_template i386_optab[] =
+       0, 0 },
+     { { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } } } },
++	  0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0 } } } },
+   { "vscatterpf1dps", 1, 0x66C6, 6, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 
+@@ -61510,7 +61510,7 @@ const insn_template i386_optab[] =
+       0, 0 },
+     { { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } } } },
++	  0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0 } } } },
+   { "prefetchwt1", 1, 0x0F0D, 2, 2,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-- 
+2.0.3
+

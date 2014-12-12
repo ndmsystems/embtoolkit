@@ -1,0 +1,84 @@
+From ac72fa81729954a602426b8ef6bc8c537252378a Mon Sep 17 00:00:00 2001
+From: Ilya Tocar <ilya.tocar@intel.com>
+Date: Thu, 20 Feb 2014 19:08:13 +0400
+Subject: [PATCH 138/330] Remove bogus vcvtps2ph variant.
+
+We currently support version of vcvtps2ph with sae and only 1 register operand.
+This version is encoded as if missing operand was equal to ymm0.
+I didn't found any references to this variant in
+http://download-software.intel.com/sites/default/files/managed/50/1a/319433-018.pdf
+This patch removes it.
+
+opcodes/
+
+        * i386-opc.tbl: Remove wrong variant of vcvtps2ph
+        * i386-tbl.h: Regenerate.
+---
+ opcodes/ChangeLog    |  8 ++++++++
+ opcodes/i386-opc.tbl |  1 -
+ opcodes/i386-tbl.h   | 18 ------------------
+ 3 files changed, 8 insertions(+), 19 deletions(-)
+
+diff --git a/opcodes/ChangeLog b/opcodes/ChangeLog
+index 1a15fab..8999020 100644
+--- a/opcodes/ChangeLog
++++ b/opcodes/ChangeLog
+@@ -1,6 +1,14 @@
+ 2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
+ 
+ 	Backport from master
++	2014-02-25  Ilya Tocar  <ilya.tocar@intel.com>
++
++	* i386-opc.tbl: Remove wrong variant of vcvtps2ph
++	* i386-tbl.h: Regenerate.
++
++2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
++
++	Backport from master
+ 	2014-02-21  Ilya Tocar  <ilya.tocar@intel.com>
+ 
+ 	* i386-gen.c (cpu_flag_init): Add CPU_PREFETCHWT1_FLAGS/
+diff --git a/opcodes/i386-opc.tbl b/opcodes/i386-opc.tbl
+index 476387d..5513f8e 100644
+--- a/opcodes/i386-opc.tbl
++++ b/opcodes/i386-opc.tbl
+@@ -3633,7 +3633,6 @@ vcvtps2pd, 3, 0x5A, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=0|VexW
+ vcvtps2ph, 3, 0x661D, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=2|VexW=1|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { Imm8, RegZMM, RegYMM|RegMem }
+ vcvtps2ph, 4, 0x661D, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=2|VexW=1|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf|SAE, { Imm8, Imm8, RegZMM, RegYMM|RegMem }
+ vcvtps2ph, 3, 0x661D, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|VexOpcode=2|VexW=1|Disp8MemShift=5|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { Imm8, RegZMM, YMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8 }
+-vcvtps2ph, 3, 0x661D, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|VexOpcode=2|VexW=1|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf|SAE, { Imm8, Imm8, RegZMM|RegMem }
+ 
+ vcvtsd2si, 2, 0xF22D, None, 1, CpuAVX512F, Modrm|EVex=4|VexOpcode=0|VexW=1|VecESize=1|Disp8MemShift=3|IgnoreSize|No_bSuf|No_wSuf|No_sSuf|No_qSuf|No_ldSuf, { RegXMM|Qword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, Reg32 }
+ vcvtsd2si, 3, 0xF22D, None, 1, CpuAVX512F, Modrm|EVex=4|VexOpcode=0|VexW=1|VecESize=1|IgnoreSize|No_bSuf|No_wSuf|No_sSuf|No_qSuf|No_ldSuf|StaticRounding|SAE, { Imm8, RegXMM, Reg32 }
+diff --git a/opcodes/i386-tbl.h b/opcodes/i386-tbl.h
+index 9dd7284..f1dc40a 100644
+--- a/opcodes/i386-tbl.h
++++ b/opcodes/i386-tbl.h
+@@ -44114,24 +44114,6 @@ const insn_template i386_optab[] =
+       { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0 } } } },
+-  { "vcvtps2ph", 3, 0x661D, None, 1,
+-    { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+-    { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 
+-      1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-      0, 0, 0, 1, 2, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 1, 0, 0, 0, 0, 
+-      0, 0 },
+-    { { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 
+-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+-      { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 
+-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+-      { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+   { "vfmadd132pd", 3, 0x6698, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-- 
+2.0.3
+

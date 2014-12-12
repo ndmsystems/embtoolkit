@@ -1,0 +1,196 @@
+From a1aff605b7044da2add402123ef3a52752758cd0 Mon Sep 17 00:00:00 2001
+From: Michael Zolotukhin <michael.v.zolotukhin@gmail.com>
+Date: Tue, 17 Dec 2013 09:06:57 -0800
+Subject: [PATCH 132/330] Properly handle ljmp/lcall with invalid MODRM byte
+
+gas/testsuite/
+
+2013-12-17  Michael Zolotukhin  <michael.v.zolotukhin@gmail.com>
+
+	* gas/i386/disassem.s: New.
+	* gas/i386/disassem.d: Likewise.
+	* gas/i386/x86-64-disassem.s: Likewise.
+	* gas/i386/x86-64-disassem.d: Likewise.
+	* gas/i386/i386.exp: Run disassem and x86-64-disassem.
+
+opcodes/
+
+2013-12-17  Michael Zolotukhin  <michael.v.zolotukhin@gmail.com>
+
+	* i386-dis.c (MOD_FF_REG_3): New.
+	(MOD_FF_REG_5): Likewise.
+	(mod_table): Add MOD_FF_REG_3 and MOD_FF_REG_5.
+	(reg_table): Use MOD_FF_REG_3 and MOD_FF_REG_5.
+---
+ gas/testsuite/ChangeLog                  | 11 +++++++++++
+ gas/testsuite/gas/i386/disassem.d        | 14 ++++++++++++++
+ gas/testsuite/gas/i386/disassem.s        |  3 +++
+ gas/testsuite/gas/i386/i386.exp          |  2 ++
+ gas/testsuite/gas/i386/x86-64-disassem.d | 14 ++++++++++++++
+ gas/testsuite/gas/i386/x86-64-disassem.s |  3 +++
+ opcodes/ChangeLog                        | 10 ++++++++++
+ opcodes/i386-dis.c                       | 14 ++++++++++++--
+ 8 files changed, 69 insertions(+), 2 deletions(-)
+ create mode 100644 gas/testsuite/gas/i386/disassem.d
+ create mode 100644 gas/testsuite/gas/i386/disassem.s
+ create mode 100644 gas/testsuite/gas/i386/x86-64-disassem.d
+ create mode 100644 gas/testsuite/gas/i386/x86-64-disassem.s
+
+diff --git a/gas/testsuite/ChangeLog b/gas/testsuite/ChangeLog
+index bb4f14e..3b78173 100644
+--- a/gas/testsuite/ChangeLog
++++ b/gas/testsuite/ChangeLog
+@@ -1,3 +1,14 @@
++2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
++
++	Backport from master
++	2013-12-17  Michael Zolotukhin  <michael.v.zolotukhin@gmail.com>
++
++	* gas/i386/disassem.s: New.
++	* gas/i386/disassem.d: Likewise.
++	* gas/i386/x86-64-disassem.s: Likewise.
++	* gas/i386/x86-64-disassem.d: Likewise.
++	* gas/i386/i386.exp: Run disassem and x86-64-disassem.
++
+ 2014-02-27  Jiong Wang  <jiong.wang@arm.com>
+ 
+ 	* gas/aarch64/fp-const0-parsing.s: New test.
+diff --git a/gas/testsuite/gas/i386/disassem.d b/gas/testsuite/gas/i386/disassem.d
+new file mode 100644
+index 0000000..d8c6d61
+--- /dev/null
++++ b/gas/testsuite/gas/i386/disassem.d
+@@ -0,0 +1,14 @@
++#objdump: -drw
++#name: opcodes with invalid modrm byte
++
++.*: +file format .*
++
++
++Disassembly of section \.text:
++
++0+ <\.text>:
++[ 	]*[a-f0-9]+:[ 	]*ff[ 	]*\(bad\)  
++[ 	]*[a-f0-9]+:[ 	]*ef[ 	]*out    %eax,\(%dx\)
++[ 	]*[a-f0-9]+:[ 	]*ff[ 	]*\(bad\)  
++[ 	]*[a-f0-9]+:[ 	]*d8[ 	]*\.byte 0xd8
++#pass
+diff --git a/gas/testsuite/gas/i386/disassem.s b/gas/testsuite/gas/i386/disassem.s
+new file mode 100644
+index 0000000..81b0ef3
+--- /dev/null
++++ b/gas/testsuite/gas/i386/disassem.s
+@@ -0,0 +1,3 @@
++.text
++.byte 0xFF, 0xEF
++.byte 0xFF, 0xD8
+diff --git a/gas/testsuite/gas/i386/i386.exp b/gas/testsuite/gas/i386/i386.exp
+index 55ed9de..336500a 100644
+--- a/gas/testsuite/gas/i386/i386.exp
++++ b/gas/testsuite/gas/i386/i386.exp
+@@ -267,6 +267,7 @@ if [expr ([istarget "i*86-*-*"] ||  [istarget "x86_64-*-*"]) && [gas_32_check]]
+     run_list_test "mpx-inval-1" "-al"
+     run_dump_test "mpx-add-bnd-prefix"
+     run_dump_test "sha"
++    run_dump_test "disassem"
+ 
+     # These tests require support for 8 and 16 bit relocs,
+     # so we only run them for ELF and COFF targets.
+@@ -552,6 +553,7 @@ if [expr ([istarget "i*86-*-*"] || [istarget "x86_64-*-*"]) && [gas_64_check]] t
+     run_dump_test "x86-64-mpx-addr32"
+     run_dump_test "x86-64-mpx-add-bnd-prefix"
+     run_dump_test "x86-64-sha"
++    run_dump_test "x86-64-disassem"
+ 
+     if { ![istarget "*-*-aix*"]
+       && ![istarget "*-*-beos*"]
+diff --git a/gas/testsuite/gas/i386/x86-64-disassem.d b/gas/testsuite/gas/i386/x86-64-disassem.d
+new file mode 100644
+index 0000000..8662af9
+--- /dev/null
++++ b/gas/testsuite/gas/i386/x86-64-disassem.d
+@@ -0,0 +1,14 @@
++#objdump: -drw
++#name: x86-64 opcodes with invalid modrm byte
++
++.*: +file format .*
++
++
++Disassembly of section \.text:
++
++0+ <\.text>:
++[ 	]*[a-f0-9]+:[ 	]*ff[ 	]*\(bad\)  
++[ 	]*[a-f0-9]+:[ 	]*ef[ 	]*out    %eax,\(%dx\)
++[ 	]*[a-f0-9]+:[ 	]*ff[ 	]*\(bad\)  
++[ 	]*[a-f0-9]+:[ 	]*d8[ 	]*\.byte 0xd8
++#pass
+diff --git a/gas/testsuite/gas/i386/x86-64-disassem.s b/gas/testsuite/gas/i386/x86-64-disassem.s
+new file mode 100644
+index 0000000..81b0ef3
+--- /dev/null
++++ b/gas/testsuite/gas/i386/x86-64-disassem.s
+@@ -0,0 +1,3 @@
++.text
++.byte 0xFF, 0xEF
++.byte 0xFF, 0xD8
+diff --git a/opcodes/ChangeLog b/opcodes/ChangeLog
+index ec87a6e..98b9591 100644
+--- a/opcodes/ChangeLog
++++ b/opcodes/ChangeLog
+@@ -1,3 +1,13 @@
++2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
++
++	Backport from master
++	2013-12-17  Michael Zolotukhin  <michael.v.zolotukhin@gmail.com>
++
++	* i386-dis.c (MOD_FF_REG_3): New.
++	(MOD_FF_REG_5): Likewise.
++	(mod_table): Add MOD_FF_REG_3 and MOD_FF_REG_5.
++	(reg_table): Use MOD_FF_REG_3 and MOD_FF_REG_5.
++
+ 2014-02-27  Jiong Wang  <jiong.wang@arm.com>
+ 
+ 	* aarch64-tbl.h (aarch64_opcode_table): Replace IMM0 with
+diff --git a/opcodes/i386-dis.c b/opcodes/i386-dis.c
+index 0efb412..3645daf 100644
+--- a/opcodes/i386-dis.c
++++ b/opcodes/i386-dis.c
+@@ -715,6 +715,8 @@ enum
+   MOD_8D = 0,
+   MOD_C6_REG_7,
+   MOD_C7_REG_7,
++  MOD_FF_REG_3,
++  MOD_FF_REG_5,
+   MOD_0F01_REG_0,
+   MOD_0F01_REG_1,
+   MOD_0F01_REG_2,
+@@ -3229,9 +3231,9 @@ static const struct dis386 reg_table[][8] = {
+     { "incQ",	{ Evh1 } },
+     { "decQ",	{ Evh1 } },
+     { "call{T|}", { indirEv, BND } },
+-    { "Jcall{T|}", { indirEp } },
++    { MOD_TABLE (MOD_FF_REG_3) },
+     { "jmp{T|}", { indirEv, BND } },
+-    { "Jjmp{T|}", { indirEp } },
++    { MOD_TABLE (MOD_FF_REG_5) },
+     { "pushU",	{ stackEv } },
+     { Bad_Opcode },
+   },
+@@ -11050,6 +11052,14 @@ static const struct dis386 mod_table[][2] = {
+     { RM_TABLE (RM_C7_REG_7) },
+   },
+   {
++    /* MOD_FF_REG_3 */
++    { "Jcall{T|}", { indirEp } },
++  },
++  {
++    /* MOD_FF_REG_5 */
++    { "Jjmp{T|}", { indirEp } },
++  },
++  {
+     /* MOD_0F01_REG_0 */
+     { X86_64_TABLE (X86_64_0F01_REG_0) },
+     { RM_TABLE (RM_0F01_REG_0) },
+-- 
+2.0.3
+
