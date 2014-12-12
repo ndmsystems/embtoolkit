@@ -68,7 +68,6 @@ choice
 
 	config EMBTK_GCC_VERSION_4_8_3
 		bool "gcc-4.8.3"
-		select EMBTK_GCC_NEED_PATCH
 endchoice
 
 # GCC-4.7.x

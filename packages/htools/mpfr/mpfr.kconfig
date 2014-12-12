@@ -26,7 +26,6 @@
 config EMBTK_HOST_HAVE_MPFR
 	bool
 	default y
-	select EMBTK_MPFR_HOST_NEED_PATCH
 
 config EMBTK_MPFR_HOST_VERSION_STRING
 	string

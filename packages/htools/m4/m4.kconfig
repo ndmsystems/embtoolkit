@@ -26,7 +26,6 @@
 config EMBTK_HOST_HAVE_M4
 	bool
 	default y
-	select EMBTK_M4_HOST_NEED_PATCH
 	help
 	 m4 for autotools.
 

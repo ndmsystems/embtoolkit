@@ -35,7 +35,6 @@ choice
 
 	config EMBTK_BINUTILS_VERSION_2_24
 		bool "binutils-2.24"
-		select EMBTK_BINUTILS_NEED_PATCH
 	config EMBTK_BINUTILS_VERSION_2_23_2
 		bool "binutils-2.23.2"
 		select EMBTK_BINUTILS_NEED_PATCH
