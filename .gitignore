@@ -9,10 +9,7 @@
 /.ccache
 /**.DS_Store
 /build/
-/dl/*.bz2
-/dl/*.gz
-/dl/*.patch
-/dl/*.xz
+/dl/
 /generated/
 /host-tools-*
 /tools-*
