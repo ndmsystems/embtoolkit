@@ -46,6 +46,10 @@ LINUX_HEADERS_BUILD_DIR	:= $(LINUX_BUILD_DIR)
 LINUX_HEADERS_KEEP_SRC_DIR  := $(LINUX_KEEP_SRC_DIR)
 LINUX_HEADERS_KCONFIGS_NAME := LINUX
 
+LINUX_HEADERS_MAKE_OPTS := $(LINUX_MAKE_OPTS)
+LINUX_HEADERS_MAKE_OPTS += CROSS_COMPILE=""
+LINUX_HEADERS_MAKE_OPTS += INSTALL_HDR_PATH=$(embtk_sysroot)/usr
+
 #
 # linux headers install
 #
@@ -57,8 +61,8 @@ endef
 endif
 
 define embtk_install_linux_headers
-	$(MAKE) -C $(LINUX_HEADERS_BUILD_DIR) $(LINUX_MAKE_OPTS)		\
-		INSTALL_HDR_PATH=$(embtk_sysroot)/usr headers_install
+	$(MAKE) -C $(LINUX_HEADERS_BUILD_DIR) $(LINUX_HEADERS_MAKE_OPTS)	\
+		headers_install
 endef
 
 define embtk_cleanup_linux_headers
