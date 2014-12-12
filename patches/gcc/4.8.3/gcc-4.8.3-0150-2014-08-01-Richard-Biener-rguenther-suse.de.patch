@@ -1,0 +1,149 @@
+From 183699f504d0d35a4bddc74d0ab5106978d4b955 Mon Sep 17 00:00:00 2001
+From: rguenth <rguenth@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 1 Aug 2014 07:40:01 +0000
+Subject: [PATCH 150/326] 2014-08-01  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/61964
+	* tree-ssa-tail-merge.c (gimple_operand_equal_value_p): New
+	function merged from trunk.
+	(gimple_equal_p): Handle non-SSA LHS solely by structural
+	equality.
+
+	* gcc.dg/torture/pr61964.c: New testcase.
+	* gcc.dg/pr51879-18.c: XFAIL.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213405 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                          |  8 ++++++++
+ gcc/testsuite/ChangeLog                |  6 ++++++
+ gcc/testsuite/gcc.dg/pr51879-18.c      |  2 +-
+ gcc/testsuite/gcc.dg/torture/pr61964.c | 33 +++++++++++++++++++++++++++++++++
+ gcc/tree-ssa-tail-merge.c              | 23 +++++++++++++++++++++--
+ 5 files changed, 69 insertions(+), 3 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.dg/torture/pr61964.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index fb1ebec..7813061 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,11 @@
++2014-08-01  Richard Biener  <rguenther@suse.de>
++
++	PR tree-optimization/61964
++	* tree-ssa-tail-merge.c (gimple_operand_equal_value_p): New
++	function merged from trunk.
++	(gimple_equal_p): Handle non-SSA LHS solely by structural
++	equality.
++
+ 2014-07-25  Uros Bizjak  <ubizjak@gmail.com>
+ 
+ 	* config/alpha/elf.h: Define TARGET_UNWIND_TABLES_DEFAULT.
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index da156a6..675ec25 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,9 @@
++2014-08-01  Richard Biener  <rguenther@suse.de>
++
++	PR tree-optimization/61964
++	* gcc.dg/torture/pr61964.c: New testcase.
++	* gcc.dg/pr51879-18.c: XFAIL.
++
+ 2014-07-28  Richard Biener  <rguenther@suse.de>
+ 
+ 	PR rtl-optimization/61801
+diff --git a/gcc/testsuite/gcc.dg/pr51879-18.c b/gcc/testsuite/gcc.dg/pr51879-18.c
+index 95629f1..9b3cb80 100644
+--- a/gcc/testsuite/gcc.dg/pr51879-18.c
++++ b/gcc/testsuite/gcc.dg/pr51879-18.c
+@@ -13,5 +13,5 @@ void bar (int c, int *p)
+     *q = foo ();
+ }
+ 
+-/* { dg-final { scan-tree-dump-times "foo \\(" 1 "pre"} } */
++/* { dg-final { scan-tree-dump-times "foo \\(" 1 "pre" { xfail *-*-* } } } */
+ /* { dg-final { cleanup-tree-dump "pre" } } */
+diff --git a/gcc/testsuite/gcc.dg/torture/pr61964.c b/gcc/testsuite/gcc.dg/torture/pr61964.c
+new file mode 100644
+index 0000000..a03cfdc
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/torture/pr61964.c
+@@ -0,0 +1,33 @@
++/* { dg-do run } */
++
++extern void abort (void);
++
++struct node { struct node *next, *prev; } node;
++struct head { struct node *first; } heads[5];
++int k = 2;
++struct head *head = &heads[2];
++
++static int __attribute__((noinline))
++foo()
++{
++  node.prev = (void *)head;
++  head->first = &node;
++
++  struct node *n = head->first;
++  struct head *h = &heads[k];
++
++  if (n->prev == (void *)h)
++    h->first = n->next;
++  else
++    n->prev->next = n->next;
++
++  n->next = h->first;
++  return n->next == &node;
++}
++
++int main()
++{
++  if (foo ())
++    abort ();
++  return 0;
++}
+diff --git a/gcc/tree-ssa-tail-merge.c b/gcc/tree-ssa-tail-merge.c
+index 419b4ec..61add6e 100644
+--- a/gcc/tree-ssa-tail-merge.c
++++ b/gcc/tree-ssa-tail-merge.c
+@@ -1060,6 +1060,24 @@ set_cluster (basic_block bb1, basic_block bb2)
+     gcc_unreachable ();
+ }
+ 
++/* Return true if gimple operands T1 and T2 have the same value.  */
++
++static bool
++gimple_operand_equal_value_p (tree t1, tree t2)
++{
++  if (t1 == t2)
++    return true;
++
++  if (t1 == NULL_TREE
++      || t2 == NULL_TREE)
++    return false;
++
++  if (operand_equal_p (t1, t2, 0))
++    return true;
++
++  return gvn_uses_equal (t1, t2);
++}
++
+ /* Return true if gimple statements S1 and S2 are equal.  Gimple_bb (s1) and
+    gimple_bb (s2) are members of SAME_SUCC.  */
+ 
+@@ -1122,8 +1140,9 @@ gimple_equal_p (same_succ same_succ, gimple s1, gimple s2)
+       lhs2 = gimple_get_lhs (s2);
+       if (TREE_CODE (lhs1) != SSA_NAME
+ 	  && TREE_CODE (lhs2) != SSA_NAME)
+-	return (vn_valueize (gimple_vdef (s1))
+-		== vn_valueize (gimple_vdef (s2)));
++	return (operand_equal_p (lhs1, lhs2, 0)
++		&& gimple_operand_equal_value_p (gimple_assign_rhs1 (s1),
++						 gimple_assign_rhs1 (s2)));
+       else if (TREE_CODE (lhs1) == SSA_NAME
+ 	       && TREE_CODE (lhs2) == SSA_NAME)
+ 	return vn_valueize (lhs1) == vn_valueize (lhs2);
+-- 
+2.0.3
+

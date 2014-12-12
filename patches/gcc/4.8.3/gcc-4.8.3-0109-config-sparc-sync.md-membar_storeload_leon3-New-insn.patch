@@ -1,0 +1,54 @@
+From 68286d2023f2cddedbcd4da0041bd9ea8a73a1f9 Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sat, 19 Jul 2014 10:42:30 +0000
+Subject: [PATCH 109/134] 	* config/sparc/sync.md
+ (*membar_storeload_leon3): New insn. 	(*membar_storeload): Disable for
+ LEON3.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212843 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog            |  5 +++++
+ gcc/config/sparc/sync.md | 10 +++++++++-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 59addff..66c6159 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,8 @@
++2014-07-19  Daniel Cederman  <cederman@gaisler.com>
++
++	* config/sparc/sync.md (*membar_storeload_leon3): New insn.
++	(*membar_storeload): Disable for LEON3.
++
+ 2014-07-17  Richard Biener  <rguenther@suse.de>
+ 
+ 	PR rtl-optimization/61801
+diff --git a/gcc/config/sparc/sync.md b/gcc/config/sparc/sync.md
+index cf90985..7e39b98 100644
+--- a/gcc/config/sparc/sync.md
++++ b/gcc/config/sparc/sync.md
+@@ -64,11 +64,19 @@
+   "stbar"
+   [(set_attr "type" "multi")])
+ 
++;; For LEON3, STB has the effect of membar #StoreLoad.
++(define_insn "*membar_storeload_leon3"
++  [(set (match_operand:BLK 0 "" "")
++	(unspec:BLK [(match_dup 0) (const_int 2)] UNSPEC_MEMBAR))]
++  "TARGET_LEON3"
++  "stb\t%%g0, [%%sp-1]"
++  [(set_attr "type" "store")])
++
+ ;; For V8, LDSTUB has the effect of membar #StoreLoad.
+ (define_insn "*membar_storeload"
+   [(set (match_operand:BLK 0 "" "")
+ 	(unspec:BLK [(match_dup 0) (const_int 2)] UNSPEC_MEMBAR))]
+-  "TARGET_V8"
++  "TARGET_V8 && !TARGET_LEON3"
+   "ldstub\t[%%sp-1], %%g0"
+   [(set_attr "type" "multi")])
+ 
+-- 
+1.8.5.5
+

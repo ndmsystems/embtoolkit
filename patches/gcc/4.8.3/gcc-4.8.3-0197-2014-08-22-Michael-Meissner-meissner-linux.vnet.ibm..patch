@@ -1,0 +1,138 @@
+From b4a6b242b4c7069f4183577ee2e1e97910f0aa2f Mon Sep 17 00:00:00 2001
+From: meissner <meissner@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 22 Aug 2014 17:53:00 +0000
+Subject: [PATCH 197/326] 2014-08-22  Michael Meissner 
+ <meissner@linux.vnet.ibm.com>
+
+	Backport fro mainline
+	2014-08-22  Michael Meissner  <meissner@linux.vnet.ibm.com>
+
+	PR target/62195
+	* doc/md.texi (Machine Constraints): Update PowerPC wi constraint
+	documentation to state it is only for VSX operations.
+
+	* config/rs6000/rs6000.c (rs6000_init_hard_regno_mode_ok): Make wi
+	constraint only active if VSX.
+
+	* config/rs6000/rs6000.md (lfiwax): Use wj constraint instead of
+	wi cosntraint for ISA 2.07 lxsiwax/lxsiwzx instructions.
+	(lfiwzx): Likewise.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214340 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                    | 16 ++++++++++++++++
+ gcc/config/rs6000/constraints.md |  2 +-
+ gcc/config/rs6000/rs6000.c       |  8 +++-----
+ gcc/config/rs6000/rs6000.md      |  4 ++--
+ gcc/doc/md.texi                  |  2 +-
+ 5 files changed, 23 insertions(+), 9 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index bd2e79b..9eb9124 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,19 @@
++2014-08-22  Michael Meissner  <meissner@linux.vnet.ibm.com>
++
++	Backport fro mainline
++	2014-08-22  Michael Meissner  <meissner@linux.vnet.ibm.com>
++
++	PR target/62195
++	* doc/md.texi (Machine Constraints): Update PowerPC wi constraint
++	documentation to state it is only for VSX operations.
++
++	* config/rs6000/rs6000.c (rs6000_init_hard_regno_mode_ok): Make wi
++	constraint only active if VSX.
++
++	* config/rs6000/rs6000.md (lfiwax): Use wj constraint instead of
++	wi cosntraint for ISA 2.07 lxsiwax/lxsiwzx instructions.
++	(lfiwzx): Likewise.
++
+ 2014-08-15  Tom de Vries  <tom@codesourcery.com>
+ 
+ 	Backport from mainline:
+diff --git a/gcc/config/rs6000/constraints.md b/gcc/config/rs6000/constraints.md
+index 5179860..1724d28 100644
+--- a/gcc/config/rs6000/constraints.md
++++ b/gcc/config/rs6000/constraints.md
+@@ -71,7 +71,7 @@
+ ;; At present, DImode is not allowed in the Altivec registers.  If in the
+ ;; future it is allowed, wi/wj can be set to VSX_REGS instead of FLOAT_REGS.
+ (define_register_constraint "wi" "rs6000_constraints[RS6000_CONSTRAINT_wi]"
+-  "FP or VSX register to hold 64-bit integers or NO_REGS.")
++  "FP or VSX register to hold 64-bit integers for VSX insns or NO_REGS.")
+ 
+ (define_register_constraint "wj" "rs6000_constraints[RS6000_CONSTRAINT_wj]"
+   "FP or VSX register to hold 64-bit integers for direct moves or NO_REGS.")
+diff --git a/gcc/config/rs6000/rs6000.c b/gcc/config/rs6000/rs6000.c
+index 3151402..72fe69b 100644
+--- a/gcc/config/rs6000/rs6000.c
++++ b/gcc/config/rs6000/rs6000.c
+@@ -2608,7 +2608,7 @@ rs6000_init_hard_regno_mode_ok (bool global_init_p)
+ 	wf - Preferred register class for V4SFmode.
+ 	wg - Float register for power6x move insns.
+ 	wh - FP register for direct move instructions.
+-	wi - FP or VSX register to hold 64-bit integers.
++	wi - FP or VSX register to hold 64-bit integers for VSX insns.
+ 	wj - FP or VSX register to hold 64-bit integers for direct moves.
+ 	wk - FP or VSX register to hold 64-bit doubles for direct moves.
+ 	wl - Float register if we can do 32-bit signed int loads.
+@@ -2628,16 +2628,14 @@ rs6000_init_hard_regno_mode_ok (bool global_init_p)
+     rs6000_constraints[RS6000_CONSTRAINT_f] = FLOAT_REGS;	/* SFmode  */
+ 
+   if (TARGET_HARD_FLOAT && TARGET_FPRS && TARGET_DOUBLE_FLOAT)
+-    {
+-      rs6000_constraints[RS6000_CONSTRAINT_d]  = FLOAT_REGS;	/* DFmode  */
+-      rs6000_constraints[RS6000_CONSTRAINT_wi] = FLOAT_REGS;	/* DImode  */
+-    }
++    rs6000_constraints[RS6000_CONSTRAINT_d]  = FLOAT_REGS;	/* DFmode  */
+ 
+   if (TARGET_VSX)
+     {
+       rs6000_constraints[RS6000_CONSTRAINT_wa] = VSX_REGS;
+       rs6000_constraints[RS6000_CONSTRAINT_wd] = VSX_REGS;	/* V2DFmode  */
+       rs6000_constraints[RS6000_CONSTRAINT_wf] = VSX_REGS;	/* V4SFmode  */
++      rs6000_constraints[RS6000_CONSTRAINT_wi] = FLOAT_REGS;	/* DImode  */
+ 
+       if (TARGET_VSX_TIMODE)
+ 	rs6000_constraints[RS6000_CONSTRAINT_wt] = VSX_REGS;	/* TImode  */
+diff --git a/gcc/config/rs6000/rs6000.md b/gcc/config/rs6000/rs6000.md
+index 43c096a..8b2b769 100644
+--- a/gcc/config/rs6000/rs6000.md
++++ b/gcc/config/rs6000/rs6000.md
+@@ -5614,7 +5614,7 @@
+ ; We don't define lfiwax/lfiwzx with the normal definition, because we
+ ; don't want to support putting SImode in FPR registers.
+ (define_insn "lfiwax"
+-  [(set (match_operand:DI 0 "gpc_reg_operand" "=d,wi,!wj")
++  [(set (match_operand:DI 0 "gpc_reg_operand" "=d,wj,!wj")
+ 	(unspec:DI [(match_operand:SI 1 "reg_or_indexed_operand" "Z,Z,r")]
+ 		   UNSPEC_LFIWAX))]
+   "TARGET_HARD_FLOAT && TARGET_FPRS && TARGET_DOUBLE_FLOAT && TARGET_LFIWAX"
+@@ -5694,7 +5694,7 @@
+    (set_attr "type" "fpload")])
+ 
+ (define_insn "lfiwzx"
+-  [(set (match_operand:DI 0 "gpc_reg_operand" "=d,wi,!wj")
++  [(set (match_operand:DI 0 "gpc_reg_operand" "=d,wj,!wj")
+ 	(unspec:DI [(match_operand:SI 1 "reg_or_indexed_operand" "Z,Z,r")]
+ 		   UNSPEC_LFIWZX))]
+   "TARGET_HARD_FLOAT && TARGET_FPRS && TARGET_DOUBLE_FLOAT && TARGET_LFIWZX"
+diff --git a/gcc/doc/md.texi b/gcc/doc/md.texi
+index 1b3227c..000b93a 100644
+--- a/gcc/doc/md.texi
++++ b/gcc/doc/md.texi
+@@ -2085,7 +2085,7 @@ If @option{-mmfpgpr} was used, a floating point register or NO_REGS.
+ Floating point register if direct moves are available, or NO_REGS.
+ 
+ @item wi
+-FP or VSX register to hold 64-bit integers or NO_REGS.
++FP or VSX register to hold 64-bit integers for VSX insns or NO_REGS.
+ 
+ @item wj
+ FP or VSX register to hold 64-bit integers for direct moves or NO_REGS.
+-- 
+2.0.3
+

@@ -1,0 +1,23 @@
+From d31de83c59af76cba7630cb8a2b87df1e81fe5dc Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 16 Jul 2014 15:10:36 +0000
+Subject: [PATCH 104/134] Date fix.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212666 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 0d4902f..e4f8575 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,4 +1,4 @@
+-2014-07-18  Jakub Jelinek  <jakub@redhat.com>
++2014-07-16  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	* omp-low.c (create_omp_child_function): Don't set DECL_NAMELESS
+ 	on the FUNCTION_DECL.
+-- 
+1.8.5.5
+

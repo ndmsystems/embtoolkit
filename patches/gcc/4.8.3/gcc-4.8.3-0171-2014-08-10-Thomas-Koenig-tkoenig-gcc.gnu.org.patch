@@ -1,0 +1,107 @@
+From cdfc1d16b809c4b5534a595ff49145ced841c71a Mon Sep 17 00:00:00 2001
+From: tkoenig <tkoenig@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sun, 10 Aug 2014 14:19:18 +0000
+Subject: [PATCH 171/326] 2014-08-10  Thomas Koenig  <tkoenig@gcc.gnu.org>
+
+	Backport from trunk
+	PR fortran/61999
+	* simplify.c (gfc_simplify_dot_product): Convert types of
+	vectors before calculating the result.
+
+2014-08-10  Thomas Koenig  <tkoenig@gcc.gnu.org>
+
+	Backport from trunk
+	PR fortran/61999
+	* gfortran.dg/dot_product_3.f90:  New test case.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213789 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/fortran/ChangeLog                       |  7 +++++++
+ gcc/fortran/simplify.c                      | 11 ++++++++++-
+ gcc/testsuite/ChangeLog                     |  6 ++++++
+ gcc/testsuite/gfortran.dg/dot_product_3.f90 | 15 +++++++++++++++
+ 4 files changed, 38 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/gfortran.dg/dot_product_3.f90
+
+diff --git a/gcc/fortran/ChangeLog b/gcc/fortran/ChangeLog
+index a21b5db..22e84cf 100644
+--- a/gcc/fortran/ChangeLog
++++ b/gcc/fortran/ChangeLog
+@@ -1,3 +1,10 @@
++2014-08-10  Thomas Koenig  <tkoenig@gcc.gnu.org>
++
++	Backport from trunk
++	PR fortran/61999
++	* simplify.c (gfc_simplify_dot_product): Convert types of
++	vectors before calculating the result.
++
+ 2014-07-19  Paul Thomas  <pault@gcc.gnu.org>
+ 
+ 	Backport from trunk.
+diff --git a/gcc/fortran/simplify.c b/gcc/fortran/simplify.c
+index 7c21f22..65c65a3 100644
+--- a/gcc/fortran/simplify.c
++++ b/gcc/fortran/simplify.c
+@@ -1877,13 +1877,22 @@ gfc_simplify_dim (gfc_expr *x, gfc_expr *y)
+ gfc_expr*
+ gfc_simplify_dot_product (gfc_expr *vector_a, gfc_expr *vector_b)
+ {
++
++  gfc_expr temp;
++
+   if (!is_constant_array_expr (vector_a)
+       || !is_constant_array_expr (vector_b))
+     return NULL;
+ 
+   gcc_assert (vector_a->rank == 1);
+   gcc_assert (vector_b->rank == 1);
+-  gcc_assert (gfc_compare_types (&vector_a->ts, &vector_b->ts));
++
++  temp.expr_type = EXPR_OP;
++  gfc_clear_ts (&temp.ts);
++  temp.value.op.op = INTRINSIC_NONE;
++  temp.value.op.op1 = vector_a;
++  temp.value.op.op2 = vector_b;
++  gfc_type_convert_binary (&temp, 1);
+ 
+   return compute_dot_product (vector_a, 1, 0, vector_b, 1, 0, true);
+ }
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 3053629..d55ac28 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,9 @@
++2014-08-10  Thomas Koenig  <tkoenig@gcc.gnu.org>
++
++	Backport from trunk
++	PR fortran/61999
++	* gfortran.dg/dot_product_3.f90:  New test case.
++
+ 2014-08-07  John David Anglin  <danglin@gcc.gnu.org>
+ 
+ 	PR tree-optimization/60707
+diff --git a/gcc/testsuite/gfortran.dg/dot_product_3.f90 b/gcc/testsuite/gfortran.dg/dot_product_3.f90
+new file mode 100644
+index 0000000..6e11556
+--- /dev/null
++++ b/gcc/testsuite/gfortran.dg/dot_product_3.f90
+@@ -0,0 +1,15 @@
++! { dg-do compile }
++! { dg-options "-fdump-tree-original" }
++! PR 61999 - this used to ICE.
++! Original test case by A. Kasahara
++program main
++   use, intrinsic:: iso_fortran_env, only: output_unit
++
++   implicit none
++
++   write(output_unit, *) dot_product([1, 2], [2.0, 3.0])
++
++   stop
++end program main
++! { dg-final { scan-tree-dump-times "8\\.0e\\+0" 1 "original" } }
++! { dg-final { cleanup-tree-dump "original" } }
+-- 
+2.0.3
+

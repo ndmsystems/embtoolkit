@@ -1,0 +1,124 @@
+From 8b2a954c9f4f21b62d8fc2eb7b398bfba55f0f59 Mon Sep 17 00:00:00 2001
+From: pault <pault@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 8 Jul 2014 19:51:04 +0000
+Subject: [PATCH 092/134] 2014-07-08  Paul Thomas  <pault@gcc.gnu.org>
+
+	PR fortran/61459
+	PR fortran/58883
+	* trans-expr.c (fcncall_realloc_result): Use the natural type
+	for the address expression of 'res_desc'.
+
+2014-07-08  Paul Thomas  <pault@gcc.gnu.org>
+
+	PR fortran/61459
+	PR fortran/58883
+	* gfortran.dg/allocatable_function_8.f90 : New test
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212369 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/fortran/ChangeLog                              |  7 ++++
+ gcc/fortran/trans-expr.c                           |  2 +-
+ gcc/testsuite/ChangeLog                            |  6 +++
+ .../gfortran.dg/allocatable_function_8.f90         | 47 ++++++++++++++++++++++
+ 4 files changed, 61 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/gfortran.dg/allocatable_function_8.f90
+
+diff --git a/gcc/fortran/ChangeLog b/gcc/fortran/ChangeLog
+index 65cfa6f..c0ab457 100644
+--- a/gcc/fortran/ChangeLog
++++ b/gcc/fortran/ChangeLog
+@@ -1,3 +1,10 @@
++2014-07-08  Paul Thomas  <pault@gcc.gnu.org>
++
++	PR fortran/61459
++	PR fortran/58883
++	* trans-expr.c (fcncall_realloc_result): Use the natural type
++	for the address expression of 'res_desc'.
++
+ 2014-07-02  Jakub Jelinek  <jakub@redhat.com>
+ 	    Fritz Reese  <Reese-Fritz@zai.com>
+ 
+diff --git a/gcc/fortran/trans-expr.c b/gcc/fortran/trans-expr.c
+index d6411b0..850ed83 100644
+--- a/gcc/fortran/trans-expr.c
++++ b/gcc/fortran/trans-expr.c
+@@ -7096,7 +7096,7 @@ fcncall_realloc_result (gfc_se *se, int rank)
+ 
+   res_desc = gfc_evaluate_now (desc, &se->pre);
+   gfc_conv_descriptor_data_set (&se->pre, res_desc, null_pointer_node);
+-  se->expr = gfc_build_addr_expr (TREE_TYPE (se->expr), res_desc);
++  se->expr = gfc_build_addr_expr (NULL_TREE, res_desc);
+ 
+   /* Free the lhs after the function call and copy the result data to
+      the lhs descriptor.  */
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 95ea849..212d42a 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,9 @@
++2014-07-08  Paul Thomas  <pault@gcc.gnu.org>
++
++	PR fortran/61459
++	PR fortran/58883
++	* gfortran.dg/allocatable_function_8.f90 : New test
++
+ 2014-07-04  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR tree-optimization/61684
+diff --git a/gcc/testsuite/gfortran.dg/allocatable_function_8.f90 b/gcc/testsuite/gfortran.dg/allocatable_function_8.f90
+new file mode 100644
+index 0000000..7d0d69d
+--- /dev/null
++++ b/gcc/testsuite/gfortran.dg/allocatable_function_8.f90
+@@ -0,0 +1,47 @@
++! { dg-do run }
++! Test the fix for PR61459.
++!
++! Contributed by John Wingate  <johnww@tds.net>
++!
++module a
++
++   implicit none
++   private
++   public :: f_segfault, f_segfault_plus, f_workaround
++   integer, dimension(2,2) :: b = reshape([1,-1,1,1],[2,2])
++
++contains
++
++   function f_segfault(x)
++      real, dimension(:), allocatable :: f_segfault
++      real, dimension(:), intent(in)  :: x
++      allocate(f_segfault(2))
++      f_segfault = matmul(b,x)
++   end function f_segfault
++
++! Sefaulted without the ALLOCATE as well.
++   function f_segfault_plus(x)
++      real, dimension(:), allocatable :: f_segfault_plus
++      real, dimension(:), intent(in)  :: x
++      f_segfault_plus = matmul(b,x)
++   end function f_segfault_plus
++
++   function f_workaround(x)
++      real, dimension(:), allocatable :: f_workaround
++      real, dimension(:), intent(in)  :: x
++      real, dimension(:), allocatable :: tmp
++      allocate(f_workaround(2),tmp(2))
++      tmp = matmul(b,x)
++      f_workaround = tmp
++   end function f_workaround
++
++end module a
++
++program main
++   use a
++   implicit none
++   real, dimension(2) :: x = 1.0, y
++   y = f_workaround (x)
++   if (any (f_segfault (x) .ne. y)) call abort
++   if (any (f_segfault_plus (x) .ne. y)) call abort
++end program main
+-- 
+1.8.5.5
+

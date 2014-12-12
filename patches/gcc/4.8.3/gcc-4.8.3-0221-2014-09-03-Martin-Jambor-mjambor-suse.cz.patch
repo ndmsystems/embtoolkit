@@ -1,0 +1,164 @@
+From 151a971f1d0c0fee18573f7ec20566949030ae25 Mon Sep 17 00:00:00 2001
+From: jamborm <jamborm@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 3 Sep 2014 16:33:10 +0000
+Subject: [PATCH 221/326] 2014-09-03  Martin Jambor  <mjambor@suse.cz>
+
+	PR ipa/61986
+	* ipa-cp.c (find_aggregate_values_for_callers_subset): Chain
+	created replacements in ascending order of offsets.
+	(known_aggs_to_agg_replacement_list): Likewise.
+
+gcc/testsuite/
+	* gcc.dg/ipa/pr61986.c: New test.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214884 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                      |  7 ++++++
+ gcc/ipa-cp.c                       | 16 ++++++++-----
+ gcc/testsuite/ChangeLog            |  5 ++++
+ gcc/testsuite/gcc.dg/ipa/pr61986.c | 48 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 70 insertions(+), 6 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.dg/ipa/pr61986.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 0f872fa..43f5df4 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,10 @@
++2014-09-03  Martin Jambor  <mjambor@suse.cz>
++
++	PR ipa/61986
++	* ipa-cp.c (find_aggregate_values_for_callers_subset): Chain
++	created replacements in ascending order of offsets.
++	(known_aggs_to_agg_replacement_list): Likewise.
++
+ 2014-09-01  Marek Polacek  <polacek@redhat.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/ipa-cp.c b/gcc/ipa-cp.c
+index bd45575..55e02b9 100644
+--- a/gcc/ipa-cp.c
++++ b/gcc/ipa-cp.c
+@@ -3002,7 +3002,8 @@ find_aggregate_values_for_callers_subset (struct cgraph_node *node,
+ 					  vec<cgraph_edge_p> callers)
+ {
+   struct ipa_node_params *dest_info = IPA_NODE_REF (node);
+-  struct ipa_agg_replacement_value *res = NULL;
++  struct ipa_agg_replacement_value *res;
++  struct ipa_agg_replacement_value **tail = &res;
+   struct cgraph_edge *cs;
+   int i, j, count = ipa_get_param_count (dest_info);
+ 
+@@ -3046,14 +3047,15 @@ find_aggregate_values_for_callers_subset (struct cgraph_node *node,
+ 	  v->offset = item->offset;
+ 	  v->value = item->value;
+ 	  v->by_ref = plats->aggs_by_ref;
+-	  v->next = res;
+-	  res = v;
++	  *tail = v;
++	  tail = &v->next;
+ 	}
+ 
+     next_param:
+       if (inter.exists ())
+ 	inter.release ();
+     }
++  *tail = NULL;
+   return res;
+ }
+ 
+@@ -3062,7 +3064,8 @@ find_aggregate_values_for_callers_subset (struct cgraph_node *node,
+ static struct ipa_agg_replacement_value *
+ known_aggs_to_agg_replacement_list (vec<ipa_agg_jump_function_t> known_aggs)
+ {
+-  struct ipa_agg_replacement_value *res = NULL;
++  struct ipa_agg_replacement_value *res;
++  struct ipa_agg_replacement_value **tail = &res;
+   struct ipa_agg_jump_function *aggjf;
+   struct ipa_agg_jf_item *item;
+   int i, j;
+@@ -3076,9 +3079,10 @@ known_aggs_to_agg_replacement_list (vec<ipa_agg_jump_function_t> known_aggs)
+ 	v->offset = item->offset;
+ 	v->value = item->value;
+ 	v->by_ref = aggjf->by_ref;
+-	v->next = res;
+-	res = v;
++	*tail = v;
++	tail = &v->next;
+       }
++  *tail = NULL;
+   return res;
+ }
+ 
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index a5f098d..7d32875 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-09-03  Martin Jambor  <mjambor@suse.cz>
++
++	PR ipa/61986
++	* gcc.dg/ipa/pr61986.c: New test.
++
+ 2014-08-26  Dominik Vogt  <vogt@linux.vnet.ibm.com>
+ 
+ 	* gfortran.dg/bessel_7.f90: Bump allowed precision to avoid
+diff --git a/gcc/testsuite/gcc.dg/ipa/pr61986.c b/gcc/testsuite/gcc.dg/ipa/pr61986.c
+new file mode 100644
+index 0000000..8d2f658
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/ipa/pr61986.c
+@@ -0,0 +1,48 @@
++/* { dg-do compile } */
++/* { dg-options "-O3" } */
++
++int a, b, c;
++
++struct S
++{
++  int f0;
++  int f1;
++} d;
++
++static int fn2 (struct S);
++void fn3 (struct S);
++
++void
++fn1 (struct S p)
++{
++  struct S h = { 0, 0 };
++  fn3 (p);
++  fn2 (h);
++}
++
++int
++fn2 (struct S p)
++{
++  struct S j = { 0, 0 };
++  fn3 (p);
++  fn2 (j);
++  return 0;
++}
++
++void
++fn3 (struct S p)
++{
++  for (; b; a++)
++    c = p.f0;
++  fn1 (d);
++}
++
++void
++fn4 ()
++{
++  for (;;)
++    {
++      struct S f = { 0, 0 };
++      fn1 (f);
++    }
++}
+-- 
+2.0.3
+

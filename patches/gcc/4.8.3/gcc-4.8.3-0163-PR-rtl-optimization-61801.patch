@@ -1,0 +1,67 @@
+From 03f1eebee8c5baaff0ee3cc6fb44cb1e9a8dfee7 Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 6 Aug 2014 08:50:12 +0000
+Subject: [PATCH 163/326] 	PR rtl-optimization/61801 	*
+ gcc.target/i386/pr61801.c: Rewritten.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213654 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/testsuite/ChangeLog                 |  5 +++++
+ gcc/testsuite/gcc.target/i386/pr61801.c | 25 ++++++++++++-------------
+ 2 files changed, 17 insertions(+), 13 deletions(-)
+
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 8e6d198..ce09fe0 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-08-06  Jakub Jelinek  <jakub@redhat.com>
++
++	PR rtl-optimization/61801
++	* gcc.target/i386/pr61801.c: Rewritten.
++
+ 2014-08-01  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/testsuite/gcc.target/i386/pr61801.c b/gcc/testsuite/gcc.target/i386/pr61801.c
+index c15cfd8..d0d08cc 100644
+--- a/gcc/testsuite/gcc.target/i386/pr61801.c
++++ b/gcc/testsuite/gcc.target/i386/pr61801.c
+@@ -1,22 +1,21 @@
++/* PR rtl-optimization/61801 */
+ /* { dg-do compile } */
+ /* { dg-options "-Os -fcompare-debug" } */
+ 
+-int a, b, c;
+-void fn1 ()
++int a, c;
++int bar (void);
++void baz (void);
++
++void
++foo (void)
+ {
+   int d;
+-  if (fn2 () && !0)
++  if (bar ())
+     {
+-      b = (
+-	   {
+-	   int e;
+-	   fn3 ();
+-	   switch (0)
+-	   default:
+-	   asm volatile("" : "=a"(e) : "0"(a), "i"(0));
+-	   e;
+-	   });
+-      d = b;
++      int e;
++      baz ();
++      asm volatile ("" : "=a" (e) : "0" (a), "i" (0));
++      d = e;
+     }
+   c = d;
+ }
+-- 
+2.0.3
+

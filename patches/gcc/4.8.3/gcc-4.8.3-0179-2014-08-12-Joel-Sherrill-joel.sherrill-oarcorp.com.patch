@@ -1,0 +1,62 @@
+From 49185dad3b0a935c1b67d14d46a585cebb539f8c Mon Sep 17 00:00:00 2001
+From: joel <joel@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 12 Aug 2014 19:49:22 +0000
+Subject: [PATCH 179/326] 2014-08-12  Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* socket.c: For RTEMS, use correct prototype of gethostbyname_r().
+	* gsocket.h Add include of <unistd.h> on RTEMS.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213883 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ada/ChangeLog | 5 +++++
+ gcc/ada/gsocket.h | 5 +++++
+ gcc/ada/socket.c  | 2 +-
+ 3 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ada/ChangeLog b/gcc/ada/ChangeLog
+index 5a4872d..a430c4b 100644
+--- a/gcc/ada/ChangeLog
++++ b/gcc/ada/ChangeLog
+@@ -1,3 +1,8 @@
++2014-08-12  Joel Sherrill <joel.sherrill@oarcorp.com>
++
++	* socket.c: For RTEMS, use correct prototype of gethostbyname_r().
++	* gsocket.h Add include of <unistd.h> on RTEMS.
++
+ 2014-08-11  Joel Sherrill <joel.sherrill@oarcorp.com>
+ 
+ 	* s-osinte-rtems.adb: Correct formatting of line in license block.
+diff --git a/gcc/ada/gsocket.h b/gcc/ada/gsocket.h
+index e21d714..1d9235f 100644
+--- a/gcc/ada/gsocket.h
++++ b/gcc/ada/gsocket.h
+@@ -183,6 +183,11 @@
+ #include <sys/time.h>
+ #endif
+ 
++#if defined(__rtems__)
++#include <unistd.h>
++/* Required, for read(), write(), and close() */
++#endif
++
+ /*
+  * RTEMS has these .h files but not until you have built and installed RTEMS.
+  * When building a C/C++ toolset, you also build the newlib C library, so the
+diff --git a/gcc/ada/socket.c b/gcc/ada/socket.c
+index 18999b3..e658456 100644
+--- a/gcc/ada/socket.c
++++ b/gcc/ada/socket.c
+@@ -212,7 +212,7 @@ __gnat_gethostbyname (const char *name,
+   struct hostent *rh;
+   int ri;
+ 
+-#if defined(__linux__) || defined(__GLIBC__)
++#if defined(__linux__) || defined(__GLIBC__) || defined(__rtems__)
+   (void) gethostbyname_r (name, ret, buf, buflen, &rh, h_errnop);
+ #else
+   rh = gethostbyname_r (name, ret, buf, buflen, h_errnop);
+-- 
+2.0.3
+

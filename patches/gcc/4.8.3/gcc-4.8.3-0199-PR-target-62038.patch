@@ -1,0 +1,95 @@
+From 17ddec04383571efe51472ee93f7564709a78d49 Mon Sep 17 00:00:00 2001
+From: danglin <danglin@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sat, 23 Aug 2014 16:00:46 +0000
+Subject: [PATCH 199/326] 	PR target/62038 	* config/pa/pa.c
+ (pa_output_function_epilogue): Don't set 	last_address when the current
+ function is a thunk. 	(pa_asm_output_mi_thunk): When we don't have named
+ sections or they 	are not being used, check that thunk can reach the
+ stub table with a 	short branch.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214399 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog      |  9 +++++++++
+ gcc/config/pa/pa.c | 18 ++++++++++++------
+ 2 files changed, 21 insertions(+), 6 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 9eb9124..b5c5ac3 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,12 @@
++2014-08-23  John David Anglin  <danglin@gcc.gnu.org>
++
++	PR target/62038
++	* config/pa/pa.c (pa_output_function_epilogue): Don't set
++	last_address when the current function is a thunk.
++	(pa_asm_output_mi_thunk): When we don't have named sections or they
++	are not being used, check that thunk can reach the stub table with a
++	short branch.
++
+ 2014-08-22  Michael Meissner  <meissner@linux.vnet.ibm.com>
+ 
+ 	Backport fro mainline
+diff --git a/gcc/config/pa/pa.c b/gcc/config/pa/pa.c
+index 780c50f..63c7b7d 100644
+--- a/gcc/config/pa/pa.c
++++ b/gcc/config/pa/pa.c
+@@ -4160,8 +4160,7 @@ static void
+ pa_output_function_epilogue (FILE *file, HOST_WIDE_INT size ATTRIBUTE_UNUSED)
+ {
+   rtx insn = get_last_insn ();
+-
+-  last_address = 0;
++  bool extra_nop;
+ 
+   /* pa_expand_epilogue does the dirty work now.  We just need
+      to output the assembler directives which denote the end
+@@ -4185,8 +4184,10 @@ pa_output_function_epilogue (FILE *file, HOST_WIDE_INT size ATTRIBUTE_UNUSED)
+   if (insn && GET_CODE (insn) == CALL_INSN)
+     {
+       fputs ("\tnop\n", file);
+-      last_address += 4;
++      extra_nop = true;
+     }
++  else
++    extra_nop = false;
+ 
+   fputs ("\t.EXIT\n\t.PROCEND\n", file);
+ 
+@@ -4199,12 +4200,13 @@ pa_output_function_epilogue (FILE *file, HOST_WIDE_INT size ATTRIBUTE_UNUSED)
+       cfun->machine->in_nsubspa = 2;
+     }
+ 
+-  /* Thunks do their own accounting.  */
++  /* Thunks do their own insn accounting.  */
+   if (cfun->is_thunk)
+     return;
+ 
+   if (INSN_ADDRESSES_SET_P ())
+     {
++      last_address = extra_nop ? 4 : 0;
+       insn = get_last_nonnote_insn ();
+       last_address += INSN_ADDRESSES (INSN_UID (insn));
+       if (INSN_P (insn))
+@@ -8304,12 +8306,16 @@ pa_asm_output_mi_thunk (FILE *file, tree thunk_fndecl, HOST_WIDE_INT delta,
+ 		   || ((DECL_SECTION_NAME (thunk_fndecl)
+ 			== DECL_SECTION_NAME (function))
+ 		       && last_address < 262132)))
++	      /* In this case, we need to be able to reach the start of
++		 the stub table even though the function is likely closer
++		 and can be jumped to directly.  */
+ 	      || (targetm_common.have_named_sections
+ 		  && DECL_SECTION_NAME (thunk_fndecl) == NULL
+ 		  && DECL_SECTION_NAME (function) == NULL
+-		  && last_address < 262132)
++		  && total_code_bytes < MAX_PCREL17F_OFFSET)
++	      /* Likewise.  */
+ 	      || (!targetm_common.have_named_sections
+-		  && last_address < 262132))))
++		  && total_code_bytes < MAX_PCREL17F_OFFSET))))
+     {
+       if (!val_14)
+ 	output_asm_insn ("addil L'%2,%%r26", xoperands);
+-- 
+2.0.3
+

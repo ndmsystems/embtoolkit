@@ -1,0 +1,146 @@
+From d50cb371c6f42eb203a668db1a349508e2fb0cf1 Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 8 Sep 2014 19:07:00 +0000
+Subject: [PATCH 230/326] 	Backported from mainline 	2014-08-06 
+ Vladimir Makarov  <vmakarov@redhat.com>
+
+	PR debug/61923
+	* haifa-sched.c (advance_one_cycle): Fix dump.
+	(schedule_block): Don't advance cycle if we are already at the
+	beginning of the cycle.
+
+	* gcc.target/i386/pr61923.c: New test.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215020 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                           | 10 +++++++++
+ gcc/haifa-sched.c                       |  8 +++++---
+ gcc/testsuite/ChangeLog                 |  8 ++++++++
+ gcc/testsuite/gcc.target/i386/pr61923.c | 36 +++++++++++++++++++++++++++++++++
+ 4 files changed, 59 insertions(+), 3 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.target/i386/pr61923.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 7f7642f..4c26c28 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,13 @@
++2014-09-08  Jakub Jelinek  <jakub@redhat.com>
++
++	Backported from mainline
++	2014-08-06  Vladimir Makarov  <vmakarov@redhat.com>
++
++	PR debug/61923
++	* haifa-sched.c (advance_one_cycle): Fix dump.
++	(schedule_block): Don't advance cycle if we are already at the
++	beginning of the cycle.
++
+ 2014-09-03  Martin Jambor  <mjambor@suse.cz>
+ 
+ 	PR ipa/62015
+diff --git a/gcc/haifa-sched.c b/gcc/haifa-sched.c
+index c4591bfe..28934c5 100644
+--- a/gcc/haifa-sched.c
++++ b/gcc/haifa-sched.c
+@@ -2931,7 +2931,7 @@ advance_one_cycle (void)
+ {
+   advance_state (curr_state);
+   if (sched_verbose >= 6)
+-    fprintf (sched_dump, ";;\tAdvanced a state.\n");
++    fprintf (sched_dump, ";;\tAdvance the current state.\n");
+ }
+ 
+ /* Update register pressure after scheduling INSN.  */
+@@ -5964,6 +5964,7 @@ schedule_block (basic_block *target_bb, state_t init_state)
+   modulo_insns_scheduled = 0;
+ 
+   ls.modulo_epilogue = false;
++  ls.first_cycle_insn_p = true;
+ 
+   /* Loop until all the insns in BB are scheduled.  */
+   while ((*current_sched_info->schedule_more_p) ())
+@@ -6034,7 +6035,6 @@ schedule_block (basic_block *target_bb, state_t init_state)
+       if (must_backtrack)
+ 	goto do_backtrack;
+ 
+-      ls.first_cycle_insn_p = true;
+       ls.shadows_only_p = false;
+       cycle_issued_insns = 0;
+       ls.can_issue_more = issue_rate;
+@@ -6321,11 +6321,13 @@ schedule_block (basic_block *target_bb, state_t init_state)
+ 	      break;
+ 	    }
+ 	}
++      ls.first_cycle_insn_p = true;
+     }
+   if (ls.modulo_epilogue)
+     success = true;
+  end_schedule:
+-  advance_one_cycle ();
++  if (!ls.first_cycle_insn_p)
++    advance_one_cycle ();
+   perform_replacements_new_cycle ();
+   if (modulo_ii > 0)
+     {
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 0c91c6d..a618070 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,11 @@
++2014-09-08  Jakub Jelinek  <jakub@redhat.com>
++
++	Backported from mainline
++	2014-08-06  Vladimir Makarov  <vmakarov@redhat.com>
++
++	PR debug/61923
++	* gcc.target/i386/pr61923.c: New test.
++
+ 2014-09-06  John David Anglin  <danglin@gcc.gnu.org>
+ 
+ 	PR testsuite/56194
+diff --git a/gcc/testsuite/gcc.target/i386/pr61923.c b/gcc/testsuite/gcc.target/i386/pr61923.c
+new file mode 100644
+index 0000000..458158c
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/i386/pr61923.c
+@@ -0,0 +1,36 @@
++/* PR debug/61923 */
++/* { dg-do compile } */
++/* { dg-options "-O2 -fcompare-debug" } */
++
++typedef struct
++{
++  struct
++  {
++    struct
++    {
++      char head;
++    } tickets;
++  };
++} arch_spinlock_t;
++struct ext4_map_blocks
++{
++  int m_lblk;
++  int m_len;
++  int m_flags;
++};
++int ext4_da_map_blocks_ei_0;
++void fn1 (int p1, struct ext4_map_blocks *p2)
++{
++  int ret;
++  if (p2->m_flags)
++    {
++      ext4_da_map_blocks_ei_0++;
++      arch_spinlock_t *lock;
++      switch (sizeof *&lock->tickets.head)
++      case 1:
++      asm("" : "+m"(*&lock->tickets.head) : ""(0));
++      __asm__("");
++      ret = 0;
++    }
++  fn2 (p2->m_lblk, p2->m_len);
++}
+-- 
+2.0.3
+

@@ -1,0 +1,47 @@
+From 2ded2314eb58a20cea1b3632ff3dfb0bbe3c5949 Mon Sep 17 00:00:00 2001
+From: jamborm <jamborm@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 5 Jun 2014 09:12:14 +0000
+Subject: [PATCH 033/134] 2014-06-05  Martin Jambor  <mjambor@suse.cz>
+
+	PR ipa/61393
+	* ipa-cp.c (determine_versionability): Pretend that tm_clones are
+	not versionable.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@211259 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog | 6 ++++++
+ gcc/ipa-cp.c  | 2 ++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index a6eeb63..1f51977 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,9 @@
++2014-06-05  Martin Jambor  <mjambor@suse.cz>
++
++	PR ipa/61393
++	* ipa-cp.c (determine_versionability): Pretend that tm_clones are
++	not versionable.
++
+ 2014-06-04  Richard Biener  <rguenther@suse.de>
+ 
+ 	PR tree-optimization/61383
+diff --git a/gcc/ipa-cp.c b/gcc/ipa-cp.c
+index d9d69b3..bd45575 100644
+--- a/gcc/ipa-cp.c
++++ b/gcc/ipa-cp.c
+@@ -447,6 +447,8 @@ determine_versionability (struct cgraph_node *node)
+   else if (!opt_for_fn (node->symbol.decl, optimize)
+ 	   || !opt_for_fn (node->symbol.decl, flag_ipa_cp))
+     reason = "non-optimized function";
++  else if (node->tm_clone)
++    reason = "transactional memory clone";
+ 
+   if (reason && dump_file && !node->alias && !node->thunk.thunk_p)
+     fprintf (dump_file, "Function %s/%i is not versionable, reason: %s.\n",
+-- 
+1.8.5.5
+

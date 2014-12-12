@@ -1,0 +1,40 @@
+From 90c7bb85898db40545e68b0fdc7215ac9cccc556 Mon Sep 17 00:00:00 2001
+From: rth <rth@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 24 Jul 2014 18:32:26 +0000
+Subject: [PATCH 123/134] AArch64: emit .note.GNU-stack
+
+        2014-07-24  Kyle McMartin  <kyle@redhat.com>
+        * config/aarch64/aarch64-linux.h (TARGET_ASM_FILE_END): Define.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213030 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                      | 4 ++++
+ gcc/config/aarch64/aarch64-linux.h | 2 ++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 9415280..6c67c39 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,7 @@
++2014-07-24  Kyle McMartin  <kyle@redhat.com>
++
++	* config/aarch64/aarch64-linux.h (TARGET_ASM_FILE_END): Define.
++
+ 2014-07-24  Ulrich Weigand  <Ulrich.Weigand@de.ibm.com>
+ 
+ 	* config/rs6000/rs6000-protos.h (rs6000_special_adjust_field_align_p):
+diff --git a/gcc/config/aarch64/aarch64-linux.h b/gcc/config/aarch64/aarch64-linux.h
+index 83efad4..4e6e23a 100644
+--- a/gcc/config/aarch64/aarch64-linux.h
++++ b/gcc/config/aarch64/aarch64-linux.h
+@@ -43,4 +43,6 @@
+     }						\
+   while (0)
+ 
++#define TARGET_ASM_FILE_END file_end_indicate_exec_stack
++
+ #endif  /* GCC_AARCH64_LINUX_H */
+-- 
+1.8.5.5
+

@@ -1,0 +1,115 @@
+From 3e814d5d5ab8b55a6a422d9055040f7b3aacac63 Mon Sep 17 00:00:00 2001
+From: wschmidt <wschmidt@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 25 Sep 2014 15:15:06 +0000
+Subject: [PATCH 261/326] [gcc]
+
+2014-09-25  Bill Schmidt  <wschmidt@linux.vnet.ibm.com>
+
+	PR target/63335
+	* config/rs6000/rs6000-c.c (altivec_build_resolved_builtin):
+	Exclude VSX_BUILTIN_XVCMPGEDP_P from special handling.
+
+[gcc/testsuite]
+
+2014-09-25  Bill Schmidt  <wschmidt@linux.vnet.ibm.com>
+
+	PR target/63335
+	* gcc.target/powerpc/pr63335.c: New test.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215604 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                              |  9 +++++++++
+ gcc/config/rs6000/rs6000-c.c               |  3 ++-
+ gcc/testsuite/ChangeLog                    |  8 ++++++++
+ gcc/testsuite/gcc.target/powerpc/pr63335.c | 30 ++++++++++++++++++++++++++++++
+ 4 files changed, 49 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/gcc.target/powerpc/pr63335.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index c33e92c..e2b552d 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,12 @@
++2014-09-25  Bill Schmidt  <wschmidt@linux.vnet.ibm.com>
++
++	Backport from mainline r215559
++	2014-09-25  Bill Schmidt  <wschmidt@linux.vnet.ibm.com>
++
++	PR target/63335
++	* config/rs6000/rs6000-c.c (altivec_build_resolved_builtin):
++	Exclude VSX_BUILTIN_XVCMPGEDP_P from special handling.
++
+ 2014-09-25  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR tree-optimization/63341
+diff --git a/gcc/config/rs6000/rs6000-c.c b/gcc/config/rs6000/rs6000-c.c
+index 9cb6387..08ea5c5 100644
+--- a/gcc/config/rs6000/rs6000-c.c
++++ b/gcc/config/rs6000/rs6000-c.c
+@@ -4126,7 +4126,8 @@ altivec_build_resolved_builtin (tree *args, int n,
+      argument) is reversed.  Patch the arguments here before building
+      the resolved CALL_EXPR.  */
+   if (desc->code == ALTIVEC_BUILTIN_VEC_VCMPGE_P
+-      && desc->overloaded_code != ALTIVEC_BUILTIN_VCMPGEFP_P)
++      && desc->overloaded_code != ALTIVEC_BUILTIN_VCMPGEFP_P
++      && desc->overloaded_code != VSX_BUILTIN_XVCMPGEDP_P)
+     {
+       tree t;
+       t = args[2], args[2] = args[1], args[1] = t;
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 7b51712..ba5225c 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,11 @@
++2014-09-25  Bill Schmidt  <wschmidt@linux.vnet.ibm.com>
++
++	Backport from mainline r215559
++	2014-09-25  Bill Schmidt  <wschmidt@linux.vnet.ibm.com>
++
++	PR target/63335
++	* gcc.target/powerpc/pr63335.c: New test.
++
+ 2014-09-25  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR tree-optimization/63341
+diff --git a/gcc/testsuite/gcc.target/powerpc/pr63335.c b/gcc/testsuite/gcc.target/powerpc/pr63335.c
+new file mode 100644
+index 0000000..931a8b6
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/powerpc/pr63335.c
+@@ -0,0 +1,30 @@
++/* { dg-do run { target { powerpc64*-*-* } } } */
++/* { dg-require-effective-target powerpc_vsx_ok } */
++/* { dg-options "-mvsx" } */
++
++#include <altivec.h>
++
++void abort (void);
++
++vector double vec = (vector double) {99.0, 99.0};
++
++int main() {
++
++  int actual = vec_all_nge(vec, vec);
++  if ( actual != 0)
++    abort();
++
++  actual = vec_all_nle(vec, vec);
++  if ( actual != 0)
++    abort();
++
++  actual = vec_any_nge(vec, vec);
++  if ( actual != 0)
++    abort();
++
++  actual = vec_any_nle(vec, vec);
++  if ( actual != 0)
++    abort();
++
++  return 0;
++}
+-- 
+2.0.3
+

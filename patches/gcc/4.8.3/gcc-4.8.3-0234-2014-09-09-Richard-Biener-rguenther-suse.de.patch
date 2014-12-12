@@ -1,0 +1,302 @@
+From 2bf6c00279336145efc1489fe12a841ba206305f Mon Sep 17 00:00:00 2001
+From: rguenth <rguenth@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 9 Sep 2014 13:17:51 +0000
+Subject: [PATCH 234/326] 2014-09-09  Richard Biener  <rguenther@suse.de>
+
+	Backport from mainline
+	2014-05-05  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/61010
+	* fold-const.c (fold_binary_loc): Consistently avoid
+	canonicalizing X & CST away from a CST that is the mask
+	of a mode.
+
+	* gcc.dg/torture/pr61010.c: New testcase.
+
+	2014-05-28  Richard Biener  <rguenther@suse.de>
+
+	PR middle-end/61045
+	* fold-const.c (fold_comparison): When folding
+	X +- C1 CMP Y +- C2 to X CMP Y +- C2 +- C1 also ensure
+	the sign of the remaining constant operand stays the same.
+
+	* gcc.dg/pr61045.c: New testcase.
+
+	2014-08-11  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/62075
+	* tree-vect-slp.c (vect_detect_hybrid_slp_stmts): Properly
+	handle uses in patterns.
+
+	* gcc.dg/vect/pr62075.c: New testcase.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215073 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                          | 23 ++++++++++++++
+ gcc/fold-const.c                       | 58 ++++++++++++++++------------------
+ gcc/testsuite/ChangeLog                | 18 +++++++++++
+ gcc/testsuite/gcc.dg/pr61045.c         | 12 +++++++
+ gcc/testsuite/gcc.dg/torture/pr61010.c |  8 +++++
+ gcc/testsuite/gcc.dg/vect/pr62075.c    | 22 +++++++++++++
+ gcc/tree-vect-slp.c                    |  5 ++-
+ 7 files changed, 115 insertions(+), 31 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.dg/pr61045.c
+ create mode 100644 gcc/testsuite/gcc.dg/torture/pr61010.c
+ create mode 100644 gcc/testsuite/gcc.dg/vect/pr62075.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index eb3a989..ca399cd 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,26 @@
++2014-09-09  Richard Biener  <rguenther@suse.de>
++
++	Backport from mainline
++	2014-05-05  Richard Biener  <rguenther@suse.de>
++
++	PR middle-end/61010
++	* fold-const.c (fold_binary_loc): Consistently avoid
++	canonicalizing X & CST away from a CST that is the mask
++	of a mode.
++
++	2014-05-28  Richard Biener  <rguenther@suse.de>
++
++	PR middle-end/61045
++	* fold-const.c (fold_comparison): When folding
++	X +- C1 CMP Y +- C2 to X CMP Y +- C2 +- C1 also ensure
++	the sign of the remaining constant operand stays the same.
++
++	2014-08-11  Richard Biener  <rguenther@suse.de>
++
++	PR tree-optimization/62075
++	* tree-vect-slp.c (vect_detect_hybrid_slp_stmts): Properly
++	handle uses in patterns.
++
+ 2014-09-09  James Greenhalgh  <james.greenhalgh@arm.com>
+ 
+ 	Backport from mainline.
+diff --git a/gcc/fold-const.c b/gcc/fold-const.c
+index 3a60201..0cf3bfd 100644
+--- a/gcc/fold-const.c
++++ b/gcc/fold-const.c
+@@ -9213,7 +9213,7 @@ fold_comparison (location_t loc, enum tree_code code, tree type,
+   /* Transform comparisons of the form X +- C1 CMP Y +- C2 to
+      X CMP Y +- C2 +- C1 for signed X, Y.  This is valid if
+      the resulting offset is smaller in absolute value than the
+-     original one.  */
++     original one and has the same sign.  */
+   if (TYPE_OVERFLOW_UNDEFINED (TREE_TYPE (arg0))
+       && (TREE_CODE (arg0) == PLUS_EXPR || TREE_CODE (arg0) == MINUS_EXPR)
+       && (TREE_CODE (TREE_OPERAND (arg0, 1)) == INTEGER_CST
+@@ -9232,32 +9232,35 @@ fold_comparison (location_t loc, enum tree_code code, tree type,
+ 				      "a comparison");
+ 
+       /* Put the constant on the side where it doesn't overflow and is
+-	 of lower absolute value than before.  */
++	 of lower absolute value and of same sign than before.  */
+       cst = int_const_binop (TREE_CODE (arg0) == TREE_CODE (arg1)
+ 			     ? MINUS_EXPR : PLUS_EXPR,
+ 			     const2, const1);
+       if (!TREE_OVERFLOW (cst)
+-	  && tree_int_cst_compare (const2, cst) == tree_int_cst_sgn (const2))
++	  && tree_int_cst_compare (const2, cst) == tree_int_cst_sgn (const2)
++	  && tree_int_cst_sgn (cst) == tree_int_cst_sgn (const2))
+ 	{
+ 	  fold_overflow_warning (warnmsg, WARN_STRICT_OVERFLOW_COMPARISON);
+ 	  return fold_build2_loc (loc, code, type,
+-			      variable1,
+-			      fold_build2_loc (loc,
+-					   TREE_CODE (arg1), TREE_TYPE (arg1),
+-					   variable2, cst));
++				  variable1,
++				  fold_build2_loc (loc, TREE_CODE (arg1),
++						   TREE_TYPE (arg1),
++						   variable2, cst));
+ 	}
+ 
+       cst = int_const_binop (TREE_CODE (arg0) == TREE_CODE (arg1)
+ 			     ? MINUS_EXPR : PLUS_EXPR,
+ 			     const1, const2);
+       if (!TREE_OVERFLOW (cst)
+-	  && tree_int_cst_compare (const1, cst) == tree_int_cst_sgn (const1))
++	  && tree_int_cst_compare (const1, cst) == tree_int_cst_sgn (const1)
++	  && tree_int_cst_sgn (cst) == tree_int_cst_sgn (const1))
+ 	{
+ 	  fold_overflow_warning (warnmsg, WARN_STRICT_OVERFLOW_COMPARISON);
+ 	  return fold_build2_loc (loc, code, type,
+-			      fold_build2_loc (loc, TREE_CODE (arg0), TREE_TYPE (arg0),
+-					   variable1, cst),
+-			      variable2);
++				  fold_build2_loc (loc, TREE_CODE (arg0),
++						   TREE_TYPE (arg0),
++						   variable1, cst),
++				  variable2);
+ 	}
+     }
+ 
+@@ -11218,7 +11221,6 @@ fold_binary_loc (location_t loc,
+ 	{
+ 	  double_int c1, c2, c3, msk;
+ 	  int width = TYPE_PRECISION (type), w;
+-	  bool try_simplify = true;
+ 
+ 	  c1 = tree_to_double_int (TREE_OPERAND (arg0, 1));
+ 	  c2 = tree_to_double_int (arg1);
+@@ -11255,20 +11257,7 @@ fold_binary_loc (location_t loc,
+ 		}
+ 	    }
+ 
+-	  /* If X is a tree of the form (Y * K1) & K2, this might conflict
+-	     with that optimization from the BIT_AND_EXPR optimizations.
+-	     This could end up in an infinite recursion.  */
+-	  if (TREE_CODE (TREE_OPERAND (arg0, 0)) == MULT_EXPR
+-	      && TREE_CODE (TREE_OPERAND (TREE_OPERAND (arg0, 0), 1))
+-	                    == INTEGER_CST)
+-	  {
+-	    tree t = TREE_OPERAND (TREE_OPERAND (arg0, 0), 1);
+-	    double_int masked = mask_with_tz (type, c3, tree_to_double_int (t));
+-
+-	    try_simplify = (masked != c1);
+-	  }
+-
+-	  if (try_simplify && c3 != c1)
++	  if (c3 != c1)
+ 	    return fold_build2_loc (loc, BIT_IOR_EXPR, type,
+ 				    fold_build2_loc (loc, BIT_AND_EXPR, type,
+ 						     TREE_OPERAND (arg0, 0),
+@@ -11658,16 +11647,25 @@ fold_binary_loc (location_t loc,
+ 	  && TREE_CODE (arg0) == MULT_EXPR
+ 	  && TREE_CODE (TREE_OPERAND (arg0, 1)) == INTEGER_CST)
+ 	{
++	  double_int darg1 = tree_to_double_int (arg1);
+ 	  double_int masked
+-	    = mask_with_tz (type, tree_to_double_int (arg1),
++	    = mask_with_tz (type, darg1,
+ 	                    tree_to_double_int (TREE_OPERAND (arg0, 1)));
+ 
+ 	  if (masked.is_zero ())
+ 	    return omit_two_operands_loc (loc, type, build_zero_cst (type),
+ 	                                  arg0, arg1);
+-	  else if (masked != tree_to_double_int (arg1))
+-	    return fold_build2_loc (loc, code, type, op0,
+-	                            double_int_to_tree (type, masked));
++	  else if (masked != darg1)
++	    {
++	      /* Avoid the transform if arg1 is a mask of some
++	         mode which allows further optimizations.  */
++	      int pop = darg1.popcount ();
++	      if (!(pop >= BITS_PER_UNIT
++		    && exact_log2 (pop) != -1
++		    && double_int::mask (pop) == darg1))
++		return fold_build2_loc (loc, code, type, op0,
++					double_int_to_tree (type, masked));
++	    }
+ 	}
+ 
+       /* For constants M and N, if M == (1LL << cst) - 1 && (N & M) == M,
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index d8b7799..b5af69c 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,21 @@
++2014-09-09  Richard Biener  <rguenther@suse.de>
++
++	Backport from mainline
++	2014-05-05  Richard Biener  <rguenther@suse.de>
++
++	PR middle-end/61010
++	* gcc.dg/torture/pr61010.c: New testcase.
++
++	2014-05-28  Richard Biener  <rguenther@suse.de>
++
++	PR middle-end/61045
++	* gcc.dg/pr61045.c: New testcase.
++
++	2014-08-11  Richard Biener  <rguenther@suse.de>
++
++	PR tree-optimization/62075
++	* gcc.dg/vect/pr62075.c: New testcase.
++
+ 2014-09-08  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR tree-optimization/60196
+diff --git a/gcc/testsuite/gcc.dg/pr61045.c b/gcc/testsuite/gcc.dg/pr61045.c
+new file mode 100644
+index 0000000..1808cdc
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/pr61045.c
+@@ -0,0 +1,12 @@
++/* { dg-do run } */
++/* { dg-options "-fstrict-overflow" } */
++
++int main ()
++{
++  int a = 0;
++  int b = __INT_MAX__;
++  int t = (a - 2) > (b - 1);
++  if (t != 0)
++    __builtin_abort();
++  return 0;
++}
+diff --git a/gcc/testsuite/gcc.dg/torture/pr61010.c b/gcc/testsuite/gcc.dg/torture/pr61010.c
+new file mode 100644
+index 0000000..ed56539
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/torture/pr61010.c
+@@ -0,0 +1,8 @@
++/* { dg-do compile } */
++
++int main (void)
++{
++  int a = 0;
++  unsigned b = (a * 64 & 192) | 63U;
++  return 0;
++}
+diff --git a/gcc/testsuite/gcc.dg/vect/pr62075.c b/gcc/testsuite/gcc.dg/vect/pr62075.c
+new file mode 100644
+index 0000000..798490e
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/vect/pr62075.c
+@@ -0,0 +1,22 @@
++/* { dg-do compile } */
++
++int a[16][2];
++struct A
++{
++  int b[16][2];
++  int c[16][1];
++};
++
++void
++foo (struct A *x)
++{
++  int i;
++  for (i = 0; i < 16; ++i)
++    {
++      x->b[i][0] = a[i][0];
++      x->c[i][0] = 0 != a[i][0];
++      x->b[i][1] = a[i][1];
++    }
++}
++
++/* { dg-final { cleanup-tree-dump "vect" } } */
+diff --git a/gcc/tree-vect-slp.c b/gcc/tree-vect-slp.c
+index e184326..7ea641a 100644
+--- a/gcc/tree-vect-slp.c
++++ b/gcc/tree-vect-slp.c
+@@ -1837,7 +1837,10 @@ vect_detect_hybrid_slp_stmts (slp_tree node)
+ 	    && (stmt_vinfo = vinfo_for_stmt (use_stmt))
+ 	    && !STMT_SLP_TYPE (stmt_vinfo)
+             && (STMT_VINFO_RELEVANT (stmt_vinfo)
+-                || VECTORIZABLE_CYCLE_DEF (STMT_VINFO_DEF_TYPE (stmt_vinfo)))
++                || VECTORIZABLE_CYCLE_DEF (STMT_VINFO_DEF_TYPE (stmt_vinfo))
++		|| (STMT_VINFO_IN_PATTERN_P (stmt_vinfo)
++		    && STMT_VINFO_RELATED_STMT (stmt_vinfo)
++		    && !STMT_SLP_TYPE (vinfo_for_stmt (STMT_VINFO_RELATED_STMT (stmt_vinfo)))))
+ 	    && !(gimple_code (use_stmt) == GIMPLE_PHI
+                  && STMT_VINFO_DEF_TYPE (stmt_vinfo)
+                   == vect_reduction_def))
+-- 
+2.0.3
+

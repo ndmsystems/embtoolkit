@@ -1,0 +1,20 @@
+From 7bd970312cb9e8f29dd1c7f2c703eab34ec4a7cd Mon Sep 17 00:00:00 2001
+From: gccadmin <gccadmin@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sat, 8 Nov 2014 00:16:11 +0000
+Subject: [PATCH 341/341] Daily bump.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@217243 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/DATESTAMP | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gcc/DATESTAMP b/gcc/DATESTAMP
+index d4d56f6..7e1a5a1 100644
+--- a/gcc/DATESTAMP
++++ b/gcc/DATESTAMP
+@@ -1 +1 @@
+-20141107
++20141108
+-- 
+2.0.3
+

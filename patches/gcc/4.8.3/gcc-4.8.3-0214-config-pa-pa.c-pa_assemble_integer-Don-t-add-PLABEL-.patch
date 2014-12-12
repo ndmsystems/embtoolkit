@@ -1,0 +1,47 @@
+From e9679e2fc283e8644a129c8bf2992a5ffc14f901 Mon Sep 17 00:00:00 2001
+From: danglin <danglin@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sat, 30 Aug 2014 15:29:45 +0000
+Subject: [PATCH 214/326] 	* config/pa/pa.c (pa_assemble_integer): Don't
+ add PLABEL relocation 	prefix to function labels when generating fast
+ indirect calls.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214756 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog      | 5 +++++
+ gcc/config/pa/pa.c | 7 ++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 6236b68..92514dd 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,8 @@
++2014-08-30  John David Anglin  <danglin@gcc.gnu.org>
++
++	* config/pa/pa.c (pa_assemble_integer): Don't add PLABEL relocation
++	prefix to function labels when generating fast indirect calls.
++
+ 2014-08-26  Joel Sherrill <joel.sherrill@oarcorp.com>
+ 
+ 	* doc/invoke.texi: -fno-cxa-atexit should be -fno-use-cxa-atexit.
+diff --git a/gcc/config/pa/pa.c b/gcc/config/pa/pa.c
+index 63c7b7d..bd358f9 100644
+--- a/gcc/config/pa/pa.c
++++ b/gcc/config/pa/pa.c
+@@ -3237,7 +3237,12 @@ pa_assemble_integer (rtx x, unsigned int size, int aligned_p)
+       && aligned_p
+       && function_label_operand (x, VOIDmode))
+     {
+-      fputs (size == 8? "\t.dword\tP%" : "\t.word\tP%", asm_out_file);
++      fputs (size == 8? "\t.dword\t" : "\t.word\t", asm_out_file);
++
++      /* We don't want an OPD when generating fast indirect calls.  */
++      if (!TARGET_FAST_INDIRECT_CALLS)
++	fputs ("P%", asm_out_file);
++
+       output_addr_const (asm_out_file, x);
+       fputc ('\n', asm_out_file);
+       return true;
+-- 
+2.0.3
+

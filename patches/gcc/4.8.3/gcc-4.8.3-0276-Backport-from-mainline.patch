@@ -1,0 +1,108 @@
+From 99b536a4edd172c33fbe770bcfb3dbc379e495a6 Mon Sep 17 00:00:00 2001
+From: uros <uros@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 1 Oct 2014 17:41:47 +0000
+Subject: [PATCH 276/326] 	Backport from mainline 	2014-09-30  Uros
+ Bizjak  <ubizjak@gmail.com>
+
+	* config/i386/i386.md (fmodxf3): Enable for flag_finite_math_only only.
+	(fmod<mode>3): Ditto.
+	(fpremxf4_i387): Ditto.
+	(reminderxf3): Ditto.
+	(reminder<mode>3): Ditto.
+	(fprem1xf4_i387): Ditto.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215773 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog           | 12 ++++++++++++
+ gcc/config/i386/i386.md | 18 ++++++++++++------
+ 2 files changed, 24 insertions(+), 6 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 71a9fbe..7112e15 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,15 @@
++2014-10-01  Uros Bizjak  <ubizjak@gmail.com>
++
++	Backport from mainline
++	2014-09-30  Uros Bizjak  <ubizjak@gmail.com>
++
++	* config/i386/i386.md (fmodxf3): Enable for flag_finite_math_only only.
++	(fmod<mode>3): Ditto.
++	(fpremxf4_i387): Ditto.
++	(reminderxf3): Ditto.
++	(reminder<mode>3): Ditto.
++	(fprem1xf4_i387): Ditto.
++
+ 2014-09-30  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR inline-asm/63282
+diff --git a/gcc/config/i386/i386.md b/gcc/config/i386/i386.md
+index d505594..24e93f9 100644
+--- a/gcc/config/i386/i386.md
++++ b/gcc/config/i386/i386.md
+@@ -13516,7 +13516,8 @@
+    (set (reg:CCFP FPSR_REG)
+ 	(unspec:CCFP [(match_dup 2) (match_dup 3)]
+ 		     UNSPEC_C2_FLAG))]
+-  "TARGET_USE_FANCY_MATH_387"
++  "TARGET_USE_FANCY_MATH_387
++   && flag_finite_math_only"
+   "fprem"
+   [(set_attr "type" "fpspc")
+    (set_attr "mode" "XF")])
+@@ -13525,7 +13526,8 @@
+   [(use (match_operand:XF 0 "register_operand"))
+    (use (match_operand:XF 1 "general_operand"))
+    (use (match_operand:XF 2 "general_operand"))]
+-  "TARGET_USE_FANCY_MATH_387"
++  "TARGET_USE_FANCY_MATH_387
++   && flag_finite_math_only"
+ {
+   rtx label = gen_label_rtx ();
+ 
+@@ -13548,7 +13550,8 @@
+   [(use (match_operand:MODEF 0 "register_operand"))
+    (use (match_operand:MODEF 1 "general_operand"))
+    (use (match_operand:MODEF 2 "general_operand"))]
+-  "TARGET_USE_FANCY_MATH_387"
++  "TARGET_USE_FANCY_MATH_387
++   && flag_finite_math_only"
+ {
+   rtx (*gen_truncxf) (rtx, rtx);
+ 
+@@ -13587,7 +13590,8 @@
+    (set (reg:CCFP FPSR_REG)
+ 	(unspec:CCFP [(match_dup 2) (match_dup 3)]
+ 		     UNSPEC_C2_FLAG))]
+-  "TARGET_USE_FANCY_MATH_387"
++  "TARGET_USE_FANCY_MATH_387
++   && flag_finite_math_only"
+   "fprem1"
+   [(set_attr "type" "fpspc")
+    (set_attr "mode" "XF")])
+@@ -13596,7 +13600,8 @@
+   [(use (match_operand:XF 0 "register_operand"))
+    (use (match_operand:XF 1 "general_operand"))
+    (use (match_operand:XF 2 "general_operand"))]
+-  "TARGET_USE_FANCY_MATH_387"
++  "TARGET_USE_FANCY_MATH_387
++   && flag_finite_math_only"
+ {
+   rtx label = gen_label_rtx ();
+ 
+@@ -13619,7 +13624,8 @@
+   [(use (match_operand:MODEF 0 "register_operand"))
+    (use (match_operand:MODEF 1 "general_operand"))
+    (use (match_operand:MODEF 2 "general_operand"))]
+-  "TARGET_USE_FANCY_MATH_387"
++  "TARGET_USE_FANCY_MATH_387
++   && flag_finite_math_only"
+ {
+   rtx (*gen_truncxf) (rtx, rtx);
+ 
+-- 
+2.0.3
+

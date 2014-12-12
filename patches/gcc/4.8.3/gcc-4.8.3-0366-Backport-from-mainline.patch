@@ -1,0 +1,53 @@
+From 58747c8cd852ebe59827c655f50cc0f9c00cfa3e Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sat, 22 Nov 2014 11:29:27 +0000
+Subject: [PATCH 366/366] 	Backport from mainline 	2014-11-20  Vincent
+ Celier  <celier@adacore.com>
+
+	PR ada/47500
+	* back_end.adb (Scan_Back_End_Switches): Skip switch -G and
+	its argument.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@217963 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ada/ChangeLog    | 9 +++++++++
+ gcc/ada/back_end.adb | 3 ++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ada/ChangeLog b/gcc/ada/ChangeLog
+index 2f39ad5..d33633e 100644
+--- a/gcc/ada/ChangeLog
++++ b/gcc/ada/ChangeLog
+@@ -1,3 +1,12 @@
++2014-11-22  Eric Botcazou  <ebotcazou@adacore.com>
++
++	Backport from mainline
++	2014-11-20  Vincent Celier  <celier@adacore.com>
++
++	PR ada/47500
++	* back_end.adb (Scan_Back_End_Switches): Skip switch -G and
++	its argument.
++
+ 2014-10-13  Eric Botcazou  <ebotcazou@adacore.com>
+             Alan Modra  <amodra@gmail.com>
+ 
+diff --git a/gcc/ada/back_end.adb b/gcc/ada/back_end.adb
+index f23230e..4313ca4 100644
+--- a/gcc/ada/back_end.adb
++++ b/gcc/ada/back_end.adb
+@@ -209,9 +209,10 @@ package body Back_End is
+          Last  : constant Natural  := Switch_Last (Switch_Chars);
+ 
+       begin
+-         --  Skip -o or internal GCC switches together with their argument
++         --  Skip -o, -G or internal GCC switches together with their argument.
+ 
+          if Switch_Chars (First .. Last) = "o"
++           or else Switch_Chars (First .. Last) = "G"
+            or else Is_Internal_GCC_Switch (Switch_Chars)
+          then
+             Next_Arg := Next_Arg + 1;
+-- 
+2.0.3
+

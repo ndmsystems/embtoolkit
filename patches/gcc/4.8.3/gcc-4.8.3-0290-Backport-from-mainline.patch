@@ -1,0 +1,63 @@
+From 7cb4172929cd14fd503766439c257c6e1e454075 Mon Sep 17 00:00:00 2001
+From: uros <uros@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 9 Oct 2014 09:05:37 +0000
+Subject: [PATCH 290/326] 	Backport from mainline 	2014-10-09  Uros
+ Bizjak  <ubizjak@gmail.com>
+
+	PR rtl-optimization/57003
+	* regcprop.c (copyprop_hardreg_forward_1): If ksvd.ignore_set_reg,
+	also check CALL_INSN_FUNCTION_USAGE for clobbers again after
+	killing regs_invalidated_by_call.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@216035 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog  | 10 ++++++++++
+ gcc/regcprop.c | 12 +++++++++++-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index c53278c..e7dc0f3 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,13 @@
++2014-10-09  Uros Bizjak  <ubizjak@gmail.com>
++
++	Backport from mainline
++	2014-10-09  Uros Bizjak  <ubizjak@gmail.com>
++
++	PR rtl-optimization/57003
++	* regcprop.c (copyprop_hardreg_forward_1): If ksvd.ignore_set_reg,
++	also check CALL_INSN_FUNCTION_USAGE for clobbers again after
++	killing regs_invalidated_by_call.
++
+ 2014-10-08  Oleg Endo  <olegendo@gcc.gnu.org>
+ 
+ 	Backport from mainline
+diff --git a/gcc/regcprop.c b/gcc/regcprop.c
+index 8bfb64e..5b78511 100644
+--- a/gcc/regcprop.c
++++ b/gcc/regcprop.c
+@@ -1039,7 +1039,17 @@ copyprop_hardreg_forward_1 (basic_block bb, struct value_data *vd)
+ 	     but instead among CLOBBERs on the CALL_INSN, we could wrongly
+ 	     assume the value in it is still live.  */
+ 	  if (ksvd.ignore_set_reg)
+-	    note_stores (PATTERN (insn), kill_clobbered_value, vd);
++	    {
++	      note_stores (PATTERN (insn), kill_clobbered_value, vd);
++	      for (exp = CALL_INSN_FUNCTION_USAGE (insn);
++		   exp;
++		   exp = XEXP (exp, 1))
++		{
++		  rtx x = XEXP (exp, 0);
++		  if (GET_CODE (x) == CLOBBER)
++		    kill_value (SET_DEST (x), vd);
++		}
++	    }
+ 	}
+ 
+       /* Notice stores.  */
+-- 
+2.0.3
+

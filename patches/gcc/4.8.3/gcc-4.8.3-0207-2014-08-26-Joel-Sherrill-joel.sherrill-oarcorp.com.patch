@@ -1,0 +1,43 @@
+From 5b6d591975fef251795c9bd25ee2d9afc5bb4adc Mon Sep 17 00:00:00 2001
+From: joel <joel@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 26 Aug 2014 22:27:14 +0000
+Subject: [PATCH 207/326] 2014-08-26  Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* doc/invoke.texi: -fno-cxa-atexit should be -fno-use-cxa-atexit.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214553 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog       | 4 ++++
+ gcc/doc/invoke.texi | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 0c22e0a..6236b68 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,7 @@
++2014-08-26  Joel Sherrill <joel.sherrill@oarcorp.com>
++
++	* doc/invoke.texi: -fno-cxa-atexit should be -fno-use-cxa-atexit.
++
+ 2014-08-26  Marek Polacek  <polacek@redhat.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
+index 3315dda..b3b31f0 100644
+--- a/gcc/doc/invoke.texi
++++ b/gcc/doc/invoke.texi
+@@ -12480,7 +12480,7 @@ are compatible with as many systems and code bases as possible.
+ @item -mkernel
+ @opindex mkernel
+ Enable kernel development mode.  The @option{-mkernel} option sets
+-@option{-static}, @option{-fno-common}, @option{-fno-cxa-atexit},
++@option{-static}, @option{-fno-common}, @option{-fno-use-cxa-atexit},
+ @option{-fno-exceptions}, @option{-fno-non-call-exceptions},
+ @option{-fapple-kext}, @option{-fno-weak} and @option{-fno-rtti} where
+ applicable.  This mode also sets @option{-mno-altivec},
+-- 
+2.0.3
+

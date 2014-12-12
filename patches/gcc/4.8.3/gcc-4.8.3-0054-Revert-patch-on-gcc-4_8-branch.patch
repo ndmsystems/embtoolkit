@@ -1,0 +1,67 @@
+From 39da421784cfba0592dec7ae834f5437533a282c Mon Sep 17 00:00:00 2001
+From: eager <eager@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 17 Jun 2014 22:19:07 +0000
+Subject: [PATCH 054/134] Revert patch on gcc-4_8-branch.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@211750 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                       |  6 ++++++
+ gcc/config/microblaze/microblaze.md | 12 ------------
+ gcc/config/microblaze/predicates.md |  4 ----
+ 3 files changed, 6 insertions(+), 16 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index f96b744..98406fe 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,9 @@
++2014-06-17  Nagaraju Mekala <nagaraju.mekala@xilinx.com>
++
++	Revert on gcc-4_8-branch.
++	* config/microblaze/microblaze.md: Add movsi4_rev insn pattern.
++	* config/microblaze/predicates.md: Add reg_or_mem_operand predicate.
++
+ 2014-06-17  Yufeng Zhang  <yufeng.zhang@arm.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/config/microblaze/microblaze.md b/gcc/config/microblaze/microblaze.md
+index f1913b3..7d613f4 100644
+--- a/gcc/config/microblaze/microblaze.md
++++ b/gcc/config/microblaze/microblaze.md
+@@ -1119,18 +1119,6 @@
+   }
+ )
+ 
+-;;Load and store reverse
+-(define_insn "movsi4_rev"
+-  [(set (match_operand:SI 0 "reg_or_mem_operand" "=r,Q")
+-        (bswap:SI (match_operand:SF 1 "reg_or_mem_operand" "Q,r")))]
+-  "TARGET_REORDER"
+-  "@
+-   lwr\t%0,%y1,r0
+-   swr\t%1,%y0,r0"
+-  [(set_attr "type"     "load,store")
+-  (set_attr "mode"      "SI")
+-  (set_attr "length"    "4,4")])
+-
+ ;; 32-bit floating point moves
+ 
+ (define_expand "movsf"
+diff --git a/gcc/config/microblaze/predicates.md b/gcc/config/microblaze/predicates.md
+index 905d46a..2c23291 100644
+--- a/gcc/config/microblaze/predicates.md
++++ b/gcc/config/microblaze/predicates.md
+@@ -85,10 +85,6 @@
+   (ior (match_operand 0 "const_0_operand")
+        (match_operand 0 "register_operand")))
+ 
+-(define_predicate "reg_or_mem_operand"
+-  (ior (match_operand 0 "memory_operand")
+-       (match_operand 0 "register_operand")))
+-
+ ;;  Return if the operand is either the PC or a label_ref.  
+ (define_special_predicate "pc_or_label_operand"
+   (ior (match_code "pc,label_ref")
+-- 
+1.8.5.5
+

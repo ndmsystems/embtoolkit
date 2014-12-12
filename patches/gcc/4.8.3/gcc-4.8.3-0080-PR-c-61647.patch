@@ -1,0 +1,84 @@
+From 8d682746d2881c407782c60db1233532b9376635 Mon Sep 17 00:00:00 2001
+From: jason <jason@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 30 Jun 2014 18:44:24 +0000
+Subject: [PATCH 080/134] 	PR c++/61647 	* pt.c
+ (type_dependent_expression_p): Check BASELINK_OPTYPE.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212163 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/cp/ChangeLog                       |  3 +++
+ gcc/cp/pt.c                            |  7 ++++++-
+ gcc/testsuite/g++.dg/template/conv14.C | 30 ++++++++++++++++++++++++++++++
+ 3 files changed, 39 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/g++.dg/template/conv14.C
+
+diff --git a/gcc/cp/ChangeLog b/gcc/cp/ChangeLog
+index d67a63e..4808494 100644
+--- a/gcc/cp/ChangeLog
++++ b/gcc/cp/ChangeLog
+@@ -1,5 +1,8 @@
+ 2014-06-30  Jason Merrill  <jason@redhat.com>
+ 
++	PR c++/61647
++	* pt.c (type_dependent_expression_p): Check BASELINK_OPTYPE.
++
+ 	PR c++/61539
+ 	* pt.c (unify_one_argument): Type/expression mismatch just causes
+ 	deduction failure.
+diff --git a/gcc/cp/pt.c b/gcc/cp/pt.c
+index 3ddd4b8..a188892 100644
+--- a/gcc/cp/pt.c
++++ b/gcc/cp/pt.c
+@@ -20011,7 +20011,12 @@ type_dependent_expression_p (tree expression)
+ 	return true;
+ 
+       if (BASELINK_P (expression))
+-	expression = BASELINK_FUNCTIONS (expression);
++	{
++	  if (BASELINK_OPTYPE (expression)
++	      && dependent_type_p (BASELINK_OPTYPE (expression)))
++	    return true;
++	  expression = BASELINK_FUNCTIONS (expression);
++	}
+ 
+       if (TREE_CODE (expression) == TEMPLATE_ID_EXPR)
+ 	{
+diff --git a/gcc/testsuite/g++.dg/template/conv14.C b/gcc/testsuite/g++.dg/template/conv14.C
+new file mode 100644
+index 0000000..509ae6a
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/template/conv14.C
+@@ -0,0 +1,30 @@
++// PR c++/61647
++
++class XX;
++
++template<typename Container, typename Key>
++struct Accessor;
++
++template<typename Container, typename Key, typename KeyStore = Key>
++class Variant {
++protected:
++    KeyStore index;
++    Container state;
++public:
++    Variant(Container st, const Key& i) : index(i), state(st) {}
++
++    template<typename T>
++    operator T() const {
++        return Accessor<Container, KeyStore>::template get<T>(state, index);
++    }
++};
++
++class AutoCleanVariant : public Variant<XX*, int> {
++public:
++    AutoCleanVariant(XX* st, int i) : Variant<XX*,int>(st,i) {}
++
++    template<typename T>
++    operator T() const {
++         return Variant<XX*, int>::operator T();
++    }
++};
+-- 
+1.8.5.5
+

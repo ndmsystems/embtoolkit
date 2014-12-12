@@ -1,0 +1,146 @@
+From 8beaafc320cb13c161fe7d47d84a10b2cdf2abbe Mon Sep 17 00:00:00 2001
+From: jamborm <jamborm@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 3 Sep 2014 16:36:06 +0000
+Subject: [PATCH 222/326] 2014-09-03  Martin Jambor  <mjambor@suse.cz>
+
+	PR ipa/62015
+	* ipa-cp.c (intersect_aggregates_with_edge): Handle impermissible
+	pass-trough jump functions correctly.
+
+testsuite/
+	* g++.dg/ipa/pr62015.C: New test.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214885 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                      |  6 +++++
+ gcc/ipa-cp.c                       | 10 +++++++
+ gcc/testsuite/ChangeLog            |  5 ++++
+ gcc/testsuite/g++.dg/ipa/pr62015.C | 55 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 76 insertions(+)
+ create mode 100644 gcc/testsuite/g++.dg/ipa/pr62015.C
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 43f5df4..7f7642f 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,5 +1,11 @@
+ 2014-09-03  Martin Jambor  <mjambor@suse.cz>
+ 
++	PR ipa/62015
++	* ipa-cp.c (intersect_aggregates_with_edge): Handle impermissible
++	pass-trough jump functions correctly.
++
++2014-09-03  Martin Jambor  <mjambor@suse.cz>
++
+ 	PR ipa/61986
+ 	* ipa-cp.c (find_aggregate_values_for_callers_subset): Chain
+ 	created replacements in ascending order of offsets.
+diff --git a/gcc/ipa-cp.c b/gcc/ipa-cp.c
+index 55e02b9..b7db0cc 100644
+--- a/gcc/ipa-cp.c
++++ b/gcc/ipa-cp.c
+@@ -2904,6 +2904,11 @@ intersect_aggregates_with_edge (struct cgraph_edge *cs, int index,
+ 		intersect_with_agg_replacements (cs->caller, src_idx,
+ 						 &inter, 0);
+ 	    }
++	  else
++	    {
++	      inter.release ();
++	      return vNULL;
++	    }
+ 	}
+       else
+ 	{
+@@ -2919,6 +2924,11 @@ intersect_aggregates_with_edge (struct cgraph_edge *cs, int index,
+ 	      else
+ 		intersect_with_plats (src_plats, &inter, 0);
+ 	    }
++	  else
++	    {
++	      inter.release ();
++	      return vNULL;
++	    }
+ 	}
+     }
+   else if (jfunc->type == IPA_JF_ANCESTOR
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 7d32875..cdc118d 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,5 +1,10 @@
+ 2014-09-03  Martin Jambor  <mjambor@suse.cz>
+ 
++	PR ipa/62015
++	* g++.dg/ipa/pr62015.C: New test.
++
++2014-09-03  Martin Jambor  <mjambor@suse.cz>
++
+ 	PR ipa/61986
+ 	* gcc.dg/ipa/pr61986.c: New test.
+ 
+diff --git a/gcc/testsuite/g++.dg/ipa/pr62015.C b/gcc/testsuite/g++.dg/ipa/pr62015.C
+new file mode 100644
+index 0000000..950b46e
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/ipa/pr62015.C
+@@ -0,0 +1,55 @@
++/* { dg-do run } */
++/* { dg-options "-O3 -std=c++11"  } */
++
++
++extern "C" int printf(const char *fmt, ...);
++extern "C" void abort(void);
++
++struct Side {
++    enum _Value { Left, Right, Invalid };
++
++    constexpr Side() : _value(Invalid) {}
++    constexpr Side(_Value value) : _value(value) {}
++    operator _Value() const { return (_Value)_value; }
++
++  private:
++    char _value;
++};
++
++struct A {
++    void init();
++    void adjust(Side side, bool final);
++    void move(Side side);
++};
++
++void A::init()
++{
++    adjust(Side::Invalid, false);
++}
++
++static void __attribute__((noinline))
++check (int v, int final)
++{
++    if (v != 0)
++      abort();
++}
++
++
++__attribute__((noinline))
++void A::adjust(Side side, bool final)
++{
++  check ((int)side, final);
++}
++
++void A::move(Side side)
++{
++    adjust(side, false);
++    adjust(side, true);
++}
++
++int main()
++{
++    A t;
++    t.move(Side::Left);
++    return 0;
++}
+-- 
+2.0.3
+

@@ -1,0 +1,64 @@
+From ffee6fd5282d5408de40b4661251239d7f92be8f Mon Sep 17 00:00:00 2001
+From: redi <redi@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 29 May 2014 14:31:22 +0000
+Subject: [PATCH 019/134] 	* include/tr2/bool_set: Use UTF-8 for accented
+ characters. 	* scripts/run_doxygen: Handle Doxygen 1.8.x change.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@211055 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ libstdc++-v3/ChangeLog            |  5 +++++
+ libstdc++-v3/include/tr2/bool_set |  2 +-
+ libstdc++-v3/scripts/run_doxygen  | 11 +++++++++--
+ 3 files changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/libstdc++-v3/ChangeLog b/libstdc++-v3/ChangeLog
+index 3147708..0c11cf2 100644
+--- a/libstdc++-v3/ChangeLog
++++ b/libstdc++-v3/ChangeLog
+@@ -1,3 +1,8 @@
++2014-05-29  Jonathan Wakely  <jwakely@redhat.com>
++
++	* include/tr2/bool_set: Use UTF-8 for accented characters.
++	* scripts/run_doxygen: Handle Doxygen 1.8.x change.
++
+ 2014-05-22  Release Manager
+ 
+ 	* GCC 4.8.3 released.
+diff --git a/libstdc++-v3/include/tr2/bool_set b/libstdc++-v3/include/tr2/bool_set
+index 56a56e0..b3e33ea 100644
+--- a/libstdc++-v3/include/tr2/bool_set
++++ b/libstdc++-v3/include/tr2/bool_set
+@@ -44,7 +44,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+    *  bool_set
+    *
+    *  See N2136, Bool_set: multi-valued logic
+-   *  by Hervé Brönnimann, Guillaume Melquiond, Sylvain Pion.
++   *  by HervÃ© BrÃ¶nnimann, Guillaume Melquiond, Sylvain Pion.
+    *
+    *  The implicit conversion to bool is slippery!  I may use the new
+    *  explicit conversion.  This has been specialized in the language
+diff --git a/libstdc++-v3/scripts/run_doxygen b/libstdc++-v3/scripts/run_doxygen
+index 75b2f4f..54a5acc 100644
+--- a/libstdc++-v3/scripts/run_doxygen
++++ b/libstdc++-v3/scripts/run_doxygen
+@@ -193,8 +193,15 @@ fi
+ if $do_latex; then
+     cd ${outdir}/${mode}
+ 
+-    # Also drop in the header file and style sheet
+-    doxygen -w latex header.tex doxygen.sty
++    # Grrr, Doxygen 1.8.x changed the -w latex options.
++    need_footer=`doxygen -h | sed -n -e '/-w latex/s=.*footer.*=true=p'`
++
++    # Also drop in the header file (maybe footer file) and style sheet
++    if $need_footer; then
++      doxygen -w latex header.tex footer.tex doxygen.sty
++    else
++      doxygen -w latex header.tex doxygen.sty
++    fi
+     
+     echo ::
+     echo :: LaTeX pages begin with
+-- 
+1.8.5.5
+

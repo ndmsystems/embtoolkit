@@ -1,0 +1,346 @@
+From ed4462bc2b7af9fe4f90369f61dc644437694bf7 Mon Sep 17 00:00:00 2001
+From: vries <vries@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sat, 16 Aug 2014 17:38:04 +0000
+Subject: [PATCH 188/326] Fix if-conversion pass for dead type-unsafe code
+
+2014-08-15  Tom de Vries  <tom@codesourcery.com>
+
+	Backport from mainline:
+	2014-08-14  Tom de Vries  <tom@codesourcery.com>
+
+	PR rtl-optimization/62004
+	PR rtl-optimization/62030
+	* ifcvt.c (rtx_interchangeable_p): New function.
+	(noce_try_move, noce_process_if_block): Use rtx_interchangeable_p.
+
+	* gcc.dg/pr62004.c: New test.
+	* gcc.dg/pr62030.c: Same.
+	* gcc.target/mips/pr62030-octeon.c: Same.
+
+	2014-08-05  Richard Biener  <rguenther@suse.de>
+
+	* emit-rtl.h (mem_attrs_eq_p): Declare.
+	* emit-rtl.c (mem_attrs_eq_p): Export.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214067 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                                  | 15 ++++++++
+ gcc/emit-rtl.c                                 |  2 +-
+ gcc/emit-rtl.h                                 |  3 ++
+ gcc/ifcvt.c                                    | 31 ++++++++++++++--
+ gcc/testsuite/ChangeLog                        | 11 ++++++
+ gcc/testsuite/gcc.dg/pr62004.c                 | 47 ++++++++++++++++++++++++
+ gcc/testsuite/gcc.dg/pr62030.c                 | 50 ++++++++++++++++++++++++++
+ gcc/testsuite/gcc.target/mips/pr62030-octeon.c | 50 ++++++++++++++++++++++++++
+ 8 files changed, 205 insertions(+), 4 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.dg/pr62004.c
+ create mode 100644 gcc/testsuite/gcc.dg/pr62030.c
+ create mode 100644 gcc/testsuite/gcc.target/mips/pr62030-octeon.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index cadb4ef..bd2e79b 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,18 @@
++2014-08-15  Tom de Vries  <tom@codesourcery.com>
++
++	Backport from mainline:
++	2014-08-14  Tom de Vries  <tom@codesourcery.com>
++
++	PR rtl-optimization/62004
++	PR rtl-optimization/62030
++	* ifcvt.c (rtx_interchangeable_p): New function.
++	(noce_try_move, noce_process_if_block): Use rtx_interchangeable_p.
++
++	2014-08-05  Richard Biener  <rguenther@suse.de>
++
++	* emit-rtl.h (mem_attrs_eq_p): Declare.
++	* emit-rtl.c (mem_attrs_eq_p): Export.
++
+ 2014-08-16  John David Anglin  <danglin@gcc.gnu.org>
+ 
+ 	Backport from trunk:
+diff --git a/gcc/emit-rtl.c b/gcc/emit-rtl.c
+index b5278bf..1cac518 100644
+--- a/gcc/emit-rtl.c
++++ b/gcc/emit-rtl.c
+@@ -263,7 +263,7 @@ mem_attrs_htab_hash (const void *x)
+ 
+ /* Return true if the given memory attributes are equal.  */
+ 
+-static bool
++bool
+ mem_attrs_eq_p (const struct mem_attrs *p, const struct mem_attrs *q)
+ {
+   return (p->alias == q->alias
+diff --git a/gcc/emit-rtl.h b/gcc/emit-rtl.h
+index 7268090..81bb334 100644
+--- a/gcc/emit-rtl.h
++++ b/gcc/emit-rtl.h
+@@ -20,6 +20,9 @@ along with GCC; see the file COPYING3.  If not see
+ #ifndef GCC_EMIT_RTL_H
+ #define GCC_EMIT_RTL_H
+ 
++/* Return whether two MEM_ATTRs are equal.  */
++bool mem_attrs_eq_p (const struct mem_attrs *, const struct mem_attrs *);
++
+ /* Set the alias set of MEM to SET.  */
+ extern void set_mem_alias_set (rtx, alias_set_type);
+ 
+diff --git a/gcc/ifcvt.c b/gcc/ifcvt.c
+index e3353a5..dd6df5b 100644
+--- a/gcc/ifcvt.c
++++ b/gcc/ifcvt.c
+@@ -294,6 +294,28 @@ block_fallthru (basic_block bb)
+ 
+   return (e) ? e->dest : NULL_BLOCK;
+ }
++
++/* Return true if RTXs A and B can be safely interchanged.  */
++
++static bool
++rtx_interchangeable_p (const_rtx a, const_rtx b)
++{
++  if (!rtx_equal_p (a, b))
++    return false;
++
++  if (GET_CODE (a) != MEM)
++    return true;
++
++  /* A dead type-unsafe memory reference is legal, but a live type-unsafe memory
++     reference is not.  Interchanging a dead type-unsafe memory reference with
++     a live type-safe one creates a live type-unsafe memory reference, in other
++     words, it makes the program illegal.
++     We check here conservatively whether the two memory references have equal
++     memory attributes.  */
++
++  return mem_attrs_eq_p (get_mem_attrs (a), get_mem_attrs (b));
++}
++
+ 
+ /* Go through a bunch of insns, converting them to conditional
+    execution format if possible.  Return TRUE if all of the non-note
+@@ -1014,6 +1036,9 @@ noce_try_move (struct noce_if_info *if_info)
+       || (rtx_equal_p (if_info->a, XEXP (cond, 1))
+ 	  && rtx_equal_p (if_info->b, XEXP (cond, 0))))
+     {
++      if (!rtx_interchangeable_p (if_info->a, if_info->b))
++	return FALSE;
++
+       y = (code == EQ) ? if_info->a : if_info->b;
+ 
+       /* Avoid generating the move if the source is the destination.  */
+@@ -2483,7 +2508,7 @@ noce_process_if_block (struct noce_if_info *if_info)
+       if (! insn_b
+ 	  || insn_b != last_active_insn (else_bb, FALSE)
+ 	  || (set_b = single_set (insn_b)) == NULL_RTX
+-	  || ! rtx_equal_p (x, SET_DEST (set_b)))
++	  || ! rtx_interchangeable_p (x, SET_DEST (set_b)))
+ 	return FALSE;
+     }
+   else
+@@ -2496,7 +2521,7 @@ noce_process_if_block (struct noce_if_info *if_info)
+ 	  || BLOCK_FOR_INSN (insn_b) != BLOCK_FOR_INSN (if_info->cond_earliest)
+ 	  || !NONJUMP_INSN_P (insn_b)
+ 	  || (set_b = single_set (insn_b)) == NULL_RTX
+-	  || ! rtx_equal_p (x, SET_DEST (set_b))
++	  || ! rtx_interchangeable_p (x, SET_DEST (set_b))
+ 	  || ! noce_operand_ok (SET_SRC (set_b))
+ 	  || reg_overlap_mentioned_p (x, SET_SRC (set_b))
+ 	  || modified_between_p (SET_SRC (set_b), insn_b, jump)
+@@ -2562,7 +2587,7 @@ noce_process_if_block (struct noce_if_info *if_info)
+ 
+   /* Look and see if A and B are really the same.  Avoid creating silly
+      cmove constructs that no one will fix up later.  */
+-  if (rtx_equal_p (a, b))
++  if (rtx_interchangeable_p (a, b))
+     {
+       /* If we have an INSN_B, we don't have to create any new rtl.  Just
+ 	 move the instruction that we already have.  If we don't have an
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 0a2ddbe..db8b656 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,14 @@
++2014-08-15  Tom de Vries  <tom@codesourcery.com>
++
++	Backport from mainline:
++	2014-08-14  Tom de Vries  <tom@codesourcery.com>
++
++	PR rtl-optimization/62004
++	PR rtl-optimization/62030
++	* gcc.dg/pr62004.c: New test.
++	* gcc.dg/pr62030.c: Same.
++	* gcc.target/mips/pr62030-octeon.c: Same.
++
+ 2014-08-13  Felix Yang  <fei.yang0953@gmail.com>
+ 
+ 	PR tree-optimization/62073
+diff --git a/gcc/testsuite/gcc.dg/pr62004.c b/gcc/testsuite/gcc.dg/pr62004.c
+new file mode 100644
+index 0000000..c994a41
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/pr62004.c
+@@ -0,0 +1,47 @@
++/* { dg-do run } */
++/* { dg-options "-O2 -fno-tree-tail-merge" } */
++
++struct node
++{
++  struct node *next;
++  struct node *prev;
++};
++
++struct node node;
++
++struct head
++{
++  struct node *first;
++};
++
++struct head heads[5];
++
++int k = 2;
++
++struct head *head = &heads[2];
++
++int
++main ()
++{
++  struct node *p;
++
++  node.next = (void*)0;
++
++  node.prev = (void *)head;
++
++  head->first = &node;
++
++  struct node *n = head->first;
++
++  struct head *h = &heads[k];
++
++  heads[2].first = n->next;
++
++  if ((void*)n->prev == (void *)h)
++    p = h->first;
++  else
++    /* Dead tbaa-unsafe load from ((struct node *)&heads[2])->next.  */
++    p = n->prev->next;
++
++  return !(p == (void*)0);
++}
+diff --git a/gcc/testsuite/gcc.dg/pr62030.c b/gcc/testsuite/gcc.dg/pr62030.c
+new file mode 100644
+index 0000000..b8baf93
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/pr62030.c
+@@ -0,0 +1,50 @@
++/* { dg-do run } */
++/* { dg-options "-O2" } */
++
++extern void abort (void);
++
++struct node
++{
++  struct node *next;
++  struct node *prev;
++};
++
++struct node node;
++
++struct head
++{
++  struct node *first;
++};
++
++struct head heads[5];
++
++int k = 2;
++
++struct head *head = &heads[2];
++
++static int __attribute__((noinline))
++foo (void)
++{
++  node.prev = (void *)head;
++  head->first = &node;
++
++  struct node *n = head->first;
++  struct head *h = &heads[k];
++  struct node *next = n->next;
++
++  if (n->prev == (void *)h)
++    h->first = next;
++  else
++    n->prev->next = next;
++
++  n->next = h->first;
++  return n->next == &node;
++}
++
++int
++main (void)
++{
++  if (foo ())
++    abort ();
++  return 0;
++}
+diff --git a/gcc/testsuite/gcc.target/mips/pr62030-octeon.c b/gcc/testsuite/gcc.target/mips/pr62030-octeon.c
+new file mode 100644
+index 0000000..5e3d3b3
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/mips/pr62030-octeon.c
+@@ -0,0 +1,50 @@
++/* { dg-do run } */
++/* { dg-options "-march=octeon" } */
++
++extern void abort (void);
++
++struct node
++{
++  struct node *next;
++  struct node *prev;
++};
++
++struct node node;
++
++struct head
++{
++  struct node *first;
++};
++
++struct head heads[5];
++
++int k = 2;
++
++struct head *head = &heads[2];
++
++static int __attribute__((noinline))
++foo (void)
++{
++  node.prev = (void *)head;
++  head->first = &node;
++
++  struct node *n = head->first;
++  struct head *h = &heads[k];
++  struct node *next = n->next;
++
++  if (n->prev == (void *)h)
++    h->first = next;
++  else
++    n->prev->next = next;
++
++  n->next = h->first;
++  return n->next == &node;
++}
++
++int
++main (void)
++{
++  if (foo ())
++    abort ();
++  return 0;
++}
+-- 
+2.0.3
+

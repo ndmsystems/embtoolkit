@@ -1,0 +1,63 @@
+From 4261a6432c1f09479ef8a17e97ff806689d2994c Mon Sep 17 00:00:00 2001
+From: jason <jason@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 15 Oct 2014 16:46:23 +0000
+Subject: [PATCH 305/326] 	PR c++/56710 	* semantics.c
+ (finish_member_declaration): Don't push closure 	members.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@216275 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/cp/ChangeLog                                  | 4 ++++
+ gcc/cp/semantics.c                                | 6 ++++--
+ gcc/testsuite/g++.dg/cpp0x/lambda/lambda-names1.C | 9 +++++++++
+ 3 files changed, 17 insertions(+), 2 deletions(-)
+ create mode 100644 gcc/testsuite/g++.dg/cpp0x/lambda/lambda-names1.C
+
+diff --git a/gcc/cp/ChangeLog b/gcc/cp/ChangeLog
+index d289bba..1dec9ec 100644
+--- a/gcc/cp/ChangeLog
++++ b/gcc/cp/ChangeLog
+@@ -1,5 +1,9 @@
+ 2014-10-15  Jason Merrill  <jason@redhat.com>
+ 
++	PR c++/56710
++	* semantics.c (finish_member_declaration): Don't push closure
++	members.
++
+ 	PR c++/58624
+ 	* pt.c (tsubst_copy_and_build) [VAR_DECL]: Use TLS wrapper.
+ 	* semantics.c (finish_id_expression): Don't call TLS wrapper in a
+diff --git a/gcc/cp/semantics.c b/gcc/cp/semantics.c
+index cc9c550..30ec7fc 100644
+--- a/gcc/cp/semantics.c
++++ b/gcc/cp/semantics.c
+@@ -2735,8 +2735,10 @@ finish_member_declaration (tree decl)
+ 					      /*friend_p=*/0);
+ 	}
+     }
+-  /* Enter the DECL into the scope of the class.  */
+-  else if (pushdecl_class_level (decl))
++  /* Enter the DECL into the scope of the class, if the class
++     isn't a closure (whose fields are supposed to be unnamed).  */
++  else if (CLASSTYPE_LAMBDA_EXPR (current_class_type)
++	   || pushdecl_class_level (decl))
+     {
+       if (TREE_CODE (decl) == USING_DECL)
+ 	{
+diff --git a/gcc/testsuite/g++.dg/cpp0x/lambda/lambda-names1.C b/gcc/testsuite/g++.dg/cpp0x/lambda/lambda-names1.C
+new file mode 100644
+index 0000000..df2b037
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/cpp0x/lambda/lambda-names1.C
+@@ -0,0 +1,9 @@
++// PR c++/56710
++// { dg-options "-std=c++11 -Wall" }
++
++int main()
++{
++    int t = 0;
++    return [&]() -> int {int __t; __t = t; return __t; }();
++    return [&t]() -> int {int __t; __t = t; return __t; }();
++}
+-- 
+2.0.3
+

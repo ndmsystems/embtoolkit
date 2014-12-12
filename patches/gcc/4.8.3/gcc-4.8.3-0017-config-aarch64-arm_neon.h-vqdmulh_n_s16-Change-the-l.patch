@@ -1,0 +1,52 @@
+From bff35a96a2ed454eb6d1f3dd8e3ce084a084b6d0 Mon Sep 17 00:00:00 2001
+From: carrot <carrot@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 28 May 2014 18:34:57 +0000
+Subject: [PATCH 017/134] 	* config/aarch64/arm_neon.h (vqdmulh_n_s16):
+ Change the last operand's 	constraint. 	(vqdmulhq_n_s16): Likewise.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@211029 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                 | 7 +++++++
+ gcc/config/aarch64/arm_neon.h | 4 ++--
+ 2 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index a6df5af..8d9a352 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,10 @@
++2014-05-28  Guozhi Wei  <carrot@google.com>
++
++	PR target/61202
++	* config/aarch64/arm_neon.h (vqdmulh_n_s16): Change the last operand's
++	constraint.
++	(vqdmulhq_n_s16): Likewise.
++
+ 2014-05-28  Eric Botcazou  <ebotcazou@adacore.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/config/aarch64/arm_neon.h b/gcc/config/aarch64/arm_neon.h
+index d16711d..385e5c6 100644
+--- a/gcc/config/aarch64/arm_neon.h
++++ b/gcc/config/aarch64/arm_neon.h
+@@ -13815,7 +13815,7 @@ vqdmulh_n_s16 (int16x4_t a, int16_t b)
+   int16x4_t result;
+   __asm__ ("sqdmulh %0.4h,%1.4h,%2.h[0]"
+            : "=w"(result)
+-           : "w"(a), "w"(b)
++           : "w"(a), "x"(b)
+            : /* No clobbers */);
+   return result;
+ }
+@@ -13837,7 +13837,7 @@ vqdmulhq_n_s16 (int16x8_t a, int16_t b)
+   int16x8_t result;
+   __asm__ ("sqdmulh %0.8h,%1.8h,%2.h[0]"
+            : "=w"(result)
+-           : "w"(a), "w"(b)
++           : "w"(a), "x"(b)
+            : /* No clobbers */);
+   return result;
+ }
+-- 
+1.8.5.5
+

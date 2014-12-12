@@ -1,0 +1,290 @@
+From 01a34c3df1c282bb85491c0a2920324d6205d4f5 Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 8 Sep 2014 20:07:29 +0000
+Subject: [PATCH 231/326] 	PR tree-optimization/60196 	PR
+ tree-optimization/63189 	Backported from mainline 	2013-09-17 
+ Cong Hou  <congh@google.com>
+
+	* tree-vect-patterns.c (vect_recog_dot_prod_pattern): Fix a bug
+	when checking the dot production pattern. The type of rhs operand
+	of multiply is now checked correctly.
+
+	* gcc.dg/vect/pr63189.c: New test.
+	* gcc.dg/vect/pr60196-1.c: New test.
+	* gcc.dg/vect/pr60196-2.c: New test.
+
+	Backported from mainline
+	2013-09-17  Cong Hou  <congh@google.com>
+
+	* gcc.dg/vect/vect-reduc-dot-s16c.c: Add a test case with dot product
+	on two arrays with short and int types. This should not be recognized
+	as a dot product pattern.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215024 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                                   | 11 ++++
+ gcc/testsuite/ChangeLog                         | 15 +++++
+ gcc/testsuite/gcc.dg/vect/pr60196-1.c           | 34 ++++++++++++
+ gcc/testsuite/gcc.dg/vect/pr60196-2.c           | 33 +++++++++++
+ gcc/testsuite/gcc.dg/vect/pr63189.c             | 26 +++++++++
+ gcc/testsuite/gcc.dg/vect/vect-reduc-dot-s16c.c | 73 +++++++++++++++++++++++++
+ gcc/tree-vect-patterns.c                        |  2 +-
+ 7 files changed, 193 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/gcc.dg/vect/pr60196-1.c
+ create mode 100644 gcc/testsuite/gcc.dg/vect/pr60196-2.c
+ create mode 100644 gcc/testsuite/gcc.dg/vect/pr63189.c
+ create mode 100644 gcc/testsuite/gcc.dg/vect/vect-reduc-dot-s16c.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 4c26c28..87ad866 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,5 +1,16 @@
+ 2014-09-08  Jakub Jelinek  <jakub@redhat.com>
+ 
++	PR tree-optimization/60196
++	PR tree-optimization/63189
++	Backported from mainline
++	2013-09-17  Cong Hou  <congh@google.com>
++
++	* tree-vect-patterns.c (vect_recog_dot_prod_pattern): Fix a bug
++	when checking the dot production pattern. The type of rhs operand
++	of multiply is now checked correctly.
++
++2014-09-08  Jakub Jelinek  <jakub@redhat.com>
++
+ 	Backported from mainline
+ 	2014-08-06  Vladimir Makarov  <vmakarov@redhat.com>
+ 
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index a618070..d8b7799 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,5 +1,20 @@
+ 2014-09-08  Jakub Jelinek  <jakub@redhat.com>
+ 
++	PR tree-optimization/60196
++	PR tree-optimization/63189
++	* gcc.dg/vect/pr63189.c: New test.
++	* gcc.dg/vect/pr60196-1.c: New test.
++	* gcc.dg/vect/pr60196-2.c: New test.
++
++	Backported from mainline
++	2013-09-17  Cong Hou  <congh@google.com>
++
++	* gcc.dg/vect/vect-reduc-dot-s16c.c: Add a test case with dot product 
++	on two arrays with short and int types. This should not be recognized
++	as a dot product pattern.
++
++2014-09-08  Jakub Jelinek  <jakub@redhat.com>
++
+ 	Backported from mainline
+ 	2014-08-06  Vladimir Makarov  <vmakarov@redhat.com>
+ 
+diff --git a/gcc/testsuite/gcc.dg/vect/pr60196-1.c b/gcc/testsuite/gcc.dg/vect/pr60196-1.c
+new file mode 100644
+index 0000000..10ed4af
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/vect/pr60196-1.c
+@@ -0,0 +1,34 @@
++/* PR tree-optimization/63189 */
++/* { dg-additional-options "-fwrapv" } */
++/* { dg-do run } */
++
++#include "tree-vect.h"
++
++__attribute__((noinline, noclone)) static int
++bar (const short *a, int len)
++{
++  int x;
++  int x1 = 0;
++
++  for (x = 0; x < len; x++)
++    x1 += x * a[x];
++  return x1;
++}
++
++__attribute__((noinline, noclone)) void
++foo (void)
++{
++  short stuff[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1 };
++  if (bar (stuff, 9) != 36)
++    abort ();
++}
++
++int
++main ()
++{
++  check_vect ();
++  foo ();
++  return 0;
++}
++
++/* { dg-final { cleanup-tree-dump "vect" } } */
+diff --git a/gcc/testsuite/gcc.dg/vect/pr60196-2.c b/gcc/testsuite/gcc.dg/vect/pr60196-2.c
+new file mode 100644
+index 0000000..b2059c2
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/vect/pr60196-2.c
+@@ -0,0 +1,33 @@
++/* PR tree-optimization/63189 */
++/* { dg-do run } */
++
++#include "tree-vect.h"
++
++static const short a[8] = {1, 1, 1, 1, 1, 1, 1, 1 };
++static const unsigned char b[8] = {0, 0, 0, 0, 0, 0, 0, 0 };
++
++__attribute__((noinline, noclone)) static int
++bar (void)
++{
++  int sum = 0, i;
++  for (i = 0; i < 8; ++i)
++    sum += a[i] * b[i];
++  return sum;
++}
++
++__attribute__((noinline, noclone)) void
++foo (void)
++{
++  if (bar () != 0)
++    abort ();
++}
++
++int
++main ()
++{
++  check_vect ();
++  foo ();
++  return 0;
++}
++
++/* { dg-final { cleanup-tree-dump "vect" } } */
+diff --git a/gcc/testsuite/gcc.dg/vect/pr63189.c b/gcc/testsuite/gcc.dg/vect/pr63189.c
+new file mode 100644
+index 0000000..da6fba4
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/vect/pr63189.c
+@@ -0,0 +1,26 @@
++/* PR tree-optimization/63189 */
++/* { dg-do run } */
++
++#include "tree-vect.h"
++
++short int d[16] = { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
++
++__attribute__((noinline, noclone)) void
++foo (void)
++{
++  int j, s = 0;
++  for (j = 0; j < 8; j++)
++    s += d[j] * j;
++  if (s != 7)
++    abort ();
++}
++
++int
++main ()
++{
++  check_vect ();
++  foo ();
++  return 0;
++}
++
++/* { dg-final { cleanup-tree-dump "vect" } } */
+diff --git a/gcc/testsuite/gcc.dg/vect/vect-reduc-dot-s16c.c b/gcc/testsuite/gcc.dg/vect/vect-reduc-dot-s16c.c
+new file mode 100644
+index 0000000..8ba823b
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/vect/vect-reduc-dot-s16c.c
+@@ -0,0 +1,73 @@
++/* { dg-require-effective-target vect_int } */
++
++#include <stdarg.h>
++#include "tree-vect.h"
++
++#define N 64
++#define DOT 43680
++
++signed short X[N] __attribute__ ((__aligned__(__BIGGEST_ALIGNMENT__)));
++signed int   Y[N] __attribute__ ((__aligned__(__BIGGEST_ALIGNMENT__)));
++
++/* (short, int)->int->int dot product.
++   Not detected as a dot-product pattern.  */
++
++__attribute__ ((noinline)) int
++foo (int len)
++{
++  int i;
++  int result = 0;
++
++  for (i = 0; i < len; i++)
++    {
++      result += (X[i] * Y[i]);
++    }
++  return result;
++}
++
++
++/* (int, short)->int->int dot product.
++   Not detected as a dot-product pattern.  */
++
++__attribute__ ((noinline)) int
++bar (int len)
++{
++  int i;
++  int result = 0;
++
++  for (i = 0; i < len; i++)
++    {
++      result += (Y[i] * X[i]);
++    }
++  return result;
++}
++
++int
++main (void)
++{
++  int i;
++  int dot;
++
++  check_vect ();
++
++  for (i = 0; i < N; i++)
++    {
++      X[i] = i;
++      Y[i] = N - i;
++      __asm__ volatile ("");
++    }
++
++  dot = foo (N);
++  if (dot != DOT)
++    abort ();
++
++  dot = bar (N);
++  if (dot != DOT)
++    abort ();
++
++  return 0;
++}
++
++/* { dg-final { scan-tree-dump-times "vectorized 1 loops" 2 "vect" { target vect_unpack } } } */
++/* { dg-final { cleanup-tree-dump "vect" } } */
++
+diff --git a/gcc/tree-vect-patterns.c b/gcc/tree-vect-patterns.c
+index 554e186..c533136 100644
+--- a/gcc/tree-vect-patterns.c
++++ b/gcc/tree-vect-patterns.c
+@@ -395,7 +395,7 @@ vect_recog_dot_prod_pattern (vec<gimple> *stmts, tree *type_in,
+           || !promotion)
+         return NULL;
+       oprnd00 = gimple_assign_rhs1 (def_stmt);
+-      if (!type_conversion_p (oprnd0, stmt, true, &half_type1, &def_stmt,
++      if (!type_conversion_p (oprnd1, stmt, true, &half_type1, &def_stmt,
+                                 &promotion)
+           || !promotion)
+         return NULL;
+-- 
+2.0.3
+

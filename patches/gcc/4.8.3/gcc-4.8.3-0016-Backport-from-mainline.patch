@@ -1,0 +1,91 @@
+From 43634500a0c4b74b8b1a73ff74fe7df256197207 Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 28 May 2014 16:46:07 +0000
+Subject: [PATCH 016/134] 	Backport from mainline 	2014-05-27  Eric
+ Botcazou  <ebotcazou@adacore.com>
+
+	* double-int.c (div_and_round_double) <ROUND_DIV_EXPR>: Use the proper
+	predicate to detect a negative quotient.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@211028 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                            |  8 ++++++++
+ gcc/double-int.c                         |  2 +-
+ gcc/testsuite/ChangeLog                  |  7 +++++++
+ gcc/testsuite/gnat.dg/overflow_fixed.adb | 19 +++++++++++++++++++
+ 4 files changed, 35 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/gnat.dg/overflow_fixed.adb
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index e38b553..a6df5af 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,11 @@
++2014-05-28  Eric Botcazou  <ebotcazou@adacore.com>
++
++	Backport from mainline
++	2014-05-27  Eric Botcazou  <ebotcazou@adacore.com>
++
++	* double-int.c (div_and_round_double) <ROUND_DIV_EXPR>: Use the proper
++	predicate to detect a negative quotient.
++
+ 2014-05-28  Georg-Johann Lay  <avr@gjlay.de>
+ 
+ 	PR target/61044
+diff --git a/gcc/double-int.c b/gcc/double-int.c
+index 918ce22..53a69ad 100644
+--- a/gcc/double-int.c
++++ b/gcc/double-int.c
+@@ -616,7 +616,7 @@ div_and_round_double (unsigned code, int uns,
+ 		 == (unsigned HOST_WIDE_INT) htwice)
+ 		&& (labs_den <= ltwice)))
+ 	  {
+-	    if (*hquo < 0)
++	    if (quo_neg)
+ 	      /* quo = quo - 1;  */
+ 	      add_double (*lquo, *hquo,
+ 			  (HOST_WIDE_INT) -1, (HOST_WIDE_INT) -1, lquo, hquo);
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 55ea108..da44bda 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,10 @@
++2014-05-28  Eric Botcazou  <ebotcazou@adacore.com>
++
++	Backport from mainline
++	2014-05-27  Eric Botcazou  <ebotcazou@adacore.com>
++
++	* gnat.dg/overflow_fixed.adb: New test.
++
+ 2014-05-27  Eric Botcazou  <ebotcazou@adacore.com>
+ 
+ 	* gnat.dg/aliasing1.adb (dg-final): Robustify pattern matching.
+diff --git a/gcc/testsuite/gnat.dg/overflow_fixed.adb b/gcc/testsuite/gnat.dg/overflow_fixed.adb
+new file mode 100644
+index 0000000..6ece515
+--- /dev/null
++++ b/gcc/testsuite/gnat.dg/overflow_fixed.adb
+@@ -0,0 +1,19 @@
++-- { dg-do run }
++-- { dg-options "-gnato -O" }
++
++procedure Overflow_Fixed is
++
++  type Unsigned_8_Bit is mod 2**8;
++
++  procedure Fixed_To_Eight (Value : Duration) is
++    Item : Unsigned_8_Bit;
++  begin
++    Item := Unsigned_8_Bit(Value);
++    raise Program_Error;
++  exception
++    when Constraint_Error => null; -- expected case
++  end;
++
++begin
++  Fixed_To_Eight (-0.5);
++end;
+-- 
+1.8.5.5
+

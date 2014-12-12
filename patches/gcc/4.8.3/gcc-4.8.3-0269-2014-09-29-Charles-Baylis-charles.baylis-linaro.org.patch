@@ -1,0 +1,240 @@
+From 0e1008371ca95f1b4fd9e5fa42bb366a6321ba8a Mon Sep 17 00:00:00 2001
+From: cbaylis <cbaylis@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 29 Sep 2014 17:07:47 +0000
+Subject: [PATCH 269/326] 2014-09-29  Charles Baylis 
+ <charles.baylis@linaro.org>
+
+        Backport from mainline r212303
+        PR target/49423
+        * config/arm/arm-protos.h (arm_legitimate_address_p,
+        arm_is_constant_pool_ref): Add prototypes.
+        * config/arm/arm.c (arm_legitimate_address_p): Remove static.
+        (arm_is_constant_pool_ref) New function.
+        * config/arm/arm.md (unaligned_loadhis, arm_zero_extendhisi2_v6,
+        arm_zero_extendqisi2_v6): Use Uh constraint for memory operand.
+        (arm_extendhisi2, arm_extendhisi2_v6): Use Uh constraint for memory
+        operand and remove pool_range and neg_pool_range attributes.
+        (arm_extendqihi_insn, arm_extendqisi, arm_extendqisi_v6): Remove
+        pool_range and neg_pool_range attributes.
+        * config/arm/constraints.md (Uh): New constraint. (Uq): Don't allow
+        constant pool references.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215686 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                 | 17 +++++++++++++++++
+ gcc/config/arm/arm-protos.h   |  3 +++
+ gcc/config/arm/arm.c          | 10 +++++++++-
+ gcc/config/arm/arm.md         | 30 ++++++++++--------------------
+ gcc/config/arm/constraints.md | 11 +++++++++--
+ 5 files changed, 48 insertions(+), 23 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 466d180..86cc14f 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,20 @@
++2014-09-29  Charles Baylis  <charles.baylis@linaro.org>
++
++	Backport from mainline r212303
++	PR target/49423
++	* config/arm/arm-protos.h (arm_legitimate_address_p,
++	arm_is_constant_pool_ref): Add prototypes.
++	* config/arm/arm.c (arm_legitimate_address_p): Remove static.
++	(arm_is_constant_pool_ref) New function.
++	* config/arm/arm.md (unaligned_loadhis, arm_zero_extendhisi2_v6,
++	arm_zero_extendqisi2_v6): Use Uh constraint for memory operand.
++	(arm_extendhisi2, arm_extendhisi2_v6): Use Uh constraint for memory
++	operand and remove pool_range and neg_pool_range attributes.
++	(arm_extendqihi_insn, arm_extendqisi, arm_extendqisi_v6): Remove
++	pool_range and neg_pool_range attributes.
++	* config/arm/constraints.md (Uh): New constraint. (Uq): Don't allow
++	constant pool references.
++
+ 2014-09-28  John David Anglin  <danglin@gcc.gnu.org>
+ 
+ 	* config/pa/pa.c (pa_output_function_epilogue): Only update
+diff --git a/gcc/config/arm/arm-protos.h b/gcc/config/arm/arm-protos.h
+index ffa00c0..685af30 100644
+--- a/gcc/config/arm/arm-protos.h
++++ b/gcc/config/arm/arm-protos.h
+@@ -55,6 +55,7 @@ extern int arm_split_constant (RTX_CODE, enum machine_mode, rtx,
+ extern int legitimate_pic_operand_p (rtx);
+ extern rtx legitimize_pic_address (rtx, enum machine_mode, rtx);
+ extern rtx legitimize_tls_address (rtx, rtx);
++extern bool arm_legitimate_address_p (enum machine_mode, rtx, bool);
+ extern int arm_legitimate_address_outer_p (enum machine_mode, rtx, RTX_CODE, int);
+ extern int thumb_legitimate_offset_p (enum machine_mode, HOST_WIDE_INT);
+ extern bool arm_legitimize_reload_address (rtx *, enum machine_mode, int, int,
+@@ -286,4 +287,6 @@ extern bool arm_autoinc_modes_ok_p (enum machine_mode, enum arm_auto_incmodes);
+ 
+ extern void arm_emit_eabi_attribute (const char *, int, int);
+ 
++extern bool arm_is_constant_pool_ref (rtx);
++
+ #endif /* ! GCC_ARM_PROTOS_H */
+diff --git a/gcc/config/arm/arm.c b/gcc/config/arm/arm.c
+index e42d0b9..9024429 100644
+--- a/gcc/config/arm/arm.c
++++ b/gcc/config/arm/arm.c
+@@ -82,7 +82,6 @@ static rtx arm_legitimize_address (rtx, rtx, enum machine_mode);
+ static reg_class_t arm_preferred_reload_class (rtx, reg_class_t);
+ static rtx thumb_legitimize_address (rtx, rtx, enum machine_mode);
+ inline static int thumb1_index_register_rtx_p (rtx, int);
+-static bool arm_legitimate_address_p (enum machine_mode, rtx, bool);
+ static int thumb_far_jump_used_p (void);
+ static bool thumb_force_lr_save (void);
+ static unsigned arm_size_return_regs (void);
+@@ -27466,4 +27465,13 @@ arm_validize_comparison (rtx *comparison, rtx * op1, rtx * op2)
+ 
+ }
+ 
++/* return TRUE if x is a reference to a value in a constant pool */
++extern bool
++arm_is_constant_pool_ref (rtx x)
++{
++  return (MEM_P (x)
++	  && GET_CODE (XEXP (x, 0)) == SYMBOL_REF
++	  && CONSTANT_POOL_ADDRESS_P (XEXP (x, 0)));
++}
++
+ #include "gt-arm.h"
+diff --git a/gcc/config/arm/arm.md b/gcc/config/arm/arm.md
+index 9050ec8..cb910f1 100644
+--- a/gcc/config/arm/arm.md
++++ b/gcc/config/arm/arm.md
+@@ -4047,7 +4047,7 @@
+ (define_insn "unaligned_loadhis"
+   [(set (match_operand:SI 0 "s_register_operand" "=l,r")
+ 	(sign_extend:SI
+-	  (unspec:HI [(match_operand:HI 1 "memory_operand" "Uw,m")]
++	  (unspec:HI [(match_operand:HI 1 "memory_operand" "Uw,Uh")]
+ 		     UNSPEC_UNALIGNED_LOAD)))]
+   "unaligned_access && TARGET_32BIT"
+   "ldr%(sh%)\t%0, %1\t@ unaligned"
+@@ -4655,7 +4655,7 @@
+ 
+ (define_insn "*arm_zero_extendhisi2_v6"
+   [(set (match_operand:SI 0 "s_register_operand" "=r,r")
+-	(zero_extend:SI (match_operand:HI 1 "nonimmediate_operand" "r,m")))]
++	(zero_extend:SI (match_operand:HI 1 "nonimmediate_operand" "r,Uh")))]
+   "TARGET_ARM && arm_arch6"
+   "@
+    uxth%?\\t%0, %1
+@@ -4748,7 +4748,7 @@
+ 
+ (define_insn "*arm_zero_extendqisi2_v6"
+   [(set (match_operand:SI 0 "s_register_operand" "=r,r")
+-	(zero_extend:SI (match_operand:QI 1 "nonimmediate_operand" "r,m")))]
++	(zero_extend:SI (match_operand:QI 1 "nonimmediate_operand" "r,Uh")))]
+   "TARGET_ARM && arm_arch6"
+   "@
+    uxtb%(%)\\t%0, %1
+@@ -4980,30 +4980,26 @@
+ 
+ (define_insn "*arm_extendhisi2"
+   [(set (match_operand:SI 0 "s_register_operand" "=r,r")
+-	(sign_extend:SI (match_operand:HI 1 "nonimmediate_operand" "r,m")))]
++	(sign_extend:SI (match_operand:HI 1 "nonimmediate_operand" "r,Uh")))]
+   "TARGET_ARM && arm_arch4 && !arm_arch6"
+   "@
+    #
+    ldr%(sh%)\\t%0, %1"
+   [(set_attr "length" "8,4")
+    (set_attr "type" "alu_shift,load_byte")
+-   (set_attr "predicable" "yes")
+-   (set_attr "pool_range" "*,256")
+-   (set_attr "neg_pool_range" "*,244")]
++   (set_attr "predicable" "yes")]
+ )
+ 
+ ;; ??? Check Thumb-2 pool range
+ (define_insn "*arm_extendhisi2_v6"
+   [(set (match_operand:SI 0 "s_register_operand" "=r,r")
+-	(sign_extend:SI (match_operand:HI 1 "nonimmediate_operand" "r,m")))]
++	(sign_extend:SI (match_operand:HI 1 "nonimmediate_operand" "r,Uh")))]
+   "TARGET_32BIT && arm_arch6"
+   "@
+    sxth%?\\t%0, %1
+    ldr%(sh%)\\t%0, %1"
+   [(set_attr "type" "simple_alu_shift,load_byte")
+-   (set_attr "predicable" "yes")
+-   (set_attr "pool_range" "*,256")
+-   (set_attr "neg_pool_range" "*,244")]
++   (set_attr "predicable" "yes")]
+ )
+ 
+ (define_insn "*arm_extendhisi2addsi"
+@@ -5045,9 +5041,7 @@
+   "TARGET_ARM && arm_arch4"
+   "ldr%(sb%)\\t%0, %1"
+   [(set_attr "type" "load_byte")
+-   (set_attr "predicable" "yes")
+-   (set_attr "pool_range" "256")
+-   (set_attr "neg_pool_range" "244")]
++   (set_attr "predicable" "yes")]
+ )
+ 
+ (define_expand "extendqisi2"
+@@ -5087,9 +5081,7 @@
+    ldr%(sb%)\\t%0, %1"
+   [(set_attr "length" "8,4")
+    (set_attr "type" "alu_shift,load_byte")
+-   (set_attr "predicable" "yes")
+-   (set_attr "pool_range" "*,256")
+-   (set_attr "neg_pool_range" "*,244")]
++   (set_attr "predicable" "yes")]
+ )
+ 
+ (define_insn "*arm_extendqisi_v6"
+@@ -5101,9 +5093,7 @@
+    sxtb%?\\t%0, %1
+    ldr%(sb%)\\t%0, %1"
+   [(set_attr "type" "simple_alu_shift,load_byte")
+-   (set_attr "predicable" "yes")
+-   (set_attr "pool_range" "*,256")
+-   (set_attr "neg_pool_range" "*,244")]
++   (set_attr "predicable" "yes")]
+ )
+ 
+ (define_insn "*arm_extendqisi2addsi"
+diff --git a/gcc/config/arm/constraints.md b/gcc/config/arm/constraints.md
+index 775f8af..6394391 100644
+--- a/gcc/config/arm/constraints.md
++++ b/gcc/config/arm/constraints.md
+@@ -36,7 +36,7 @@
+ ;; in Thumb-2 state: Pj, PJ, Ps, Pt, Pu, Pv, Pw, Px, Py
+ 
+ ;; The following memory constraints have been used:
+-;; in ARM/Thumb-2 state: Q, Ut, Uv, Uy, Un, Um, Us
++;; in ARM/Thumb-2 state: Q, Uh, Ut, Uv, Uy, Un, Um, Us
+ ;; in ARM state: Uq
+ ;; in Thumb state: Uu, Uw
+ 
+@@ -310,6 +310,12 @@
+   An address valid for loading/storing register exclusive"
+  (match_operand 0 "mem_noofs_operand"))
+ 
++(define_memory_constraint "Uh"
++ "@internal
++  An address suitable for byte and half-word loads which does not point inside a constant pool"
++ (and (match_code "mem")
++      (match_test "arm_legitimate_address_p (GET_MODE (op), XEXP (op, 0), false) && !arm_is_constant_pool_ref (op)")))
++
+ (define_memory_constraint "Ut"
+  "@internal
+   In ARM/Thumb-2 state an address valid for loading/storing opaque structure
+@@ -356,7 +362,8 @@
+  (and (match_code "mem")
+       (match_test "TARGET_ARM
+ 		   && arm_legitimate_address_outer_p (GET_MODE (op), XEXP (op, 0),
+-						      SIGN_EXTEND, 0)")))
++						      SIGN_EXTEND, 0)
++		   && !arm_is_constant_pool_ref (op)")))
+ 
+ (define_memory_constraint "Q"
+  "@internal
+-- 
+2.0.3
+

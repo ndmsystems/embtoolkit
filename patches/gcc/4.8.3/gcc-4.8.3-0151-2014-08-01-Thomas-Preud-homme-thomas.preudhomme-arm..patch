@@ -1,0 +1,137 @@
+From b368c07f6023f44d155d03d54b5b5621c62dd11b Mon Sep 17 00:00:00 2001
+From: thopre01 <thopre01@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 1 Aug 2014 08:56:17 +0000
+Subject: [PATCH 151/326] 2014-08-01  Thomas Preud'homme 
+ <thomas.preudhomme@arm.com>
+
+    Backport from mainline
+    2014-06-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+    gcc/
+    PR tree-optimization/61375
+    * tree-ssa-math-opts.c (find_bswap_or_nop_1): Cancel optimization if
+      symbolic number cannot be represented in an unsigned HOST_WIDE_INT.
+    (execute_optimize_bswap): Cancel optimization if CHAR_BIT != 8.
+
+    gcc/testsuite/
+    PR tree-optimization/61375
+    * gcc.c-torture/execute/pr61375-1.c: New test.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213426 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                                 | 10 ++++++++
+ gcc/testsuite/ChangeLog                       |  8 ++++++
+ gcc/testsuite/gcc.c-torture/execute/pr61375.c | 35 +++++++++++++++++++++++++++
+ gcc/tree-ssa-math-opts.c                      |  6 ++++-
+ 4 files changed, 58 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/gcc.c-torture/execute/pr61375.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 7813061..a7f5cbe 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,13 @@
++2014-08-01  Thomas Preud'homme  <thomas.preudhomme@arm.com>
++
++	Backport from mainline
++	2014-06-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
++
++	PR tree-optimization/61375
++	* tree-ssa-math-opts.c (find_bswap_or_nop_1): Cancel optimization if
++	symbolic number cannot be represented in an unsigned HOST_WIDE_INT.
++	(execute_optimize_bswap): Cancel optimization if CHAR_BIT != 8.
++
+ 2014-08-01  Richard Biener  <rguenther@suse.de>
+ 
+ 	PR tree-optimization/61964
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 675ec25..8e6d198 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,11 @@
++2014-08-01  Thomas Preud'homme  <thomas.preudhomme@arm.com>
++
++	Backport from mainline
++	2014-06-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
++
++	PR tree-optimization/61375
++	* gcc.c-torture/execute/pr61375-1.c: New test.
++
+ 2014-08-01  Richard Biener  <rguenther@suse.de>
+ 
+ 	PR tree-optimization/61964
+diff --git a/gcc/testsuite/gcc.c-torture/execute/pr61375.c b/gcc/testsuite/gcc.c-torture/execute/pr61375.c
+new file mode 100644
+index 0000000..6fb4693
+--- /dev/null
++++ b/gcc/testsuite/gcc.c-torture/execute/pr61375.c
+@@ -0,0 +1,35 @@
++#ifdef __UINT64_TYPE__
++typedef __UINT64_TYPE__ uint64_t;
++#else
++typedef unsigned long long uint64_t;
++#endif
++
++#ifndef __SIZEOF_INT128__
++#define __int128 long long
++#endif
++
++/* Some version of bswap optimization would ICE when analyzing a mask constant
++   too big for an HOST_WIDE_INT (PR61375).  */
++
++__attribute__ ((noinline, noclone)) uint64_t
++uint128_central_bitsi_ior (unsigned __int128 in1, uint64_t in2)
++{
++  __int128 mask = (__int128)0xffff << 56;
++  return ((in1 & mask) >> 56) | in2;
++}
++
++int
++main (int argc)
++{
++  __int128 in = 1;
++#ifdef __SIZEOF_INT128__
++  in <<= 64;
++#endif
++  if (sizeof (uint64_t) * __CHAR_BIT__ != 64)
++    return 0;
++  if (sizeof (unsigned __int128) * __CHAR_BIT__ != 128)
++    return 0;
++  if (uint128_central_bitsi_ior (in, 2) != 0x102)
++    __builtin_abort ();
++  return 0;
++}
+diff --git a/gcc/tree-ssa-math-opts.c b/gcc/tree-ssa-math-opts.c
+index d11f834..523cc3c 100644
+--- a/gcc/tree-ssa-math-opts.c
++++ b/gcc/tree-ssa-math-opts.c
+@@ -1666,6 +1666,8 @@ find_bswap_1 (gimple stmt, struct symbolic_number *n, int limit)
+ 	  size = TYPE_PRECISION (n->type);
+ 	  if (size % BITS_PER_UNIT != 0)
+ 	    return NULL_TREE;
++	  if (size > HOST_BITS_PER_WIDEST_INT)
++	    return NULL_TREE;
+ 	  size /= BITS_PER_UNIT;
+ 	  n->n = (sizeof (HOST_WIDEST_INT) < 8 ? 0 :
+ 		  (unsigned HOST_WIDEST_INT)0x08070605 << 32 | 0x04030201);
+@@ -1709,6 +1711,8 @@ find_bswap_1 (gimple stmt, struct symbolic_number *n, int limit)
+ 	    type_size = TYPE_PRECISION (type);
+ 	    if (type_size % BITS_PER_UNIT != 0)
+ 	      return NULL_TREE;
++	    if (type_size > (int) HOST_BITS_PER_WIDEST_INT)
++	      return NULL_TREE;
+ 
+ 	    /* Sign extension: result is dependent on the value.  */
+ 	    old_type_size = TYPE_PRECISION (n->type);
+@@ -1849,7 +1853,7 @@ execute_optimize_bswap (void)
+   bool changed = false;
+   tree bswap16_type = NULL_TREE, bswap32_type = NULL_TREE, bswap64_type = NULL_TREE;
+ 
+-  if (BITS_PER_UNIT != 8)
++  if (BITS_PER_UNIT != 8 || CHAR_BIT != 8)
+     return 0;
+ 
+   if (sizeof (HOST_WIDEST_INT) < 8)
+-- 
+2.0.3
+

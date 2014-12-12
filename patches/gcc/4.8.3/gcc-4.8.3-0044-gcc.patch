@@ -1,0 +1,281 @@
+From 3218f947ee627b496a8c18b0c83f7a7b2576f539 Mon Sep 17 00:00:00 2001
+From: gjl <gjl@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 12 Jun 2014 08:54:24 +0000
+Subject: [PATCH 044/134] gcc/ 	Backport from 2014-05-09 trunk r210272 	*
+ config/avr/avr-fixed.md (round<mode>3): Use -1U instead of -1 in 
+ unsigned int initializers for regno_in, regno_out.
+
+	Backport from 2014-05-14 trunk r210418
+	* config/avr/avr.h (REG_CLASS_CONTENTS): Use unsigned suffix for
+	shifted values to avoid build warning.
+
+	Backport from 2014-06-12 trunk r211491
+	PR target/61443
+	* config/avr/avr.md (push<mode>1): Avoid (subreg(mem)) when
+	loading from address spaces.
+gcc/testsuite/
+	Backport from 2014-06-12 trunk r211491
+	PR target/61443
+	* gcc.target/avr/torture/pr61443.c: New test.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@211493 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                                  |  17 ++++
+ gcc/config/avr/avr-fixed.md                    |   4 +-
+ gcc/config/avr/avr.h                           |  14 +--
+ gcc/config/avr/avr.md                          |   9 ++
+ gcc/testsuite/ChangeLog                        |   7 ++
+ gcc/testsuite/gcc.target/avr/torture/pr61443.c | 134 +++++++++++++++++++++++++
+ 6 files changed, 176 insertions(+), 9 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.target/avr/torture/pr61443.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index ab05e7c..250fb00 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,20 @@
++2014-06-12  Georg-Johann Lay  <avr@gjlay.de>
++
++	Backport from 2014-05-09 trunk r210272
++
++	* config/avr/avr-fixed.md (round<mode>3): Use -1U instead of -1 in
++	unsigned int initializers for regno_in, regno_out.
++
++	Backport from 2014-05-14 trunk r210418
++	* config/avr/avr.h (REG_CLASS_CONTENTS): Use unsigned suffix for
++	shifted values to avoid build warning.
++
++	Backport from 2014-06-12 trunk r211491
++
++	PR target/61443
++	* config/avr/avr.md (push<mode>1): Avoid (subreg(mem)) when
++	loading from address spaces.
++
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	PR target/61300
+diff --git a/gcc/config/avr/avr-fixed.md b/gcc/config/avr/avr-fixed.md
+index b2f0b9a..5bda9c2 100644
+--- a/gcc/config/avr/avr-fixed.md
++++ b/gcc/config/avr/avr-fixed.md
+@@ -430,8 +430,8 @@
+       }
+ 
+     // Input and output of the libgcc function
+-    const unsigned int regno_in[]  = { -1, 22, 22, -1, 18 };
+-    const unsigned int regno_out[] = { -1, 24, 24, -1, 22 };
++    const unsigned int regno_in[]  = { -1U, 22, 22, -1U, 18 };
++    const unsigned int regno_out[] = { -1U, 24, 24, -1U, 22 };
+ 
+     operands[3] = gen_rtx_REG (<MODE>mode, regno_out[(size_t) GET_MODE_SIZE (<MODE>mode)]);
+     operands[4] = gen_rtx_REG (<MODE>mode,  regno_in[(size_t) GET_MODE_SIZE (<MODE>mode)]);
+diff --git a/gcc/config/avr/avr.h b/gcc/config/avr/avr.h
+index f223a61..57e47bf 100644
+--- a/gcc/config/avr/avr.h
++++ b/gcc/config/avr/avr.h
+@@ -250,18 +250,18 @@ enum reg_class {
+ #define REG_CLASS_CONTENTS {						\
+   {0x00000000,0x00000000},	/* NO_REGS */				\
+   {0x00000001,0x00000000},	/* R0_REG */                            \
+-  {3 << REG_X,0x00000000},      /* POINTER_X_REGS, r26 - r27 */		\
+-  {3 << REG_Y,0x00000000},      /* POINTER_Y_REGS, r28 - r29 */		\
+-  {3 << REG_Z,0x00000000},      /* POINTER_Z_REGS, r30 - r31 */		\
++  {3u << REG_X,0x00000000},     /* POINTER_X_REGS, r26 - r27 */		\
++  {3u << REG_Y,0x00000000},     /* POINTER_Y_REGS, r28 - r29 */		\
++  {3u << REG_Z,0x00000000},     /* POINTER_Z_REGS, r30 - r31 */		\
+   {0x00000000,0x00000003},	/* STACK_REG, STACK */			\
+-  {(3 << REG_Y) | (3 << REG_Z),						\
++  {(3u << REG_Y) | (3u << REG_Z),					\
+      0x00000000},		/* BASE_POINTER_REGS, r28 - r31 */	\
+-  {(3 << REG_X) | (3 << REG_Y) | (3 << REG_Z),				\
++  {(3u << REG_X) | (3u << REG_Y) | (3u << REG_Z),			\
+      0x00000000},		/* POINTER_REGS, r26 - r31 */		\
+-  {(3 << REG_X) | (3 << REG_Y) | (3 << REG_Z) | (3 << REG_W),		\
++  {(3u << REG_X) | (3u << REG_Y) | (3u << REG_Z) | (3u << REG_W),	\
+      0x00000000},		/* ADDW_REGS, r24 - r31 */		\
+   {0x00ff0000,0x00000000},	/* SIMPLE_LD_REGS r16 - r23 */          \
+-  {(3 << REG_X)|(3 << REG_Y)|(3 << REG_Z)|(3 << REG_W)|(0xff << 16),	\
++  {(3u << REG_X)|(3u << REG_Y)|(3u << REG_Z)|(3u << REG_W)|(0xffu << 16),\
+      0x00000000},	/* LD_REGS, r16 - r31 */			\
+   {0x0000ffff,0x00000000},	/* NO_LD_REGS  r0 - r15 */              \
+   {0xffffffff,0x00000000},	/* GENERAL_REGS, r0 - r31 */		\
+diff --git a/gcc/config/avr/avr.md b/gcc/config/avr/avr.md
+index ae2e765..f56008b 100644
+--- a/gcc/config/avr/avr.md
++++ b/gcc/config/avr/avr.md
+@@ -367,6 +367,15 @@
+   ""
+   {
+     int i;
++
++    // Avoid (subreg (mem)) for non-generic address spaces below.  Because
++    // of the poor addressing capabilities of these spaces it's better to
++    // load them in one chunk.  And it avoids PR61443.
++
++    if (MEM_P (operands[0])
++        && !ADDR_SPACE_GENERIC_P (MEM_ADDR_SPACE (operands[0])))
++      operands[0] = copy_to_mode_reg (<MODE>mode, operands[0]);
++
+     for (i = GET_MODE_SIZE (<MODE>mode) - 1; i >= 0; --i)
+       {
+         rtx part = simplify_gen_subreg (QImode, operands[0], <MODE>mode, i);
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index b66a7aa..79b6682 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,10 @@
++2014-06-12  Georg-Johann Lay  <avr@gjlay.de>
++
++	Backport from 2014-06-12 trunk r211491
++
++	PR target/61443
++	* gcc.target/avr/torture/pr61443.c: New test.
++
+ 2014-06-04  Richard Biener  <rguenther@suse.de>
+ 
+ 	PR tree-optimization/61383
+diff --git a/gcc/testsuite/gcc.target/avr/torture/pr61443.c b/gcc/testsuite/gcc.target/avr/torture/pr61443.c
+new file mode 100644
+index 0000000..12c6bca
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/avr/torture/pr61443.c
+@@ -0,0 +1,134 @@
++/* { dg-do run } */
++/* { dg-options "-std=gnu99" } */
++
++#include <stdlib.h>
++#include <stdarg.h>
++
++#define NC __attribute__((noinline,noclone))
++
++void NC vfun (char n, ...)
++{
++  va_list ap;
++
++  va_start (ap, n);
++
++  switch (n)
++    {
++    default:
++      abort();
++    case 1:
++      if (11 != va_arg (ap, int))
++        abort();
++      break;
++    case 2:
++      if (2222 != va_arg (ap, int))
++        abort();
++      break;
++    case 3:
++      if (333333 != va_arg (ap, __int24))
++        abort();
++      break;
++    case 4:
++      if (44444444 != va_arg (ap, long))
++        abort();
++      break;
++    case 8:
++      if (8888888888888888 != va_arg (ap, long long))
++        abort();
++      break;
++    }
++
++  va_end (ap);
++}
++
++
++void NC boo_qi (const __flash char *p)
++{
++  vfun (1, *p);
++}
++
++void NC boox_qi (const __memx char *p)
++{
++  vfun (1, *p);
++}
++
++void NC boo_hi (const __flash int *p)
++{
++  vfun (2, *p);
++}
++
++void NC boox_hi (const __memx int *p)
++{
++  vfun (2, *p);
++}
++
++void NC boo_psi (const __flash __int24 *p)
++{
++  vfun (3, *p);
++}
++
++void NC boox_psi (const __memx __int24 *p)
++{
++  vfun (3, *p);
++}
++
++void NC boo_si (const __flash long *p)
++{
++  vfun (4, *p);
++}
++
++void NC boox_si (const __memx long *p)
++{
++  vfun (4, *p);
++}
++
++void NC boo_di (const __flash long long *p)
++{
++  vfun (8, *p);
++}
++
++void NC boox_di (const __memx long long *p)
++{
++  vfun (8, *p);
++}
++
++const __flash char f_qi = 11;
++const __flash int f_hi = 2222;
++const __flash __int24 f_psi = 333333;
++const __flash long f_si = 44444444;
++const __flash long long f_di = 8888888888888888;
++
++const __memx char x_qi = 11;
++const __memx int x_hi = 2222;
++const __memx __int24 x_psi = 333333;
++const __memx long x_si = 44444444;
++const __memx long long x_di = 8888888888888888;
++
++char r_qi = 11;
++int r_hi = 2222;
++__int24 r_psi = 333333;
++long r_si = 44444444;
++long long r_di = 8888888888888888;
++
++int main (void)
++{
++  boo_qi (&f_qi);
++  boo_hi (&f_hi);
++  boo_psi (&f_psi);
++  boo_si (&f_si);
++  boo_di (&f_di);
++
++  boox_qi (&x_qi);
++  boox_hi (&x_hi);
++  boox_psi (&x_psi);
++  boox_si (&x_si);
++  boox_di (&x_di);
++
++  boox_qi (&r_qi);
++  boox_hi (&r_hi);
++  boox_psi (&r_psi);
++  boox_si (&r_si);
++  boox_di (&r_di);
++
++  exit (0);
++}
+-- 
+1.8.5.5
+

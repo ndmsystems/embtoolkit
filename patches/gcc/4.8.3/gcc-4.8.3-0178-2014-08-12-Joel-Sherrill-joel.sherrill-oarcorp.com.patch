@@ -1,0 +1,43 @@
+From 924ab1a8c100d7e0fc8b21d429a72156c8187d79 Mon Sep 17 00:00:00 2001
+From: joel <joel@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 12 Aug 2014 19:47:06 +0000
+Subject: [PATCH 178/326] 2014-08-12  Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.in: Add CFLAGS_FOR_TARGET to GNATLIBCFLAGS_FOR_C.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213879 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ libada/ChangeLog   | 4 ++++
+ libada/Makefile.in | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/libada/ChangeLog b/libada/ChangeLog
+index 5ecdfc9..60dddfe 100644
+--- a/libada/ChangeLog
++++ b/libada/ChangeLog
+@@ -1,3 +1,7 @@
++2014-08-12  Joel Sherrill <joel.sherrill@oarcorp.com>
++
++	* Makefile.in: Add CFLAGS_FOR_TARGET to GNATLIBCFLAGS_FOR_C.
++
+ 2014-05-22  Release Manager
+ 
+ 	* GCC 4.8.3 released.
+diff --git a/libada/Makefile.in b/libada/Makefile.in
+index 983a542..ca02e8d 100644
+--- a/libada/Makefile.in
++++ b/libada/Makefile.in
+@@ -60,7 +60,7 @@ CFLAGS=-g
+ PICFLAG = @PICFLAG@
+ GNATLIBFLAGS= -W -Wall -gnatpg -nostdinc
+ GNATLIBCFLAGS= -g -O2
+-GNATLIBCFLAGS_FOR_C = -W -Wall $(GNATLIBCFLAGS) \
++GNATLIBCFLAGS_FOR_C = -W -Wall $(GNATLIBCFLAGS) $(CFLAGS_FOR_TARGET) \
+ 	-fexceptions -DIN_RTS @have_getipinfo@
+ 
+ host_subdir = @host_subdir@
+-- 
+2.0.3
+

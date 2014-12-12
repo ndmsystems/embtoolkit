@@ -1,0 +1,290 @@
+From 92264640ca9d1d04cbd8dec2f4d677f3dddbfa5b Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 25 Sep 2014 08:19:14 +0000
+Subject: [PATCH 260/326] 	PR tree-optimization/63341 	*
+ tree-vectorizer.h (vect_create_data_ref_ptr, 
+ vect_create_addr_base_for_vector_ref): Add another tree argument 
+ defaulting to NULL_TREE. 	* tree-vect-data-refs.c
+ (vect_create_data_ref_ptr): Add byte_offset 	argument, pass it down to
+ vect_create_addr_base_for_vector_ref. 
+ (vect_create_addr_base_for_vector_ref): Add byte_offset argument, 	add
+ that to base_offset too if non-NULL. 	* tree-vect-stmts.c
+ (vectorizable_load): Add byte_offset variable, 	for
+ dr_explicit_realign_optimized set it to vector byte size 	- 1 instead of
+ setting offset, pass byte_offset down to 	vect_create_data_ref_ptr.
+
+	* gcc.dg/vect/pr63341-1.c: New test.
+	* gcc.dg/vect/pr63341-2.c: New test.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215587 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                         | 15 +++++++++++++++
+ gcc/testsuite/ChangeLog               |  6 ++++++
+ gcc/testsuite/gcc.dg/vect/pr63341-1.c | 32 ++++++++++++++++++++++++++++++++
+ gcc/testsuite/gcc.dg/vect/pr63341-2.c | 35 +++++++++++++++++++++++++++++++++++
+ gcc/tree-vect-data-refs.c             | 28 ++++++++++++++++++++++++----
+ gcc/tree-vect-stmts.c                 |  7 +++++--
+ gcc/tree-vectorizer.h                 |  6 ++++--
+ 7 files changed, 121 insertions(+), 8 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.dg/vect/pr63341-1.c
+ create mode 100644 gcc/testsuite/gcc.dg/vect/pr63341-2.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index ec65065..c33e92c 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,18 @@
++2014-09-25  Jakub Jelinek  <jakub@redhat.com>
++
++	PR tree-optimization/63341
++	* tree-vectorizer.h (vect_create_data_ref_ptr,
++	vect_create_addr_base_for_vector_ref): Add another tree argument
++	defaulting to NULL_TREE.
++	* tree-vect-data-refs.c (vect_create_data_ref_ptr): Add byte_offset
++	argument, pass it down to vect_create_addr_base_for_vector_ref.
++	(vect_create_addr_base_for_vector_ref): Add byte_offset argument,
++	add that to base_offset too if non-NULL.
++	* tree-vect-stmts.c (vectorizable_load): Add byte_offset variable,
++	for dr_explicit_realign_optimized set it to vector byte size
++	- 1 instead of setting offset, pass byte_offset down to
++	vect_create_data_ref_ptr.
++
+ 2014-09-23  Michael Meissner  <meissner@linux.vnet.ibm.com>
+ 
+ 	Back port from trunk:
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 9aab1c7..7b51712 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,9 @@
++2014-09-25  Jakub Jelinek  <jakub@redhat.com>
++
++	PR tree-optimization/63341
++	* gcc.dg/vect/pr63341-1.c: New test.
++	* gcc.dg/vect/pr63341-2.c: New test.
++
+ 2014-09-18  Joseph Myers  <joseph@codesourcery.com>
+ 
+ 	* gcc.dg/torture/float128-exact-underflow.c: New test.
+diff --git a/gcc/testsuite/gcc.dg/vect/pr63341-1.c b/gcc/testsuite/gcc.dg/vect/pr63341-1.c
+new file mode 100644
+index 0000000..4aece7b
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/vect/pr63341-1.c
+@@ -0,0 +1,32 @@
++/* PR tree-optimization/63341 */
++/* { dg-do run } */
++
++#include "tree-vect.h"
++
++typedef union U { unsigned short s; unsigned char c; } __attribute__((packed)) U;
++struct S { char e __attribute__((aligned (64))); U s[32]; };
++struct S t = {0, {{1}, {2}, {3}, {4}, {5}, {6}, {7}, {8},
++		  {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16},
++		  {17}, {18}, {19}, {20}, {21}, {22}, {23}, {24},
++		  {25}, {26}, {27}, {28}, {29}, {30}, {31}, {32}}};
++unsigned short d[32] = { 1 };
++
++__attribute__((noinline, noclone)) void
++foo ()
++{
++  int i;
++  for (i = 0; i < 32; i++)
++    d[i] = t.s[i].s;
++  if (__builtin_memcmp (d, t.s, sizeof d))
++    abort ();
++}
++
++int
++main ()
++{
++  check_vect ();
++  foo ();
++  return 0;
++}
++
++/* { dg-final { cleanup-tree-dump "vect" } } */
+diff --git a/gcc/testsuite/gcc.dg/vect/pr63341-2.c b/gcc/testsuite/gcc.dg/vect/pr63341-2.c
+new file mode 100644
+index 0000000..4e7d2bb
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/vect/pr63341-2.c
+@@ -0,0 +1,35 @@
++/* PR tree-optimization/63341 */
++/* { dg-do run } */
++
++#include "tree-vect.h"
++
++typedef union U { unsigned short s; unsigned char c; } __attribute__((packed)) U;
++struct S { char e __attribute__((aligned (64))); U s[32]; };
++struct S t = {0, {{0x5010}, {0x5111}, {0x5212}, {0x5313}, {0x5414}, {0x5515}, {0x5616}, {0x5717},
++		  {0x5818}, {0x5919}, {0x5a1a}, {0x5b1b}, {0x5c1c}, {0x5d1d}, {0x5e1e}, {0x5f1f},
++		  {0x6020}, {0x6121}, {0x6222}, {0x6323}, {0x6424}, {0x6525}, {0x6626}, {0x6727},
++		  {0x6828}, {0x6929}, {0x6a2a}, {0x6b2b}, {0x6c2c}, {0x6d2d}, {0x6e2e}, {0x6f2f}}};
++unsigned short d[32] = { 1 };
++
++__attribute__((noinline, noclone)) void
++foo ()
++{
++  int i;
++  for (i = 0; i < 32; i++)
++    d[i] = t.s[i].s + 4;
++  for (i = 0; i < 32; i++)
++    if (d[i] != t.s[i].s + 4)
++      abort ();
++    else
++      asm volatile ("" : : : "memory");
++}
++
++int
++main ()
++{
++  check_vect ();
++  foo ();
++  return 0;
++}
++
++/* { dg-final { cleanup-tree-dump "vect" } } */
+diff --git a/gcc/tree-vect-data-refs.c b/gcc/tree-vect-data-refs.c
+index d8d1435..1ff0626 100644
+--- a/gcc/tree-vect-data-refs.c
++++ b/gcc/tree-vect-data-refs.c
+@@ -3553,6 +3553,9 @@ vect_get_new_vect_var (tree type, enum vect_var_kind var_kind, const char *name)
+ 	    is as follows:
+ 	    if LOOP=i_loop:	&in		(relative to i_loop)
+ 	    if LOOP=j_loop: 	&in+i*2B	(relative to j_loop)
++   BYTE_OFFSET: Optional, defaulted to NULL.  If supplied, it is added to the
++	    initial address.  Unlike OFFSET, which is number of elements to
++	    be added, BYTE_OFFSET is measured in bytes.
+ 
+    Output:
+    1. Return an SSA_NAME whose value is the address of the memory location of
+@@ -3566,7 +3569,8 @@ tree
+ vect_create_addr_base_for_vector_ref (gimple stmt,
+ 				      gimple_seq *new_stmt_list,
+ 				      tree offset,
+-				      struct loop *loop)
++				      struct loop *loop,
++				      tree byte_offset)
+ {
+   stmt_vec_info stmt_info = vinfo_for_stmt (stmt);
+   struct data_reference *dr = STMT_VINFO_DATA_REF (stmt_info);
+@@ -3628,6 +3632,16 @@ vect_create_addr_base_for_vector_ref (gimple stmt,
+       base_offset = force_gimple_operand (base_offset, &seq, false, tmp);
+       gimple_seq_add_seq (new_stmt_list, seq);
+     }
++  if (byte_offset)
++    {
++      tree tmp = create_tmp_var (sizetype, "offset");
++
++      byte_offset = fold_convert (sizetype, byte_offset);
++      base_offset = fold_build2 (PLUS_EXPR, sizetype,
++				 base_offset, byte_offset);
++      base_offset = force_gimple_operand (base_offset, &seq, false, tmp);
++      gimple_seq_add_seq (new_stmt_list, seq);
++    }
+ 
+   /* base + base_offset */
+   if (loop_vinfo)
+@@ -3692,6 +3706,10 @@ vect_create_addr_base_for_vector_ref (gimple stmt,
+    5. BSI: location where the new stmts are to be placed if there is no loop
+    6. ONLY_INIT: indicate if ap is to be updated in the loop, or remain
+         pointing to the initial address.
++   7. BYTE_OFFSET (optional, defaults to NULL): a byte offset to be added
++	to the initial address accessed by the data-ref in STMT.  This is
++	similar to OFFSET, but OFFSET is counted in elements, while BYTE_OFFSET
++	in bytes.
+ 
+    Output:
+    1. Declare a new ptr to vector_type, and have it point to the base of the
+@@ -3705,6 +3723,8 @@ vect_create_addr_base_for_vector_ref (gimple stmt,
+          initial_address = &a[init];
+       if OFFSET is supplied:
+          initial_address = &a[init + OFFSET];
++      if BYTE_OFFSET is supplied:
++	 initial_address = &a[init] + BYTE_OFFSET;
+ 
+       Return the initial_address in INITIAL_ADDRESS.
+ 
+@@ -3722,7 +3742,7 @@ tree
+ vect_create_data_ref_ptr (gimple stmt, tree aggr_type, struct loop *at_loop,
+ 			  tree offset, tree *initial_address,
+ 			  gimple_stmt_iterator *gsi, gimple *ptr_incr,
+-			  bool only_init, bool *inv_p)
++			  bool only_init, bool *inv_p, tree byte_offset)
+ {
+   const char *base_name;
+   stmt_vec_info stmt_info = vinfo_for_stmt (stmt);
+@@ -3881,10 +3901,10 @@ vect_create_data_ref_ptr (gimple stmt, tree aggr_type, struct loop *at_loop,
+   /* (2) Calculate the initial address of the aggregate-pointer, and set
+      the aggregate-pointer to point to it before the loop.  */
+ 
+-  /* Create: (&(base[init_val+offset]) in the loop preheader.  */
++  /* Create: (&(base[init_val+offset]+byte_offset) in the loop preheader.  */
+ 
+   new_temp = vect_create_addr_base_for_vector_ref (stmt, &new_stmt_list,
+-                                                   offset, loop);
++						   offset, loop, byte_offset);
+   if (new_stmt_list)
+     {
+       if (pe)
+diff --git a/gcc/tree-vect-stmts.c b/gcc/tree-vect-stmts.c
+index 361c312..1fcf726 100644
+--- a/gcc/tree-vect-stmts.c
++++ b/gcc/tree-vect-stmts.c
+@@ -4319,6 +4319,7 @@ vectorizable_load (gimple stmt, gimple_stmt_iterator *gsi, gimple *vec_stmt,
+   int i, j, group_size;
+   tree msq = NULL_TREE, lsq;
+   tree offset = NULL_TREE;
++  tree byte_offset = NULL_TREE;
+   tree realignment_token = NULL_TREE;
+   gimple phi = NULL;
+   vec<tree> dr_chain = vNULL;
+@@ -4934,7 +4935,8 @@ vectorizable_load (gimple stmt, gimple_stmt_iterator *gsi, gimple *vec_stmt,
+       if (alignment_support_scheme == dr_explicit_realign_optimized)
+ 	{
+ 	  phi = SSA_NAME_DEF_STMT (msq);
+-	  offset = size_int (TYPE_VECTOR_SUBPARTS (vectype) - 1);
++	  byte_offset = size_binop (MINUS_EXPR, TYPE_SIZE_UNIT (vectype),
++				    size_one_node);
+ 	}
+     }
+   else
+@@ -4955,7 +4957,8 @@ vectorizable_load (gimple stmt, gimple_stmt_iterator *gsi, gimple *vec_stmt,
+       if (j == 0)
+         dataref_ptr = vect_create_data_ref_ptr (first_stmt, aggr_type, at_loop,
+ 						offset, &dummy, gsi,
+-						&ptr_incr, false, &inv_p);
++						&ptr_incr, false, &inv_p,
++						byte_offset);
+       else
+         dataref_ptr = bump_vector_ptr (dataref_ptr, ptr_incr, gsi, stmt,
+ 				       TYPE_SIZE_UNIT (aggr_type));
+diff --git a/gcc/tree-vectorizer.h b/gcc/tree-vectorizer.h
+index d60d023..80200bd 100644
+--- a/gcc/tree-vectorizer.h
++++ b/gcc/tree-vectorizer.h
+@@ -931,7 +931,8 @@ extern tree vect_check_gather (gimple, loop_vec_info, tree *, tree *,
+ extern bool vect_analyze_data_refs (loop_vec_info, bb_vec_info, int *);
+ extern tree vect_create_data_ref_ptr (gimple, tree, struct loop *, tree,
+ 				      tree *, gimple_stmt_iterator *,
+-				      gimple *, bool, bool *);
++				      gimple *, bool, bool *,
++				      tree = NULL_TREE);
+ extern tree bump_vector_ptr (tree, gimple, gimple_stmt_iterator *, gimple, tree);
+ extern tree vect_create_destination_var (tree, tree);
+ extern bool vect_grouped_store_supported (tree, unsigned HOST_WIDE_INT);
+@@ -949,7 +950,8 @@ extern void vect_record_grouped_load_vectors (gimple, vec<tree> );
+ extern int vect_get_place_in_interleaving_chain (gimple, gimple);
+ extern tree vect_get_new_vect_var (tree, enum vect_var_kind, const char *);
+ extern tree vect_create_addr_base_for_vector_ref (gimple, gimple_seq *,
+-                                                  tree, struct loop *);
++						  tree, struct loop *,
++						  tree = NULL_TREE);
+ 
+ /* In tree-vect-loop.c.  */
+ /* FORNOW: Used in tree-parloops.c.  */
+-- 
+2.0.3
+

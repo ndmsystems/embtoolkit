@@ -1,0 +1,46 @@
+From a488f5c3efbcc7b08a4a6455b3f487fb21549337 Mon Sep 17 00:00:00 2001
+From: wschmidt <wschmidt@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 25 Jun 2014 22:36:58 +0000
+Subject: [PATCH 068/134] 2014-06-25  Bill Schmidt 
+ <wschmidt@linux.vnet.ibm.com>
+
+	* gfortran.dg/default_format_denormal_2.f90:  Remove xfail for
+	powerpc*-*-linux*.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212002 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/testsuite/ChangeLog                                 | 5 +++++
+ gcc/testsuite/gfortran.dg/default_format_denormal_2.f90 | 4 ++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 5ff54da..a68b157 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-06-25  Bill Schmidt  <wschmidt@linux.vnet.ibm.com>
++
++	* gfortran.dg/default_format_denormal_2.f90:  Remove xfail for
++	powerpc*-*-linux*.
++
+ 2014-06-18  Uros Bizjak  <ubizjak@gmail.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/testsuite/gfortran.dg/default_format_denormal_2.f90 b/gcc/testsuite/gfortran.dg/default_format_denormal_2.f90
+index a5337ca..6134a56 100644
+--- a/gcc/testsuite/gfortran.dg/default_format_denormal_2.f90
++++ b/gcc/testsuite/gfortran.dg/default_format_denormal_2.f90
+@@ -1,6 +1,6 @@
+ ! { dg-require-effective-target fortran_large_real }
+-! { dg-do run { xfail powerpc*-apple-darwin* powerpc*-*-linux* } }
+-! Test XFAILed on these platforms because the system's printf() lacks
++! { dg-do run { xfail powerpc*-apple-darwin* } }
++! Test XFAILed on this platform because the system's printf() lacks
+ ! proper support for denormalized long doubles. See PR24685
+ !
+ ! This tests that the default formats for formatted I/O of reals are
+-- 
+1.8.5.5
+

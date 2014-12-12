@@ -1,0 +1,76 @@
+From 64dd6730799589807ed365e608e2e6ba5219b6a9 Mon Sep 17 00:00:00 2001
+From: mpolacek <mpolacek@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 3 Sep 2014 17:25:45 +0000
+Subject: [PATCH 223/326] 	PR fortran/62270 	* interface.c
+ (compare_parameter): Fix condition.
+
+	* gfortran.dg/pointer_intent_7.f90: Adjust dg-error.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214887 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/fortran/ChangeLog                          | 6 ++++++
+ gcc/fortran/interface.c                        | 2 +-
+ gcc/testsuite/ChangeLog                        | 8 ++++++++
+ gcc/testsuite/gfortran.dg/pointer_intent_7.f90 | 2 +-
+ 4 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/fortran/ChangeLog b/gcc/fortran/ChangeLog
+index 2ac8fb3..c7001ca 100644
+--- a/gcc/fortran/ChangeLog
++++ b/gcc/fortran/ChangeLog
+@@ -1,3 +1,9 @@
++2014-09-03  Marek Polacek  <polacek@redhat.com>
++
++	Backport from trunk
++	PR fortran/62270
++	* interface.c (compare_parameter): Fix condition.
++
+ 2014-08-21  Thomas Koenig  <tkoenig@gcc.gnu.org>
+ 
+ 	Backport from trunk
+diff --git a/gcc/fortran/interface.c b/gcc/fortran/interface.c
+index 725cd8a..e38bb1f 100644
+--- a/gcc/fortran/interface.c
++++ b/gcc/fortran/interface.c
+@@ -1923,7 +1923,7 @@ compare_parameter (gfc_symbol *formal, gfc_expr *actual,
+   /* F2008, 12.5.2.5; IR F08/0073.  */
+   if (formal->ts.type == BT_CLASS && actual->expr_type != EXPR_NULL
+       && ((CLASS_DATA (formal)->attr.class_pointer
+-	   && !formal->attr.intent == INTENT_IN)
++	   && formal->attr.intent != INTENT_IN)
+           || CLASS_DATA (formal)->attr.allocatable))
+     {
+       if (actual->ts.type != BT_CLASS)
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index cdc118d..d8f884a 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,11 @@
++2014-09-03  Marek Polacek  <polacek@redhat.com>
++
++	Backport from mainline
++	2014-09-02  Marek Polacek  <polacek@redhat.com>
++
++	PR fortran/62270
++	* gfortran.dg/pointer_intent_7.f90: Adjust dg-error.
++
+ 2014-09-03  Martin Jambor  <mjambor@suse.cz>
+ 
+ 	PR ipa/62015
+diff --git a/gcc/testsuite/gfortran.dg/pointer_intent_7.f90 b/gcc/testsuite/gfortran.dg/pointer_intent_7.f90
+index c09eb2b..5387ace 100644
+--- a/gcc/testsuite/gfortran.dg/pointer_intent_7.f90
++++ b/gcc/testsuite/gfortran.dg/pointer_intent_7.f90
+@@ -23,7 +23,7 @@ contains
+     call bar2 (c)
+     call bar3 (c)
+     call bar2p (b) ! { dg-error "INTENT\\(IN\\) in pointer association context \\(actual argument to INTENT = OUT/INOUT" }
+-    call bar3p (b) ! { dg-error "INTENT\\(IN\\) in pointer association context \\(actual argument to INTENT = OUT/INOUT" }
++    call bar3p (b) ! { dg-error "Actual argument to .n. at \\(1\\) must be polymorphic" }
+     call bar2p (c) ! { dg-error "INTENT\\(IN\\) in pointer association context \\(actual argument to INTENT = OUT/INOUT" }
+     call bar3p (c) ! { dg-error "INTENT\\(IN\\) in pointer association context \\(actual argument to INTENT = OUT/INOUT" }
+   end subroutine
+-- 
+2.0.3
+

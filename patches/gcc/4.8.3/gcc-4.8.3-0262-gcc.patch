@@ -1,0 +1,63 @@
+From d3ff57dc49a86804c6cd5e425fe1c68392bd1292 Mon Sep 17 00:00:00 2001
+From: olegendo <olegendo@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 25 Sep 2014 16:00:58 +0000
+Subject: [PATCH 262/326] gcc/ 2014-09-25  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	Backport from mainline
+	2014-09-25  Nick Clifton  <nickc@redhat.com>
+	2014-09-25  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/62218
+	* config/sh/sync.md (atomic_fetch_nand<mode>_soft_imask,
+	atomic_test_and_set_soft_imask): Fix typo in instruction sequence.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215609 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog         | 10 ++++++++++
+ gcc/config/sh/sync.md |  4 ++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index e2b552d..3e75161 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,13 @@
++2014-09-25  Oleg Endo  <olegendo@gcc.gnu.org>
++
++	Backport from mainline
++	2014-09-25  Nick Clifton  <nickc@redhat.com>
++	2014-09-25  Oleg Endo  <olegendo@gcc.gnu.org>
++
++	PR target/62218
++	* config/sh/sync.md (atomic_fetch_nand<mode>_soft_imask,
++	atomic_test_and_set_soft_imask): Fix typo in instruction sequence.
++
+ 2014-09-25  Bill Schmidt  <wschmidt@linux.vnet.ibm.com>
+ 
+ 	Backport from mainline r215559
+diff --git a/gcc/config/sh/sync.md b/gcc/config/sh/sync.md
+index cf135ac..a739fe9 100644
+--- a/gcc/config/sh/sync.md
++++ b/gcc/config/sh/sync.md
+@@ -903,7 +903,7 @@
+ 	 "	and	%0,%3"			"\n"
+ 	 "	not	%3,%3"			"\n"
+ 	 "	mov.<bwl>	%3,@%1"		"\n"
+-	 "	stc	%4,sr";
++	 "	ldc	%4,sr";
+ }
+   [(set_attr "length" "20")])
+ 
+@@ -1353,7 +1353,7 @@
+ 	 "	ldc	r0,sr"		"\n"
+ 	 "	mov.b	@%0,r0"		"\n"
+ 	 "	mov.b	%1,@%0"		"\n"
+-	 "	stc	%2,sr"		"\n"
++	 "	ldc	%2,sr"		"\n"
+ 	 "	tst	r0,r0";
+ }
+   [(set_attr "length" "16")])
+-- 
+2.0.3
+

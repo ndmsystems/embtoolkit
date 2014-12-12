@@ -1,0 +1,232 @@
+From dcfe5cefe7b7fa274e9ae20281a84f07838538d3 Mon Sep 17 00:00:00 2001
+From: rguenth <rguenth@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 9 Sep 2014 14:45:57 +0000
+Subject: [PATCH 235/326] 2014-09-09  Richard Biener  <rguenther@suse.de>
+
+	Backport from mainline
+	2014-06-11  Richard Biener  <rguenther@suse.de>
+
+	PR tree-optimization/61452
+	* tree-ssa-sccvn.c (visit_phi): Remove pointless setting of
+	expr and has_constants in case we found a leader.
+	(simplify_binary_expression): Always valueize operands first.
+	(simplify_unary_expression): Likewise.
+
+	* gcc.dg/torture/pr61452.c: New testcase.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215081 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                          | 11 ++++
+ gcc/testsuite/ChangeLog                |  8 +++
+ gcc/testsuite/gcc.dg/torture/pr61452.c | 31 ++++++++++++
+ gcc/tree-ssa-sccvn.c                   | 91 +++++++++++++---------------------
+ 4 files changed, 84 insertions(+), 57 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.dg/torture/pr61452.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index ca399cd..ecd14a4 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,6 +1,17 @@
+ 2014-09-09  Richard Biener  <rguenther@suse.de>
+ 
+ 	Backport from mainline
++	2014-06-11  Richard Biener  <rguenther@suse.de>
++
++	PR tree-optimization/61452
++	* tree-ssa-sccvn.c (visit_phi): Remove pointless setting of
++	expr and has_constants in case we found a leader.
++	(simplify_binary_expression): Always valueize operands first.
++	(simplify_unary_expression): Likewise.
++
++2014-09-09  Richard Biener  <rguenther@suse.de>
++
++	Backport from mainline
+ 	2014-05-05  Richard Biener  <rguenther@suse.de>
+ 
+ 	PR middle-end/61010
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index b5af69c..c459dd0 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,6 +1,14 @@
+ 2014-09-09  Richard Biener  <rguenther@suse.de>
+ 
+ 	Backport from mainline
++	2014-06-11  Richard Biener  <rguenther@suse.de>
++
++	PR tree-optimization/61452
++	* gcc.dg/torture/pr61452.c: New testcase.
++
++2014-09-09  Richard Biener  <rguenther@suse.de>
++
++	Backport from mainline
+ 	2014-05-05  Richard Biener  <rguenther@suse.de>
+ 
+ 	PR middle-end/61010
+diff --git a/gcc/testsuite/gcc.dg/torture/pr61452.c b/gcc/testsuite/gcc.dg/torture/pr61452.c
+new file mode 100644
+index 0000000..a62de30
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/torture/pr61452.c
+@@ -0,0 +1,31 @@
++/* { dg-do run } */
++
++int a, b;
++short c, d;
++char e, f;
++
++int
++fn1 (int p1, char p2)
++{
++  return p1 || p2 ? 0 : p2;
++}
++
++void
++fn2 ()
++{
++  for (; a;)
++    {
++      int g;
++      g = c = e;
++      for (; a;)
++	b = fn1 (g = d = e, g);
++      f = g; 
++    }
++}
++
++int
++main ()
++{
++  fn2 (); 
++  return 0;
++}
+diff --git a/gcc/tree-ssa-sccvn.c b/gcc/tree-ssa-sccvn.c
+index 5dce65a..b2afbcd 100644
+--- a/gcc/tree-ssa-sccvn.c
++++ b/gcc/tree-ssa-sccvn.c
+@@ -3015,33 +3015,12 @@ visit_phi (gimple phi)
+   /* If all value numbered to the same value, the phi node has that
+      value.  */
+   if (allsame)
+-    {
+-      if (is_gimple_min_invariant (sameval))
+-	{
+-	  VN_INFO (PHI_RESULT (phi))->has_constants = true;
+-	  VN_INFO (PHI_RESULT (phi))->expr = sameval;
+-	}
+-      else
+-	{
+-	  VN_INFO (PHI_RESULT (phi))->has_constants = false;
+-	  VN_INFO (PHI_RESULT (phi))->expr = sameval;
+-	}
+-
+-      if (TREE_CODE (sameval) == SSA_NAME)
+-	return visit_copy (PHI_RESULT (phi), sameval);
+-
+-      return set_ssa_val_to (PHI_RESULT (phi), sameval);
+-    }
++    return set_ssa_val_to (PHI_RESULT (phi), sameval);
+ 
+   /* Otherwise, see if it is equivalent to a phi node in this block.  */
+   result = vn_phi_lookup (phi);
+   if (result)
+-    {
+-      if (TREE_CODE (result) == SSA_NAME)
+-	changed = visit_copy (PHI_RESULT (phi), result);
+-      else
+-	changed = set_ssa_val_to (PHI_RESULT (phi), result);
+-    }
++    changed = set_ssa_val_to (PHI_RESULT (phi), result);
+   else
+     {
+       vn_phi_insert (phi, PHI_RESULT (phi));
+@@ -3142,24 +3121,18 @@ simplify_binary_expression (gimple stmt)
+      catch those with constants.  The goal here is to simultaneously
+      combine constants between expressions, but avoid infinite
+      expansion of expressions during simplification.  */
+-  if (TREE_CODE (op0) == SSA_NAME)
+-    {
+-      if (VN_INFO (op0)->has_constants
++  op0 = vn_valueize (op0);
++  if (TREE_CODE (op0) == SSA_NAME
++      && (VN_INFO (op0)->has_constants
+ 	  || TREE_CODE_CLASS (code) == tcc_comparison
+-	  || code == COMPLEX_EXPR)
+-	op0 = valueize_expr (vn_get_expr_for (op0));
+-      else
+-	op0 = vn_valueize (op0);
+-    }
++	  || code == COMPLEX_EXPR))
++    op0 = valueize_expr (vn_get_expr_for (op0));
+ 
+-  if (TREE_CODE (op1) == SSA_NAME)
+-    {
+-      if (VN_INFO (op1)->has_constants
+-	  || code == COMPLEX_EXPR)
+-	op1 = valueize_expr (vn_get_expr_for (op1));
+-      else
+-	op1 = vn_valueize (op1);
+-    }
++  op1 = vn_valueize (op1);
++  if (TREE_CODE (op1) == SSA_NAME
++      && (VN_INFO (op1)->has_constants
++	  || code == COMPLEX_EXPR))
++    op1 = valueize_expr (vn_get_expr_for (op1));
+ 
+   /* Pointer plus constant can be represented as invariant address.
+      Do so to allow further propatation, see also tree forwprop.  */
+@@ -3217,27 +3190,31 @@ simplify_unary_expression (gimple stmt)
+     return NULL_TREE;
+ 
+   orig_op0 = op0;
+-  if (VN_INFO (op0)->has_constants)
+-    op0 = valueize_expr (vn_get_expr_for (op0));
+-  else if (CONVERT_EXPR_CODE_P (code)
+-	   || code == REALPART_EXPR
+-	   || code == IMAGPART_EXPR
+-	   || code == VIEW_CONVERT_EXPR
+-	   || code == BIT_FIELD_REF)
++  op0 = vn_valueize (op0);
++  if (TREE_CODE (op0) == SSA_NAME)
+     {
+-      /* We want to do tree-combining on conversion-like expressions.
+-         Make sure we feed only SSA_NAMEs or constants to fold though.  */
+-      tree tem = valueize_expr (vn_get_expr_for (op0));
+-      if (UNARY_CLASS_P (tem)
+-	  || BINARY_CLASS_P (tem)
+-	  || TREE_CODE (tem) == VIEW_CONVERT_EXPR
+-	  || TREE_CODE (tem) == SSA_NAME
+-	  || TREE_CODE (tem) == CONSTRUCTOR
+-	  || is_gimple_min_invariant (tem))
+-	op0 = tem;
++      if (VN_INFO (op0)->has_constants)
++	op0 = valueize_expr (vn_get_expr_for (op0));
++      else if (CONVERT_EXPR_CODE_P (code)
++	       || code == REALPART_EXPR
++	       || code == IMAGPART_EXPR
++	       || code == VIEW_CONVERT_EXPR
++	       || code == BIT_FIELD_REF)
++	{
++	  /* We want to do tree-combining on conversion-like expressions.
++	     Make sure we feed only SSA_NAMEs or constants to fold though.  */
++	  tree tem = valueize_expr (vn_get_expr_for (op0));
++	  if (UNARY_CLASS_P (tem)
++	      || BINARY_CLASS_P (tem)
++	      || TREE_CODE (tem) == VIEW_CONVERT_EXPR
++	      || TREE_CODE (tem) == SSA_NAME
++	      || TREE_CODE (tem) == CONSTRUCTOR
++	      || is_gimple_min_invariant (tem))
++	    op0 = tem;
++	}
+     }
+ 
+-  /* Avoid folding if nothing changed, but remember the expression.  */
++  /* Avoid folding if nothing changed.  */
+   if (op0 == orig_op0)
+     return NULL_TREE;
+ 
+-- 
+2.0.3
+

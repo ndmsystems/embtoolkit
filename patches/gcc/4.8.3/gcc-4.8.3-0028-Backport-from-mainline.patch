@@ -1,0 +1,52 @@
+From d1e61748be7f08c97deda6c3bd0282d1e8953440 Mon Sep 17 00:00:00 2001
+From: redi <redi@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 3 Jun 2014 17:58:51 +0000
+Subject: [PATCH 028/134] Backport from mainline 2014-04-15  Jonathan Wakely 
+ <jwakely@redhat.com>
+
+	PR libstdc++/60734
+	* include/bits/stl_tree.h (_Rb_tree::_M_end): Fix invalid cast.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@211197 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ libstdc++-v3/ChangeLog               | 8 ++++++++
+ libstdc++-v3/include/bits/stl_tree.h | 4 ++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/libstdc++-v3/ChangeLog b/libstdc++-v3/ChangeLog
+index 0c11cf2..4736ae4 100644
+--- a/libstdc++-v3/ChangeLog
++++ b/libstdc++-v3/ChangeLog
+@@ -1,3 +1,11 @@
++2014-06-03  Jonathan Wakely  <jwakely@redhat.com>
++
++	Backport from mainline
++	2014-04-15  Jonathan Wakely  <jwakely@redhat.com>
++
++	PR libstdc++/60734
++	* include/bits/stl_tree.h (_Rb_tree::_M_end): Fix invalid cast.
++
+ 2014-05-29  Jonathan Wakely  <jwakely@redhat.com>
+ 
+ 	* include/tr2/bool_set: Use UTF-8 for accented characters.
+diff --git a/libstdc++-v3/include/bits/stl_tree.h b/libstdc++-v3/include/bits/stl_tree.h
+index 91bf4df..a9bd3d6 100644
+--- a/libstdc++-v3/include/bits/stl_tree.h
++++ b/libstdc++-v3/include/bits/stl_tree.h
+@@ -510,11 +510,11 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+ 
+       _Link_type
+       _M_end()
+-      { return static_cast<_Link_type>(&this->_M_impl._M_header); }
++      { return reinterpret_cast<_Link_type>(&this->_M_impl._M_header); }
+ 
+       _Const_Link_type
+       _M_end() const
+-      { return static_cast<_Const_Link_type>(&this->_M_impl._M_header); }
++      { return reinterpret_cast<_Const_Link_type>(&this->_M_impl._M_header); }
+ 
+       static const_reference
+       _S_value(_Const_Link_type __x)
+-- 
+1.8.5.5
+

@@ -1,0 +1,161 @@
+From 38786c8c19f6c8fd25decf784fa0bc8999843cd9 Mon Sep 17 00:00:00 2001
+From: meissner <meissner@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 6 Jun 2014 23:52:36 +0000
+Subject: [PATCH 035/134] 2014-06-06  Michael Meissner 
+ <meissner@linux.vnet.ibm.com>
+
+	Back port from trunk
+	2014-06-06  Michael Meissner  <meissner@linux.vnet.ibm.com>
+
+	PR target/61431
+	* config/rs6000/vsx.md (VSX_LE): Split VSX_D into 2 separate
+	iterators, VSX_D that handles 64-bit types, and VSX_LE that
+	handles swapping the two 64-bit double words on little endian
+	systems.  Include V1TImode and optionally TImode in VSX_LE so that
+	these types are properly swapped.  Change all of the insns and
+	splits that do the 64-bit swaps to use VSX_LE.
+	(vsx_le_perm_load_<mode>): Likewise.
+	(vsx_le_perm_store_<mode>): Likewise.
+	(splitters for little endian memory operations): Likewise.
+	(vsx_xxpermdi2_le_<mode>): Likewise.
+	(vsx_lxvd2x2_le_<mode>): Likewise.
+	(vsx_stxvd2x2_le_<mode>): Likewise.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@211332 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog            | 19 +++++++++++++++++++
+ gcc/config/rs6000/vsx.md | 41 ++++++++++++++++++++++++-----------------
+ 2 files changed, 43 insertions(+), 17 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 1f51977..f147e93 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,22 @@
++2014-06-06  Michael Meissner  <meissner@linux.vnet.ibm.com>
++
++	Back port from trunk
++	2014-06-06  Michael Meissner  <meissner@linux.vnet.ibm.com>
++
++	PR target/61431
++	* config/rs6000/vsx.md (VSX_LE): Split VSX_D into 2 separate
++	iterators, VSX_D that handles 64-bit types, and VSX_LE that
++	handles swapping the two 64-bit double words on little endian
++	systems.  Include V1TImode and optionally TImode in VSX_LE so that
++	these types are properly swapped.  Change all of the insns and
++	splits that do the 64-bit swaps to use VSX_LE.
++	(vsx_le_perm_load_<mode>): Likewise.
++	(vsx_le_perm_store_<mode>): Likewise.
++	(splitters for little endian memory operations): Likewise.
++	(vsx_xxpermdi2_le_<mode>): Likewise.
++	(vsx_lxvd2x2_le_<mode>): Likewise.
++	(vsx_stxvd2x2_le_<mode>): Likewise.
++
+ 2014-06-05  Martin Jambor  <mjambor@suse.cz>
+ 
+ 	PR ipa/61393
+diff --git a/gcc/config/rs6000/vsx.md b/gcc/config/rs6000/vsx.md
+index 3694e28..792e687 100644
+--- a/gcc/config/rs6000/vsx.md
++++ b/gcc/config/rs6000/vsx.md
+@@ -24,6 +24,13 @@
+ ;; Iterator for the 2 64-bit vector types
+ (define_mode_iterator VSX_D [V2DF V2DI])
+ 
++;; Iterator for the 2 64-bit vector types + 128-bit types that are loaded with
++;; lxvd2x to properly handle swapping words on little endian
++(define_mode_iterator VSX_LE [V2DF
++			      V2DI
++			      V1TI
++			      (TI	"VECTOR_MEM_VSX_P (TImode)")])
++
+ ;; Iterator for the 2 32-bit vector types
+ (define_mode_iterator VSX_W [V4SF V4SI])
+ 
+@@ -228,8 +235,8 @@
+ ;; The patterns for LE permuted loads and stores come before the general
+ ;; VSX moves so they match first.
+ (define_insn_and_split "*vsx_le_perm_load_<mode>"
+-  [(set (match_operand:VSX_D 0 "vsx_register_operand" "=wa")
+-        (match_operand:VSX_D 1 "memory_operand" "Z"))]
++  [(set (match_operand:VSX_LE 0 "vsx_register_operand" "=wa")
++        (match_operand:VSX_LE 1 "memory_operand" "Z"))]
+   "!BYTES_BIG_ENDIAN && TARGET_VSX"
+   "#"
+   "!BYTES_BIG_ENDIAN && TARGET_VSX"
+@@ -342,16 +349,16 @@
+    (set_attr "length" "8")])
+ 
+ (define_insn "*vsx_le_perm_store_<mode>"
+-  [(set (match_operand:VSX_D 0 "memory_operand" "=Z")
+-        (match_operand:VSX_D 1 "vsx_register_operand" "+wa"))]
++  [(set (match_operand:VSX_LE 0 "memory_operand" "=Z")
++        (match_operand:VSX_LE 1 "vsx_register_operand" "+wa"))]
+   "!BYTES_BIG_ENDIAN && TARGET_VSX"
+   "#"
+   [(set_attr "type" "vecstore")
+    (set_attr "length" "12")])
+ 
+ (define_split
+-  [(set (match_operand:VSX_D 0 "memory_operand" "")
+-        (match_operand:VSX_D 1 "vsx_register_operand" ""))]
++  [(set (match_operand:VSX_LE 0 "memory_operand" "")
++        (match_operand:VSX_LE 1 "vsx_register_operand" ""))]
+   "!BYTES_BIG_ENDIAN && TARGET_VSX && !reload_completed"
+   [(set (match_dup 2)
+         (vec_select:<MODE>
+@@ -369,8 +376,8 @@
+ ;; The post-reload split requires that we re-permute the source
+ ;; register in case it is still live.
+ (define_split
+-  [(set (match_operand:VSX_D 0 "memory_operand" "")
+-        (match_operand:VSX_D 1 "vsx_register_operand" ""))]
++  [(set (match_operand:VSX_LE 0 "memory_operand" "")
++        (match_operand:VSX_LE 1 "vsx_register_operand" ""))]
+   "!BYTES_BIG_ENDIAN && TARGET_VSX && reload_completed"
+   [(set (match_dup 1)
+         (vec_select:<MODE>
+@@ -1352,9 +1359,9 @@
+ ;; xxpermdi for little endian loads and stores.  We need several of
+ ;; these since the form of the PARALLEL differs by mode.
+ (define_insn "*vsx_xxpermdi2_le_<mode>"
+-  [(set (match_operand:VSX_D 0 "vsx_register_operand" "=wa")
+-        (vec_select:VSX_D
+-          (match_operand:VSX_D 1 "vsx_register_operand" "wa")
++  [(set (match_operand:VSX_LE 0 "vsx_register_operand" "=wa")
++        (vec_select:VSX_LE
++          (match_operand:VSX_LE 1 "vsx_register_operand" "wa")
+           (parallel [(const_int 1) (const_int 0)])))]
+   "!BYTES_BIG_ENDIAN && VECTOR_MEM_VSX_P (<MODE>mode)"
+   "xxpermdi %x0,%x1,%x1,2"
+@@ -1401,9 +1408,9 @@
+ ;; lxvd2x for little endian loads.  We need several of
+ ;; these since the form of the PARALLEL differs by mode.
+ (define_insn "*vsx_lxvd2x2_le_<mode>"
+-  [(set (match_operand:VSX_D 0 "vsx_register_operand" "=wa")
+-        (vec_select:VSX_D
+-          (match_operand:VSX_D 1 "memory_operand" "Z")
++  [(set (match_operand:VSX_LE 0 "vsx_register_operand" "=wa")
++        (vec_select:VSX_LE
++          (match_operand:VSX_LE 1 "memory_operand" "Z")
+           (parallel [(const_int 1) (const_int 0)])))]
+   "!BYTES_BIG_ENDIAN && VECTOR_MEM_VSX_P (<MODE>mode)"
+   "lxvd2x %x0,%y1"
+@@ -1450,9 +1457,9 @@
+ ;; stxvd2x for little endian stores.  We need several of
+ ;; these since the form of the PARALLEL differs by mode.
+ (define_insn "*vsx_stxvd2x2_le_<mode>"
+-  [(set (match_operand:VSX_D 0 "memory_operand" "=Z")
+-        (vec_select:VSX_D
+-          (match_operand:VSX_D 1 "vsx_register_operand" "wa")
++  [(set (match_operand:VSX_LE 0 "memory_operand" "=Z")
++        (vec_select:VSX_LE
++          (match_operand:VSX_LE 1 "vsx_register_operand" "wa")
+           (parallel [(const_int 1) (const_int 0)])))]
+   "!BYTES_BIG_ENDIAN && VECTOR_MEM_VSX_P (<MODE>mode)"
+   "stxvd2x %x1,%y0"
+-- 
+1.8.5.5
+

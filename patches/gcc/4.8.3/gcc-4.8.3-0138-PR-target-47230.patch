@@ -1,0 +1,90 @@
+From e722007d15905862c5075502fa2cce90d0b77559 Mon Sep 17 00:00:00 2001
+From: uros <uros@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sat, 26 Jul 2014 15:23:33 +0000
+Subject: [PATCH 138/326] 	PR target/47230 	* configure.ac
+ (alpha*-*-linux*): Use mh-alpha-linux. 	* configure: Regenerate.
+
+config/ChangeLog:
+
+	PR target/47230
+	* mh-alpha-linux: New file.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213083 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ ChangeLog             | 6 ++++++
+ config/ChangeLog      | 5 +++++
+ config/mh-alpha-linux | 3 +++
+ configure             | 3 +++
+ configure.ac          | 3 +++
+ 5 files changed, 20 insertions(+)
+ create mode 100644 config/mh-alpha-linux
+
+diff --git a/ChangeLog b/ChangeLog
+index 0ed0083..510048a 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,9 @@
++2014-07-26  Uros Bizjak  <ubizjak@gmail.com>
++
++	PR target/47230
++	* configure.ac (alpha*-*-linux*): Use mh-alpha-linux.
++	* configure: Regenerate.
++
+ 2014-05-22  Release Manager
+ 
+ 	* GCC 4.8.3 released.
+diff --git a/config/ChangeLog b/config/ChangeLog
+index 9dbadab..a574b07 100644
+--- a/config/ChangeLog
++++ b/config/ChangeLog
+@@ -1,3 +1,8 @@
++2014-07-26  Uros Bizjak  <ubizjak@gmail.com>
++
++	PR target/47230
++	* mh-alpha-linux: New file.
++
+ 2014-05-22  Release Manager
+ 
+ 	* GCC 4.8.3 released.
+diff --git a/config/mh-alpha-linux b/config/mh-alpha-linux
+new file mode 100644
+index 0000000..9a9244b
+--- /dev/null
++++ b/config/mh-alpha-linux
+@@ -0,0 +1,3 @@
++# Prevent GPREL16 relocation truncation
++LDFLAGS += -Wl,--no-relax
++BOOT_LDFLAGS += -Wl,--no-relax
+diff --git a/configure b/configure
+index e1d1c71..e8d1c47 100755
+--- a/configure
++++ b/configure
+@@ -3834,6 +3834,9 @@ fi
+   *-mingw*)
+     host_makefile_frag="config/mh-mingw"
+     ;;
++  alpha*-*-linux*)
++    host_makefile_frag="config/mh-alpha-linux"
++    ;;
+   hppa*-hp-hpux10*)
+     host_makefile_frag="config/mh-pa-hpux10"
+     ;;
+diff --git a/configure.ac b/configure.ac
+index 637da1e..d0e72ae 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1154,6 +1154,9 @@ case "${host}" in
+   *-mingw*)
+     host_makefile_frag="config/mh-mingw"
+     ;;
++  alpha*-*-linux*)
++    host_makefile_frag="config/mh-alpha-linux"
++    ;;
+   hppa*-hp-hpux10*)
+     host_makefile_frag="config/mh-pa-hpux10"
+     ;;
+-- 
+2.0.3
+

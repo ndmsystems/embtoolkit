@@ -1,0 +1,229 @@
+From ca69dff48145f395cb7b60aaef763ed1f7f13f96 Mon Sep 17 00:00:00 2001
+From: ktkachov <ktkachov@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 24 Oct 2014 12:22:47 +0000
+Subject: [PATCH 319/326] [AArch64] Backport --enable-fix-cortex-a53-835769
+ configure option
+
+	* config.gcc (aarch64*-*-*): Define TARGET_FIX_ERR_A53_835769_DEFAULT
+	if asked.
+	* configure.ac: Add --enable-fix-cortex-a53-835769 option.
+	* configure: Regenerate.
+	* config/aarch64/aarch64.c (aarch64_override_options): Handle
+	TARGET_FIX_ERR_A53_835769_DEFAULT.
+	* config/aarch64/aarch64.opt (mfix-cortex-a53-835769): Set Init value
+	to 2.
+	* doc/install.texi: Document --enable-fix-cortex-a53-835769 option.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@216665 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                  | 12 ++++++++++++
+ gcc/config/aarch64/aarch64.c   |  9 +++++++++
+ gcc/config/aarch64/aarch64.opt |  2 +-
+ gcc/configure                  | 35 +++++++++++++++++++++++++++++++++--
+ gcc/configure.ac               | 26 ++++++++++++++++++++++++++
+ gcc/doc/install.texi           | 14 ++++++++++++++
+ 6 files changed, 95 insertions(+), 3 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 663dd6b..ed79e0e 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,5 +1,17 @@
+ 2014-10-24  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+ 
++	* config.gcc (aarch64*-*-*): Define TARGET_FIX_ERR_A53_835769_DEFAULT
++	if asked.
++	* configure.ac: Add --enable-fix-cortex-a53-835769 option.
++	* configure: Regenerate.
++	* config/aarch64/aarch64.c (aarch64_override_options): Handle
++	TARGET_FIX_ERR_A53_835769_DEFAULT.
++	* config/aarch64/aarch64.opt (mfix-cortex-a53-835769): Set Init value
++	to 2.
++	* doc/install.texi: Document --enable-fix-cortex-a53-835769 option.
++
++2014-10-24  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
++
+ 	* config/aarch64/aarch64.opt (mfix-cortex-a53-835769): New option.
+ 	* config/aarch64/aarch64.h (ADJUST_INSN_LENGTH): Define.
+ 	(FINAL_PRESCAN_INSN): Likewise.
+diff --git a/gcc/config/aarch64/aarch64.c b/gcc/config/aarch64/aarch64.c
+index 6b8dce4..d756763 100644
+--- a/gcc/config/aarch64/aarch64.c
++++ b/gcc/config/aarch64/aarch64.c
+@@ -4848,6 +4848,15 @@ aarch64_override_options (void)
+   aarch64_tune = selected_tune->core;
+   aarch64_tune_params = selected_tune->tune;
+ 
++  if (aarch64_fix_a53_err835769 == 2)
++    {
++#ifdef TARGET_FIX_ERR_A53_835769_DEFAULT
++      aarch64_fix_a53_err835769 = 1;
++#else
++      aarch64_fix_a53_err835769 = 0;
++#endif
++    }
++
+   aarch64_override_options_after_change ();
+ }
+ 
+diff --git a/gcc/config/aarch64/aarch64.opt b/gcc/config/aarch64/aarch64.opt
+index f414ad4..f7c70bf 100644
+--- a/gcc/config/aarch64/aarch64.opt
++++ b/gcc/config/aarch64/aarch64.opt
+@@ -68,7 +68,7 @@ Target Report RejectNegative Mask(GENERAL_REGS_ONLY)
+ Generate code which uses only the general registers
+ 
+ mfix-cortex-a53-835769
+-Target Report Var(aarch64_fix_a53_err835769) Init(0)
++Target Report Var(aarch64_fix_a53_err835769) Init(2)
+ Workaround for ARM Cortex-A53 Erratum number 835769
+ 
+ mlittle-endian
+diff --git a/gcc/configure b/gcc/configure
+index 3793681..94cce4e 100755
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -910,6 +910,7 @@ with_plugin_ld
+ enable_gnu_indirect_function
+ enable_initfini_array
+ enable_comdat
++enable_fix_cortex_a53_835769
+ enable_gnu_unique_object
+ enable_linker_build_id
+ with_long_double_128
+@@ -1619,6 +1620,14 @@ Optional Features:
+                           glibc systems
+   --enable-initfini-array	use .init_array/.fini_array sections
+   --enable-comdat         enable COMDAT group support
++
++  --enable-fix-cortex-a53-835769
++                          enable workaround for AArch64 Cortex-A53 erratum
++                          835769 by default
++  --disable-fix-cortex-a53-835769
++                          disable workaround for AArch64 Cortex-A53 erratum
++                          835769 by default
++
+   --enable-gnu-unique-object
+                           enable the use of the @gnu_unique_object ELF
+                           extension on glibc systems
+@@ -17838,7 +17847,7 @@ else
+   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
+   lt_status=$lt_dlunknown
+   cat > conftest.$ac_ext <<_LT_EOF
+-#line 17841 "configure"
++#line 17850 "configure"
+ #include "confdefs.h"
+ 
+ #if HAVE_DLFCN_H
+@@ -17944,7 +17953,7 @@ else
+   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
+   lt_status=$lt_dlunknown
+   cat > conftest.$ac_ext <<_LT_EOF
+-#line 17947 "configure"
++#line 17956 "configure"
+ #include "confdefs.h"
+ 
+ #if HAVE_DLFCN_H
+@@ -23796,6 +23805,28 @@ _ACEOF
+ $as_echo "$gcc_cv_lto_plugin" >&6; }
+ 
+ case "$target" in
++
++  aarch64*-*-*)
++    # Enable default workaround for AArch64 Cortex-A53 erratum 835769.
++    # Check whether --enable-fix-cortex-a53-835769 was given.
++if test "${enable_fix_cortex_a53_835769+set}" = set; then :
++  enableval=$enable_fix_cortex_a53_835769;
++        case $enableval in
++          yes)
++            tm_defines="${tm_defines} TARGET_FIX_ERR_A53_835769_DEFAULT=1"
++            ;;
++          no)
++            ;;
++          *)
++            as_fn_error "'$enableval' is an invalid value for --enable-fix-cortex-a53-835769.\
++  Valid choices are 'yes' and 'no'." "$LINENO" 5
++            ;;
++
++        esac
++
++fi
++
++  ;;
+   # All TARGET_ABI_OSF targets.
+   alpha*-*-linux* | alpha*-*-*bsd*)
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking assembler for explicit relocation support" >&5
+diff --git a/gcc/configure.ac b/gcc/configure.ac
+index 3ee1d67..701cbf8 100644
+--- a/gcc/configure.ac
++++ b/gcc/configure.ac
+@@ -3443,6 +3443,32 @@ AC_DEFINE_UNQUOTED(HAVE_LTO_PLUGIN, $gcc_cv_lto_plugin,
+ AC_MSG_RESULT($gcc_cv_lto_plugin)
+ 
+ case "$target" in
++
++  aarch64*-*-*)
++    # Enable default workaround for AArch64 Cortex-A53 erratum 835769.
++    AC_ARG_ENABLE(fix-cortex-a53-835769,
++    [
++AS_HELP_STRING([--enable-fix-cortex-a53-835769],
++        [enable workaround for AArch64 Cortex-A53 erratum 835769 by default])
++AS_HELP_STRING([--disable-fix-cortex-a53-835769],
++        [disable workaround for AArch64 Cortex-A53 erratum 835769 by default])
++    ],
++      [
++        case $enableval in
++          yes)
++            tm_defines="${tm_defines} TARGET_FIX_ERR_A53_835769_DEFAULT=1"
++            ;;
++          no)
++            ;;
++          *)
++            AC_MSG_ERROR(['$enableval' is an invalid value for --enable-fix-cortex-a53-835769.\
++  Valid choices are 'yes' and 'no'.])
++            ;;
++
++        esac
++      ],
++    [])
++  ;;
+   # All TARGET_ABI_OSF targets.
+   alpha*-*-linux* | alpha*-*-*bsd*)
+     gcc_GAS_CHECK_FEATURE([explicit relocation support],
+diff --git a/gcc/doc/install.texi b/gcc/doc/install.texi
+index 672d783..2c3dace 100644
+--- a/gcc/doc/install.texi
++++ b/gcc/doc/install.texi
+@@ -2982,6 +2982,8 @@ information have to.
+ @ifhtml
+ @itemize
+ @item
++@uref{#aarch64x-x-x,,aarch64*-*-*}
++@item
+ @uref{#alpha-x-x,,alpha*-*-*}
+ @item
+ @uref{#alpha-dec-osf51,,alpha*-dec-osf5.1}
+@@ -3124,6 +3126,18 @@ information have to.
+ <!-- -------- host/target specific issues start here ---------------- -->
+ <hr />
+ @end html
++
++@heading @anchor{aarch64x-x-x}aarch64*-*-*
++To enable a workaround for the Cortex-A53 erratum number 835769 by default
++(for all CPUs regardless of -mcpu option given) at configure time use the
++@option{--enable-fix-cortex-a53-835769} option.  This will enable the fix by
++default and can be explicitly disabled during during compilation by passing the
++@option{-mno-fix-cortex-a53-835769} option.  Conversely,
++@option{--disable-fix-cortex-a53-835769} will disable the workaround by
++default.  The workaround is disabled by default if neither of
++@option{--enable-fix-cortex-a53-835769} or
++@option{--disable-fix-cortex-a53-835769} is given at configure time.
++
+ @heading @anchor{alpha-x-x}alpha*-*-*
+ 
+ This section contains general configuration information for all
+-- 
+2.0.3
+

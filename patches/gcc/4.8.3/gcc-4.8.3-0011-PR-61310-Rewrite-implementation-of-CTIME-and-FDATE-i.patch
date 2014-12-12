@@ -1,0 +1,204 @@
+From 8621c27eb83a24489875f658117f7d6e8d1403e8 Mon Sep 17 00:00:00 2001
+From: jb <jb@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 26 May 2014 18:36:01 +0000
+Subject: [PATCH 011/134] PR 61310 Rewrite implementation of CTIME and FDATE
+ intrinsics.
+
+2014-05-26  Janne Blomqvist  <jb@gcc.gnu.org>
+
+	Backport from mainline
+	PR libfortran/61310
+	* intrinsics.texi (CTIME): Remove mention of locale-dependent
+	behavior.
+
+2014-05-26  Janne Blomqvist  <jb@gcc.gnu.org>
+
+	Backport from mainline
+	PR libfortran/61310
+	* intrinsics/ctime.c (strctime): Rename to gf_ctime, use snprintf
+	instead of strftime.
+	(fdate): Use gf_ctime.
+	(fdate_sub): Likewise.
+	(ctime): Likewise.
+	(ctime_sub): Likewise.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@210943 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/fortran/ChangeLog          |  7 +++++
+ gcc/fortran/intrinsic.texi     |  6 ++--
+ libgfortran/ChangeLog          | 11 +++++++
+ libgfortran/intrinsics/ctime.c | 70 ++++++++++++++++++++++++++----------------
+ 4 files changed, 63 insertions(+), 31 deletions(-)
+
+diff --git a/gcc/fortran/ChangeLog b/gcc/fortran/ChangeLog
+index 44c59c77..4fbaf80e 100644
+--- a/gcc/fortran/ChangeLog
++++ b/gcc/fortran/ChangeLog
+@@ -1,3 +1,10 @@
++2014-05-26  Janne Blomqvist  <jb@gcc.gnu.org>
++
++	Backport from mainline
++	PR libfortran/61310
++	* intrinsics.texi (CTIME): Remove mention of locale-dependent
++	behavior.
++
+ 2014-05-22  Release Manager
+ 
+ 	* GCC 4.8.3 released.
+diff --git a/gcc/fortran/intrinsic.texi b/gcc/fortran/intrinsic.texi
+index 1e31e4f..a3b80aa 100644
+--- a/gcc/fortran/intrinsic.texi
++++ b/gcc/fortran/intrinsic.texi
+@@ -3343,10 +3343,8 @@ end program test_cshift
+ @table @asis
+ @item @emph{Description}:
+ @code{CTIME} converts a system time value, such as returned by
+-@code{TIME8}, to a string. Unless the application has called
+-@code{setlocale}, the output will be in the default locale, of length
+-24 and of the form @samp{Sat Aug 19 18:13:14 1995}. In other locales,
+-a longer string may result.
++@code{TIME8}, to a string. The output will be of the form @samp{Sat
++Aug 19 18:13:14 1995}.
+ 
+ This intrinsic is provided in both subroutine and function forms; however,
+ only one form can be used in any given program unit.
+diff --git a/libgfortran/ChangeLog b/libgfortran/ChangeLog
+index 6f70eff..8150a32 100644
+--- a/libgfortran/ChangeLog
++++ b/libgfortran/ChangeLog
+@@ -1,3 +1,14 @@
++2014-05-26  Janne Blomqvist  <jb@gcc.gnu.org>
++
++	Backport from mainline
++	PR libfortran/61310
++	* intrinsics/ctime.c (strctime): Rename to gf_ctime, use snprintf
++	instead of strftime.
++	(fdate): Use gf_ctime.
++	(fdate_sub): Likewise.
++	(ctime): Likewise.
++	(ctime_sub): Likewise.
++
+ 2014-05-25  Janne Blomqvist  <jb@gcc.gnu.org>
+ 
+ 	Backport from trunk.
+diff --git a/libgfortran/intrinsics/ctime.c b/libgfortran/intrinsics/ctime.c
+index 5a76284..6684a66 100644
+--- a/libgfortran/intrinsics/ctime.c
++++ b/libgfortran/intrinsics/ctime.c
+@@ -31,31 +31,53 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+ #include <string.h>
+ 
+ 
+-/* strftime-like function that fills a C string with %c format which
+-   is identical to ctime in the default locale. As ctime and ctime_r
+-   are poorly specified and their usage not recommended, the
+-   implementation instead uses strftime.  */
+-
+-static size_t
+-strctime (char *s, size_t max, const time_t *timep)
++/* Maximum space a ctime-like string might need. A "normal" ctime
++   string is 26 bytes, and in our case 24 bytes as we don't include
++   the trailing newline and null. However, the longest possible year
++   number is -2,147,481,748 (1900 - 2,147,483,648, since tm_year is a
++   32-bit signed integer) so an extra 7 bytes are needed. */
++#define CTIME_BUFSZ 31
++
++
++/* Thread-safe ctime-like function that fills a Fortran
++   string. ctime_r is a portability headache and marked as obsolescent
++   in POSIX 2008, which recommends strftime in its place. However,
++   strftime(..., "%c",...)  doesn't produce ctime-like output on
++   MinGW, so do it manually with snprintf.  */
++
++static int
++gf_ctime (char *s, size_t max, const time_t timev)
+ {
+   struct tm ltm;
+   int failed;
++  char buf[CTIME_BUFSZ + 1];
+   /* Some targets provide a localtime_r based on a draft of the POSIX
+      standard where the return type is int rather than the
+      standardized struct tm*.  */
+-  __builtin_choose_expr (__builtin_classify_type (localtime_r (timep, &ltm)) 
++  __builtin_choose_expr (__builtin_classify_type (localtime_r (&timev, &ltm)) 
+ 			 == 5,
+-			 failed = localtime_r (timep, &ltm) == NULL,
+-			 failed = localtime_r (timep, &ltm) != 0);
++			 failed = localtime_r (&timev, &ltm) == NULL,
++			 failed = localtime_r (&timev, &ltm) != 0);
+   if (failed)
+-    return 0;
+-  return strftime (s, max, "%c", &ltm);
++    goto blank;
++  int n = snprintf (buf, sizeof (buf), 
++		    "%3.3s %3.3s%3d %.2d:%.2d:%.2d %d",
++		    "SunMonTueWedThuFriSat" + ltm.tm_wday * 3,
++		    "JanFebMarAprMayJunJulAugSepOctNovDec" + ltm.tm_mon * 3,
++		    ltm.tm_mday, ltm.tm_hour, ltm.tm_min, ltm.tm_sec, 
++		    1900 + ltm.tm_year);
++  if (n < 0)
++    goto blank;
++  if ((size_t) n <= max)
++    {
++      cf_strcpy (s, max, buf);
++      return n;
++    }
++ blank:
++  memset (s, ' ', max);
++  return 0;
+ }
+ 
+-/* In the default locale, the date and time representation fits in 26
+-   bytes. However, other locales might need more space.  */
+-#define CSZ 100
+ 
+ extern void fdate (char **, gfc_charlen_type *);
+ export_proto(fdate);
+@@ -64,8 +86,8 @@ void
+ fdate (char ** date, gfc_charlen_type * date_len)
+ {
+   time_t now = time(NULL);
+-  *date = xmalloc (CSZ);
+-  *date_len = strctime (*date, CSZ, &now);
++  *date = xmalloc (CTIME_BUFSZ);
++  *date_len = gf_ctime (*date, CTIME_BUFSZ, now);
+ }
+ 
+ 
+@@ -76,10 +98,7 @@ void
+ fdate_sub (char * date, gfc_charlen_type date_len)
+ {
+   time_t now = time(NULL);
+-  char *s = xmalloc (date_len + 1);
+-  size_t n = strctime (s, date_len + 1, &now);
+-  fstrcpy (date, date_len, s, n);
+-  free (s);
++  gf_ctime (date, date_len, now);
+ }
+ 
+ 
+@@ -91,8 +110,8 @@ void
+ PREFIX(ctime) (char ** date, gfc_charlen_type * date_len, GFC_INTEGER_8 t)
+ {
+   time_t now = t;
+-  *date = xmalloc (CSZ);
+-  *date_len = strctime (*date, CSZ, &now);
++  *date = xmalloc (CTIME_BUFSZ);
++  *date_len = gf_ctime (*date, CTIME_BUFSZ, now);
+ }
+ 
+ 
+@@ -103,8 +122,5 @@ void
+ ctime_sub (GFC_INTEGER_8 * t, char * date, gfc_charlen_type date_len)
+ {
+   time_t now = *t;
+-  char *s = xmalloc (date_len + 1);
+-  size_t n = strctime (s, date_len + 1, &now);
+-  fstrcpy (date, date_len, s, n);
+-  free (s);
++  gf_ctime (date, date_len, now);
+ }
+-- 
+1.8.5.5
+

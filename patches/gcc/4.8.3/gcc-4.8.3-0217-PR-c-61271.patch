@@ -1,0 +1,44 @@
+From 606c3d25c8e93483c84f004af756170b1f91aae8 Mon Sep 17 00:00:00 2001
+From: mpolacek <mpolacek@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 1 Sep 2014 10:12:00 +0000
+Subject: [PATCH 217/326] 	PR c/61271 	* cgraphunit.c
+ (handle_alias_pairs): Fix condition.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214783 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog    | 8 ++++++++
+ gcc/cgraphunit.c | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 92514dd..9118236 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,11 @@
++2014-09-01  Marek Polacek  <polacek@redhat.com>
++
++	Backport from mainline
++	2014-08-19  Marek Polacek  <polacek@redhat.com>
++
++	PR c/61271
++	* cgraphunit.c (handle_alias_pairs): Fix condition.
++
+ 2014-08-30  John David Anglin  <danglin@gcc.gnu.org>
+ 
+ 	* config/pa/pa.c (pa_assemble_integer): Don't add PLABEL relocation
+diff --git a/gcc/cgraphunit.c b/gcc/cgraphunit.c
+index 7fa8055..7dd2c1d 100644
+--- a/gcc/cgraphunit.c
++++ b/gcc/cgraphunit.c
+@@ -1097,7 +1097,7 @@ handle_alias_pairs (void)
+ 	  /* We use local aliases for C++ thunks to force the tailcall
+ 	     to bind locally.  This is a hack - to keep it working do
+ 	     the following (which is not strictly correct).  */
+-	  && (! TREE_CODE (target_node->symbol.decl) == FUNCTION_DECL
++	  && (TREE_CODE (target_node->symbol.decl) != FUNCTION_DECL
+ 	      || ! DECL_VIRTUAL_P (target_node->symbol.decl))
+ 	  && ! lookup_attribute ("weakref", DECL_ATTRIBUTES (p->decl)))
+ 	{
+-- 
+2.0.3
+

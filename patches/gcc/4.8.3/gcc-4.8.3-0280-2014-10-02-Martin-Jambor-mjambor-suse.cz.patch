@@ -1,0 +1,50 @@
+From 9be3b34386fc083a2bed23839474222f69af7d1a Mon Sep 17 00:00:00 2001
+From: jamborm <jamborm@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 2 Oct 2014 17:13:30 +0000
+Subject: [PATCH 280/326] 2014-10-02  Martin Jambor  <mjambor@suse.cz>
+
+	PR tree-optimization/63375
+	* tree-sra.c (build_access_from_expr_1): Disqualify volatile
+	references.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215807 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog  | 6 ++++++
+ gcc/tree-sra.c | 5 +++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 8b5d629..24f6128 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,9 @@
++2014-10-02  Martin Jambor  <mjambor@suse.cz>
++
++	PR tree-optimization/63375
++	* tree-sra.c (build_access_from_expr_1): Disqualify volatile
++	references.
++
+ 2014-10-01  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR debug/63342
+diff --git a/gcc/tree-sra.c b/gcc/tree-sra.c
+index 43b2ce6..644861d 100644
+--- a/gcc/tree-sra.c
++++ b/gcc/tree-sra.c
+@@ -1030,6 +1030,11 @@ build_access_from_expr_1 (tree expr, gimple stmt, bool write)
+ 			       "component.");
+       return NULL;
+     }
++  if (TREE_THIS_VOLATILE (expr))
++    {
++      disqualify_base_of_expr (expr, "part of a volatile reference.");
++      return NULL;
++    }
+ 
+   switch (TREE_CODE (expr))
+     {
+-- 
+2.0.3
+

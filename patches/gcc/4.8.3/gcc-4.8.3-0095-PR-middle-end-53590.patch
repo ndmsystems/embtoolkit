@@ -1,0 +1,92 @@
+From b9043809039f8815191a9b2b7d49cd31172681b9 Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 10 Jul 2014 10:43:46 +0000
+Subject: [PATCH 095/134] 	PR middle-end/53590 	* function.c
+ (allocate_struct_function): Revert r188667 change.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212426 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                   |  5 +++++
+ gcc/function.c                  |  1 +
+ gcc/testsuite/ChangeLog         |  4 ++++
+ gcc/testsuite/gnat.dg/opt39.adb | 31 +++++++++++++++++++++++++++++++
+ 4 files changed, 41 insertions(+)
+ create mode 100644 gcc/testsuite/gnat.dg/opt39.adb
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 678e367..53152a7 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,8 @@
++2014-07-10  Eric Botcazou  <ebotcazou@adacore.com>
++
++	PR middle-end/53590
++	* function.c (allocate_struct_function): Revert r188667 change.
++
+ 2014-07-04  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR tree-optimization/61684
+diff --git a/gcc/function.c b/gcc/function.c
+index c96e6e2..76baf30 100644
+--- a/gcc/function.c
++++ b/gcc/function.c
+@@ -4523,6 +4523,7 @@ allocate_struct_function (tree fndecl, bool abstract_p)
+       /* ??? This could be set on a per-function basis by the front-end
+          but is this worth the hassle?  */
+       cfun->can_throw_non_call_exceptions = flag_non_call_exceptions;
++      cfun->can_delete_dead_exceptions = flag_delete_dead_exceptions;
+     }
+ }
+ 
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 212d42a..c35517d 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,7 @@
++2014-07-10  Eric Botcazou  <ebotcazou@adacore.com>
++
++	* gnat.dg/opt39.adb: New test.
++
+ 2014-07-08  Paul Thomas  <pault@gcc.gnu.org>
+ 
+ 	PR fortran/61459
+diff --git a/gcc/testsuite/gnat.dg/opt39.adb b/gcc/testsuite/gnat.dg/opt39.adb
+new file mode 100644
+index 0000000..a00cac7
+--- /dev/null
++++ b/gcc/testsuite/gnat.dg/opt39.adb
+@@ -0,0 +1,31 @@
++-- { dg-do compile }
++-- { dg-options "-O2 -fno-inline -fdump-tree-optimized" }
++
++procedure Opt39 (I : Integer) is
++
++  type Rec is record
++    I1 : Integer;
++    I2 : Integer;
++    I3 : Integer;
++    I4 : Integer;
++    I5 : Integer;
++  end record;
++
++  procedure Set (A : access Rec; I : Integer) is
++    Tmp : Rec := A.all;
++  begin
++    Tmp.I1 := I;
++    A.all := Tmp;
++  end;
++
++  R : aliased Rec;
++
++begin
++  Set (R'Access, I);
++  if R.I1 /= I then
++    raise Program_Error;
++  end if;
++end;
++
++-- { dg-final { scan-tree-dump-times "MEM" 1 "optimized" } }
++-- { dg-final { cleanup-tree-dump "optimized" } }
+-- 
+1.8.5.5
+

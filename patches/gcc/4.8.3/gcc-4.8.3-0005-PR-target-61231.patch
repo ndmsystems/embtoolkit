@@ -1,0 +1,69 @@
+From ad87d7b61f248d36c9604b5f8e864549b76de98e Mon Sep 17 00:00:00 2001
+From: amodra <amodra@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 23 May 2014 01:28:23 +0000
+Subject: [PATCH 005/134] 	PR target/61231 	*
+ config/rs6000/rs6000.c (mem_operand_gpr): Handle SImode. 	*
+ config/rs6000/rs6000.md (extendsidi2_lfiwax, extendsidi2_nocell): 	Use
+ "Y" constraint rather than "m".
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@210837 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog               | 7 +++++++
+ gcc/config/rs6000/rs6000.c  | 3 ++-
+ gcc/config/rs6000/rs6000.md | 4 ++--
+ 3 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 667a495..746b40f 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,10 @@
++2014-05-23  Alan Modra  <amodra@gmail.com>
++
++	PR target/61231
++	* config/rs6000/rs6000.c (mem_operand_gpr): Handle SImode.
++	* config/rs6000/rs6000.md (extendsidi2_lfiwax, extendsidi2_nocell):
++	Use "Y" constraint rather than "m".
++
+ 2014-05-22  Peter Bergner  <bergner@vnet.ibm.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/config/rs6000/rs6000.c b/gcc/config/rs6000/rs6000.c
+index 08308fd..29f1a32 100644
+--- a/gcc/config/rs6000/rs6000.c
++++ b/gcc/config/rs6000/rs6000.c
+@@ -6109,7 +6109,8 @@ mem_operand_gpr (rtx op, enum machine_mode mode)
+     return false;
+ 
+   extra = GET_MODE_SIZE (mode) - UNITS_PER_WORD;
+-  gcc_assert (extra >= 0);
++  if (extra < 0)
++    extra = 0;
+ 
+   if (GET_CODE (addr) == LO_SUM)
+     /* For lo_sum addresses, we must allow any offset except one that
+diff --git a/gcc/config/rs6000/rs6000.md b/gcc/config/rs6000/rs6000.md
+index b1354ff..78b8c82 100644
+--- a/gcc/config/rs6000/rs6000.md
++++ b/gcc/config/rs6000/rs6000.md
+@@ -737,7 +737,7 @@
+ 
+ (define_insn "*extendsidi2_lfiwax"
+   [(set (match_operand:DI 0 "gpc_reg_operand" "=r,r,??wm,!wl,!wu")
+-	(sign_extend:DI (match_operand:SI 1 "lwa_operand" "m,r,r,Z,Z")))]
++	(sign_extend:DI (match_operand:SI 1 "lwa_operand" "Y,r,r,Z,Z")))]
+   "TARGET_POWERPC64 && TARGET_LFIWAX"
+   "@
+    lwa%U1%X1 %0,%1
+@@ -760,7 +760,7 @@
+ 
+ (define_insn "*extendsidi2_nocell"
+   [(set (match_operand:DI 0 "gpc_reg_operand" "=r,r")
+-	(sign_extend:DI (match_operand:SI 1 "lwa_operand" "m,r")))]
++	(sign_extend:DI (match_operand:SI 1 "lwa_operand" "Y,r")))]
+   "TARGET_POWERPC64 && rs6000_gen_cell_microcode && !TARGET_LFIWAX"
+   "@
+    lwa%U1%X1 %0,%1
+-- 
+1.8.5.5
+

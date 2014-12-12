@@ -1,0 +1,40 @@
+From ec3a4db817f6ae1b2c76a9f457edefb4ae3adc56 Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 16 Jul 2014 08:39:23 +0000
+Subject: [PATCH 103/134] 	* omp-low.c (create_omp_child_function): Don't
+ set DECL_NAMELESS 	on the FUNCTION_DECL.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212583 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog | 5 +++++
+ gcc/omp-low.c | 1 -
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index a050b7a..0d4902f 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,8 @@
++2014-07-18  Jakub Jelinek  <jakub@redhat.com>
++
++	* omp-low.c (create_omp_child_function): Don't set DECL_NAMELESS
++	on the FUNCTION_DECL.
++
+ 2014-07-10  Tom G. Christensen  <tgc@jupiterrise.com>
+ 
+ 	* doc/install.texi: Remove links to defunct package providers for
+diff --git a/gcc/omp-low.c b/gcc/omp-low.c
+index 95d1168..49fadc3 100644
+--- a/gcc/omp-low.c
++++ b/gcc/omp-low.c
+@@ -1586,7 +1586,6 @@ create_omp_child_function (omp_context *ctx, bool task_copy)
+   TREE_STATIC (decl) = 1;
+   TREE_USED (decl) = 1;
+   DECL_ARTIFICIAL (decl) = 1;
+-  DECL_NAMELESS (decl) = 1;
+   DECL_IGNORED_P (decl) = 0;
+   TREE_PUBLIC (decl) = 0;
+   DECL_UNINLINABLE (decl) = 1;
+-- 
+1.8.5.5
+

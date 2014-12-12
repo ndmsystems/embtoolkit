@@ -1,0 +1,118 @@
+From 64874ff88c62d329c0b935b9e816f7f499e51e45 Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 13 Nov 2014 11:45:38 +0000
+Subject: [PATCH 349/366] 	* doc/tm.texi.in (SELECT_CC_MODE): Update
+ example. 	(REVERSIBLE_CC_MODE): Fix example. 	(REVERSE_CONDITION):
+ Fix typo. 	* doc/tm.texi: Regenerate.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@217478 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog      |  7 +++++++
+ gcc/doc/tm.texi    | 16 +++++++++-------
+ gcc/doc/tm.texi.in | 16 +++++++++-------
+ 3 files changed, 25 insertions(+), 14 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 37584bf..df44a10 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,10 @@
++2014-11-13  Eric Botcazou  <ebotcazou@adacore.com>
++
++	* doc/tm.texi.in (SELECT_CC_MODE): Update example.
++	(REVERSIBLE_CC_MODE): Fix example.
++	(REVERSE_CONDITION): Fix typo.
++	* doc/tm.texi: Regenerate.
++
+ 2014-11-12  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR ipa/63838
+diff --git a/gcc/doc/tm.texi b/gcc/doc/tm.texi
+index 53b2a7a..cbba1e7 100644
+--- a/gcc/doc/tm.texi
++++ b/gcc/doc/tm.texi
+@@ -6014,10 +6014,11 @@ for comparisons whose argument is a @code{plus}:
+ 
+ @smallexample
+ #define SELECT_CC_MODE(OP,X,Y) \
+-  (GET_MODE_CLASS (GET_MODE (X)) == MODE_FLOAT          \
+-   ? ((OP == EQ || OP == NE) ? CCFPmode : CCFPEmode)    \
+-   : ((GET_CODE (X) == PLUS || GET_CODE (X) == MINUS    \
+-       || GET_CODE (X) == NEG) \
++  (GET_MODE_CLASS (GET_MODE (X)) == MODE_FLOAT           \
++   ? ((OP == LT || OP == LE || OP == GT || OP == GE)     \
++      ? CCFPEmode : CCFPmode)                            \
++   : ((GET_CODE (X) == PLUS || GET_CODE (X) == MINUS     \
++       || GET_CODE (X) == NEG || GET_CODE (x) == ASHIFT) \
+       ? CC_NOOVmode : CCmode))
+ @end smallexample
+ 
+@@ -6060,10 +6061,11 @@ then @code{REVERSIBLE_CC_MODE (@var{mode})} must be zero.
+ You need not define this macro if it would always returns zero or if the
+ floating-point format is anything other than @code{IEEE_FLOAT_FORMAT}.
+ For example, here is the definition used on the SPARC, where floating-point
+-inequality comparisons are always given @code{CCFPEmode}:
++inequality comparisons are given either @code{CCFPEmode} or @code{CCFPmode}:
+ 
+ @smallexample
+-#define REVERSIBLE_CC_MODE(MODE)  ((MODE) != CCFPEmode)
++#define REVERSIBLE_CC_MODE(MODE) \
++   ((MODE) != CCFPEmode && (MODE) != CCFPmode)
+ @end smallexample
+ @end defmac
+ 
+@@ -6073,7 +6075,7 @@ comparison done in CC_MODE @var{mode}.  The macro is used only in case
+ @code{REVERSIBLE_CC_MODE (@var{mode})} is nonzero.  Define this macro in case
+ machine has some non-standard way how to reverse certain conditionals.  For
+ instance in case all floating point conditions are non-trapping, compiler may
+-freely convert unordered compares to ordered one.  Then definition may look
++freely convert unordered compares to ordered ones.  Then definition may look
+ like:
+ 
+ @smallexample
+diff --git a/gcc/doc/tm.texi.in b/gcc/doc/tm.texi.in
+index f2e7ab8..c2cc282 100644
+--- a/gcc/doc/tm.texi.in
++++ b/gcc/doc/tm.texi.in
+@@ -5918,10 +5918,11 @@ for comparisons whose argument is a @code{plus}:
+ 
+ @smallexample
+ #define SELECT_CC_MODE(OP,X,Y) \
+-  (GET_MODE_CLASS (GET_MODE (X)) == MODE_FLOAT          \
+-   ? ((OP == EQ || OP == NE) ? CCFPmode : CCFPEmode)    \
+-   : ((GET_CODE (X) == PLUS || GET_CODE (X) == MINUS    \
+-       || GET_CODE (X) == NEG) \
++  (GET_MODE_CLASS (GET_MODE (X)) == MODE_FLOAT           \
++   ? ((OP == LT || OP == LE || OP == GT || OP == GE)     \
++      ? CCFPEmode : CCFPmode)                            \
++   : ((GET_CODE (X) == PLUS || GET_CODE (X) == MINUS     \
++       || GET_CODE (X) == NEG || GET_CODE (x) == ASHIFT) \
+       ? CC_NOOVmode : CCmode))
+ @end smallexample
+ 
+@@ -5964,10 +5965,11 @@ then @code{REVERSIBLE_CC_MODE (@var{mode})} must be zero.
+ You need not define this macro if it would always returns zero or if the
+ floating-point format is anything other than @code{IEEE_FLOAT_FORMAT}.
+ For example, here is the definition used on the SPARC, where floating-point
+-inequality comparisons are always given @code{CCFPEmode}:
++inequality comparisons are given either @code{CCFPEmode} or @code{CCFPmode}:
+ 
+ @smallexample
+-#define REVERSIBLE_CC_MODE(MODE)  ((MODE) != CCFPEmode)
++#define REVERSIBLE_CC_MODE(MODE) \
++   ((MODE) != CCFPEmode && (MODE) != CCFPmode)
+ @end smallexample
+ @end defmac
+ 
+@@ -5977,7 +5979,7 @@ comparison done in CC_MODE @var{mode}.  The macro is used only in case
+ @code{REVERSIBLE_CC_MODE (@var{mode})} is nonzero.  Define this macro in case
+ machine has some non-standard way how to reverse certain conditionals.  For
+ instance in case all floating point conditions are non-trapping, compiler may
+-freely convert unordered compares to ordered one.  Then definition may look
++freely convert unordered compares to ordered ones.  Then definition may look
+ like:
+ 
+ @smallexample
+-- 
+2.0.3
+

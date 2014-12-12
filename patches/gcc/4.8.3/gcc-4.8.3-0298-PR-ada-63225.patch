@@ -1,0 +1,125 @@
+From 278659d8a31a7a892bdb0c4d1d36c9f8b1049ecb Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 13 Oct 2014 08:21:19 +0000
+Subject: [PATCH 298/326] 	PR ada/63225 	* uintp.adb (Vector_To_Uint):
+ Move from here to... 	* uintp.ads (UI_Vector): Make public. 
+ (Vector_To_Uint): ...here.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@216141 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ada/ChangeLog |  8 ++++++++
+ gcc/ada/uintp.adb | 16 ----------------
+ gcc/ada/uintp.ads | 40 ++++++++++++++++++++++++++++------------
+ 3 files changed, 36 insertions(+), 28 deletions(-)
+
+diff --git a/gcc/ada/ChangeLog b/gcc/ada/ChangeLog
+index a430c4b..2f39ad5 100644
+--- a/gcc/ada/ChangeLog
++++ b/gcc/ada/ChangeLog
+@@ -1,3 +1,11 @@
++2014-10-13  Eric Botcazou  <ebotcazou@adacore.com>
++            Alan Modra  <amodra@gmail.com>
++
++	PR ada/63225
++	* uintp.adb (Vector_To_Uint): Move from here to...
++	* uintp.ads (UI_Vector): Make public.
++	(Vector_To_Uint): ...here.
++
+ 2014-08-12  Joel Sherrill <joel.sherrill@oarcorp.com>
+ 
+ 	* socket.c: For RTEMS, use correct prototype of gethostbyname_r().
+diff --git a/gcc/ada/uintp.adb b/gcc/ada/uintp.adb
+index bc01466..7618898 100644
+--- a/gcc/ada/uintp.adb
++++ b/gcc/ada/uintp.adb
+@@ -171,22 +171,6 @@ package body Uintp is
+    --  If Discard_Quotient is True, Quotient is set to No_Uint
+    --  If Discard_Remainder is True, Remainder is set to No_Uint
+ 
+-   function Vector_To_Uint
+-     (In_Vec   : UI_Vector;
+-      Negative : Boolean) return Uint;
+-   --  Functions that calculate values in UI_Vectors, call this function to
+-   --  create and return the Uint value. In_Vec contains the multiple precision
+-   --  (Base) representation of a non-negative value. Leading zeroes are
+-   --  permitted. Negative is set if the desired result is the negative of the
+-   --  given value. The result will be either the appropriate directly
+-   --  represented value, or a table entry in the proper canonical format is
+-   --  created and returned.
+-   --
+-   --  Note that Init_Operand puts a signed value in the result vector, but
+-   --  Vector_To_Uint is always presented with a non-negative value. The
+-   --  processing of signs is something that is done by the caller before
+-   --  calling Vector_To_Uint.
+-
+    ------------
+    -- Direct --
+    ------------
+diff --git a/gcc/ada/uintp.ads b/gcc/ada/uintp.ads
+index dcf85a0..d76d285 100644
+--- a/gcc/ada/uintp.ads
++++ b/gcc/ada/uintp.ads
+@@ -90,6 +90,18 @@ package Uintp is
+    Uint_Minus_80  : constant Uint;
+    Uint_Minus_128 : constant Uint;
+ 
++   type UI_Vector is array (Pos range <>) of Int;
++   --  Vector containing the integer values of a Uint value
++
++   --  Note: An earlier version of this package used pointers of arrays of Ints
++   --  (dynamically allocated) for the Uint type. The change leads to a few
++   --  less natural idioms used throughout this code, but eliminates all uses
++   --  of the heap except for the table package itself. For example, Uint
++   --  parameters are often converted to UI_Vectors for internal manipulation.
++   --  This is done by creating the local UI_Vector using the function N_Digits
++   --  on the Uint to find the size needed for the vector, and then calling
++   --  Init_Operand to copy the values out of the table into the vector.
++
+    -----------------
+    -- Subprograms --
+    -----------------
+@@ -252,6 +264,22 @@ package Uintp is
+    --  function is used for capacity checks, and it can be one bit off
+    --  without affecting its usage.
+ 
++   function Vector_To_Uint
++     (In_Vec   : UI_Vector;
++      Negative : Boolean) return Uint;
++   --  Functions that calculate values in UI_Vectors, call this function to
++   --  create and return the Uint value. In_Vec contains the multiple precision
++   --  (Base) representation of a non-negative value. Leading zeroes are
++   --  permitted. Negative is set if the desired result is the negative of the
++   --  given value. The result will be either the appropriate directly
++   --  represented value, or a table entry in the proper canonical format is
++   --  created and returned.
++   --
++   --  Note that Init_Operand puts a signed value in the result vector, but
++   --  Vector_To_Uint is always presented with a non-negative value. The
++   --  processing of signs is something that is done by the caller before
++   --  calling Vector_To_Uint.
++
+    ---------------------
+    -- Output Routines --
+    ---------------------
+@@ -494,18 +522,6 @@ private
+    --  UI_Vector is defined for this purpose and some internal subprograms
+    --  used for converting from one to the other are defined.
+ 
+-   type UI_Vector is array (Pos range <>) of Int;
+-   --  Vector containing the integer values of a Uint value
+-
+-   --  Note: An earlier version of this package used pointers of arrays of Ints
+-   --  (dynamically allocated) for the Uint type. The change leads to a few
+-   --  less natural idioms used throughout this code, but eliminates all uses
+-   --  of the heap except for the table package itself. For example, Uint
+-   --  parameters are often converted to UI_Vectors for internal manipulation.
+-   --  This is done by creating the local UI_Vector using the function N_Digits
+-   --  on the Uint to find the size needed for the vector, and then calling
+-   --  Init_Operand to copy the values out of the table into the vector.
+-
+    type Uint_Entry is record
+       Length : Pos;
+       --  Length of entry in Udigits table in digits (i.e. in words)
+-- 
+2.0.3
+

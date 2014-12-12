@@ -1,0 +1,177 @@
+From de707245aad5981ea28f4f5a9f9889637a3d358c Mon Sep 17 00:00:00 2001
+From: olegendo <olegendo@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sun, 24 Aug 2014 11:15:37 +0000
+Subject: [PATCH 201/326] gcc/ 	Backport from mainline 	2014-08-24  Oleg Endo 
+ <olegendo@gcc.gnu.org>
+
+	PR target/61996
+	* config/sh/sh.opt (musermode): Allow negative form.
+	* config/sh/sh.c (sh_option_override): Disable TARGET_USERMODE for
+	targets that don't support it.
+	* doc/invoke.texi (SH Options): Rename sh-*-linux* to sh*-*-linux*.
+	Document -mno-usermode option.
+
+gcc/testsuite
+	Backport from mainline
+	2014-08-24  Oleg Endo  <olegendo@gcc.gnu.org>
+
+	PR target/61996
+	* gcc.target/sh/pr61996.c: New.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214408 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                         | 12 ++++++++++++
+ gcc/config/sh/sh.c                    |  6 ++++++
+ gcc/config/sh/sh.opt                  |  2 +-
+ gcc/doc/invoke.texi                   | 19 +++++++++++--------
+ gcc/testsuite/ChangeLog               |  8 ++++++++
+ gcc/testsuite/gcc.target/sh/pr61996.c | 12 ++++++++++++
+ 6 files changed, 50 insertions(+), 9 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.target/sh/pr61996.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index b5c5ac3..e575861 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,15 @@
++2014-08-24  Oleg Endo  <olegendo@gcc.gnu.org>
++
++	Backport from mainline
++	2014-08-24  Oleg Endo  <olegendo@gcc.gnu.org>
++
++	PR target/61996
++	* config/sh/sh.opt (musermode): Allow negative form.
++	* config/sh/sh.c (sh_option_override): Disable TARGET_USERMODE for
++	targets that don't support it.
++	* doc/invoke.texi (SH Options): Rename sh-*-linux* to sh*-*-linux*.
++	Document -mno-usermode option.
++
+ 2014-08-23  John David Anglin  <danglin@gcc.gnu.org>
+ 
+ 	PR target/62038
+diff --git a/gcc/config/sh/sh.c b/gcc/config/sh/sh.c
+index 9ecaa92..e818a79 100644
+--- a/gcc/config/sh/sh.c
++++ b/gcc/config/sh/sh.c
+@@ -808,6 +808,12 @@ sh_option_override (void)
+        targetm.asm_out.aligned_op.di = NULL;
+        targetm.asm_out.unaligned_op.di = NULL;
+     }
++
++  /* User/priviledged mode is supported only on SH3*, SH4* and SH5*.
++     Disable it for everything else.  */
++  if (! (TARGET_SH3 || TARGET_SH5) && TARGET_USERMODE)
++    TARGET_USERMODE = false;
++
+   if (TARGET_SH1)
+     {
+       if (! strcmp (sh_div_str, "call-div1"))
+diff --git a/gcc/config/sh/sh.opt b/gcc/config/sh/sh.opt
+index 8a6788e..8fdd7e3 100644
+--- a/gcc/config/sh/sh.opt
++++ b/gcc/config/sh/sh.opt
+@@ -343,7 +343,7 @@ Target RejectNegative Joined UInteger Var(sh_multcost) Init(-1)
+ Cost to assume for a multiply insn
+ 
+ musermode
+-Target Report RejectNegative Var(TARGET_USERMODE)
++Target Var(TARGET_USERMODE)
+ Don't generate privileged-mode only code; implies -mno-inline-ic_invalidate if the inline code would not work in user mode.
+ 
+ ;; We might want to enable this by default for TARGET_HARD_SH4, because
+diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
+index 902e5e5..3315dda 100644
+--- a/gcc/doc/invoke.texi
++++ b/gcc/doc/invoke.texi
+@@ -18877,7 +18877,7 @@ Mark the @code{MAC} register as call-clobbered, even if
+ @item -mieee
+ @itemx -mno-ieee
+ @opindex mieee
+-@opindex mnoieee
++@opindex mno-ieee
+ Control the IEEE compliance of floating-point comparisons, which affects the
+ handling of cases where the result of a comparison is unordered.  By default
+ @option{-mieee} is implicitly enabled.  If @option{-ffinite-math-only} is
+@@ -18917,14 +18917,14 @@ separated list.  For details on the atomic built-in functions see
+ 
+ @item none
+ Disable compiler generated atomic sequences and emit library calls for atomic
+-operations.  This is the default if the target is not @code{sh-*-linux*}.
++operations.  This is the default if the target is not @code{sh*-*-linux*}.
+ 
+ @item soft-gusa
+ Generate GNU/Linux compatible gUSA software atomic sequences for the atomic
+ built-in functions.  The generated atomic sequences require additional support
+ from the interrupt/exception handling code of the system and are only suitable
+ for SH3* and SH4* single-core systems.  This option is enabled by default when
+-the target is @code{sh-*-linux*} and SH3* or SH4*.  When the target is SH4A,
++the target is @code{sh*-*-linux*} and SH3* or SH4*.  When the target is SH4A,
+ this option will also partially utilize the hardware atomic instructions
+ @code{movli.l} and @code{movco.l} to create more efficient code, unless
+ @samp{strict} is specified.  
+@@ -18943,7 +18943,7 @@ setting @code{SR.IMASK = 1111}.  This model works only when the program runs
+ in privileged mode and is only suitable for single-core systems.  Additional
+ support from the interrupt/exception handling code of the system is not
+ required.  This model is enabled by default when the target is
+-@code{sh-*-linux*} and SH1* or SH2*.
++@code{sh*-*-linux*} and SH1* or SH2*.
+ 
+ @item hard-llcs
+ Generate hardware atomic sequences using the @code{movli.l} and @code{movco.l}
+@@ -18984,11 +18984,14 @@ When generating position-independent code, emit function calls using
+ the Global Offset Table instead of the Procedure Linkage Table.
+ 
+ @item -musermode
++@itemx -mno-usermode
+ @opindex musermode
+-Don't generate privileged mode only code.  This option
+-implies @option{-mno-inline-ic_invalidate}
+-if the inlined code would not work in user mode.
+-This is the default when the target is @code{sh-*-linux*}.
++@opindex mno-usermode
++Don't allow (allow) the compiler generating privileged mode code.  Specifying
++@option{-musermode} also implies @option{-mno-inline-ic_invalidate} if the
++inlined code would not work in user mode.  @option{-musermode} is the default
++when the target is @code{sh*-*-linux*}.  If the target is SH1* or SH2*
++@option{-musermode} has no effect, since there is no user mode.
+ 
+ @item -multcost=@var{number}
+ @opindex multcost=@var{number}
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 44128c7..dcead6d 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,11 @@
++2014-08-24  Oleg Endo  <olegendo@gcc.gnu.org>
++
++	Backport from mainline
++	2014-08-24  Oleg Endo  <olegendo@gcc.gnu.org>
++
++	PR target/61996
++	* gcc.target/sh/pr61996.c: New.
++
+ 2014-08-21  Thomas Koenig  <tkoenig@gcc.gnu.org>
+ 
+ 	Backport from trunk
+diff --git a/gcc/testsuite/gcc.target/sh/pr61996.c b/gcc/testsuite/gcc.target/sh/pr61996.c
+new file mode 100644
+index 0000000..51a5f92
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/sh/pr61996.c
+@@ -0,0 +1,12 @@
++/* Check that the option -musermode has no effect on targets that do not
++   support user/privileged mode and that it does not interfere with option
++   -matomic-model=soft-imask.  */
++/* { dg-do compile }  */
++/* { dg-options "-matomic-model=soft-imask" }  */
++/* { dg-skip-if "" { "sh*-*-*" } { "*"} { "-m1*" "-m2*" } }  */
++
++int
++test (void)
++{
++  return 0;
++}
+-- 
+2.0.3
+

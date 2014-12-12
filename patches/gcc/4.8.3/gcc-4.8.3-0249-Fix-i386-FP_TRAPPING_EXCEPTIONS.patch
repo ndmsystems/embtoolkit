@@ -1,0 +1,118 @@
+From 6ca86a9a983d974cfd511f596fdde33435137afd Mon Sep 17 00:00:00 2001
+From: jsm28 <jsm28@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 18 Sep 2014 12:04:43 +0000
+Subject: [PATCH 249/326] Fix i386 FP_TRAPPING_EXCEPTIONS.
+
+The i386 sfp-machine.h defines FP_TRAPPING_EXCEPTIONS in a way that is
+always wrong: it treats a set bit as indicating the exception is
+trapping, when actually a set bit (both for 387 and SSE floating
+point) indicates it is masked, and a clear bit indicates it is
+trapping.  This patch fixes this bug.
+
+Bootstrapped with no regressions on x86_64-unknown-linux-gnu.
+
+libgcc:
+	* config/i386/sfp-machine.h (FP_TRAPPING_EXCEPTIONS): Treat clear
+	bits not set bits as indicating trapping exceptions.
+
+gcc/testsuite:
+	* gcc.dg/torture/float128-exact-underflow.c: New test.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215349 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/testsuite/ChangeLog                            |  4 +++
+ .../gcc.dg/torture/float128-exact-underflow.c      | 41 ++++++++++++++++++++++
+ libgcc/ChangeLog                                   |  5 +++
+ libgcc/config/i386/sfp-machine.h                   |  2 +-
+ 4 files changed, 51 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/gcc.dg/torture/float128-exact-underflow.c
+
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 1a340d2..9aab1c7 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,7 @@
++2014-09-18  Joseph Myers  <joseph@codesourcery.com>
++
++	* gcc.dg/torture/float128-exact-underflow.c: New test.
++
+ 2014-09-17  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR debug/63284
+diff --git a/gcc/testsuite/gcc.dg/torture/float128-exact-underflow.c b/gcc/testsuite/gcc.dg/torture/float128-exact-underflow.c
+new file mode 100644
+index 0000000..ea11f26
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/torture/float128-exact-underflow.c
+@@ -0,0 +1,41 @@
++/* Test that exact underflow in __float128 signals the underflow
++   exception if trapping is enabled, but does not raise the flag
++   otherwise.  */
++
++/* { dg-do run { target i?86-*-*gnu* x86_64-*-*gnu* } } */
++/* { dg-options "-D_GNU_SOURCE" } */
++/* { dg-require-effective-target fenv_exceptions } */
++
++#include <fenv.h>
++#include <setjmp.h>
++#include <signal.h>
++#include <stdlib.h>
++
++volatile sig_atomic_t caught_sigfpe;
++sigjmp_buf buf;
++
++static void
++handle_sigfpe (int sig)
++{
++  caught_sigfpe = 1;
++  siglongjmp (buf, 1);
++}
++
++int
++main (void)
++{
++  volatile __float128 a = 0x1p-16382q, b = 0x1p-2q;
++  volatile __float128 r;
++  r = a * b;
++  if (fetestexcept (FE_UNDERFLOW))
++    abort ();
++  if (r != 0x1p-16384q)
++    abort ();
++  feenableexcept (FE_UNDERFLOW);
++  signal (SIGFPE, handle_sigfpe);
++  if (sigsetjmp (buf, 1) == 0)
++    r = a * b;
++  if (!caught_sigfpe)
++    abort ();
++  exit (0);
++}
+diff --git a/libgcc/ChangeLog b/libgcc/ChangeLog
+index 5305978..0dbd425 100644
+--- a/libgcc/ChangeLog
++++ b/libgcc/ChangeLog
+@@ -1,3 +1,8 @@
++2014-09-18  Joseph Myers  <joseph@codesourcery.com>
++
++	* config/i386/sfp-machine.h (FP_TRAPPING_EXCEPTIONS): Treat clear
++	bits not set bits as indicating trapping exceptions.
++
+ 2014-05-22  Release Manager
+ 
+ 	* GCC 4.8.3 released.
+diff --git a/libgcc/config/i386/sfp-machine.h b/libgcc/config/i386/sfp-machine.h
+index b19d94b..27b42a1 100644
+--- a/libgcc/config/i386/sfp-machine.h
++++ b/libgcc/config/i386/sfp-machine.h
+@@ -59,7 +59,7 @@ void __sfp_handle_exceptions (int);
+       __sfp_handle_exceptions (_fex);		\
+   } while (0);
+ 
+-#define FP_TRAPPING_EXCEPTIONS ((_fcw >> FP_EX_SHIFT) & FP_EX_ALL)
++#define FP_TRAPPING_EXCEPTIONS ((~_fcw >> FP_EX_SHIFT) & FP_EX_ALL)
+ 
+ #define FP_ROUNDMODE		(_fcw & FP_RND_MASK)
+ #endif
+-- 
+2.0.3
+

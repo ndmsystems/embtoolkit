@@ -1,0 +1,93 @@
+From 33713a539f3def94a528d948f9e2aee60b188726 Mon Sep 17 00:00:00 2001
+From: uros <uros@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 19 Nov 2014 23:29:51 +0000
+Subject: [PATCH 360/366] 	PR target/63947 	* config/i386/i386.c
+ (put_condition_code) <case LTU, case GEU>: 	Output "b" and "nb" suffix for
+ FP mode.
+
+testsuite/ChangeLog:
+
+	PR target/63947
+	* gcc.target/i386/pr63947.c: New test.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@217819 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                           | 6 ++++++
+ gcc/config/i386/i386.c                  | 6 +++---
+ gcc/testsuite/ChangeLog                 | 5 +++++
+ gcc/testsuite/gcc.target/i386/pr63947.c | 9 +++++++++
+ 4 files changed, 23 insertions(+), 3 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.target/i386/pr63947.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 6545ece..8aac0ff 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,9 @@
++2014-11-19  Uros Bizjak  <ubizjak@gmail.com>
++
++	PR target/63947
++	* config/i386/i386.c (put_condition_code) <case LTU, case GEU>:
++	Output "b" and "nb" suffix for FP mode.
++
+ 2014-11-19  Tom de Vries  <tom@codesourcery.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/config/i386/i386.c b/gcc/config/i386/i386.c
+index 568e574..9b24efc 100644
+--- a/gcc/config/i386/i386.c
++++ b/gcc/config/i386/i386.c
+@@ -13800,7 +13800,7 @@ put_condition_code (enum rtx_code code, enum machine_mode mode, bool reverse,
+       if (mode == CCmode)
+ 	suffix = "b";
+       else if (mode == CCCmode)
+-	suffix = "c";
++	suffix = fp ? "b" : "c";
+       else
+ 	gcc_unreachable ();
+       break;
+@@ -13823,9 +13823,9 @@ put_condition_code (enum rtx_code code, enum machine_mode mode, bool reverse,
+       break;
+     case GEU:
+       if (mode == CCmode)
+-	suffix = fp ? "nb" : "ae";
++	suffix = "nb";
+       else if (mode == CCCmode)
+-	suffix = "nc";
++	suffix = fp ? "nb" : "nc";
+       else
+ 	gcc_unreachable ();
+       break;
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 978c74b..df6a22d 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-11-19  Uros Bizjak  <ubizjak@gmail.com>
++
++	PR target/63947
++	* gcc.target/i386/pr63947.c: New test.
++
+ 2014-11-19  Tom de Vries  <tom@codesourcery.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/testsuite/gcc.target/i386/pr63947.c b/gcc/testsuite/gcc.target/i386/pr63947.c
+new file mode 100644
+index 0000000..3c0a67a
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/i386/pr63947.c
+@@ -0,0 +1,9 @@
++/* PR target/63947 */
++/* { dg-do assemble } */
++/* { dg-options "-Os" } */
++/* { dg-additional-options "-march=i686" { target ia32 } } */
++
++long double foo (unsigned a, unsigned b)
++{
++  return a + b < a;
++}
+-- 
+2.0.3
+
