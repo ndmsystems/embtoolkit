@@ -64,9 +64,10 @@ menu "Toolchain configuration"
 source "core/toolchain/toolchain.kconfig"
 endmenu
 
-menu "Toolchain Addons - Debugging systems"
+menu "Toolchain Addons"
 source "core/toolchain/addons/gdb/gdb.kconfig"
 source "packages/misc/ncurses/ncurses.kconfig"
+source "core/toolchain/addons/node/node.kconfig"
 source "core/toolchain/addons/ltrace/ltrace.kconfig"
 source "core/toolchain/addons/strace/strace.kconfig"
 endmenu
