@@ -71,10 +71,13 @@ embtk_pkgincdir := core/toolchain/addons
 # ltrace
 $(call embtk_include_xtoolpkg,ltrace,toolchain_addons_deps)
 
+# node.js
+$(call embtk_include_xtoolpkg,node_host,toolchain_addons_deps)
+
 # strace
 $(call embtk_include_xtoolpkg,strace,toolchain_addons_deps)
 
-# Addon: gdb
+# gdb
 embtk_pkgincdir := core/toolchain/addons/gdb
 ifeq ($(CONFIG_EMBTK_HAVE_GDBSERVER)$(CONFIG_EMBTK_HAVE_GDB),y)
 include core/toolchain/addons/gdb/common.mk

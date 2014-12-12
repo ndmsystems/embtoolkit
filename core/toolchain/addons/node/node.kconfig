@@ -1,0 +1,13 @@
+config EMBTK_HOST_HAVE_NODE
+	bool "Have Node.js"
+	default y
+	help
+	 Node.js is an open source, cross-platform runtime environment for
+	 server-side and networking applications.
+
+config EMBTK_NODE_HOST_VERSION_STRING
+	string
+	default	"0.10.30"
+
+config EMBTK_NODE_HOST_NEED_PATCH
+	bool
