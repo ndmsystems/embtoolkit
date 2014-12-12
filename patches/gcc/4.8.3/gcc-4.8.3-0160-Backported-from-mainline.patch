@@ -1,0 +1,104 @@
+From d0c4216619008a828df35dd1a4f8fc801e21e49c Mon Sep 17 00:00:00 2001
+From: redi <redi@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 4 Aug 2014 22:16:44 +0000
+Subject: [PATCH 160/326] Backported from mainline 2014-07-29  Jonathan Wakely 
+ <jwakely@redhat.com>
+
+	PR libstdc++/61946
+	* include/ext/rope (rope::rope(char_producer<_CharT>*, size_t, bool,
+	const allocator_type&)): Pass non-const allocator to
+	_S_new_RopeFunction.
+	* testsuite/ext/rope/61946.cc: New.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213611 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ libstdc++-v3/ChangeLog                   | 11 +++++++++++
+ libstdc++-v3/include/ext/rope            |  7 ++++---
+ libstdc++-v3/testsuite/ext/rope/61946.cc | 31 +++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 3 deletions(-)
+ create mode 100644 libstdc++-v3/testsuite/ext/rope/61946.cc
+
+diff --git a/libstdc++-v3/ChangeLog b/libstdc++-v3/ChangeLog
+index ed7e39c..9c8408d 100644
+--- a/libstdc++-v3/ChangeLog
++++ b/libstdc++-v3/ChangeLog
+@@ -1,3 +1,14 @@
++2014-08-04  Jonathan Wakely  <jwakely@redhat.com>
++
++	Backported from mainline
++	2014-07-29  Jonathan Wakely  <jwakely@redhat.com>
++
++	PR libstdc++/61946
++	* include/ext/rope (rope::rope(char_producer<_CharT>*, size_t, bool,
++	const allocator_type&)): Pass non-const allocator to
++	_S_new_RopeFunction.
++	* testsuite/ext/rope/61946.cc: New.
++
+ 2014-08-04  Zifei Tong  <zifeitong@gmail.com>
+ 
+ 	* libsupc++/atexit_thread.cc (HAVE___CXA_THREAD_ATEXIT_IMPL): Add
+diff --git a/libstdc++-v3/include/ext/rope b/libstdc++-v3/include/ext/rope
+index 38eb1e8..75c8fc2 100644
+--- a/libstdc++-v3/include/ext/rope
++++ b/libstdc++-v3/include/ext/rope
+@@ -1544,7 +1544,7 @@ protected:
+       typedef typename _Base::allocator_type allocator_type;
+       using _Base::_M_tree_ptr;
+       using _Base::get_allocator;
+-      using _Base::_M_get_allocator;      
++      using _Base::_M_get_allocator;
+       typedef __GC_CONST _CharT* _Cstrptr;
+       
+       static _CharT _S_empty_c_str[1];
+@@ -1876,8 +1876,9 @@ protected:
+ 	   const allocator_type& __a = allocator_type())
+       : _Base(__a)
+       {
+-	this->_M_tree_ptr = (0 == __len) ?
+-	  0 : _S_new_RopeFunction(__fn, __len, __delete_fn, __a);
++	this->_M_tree_ptr = (0 == __len)
++	  ? 0
++	  : _S_new_RopeFunction(__fn, __len, __delete_fn, _M_get_allocator());
+       }
+ 
+       rope(const rope& __x, const allocator_type& __a = allocator_type())
+diff --git a/libstdc++-v3/testsuite/ext/rope/61946.cc b/libstdc++-v3/testsuite/ext/rope/61946.cc
+new file mode 100644
+index 0000000..ba73b48
+--- /dev/null
++++ b/libstdc++-v3/testsuite/ext/rope/61946.cc
+@@ -0,0 +1,31 @@
++// Copyright (C) 2014 Free Software Foundation, Inc.
++//
++// This file is part of the GNU ISO C++ Library.  This library is free
++// software; you can redistribute it and/or modify it under the
++// terms of the GNU General Public License as published by the
++// Free Software Foundation; either version 3, or (at your option)
++// any later version.
++
++// This library is distributed in the hope that it will be useful,
++// but WITHOUT ANY WARRANTY; without even the implied warranty of
++// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++// GNU General Public License for more details.
++
++// You should have received a copy of the GNU General Public License along
++// with this library; see the file COPYING3.  If not see
++// <http://www.gnu.org/licenses/>.
++
++// { dg-do compile }
++
++#include <ext/rope>
++
++struct empty_char_prod : __gnu_cxx::char_producer<char>
++{
++  virtual void operator()(size_t, size_t, char*) {}
++};
++
++int main ()
++{
++  empty_char_prod* ecp = new empty_char_prod;
++  __gnu_cxx::crope excrope( ecp, 10L, true );
++}
+-- 
+2.0.3
+

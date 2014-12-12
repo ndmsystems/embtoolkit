@@ -1,0 +1,124 @@
+From d7a2ce7542636c9d18580a2d7163b9c742206e3f Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 17 Sep 2014 19:08:06 +0000
+Subject: [PATCH 247/326] 	PR debug/63284 	* tree-cfgcleanup.c
+ (fixup_noreturn_call): Don't split block 	if there are only debug stmts
+ after the noreturn call, instead 	remove the debug stmts.
+
+	* gcc.dg/pr63284.c: New test.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215333 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                  |  7 +++++++
+ gcc/testsuite/ChangeLog        |  5 +++++
+ gcc/testsuite/gcc.dg/pr63284.c | 42 ++++++++++++++++++++++++++++++++++++++++++
+ gcc/tree-cfgcleanup.c          | 15 ++++++++++++++-
+ 4 files changed, 68 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/gcc.dg/pr63284.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index c030e0d..8294480 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,10 @@
++2014-09-17  Jakub Jelinek  <jakub@redhat.com>
++
++	PR debug/63284
++	* tree-cfgcleanup.c (fixup_noreturn_call): Don't split block
++	if there are only debug stmts after the noreturn call, instead
++	remove the debug stmts.
++
+ 2014-09-10  Michael Meissner  <meissner@linux.vnet.ibm.com>
+ 
+ 	* config/rs6000/vsx.md (vsx_fmav4sf4): Use correct constraints for
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index c459dd0..1a340d2 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-09-17  Jakub Jelinek  <jakub@redhat.com>
++
++	PR debug/63284
++	* gcc.dg/pr63284.c: New test.
++
+ 2014-09-09  Richard Biener  <rguenther@suse.de>
+ 
+ 	Backport from mainline
+diff --git a/gcc/testsuite/gcc.dg/pr63284.c b/gcc/testsuite/gcc.dg/pr63284.c
+new file mode 100644
+index 0000000..dc7fc28
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/pr63284.c
+@@ -0,0 +1,42 @@
++/* PR debug/63284 */
++/* { dg-do compile } */
++/* { dg-options "-O2 -fcompare-debug" } */
++
++int a[10], *b, *d, c, f;
++int fn2 (void);
++void fn3 (void);
++void fn4 (int);
++
++static int
++fn1 (int x)
++{
++  int e = a[0];
++  if (e)
++    return 1;
++  if (b)
++    switch (x)
++      {
++      case 1:
++        if (d)
++          e = fn2 ();
++        else
++          fn3 ();
++        break;
++      case 0:
++        if (d)
++          {
++            fn3 ();
++            if (c)
++              fn4 (1);
++          }
++        else
++          fn4 (0);
++      }
++  return e;
++}
++
++void
++fn6 (void)
++{
++  f = fn1 (0);
++}
+diff --git a/gcc/tree-cfgcleanup.c b/gcc/tree-cfgcleanup.c
+index aeb5e4e..cd3e6e3 100644
+--- a/gcc/tree-cfgcleanup.c
++++ b/gcc/tree-cfgcleanup.c
+@@ -498,7 +498,20 @@ fixup_noreturn_call (gimple stmt)
+ 
+   /* First split basic block if stmt is not last.  */
+   if (stmt != gsi_stmt (gsi_last_bb (bb)))
+-    split_block (bb, stmt);
++    {
++      if (stmt == gsi_stmt (gsi_last_nondebug_bb (bb)))
++	{
++	  /* Don't split if there are only debug stmts
++	     after stmt, that can result in -fcompare-debug
++	     failures.  Remove the debug stmts instead,
++	     they should be all unreachable anyway.  */
++	  gimple_stmt_iterator gsi = gsi_for_stmt (stmt);
++	  for (gsi_next (&gsi); !gsi_end_p (gsi); )
++	    gsi_remove (&gsi, true);
++	}
++      else
++	split_block (bb, stmt);
++    }
+ 
+   changed |= remove_fallthru_edge (bb->succs);
+ 
+-- 
+2.0.3
+

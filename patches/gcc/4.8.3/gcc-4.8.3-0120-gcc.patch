@@ -1,0 +1,129 @@
+From 06def2945028a9ecab50af7a58d3e9547351e42b Mon Sep 17 00:00:00 2001
+From: uweigand <uweigand@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 24 Jul 2014 17:30:52 +0000
+Subject: [PATCH 120/134] gcc/
+
+	* config/rs6000/rs6000.c (rs6000_function_arg): If a float argument
+	does not fit fully into floating-point registers, and there is still
+	space in the register parameter area, issue -Wpsabi note that the ABI
+	will change in a future GCC release.
+
+gcc/testsuite/
+
+	* gcc.target/powerpc/ppc64-abi-warn-1.c: New test.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213023 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                                      |  7 +++++
+ gcc/config/rs6000/rs6000.c                         | 32 ++++++++++++++++++++++
+ gcc/testsuite/ChangeLog                            |  7 +++++
+ .../gcc.target/powerpc/ppc64-abi-warn-1.c          | 12 ++++++++
+ 4 files changed, 58 insertions(+)
+ create mode 100644 gcc/testsuite/gcc.target/powerpc/ppc64-abi-warn-1.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 51a4e7c..f03a819 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,10 @@
++2014-07-23  Ulrich Weigand  <Ulrich.Weigand@de.ibm.com>
++
++	* config/rs6000/rs6000.c (rs6000_function_arg): If a float argument
++	does not fit fully into floating-point registers, and there is still
++	space in the register parameter area, issue -Wpsabi note that the ABI
++	will change in a future GCC release.
++
+ 2014-07-23  Sebastian Huber  <sebastian.huber@embedded-brains.de>
+ 
+ 	* config/arm/t-rtems-eabi: Add
+diff --git a/gcc/config/rs6000/rs6000.c b/gcc/config/rs6000/rs6000.c
+index 3c1ff4d..7bdbdcc 100644
+--- a/gcc/config/rs6000/rs6000.c
++++ b/gcc/config/rs6000/rs6000.c
+@@ -10245,6 +10245,7 @@ rs6000_function_arg (cumulative_args_t cum_v, enum machine_mode mode,
+ 	  rtx r, off;
+ 	  int i, k = 0;
+ 	  unsigned long n_fpreg = (GET_MODE_SIZE (elt_mode) + 7) >> 3;
++	  int fpr_words;
+ 
+ 	  /* Do we also need to pass this argument in the parameter
+ 	     save area?  */
+@@ -10273,6 +10274,37 @@ rs6000_function_arg (cumulative_args_t cum_v, enum machine_mode mode,
+ 	      rvec[k++] = gen_rtx_EXPR_LIST (VOIDmode, r, off);
+ 	    }
+ 
++	  /* If there were not enough FPRs to hold the argument, the rest
++	     usually goes into memory.  However, if the current position
++	     is still within the register parameter area, a portion may
++	     actually have to go into GPRs.
++
++	     Note that it may happen that the portion of the argument
++	     passed in the first "half" of the first GPR was already
++	     passed in the last FPR as well.
++
++	     For unnamed arguments, we already set up GPRs to cover the
++	     whole argument in rs6000_psave_function_arg, so there is
++	     nothing further to do at this point.
++
++	     GCC 4.8/4.9 Note: This was implemented incorrectly in earlier
++	     GCC releases.  To avoid any ABI change on the release branch,
++	     we retain that original implementation here, but warn if we
++	     encounter a case where the ABI will change in the future.  */
++	  fpr_words = (i * GET_MODE_SIZE (elt_mode)) / (TARGET_32BIT ? 4 : 8);
++	  if (i < n_elts && align_words + fpr_words < GP_ARG_NUM_REG
++	      && cum->nargs_prototype > 0)
++            {
++	      static bool warned;
++	      if (!warned && warn_psabi)
++		{
++		  warned = true;
++		  inform (input_location,
++			  "the ABI of passing homogeneous float aggregates"
++			  " will change in a future GCC release");
++		}
++	    }
++
+ 	  return rs6000_finish_function_arg (mode, rvec, k);
+ 	}
+       else if (align_words < GP_ARG_NUM_REG)
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 394ca7a..0289f57 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -3,6 +3,13 @@
+ 	Backport from mainline:
+ 	2014-07-24  Ulrich Weigand  <Ulrich.Weigand@de.ibm.com>
+ 
++	* gcc.target/powerpc/ppc64-abi-warn-1.c: New test.
++
++2014-07-24  Ulrich Weigand  <Ulrich.Weigand@de.ibm.com>
++
++	Backport from mainline:
++	2014-07-24  Ulrich Weigand  <Ulrich.Weigand@de.ibm.com>
++
+ 	* g++.dg/compat/struct-layout-1.exp: Load g++-dg.exp.
+ 
+ 2014-07-19  Eric Botcazou  <ebotcazou@adacore.com>
+diff --git a/gcc/testsuite/gcc.target/powerpc/ppc64-abi-warn-1.c b/gcc/testsuite/gcc.target/powerpc/ppc64-abi-warn-1.c
+new file mode 100644
+index 0000000..6e0d548
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/powerpc/ppc64-abi-warn-1.c
+@@ -0,0 +1,12 @@
++/* { dg-do compile { target { powerpc*-*-linux* && lp64 } } } */
++/* { dg-options "-mabi=elfv2" } */
++
++struct f8
++  {
++    float x[8];
++  };
++
++void test (struct f8 a, struct f8 b) /* { dg-message "note: the ABI of passing homogeneous float aggregates will change" } */
++{
++}
++
+-- 
+1.8.5.5
+

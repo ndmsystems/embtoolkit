@@ -1,0 +1,122 @@
+From faa0533685d3e680231542f5d93a5c87173ba0ca Mon Sep 17 00:00:00 2001
+From: jason <jason@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 1 Aug 2014 18:33:54 +0000
+Subject: [PATCH 155/326] 	PR c++/59823 	Core DR 1138 	* call.c
+ (reference_binding): Pass LOOKUP_NO_TEMP_BIND for 	list-initialization. 
+ A conversion to rvalue ref that involves 	an lvalue-rvalue conversion is
+ bad. 	(convert_like_real): Give helpful error message.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213502 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/cp/ChangeLog                       |  9 +++++++++
+ gcc/cp/call.c                          | 24 +++++++++++++++++-------
+ gcc/testsuite/g++.dg/cpp0x/overload3.C | 17 +++++++++++++++++
+ 3 files changed, 43 insertions(+), 7 deletions(-)
+ create mode 100644 gcc/testsuite/g++.dg/cpp0x/overload3.C
+
+diff --git a/gcc/cp/ChangeLog b/gcc/cp/ChangeLog
+index 7f01858..4b87bf5 100644
+--- a/gcc/cp/ChangeLog
++++ b/gcc/cp/ChangeLog
+@@ -1,3 +1,12 @@
++2014-01-27  Jason Merrill  <jason@redhat.com>
++
++	PR c++/59823
++	Core DR 1138
++	* call.c (reference_binding): Pass LOOKUP_NO_TEMP_BIND for
++	list-initialization.  A conversion to rvalue ref that involves
++	an lvalue-rvalue conversion is bad.
++	(convert_like_real): Give helpful error message.
++
+ 2014-01-29  Jason Merrill  <jason@redhat.com>
+ 
+ 	PR c++/59956
+diff --git a/gcc/cp/call.c b/gcc/cp/call.c
+index 51e1d19..a4deef0 100644
+--- a/gcc/cp/call.c
++++ b/gcc/cp/call.c
+@@ -1464,7 +1464,7 @@ reference_binding (tree rto, tree rfrom, tree expr, bool c_cast_p, int flags,
+     {
+       maybe_warn_cpp0x (CPP0X_INITIALIZER_LISTS);
+       conv = implicit_conversion (to, from, expr, c_cast_p,
+-				  flags, complain);
++				  flags|LOOKUP_NO_TEMP_BIND, complain);
+       if (!CLASS_TYPE_P (to)
+ 	  && CONSTRUCTOR_NELTS (expr) == 1)
+ 	{
+@@ -1624,9 +1624,9 @@ reference_binding (tree rto, tree rfrom, tree expr, bool c_cast_p, int flags,
+ 
+   /* [dcl.init.ref]
+ 
+-     Otherwise, the reference shall be to a non-volatile const type.
+-
+-     Under C++0x, [8.5.3/5 dcl.init.ref] it may also be an rvalue reference */
++     Otherwise, the reference shall be an lvalue reference to a
++     non-volatile const type, or the reference shall be an rvalue
++     reference.  */
+   if (!CP_TYPE_CONST_NON_VOLATILE_P (to) && !TYPE_REF_IS_RVALUE (rto))
+     return NULL;
+ 
+@@ -1664,7 +1664,16 @@ reference_binding (tree rto, tree rfrom, tree expr, bool c_cast_p, int flags,
+   /* This reference binding, unlike those above, requires the
+      creation of a temporary.  */
+   conv->need_temporary_p = true;
+-  conv->rvaluedness_matches_p = TYPE_REF_IS_RVALUE (rto);
++  if (TYPE_REF_IS_RVALUE (rto))
++    {
++      conv->rvaluedness_matches_p = 1;
++      /* In the second case, if the reference is an rvalue reference and
++	 the second standard conversion sequence of the user-defined
++	 conversion sequence includes an lvalue-to-rvalue conversion, the
++	 program is ill-formed.  */
++      if (conv->user_conv_p && next_conversion (conv)->kind == ck_rvalue)
++	conv->bad_p = 1;
++    }
+ 
+   return conv;
+ }
+@@ -5811,7 +5820,7 @@ convert_like_real (conversion *convs, tree expr, tree fn, int argnum,
+       && convs->kind != ck_list
+       && convs->kind != ck_ambig
+       && (convs->kind != ck_ref_bind
+-	  || convs->user_conv_p)
++	  || (convs->user_conv_p && next_conversion (convs)->bad_p))
+       && (convs->kind != ck_rvalue
+ 	  || SCALAR_TYPE_P (totype))
+       && convs->kind != ck_base)
+@@ -6110,7 +6119,8 @@ convert_like_real (conversion *convs, tree expr, tree fn, int argnum,
+ 	if (convs->bad_p && !next_conversion (convs)->bad_p)
+ 	  {
+ 	    gcc_assert (TYPE_REF_IS_RVALUE (ref_type)
+-			&& real_lvalue_p (expr));
++			&& (real_lvalue_p (expr)
++			    || next_conversion(convs)->kind == ck_rvalue));
+ 
+ 	    error_at (loc, "cannot bind %qT lvalue to %qT",
+ 		      TREE_TYPE (expr), totype);
+diff --git a/gcc/testsuite/g++.dg/cpp0x/overload3.C b/gcc/testsuite/g++.dg/cpp0x/overload3.C
+new file mode 100644
+index 0000000..9572a47f
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/cpp0x/overload3.C
+@@ -0,0 +1,17 @@
++// PR c++/59823
++// { dg-options "-std=c++11" }
++
++struct X { };
++
++void f(X&&);			// { dg-message "void f" }
++
++struct wrap
++{
++  operator const X&() const;
++};
++
++int main()
++{
++  wrap w;
++  f(w);				// { dg-error "lvalue" }
++}
+-- 
+2.0.3
+

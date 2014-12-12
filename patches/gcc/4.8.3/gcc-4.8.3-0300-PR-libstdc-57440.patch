@@ -1,0 +1,56 @@
+From 6b8dec0955a392269cda14d1f8927b3c8a2cd4f4 Mon Sep 17 00:00:00 2001
+From: ktietz <ktietz@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 14 Oct 2014 17:06:27 +0000
+Subject: [PATCH 300/326] 	PR libstdc++/57440 	*
+ config/os/mingw32/os_defines.h (_GTHREAD_USE_MUTEX_INIT_FUNC): 	Define
+ to avoid leak. 	* config/os/mingw32-w64/os_defines.h: Likewise.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@216213 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ libstdc++-v3/ChangeLog                          | 7 +++++++
+ libstdc++-v3/config/os/mingw32-w64/os_defines.h | 3 +++
+ libstdc++-v3/config/os/mingw32/os_defines.h     | 3 +++
+ 3 files changed, 13 insertions(+)
+
+diff --git a/libstdc++-v3/ChangeLog b/libstdc++-v3/ChangeLog
+index 79e8b7d..eb469ba 100644
+--- a/libstdc++-v3/ChangeLog
++++ b/libstdc++-v3/ChangeLog
+@@ -1,3 +1,10 @@
++2014-10-14  Kai Tietz  <ktietz@redhat.com>
++
++	PR libstdc++/57440
++	* config/os/mingw32/os_defines.h (_GTHREAD_USE_MUTEX_INIT_FUNC):
++	Define to avoid leak.
++	* config/os/mingw32-w64/os_defines.h: Likewise.
++
+ 2014-10-03  Jonathan Wakely  <jwakely@redhat.com>
+ 
+ 	PR libstdc++/63449
+diff --git a/libstdc++-v3/config/os/mingw32-w64/os_defines.h b/libstdc++-v3/config/os/mingw32-w64/os_defines.h
+index ad76436..920d7cf 100644
+--- a/libstdc++-v3/config/os/mingw32-w64/os_defines.h
++++ b/libstdc++-v3/config/os/mingw32-w64/os_defines.h
+@@ -78,4 +78,7 @@
+ #define _GLIBCXX_LLP64 1
+ #endif
+ 
++// See libstdc++/59807
++#define _GTHREAD_USE_MUTEX_INIT_FUNC 1
++
+ #endif
+diff --git a/libstdc++-v3/config/os/mingw32/os_defines.h b/libstdc++-v3/config/os/mingw32/os_defines.h
+index df3a1cb..900291d 100644
+--- a/libstdc++-v3/config/os/mingw32/os_defines.h
++++ b/libstdc++-v3/config/os/mingw32/os_defines.h
+@@ -75,4 +75,7 @@
+ #define _GLIBCXX_LLP64 1
+ #endif
+ 
++// See libstdc++/59807
++#define _GTHREAD_USE_MUTEX_INIT_FUNC 1
++
+ #endif
+-- 
+2.0.3
+

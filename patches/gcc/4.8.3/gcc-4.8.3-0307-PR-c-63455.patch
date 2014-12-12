@@ -1,0 +1,62 @@
+From 827985c1d3b3446aa791f84a730bfdec9d77d74c Mon Sep 17 00:00:00 2001
+From: jason <jason@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 15 Oct 2014 16:46:35 +0000
+Subject: [PATCH 307/326] 	PR c++/63455 	Revert: 	* parser.c
+ (cp_parser_abort_tentative_parse): Make sure we haven't 	committed to
+ this tentative parse.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@216277 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/cp/ChangeLog                      |  5 +++++
+ gcc/cp/parser.c                       |  2 --
+ gcc/testsuite/g++.dg/ext/stmtexpr16.C | 10 ++++++++++
+ 3 files changed, 15 insertions(+), 2 deletions(-)
+ create mode 100644 gcc/testsuite/g++.dg/ext/stmtexpr16.C
+
+diff --git a/gcc/cp/ChangeLog b/gcc/cp/ChangeLog
+index 643b5cb..917e5cf 100644
+--- a/gcc/cp/ChangeLog
++++ b/gcc/cp/ChangeLog
+@@ -1,5 +1,10 @@
+ 2014-10-15  Jason Merrill  <jason@redhat.com>
+ 
++	PR c++/63455
++	Revert:
++	* parser.c (cp_parser_abort_tentative_parse): Make sure we haven't
++	committed to this tentative parse.
++
+ 	PR c++/63415
+ 	* pt.c (value_dependent_expression_p) [CONSTRUCTOR]: Check the type.
+ 	(iterative_hash_template_arg): Likewise.
+diff --git a/gcc/cp/parser.c b/gcc/cp/parser.c
+index affe2df..a84bc59 100644
+--- a/gcc/cp/parser.c
++++ b/gcc/cp/parser.c
+@@ -23779,8 +23779,6 @@ cp_parser_commit_to_tentative_parse (cp_parser* parser)
+ static void
+ cp_parser_abort_tentative_parse (cp_parser* parser)
+ {
+-  gcc_assert (parser->context->status != CP_PARSER_STATUS_KIND_COMMITTED
+-	      || errorcount > 0);
+   cp_parser_simulate_error (parser);
+   /* Now, pretend that we want to see if the construct was
+      successfully parsed.  */
+diff --git a/gcc/testsuite/g++.dg/ext/stmtexpr16.C b/gcc/testsuite/g++.dg/ext/stmtexpr16.C
+new file mode 100644
+index 0000000..ddce40c
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/ext/stmtexpr16.C
+@@ -0,0 +1,10 @@
++// PR c++/63455
++// { dg-options "-std=gnu++11" }
++
++int main()
++{
++    int x = 0;
++
++    // without '+0', gcc 4.6 gives a different error (no ICE though)
++    decltype(({ int y = x; y; })+0) v1 = 0;
++}
+-- 
+2.0.3
+

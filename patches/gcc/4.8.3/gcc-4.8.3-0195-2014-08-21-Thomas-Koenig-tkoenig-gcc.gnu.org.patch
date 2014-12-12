@@ -1,0 +1,95 @@
+From 17bb195a5a1b6637fae464a911416f31bde0abb2 Mon Sep 17 00:00:00 2001
+From: tkoenig <tkoenig@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 21 Aug 2014 21:20:27 +0000
+Subject: [PATCH 195/326] 2014-08-21  Thomas Koenig  <tkoenig@gcc.gnu.org>
+
+	Backport from trunk
+	PR fortran/62214
+	* frontend-passes.c (optimize_binop_array_assignment):
+	Do not try to optimize the array assignment for string
+	concatenation.
+
+2014-08-21  Thomas Koenig  <tkoenig@gcc.gnu.org>
+
+	Backport from trunk
+	PR fortran/62214
+	* gfortran.dg/array_assignment_5.f90:  New test.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214296 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/fortran/ChangeLog                            |  6 ++++++
+ gcc/fortran/frontend-passes.c                    |  4 ++++
+ gcc/testsuite/ChangeLog                          |  6 ++++++
+ gcc/testsuite/gfortran.dg/array_assignment_5.f90 | 16 ++++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 gcc/testsuite/gfortran.dg/array_assignment_5.f90
+
+diff --git a/gcc/fortran/ChangeLog b/gcc/fortran/ChangeLog
+index 22e84cf..2ac8fb3 100644
+--- a/gcc/fortran/ChangeLog
++++ b/gcc/fortran/ChangeLog
+@@ -1,3 +1,9 @@
++2014-08-21  Thomas Koenig  <tkoenig@gcc.gnu.org>
++
++	Backport from trunk
++	PR fortran/62214
++	* gfortran.dg/array_assignment_5.f90:  New test.
++
+ 2014-08-10  Thomas Koenig  <tkoenig@gcc.gnu.org>
+ 
+ 	Backport from trunk
+diff --git a/gcc/fortran/frontend-passes.c b/gcc/fortran/frontend-passes.c
+index 2772932..7bbdac8 100644
+--- a/gcc/fortran/frontend-passes.c
++++ b/gcc/fortran/frontend-passes.c
+@@ -874,6 +874,10 @@ optimize_binop_array_assignment (gfc_code *c, gfc_expr **rhs, bool seen_op)
+ 	    return true;
+ 	  break;
+ 
++	case INTRINSIC_CONCAT:
++	  /* Do not do string concatenations.  */
++	  break;
++
+ 	default:
+ 	  /* Binary operators.  */
+ 	  if (optimize_binop_array_assignment (c, &e->value.op.op1, true))
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index db8b656..44128c7 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,9 @@
++2014-08-21  Thomas Koenig  <tkoenig@gcc.gnu.org>
++
++	Backport from trunk
++	PR fortran/62214
++	* gfortran.dg/array_assignment_5.f90:  New test.
++
+ 2014-08-15  Tom de Vries  <tom@codesourcery.com>
+ 
+ 	Backport from mainline:
+diff --git a/gcc/testsuite/gfortran.dg/array_assignment_5.f90 b/gcc/testsuite/gfortran.dg/array_assignment_5.f90
+new file mode 100644
+index 0000000..6d58527
+--- /dev/null
++++ b/gcc/testsuite/gfortran.dg/array_assignment_5.f90
+@@ -0,0 +1,16 @@
++! { dg-do run }
++! { dg-options "-ffrontend-optimize" }
++! PR 62214 - this used to give the wrong result.
++! Original test case by Oliver Fuhrer
++PROGRAM test
++  IMPLICIT NONE
++  CHARACTER(LEN=20)   :: fullNames(2)
++  CHARACTER(LEN=255)  :: pathName
++  CHARACTER(LEN=5)    :: fileNames(2)
++  
++  pathName = "/dir1/dir2/"
++  fileNames = (/ "file1", "file2" /)
++  fullNames = SPREAD(TRIM(pathName),1,2) // fileNames
++  if (fullNames(1) /= '/dir1/dir2/file1' .or. &
++       & fullnames(2) /= '/dir1/dir2/file2') call abort
++END PROGRAM test
+-- 
+2.0.3
+

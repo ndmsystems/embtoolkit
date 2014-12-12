@@ -1,0 +1,108 @@
+From 90a7153572dc2a398b3268af32cb8bf1022ab94e Mon Sep 17 00:00:00 2001
+From: kargl <kargl@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 20 Aug 2014 16:23:55 +0000
+Subject: [PATCH 193/326] 2014-08-20  Steven G. Kargl  <kargl@gcc.gnu.org>
+
+	PR libgfortran/62188
+	* m4/bessel.m4: Avoid indexing off the end of an array.
+	* generated/bessel_r10.c: Regenerated.
+	* generated/bessel_r16.c: Ditto.
+	* generated/bessel_r4.c: Ditto.
+	* generated/bessel_r8.c: Ditto.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214231 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ libgfortran/ChangeLog              | 9 +++++++++
+ libgfortran/generated/bessel_r10.c | 2 +-
+ libgfortran/generated/bessel_r16.c | 2 +-
+ libgfortran/generated/bessel_r4.c  | 2 +-
+ libgfortran/generated/bessel_r8.c  | 2 +-
+ libgfortran/m4/bessel.m4           | 2 +-
+ 6 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/libgfortran/ChangeLog b/libgfortran/ChangeLog
+index a0868cd..06d9da2 100644
+--- a/libgfortran/ChangeLog
++++ b/libgfortran/ChangeLog
+@@ -1,3 +1,12 @@
++2014-08-20  Steven G. Kargl  <kargl@gcc.gnu.org>
++
++	PR libgfortran/62188
++	* m4/bessel.m4: Avoid indexing off the end of an array.
++	* generated/bessel_r10.c: Regenerated.
++	* generated/bessel_r16.c: Ditto.
++	* generated/bessel_r4.c: Ditto.
++	* generated/bessel_r8.c: Ditto.
++
+ 2014-07-31  Janne Blomqvist  <jb@gcc.gnu.org>
+ 
+ 	Backport from mainline
+diff --git a/libgfortran/generated/bessel_r10.c b/libgfortran/generated/bessel_r10.c
+index 44da847..e926d5c 100644
+--- a/libgfortran/generated/bessel_r10.c
++++ b/libgfortran/generated/bessel_r10.c
+@@ -162,7 +162,7 @@ bessel_yn_r10 (gfc_array_r10 * const restrict ret, int n1, int n2,
+ 
+   x2rev = GFC_REAL_10_LITERAL(2.)/x;
+ 
+-  for (i = 2; i <= n1+n2; i++)
++  for (i = 2; i <= n2 - n1; i++)
+     {
+ #if defined(GFC_REAL_10_INFINITY)
+       if (unlikely (last2 == -GFC_REAL_10_INFINITY))
+diff --git a/libgfortran/generated/bessel_r16.c b/libgfortran/generated/bessel_r16.c
+index d0ad50a..c0ee468 100644
+--- a/libgfortran/generated/bessel_r16.c
++++ b/libgfortran/generated/bessel_r16.c
+@@ -166,7 +166,7 @@ bessel_yn_r16 (gfc_array_r16 * const restrict ret, int n1, int n2,
+ 
+   x2rev = GFC_REAL_16_LITERAL(2.)/x;
+ 
+-  for (i = 2; i <= n1+n2; i++)
++  for (i = 2; i <= n2 - n1; i++)
+     {
+ #if defined(GFC_REAL_16_INFINITY)
+       if (unlikely (last2 == -GFC_REAL_16_INFINITY))
+diff --git a/libgfortran/generated/bessel_r4.c b/libgfortran/generated/bessel_r4.c
+index 5fe486b..eedfc1f 100644
+--- a/libgfortran/generated/bessel_r4.c
++++ b/libgfortran/generated/bessel_r4.c
+@@ -162,7 +162,7 @@ bessel_yn_r4 (gfc_array_r4 * const restrict ret, int n1, int n2,
+ 
+   x2rev = GFC_REAL_4_LITERAL(2.)/x;
+ 
+-  for (i = 2; i <= n1+n2; i++)
++  for (i = 2; i <= n2 - n1; i++)
+     {
+ #if defined(GFC_REAL_4_INFINITY)
+       if (unlikely (last2 == -GFC_REAL_4_INFINITY))
+diff --git a/libgfortran/generated/bessel_r8.c b/libgfortran/generated/bessel_r8.c
+index 2150042..8e71cb9 100644
+--- a/libgfortran/generated/bessel_r8.c
++++ b/libgfortran/generated/bessel_r8.c
+@@ -162,7 +162,7 @@ bessel_yn_r8 (gfc_array_r8 * const restrict ret, int n1, int n2,
+ 
+   x2rev = GFC_REAL_8_LITERAL(2.)/x;
+ 
+-  for (i = 2; i <= n1+n2; i++)
++  for (i = 2; i <= n2 - n1; i++)
+     {
+ #if defined(GFC_REAL_8_INFINITY)
+       if (unlikely (last2 == -GFC_REAL_8_INFINITY))
+diff --git a/libgfortran/m4/bessel.m4 b/libgfortran/m4/bessel.m4
+index bfdbf9a..41adade 100644
+--- a/libgfortran/m4/bessel.m4
++++ b/libgfortran/m4/bessel.m4
+@@ -163,7 +163,7 @@ bessel_yn_r'rtype_kind` ('rtype` * const restrict ret, int n1, int n2,
+ 
+   x2rev = GFC_REAL_'rtype_kind`_LITERAL(2.)/x;
+ 
+-  for (i = 2; i <= n1+n2; i++)
++  for (i = 2; i <= n2 - n1; i++)
+     {
+ #if defined('rtype_name`_INFINITY)
+       if (unlikely (last2 == -'rtype_name`_INFINITY))
+-- 
+2.0.3
+

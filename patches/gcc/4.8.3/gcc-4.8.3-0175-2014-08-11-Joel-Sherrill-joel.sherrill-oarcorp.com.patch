@@ -1,0 +1,43 @@
+From 44a80b8929a8baf1067b554fd2cd9e3abfc7da3a Mon Sep 17 00:00:00 2001
+From: joel <joel@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 11 Aug 2014 21:28:08 +0000
+Subject: [PATCH 175/326] 2014-08-11  Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* s-osinte-rtems.adb: Correct formatting of line in license block.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213838 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ada/ChangeLog          | 4 ++++
+ gcc/ada/s-osinte-rtems.adb | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ada/ChangeLog b/gcc/ada/ChangeLog
+index eea52d2..5a4872d 100644
+--- a/gcc/ada/ChangeLog
++++ b/gcc/ada/ChangeLog
+@@ -1,3 +1,7 @@
++2014-08-11  Joel Sherrill <joel.sherrill@oarcorp.com>
++
++	* s-osinte-rtems.adb: Correct formatting of line in license block.
++
+ 2014-05-22  Release Manager
+ 
+ 	* GCC 4.8.3 released.
+diff --git a/gcc/ada/s-osinte-rtems.adb b/gcc/ada/s-osinte-rtems.adb
+index de21785..9f01128 100644
+--- a/gcc/ada/s-osinte-rtems.adb
++++ b/gcc/ada/s-osinte-rtems.adb
+@@ -22,7 +22,7 @@
+ -- You should have received a copy of the GNU General Public License and    --
+ -- a copy of the GCC Runtime Library Exception along with this program;     --
+ -- see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see    --
+--- <http://www.gnu.org/licenses/>.                                         
++-- <http://www.gnu.org/licenses/>.                                          --
+ --                                                                          --
+ -- GNARL was developed by the GNARL team at Florida State University. It is --
+ -- now maintained by Ada Core Technologies Inc. in cooperation with Florida --
+-- 
+2.0.3
+

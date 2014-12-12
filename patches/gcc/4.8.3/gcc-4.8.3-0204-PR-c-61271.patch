@@ -1,0 +1,49 @@
+From a1b1bc38069556f6965e8508c64558b9ec7d0494 Mon Sep 17 00:00:00 2001
+From: mpolacek <mpolacek@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 26 Aug 2014 09:30:29 +0000
+Subject: [PATCH 204/326] 	PR c/61271 	* tree-vectorizer.h
+ (LOOP_REQUIRES_VERSIONING_FOR_ALIGNMENT, 
+ LOOP_REQUIRES_VERSIONING_FOR_ALIAS): Wrap in parens.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214495 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog         | 9 +++++++++
+ gcc/tree-vectorizer.h | 4 ++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index e575861..0c22e0a 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,12 @@
++2014-08-26  Marek Polacek  <polacek@redhat.com>
++
++	Backport from mainline
++	2014-08-26  Marek Polacek  <polacek@redhat.com>
++
++	PR c/61271
++	* tree-vectorizer.h (LOOP_REQUIRES_VERSIONING_FOR_ALIGNMENT,
++	LOOP_REQUIRES_VERSIONING_FOR_ALIAS): Wrap in parens.
++
+ 2014-08-24  Oleg Endo  <olegendo@gcc.gnu.org>
+ 
+ 	Backport from mainline
+diff --git a/gcc/tree-vectorizer.h b/gcc/tree-vectorizer.h
+index e4ef993..d60d023 100644
+--- a/gcc/tree-vectorizer.h
++++ b/gcc/tree-vectorizer.h
+@@ -324,9 +324,9 @@ typedef struct _loop_vec_info {
+ #define LOOP_VINFO_OPERANDS_SWAPPED(L)     (L)->operands_swapped
+ 
+ #define LOOP_REQUIRES_VERSIONING_FOR_ALIGNMENT(L) \
+-(L)->may_misalign_stmts.length () > 0
++((L)->may_misalign_stmts.length () > 0)
+ #define LOOP_REQUIRES_VERSIONING_FOR_ALIAS(L)     \
+-(L)->may_alias_ddrs.length () > 0
++((L)->may_alias_ddrs.length () > 0)
+ 
+ #define NITERS_KNOWN_P(n)                     \
+ (host_integerp ((n),0)                        \
+-- 
+2.0.3
+

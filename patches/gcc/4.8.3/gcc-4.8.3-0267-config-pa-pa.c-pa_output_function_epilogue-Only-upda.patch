@@ -1,0 +1,49 @@
+From f16ad5f305bcfd538cdeb02381a008f90b016d6b Mon Sep 17 00:00:00 2001
+From: danglin <danglin@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sun, 28 Sep 2014 15:42:26 +0000
+Subject: [PATCH 267/326] 	* config/pa/pa.c
+ (pa_output_function_epilogue): Only update 	last_address when a nonnote
+ insn is found.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215671 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog      | 5 +++++
+ gcc/config/pa/pa.c | 9 ++++++---
+ 2 files changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 3e75161..466d180 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,8 @@
++2014-09-28  John David Anglin  <danglin@gcc.gnu.org>
++
++	* config/pa/pa.c (pa_output_function_epilogue): Only update
++	last_address when a nonnote insn is found.
++
+ 2014-09-25  Oleg Endo  <olegendo@gcc.gnu.org>
+ 
+ 	Backport from mainline
+diff --git a/gcc/config/pa/pa.c b/gcc/config/pa/pa.c
+index bd358f9..47fd47f 100644
+--- a/gcc/config/pa/pa.c
++++ b/gcc/config/pa/pa.c
+@@ -4213,9 +4213,12 @@ pa_output_function_epilogue (FILE *file, HOST_WIDE_INT size ATTRIBUTE_UNUSED)
+     {
+       last_address = extra_nop ? 4 : 0;
+       insn = get_last_nonnote_insn ();
+-      last_address += INSN_ADDRESSES (INSN_UID (insn));
+-      if (INSN_P (insn))
+-	last_address += insn_default_length (insn);
++      if (insn)
++	{
++	  last_address += INSN_ADDRESSES (INSN_UID (insn));
++	  if (INSN_P (insn))
++	    last_address += insn_default_length (insn);
++	}
+       last_address = ((last_address + FUNCTION_BOUNDARY / BITS_PER_UNIT - 1)
+ 		      & ~(FUNCTION_BOUNDARY / BITS_PER_UNIT - 1));
+     }
+-- 
+2.0.3
+

@@ -1,0 +1,109 @@
+From 391e665a242d6b830710ff00bc54e489576a7d86 Mon Sep 17 00:00:00 2001
+From: thopre01 <thopre01@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 13 Aug 2014 09:37:41 +0000
+Subject: [PATCH 181/326] 2014-08-13  Thomas Preud'homme 
+ <thomas.preudhomme@arm.com>
+
+    Backport from mainline
+    2014-08-12  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+
+    gcc/
+    PR middle-end/62103
+    * gimple-fold.c (fold_ctor_reference): Don't fold in presence of
+    bitfields, that is when size doesn't match the size of type or the
+    size of the constructor.
+
+    gcc/testsuite/
+    PR middle-end/62103
+    * gcc.c-torture/execute/bitfld-6.c: New test.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213899 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                                  | 10 ++++++++++
+ gcc/gimple-fold.c                              |  4 ++--
+ gcc/testsuite/ChangeLog                        |  8 ++++++++
+ gcc/testsuite/gcc.c-torture/execute/bitfld-6.c | 23 +++++++++++++++++++++++
+ 4 files changed, 43 insertions(+), 2 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.c-torture/execute/bitfld-6.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 25ac61f..e777154 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,13 @@
++2014-08-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
++
++	Backport from mainline
++	2014-08-12  Thomas Preud'homme  <thomas.preudhomme@arm.com>
++
++	PR middle-end/62103
++	* gimple-fold.c (fold_ctor_reference): Don't fold in presence of
++	bitfields, that is when size doesn't match the size of type or the
++	size of the constructor.
++
+ 2014-08-12  Michael Meissner  <meissner@linux.vnet.ibm.com>
+ 
+ 	Backport patch from mainline
+diff --git a/gcc/gimple-fold.c b/gcc/gimple-fold.c
+index 5d08169..80020a9 100644
+--- a/gcc/gimple-fold.c
++++ b/gcc/gimple-fold.c
+@@ -2955,8 +2955,8 @@ fold_ctor_reference (tree type, tree ctor, unsigned HOST_WIDE_INT offset,
+      result.  */
+   if (!AGGREGATE_TYPE_P (TREE_TYPE (ctor)) && !offset
+       /* VIEW_CONVERT_EXPR is defined only for matching sizes.  */
+-      && operand_equal_p (TYPE_SIZE (type),
+-			  TYPE_SIZE (TREE_TYPE (ctor)), 0))
++      && !compare_tree_int (TYPE_SIZE (type), size)
++      && !compare_tree_int (TYPE_SIZE (TREE_TYPE (ctor)), size))
+     {
+       ret = canonicalize_constructor_val (unshare_expr (ctor), from_decl);
+       ret = fold_unary (VIEW_CONVERT_EXPR, type, ret);
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index d55ac28..bcb2b66 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,11 @@
++2014-08-13  Thomas Preud'homme  <thomas.preudhomme@arm.com>
++
++	Backport from mainline
++	2014-08-12  Thomas Preud'homme  <thomas.preudhomme@arm.com>
++
++	PR middle-end/62103
++	* gcc.c-torture/execute/bitfld-6.c: New test.
++
+ 2014-08-10  Thomas Koenig  <tkoenig@gcc.gnu.org>
+ 
+ 	Backport from trunk
+diff --git a/gcc/testsuite/gcc.c-torture/execute/bitfld-6.c b/gcc/testsuite/gcc.c-torture/execute/bitfld-6.c
+new file mode 100644
+index 0000000..50927dc
+--- /dev/null
++++ b/gcc/testsuite/gcc.c-torture/execute/bitfld-6.c
+@@ -0,0 +1,23 @@
++union U
++{
++  const int a;
++  unsigned b : 20;
++};
++
++static union U u = { 0x12345678 };
++
++/* Constant folding used to fail to account for endianness when folding a
++   union.  */
++
++int
++main (void)
++{
++#ifdef __BYTE_ORDER__
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++  return u.b - 0x45678;
++#else
++  return u.b - 0x12345;
++#endif
++#endif
++  return 0;
++}
+-- 
+2.0.3
+

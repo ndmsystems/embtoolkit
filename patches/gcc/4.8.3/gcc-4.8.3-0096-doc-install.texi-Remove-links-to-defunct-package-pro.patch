@@ -1,0 +1,45 @@
+From e6330fcfa13df7d8947b7498d7805c2743922afb Mon Sep 17 00:00:00 2001
+From: gerald <gerald@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 10 Jul 2014 12:40:55 +0000
+Subject: [PATCH 096/134] 	* doc/install.texi: Remove links to defunct
+ package providers for 	Solaris.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212431 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog        | 5 +++++
+ gcc/doc/install.texi | 6 ------
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 53152a7..a050b7a 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,8 @@
++2014-07-10  Tom G. Christensen  <tgc@jupiterrise.com>
++
++	* doc/install.texi: Remove links to defunct package providers for
++	Solaris.
++
+ 2014-07-10  Eric Botcazou  <ebotcazou@adacore.com>
+ 
+ 	PR middle-end/53590
+diff --git a/gcc/doc/install.texi b/gcc/doc/install.texi
+index 1265129..672d783 100644
+--- a/gcc/doc/install.texi
++++ b/gcc/doc/install.texi
+@@ -2915,12 +2915,6 @@ OpenServer/Unixware}.
+ Solaris 2 (SPARC, Intel):
+ @itemize
+ @item
+-@uref{http://www.sunfreeware.com/,,Sunfreeware}
+-
+-@item
+-@uref{http://www.blastwave.org/,,Blastwave}
+-
+-@item
+ @uref{http://www.opencsw.org/,,OpenCSW}
+ 
+ @item
+-- 
+1.8.5.5
+

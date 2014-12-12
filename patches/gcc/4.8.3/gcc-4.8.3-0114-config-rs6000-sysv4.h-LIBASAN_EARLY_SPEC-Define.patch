@@ -1,0 +1,63 @@
+From bfa50012bdbccfa74653c41e29e879ebf10df50d Mon Sep 17 00:00:00 2001
+From: bergner <bergner@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 21 Jul 2014 20:10:02 +0000
+Subject: [PATCH 114/134] 	* config/rs6000/sysv4.h (LIBASAN_EARLY_SPEC):
+ Define. 	(LIBTSAN_EARLY_SPEC): Likewise. 	(STATIC_LIBASAN_LIBS):
+ Likewise. 	(STATIC_LIBTSAN_LIBS): Likewise.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212899 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog             |  7 +++++++
+ gcc/config/rs6000/sysv4.h | 24 ++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index ab94173..729216b 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,10 @@
++2014-07-21  Peter Bergner  <bergner@vnet.ibm.com>
++
++	* config/rs6000/sysv4.h (LIBASAN_EARLY_SPEC): Define.
++	(LIBTSAN_EARLY_SPEC): Likewise.
++	(STATIC_LIBASAN_LIBS): Likewise.
++	(STATIC_LIBTSAN_LIBS): Likewise.
++
+ 2014-07-19  Eric Botcazou  <ebotcazou@adacore.com>
+ 
+ 	* toplev.c (output_stack_usage): Adjust the location of the warning.
+diff --git a/gcc/config/rs6000/sysv4.h b/gcc/config/rs6000/sysv4.h
+index f6795b0..df54b4e 100644
+--- a/gcc/config/rs6000/sysv4.h
++++ b/gcc/config/rs6000/sysv4.h
+@@ -949,3 +949,27 @@ ncrtn.o%s"
+ #define TARGET_USES_SYSV4_OPT 1
+ 
+ #undef DBX_REGISTER_NUMBER
++
++/* Link -lasan early on the command line.  For -static-libasan, don't link
++   it for -shared link, the executable should be compiled with -static-libasan
++   in that case, and for executable link link with --{,no-}whole-archive around
++   it to force everything into the executable.  And similarly for -ltsan.  */
++#if defined(HAVE_LD_STATIC_DYNAMIC)
++#undef LIBASAN_EARLY_SPEC
++#define LIBASAN_EARLY_SPEC "%{!shared:libasan_preinit%O%s} " \
++  "%{static-libasan:%{!shared:" \
++  LD_STATIC_OPTION " --whole-archive -lasan --no-whole-archive " \
++  LD_DYNAMIC_OPTION "}}%{!static-libasan:-lasan}"
++#undef LIBTSAN_EARLY_SPEC
++#define LIBTSAN_EARLY_SPEC "%{static-libtsan:%{!shared:" \
++  LD_STATIC_OPTION " --whole-archive -ltsan --no-whole-archive " \
++  LD_DYNAMIC_OPTION "}}%{!static-libtsan:-ltsan}"
++#endif
++
++/* Additional libraries needed by -static-libasan.  */
++#undef STATIC_LIBASAN_LIBS
++#define STATIC_LIBASAN_LIBS "-ldl -lpthread"
++
++/* Additional libraries needed by -static-libtsan.  */
++#undef STATIC_LIBTSAN_LIBS
++#define STATIC_LIBTSAN_LIBS "-ldl -lpthread"
+-- 
+1.8.5.5
+

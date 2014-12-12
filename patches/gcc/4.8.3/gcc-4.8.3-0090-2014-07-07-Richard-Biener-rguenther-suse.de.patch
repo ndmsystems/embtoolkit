@@ -1,0 +1,42 @@
+From 41ef0fc91d442e177f858b1d7ce8779ee9783e69 Mon Sep 17 00:00:00 2001
+From: rguenth <rguenth@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 7 Jul 2014 08:03:23 +0000
+Subject: [PATCH 090/134] 2014-07-07  Richard Biener  <rguenther@suse.de>
+
+        * gennews: Use gcc-3.0/index.html.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212324 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ contrib/ChangeLog | 4 ++++
+ contrib/gennews   | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/contrib/ChangeLog b/contrib/ChangeLog
+index 45259f2..4445d0e 100644
+--- a/contrib/ChangeLog
++++ b/contrib/ChangeLog
+@@ -1,3 +1,7 @@
++2014-07-07  Richard Biener  <rguenther@suse.de>
++
++        * gennews: Use gcc-3.0/index.html.
++
+ 2014-05-22  Release Manager
+ 
+ 	* GCC 4.8.3 released.
+diff --git a/contrib/gennews b/contrib/gennews
+index 962bef2..294e660 100755
+--- a/contrib/gennews
++++ b/contrib/gennews
+@@ -37,7 +37,7 @@ files="
+     gcc-3.3/index.html gcc-3.3/changes.html
+     gcc-3.2/index.html gcc-3.2/changes.html
+     gcc-3.1/index.html gcc-3.1/changes.html
+-    gcc-3.0/gcc-3.0.html gcc-3.0/features.html gcc-3.0/caveats.html
++    gcc-3.0/index.html gcc-3.0/features.html gcc-3.0/caveats.html
+     gcc-2.95/index.html gcc-2.95/features.html gcc-2.95/caveats.html
+     egcs-1.1/index.html egcs-1.1/features.html egcs-1.1/caveats.html
+     egcs-1.0/index.html egcs-1.0/features.html egcs-1.0/caveats.html"
+-- 
+1.8.5.5
+

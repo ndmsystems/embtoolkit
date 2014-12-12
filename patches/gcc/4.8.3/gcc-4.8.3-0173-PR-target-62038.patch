@@ -1,0 +1,44 @@
+From d66691021268c5cab6172a2611d00a6620cd8330 Mon Sep 17 00:00:00 2001
+From: danglin <danglin@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 11 Aug 2014 19:13:46 +0000
+Subject: [PATCH 173/326] 	PR target/62038 	* config/pa/pa.c
+ (pa_asm_output_mi_thunk): Use a branch with %r31 link 	register.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213831 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog      | 6 ++++++
+ gcc/config/pa/pa.c | 4 +++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index a7f5cbe..88fc92a 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,9 @@
++2014-08-11  John Dave Anglin  <danglin@gcc.gnu.org>
++
++	PR target/62038
++	* config/pa/pa.c (pa_asm_output_mi_thunk): Use a branch with %r31 link
++	register.
++
+ 2014-08-01  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/config/pa/pa.c b/gcc/config/pa/pa.c
+index 7603858..de8b218 100644
+--- a/gcc/config/pa/pa.c
++++ b/gcc/config/pa/pa.c
+@@ -8311,7 +8311,9 @@ pa_asm_output_mi_thunk (FILE *file, tree thunk_fndecl, HOST_WIDE_INT delta,
+       if (!val_14)
+ 	output_asm_insn ("addil L'%2,%%r26", xoperands);
+ 
+-      output_asm_insn ("b %0", xoperands);
++      /* An absolute branch without a link register is not considered
++	 a call by GAS.  We need a call to get a stub if necessary.  */
++      output_asm_insn ("bl %0,%%r31", xoperands);
+ 
+       if (val_14)
+ 	{
+-- 
+2.0.3
+

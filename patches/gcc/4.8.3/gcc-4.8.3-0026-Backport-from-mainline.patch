@@ -1,0 +1,109 @@
+From c2ae63093c364965ba24e38ac711fa50d53eef8a Mon Sep 17 00:00:00 2001
+From: abel <abel@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 3 Jun 2014 09:20:36 +0000
+Subject: [PATCH 026/134] 	Backport from mainline
+
+	2014-05-14  Andrey Belevantsev  <abel@ispras.ru>
+        PR rtl-optimization/60901
+
+        * config/i386/i386.c (ix86_dependencies_evaluation_hook): Check that
+        bb predecessor belongs to the same scheduling region.  Adjust comment.
+
+        * gcc.target/i386/pr60901.c: New test.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@211164 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                           |  9 +++++++++
+ gcc/config/i386/i386.c                  | 12 ++++++++----
+ gcc/testsuite/ChangeLog                 |  8 ++++++++
+ gcc/testsuite/gcc.target/i386/pr60901.c | 17 +++++++++++++++++
+ 4 files changed, 42 insertions(+), 4 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.target/i386/pr60901.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index d2b0352..278e133 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,12 @@
++2014-06-03  Andrey Belevantsev  <abel@ispras.ru>
++
++	Backport from mainline
++	2014-05-14  Andrey Belevantsev  <abel@ispras.ru>
++
++	PR rtl-optimization/60901
++	* config/i386/i386.c (ix86_dependencies_evaluation_hook): Check that
++	bb predecessor belongs to the same scheduling region.  Adjust comment.
++
+ 2014-06-03  Uros Bizjak  <ubizjak@gmail.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/config/i386/i386.c b/gcc/config/i386/i386.c
+index fa81d0f..4ad76bd 100644
+--- a/gcc/config/i386/i386.c
++++ b/gcc/config/i386/i386.c
+@@ -24640,13 +24640,17 @@ ix86_dependencies_evaluation_hook (rtx head, rtx tail)
+ 	      {
+ 		edge e;
+ 		edge_iterator ei;
+-		/* Assume that region is SCC, i.e. all immediate predecessors
+-	           of non-head block are in the same region.  */
++
++		/* Regions are SCCs with the exception of selective
++		   scheduling with pipelining of outer blocks enabled.
++		   So also check that immediate predecessors of a non-head
++		   block are in the same region.  */
+ 		FOR_EACH_EDGE (e, ei, bb->preds)
+ 		  {
+ 		    /* Avoid creating of loop-carried dependencies through
+-		       using topological odering in region.  */
+-		    if (BLOCK_TO_BB (bb->index) > BLOCK_TO_BB (e->src->index))
++		       using topological ordering in the region.  */
++		    if (rgn == CONTAINING_RGN (e->src->index)
++			&& BLOCK_TO_BB (bb->index) > BLOCK_TO_BB (e->src->index))
+ 		      add_dependee_for_func_arg (first_arg, e->src); 
+ 		  }
+ 	      }
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index da44bda..a165e84 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,11 @@
++2014-06-03  Andrey Belevantsev  <abel@ispras.ru>
++
++	Backport from mainline
++	2014-05-14  Andrey Belevantsev  <abel@ispras.ru>
++
++	PR rtl-optimization/60901
++	* gcc.target/i386/pr60901.c: New test.
++
+ 2014-05-28  Eric Botcazou  <ebotcazou@adacore.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/testsuite/gcc.target/i386/pr60901.c b/gcc/testsuite/gcc.target/i386/pr60901.c
+new file mode 100644
+index 0000000..f0f25a1
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/i386/pr60901.c
+@@ -0,0 +1,17 @@
++/* { dg-options "-O -fselective-scheduling -fschedule-insns -fsel-sched-pipelining -fsel-sched-pipelining-outer-loops -fno-tree-dominator-opts"  } */
++
++extern int n;
++extern void bar (void);
++extern int baz (int);
++
++void
++foo (void)
++{
++  int i, j;
++  for (j = 0; j < n; j++)
++    {
++      for (i = 1; i < j; i++)
++	bar ();
++      baz (0);
++    }
++}
+-- 
+1.8.5.5
+

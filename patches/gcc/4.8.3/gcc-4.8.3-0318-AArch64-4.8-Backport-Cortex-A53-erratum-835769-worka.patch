@@ -1,0 +1,269 @@
+From 26aef4ef6f2d1fc3f1f974ae141d1e1d43ff9e3d Mon Sep 17 00:00:00 2001
+From: ktkachov <ktkachov@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 24 Oct 2014 12:21:19 +0000
+Subject: [PATCH 318/326] [AArch64][4.8] Backport Cortex-A53 erratum 835769
+ workaround
+
+	* config/aarch64/aarch64.opt (mfix-cortex-a53-835769): New option.
+	* config/aarch64/aarch64.h (ADJUST_INSN_LENGTH): Define.
+	(FINAL_PRESCAN_INSN): Likewise.
+	* config/aarch64/aarch64.h (is_mem_p): New function.
+	(has_memory_op): Likewise.
+	(aarch64_prev_real_insn): Likewise.
+	(is_madd_op): Likewise.
+	(dep_between_memop_and_curr): Likewise.
+	(aarch64_madd_needs_nop): Likewise.
+	(aarch64_final_prescan_insn): Likewise.
+	* doc/invoke.texi (Document new option).
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@216664 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                       |  14 ++++
+ gcc/config/aarch64/aarch64-protos.h |   2 +
+ gcc/config/aarch64/aarch64.c        | 125 ++++++++++++++++++++++++++++++++++++
+ gcc/config/aarch64/aarch64.h        |  12 ++++
+ gcc/config/aarch64/aarch64.opt      |   4 ++
+ gcc/doc/invoke.texi                 |   9 +++
+ 6 files changed, 166 insertions(+)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index f3cf994..663dd6b 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,17 @@
++2014-10-24  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
++
++	* config/aarch64/aarch64.opt (mfix-cortex-a53-835769): New option.
++	* config/aarch64/aarch64.h (ADJUST_INSN_LENGTH): Define.
++	(FINAL_PRESCAN_INSN): Likewise.
++	* config/aarch64/aarch64.h (is_mem_p): New function.
++	(has_memory_op): Likewise.
++	(aarch64_prev_real_insn): Likewise.
++	(is_madd_op): Likewise.
++	(dep_between_memop_and_curr): Likewise.
++	(aarch64_madd_needs_nop): Likewise.
++	(aarch64_final_prescan_insn): Likewise.
++	* doc/invoke.texi (Document new option).
++
+ 2014-10-15  Eric Botcazou  <ebotcazou@adacore.com>
+ 
+ 	* stor-layout.c (self_referential_size): Do not promote arguments.
+diff --git a/gcc/config/aarch64/aarch64-protos.h b/gcc/config/aarch64/aarch64-protos.h
+index 5d0072f..07ff703 100644
+--- a/gcc/config/aarch64/aarch64-protos.h
++++ b/gcc/config/aarch64/aarch64-protos.h
+@@ -247,6 +247,8 @@ aarch64_builtin_vectorized_function (tree fndecl,
+ 
+ extern void aarch64_split_combinev16qi (rtx operands[3]);
+ extern void aarch64_expand_vec_perm (rtx target, rtx op0, rtx op1, rtx sel);
++extern bool aarch64_madd_needs_nop (rtx);
++extern void aarch64_final_prescan_insn (rtx);
+ extern bool
+ aarch64_expand_vec_perm_const (rtx target, rtx op0, rtx op1, rtx sel);
+ 
+diff --git a/gcc/config/aarch64/aarch64.c b/gcc/config/aarch64/aarch64.c
+index 0ac9ba1..6b8dce4 100644
+--- a/gcc/config/aarch64/aarch64.c
++++ b/gcc/config/aarch64/aarch64.c
+@@ -6040,6 +6040,131 @@ aarch64_mangle_type (const_tree type)
+   return NULL;
+ }
+ 
++
++/* Return true iff X is a MEM rtx.  */
++
++static int
++is_mem_p (rtx *x, void *data ATTRIBUTE_UNUSED)
++{
++  return MEM_P (*x);
++}
++
++
++/*  Return true if mem_insn contains a MEM RTX somewhere in it.  */
++
++static bool
++has_memory_op (rtx mem_insn)
++{
++   rtx pattern = PATTERN (mem_insn);
++   return for_each_rtx (&pattern, is_mem_p, NULL);
++}
++
++
++/* Find the first rtx before insn that will generate an assembly
++   instruction.  */
++
++static rtx
++aarch64_prev_real_insn (rtx insn)
++{
++  if (!insn)
++    return NULL;
++
++  do
++    {
++      insn = prev_real_insn (insn);
++    }
++  while (insn && recog_memoized (insn) < 0);
++
++  return insn;
++}
++
++/*  Return true iff t1 is the v8type of a multiply-accumulate instruction.  */
++
++static bool
++is_madd_op (enum attr_v8type t1)
++{
++  return t1 == V8TYPE_MADD
++         || t1 == V8TYPE_MADDL;
++}
++
++
++/* Check if there is a register dependency between a load and the insn
++   for which we hold recog_data.  */
++
++static bool
++dep_between_memop_and_curr (rtx memop)
++{
++  rtx load_reg;
++  int opno;
++
++  gcc_assert (GET_CODE (memop) == SET);
++
++  if (!REG_P (SET_DEST (memop)))
++    return false;
++
++  load_reg = SET_DEST (memop);
++  for (opno = 1; opno < recog_data.n_operands; opno++)
++    {
++      rtx operand = recog_data.operand[opno];
++      if (REG_P (operand)
++          && reg_overlap_mentioned_p (load_reg, operand))
++        return true;
++
++    }
++  return false;
++}
++
++
++
++/* When working around the Cortex-A53 erratum 835769,
++   given rtx_insn INSN, return true if it is a 64-bit multiply-accumulate
++   instruction and has a preceding memory instruction such that a NOP
++   should be inserted between them.  */
++
++bool
++aarch64_madd_needs_nop (rtx insn)
++{
++  enum attr_v8type attr_type;
++  rtx prev;
++  rtx body;
++
++  if (!aarch64_fix_a53_err835769)
++    return false;
++
++  if (recog_memoized (insn) < 0)
++    return false;
++
++  attr_type = get_attr_v8type (insn);
++  if (!is_madd_op (attr_type))
++    return false;
++
++  prev = aarch64_prev_real_insn (insn);
++  if (!prev || !has_memory_op (prev))
++    return false;
++
++  body = single_set (prev);
++
++  /* If the previous insn is a memory op and there is no dependency between
++     it and the madd, emit a nop between them.  If we know it's a memop but
++     body is NULL, return true to be safe.  */
++  if (GET_MODE (recog_data.operand[0]) == DImode
++      && (!body || !dep_between_memop_and_curr (body)))
++    return true;
++
++  return false;
++
++}
++
++/* Implement FINAL_PRESCAN_INSN.  */
++
++void
++aarch64_final_prescan_insn (rtx insn)
++{
++  if (aarch64_madd_needs_nop (insn))
++    fprintf (asm_out_file, "\tnop // between mem op and mult-accumulate\n");
++}
++
++
+ /* Return the equivalent letter for size.  */
+ static unsigned char
+ sizetochar (int size)
+diff --git a/gcc/config/aarch64/aarch64.h b/gcc/config/aarch64/aarch64.h
+index 19ac5eb..1a8b993 100644
+--- a/gcc/config/aarch64/aarch64.h
++++ b/gcc/config/aarch64/aarch64.h
+@@ -465,6 +465,18 @@ enum target_cpus
+   (TARGET_CPU_generic | (AARCH64_CPU_DEFAULT_FLAGS << 6))
+ #endif
+ 
++/* If inserting NOP before a mult-accumulate insn remember to adjust the
++   length so that conditional branching code is updated appropriately.  */
++#define ADJUST_INSN_LENGTH(insn, length)	\
++  do						\
++    {						\
++      if (aarch64_madd_needs_nop (insn))	\
++        length += 4;				\
++    } while (0)
++
++#define FINAL_PRESCAN_INSN(INSN, OPVEC, NOPERANDS)	\
++    aarch64_final_prescan_insn (INSN);			\
++
+ /* The processor for which instructions should be scheduled.  */
+ extern enum aarch64_processor aarch64_tune;
+ 
+diff --git a/gcc/config/aarch64/aarch64.opt b/gcc/config/aarch64/aarch64.opt
+index 3518248..f414ad4 100644
+--- a/gcc/config/aarch64/aarch64.opt
++++ b/gcc/config/aarch64/aarch64.opt
+@@ -67,6 +67,10 @@ mgeneral-regs-only
+ Target Report RejectNegative Mask(GENERAL_REGS_ONLY)
+ Generate code which uses only the general registers
+ 
++mfix-cortex-a53-835769
++Target Report Var(aarch64_fix_a53_err835769) Init(0)
++Workaround for ARM Cortex-A53 Erratum number 835769
++
+ mlittle-endian
+ Target Report RejectNegative InverseMask(BIG_END)
+ Assume target CPU is configured as little endian
+diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
+index c96ef22..d3ac468 100644
+--- a/gcc/doc/invoke.texi
++++ b/gcc/doc/invoke.texi
+@@ -475,6 +475,7 @@ Objective-C and Objective-C++ Dialects}.
+ -mstrict-align @gol
+ -momit-leaf-frame-pointer  -mno-omit-leaf-frame-pointer @gol
+ -mtls-dialect=desc  -mtls-dialect=traditional @gol
++-mfix-cortex-a53-835769  -mno-fix-cortex-a53-835769 @gol
+ -march=@var{name}  -mcpu=@var{name}  -mtune=@var{name}}
+ 
+ @emph{Adapteva Epiphany Options}
+@@ -10934,6 +10935,14 @@ of TLS variables.  This is the default.
+ Use traditional TLS as the thread-local storage mechanism for dynamic accesses
+ of TLS variables.
+ 
++@item -mfix-cortex-a53-835769
++@itemx -mno-fix-cortex-a53-835769
++@opindex -mfix-cortex-a53-835769
++@opindex -mno-fix-cortex-a53-835769
++Enable or disable the workaround for the ARM Cortex-A53 erratum number 835769.
++This will involve inserting a NOP instruction between memory instructions and
++64-bit integer multiply-accumulate instructions.
++
+ @item -march=@var{name}
+ @opindex march
+ Specify the name of the target architecture, optionally suffixed by one or
+-- 
+2.0.3
+

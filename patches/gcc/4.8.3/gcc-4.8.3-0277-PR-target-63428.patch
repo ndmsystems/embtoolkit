@@ -1,0 +1,86 @@
+From 6a004112efcb97d057cc6b87509df188a0f1d234 Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 1 Oct 2014 20:47:29 +0000
+Subject: [PATCH 277/326] 	PR target/63428 	* config/i386/i386.c
+ (expand_vec_perm_pshufb): Fix up rperm[0] 	argument to avx2_permv2ti.
+
+	* gcc.dg/torture/vshuf-4.inc: Move test 122 from EXPTESTS
+	to test 24 in TESTS.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215781 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                            | 6 ++++++
+ gcc/config/i386/i386.c                   | 4 ++--
+ gcc/testsuite/ChangeLog                  | 6 ++++++
+ gcc/testsuite/gcc.dg/torture/vshuf-4.inc | 4 ++--
+ 4 files changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 7112e15..23bfb74 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,9 @@
++2014-10-01  Jakub Jelinek  <jakub@redhat.com>
++
++	PR target/63428
++	* config/i386/i386.c (expand_vec_perm_pshufb): Fix up rperm[0]
++	argument to avx2_permv2ti.
++
+ 2014-10-01  Uros Bizjak  <ubizjak@gmail.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/config/i386/i386.c b/gcc/config/i386/i386.c
+index 4ad76bd..568e574 100644
+--- a/gcc/config/i386/i386.c
++++ b/gcc/config/i386/i386.c
+@@ -38811,8 +38811,8 @@ expand_vec_perm_pshufb (struct expand_vec_perm_d *d)
+ 	      op0 = gen_lowpart (V4DImode, d->op0);
+ 	      op1 = gen_lowpart (V4DImode, d->op1);
+ 	      rperm[0]
+-		= GEN_INT (((d->perm[0] & (nelt / 2)) ? 1 : 0)
+-			   || ((d->perm[nelt / 2] & (nelt / 2)) ? 2 : 0));
++		= GEN_INT ((d->perm[0] / (nelt / 2))
++			   | ((d->perm[nelt / 2] / (nelt / 2)) * 16));
+ 	      emit_insn (gen_avx2_permv2ti (target, op0, op1, rperm[0]));
+ 	      return true;
+ 	    }
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index e06517d..6398f2f 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,9 @@
++2014-10-01  Jakub Jelinek  <jakub@redhat.com>
++
++	PR target/63428
++	* gcc.dg/torture/vshuf-4.inc: Move test 122 from EXPTESTS
++	to test 24 in TESTS.
++
+ 2014-10-01  Uros Bizjak  <ubizjak@gmail.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/testsuite/gcc.dg/torture/vshuf-4.inc b/gcc/testsuite/gcc.dg/torture/vshuf-4.inc
+index c50fa8e..d0cb738 100644
+--- a/gcc/testsuite/gcc.dg/torture/vshuf-4.inc
++++ b/gcc/testsuite/gcc.dg/torture/vshuf-4.inc
+@@ -23,7 +23,8 @@ T (19,	3, 2, 1, 0) \
+ T (20,	0, 4, 1, 5) \
+ T (21,	2, 6, 3, 7) \
+ T (22,	1, 2, 3, 0) \
+-T (23,	2, 1, 0, 3)
++T (23,	2, 1, 0, 3) \
++T (24,	2, 5, 6, 3)
+ #define EXPTESTS \
+ T (116,	1, 2, 4, 3) \
+ T (117,	7, 3, 3, 0) \
+@@ -31,7 +32,6 @@ T (118,	5, 3, 2, 7) \
+ T (119,	0, 3, 5, 6) \
+ T (120,	0, 0, 1, 5) \
+ T (121,	4, 6, 2, 1) \
+-T (122,	2, 5, 6, 3) \
+ T (123,	4, 6, 3, 2) \
+ T (124,	4, 7, 5, 6) \
+ T (125,	0, 4, 2, 4) \
+-- 
+2.0.3
+

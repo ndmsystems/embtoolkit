@@ -1,0 +1,116 @@
+From 06a3413f4aa4dddd790460681dd471c39847de94 Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sat, 19 Jul 2014 19:32:38 +0000
+Subject: [PATCH 111/134] 	* toplev.c (output_stack_usage): Adjust the
+ location of the warning.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212852 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                        |  4 ++++
+ gcc/testsuite/ChangeLog              |  4 ++++
+ gcc/testsuite/gcc.dg/stack-usage-2.c | 17 ++++++++---------
+ gcc/toplev.c                         | 13 ++++++++-----
+ 4 files changed, 24 insertions(+), 14 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 66c6159..ab94173 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,7 @@
++2014-07-19  Eric Botcazou  <ebotcazou@adacore.com>
++
++	* toplev.c (output_stack_usage): Adjust the location of the warning.
++
+ 2014-07-19  Daniel Cederman  <cederman@gaisler.com>
+ 
+ 	* config/sparc/sync.md (*membar_storeload_leon3): New insn.
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 0c120b6..de16e2b 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,7 @@
++2014-07-19  Eric Botcazou  <ebotcazou@adacore.com>
++
++	* gcc.dg/stack-usage-2.c: Adjust.
++
+ 2014-07-19  Paul Thomas  <pault@gcc.gnu.org>
+ 
+ 	Backport from trunk.
+diff --git a/gcc/testsuite/gcc.dg/stack-usage-2.c b/gcc/testsuite/gcc.dg/stack-usage-2.c
+index d3c17a8..df7e55f 100644
+--- a/gcc/testsuite/gcc.dg/stack-usage-2.c
++++ b/gcc/testsuite/gcc.dg/stack-usage-2.c
+@@ -1,33 +1,32 @@
+ /* { dg-do compile } */
+ /* { dg-options "-Wstack-usage=512" } */
+ 
+-int foo1 (void)
++int foo1 (void)  /* { dg-bogus "stack usage" } */
+ {
+   char arr[16];
+   arr[0] = 1;
+   return 0;
+-} /* { dg-bogus "stack usage" } */
++}
+ 
+-int foo2 (void)
++int foo2 (void)  /* { dg-warning "stack usage is \[0-9\]* bytes" } */
+ {
+   char arr[1024];
+   arr[0] = 1;
+   return 0;
+-} /* { dg-warning "stack usage is \[0-9\]* bytes" } */
++}
+ 
+-int foo3 (void)
++int foo3 (void) /* { dg-warning "stack usage might be \[0-9\]* bytes" } */
+ {
+   char arr[1024] __attribute__((aligned (512)));
+   arr[0] = 1;
+   /* Force dynamic realignment of argument pointer.  */
+   __builtin_apply ((void (*)()) foo2, 0, 0);
+   return 0;
++}
+ 
+-} /* { dg-warning "stack usage might be \[0-9\]* bytes" } */
+-
+-int foo4 (int n)
++int foo4 (int n) /* { dg-warning "stack usage might be unbounded" } */
+ {
+   char arr[n];
+   arr[0] = 1;
+   return 0;
+-} /* { dg-warning "stack usage might be unbounded" } */
++}
+diff --git a/gcc/toplev.c b/gcc/toplev.c
+index 7bced04..33b80f5 100644
+--- a/gcc/toplev.c
++++ b/gcc/toplev.c
+@@ -1036,16 +1036,19 @@ output_stack_usage (void)
+ 
+   if (warn_stack_usage >= 0)
+     {
++      const location_t loc = DECL_SOURCE_LOCATION (current_function_decl);
++
+       if (stack_usage_kind == DYNAMIC)
+-	warning (OPT_Wstack_usage_, "stack usage might be unbounded");
++	warning_at (loc, OPT_Wstack_usage_, "stack usage might be unbounded");
+       else if (stack_usage > warn_stack_usage)
+ 	{
+ 	  if (stack_usage_kind == DYNAMIC_BOUNDED)
+-	    warning (OPT_Wstack_usage_, "stack usage might be %wd bytes",
+-		     stack_usage);
++	    warning_at (loc,
++			OPT_Wstack_usage_, "stack usage might be %wd bytes",
++			stack_usage);
+ 	  else
+-	    warning (OPT_Wstack_usage_, "stack usage is %wd bytes",
+-		     stack_usage);
++	    warning_at (loc, OPT_Wstack_usage_, "stack usage is %wd bytes",
++			stack_usage);
+ 	}
+     }
+ }
+-- 
+1.8.5.5
+

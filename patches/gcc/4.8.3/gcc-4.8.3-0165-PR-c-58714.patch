@@ -1,0 +1,84 @@
+From a0f4400683bd20ef92578e88d3472eaac12bd4fe Mon Sep 17 00:00:00 2001
+From: jason <jason@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 7 Aug 2014 19:50:04 +0000
+Subject: [PATCH 165/326] 	PR c++/58714 	* tree.c (stabilize_expr): A
+ stabilized prvalue is an xvalue.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213734 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/cp/ChangeLog                      |  5 +++++
+ gcc/cp/tree.c                         |  4 ++++
+ gcc/testsuite/g++.dg/cpp0x/rv-cond1.C | 13 +++++++++++++
+ gcc/testsuite/g++.dg/expr/cond12.C    | 12 ++++++++++++
+ 4 files changed, 34 insertions(+)
+ create mode 100644 gcc/testsuite/g++.dg/cpp0x/rv-cond1.C
+ create mode 100644 gcc/testsuite/g++.dg/expr/cond12.C
+
+diff --git a/gcc/cp/ChangeLog b/gcc/cp/ChangeLog
+index 4b87bf5..b0e1efd 100644
+--- a/gcc/cp/ChangeLog
++++ b/gcc/cp/ChangeLog
+@@ -1,3 +1,8 @@
++2014-08-07  Jason Merrill  <jason@redhat.com>
++
++	PR c++/58714
++	* tree.c (stabilize_expr): A stabilized prvalue is an xvalue.
++
+ 2014-01-27  Jason Merrill  <jason@redhat.com>
+ 
+ 	PR c++/59823
+diff --git a/gcc/cp/tree.c b/gcc/cp/tree.c
+index ed4bff6..a9ff1c1 100644
+--- a/gcc/cp/tree.c
++++ b/gcc/cp/tree.c
+@@ -3748,6 +3748,10 @@ stabilize_expr (tree exp, tree* initp)
+     {
+       init_expr = get_target_expr (exp);
+       exp = TARGET_EXPR_SLOT (init_expr);
++      if (CLASS_TYPE_P (TREE_TYPE (exp)))
++	exp = move (exp);
++      else
++	exp = rvalue (exp);
+     }
+   else
+     {
+diff --git a/gcc/testsuite/g++.dg/cpp0x/rv-cond1.C b/gcc/testsuite/g++.dg/cpp0x/rv-cond1.C
+new file mode 100644
+index 0000000..a8f598f
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/cpp0x/rv-cond1.C
+@@ -0,0 +1,13 @@
++// PR c++/58714
++// { dg-do compile { target c++11 } }
++
++struct X {
++  X& operator=(const X&) = delete;
++  X& operator=(X&& ) = default;
++};
++
++void f(bool t) {
++  X a, b;
++  *(t ? &a : &b) = X();
++  (t ? a : b) = X();
++}
+diff --git a/gcc/testsuite/g++.dg/expr/cond12.C b/gcc/testsuite/g++.dg/expr/cond12.C
+new file mode 100644
+index 0000000..9134f81
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/expr/cond12.C
+@@ -0,0 +1,12 @@
++// PR c++/58714
++// { dg-do run }
++
++struct X {
++    X& operator=(const X&){}
++    X& operator=(X&){__builtin_abort();}
++};
++
++int main(int argv,char**) {
++  X a, b;
++  ((argv > 2) ? a : b) = X();
++}
+-- 
+2.0.3
+

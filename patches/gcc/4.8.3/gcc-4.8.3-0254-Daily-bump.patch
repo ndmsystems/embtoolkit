@@ -1,0 +1,20 @@
+From 5eea3b9c593cd69c360d92f02177bdfeade19d70 Mon Sep 17 00:00:00 2001
+From: gccadmin <gccadmin@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Mon, 22 Sep 2014 00:16:35 +0000
+Subject: [PATCH 254/326] Daily bump.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215440 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/DATESTAMP | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gcc/DATESTAMP b/gcc/DATESTAMP
+index cb7b251..68f7f6b 100644
+--- a/gcc/DATESTAMP
++++ b/gcc/DATESTAMP
+@@ -1 +1 @@
+-20140921
++20140922
+-- 
+2.0.3
+

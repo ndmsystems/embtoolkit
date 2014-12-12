@@ -1,0 +1,59 @@
+From bb5be3a04474e6f75fa3da3278a524719029de2b Mon Sep 17 00:00:00 2001
+From: clyon <clyon@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 13 Nov 2014 13:44:44 +0000
+Subject: [PATCH 350/366] 2014-11-13  Christophe Lyon 
+ <christophe.lyon@linaro.org>
+
+	Backport from mainline
+	2014-11-02  Michael Collison  <michael.collison@linaro.org>
+
+	* config/arm/arm.h (CLZ_DEFINED_VALUE_AT_ZERO) : Update
+	to support vector modes.
+	(CTZ_DEFINED_VALUE_AT_ZERO): Ditto.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@217490 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog        | 9 +++++++++
+ gcc/config/arm/arm.h | 7 ++++---
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index df44a10..e1362eb 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,12 @@
++2014-11-13  Christophe Lyon  <christophe.lyon@linaro.org>
++
++	Backport from mainline
++	2014-11-02  Michael Collison  <michael.collison@linaro.org>
++
++	* config/arm/arm.h (CLZ_DEFINED_VALUE_AT_ZERO) : Update
++	to support vector modes.
++	(CTZ_DEFINED_VALUE_AT_ZERO): Ditto.
++
+ 2014-11-13  Eric Botcazou  <ebotcazou@adacore.com>
+ 
+ 	* doc/tm.texi.in (SELECT_CC_MODE): Update example.
+diff --git a/gcc/config/arm/arm.h b/gcc/config/arm/arm.h
+index 63fa3c1..b4947cd 100644
+--- a/gcc/config/arm/arm.h
++++ b/gcc/config/arm/arm.h
+@@ -2082,9 +2082,10 @@ extern int making_const_table;
+    ? reverse_condition_maybe_unordered (code) \
+    : reverse_condition (code))
+ 
+-/* The arm5 clz instruction returns 32.  */
+-#define CLZ_DEFINED_VALUE_AT_ZERO(MODE, VALUE)  ((VALUE) = 32, 1)
+-#define CTZ_DEFINED_VALUE_AT_ZERO(MODE, VALUE)  ((VALUE) = 32, 1)
++#define CLZ_DEFINED_VALUE_AT_ZERO(MODE, VALUE) \
++  ((VALUE) = GET_MODE_UNIT_BITSIZE (MODE))
++#define CTZ_DEFINED_VALUE_AT_ZERO(MODE, VALUE) \
++  ((VALUE) = GET_MODE_UNIT_BITSIZE (MODE))
+ 
+ #define CC_STATUS_INIT \
+   do { cfun->machine->thumb1_cc_insn = NULL_RTX; } while (0)
+-- 
+2.0.3
+

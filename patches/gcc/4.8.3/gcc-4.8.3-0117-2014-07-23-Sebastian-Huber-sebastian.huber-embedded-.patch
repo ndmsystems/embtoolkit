@@ -1,0 +1,215 @@
+From aa5485bc454bcb0260c03700a273967155f8d440 Mon Sep 17 00:00:00 2001
+From: joel <joel@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 23 Jul 2014 14:10:51 +0000
+Subject: [PATCH 117/134] 2014-07-23  Sebastian Huber 
+ <sebastian.huber@embedded-brains.de>
+
+	* config/arm/t-rtems-eabi: Add
+	mthumb/march=armv7-r/mfpu=vfpv3-d16/mfloat-abi=hard,
+	mthumb/march=armv7-m/mfpu=fpv4-sp-d16/mfloat-abi=hard,
+	mbig-endian/mthumb/march=armv7-r, and
+	mbig-endian/mthumb/march=armv7-r/mfpu=vfpv3-d16/mfloat-abi=hard
+	multilibs.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212940 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog               |   9 ++++
+ gcc/config/arm/t-rtems-eabi | 124 +++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 131 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 729216b..51a4e7c 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,12 @@
++2014-07-23  Sebastian Huber  <sebastian.huber@embedded-brains.de>
++
++	* config/arm/t-rtems-eabi: Add
++	mthumb/march=armv7-r/mfpu=vfpv3-d16/mfloat-abi=hard,
++	mthumb/march=armv7-m/mfpu=fpv4-sp-d16/mfloat-abi=hard,
++	mbig-endian/mthumb/march=armv7-r, and
++	mbig-endian/mthumb/march=armv7-r/mfpu=vfpv3-d16/mfloat-abi=hard
++	multilibs.
++
+ 2014-07-21  Peter Bergner  <bergner@vnet.ibm.com>
+ 
+ 	* config/rs6000/sysv4.h (LIBASAN_EARLY_SPEC): Define.
+diff --git a/gcc/config/arm/t-rtems-eabi b/gcc/config/arm/t-rtems-eabi
+index d81fbf7..92c4dcb 100644
+--- a/gcc/config/arm/t-rtems-eabi
++++ b/gcc/config/arm/t-rtems-eabi
+@@ -1,47 +1,167 @@
+ # Custom RTEMS EABI multilibs
+ 
+-MULTILIB_OPTIONS  = mthumb march=armv6-m/march=armv7-a/march=armv7-r/march=armv7-m mfpu=neon mfloat-abi=hard
+-MULTILIB_DIRNAMES = thumb armv6-m armv7-a armv7-r armv7-m neon hard
++MULTILIB_OPTIONS  = mbig-endian mthumb march=armv6-m/march=armv7-a/march=armv7-r/march=armv7-m mfpu=neon/mfpu=vfpv3-d16/mfpu=fpv4-sp-d16 mfloat-abi=hard
++MULTILIB_DIRNAMES = eb thumb armv6-m armv7-a armv7-r armv7-m neon vfpv3-d16 fpv4-sp-d16 hard
+ 
+ # Enumeration of multilibs
+ 
+ MULTILIB_EXCEPTIONS =
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv6-m/mfpu=neon/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv6-m/mfpu=neon
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv6-m/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv6-m/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv6-m/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv6-m/mfpu=fpv4-sp-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv6-m/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv6-m
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-a/mfpu=neon/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-a/mfpu=neon
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-a/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-a/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-a/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-a/mfpu=fpv4-sp-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-a/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-a
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-r/mfpu=neon/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-r/mfpu=neon
++# MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-r/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-r/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-r/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-r/mfpu=fpv4-sp-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-r/mfloat-abi=hard
++# MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-r
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-m/mfpu=neon/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-m/mfpu=neon
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-m/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-m/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-m/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-m/mfpu=fpv4-sp-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-m/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/march=armv7-m
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/mfpu=neon/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/mfpu=neon
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/mfpu=fpv4-sp-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mthumb
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv6-m/mfpu=neon/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv6-m/mfpu=neon
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv6-m/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv6-m/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv6-m/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv6-m/mfpu=fpv4-sp-d16
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv6-m/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv6-m
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-a/mfpu=neon/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-a/mfpu=neon
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-a/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-a/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-a/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-a/mfpu=fpv4-sp-d16
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-a/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-a
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-r/mfpu=neon/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-r/mfpu=neon
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-r/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-r/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-r/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-r/mfpu=fpv4-sp-d16
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-r/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-r
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-m/mfpu=neon/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-m/mfpu=neon
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-m/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-m/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-m/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-m/mfpu=fpv4-sp-d16
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-m/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/march=armv7-m
++MULTILIB_EXCEPTIONS += mbig-endian/mfpu=neon/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mfpu=neon
++MULTILIB_EXCEPTIONS += mbig-endian/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian/mfpu=fpv4-sp-d16
++MULTILIB_EXCEPTIONS += mbig-endian/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mbig-endian
+ MULTILIB_EXCEPTIONS += mthumb/march=armv6-m/mfpu=neon/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += mthumb/march=armv6-m/mfpu=neon
++MULTILIB_EXCEPTIONS += mthumb/march=armv6-m/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mthumb/march=armv6-m/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mthumb/march=armv6-m/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mthumb/march=armv6-m/mfpu=fpv4-sp-d16
+ MULTILIB_EXCEPTIONS += mthumb/march=armv6-m/mfloat-abi=hard
+ # MULTILIB_EXCEPTIONS += mthumb/march=armv6-m
+ # MULTILIB_EXCEPTIONS += mthumb/march=armv7-a/mfpu=neon/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += mthumb/march=armv7-a/mfpu=neon
++MULTILIB_EXCEPTIONS += mthumb/march=armv7-a/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mthumb/march=armv7-a/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mthumb/march=armv7-a/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mthumb/march=armv7-a/mfpu=fpv4-sp-d16
+ MULTILIB_EXCEPTIONS += mthumb/march=armv7-a/mfloat-abi=hard
+ # MULTILIB_EXCEPTIONS += mthumb/march=armv7-a
+ MULTILIB_EXCEPTIONS += mthumb/march=armv7-r/mfpu=neon/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += mthumb/march=armv7-r/mfpu=neon
++# MULTILIB_EXCEPTIONS += mthumb/march=armv7-r/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mthumb/march=armv7-r/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mthumb/march=armv7-r/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mthumb/march=armv7-r/mfpu=fpv4-sp-d16
+ MULTILIB_EXCEPTIONS += mthumb/march=armv7-r/mfloat-abi=hard
+ # MULTILIB_EXCEPTIONS += mthumb/march=armv7-r
+ MULTILIB_EXCEPTIONS += mthumb/march=armv7-m/mfpu=neon/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += mthumb/march=armv7-m/mfpu=neon
++MULTILIB_EXCEPTIONS += mthumb/march=armv7-m/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mthumb/march=armv7-m/mfpu=vfpv3-d16
++# MULTILIB_EXCEPTIONS += mthumb/march=armv7-m/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mthumb/march=armv7-m/mfpu=fpv4-sp-d16
+ MULTILIB_EXCEPTIONS += mthumb/march=armv7-m/mfloat-abi=hard
+ # MULTILIB_EXCEPTIONS += mthumb/march=armv7-m
+ MULTILIB_EXCEPTIONS += mthumb/mfpu=neon/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += mthumb/mfpu=neon
++MULTILIB_EXCEPTIONS += mthumb/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mthumb/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mthumb/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mthumb/mfpu=fpv4-sp-d16
+ MULTILIB_EXCEPTIONS += mthumb/mfloat-abi=hard
+ # MULTILIB_EXCEPTIONS += mthumb
+ MULTILIB_EXCEPTIONS += march=armv6-m/mfpu=neon/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += march=armv6-m/mfpu=neon
++MULTILIB_EXCEPTIONS += march=armv6-m/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += march=armv6-m/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += march=armv6-m/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += march=armv6-m/mfpu=fpv4-sp-d16
+ MULTILIB_EXCEPTIONS += march=armv6-m/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += march=armv6-m
+ MULTILIB_EXCEPTIONS += march=armv7-a/mfpu=neon/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += march=armv7-a/mfpu=neon
++MULTILIB_EXCEPTIONS += march=armv7-a/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += march=armv7-a/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += march=armv7-a/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += march=armv7-a/mfpu=fpv4-sp-d16
+ MULTILIB_EXCEPTIONS += march=armv7-a/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += march=armv7-a
+ MULTILIB_EXCEPTIONS += march=armv7-r/mfpu=neon/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += march=armv7-r/mfpu=neon
++MULTILIB_EXCEPTIONS += march=armv7-r/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += march=armv7-r/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += march=armv7-r/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += march=armv7-r/mfpu=fpv4-sp-d16
+ MULTILIB_EXCEPTIONS += march=armv7-r/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += march=armv7-r
+ MULTILIB_EXCEPTIONS += march=armv7-m/mfpu=neon/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += march=armv7-m/mfpu=neon
++MULTILIB_EXCEPTIONS += march=armv7-m/mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += march=armv7-m/mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += march=armv7-m/mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += march=armv7-m/mfpu=fpv4-sp-d16
+ MULTILIB_EXCEPTIONS += march=armv7-m/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += march=armv7-m
+ MULTILIB_EXCEPTIONS += mfpu=neon/mfloat-abi=hard
+ MULTILIB_EXCEPTIONS += mfpu=neon
++MULTILIB_EXCEPTIONS += mfpu=vfpv3-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mfpu=vfpv3-d16
++MULTILIB_EXCEPTIONS += mfpu=fpv4-sp-d16/mfloat-abi=hard
++MULTILIB_EXCEPTIONS += mfpu=fpv4-sp-d16
+ MULTILIB_EXCEPTIONS += mfloat-abi=hard
+-- 
+1.8.5.5
+

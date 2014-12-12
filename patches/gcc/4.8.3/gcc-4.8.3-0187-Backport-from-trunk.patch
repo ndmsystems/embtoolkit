@@ -1,0 +1,93 @@
+From daf63b73e4ca5ef591c2881306930dfb4da2ad94 Mon Sep 17 00:00:00 2001
+From: danglin <danglin@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sat, 16 Aug 2014 17:29:33 +0000
+Subject: [PATCH 187/326] 	Backport from trunk: 	2014-04-06  John David
+ Anglin  <danglin@gcc.gnu.org>
+
+	PR debug/55794
+	* config/pa/pa.c (pa_output_function_epilogue): Skip address and code
+	size accounting for thunks.
+	(pa_asm_output_mi_thunk): Use final_start_function() and
+	final_end_function() to output function start and end directives.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214066 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog      | 11 +++++++++++
+ gcc/config/pa/pa.c | 20 +++++++-------------
+ 2 files changed, 18 insertions(+), 13 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index aad773d..cadb4ef 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,14 @@
++2014-08-16  John David Anglin  <danglin@gcc.gnu.org>
++
++	Backport from trunk:
++	2014-04-06  John David Anglin  <danglin@gcc.gnu.org>
++
++	PR debug/55794
++	* config/pa/pa.c (pa_output_function_epilogue): Skip address and code
++	size accounting for thunks.
++	(pa_asm_output_mi_thunk): Use final_start_function() and
++	final_end_function() to output function start and end directives.
++
+ 2014-08-15  Oleg Endo  <olegendo@gcc.gnu.org>
+ 
+ 	Backport from mainline:
+diff --git a/gcc/config/pa/pa.c b/gcc/config/pa/pa.c
+index 7603858..780c50f 100644
+--- a/gcc/config/pa/pa.c
++++ b/gcc/config/pa/pa.c
+@@ -4192,13 +4192,17 @@ pa_output_function_epilogue (FILE *file, HOST_WIDE_INT size ATTRIBUTE_UNUSED)
+ 
+   if (TARGET_SOM && TARGET_GAS)
+     {
+-      /* We done with this subspace except possibly for some additional
++      /* We are done with this subspace except possibly for some additional
+ 	 debug information.  Forget that we are in this subspace to ensure
+ 	 that the next function is output in its own subspace.  */
+       in_section = NULL;
+       cfun->machine->in_nsubspa = 2;
+     }
+ 
++  /* Thunks do their own accounting.  */
++  if (cfun->is_thunk)
++    return;
++
+   if (INSN_ADDRESSES_SET_P ())
+     {
+       insn = get_last_nonnote_insn ();
+@@ -8270,8 +8274,7 @@ pa_asm_output_mi_thunk (FILE *file, tree thunk_fndecl, HOST_WIDE_INT delta,
+   xoperands[1] = XEXP (DECL_RTL (thunk_fndecl), 0);
+   xoperands[2] = GEN_INT (delta);
+ 
+-  ASM_OUTPUT_LABEL (file, XSTR (xoperands[1], 0));
+-  fprintf (file, "\t.PROC\n\t.CALLINFO FRAME=0,NO_CALLS\n\t.ENTRY\n");
++  final_start_function (emit_barrier (), file, 1);
+ 
+   /* Output the thunk.  We know that the function is in the same
+      translation unit (i.e., the same space) as the thunk, and that
+@@ -8477,16 +8480,7 @@ pa_asm_output_mi_thunk (FILE *file, tree thunk_fndecl, HOST_WIDE_INT delta,
+ 	}
+     }
+ 
+-  fprintf (file, "\t.EXIT\n\t.PROCEND\n");
+-
+-  if (TARGET_SOM && TARGET_GAS)
+-    {
+-      /* We done with this subspace except possibly for some additional
+-	 debug information.  Forget that we are in this subspace to ensure
+-	 that the next function is output in its own subspace.  */
+-      in_section = NULL;
+-      cfun->machine->in_nsubspa = 2;
+-    }
++  final_end_function ();
+ 
+   if (TARGET_SOM && flag_pic && TREE_PUBLIC (function))
+     {
+-- 
+2.0.3
+

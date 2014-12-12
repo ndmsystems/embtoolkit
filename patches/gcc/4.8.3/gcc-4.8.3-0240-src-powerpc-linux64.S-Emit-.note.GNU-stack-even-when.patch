@@ -1,0 +1,61 @@
+From 8fca784f1c7477b7d93110a5ab95acd94dfa7cb9 Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 11 Sep 2014 09:05:12 +0000
+Subject: [PATCH 240/326] 	* src/powerpc/linux64.S: Emit .note.GNU-stack
+ even when 	POWERPC64 is not defined. 	*
+ src/powerpc/linux64_closure.S: Likewise.  Also test _CALL_ELF == 2.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215157 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ libffi/ChangeLog                     | 6 ++++++
+ libffi/src/powerpc/linux64.S         | 5 +++--
+ libffi/src/powerpc/linux64_closure.S | 5 +++--
+ 3 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/libffi/ChangeLog b/libffi/ChangeLog
+index ffab7e6..0b4a372 100644
+--- a/libffi/ChangeLog
++++ b/libffi/ChangeLog
+@@ -1,3 +1,9 @@
++2014-09-11  Jakub Jelinek  <jakub@redhat.com>
++
++	* src/powerpc/linux64.S: Emit .note.GNU-stack even when
++	POWERPC64 is not defined.
++	* src/powerpc/linux64_closure.S: Likewise.  Also test _CALL_ELF == 2.
++
+ 2014-05-22  Release Manager
+ 
+ 	* GCC 4.8.3 released.
+diff --git a/libffi/src/powerpc/linux64.S b/libffi/src/powerpc/linux64.S
+index c4d01d8..d2acb70 100644
+--- a/libffi/src/powerpc/linux64.S
++++ b/libffi/src/powerpc/linux64.S
+@@ -254,7 +254,8 @@ ffi_call_LINUX64:
+ 	.align 3
+ .LEFDE1:
+ 
+-# if (defined __ELF__ && defined __linux__) || _CALL_ELF == 2
++#endif
++
++#if (defined __ELF__ && defined __linux__) || _CALL_ELF == 2
+ 	.section	.note.GNU-stack,"",@progbits
+-# endif
+ #endif
+diff --git a/libffi/src/powerpc/linux64_closure.S b/libffi/src/powerpc/linux64_closure.S
+index 46a9ddf..1d80a39 100644
+--- a/libffi/src/powerpc/linux64_closure.S
++++ b/libffi/src/powerpc/linux64_closure.S
+@@ -381,7 +381,8 @@ ffi_closure_LINUX64:
+ 	.align 3
+ .LEFDE1:
+ 
+-# if defined __ELF__ && defined __linux__
++#endif
++
++#if (defined __ELF__ && defined __linux__) || _CALL_ELF == 2
+ 	.section	.note.GNU-stack,"",@progbits
+-# endif
+ #endif
+-- 
+2.0.3
+

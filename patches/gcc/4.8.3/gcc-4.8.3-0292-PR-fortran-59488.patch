@@ -1,0 +1,115 @@
+From dad8e408a0e701098f75833701493cd568cd53a1 Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 10 Oct 2014 11:24:31 +0000
+Subject: [PATCH 292/326] 	PR fortran/59488 	* trans-openmp.c
+ (gfc_omp_predetermined_sharing): Return 	OMP_CLAUSE_DEFAULT_SHARED for
+ parameters or vtables.
+
+	* gfortran.dg/gomp/pr59488-1.f90: New test.
+	* gfortran.dg/gomp/pr59488-2.f90: New test.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@216071 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/fortran/ChangeLog                        |  6 ++++++
+ gcc/fortran/trans-openmp.c                   | 10 ++++++++++
+ gcc/testsuite/ChangeLog                      |  6 ++++++
+ gcc/testsuite/gfortran.dg/gomp/pr59488-1.f90 | 13 +++++++++++++
+ gcc/testsuite/gfortran.dg/gomp/pr59488-2.f90 | 16 ++++++++++++++++
+ 5 files changed, 51 insertions(+)
+ create mode 100644 gcc/testsuite/gfortran.dg/gomp/pr59488-1.f90
+ create mode 100644 gcc/testsuite/gfortran.dg/gomp/pr59488-2.f90
+
+diff --git a/gcc/fortran/ChangeLog b/gcc/fortran/ChangeLog
+index c7001ca..b5dfcf1 100644
+--- a/gcc/fortran/ChangeLog
++++ b/gcc/fortran/ChangeLog
+@@ -1,3 +1,9 @@
++2014-10-10  Jakub Jelinek  <jakub@redhat.com>
++
++	PR fortran/59488
++	* trans-openmp.c (gfc_omp_predetermined_sharing): Return
++	OMP_CLAUSE_DEFAULT_SHARED for parameters or vtables.
++
+ 2014-09-03  Marek Polacek  <polacek@redhat.com>
+ 
+ 	Backport from trunk
+diff --git a/gcc/fortran/trans-openmp.c b/gcc/fortran/trans-openmp.c
+index 988dea9..53a78f0 100644
+--- a/gcc/fortran/trans-openmp.c
++++ b/gcc/fortran/trans-openmp.c
+@@ -115,6 +115,16 @@ gfc_omp_predetermined_sharing (tree decl)
+   if (GFC_DECL_RESULT (decl) && ! DECL_HAS_VALUE_EXPR_P (decl))
+     return OMP_CLAUSE_DEFAULT_SHARED;
+ 
++  /* These are either array or derived parameters, or vtables.
++     In the former cases, the OpenMP standard doesn't consider them to be
++     variables at all (they can't be redefined), but they can nevertheless appear
++     in parallel/task regions and for default(none) purposes treat them as shared.
++     For vtables likely the same handling is desirable.  */
++  if (TREE_CODE (decl) == VAR_DECL
++      && TREE_READONLY (decl)
++      && TREE_STATIC (decl))
++    return OMP_CLAUSE_DEFAULT_SHARED;
++
+   return OMP_CLAUSE_DEFAULT_UNSPECIFIED;
+ }
+ 
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index ac676af..6550957 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,9 @@
++2014-10-10  Jakub Jelinek  <jakub@redhat.com>
++
++	PR fortran/59488
++	* gfortran.dg/gomp/pr59488-1.f90: New test.
++	* gfortran.dg/gomp/pr59488-2.f90: New test.
++
+ 2014-10-01  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR debug/63342
+diff --git a/gcc/testsuite/gfortran.dg/gomp/pr59488-1.f90 b/gcc/testsuite/gfortran.dg/gomp/pr59488-1.f90
+new file mode 100644
+index 0000000..9db17dd
+--- /dev/null
++++ b/gcc/testsuite/gfortran.dg/gomp/pr59488-1.f90
+@@ -0,0 +1,13 @@
++! PR fortran/59488
++! { dg-do compile }
++! { dg-options "-fopenmp" }
++
++  implicit none
++  integer, parameter :: p(2) = (/ 11, 12 /)
++  integer :: r
++
++  !$omp parallel do default(none)
++  do r = 1, 2
++    print *, p(r)
++  end do
++end
+diff --git a/gcc/testsuite/gfortran.dg/gomp/pr59488-2.f90 b/gcc/testsuite/gfortran.dg/gomp/pr59488-2.f90
+new file mode 100644
+index 0000000..38f157b
+--- /dev/null
++++ b/gcc/testsuite/gfortran.dg/gomp/pr59488-2.f90
+@@ -0,0 +1,16 @@
++! PR fortran/59488
++! { dg-do compile }
++! { dg-options "-fopenmp" }
++
++  implicit none
++  type t
++    integer :: s1, s2, s3
++  end type
++  integer :: r
++  type(t), parameter :: u = t(1, 2, 3)
++
++  !$omp parallel do default(none)
++  do r = 1, 2
++    print *, u
++  end do
++end
+-- 
+2.0.3
+

@@ -1,0 +1,45 @@
+From 5d0d46b05b35948acb142929380c4379a9c3bf94 Mon Sep 17 00:00:00 2001
+From: rguenth <rguenth@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 22 May 2014 09:17:17 +0000
+Subject: [PATCH 001/134] 2014-05-22  Richard Biener  <rguenther@suse.de>
+
+        * BASE-VER: Set to 4.8.4.
+        * DEV-PHASE: Set to prerelease.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@210801 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/BASE-VER  | 2 +-
+ gcc/ChangeLog | 5 +++++
+ gcc/DEV-PHASE | 1 +
+ 3 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/BASE-VER b/gcc/BASE-VER
+index f99c658..57c4b30 100644
+--- a/gcc/BASE-VER
++++ b/gcc/BASE-VER
+@@ -1 +1 @@
+-4.8.3
++4.8.4
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index dc50953..f37dcfd 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,8 @@
++2013-05-22  Richard Biener  <rguenther@suse.de>
++
++	* BASE-VER: Set to 4.8.4.
++	* DEV-PHASE: Set to prerelease.
++
+ 2014-05-22  Release Manager
+ 
+ 	* GCC 4.8.3 released.
+diff --git a/gcc/DEV-PHASE b/gcc/DEV-PHASE
+index e69de29..373fbc6 100644
+--- a/gcc/DEV-PHASE
++++ b/gcc/DEV-PHASE
+@@ -0,0 +1 @@
++prerelease
+-- 
+1.8.5.5
+

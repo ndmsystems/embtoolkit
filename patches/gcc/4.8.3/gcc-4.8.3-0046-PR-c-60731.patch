@@ -1,0 +1,93 @@
+From c783725c4220893b5e996cb859a4416f9a36e5c0 Mon Sep 17 00:00:00 2001
+From: jason <jason@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 13 Jun 2014 16:39:37 +0000
+Subject: [PATCH 046/134] 	PR c++/60731 	* common.opt
+ (-fno-gnu-unique): Add. 	* config/elfos.h (USE_GNU_UNIQUE_OBJECT):
+ Check it.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@211648 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog       |  6 ++++++
+ gcc/common.opt      |  4 ++++
+ gcc/config/elfos.h  |  2 +-
+ gcc/doc/invoke.texi | 15 +++++++++++++++
+ 4 files changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 250fb00..c950ee7 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,9 @@
++2014-06-13  Jason Merrill  <jason@redhat.com>
++
++	PR c++/60731
++	* common.opt (-fno-gnu-unique): Add.
++	* config/elfos.h (USE_GNU_UNIQUE_OBJECT): Check it.
++
+ 2014-06-12  Georg-Johann Lay  <avr@gjlay.de>
+ 
+ 	Backport from 2014-05-09 trunk r210272
+diff --git a/gcc/common.opt b/gcc/common.opt
+index bdbd3b6..ec4cafc 100644
+--- a/gcc/common.opt
++++ b/gcc/common.opt
+@@ -1226,6 +1226,10 @@ fgnu-tm
+ Common Report Var(flag_tm)
+ Enable support for GNU transactional memory
+ 
++fgnu-unique
++Common Report Var(flag_gnu_unique) Init(1)
++Use STB_GNU_UNIQUE if supported by the assembler
++
+ floop-flatten
+ Common Ignore
+ Does nothing. Preserved for backward compatibility.
+diff --git a/gcc/config/elfos.h b/gcc/config/elfos.h
+index 4383023..43aab73 100644
+--- a/gcc/config/elfos.h
++++ b/gcc/config/elfos.h
+@@ -287,7 +287,7 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+ /* Write the extra assembler code needed to declare an object properly.  */
+ 
+ #ifdef HAVE_GAS_GNU_UNIQUE_OBJECT
+-#define USE_GNU_UNIQUE_OBJECT 1
++#define USE_GNU_UNIQUE_OBJECT flag_gnu_unique
+ #else
+ #define USE_GNU_UNIQUE_OBJECT 0
+ #endif
+diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
+index c39192b..dcb3d77 100644
+--- a/gcc/doc/invoke.texi
++++ b/gcc/doc/invoke.texi
+@@ -1009,6 +1009,7 @@ See S/390 and zSeries Options.
+ -ffixed-@var{reg}  -fexceptions @gol
+ -fnon-call-exceptions  -fdelete-dead-exceptions  -funwind-tables @gol
+ -fasynchronous-unwind-tables @gol
++-fno-gnu-unique @gol
+ -finhibit-size-directive  -finstrument-functions @gol
+ -finstrument-functions-exclude-function-list=@var{sym},@var{sym},@dots{} @gol
+ -finstrument-functions-exclude-file-list=@var{file},@var{file},@dots{} @gol
+@@ -20357,6 +20358,20 @@ Generate unwind table in DWARF 2 format, if supported by target machine.  The
+ table is exact at each instruction boundary, so it can be used for stack
+ unwinding from asynchronous events (such as debugger or garbage collector).
+ 
++@item -fno-gnu-unique
++@opindex fno-gnu-unique
++On systems with recent GNU assembler and C library, the C++ compiler
++uses the @code{STB_GNU_UNIQUE} binding to make sure that definitions
++of template static data members and static local variables in inline
++functions are unique even in the presence of @code{RTLD_LOCAL}; this
++is necessary to avoid problems with a library used by two different
++@code{RTLD_LOCAL} plugins depending on a definition in one of them and
++therefore disagreeing with the other one about the binding of the
++symbol.  But this causes @code{dlclose} to be ignored for affected
++DSOs; if your program relies on reinitialization of a DSO via
++@code{dlclose} and @code{dlopen}, you can use
++@option{-fno-gnu-unique}.
++
+ @item -fpcc-struct-return
+ @opindex fpcc-struct-return
+ Return ``short'' @code{struct} and @code{union} values in memory like
+-- 
+1.8.5.5
+

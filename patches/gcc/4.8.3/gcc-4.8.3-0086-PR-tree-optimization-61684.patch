@@ -1,0 +1,84 @@
+From eafdf2e4c209317fd54784ec6cff0ce53cb79e48 Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 4 Jul 2014 08:37:39 +0000
+Subject: [PATCH 086/134] 	PR tree-optimization/61684 	*
+ tree-ssa-ifcombine.c (recognize_single_bit_test): Make sure 	rhs1 of
+ conversion is a SSA_NAME before using SSA_NAME_DEF_STMT on it.
+
+	* gcc.c-torture/compile/pr61684.c: New test.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@212292 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                                 |  6 ++++++
+ gcc/testsuite/ChangeLog                       |  5 +++++
+ gcc/testsuite/gcc.c-torture/compile/pr61684.c | 15 +++++++++++++++
+ gcc/tree-ssa-ifcombine.c                      |  3 ++-
+ 4 files changed, 28 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/gcc.c-torture/compile/pr61684.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index bd902b9..678e367 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,9 @@
++2014-07-04  Jakub Jelinek  <jakub@redhat.com>
++
++	PR tree-optimization/61684
++	* tree-ssa-ifcombine.c (recognize_single_bit_test): Make sure
++	rhs1 of conversion is a SSA_NAME before using SSA_NAME_DEF_STMT on it.
++
+ 2014-06-30  Thomas Preud'homme  <thomas.preudhomme@arm.com>
+ 
+ 	Backport from Mainline
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index facd6dd..95ea849 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-07-04  Jakub Jelinek  <jakub@redhat.com>
++
++	PR tree-optimization/61684
++	* gcc.c-torture/compile/pr61684.c: New test.
++
+ 2014-07-02  Jakub Jelinek  <jakub@redhat.com>
+ 	    Fritz Reese  <Reese-Fritz@zai.com>
+ 
+diff --git a/gcc/testsuite/gcc.c-torture/compile/pr61684.c b/gcc/testsuite/gcc.c-torture/compile/pr61684.c
+new file mode 100644
+index 0000000..f5b53b7
+--- /dev/null
++++ b/gcc/testsuite/gcc.c-torture/compile/pr61684.c
+@@ -0,0 +1,15 @@
++/* PR tree-optimization/61684 */
++
++int a, c;
++static int *b = 0;
++short d;
++static short **e = 0;
++
++void
++foo ()
++{
++  for (; c < 1; c++)
++    ;
++  *e = &d;
++  a = d && (c && 1) & *b;
++}
+diff --git a/gcc/tree-ssa-ifcombine.c b/gcc/tree-ssa-ifcombine.c
+index ed6ea82..186e140 100644
+--- a/gcc/tree-ssa-ifcombine.c
++++ b/gcc/tree-ssa-ifcombine.c
+@@ -201,7 +201,8 @@ recognize_single_bit_test (gimple cond, tree *name, tree *bit, bool inv)
+       while (is_gimple_assign (stmt)
+ 	     && ((CONVERT_EXPR_CODE_P (gimple_assign_rhs_code (stmt))
+ 		  && (TYPE_PRECISION (TREE_TYPE (gimple_assign_lhs (stmt)))
+-		      <= TYPE_PRECISION (TREE_TYPE (gimple_assign_rhs1 (stmt)))))
++		      <= TYPE_PRECISION (TREE_TYPE (gimple_assign_rhs1 (stmt))))
++		  && TREE_CODE (gimple_assign_rhs1 (stmt)) == SSA_NAME)
+ 		 || gimple_assign_ssa_name_copy_p (stmt)))
+ 	stmt = SSA_NAME_DEF_STMT (gimple_assign_rhs1 (stmt));
+ 
+-- 
+1.8.5.5
+

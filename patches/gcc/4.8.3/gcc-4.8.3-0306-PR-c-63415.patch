@@ -1,0 +1,66 @@
+From 49905e07adc700816bf494952af78a4783d243bf Mon Sep 17 00:00:00 2001
+From: jason <jason@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 15 Oct 2014 16:46:29 +0000
+Subject: [PATCH 306/326] 	PR c++/63415 	* pt.c
+ (value_dependent_expression_p) [CONSTRUCTOR]: Check the type. 
+ (iterative_hash_template_arg): Likewise.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@216276 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/cp/ChangeLog                                 | 4 ++++
+ gcc/cp/pt.c                                      | 3 +++
+ gcc/testsuite/g++.dg/cpp0x/constexpr-initlist8.C | 7 +++++++
+ 3 files changed, 14 insertions(+)
+ create mode 100644 gcc/testsuite/g++.dg/cpp0x/constexpr-initlist8.C
+
+diff --git a/gcc/cp/ChangeLog b/gcc/cp/ChangeLog
+index 1dec9ec..643b5cb 100644
+--- a/gcc/cp/ChangeLog
++++ b/gcc/cp/ChangeLog
+@@ -1,5 +1,9 @@
+ 2014-10-15  Jason Merrill  <jason@redhat.com>
+ 
++	PR c++/63415
++	* pt.c (value_dependent_expression_p) [CONSTRUCTOR]: Check the type.
++	(iterative_hash_template_arg): Likewise.
++
+ 	PR c++/56710
+ 	* semantics.c (finish_member_declaration): Don't push closure
+ 	members.
+diff --git a/gcc/cp/pt.c b/gcc/cp/pt.c
+index 83aedd7..eadb078 100644
+--- a/gcc/cp/pt.c
++++ b/gcc/cp/pt.c
+@@ -1571,6 +1571,7 @@ iterative_hash_template_arg (tree arg, hashval_t val)
+     case CONSTRUCTOR:
+       {
+ 	tree field, value;
++	iterative_hash_template_arg (TREE_TYPE (arg), val);
+ 	FOR_EACH_CONSTRUCTOR_ELT (CONSTRUCTOR_ELTS (arg), i, field, value)
+ 	  {
+ 	    val = iterative_hash_template_arg (field, val);
+@@ -19826,6 +19827,8 @@ value_dependent_expression_p (tree expression)
+       {
+ 	unsigned ix;
+ 	tree val;
++	if (dependent_type_p (TREE_TYPE (expression)))
++	  return true;
+ 	FOR_EACH_CONSTRUCTOR_VALUE (CONSTRUCTOR_ELTS (expression), ix, val)
+ 	  if (value_dependent_expression_p (val))
+ 	    return true;
+diff --git a/gcc/testsuite/g++.dg/cpp0x/constexpr-initlist8.C b/gcc/testsuite/g++.dg/cpp0x/constexpr-initlist8.C
+new file mode 100644
+index 0000000..3d859a8
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/cpp0x/constexpr-initlist8.C
+@@ -0,0 +1,7 @@
++// PR c++/63415
++// { dg-do compile { target c++11 } }
++
++template <typename T>
++struct A {
++  static constexpr int value = int(T{});
++};
+-- 
+2.0.3
+

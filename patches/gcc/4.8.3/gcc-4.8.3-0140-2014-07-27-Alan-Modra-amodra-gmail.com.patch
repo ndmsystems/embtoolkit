@@ -1,0 +1,47 @@
+From 5d3531ff3ba522efbb894f0a98edd13e4961514c Mon Sep 17 00:00:00 2001
+From: doko <doko@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sun, 27 Jul 2014 13:19:21 +0000
+Subject: [PATCH 140/326] 2014-07-27  Alan Modra  <amodra@gmail.com>           
+  Matthias Klose  <doko@ubuntu.com>
+
+        PR libobjc/61920
+
+        * encoding.c: Define rs6000_special_adjust_field_align_p.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213100 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ libobjc/ChangeLog  | 7 +++++++
+ libobjc/encoding.c | 1 +
+ 2 files changed, 8 insertions(+)
+
+diff --git a/libobjc/ChangeLog b/libobjc/ChangeLog
+index 73985a6..b664532 100644
+--- a/libobjc/ChangeLog
++++ b/libobjc/ChangeLog
+@@ -1,3 +1,10 @@
++2014-07-27  Alan Modra  <amodra@gmail.com>
++	    Matthias Klose  <doko@ubuntu.com>
++
++	PR libobjc/61920
++
++	* encoding.c: Define rs6000_special_adjust_field_align_p.
++
+ 2014-05-22  Release Manager
+ 
+ 	* GCC 4.8.3 released.
+diff --git a/libobjc/encoding.c b/libobjc/encoding.c
+index 79ad32a..42b0bf7 100644
+--- a/libobjc/encoding.c
++++ b/libobjc/encoding.c
+@@ -192,6 +192,7 @@ _darwin_rs6000_special_round_type_align (const char *struc, int comp, int spec)
+    ? MAX (MAX (COMPUTED, SPECIFIED), 64)				\
+    : MAX (COMPUTED, SPECIFIED));})
+ 
++#define rs6000_special_adjust_field_align_p(FIELD, COMPUTED) 0
+ 
+ /* Skip a variable name, enclosed in quotes (").  */
+ static inline
+-- 
+2.0.3
+

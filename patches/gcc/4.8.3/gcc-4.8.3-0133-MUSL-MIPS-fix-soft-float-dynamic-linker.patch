@@ -1,0 +1,29 @@
+From 26aa65c609a6e46a7e93de727953bfa4d4df94c1 Mon Sep 17 00:00:00 2001
+From: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+Date: Sun, 2 Mar 2014 13:48:21 +0100
+Subject: [PATCH 133/134] [MUSL]MIPS: fix soft float dynamic linker
+
+Signed-off-by: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+---
+ gcc/config/mips/linux.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/config/mips/linux.h b/gcc/config/mips/linux.h
+index e57f3af..fe78cfb 100644
+--- a/gcc/config/mips/linux.h
++++ b/gcc/config/mips/linux.h
+@@ -20,9 +20,10 @@ along with GCC; see the file COPYING3.  If not see
+ #define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
+ 
+ #undef MUSL_DYNAMIC_LINKER
++
+ #if TARGET_ENDIAN_DEFAULT == 0 /* LE */
+ #define MUSL_DYNAMIC_LINKER_E "%{EB:;:el}"
+ #else
+ #define MUSL_DYNAMIC_LINKER_E "%{EL:el}"
+ #endif
+-#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E ".so.1"
++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E "%{msoft-float:-sf}.so.1"
+-- 
+1.8.5.5
+

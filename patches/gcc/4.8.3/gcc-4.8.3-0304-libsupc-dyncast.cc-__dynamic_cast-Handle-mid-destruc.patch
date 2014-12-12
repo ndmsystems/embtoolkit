@@ -1,0 +1,87 @@
+From b6eb75d1dface3c49f458810756c510204a19e42 Mon Sep 17 00:00:00 2001
+From: jason <jason@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 15 Oct 2014 16:46:17 +0000
+Subject: [PATCH 304/326] 	* libsupc++/dyncast.cc (__dynamic_cast):
+ Handle mid-destruction 	dynamic_cast more gracefully.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@216274 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/testsuite/g++.dg/rtti/dyncast7.C | 28 ++++++++++++++++++++++++++++
+ libstdc++-v3/ChangeLog               |  5 +++++
+ libstdc++-v3/libsupc++/dyncast.cc    | 12 ++++++++++++
+ 3 files changed, 45 insertions(+)
+ create mode 100644 gcc/testsuite/g++.dg/rtti/dyncast7.C
+
+diff --git a/gcc/testsuite/g++.dg/rtti/dyncast7.C b/gcc/testsuite/g++.dg/rtti/dyncast7.C
+new file mode 100644
+index 0000000..deb4397
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/rtti/dyncast7.C
+@@ -0,0 +1,28 @@
++// I think this dynamic_cast has undefined behavior when destroying E::o
++// because we're the F period of destruction has started and ap doesn't
++// point to the object currently being destroyed--but the reasonable
++// options are success or failure, not SEGV.
++
++// { dg-do run }
++
++extern "C" void abort();
++
++struct A { virtual ~A(); };
++struct B { virtual ~B() { } };
++struct C : B, A { };
++struct E : virtual B { A o; };
++struct F : virtual C, virtual E { };
++
++A* ap;
++C* cp;
++
++A::~A() {
++  C* cp2 = dynamic_cast<C*>(ap);
++  if (cp2 != cp && cp2 != 0)
++    abort();
++}
++
++int main() {
++  F f;
++  ap = cp = &f;
++}
+diff --git a/libstdc++-v3/ChangeLog b/libstdc++-v3/ChangeLog
+index eb469ba..22edbcf 100644
+--- a/libstdc++-v3/ChangeLog
++++ b/libstdc++-v3/ChangeLog
+@@ -1,3 +1,8 @@
++2014-10-15  Jason Merrill  <jason@redhat.com>
++
++	* libsupc++/dyncast.cc (__dynamic_cast): Handle mid-destruction
++	dynamic_cast more gracefully.
++
+ 2014-10-14  Kai Tietz  <ktietz@redhat.com>
+ 
+ 	PR libstdc++/57440
+diff --git a/libstdc++-v3/libsupc++/dyncast.cc b/libstdc++-v3/libsupc++/dyncast.cc
+index 2e5dbf0..b9db8ee 100644
+--- a/libstdc++-v3/libsupc++/dyncast.cc
++++ b/libstdc++-v3/libsupc++/dyncast.cc
+@@ -55,6 +55,18 @@ __dynamic_cast (const void *src_ptr,    // object started from
+       adjust_pointer <void> (src_ptr, prefix->whole_object);
+   const __class_type_info *whole_type = prefix->whole_type;
+   __class_type_info::__dyncast_result result;
++
++  // If the whole object vptr doesn't refer to the whole object type, we're
++  // in the middle of constructing a primary base, and src is a separate
++  // base.  This has undefined behavior and we can't find anything outside
++  // of the base we're actually constructing, so fail now rather than
++  // segfault later trying to use a vbase offset that doesn't exist.
++  const void *whole_vtable = *static_cast <const void *const *> (whole_ptr);
++  const vtable_prefix *whole_prefix =
++    adjust_pointer <vtable_prefix> (whole_vtable,
++				    -offsetof (vtable_prefix, origin));
++  if (whole_prefix->whole_type != whole_type)
++    return NULL;
+   
+   whole_type->__do_dyncast (src2dst, __class_type_info::__contained_public,
+                             dst_type, whole_ptr, src_type, src_ptr, result);
+-- 
+2.0.3
+

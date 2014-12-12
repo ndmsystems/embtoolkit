@@ -1,0 +1,294 @@
+From 28f2abb5bcd8ce3b848b9f58be59a2a3d7743cf2 Mon Sep 17 00:00:00 2001
+From: yufeng <yufeng@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 17 Jun 2014 14:15:03 +0000
+Subject: [PATCH 053/134] gcc/
+
+	PR target/61483
+	* config/aarch64/aarch64.c (aarch64_layout_arg): Add new local
+	variable 'size'; calculate 'size' right in the front; use
+	'size' to compute 'nregs' (when 'allocate_ncrn != 0') and
+	pcum->aapcs_stack_words.
+
+gcc/testsuite/
+
+	PR target/61483
+	* gcc.target/aarch64/aapcs64/type-def.h (struct hfa_fx2_t): New type.
+	* gcc.target/aarch64/aapcs64/va_arg-13.c: New test.
+	* gcc.target/aarch64/aapcs64/va_arg-14.c: Ditto.
+	* gcc.target/aarch64/aapcs64/va_arg-15.c: Ditto.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@211741 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                                      | 10 ++++
+ gcc/config/aarch64/aarch64.c                       | 17 ++++---
+ gcc/testsuite/ChangeLog                            | 10 ++++
+ .../gcc.target/aarch64/aapcs64/type-def.h          |  7 +++
+ .../gcc.target/aarch64/aapcs64/va_arg-13.c         | 59 ++++++++++++++++++++++
+ .../gcc.target/aarch64/aapcs64/va_arg-14.c         | 35 +++++++++++++
+ .../gcc.target/aarch64/aapcs64/va_arg-15.c         | 39 ++++++++++++++
+ 7 files changed, 170 insertions(+), 7 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-13.c
+ create mode 100644 gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-14.c
+ create mode 100644 gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-15.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index c9ab54f..f96b744 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,13 @@
++2014-06-17  Yufeng Zhang  <yufeng.zhang@arm.com>
++
++	Backport from mainline
++
++	PR target/61483
++	* config/aarch64/aarch64.c (aarch64_layout_arg): Add new local
++	variable 'size'; calculate 'size' right in the front; use
++	'size' to compute 'nregs' (when 'allocate_ncrn != 0') and
++	pcum->aapcs_stack_words.
++
+ 2014-06-13  Peter Bergner  <bergner@vnet.ibm.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/config/aarch64/aarch64.c b/gcc/config/aarch64/aarch64.c
+index 0d4b265..0ac9ba1 100644
+--- a/gcc/config/aarch64/aarch64.c
++++ b/gcc/config/aarch64/aarch64.c
+@@ -1201,6 +1201,7 @@ aarch64_layout_arg (cumulative_args_t pcum_v, enum machine_mode mode,
+   CUMULATIVE_ARGS *pcum = get_cumulative_args (pcum_v);
+   int ncrn, nvrn, nregs;
+   bool allocate_ncrn, allocate_nvrn;
++  HOST_WIDE_INT size;
+ 
+   /* We need to do this once per argument.  */
+   if (pcum->aapcs_arg_processed)
+@@ -1208,6 +1209,11 @@ aarch64_layout_arg (cumulative_args_t pcum_v, enum machine_mode mode,
+ 
+   pcum->aapcs_arg_processed = true;
+ 
++  /* Size in bytes, rounded to the nearest multiple of 8 bytes.  */
++  size
++    = AARCH64_ROUND_UP (type ? int_size_in_bytes (type) : GET_MODE_SIZE (mode),
++			UNITS_PER_WORD);
++
+   allocate_ncrn = (type) ? !(FLOAT_TYPE_P (type)) : !FLOAT_MODE_P (mode);
+   allocate_nvrn = aarch64_vfp_is_call_candidate (pcum_v,
+ 						 mode,
+@@ -1258,9 +1264,7 @@ aarch64_layout_arg (cumulative_args_t pcum_v, enum machine_mode mode,
+     }
+ 
+   ncrn = pcum->aapcs_ncrn;
+-  nregs = ((type ? int_size_in_bytes (type) : GET_MODE_SIZE (mode))
+-	   + UNITS_PER_WORD - 1) / UNITS_PER_WORD;
+-
++  nregs = size / UNITS_PER_WORD;
+ 
+   /* C6 - C9.  though the sign and zero extension semantics are
+      handled elsewhere.  This is the case where the argument fits
+@@ -1309,13 +1313,12 @@ aarch64_layout_arg (cumulative_args_t pcum_v, enum machine_mode mode,
+   pcum->aapcs_nextncrn = NUM_ARG_REGS;
+ 
+   /* The argument is passed on stack; record the needed number of words for
+-     this argument (we can re-use NREGS) and align the total size if
+-     necessary.  */
++     this argument and align the total size if necessary.  */
+ on_stack:
+-  pcum->aapcs_stack_words = nregs;
++  pcum->aapcs_stack_words = size / UNITS_PER_WORD;
+   if (aarch64_function_arg_alignment (mode, type) == 16 * BITS_PER_UNIT)
+     pcum->aapcs_stack_size = AARCH64_ROUND_UP (pcum->aapcs_stack_size,
+-					       16 / UNITS_PER_WORD) + 1;
++					       16 / UNITS_PER_WORD);
+   return;
+ }
+ 
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 4fd2ef0..8418873 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,13 @@
++2014-06-17  Yufeng Zhang  <yufeng.zhang@arm.com>
++
++	Backport from mainline
++
++	PR target/61483
++	* gcc.target/aarch64/aapcs64/type-def.h (struct hfa_fx2_t): New type.
++	* gcc.target/aarch64/aapcs64/va_arg-13.c: New test.
++	* gcc.target/aarch64/aapcs64/va_arg-14.c: Ditto.
++	* gcc.target/aarch64/aapcs64/va_arg-15.c: Ditto.
++
+ 2014-06-15  Francois-Xavier Coudert  <fxcoudert@gcc.gnu.org>
+ 
+ 	Backport from trunk.
+diff --git a/gcc/testsuite/gcc.target/aarch64/aapcs64/type-def.h b/gcc/testsuite/gcc.target/aarch64/aapcs64/type-def.h
+index a95d06a..07e56ff 100644
+--- a/gcc/testsuite/gcc.target/aarch64/aapcs64/type-def.h
++++ b/gcc/testsuite/gcc.target/aarch64/aapcs64/type-def.h
+@@ -34,6 +34,13 @@ struct hfa_fx2_t
+   float b;
+ };
+ 
++struct hfa_fx3_t
++{
++  float a;
++  float b;
++  float c;
++};
++
+ struct hfa_dx2_t
+ {
+   double a;
+diff --git a/gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-13.c b/gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-13.c
+new file mode 100644
+index 0000000..ae1e3ec
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-13.c
+@@ -0,0 +1,59 @@
++/* Test AAPCS64 layout and __builtin_va_start.
++
++   Pass named HFA/HVA argument on stack.  */
++
++/* { dg-do run { target aarch64*-*-* } } */
++
++#ifndef IN_FRAMEWORK
++#define AAPCS64_TEST_STDARG
++#define TESTFILE "va_arg-13.c"
++
++struct float_float_t
++{
++  float a;
++  float b;
++} float_float;
++
++union float_int_t
++{
++  float b8;
++  int b5;
++} float_int;
++
++#define HAS_DATA_INIT_FUNC
++void
++init_data ()
++{
++  float_float.a = 1.2f;
++  float_float.b = 2.2f;
++
++  float_int.b8 = 4983.80f;
++}
++
++#include "abitest.h"
++#else
++  ARG (float, 1.0f, S0, 0)
++  ARG (float, 2.0f, S1, 1)
++  ARG (float, 3.0f, S2, 2)
++  ARG (float, 4.0f, S3, 3)
++  ARG (float, 5.0f, S4, 4)
++  ARG (float, 6.0f, S5, 5)
++  ARG (float, 7.0f, S6, 6)
++  ARG (struct float_float_t, float_float, STACK, 7)
++  ARG (int,  9, W0, 8)
++  ARG (int, 10, W1, 9)
++  ARG (int, 11, W2, 10)
++  ARG (int, 12, W3, 11)
++  ARG (int, 13, W4, 12)
++  ARG (int, 14, W5, 13)
++  ARG (int, 15, W6, LAST_NAMED_ARG_ID)
++  DOTS
++  /* Note on the reason of using 'X7' instead of 'W7' here:
++     Using 'X7' makes sure the test works in the big-endian mode.
++     According to PCS rules B.4 and C.10, the size of float_int is rounded
++     to 8 bytes and prepared in the register X7 as if loaded via LDR from
++     the memory, with the content of the other 4 bytes unspecified.  The
++     test framework will only compare the 4 relavent bytes.  */
++  ANON (union float_int_t, float_int, X7, 15)
++  LAST_ANON (long long, 12683143434LL, STACK + 8, 16)
++#endif
+diff --git a/gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-14.c b/gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-14.c
+new file mode 100644
+index 0000000..91080d5
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-14.c
+@@ -0,0 +1,35 @@
++/* Test AAPCS64 layout and __builtin_va_start.
++
++   Pass named HFA/HVA argument on stack.  */
++
++/* { dg-do run { target aarch64*-*-* } } */
++
++#ifndef IN_FRAMEWORK
++#define AAPCS64_TEST_STDARG
++#define TESTFILE "va_arg-14.c"
++#include "type-def.h"
++
++struct hfa_fx2_t hfa_fx2 = {1.2f, 2.2f};
++struct hfa_fx3_t hfa_fx3 = {3.2f, 4.2f, 5.2f};
++vf4_t float32x4 = {6.2f, 7.2f, 8.2f, 9.2f};
++vf4_t float32x4_2 = {10.2f, 11.2f, 12.2f, 13.2f};
++
++#include "abitest.h"
++#else
++  ARG (float, 1.0f, S0, 0)
++  ARG (float, 2.0f, S1, 1)
++  ARG (float, 3.0f, S2, 2)
++  ARG (float, 4.0f, S3, 3)
++  ARG (float, 5.0f, S4, 4)
++  ARG (float, 6.0f, S5, 5)
++  ARG (float, 7.0f, S6, 6)
++  ARG (struct hfa_fx3_t, hfa_fx3, STACK, 7)
++  /* Previous argument size has been rounded up to the nearest multiple of
++     8 bytes.  */
++  ARG (struct hfa_fx2_t, hfa_fx2, STACK + 16, 8)
++  /* NSAA is rounded up to the nearest natural alignment of float32x4.  */
++  ARG (vf4_t, float32x4, STACK + 32, 9)
++  ARG (vf4_t, float32x4_2, STACK + 48, LAST_NAMED_ARG_ID)
++  DOTS
++  LAST_ANON (double, 123456789.987, STACK + 64, 11)
++#endif
+diff --git a/gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-15.c b/gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-15.c
+new file mode 100644
+index 0000000..d8fdb32
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/aarch64/aapcs64/va_arg-15.c
+@@ -0,0 +1,39 @@
++/* Test AAPCS64 layout and __builtin_va_start.
++
++   Pass named __128int argument on stack.  */
++
++/* { dg-do run { target aarch64*-*-* } } */
++
++#ifndef IN_FRAMEWORK
++#define AAPCS64_TEST_STDARG
++#define TESTFILE "va_arg-15.c"
++#include "type-def.h"
++
++union int128_t qword;
++
++#define HAS_DATA_INIT_FUNC
++void
++init_data ()
++{
++  /* Init signed quad-word integer.  */
++  qword.l64 = 0xfdb9753102468aceLL;
++  qword.h64 = 0xeca8642013579bdfLL;
++}
++
++#include "abitest.h"
++#else
++  ARG (int, 1, W0, 0)
++  ARG (int, 2, W1, 1)
++  ARG (int, 3, W2, 2)
++  ARG (int, 4, W3, 3)
++  ARG (int, 5, W4, 4)
++  ARG (int, 6, W5, 5)
++  ARG (int, 7, W6, 6)
++  ARG (__int128, qword.i, STACK, LAST_NAMED_ARG_ID)
++  DOTS
++#ifndef __AAPCS64_BIG_ENDIAN__
++  LAST_ANON (int, 8, STACK + 16, 8)
++#else
++  LAST_ANON (int, 8, STACK + 20, 8)
++#endif
++#endif
+-- 
+1.8.5.5
+

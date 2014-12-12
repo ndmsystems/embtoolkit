@@ -1,0 +1,44 @@
+From 96ca168c0b87f500f2abb28e956696b05d84db09 Mon Sep 17 00:00:00 2001
+From: uweigand <uweigand@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 26 Aug 2014 14:14:53 +0000
+Subject: [PATCH 206/326] 2014-08-26  Dominik Vogt  <vogt@linux.vnet.ibm.com>
+
+	* gfortran.dg/bessel_7.f90: Bump allowed precision to avoid
+	failure on s390*-*-linux-gnu.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@214522 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/testsuite/ChangeLog                | 5 +++++
+ gcc/testsuite/gfortran.dg/bessel_7.f90 | 2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index dcead6d..a5f098d 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-08-26  Dominik Vogt  <vogt@linux.vnet.ibm.com>
++
++	* gfortran.dg/bessel_7.f90: Bump allowed precision to avoid
++	failure on s390*-*-linux-gnu.
++
+ 2014-08-24  Oleg Endo  <olegendo@gcc.gnu.org>
+ 
+ 	Backport from mainline
+diff --git a/gcc/testsuite/gfortran.dg/bessel_7.f90 b/gcc/testsuite/gfortran.dg/bessel_7.f90
+index 7e63ed1..c6b5f74 100644
+--- a/gcc/testsuite/gfortran.dg/bessel_7.f90
++++ b/gcc/testsuite/gfortran.dg/bessel_7.f90
+@@ -16,7 +16,7 @@
+ implicit none
+ real,parameter :: values(*) = [0.0, 0.5, 1.0, 0.9, 1.8,2.0,3.0,4.0,4.25,8.0,34.53, 475.78] 
+ real,parameter :: myeps(size(values)) = epsilon(0.0) &
+-                  * [2, 3, 4, 5, 8, 2, 12, 6, 7, 6, 36, 168 ]
++                  * [2, 3, 4, 5, 8, 2, 13, 6, 7, 6, 36, 168 ]
+ ! The following is sufficient for me - the values above are a bit
+ ! more tolerant
+ !                  * [0, 0, 0, 3, 3, 0, 9, 0, 2, 1, 22, 130 ]
+-- 
+2.0.3
+

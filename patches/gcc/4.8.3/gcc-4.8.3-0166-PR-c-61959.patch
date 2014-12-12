@@ -1,0 +1,79 @@
+From 48c2a2a986eb1fa75a5fc46e74d95544c36f59dc Mon Sep 17 00:00:00 2001
+From: jason <jason@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 7 Aug 2014 19:50:11 +0000
+Subject: [PATCH 166/326] 	PR c++/61959 	* semantics.c
+ (cxx_eval_bare_aggregate): Handle POINTER_PLUS_EXPR.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@213735 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/cp/ChangeLog                              |  3 +++
+ gcc/cp/semantics.c                            |  4 +++-
+ gcc/testsuite/g++.dg/cpp0x/constexpr-empty7.C | 28 +++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/g++.dg/cpp0x/constexpr-empty7.C
+
+diff --git a/gcc/cp/ChangeLog b/gcc/cp/ChangeLog
+index b0e1efd..82e61f5 100644
+--- a/gcc/cp/ChangeLog
++++ b/gcc/cp/ChangeLog
+@@ -1,5 +1,8 @@
+ 2014-08-07  Jason Merrill  <jason@redhat.com>
+ 
++	PR c++/61959
++	* semantics.c (cxx_eval_bare_aggregate): Handle POINTER_PLUS_EXPR.
++
+ 	PR c++/58714
+ 	* tree.c (stabilize_expr): A stabilized prvalue is an xvalue.
+ 
+diff --git a/gcc/cp/semantics.c b/gcc/cp/semantics.c
+index d5013c4..9825dbe 100644
+--- a/gcc/cp/semantics.c
++++ b/gcc/cp/semantics.c
+@@ -7296,7 +7296,9 @@ cxx_eval_bare_aggregate (const constexpr_call *call, tree t,
+ 	  constructor_elt *inner = base_field_constructor_elt (n, ce->index);
+ 	  inner->value = elt;
+ 	}
+-      else if (ce->index && TREE_CODE (ce->index) == NOP_EXPR)
++      else if (ce->index
++	       && (TREE_CODE (ce->index) == NOP_EXPR
++		   || TREE_CODE (ce->index) == POINTER_PLUS_EXPR))
+ 	{
+ 	  /* This is an initializer for an empty base; now that we've
+ 	     checked that it's constant, we can ignore it.  */
+diff --git a/gcc/testsuite/g++.dg/cpp0x/constexpr-empty7.C b/gcc/testsuite/g++.dg/cpp0x/constexpr-empty7.C
+new file mode 100644
+index 0000000..f491994
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/cpp0x/constexpr-empty7.C
+@@ -0,0 +1,28 @@
++// PR c++/61959
++// { dg-do compile { target c++11 } }
++
++template <class Coord> struct BasePoint
++{
++  Coord x, y;
++  constexpr BasePoint (Coord, Coord) : x (0), y (0) {}
++};
++template <class T> struct BaseCoord
++{
++  int value;
++  constexpr BaseCoord (T) : value (1) {}
++};
++template <class units> struct IntCoordTyped : BaseCoord<int>, units
++{
++  typedef BaseCoord Super;
++  constexpr IntCoordTyped (int) : Super (0) {}
++};
++template <class units>
++struct IntPointTyped : BasePoint<IntCoordTyped<units> >, units
++{
++  typedef BasePoint<IntCoordTyped<units> > Super;
++  constexpr IntPointTyped (int, int) : Super (0, 0) {}
++};
++struct A
++{
++};
++IntPointTyped<A> a (0, 0);
+-- 
+2.0.3
+

@@ -1,0 +1,38 @@
+From 08537cc09124924b47c6acace0f7e4ef2926235b Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 27 May 2014 20:38:50 +0000
+Subject: [PATCH 013/134] 	* gnat.dg/aliasing1.adb (dg-final): Robustify
+ pattern matching.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@210984 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/testsuite/ChangeLog             | 4 ++++
+ gcc/testsuite/gnat.dg/aliasing1.adb | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 1d4513f..55ea108 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,7 @@
++2014-05-27  Eric Botcazou  <ebotcazou@adacore.com>
++
++	* gnat.dg/aliasing1.adb (dg-final): Robustify pattern matching.
++
+ 2014-05-22  Peter Bergner  <bergner@vnet.ibm.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/testsuite/gnat.dg/aliasing1.adb b/gcc/testsuite/gnat.dg/aliasing1.adb
+index b2b7d12..bffc422 100644
+--- a/gcc/testsuite/gnat.dg/aliasing1.adb
++++ b/gcc/testsuite/gnat.dg/aliasing1.adb
+@@ -18,5 +18,5 @@ package body Aliasing1 is
+ 
+ end Aliasing1;
+ 
+--- { dg-final { scan-tree-dump-not "__gnat_rcheck" "optimized" } }
++-- { dg-final { scan-tree-dump-not "gnat_rcheck" "optimized" } }
+ -- { dg-final { cleanup-tree-dump "optimized" } }
+-- 
+1.8.5.5
+

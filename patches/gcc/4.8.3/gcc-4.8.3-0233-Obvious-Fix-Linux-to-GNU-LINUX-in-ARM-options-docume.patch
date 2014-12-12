@@ -1,0 +1,75 @@
+From e1b56c31b5acec7aa67ecb6881ca00b197b6227d Mon Sep 17 00:00:00 2001
+From: jgreenhalgh <jgreenhalgh@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 9 Sep 2014 12:38:15 +0000
+Subject: [PATCH 233/326] [Obvious] Fix Linux to GNU/LINUX in ARM options
+ documentation
+
+gcc/
+
+	* doc/invoke.texi (-march): Use GNU/Linux rather than Linux.
+	(-mtune): Likewise.
+	(-mcpu): Likewise.
+
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@215068 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog       |  9 +++++++++
+ gcc/doc/invoke.texi | 10 +++++-----
+ 2 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 87ad866..eb3a989 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,12 @@
++2014-09-09  James Greenhalgh  <james.greenhalgh@arm.com>
++
++	Backport from mainline.
++	2014-09-09  James Greenhalgh  <james.greenhalgh@arm.com>
++
++	* doc/invoke.texi (-march): Use GNU/Linux rather than Linux.
++	(-mtune): Likewise.
++	(-mcpu): Likewise.
++
+ 2014-09-08  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR tree-optimization/60196
+diff --git a/gcc/doc/invoke.texi b/gcc/doc/invoke.texi
+index b3b31f0..c96ef22 100644
+--- a/gcc/doc/invoke.texi
++++ b/gcc/doc/invoke.texi
+@@ -11272,8 +11272,8 @@ of the @option{-mcpu=} option.  Permissible names are: @samp{armv2},
+ 
+ @option{-march=native} causes the compiler to auto-detect the architecture
+ of the build computer.  At present, this feature is only supported on
+-Linux, and not all architectures are recognized.  If the auto-detect is
+-unsuccessful the option has no effect.
++GNU/Linux, and not all architectures are recognized.  If the auto-detect
++is unsuccessful the option has no effect.
+ 
+ @item -mtune=@var{name}
+ @opindex mtune
+@@ -11318,7 +11318,7 @@ this option may change in future GCC versions as CPU models come and go.
+ 
+ @option{-mtune=native} causes the compiler to auto-detect the CPU
+ of the build computer.  At present, this feature is only supported on
+-Linux, and not all architectures are recognized.  If the auto-detect is
++GNU/Linux, and not all architectures are recognized.  If the auto-detect is
+ unsuccessful the option has no effect.
+ 
+ @item -mcpu=@var{name}
+@@ -11339,8 +11339,8 @@ See @option{-mtune} for more information.
+ 
+ @option{-mcpu=native} causes the compiler to auto-detect the CPU
+ of the build computer.  At present, this feature is only supported on
+-Linux, and not all architectures are recognized.  If the auto-detect is
+-unsuccessful the option has no effect.
++GNU/Linux, and not all architectures are recognized.  If the auto-detect
++is unsuccessful the option has no effect.
+ 
+ @item -mfpu=@var{name}
+ @opindex mfpu
+-- 
+2.0.3
+

@@ -1,0 +1,133 @@
+From 618f828f6d580c13a7e0e8fb04f2d7342887e144 Mon Sep 17 00:00:00 2001
+From: olegendo <olegendo@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 8 Oct 2014 23:17:42 +0000
+Subject: [PATCH 288/326] gcc/ 	Backport from mainline 	2014-10-08  Oleg Endo 
+ <olegendo@gcc.gnu.org>
+
+	PR target/52941
+	* config/sh/sync.md (atomic_exchangesi_hard, atomic_exchange<mode>_hard,
+	atomic_fetch_<fetchop_name>si_hard,
+	atomic_fetch_<fetchop_name><mode>_hard, atomic_fetch_nandsi_hard,
+	atomic_fetch_nand<mode>_hard, atomic_<fetchop_name>_fetchsi_hard,
+	atomic_<fetchop_name>_fetch<mode>_hard, atomic_nand_fetchsi_hard,
+	atomic_nand_fetch<mode>_hard): Add missing set of T_REG.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_8-branch@216020 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog         | 13 +++++++++++++
+ gcc/config/sh/sync.md | 14 ++++++++++++--
+ 2 files changed, 25 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 24f6128..c53278c 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,16 @@
++2014-10-08  Oleg Endo  <olegendo@gcc.gnu.org>
++
++	Backport from mainline
++	2014-10-08  Oleg Endo  <olegendo@gcc.gnu.org>
++
++	PR target/52941
++	* config/sh/sync.md (atomic_exchangesi_hard, atomic_exchange<mode>_hard,
++	atomic_fetch_<fetchop_name>si_hard,
++	atomic_fetch_<fetchop_name><mode>_hard, atomic_fetch_nandsi_hard,
++	atomic_fetch_nand<mode>_hard, atomic_<fetchop_name>_fetchsi_hard,
++	atomic_<fetchop_name>_fetch<mode>_hard, atomic_nand_fetchsi_hard,
++	atomic_nand_fetch<mode>_hard): Add missing set of T_REG.
++
+ 2014-10-02  Martin Jambor  <mjambor@suse.cz>
+ 
+ 	PR tree-optimization/63375
+diff --git a/gcc/config/sh/sync.md b/gcc/config/sh/sync.md
+index a739fe9..17a34e7 100644
+--- a/gcc/config/sh/sync.md
++++ b/gcc/config/sh/sync.md
+@@ -466,6 +466,7 @@
+    (set (mem:SI (match_dup 1))
+ 	(unspec:SI
+ 	  [(match_operand:SI 2 "arith_operand" "rI08")] UNSPEC_ATOMIC))
++   (set (reg:SI T_REG) (const_int 1))
+    (clobber (reg:SI R0_REG))]
+   "TARGET_ATOMIC_HARD_LLCS
+    || (TARGET_SH4A_ARCH && TARGET_ATOMIC_ANY && !TARGET_ATOMIC_STRICT)"
+@@ -484,6 +485,7 @@
+    (set (mem:QIHI (match_dup 1))
+ 	(unspec:QIHI
+ 	  [(match_operand:QIHI 2 "register_operand" "r")] UNSPEC_ATOMIC))
++   (set (reg:SI T_REG) (const_int 1))
+    (clobber (reg:SI R0_REG))
+    (clobber (match_scratch:SI 3 "=&r"))
+    (clobber (match_scratch:SI 4 "=1"))]
+@@ -617,6 +619,7 @@
+ 	  [(FETCHOP:SI (mem:SI (match_dup 1))
+ 	     (match_operand:SI 2 "<fetchop_predicate>" "<fetchop_constraint>"))]
+ 	  UNSPEC_ATOMIC))
++   (set (reg:SI T_REG) (const_int 1))
+    (clobber (reg:SI R0_REG))]
+   "TARGET_ATOMIC_HARD_LLCS
+    || (TARGET_SH4A_ARCH && TARGET_ATOMIC_ANY && !TARGET_ATOMIC_STRICT)"
+@@ -637,6 +640,7 @@
+ 	  [(FETCHOP:QIHI (mem:QIHI (match_dup 1))
+ 	     (match_operand:QIHI 2 "<fetchop_predicate>" "<fetchop_constraint>"))]
+ 	  UNSPEC_ATOMIC))
++   (set (reg:SI T_REG) (const_int 1))
+    (clobber (reg:SI R0_REG))
+    (clobber (match_scratch:SI 3 "=&r"))
+    (clobber (match_scratch:SI 4 "=1"))]
+@@ -784,6 +788,7 @@
+ 	  [(not:SI (and:SI (mem:SI (match_dup 1))
+ 		   (match_operand:SI 2 "logical_operand" "rK08")))]
+ 	  UNSPEC_ATOMIC))
++   (set (reg:SI T_REG) (const_int 1))
+    (clobber (reg:SI R0_REG))]
+   "TARGET_ATOMIC_HARD_LLCS
+    || (TARGET_SH4A_ARCH && TARGET_ATOMIC_ANY && !TARGET_ATOMIC_STRICT)"
+@@ -805,6 +810,7 @@
+ 	  [(not:QIHI (and:QIHI (mem:QIHI (match_dup 1))
+ 		     (match_operand:QIHI 2 "logical_operand" "rK08")))]
+ 	  UNSPEC_ATOMIC))
++   (set (reg:SI T_REG) (const_int 1))
+    (clobber (reg:SI R0_REG))
+    (clobber (match_scratch:SI 3 "=&r"))
+    (clobber (match_scratch:SI 4 "=1"))]
+@@ -960,7 +966,8 @@
+    (set (mem:SI (match_dup 1))
+ 	(unspec:SI
+ 	  [(FETCHOP:SI (mem:SI (match_dup 1)) (match_dup 2))]
+-	  UNSPEC_ATOMIC))]
++	  UNSPEC_ATOMIC))
++   (set (reg:SI T_REG) (const_int 1))]
+   "TARGET_ATOMIC_HARD_LLCS
+    || (TARGET_SH4A_ARCH && TARGET_ATOMIC_ANY && !TARGET_ATOMIC_STRICT)"
+ {
+@@ -980,6 +987,7 @@
+ 	(unspec:QIHI
+ 	  [(FETCHOP:QIHI (mem:QIHI (match_dup 1)) (match_dup 2))]
+ 	  UNSPEC_ATOMIC))
++   (set (reg:SI T_REG) (const_int 1))
+    (clobber (reg:SI R0_REG))
+    (clobber (match_scratch:SI 3 "=&r"))
+    (clobber (match_scratch:SI 4 "=1"))]
+@@ -1124,7 +1132,8 @@
+    (set (mem:SI (match_dup 1))
+ 	(unspec:SI
+ 	  [(not:SI (and:SI (mem:SI (match_dup 1)) (match_dup 2)))]
+-	  UNSPEC_ATOMIC))]
++	  UNSPEC_ATOMIC))
++   (set (reg:SI T_REG) (const_int 1))]
+   "TARGET_ATOMIC_HARD_LLCS
+    || (TARGET_SH4A_ARCH && TARGET_ATOMIC_ANY && !TARGET_ATOMIC_STRICT)"
+ {
+@@ -1145,6 +1154,7 @@
+ 	(unspec:QIHI
+ 	  [(not:QIHI (and:QIHI (mem:QIHI (match_dup 1)) (match_dup 2)))]
+ 	  UNSPEC_ATOMIC))
++   (set (reg:SI T_REG) (const_int 1))
+    (clobber (reg:SI R0_REG))
+    (clobber (match_scratch:SI 3 "=&r"))
+    (clobber (match_scratch:SI 4 "=1"))]
+-- 
+2.0.3
+
