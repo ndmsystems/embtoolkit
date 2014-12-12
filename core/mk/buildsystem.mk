@@ -41,6 +41,7 @@ __embtk_dldir		:= $(patsubst %/,%,$(call __embtk_mk_uquote,$(CONFIG_EMBTK_DOWNLO
 embtk_dldir		:= $(or $(__embtk_dldir),$(EMBTK_ROOT)/dl)
 embtk_srcdir		:= $(EMBTK_ROOT)/src
 embtk_includedir	:= $(embtk_srcdir)/embtk/include
+embtk_patchesdir	:= $(EMBTK_ROOT)/patches
 
 
 define __embtk_kconfig_buildrun

@@ -81,7 +81,6 @@ define __embtk_download_pkg_from_svn
 	$(call __embtk_download_pkg_patches,$(1)) ||				\
 	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
 	$(call __embtk_applypatch_pkg,$(1))
-
 endef
 
 define __embtk_gitclone_pkg
@@ -160,13 +159,39 @@ endef
 # $(call embtk_decompress_pkg,pkgname)
 #
 
+___embtk_applypatch_pkg_from_dldir =						\
+	if [ ! -e $(__embtk_pkg_dotpatched_f) ]; then				\
+		pushd "$(__embtk_pkg_srcdir)" 2>&1 >/dev/null;			\
+		patch -p1 --silent < $(__embtk_pkg_patch_f);			\
+		$(call __embtk_setpatched_pkg,$(1));				\
+		popd 2>&1 >/dev/null;						\
+	fi;
+
+__embtk_patches = $(embtk_patchesdir)/$(__embtk_pkg_name)/$(__embtk_pkg_version)/$(__embtk_pkg_name)-$(__embtk_pkg_version)-*.patch
+
+___embtk_applypatch_pkg_from_patchesdir =					\
+	if [ ! -e $(__embtk_pkg_dotpatched_f) ]; then				\
+		pushd "$(__embtk_pkg_srcdir)" 2>&1 >/dev/null;			\
+		patched=0;							\
+		for i in $$(ls $(__embtk_patches) 2>/dev/null); do		\
+			$(call embtk_pinfo, "Applying patch $$i");		\
+			if patch -p1 --silent < "$$i"; then			\
+				patched=1;					\
+			else							\
+				$(call embtk_perror, "patch $$i doesn't apply");\
+				exit 1;						\
+			fi;							\
+		done;								\
+		popd 2>&1 >/dev/null;						\
+		if [ $${patched} -eq 1 ]; then					\
+			$(call __embtk_setpatched_pkg,$(1));			\
+		fi;								\
+	fi;
+
 __embtk_applypatch_pkg =							\
 	$(if $(__embtk_pkg_needpatch),						\
-		if [ ! -e $(__embtk_pkg_dotpatched_f) ]; then			\
-			cd $(__embtk_pkg_srcdir);				\
-			patch -p1 --silent < $(__embtk_pkg_patch_f);		\
-			$(call __embtk_setpatched_pkg,$(1));			\
-		fi,true;)
+		$(call ___embtk_applypatch_pkg_from_dldir,$(1)),		\
+		$(call ___embtk_applypatch_pkg_from_patchesdir,$(1)))
 
 __embtk_decompress_pkg_exitfailure =						\
 	$(call embtk_perror,"!Compression unknown for $(__embtk_pkg_name)!");	\
@@ -195,7 +220,7 @@ __embtk_decompress_pkg =							\
 			;;							\
 	esac
 
-__embtk_decompress_pkg_msg = $(call embtk_pinfo,"Decrompressing $(__embtk_pkg_package) ...")
+__embtk_decompress_pkg_msg = $(call embtk_pinfo,"Decompressing $(__embtk_pkg_package) ...")
 define embtk_decompress_pkg
 	$(if $(__embtk_pkg_usegit)$(__embtk_pkg_usesvn),true,
 		$(if $(EMBTK_BUILDSYS_DEBUG),$(__embtk_decompress_pkg_msg))
