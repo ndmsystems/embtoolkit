@@ -1,0 +1,39 @@
+From 03c239526ca7a9348a8d70a3652a9027f352e483 Mon Sep 17 00:00:00 2001
+From: Rainer Orth <ro@CeBiTec.Uni-Bielefeld.DE>
+Date: Fri, 7 Feb 2014 15:51:17 +0100
+Subject: [PATCH 085/330] 	* cache.c (bfd_cache_max_open): Cast
+ RLIM_INFINITY to rlim_t.
+
+---
+ bfd/ChangeLog | 4 ++++
+ bfd/cache.c   | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index af251c9..0e835c5 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,3 +1,7 @@
++2014-02-07  Rainer Orth  <ro@CeBiTec.Uni-Bielefeld.DE>
++
++	* cache.c (bfd_cache_max_open): Cast RLIM_INFINITY to rlim_t.
++
+ 2014-01-24  Alan Modra  <amodra@gmail.com>
+ 
+ 	* elf64-ppc.c (ppc_build_one_stub): Correct reloc count passed
+diff --git a/bfd/cache.c b/bfd/cache.c
+index 4d46936..4071a02 100644
+--- a/bfd/cache.c
++++ b/bfd/cache.c
+@@ -82,7 +82,7 @@ bfd_cache_max_open (void)
+ #ifdef HAVE_GETRLIMIT
+       struct rlimit rlim;
+       if (getrlimit (RLIMIT_NOFILE, &rlim) == 0
+-	  && rlim.rlim_cur != RLIM_INFINITY)
++	  && rlim.rlim_cur != (rlim_t) RLIM_INFINITY)
+ 	max = rlim.rlim_cur / 8;
+       else
+ #endif /* HAVE_GETRLIMIT */
+-- 
+2.0.3
+

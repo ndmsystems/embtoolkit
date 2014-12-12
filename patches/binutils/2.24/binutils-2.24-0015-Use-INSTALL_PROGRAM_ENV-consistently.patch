@@ -1,0 +1,469 @@
+From 5e705ddb0649980f0ea8c896d91c406c11817472 Mon Sep 17 00:00:00 2001
+From: Roland McGrath <mcgrathr@google.com>
+Date: Tue, 10 Dec 2013 14:01:01 -0800
+Subject: [PATCH 015/330] Use $(INSTALL_PROGRAM_ENV) consistently.
+
+binutils/
+	* Makefile.am (install-exec-local): Prefix libtool invocation with
+	$(INSTALL_PROGRAM_ENV).
+	* Makefile.in: Regenerate.
+
+gas/
+	* Makefile.am (install-exec-bindir): Prefix libtool invocation
+	with $(INSTALL_PROGRAM_ENV).
+	(install-exec-tooldir): Likewise.
+	* Makefile.in: Regenerate.
+
+gold/
+	* Makefile.am (install-exec-local): Prefix $(INSTALL_PROGRAM) uses
+	with $(INSTALL_PROGRAM_ENV).
+	* Makefile.in: Regenerate.
+
+ld/
+	* Makefile.am (install-exec-local): Prefix libtool invocation with
+	$(INSTALL_PROGRAM_ENV).
+	* Makefile.in: Regenerate.
+
+(cherry picked from commit f2c7d7ee5b94a3ff4fe86d47e9a529cc50bfb7c5)
+---
+ binutils/ChangeLog   |  6 ++++++
+ binutils/Makefile.am | 12 ++++++------
+ binutils/Makefile.in | 12 ++++++------
+ gas/ChangeLog        |  7 +++++++
+ gas/Makefile.am      | 12 ++++++------
+ gas/Makefile.in      | 12 ++++++------
+ gold/ChangeLog       |  6 ++++++
+ gold/Makefile.am     | 13 +++++++------
+ gold/Makefile.in     | 13 +++++++------
+ ld/ChangeLog         |  6 ++++++
+ ld/Makefile.am       | 12 ++++++------
+ ld/Makefile.in       | 12 ++++++------
+ 12 files changed, 75 insertions(+), 48 deletions(-)
+
+diff --git a/binutils/ChangeLog b/binutils/ChangeLog
+index f9014b5..829b8c5 100644
+--- a/binutils/ChangeLog
++++ b/binutils/ChangeLog
+@@ -1,3 +1,9 @@
++2013-12-10  Roland McGrath  <mcgrathr@google.com>
++
++	* Makefile.am (install-exec-local): Prefix libtool invocation with
++	$(INSTALL_PROGRAM_ENV).
++	* Makefile.in: Regenerate.
++
+ 2013-11-22  Cory Fields  <cory@coryfields.com>
+ 
+ 	* windres.c (define_resource): Use zero for timestamp, making
+diff --git a/binutils/Makefile.am b/binutils/Makefile.am
+index e2f8630..e35db01 100644
+--- a/binutils/Makefile.am
++++ b/binutils/Makefile.am
+@@ -1,17 +1,17 @@
+ ## Process this file with automake to generate Makefile.in
+ #
+-#   Copyright 2012 Free Software Foundation
++#   Copyright 2012, 2013 Free Software Foundation
+ #
+ # This file is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+-# 
++#
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+-# 
++#
+ # You should have received a copy of the GNU General Public License
+ # along with this program; see the file COPYING3.  If not see
+ # <http://www.gnu.org/licenses/>.
+@@ -528,8 +528,8 @@ mostlyclean-local:
+ install-exec-local: install-binPROGRAMS $(bin_PROGRAMS) $(noinst_PROGRAMS)
+ 	@list='$(RENAMED_PROGS)'; for p in $$list; do \
+ 	  if test -f $$p$(EXEEXT); then \
+-	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p$(EXEEXT) $(bindir)/`echo $$p|sed -e 's/-new//' -e 's/cxxfilt/$(DEMANGLER_NAME)/'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+-	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p$(EXEEXT) $(DESTDIR)$(bindir)/`echo $$p|sed -e 's/-new//' -e 's/cxxfilt/$(DEMANGLER_NAME)/'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
++	    echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p$(EXEEXT) $(bindir)/`echo $$p|sed -e 's/-new//' -e 's/cxxfilt/$(DEMANGLER_NAME)/'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
++	    $(INSTALL_PROGRAM_ENV) $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p$(EXEEXT) $(DESTDIR)$(bindir)/`echo $$p|sed -e 's/-new//' -e 's/cxxfilt/$(DEMANGLER_NAME)/'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+ 	  else :; fi; \
+ 	done
+ 	$(mkinstalldirs) $(DESTDIR)$(tooldir)/bin
+@@ -540,7 +540,7 @@ install-exec-local: install-binPROGRAMS $(bin_PROGRAMS) $(noinst_PROGRAMS)
+ 	    if [ "$(bindir)/$$k" != "$(tooldir)/bin/$$j" ]; then \
+ 	      rm -f $(DESTDIR)$(tooldir)/bin/$$j$(EXEEXT); \
+ 	      ln $(DESTDIR)$(bindir)/$$k$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$$j$(EXEEXT) >/dev/null 2>/dev/null \
+-		|| $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) $$i$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$$j$(EXEEXT); \
++		|| $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) $$i$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$$j$(EXEEXT); \
+ 	    fi; \
+ 	  else true; \
+ 	  fi; \
+diff --git a/binutils/Makefile.in b/binutils/Makefile.in
+index e1e61dc..3408769 100644
+--- a/binutils/Makefile.in
++++ b/binutils/Makefile.in
+@@ -16,18 +16,18 @@
+ @SET_MAKE@
+ 
+ #
+-#   Copyright 2012 Free Software Foundation
++#   Copyright 2012, 2013 Free Software Foundation
+ #
+ # This file is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+-# 
++#
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+-# 
++#
+ # You should have received a copy of the GNU General Public License
+ # along with this program; see the file COPYING3.  If not see
+ # <http://www.gnu.org/licenses/>.
+@@ -1458,8 +1458,8 @@ mostlyclean-local:
+ install-exec-local: install-binPROGRAMS $(bin_PROGRAMS) $(noinst_PROGRAMS)
+ 	@list='$(RENAMED_PROGS)'; for p in $$list; do \
+ 	  if test -f $$p$(EXEEXT); then \
+-	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p$(EXEEXT) $(bindir)/`echo $$p|sed -e 's/-new//' -e 's/cxxfilt/$(DEMANGLER_NAME)/'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+-	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p$(EXEEXT) $(DESTDIR)$(bindir)/`echo $$p|sed -e 's/-new//' -e 's/cxxfilt/$(DEMANGLER_NAME)/'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
++	    echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p$(EXEEXT) $(bindir)/`echo $$p|sed -e 's/-new//' -e 's/cxxfilt/$(DEMANGLER_NAME)/'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
++	    $(INSTALL_PROGRAM_ENV) $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p$(EXEEXT) $(DESTDIR)$(bindir)/`echo $$p|sed -e 's/-new//' -e 's/cxxfilt/$(DEMANGLER_NAME)/'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+ 	  else :; fi; \
+ 	done
+ 	$(mkinstalldirs) $(DESTDIR)$(tooldir)/bin
+@@ -1470,7 +1470,7 @@ install-exec-local: install-binPROGRAMS $(bin_PROGRAMS) $(noinst_PROGRAMS)
+ 	    if [ "$(bindir)/$$k" != "$(tooldir)/bin/$$j" ]; then \
+ 	      rm -f $(DESTDIR)$(tooldir)/bin/$$j$(EXEEXT); \
+ 	      ln $(DESTDIR)$(bindir)/$$k$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$$j$(EXEEXT) >/dev/null 2>/dev/null \
+-		|| $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) $$i$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$$j$(EXEEXT); \
++		|| $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) $$i$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$$j$(EXEEXT); \
+ 	    fi; \
+ 	  else true; \
+ 	  fi; \
+diff --git a/gas/ChangeLog b/gas/ChangeLog
+index 7fafa26..30e63a1 100644
+--- a/gas/ChangeLog
++++ b/gas/ChangeLog
+@@ -1,3 +1,10 @@
++2013-12-10  Roland McGrath  <mcgrathr@google.com>
++
++	* Makefile.am (install-exec-bindir): Prefix libtool invocation
++	with $(INSTALL_PROGRAM_ENV).
++	(install-exec-tooldir): Likewise.
++	* Makefile.in: Regenerate.
++
+ 2013-11-18  H.J. Lu  <hongjiu.lu@intel.com>
+ 
+ 	* config/tc-i386.c (lex_got): Add a dummy "int bnd_prefix"
+diff --git a/gas/Makefile.am b/gas/Makefile.am
+index b85755d..40a833c 100644
+--- a/gas/Makefile.am
++++ b/gas/Makefile.am
+@@ -1,17 +1,17 @@
+ ## Process this file with automake to generate Makefile.in
+ #
+-#   Copyright 2012 Free Software Foundation
++#   Copyright 2012, 2013 Free Software Foundation
+ #
+ # This file is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+-# 
++#
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+-# 
++#
+ # You should have received a copy of the GNU General Public License
+ # along with this program; see the file COPYING3.  If not see
+ # <http://www.gnu.org/licenses/>.
+@@ -600,8 +600,8 @@ install-exec-bindir: $(noinst_PROGRAMS)
+ 	$(mkinstalldirs) $(DESTDIR)$(bindir)
+ 	@list='$(noinst_PROGRAMS)'; for p in $$list; do \
+ 	  if test -f $$p; then \
+-	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed -e 's/$(EXEEXT)$$//' -e 's/-new//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+-	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed -e 's/$(EXEEXT)$$//' -e 's/-new//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
++	    echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed -e 's/$(EXEEXT)$$//' -e 's/-new//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
++	    $(INSTALL_PROGRAM_ENV) $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed -e 's/$(EXEEXT)$$//' -e 's/-new//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+ 	  else :; fi; \
+ 	done
+ 
+@@ -611,7 +611,7 @@ install-exec-tooldir: install-exec-bindir $(noinst_PROGRAMS)
+ 	if [ "$(bindir)/$$n$(EXEEXT)" != "$(tooldir)/bin/as$(EXEEXT)" ]; then \
+ 	  rm -f $(DESTDIR)$(tooldir)/bin/as$(EXEEXT); \
+ 	  ln $(DESTDIR)$(bindir)/$$n$(EXEEXT) $(DESTDIR)$(tooldir)/bin/as$(EXEEXT) >/dev/null 2>/dev/null \
+-	    || $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) as-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/as$(EXEEXT); \
++	    || $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) as-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/as$(EXEEXT); \
+ 	else \
+ 	  true ; \
+ 	fi
+diff --git a/gas/Makefile.in b/gas/Makefile.in
+index 89ce4f5..dd0318f 100644
+--- a/gas/Makefile.in
++++ b/gas/Makefile.in
+@@ -16,18 +16,18 @@
+ @SET_MAKE@
+ 
+ #
+-#   Copyright 2012 Free Software Foundation
++#   Copyright 2012, 2013 Free Software Foundation
+ #
+ # This file is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+-# 
++#
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+-# 
++#
+ # You should have received a copy of the GNU General Public License
+ # along with this program; see the file COPYING3.  If not see
+ # <http://www.gnu.org/licenses/>.
+@@ -2597,8 +2597,8 @@ install-exec-bindir: $(noinst_PROGRAMS)
+ 	$(mkinstalldirs) $(DESTDIR)$(bindir)
+ 	@list='$(noinst_PROGRAMS)'; for p in $$list; do \
+ 	  if test -f $$p; then \
+-	    echo " $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed -e 's/$(EXEEXT)$$//' -e 's/-new//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
+-	    $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed -e 's/$(EXEEXT)$$//' -e 's/-new//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
++	    echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed -e 's/$(EXEEXT)$$//' -e 's/-new//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`"; \
++	    $(INSTALL_PROGRAM_ENV) $(LIBTOOL)  --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/`echo $$p|sed -e 's/$(EXEEXT)$$//' -e 's/-new//'|sed '$(transform)'|sed 's/$$/$(EXEEXT)/'`; \
+ 	  else :; fi; \
+ 	done
+ 
+@@ -2608,7 +2608,7 @@ install-exec-tooldir: install-exec-bindir $(noinst_PROGRAMS)
+ 	if [ "$(bindir)/$$n$(EXEEXT)" != "$(tooldir)/bin/as$(EXEEXT)" ]; then \
+ 	  rm -f $(DESTDIR)$(tooldir)/bin/as$(EXEEXT); \
+ 	  ln $(DESTDIR)$(bindir)/$$n$(EXEEXT) $(DESTDIR)$(tooldir)/bin/as$(EXEEXT) >/dev/null 2>/dev/null \
+-	    || $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) as-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/as$(EXEEXT); \
++	    || $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) as-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/as$(EXEEXT); \
+ 	else \
+ 	  true ; \
+ 	fi
+diff --git a/gold/ChangeLog b/gold/ChangeLog
+index dcf7ed4..227d342 100644
+--- a/gold/ChangeLog
++++ b/gold/ChangeLog
+@@ -1,3 +1,9 @@
++2013-12-10  Roland McGrath  <mcgrathr@google.com>
++
++	* Makefile.am (install-exec-local): Prefix $(INSTALL_PROGRAM) uses
++	with $(INSTALL_PROGRAM_ENV).
++	* Makefile.in: Regenerate.
++
+ 2013-11-22  Cary Coutant  <ccoutant@google.com>
+ 
+ 	* testsuite/Makefile.am (exception_x86_64_bnd_test): Use in-tree
+diff --git a/gold/Makefile.am b/gold/Makefile.am
+index 8e2fff1..42704ce 100644
+--- a/gold/Makefile.am
++++ b/gold/Makefile.am
+@@ -7,12 +7,12 @@
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+-# 
++#
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+-# 
++#
+ # You should have received a copy of the GNU General Public License
+ # along with this program; see the file COPYING3.  If not see
+ # <http://www.gnu.org/licenses/>.
+@@ -211,21 +211,22 @@ check: libgold.a
+ install-exec-local: ld-new$(EXEEXT)
+ 	$(mkinstalldirs) $(DESTDIR)$(bindir) $(DESTDIR)$(tooldir)/bin
+ 	n=`echo $(installed_linker) | sed '$(transform)'`; \
+-	$(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$${n}$(EXEEXT); \
++	$(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) \
++	  ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$${n}$(EXEEXT); \
+ 	if test "$(bindir)" != "$(tooldir)/bin"; then \
+ 	  rm -f $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
+ 	  ln $(DESTDIR)$(bindir)/$${n}$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT) >/dev/null 2>/dev/null \
+-	  || $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
++	  || $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
+ 	fi; \
+ 	if test "x$(install_as_default)" = "xyes"; then \
+ 	  ld=`echo ld | sed '$(transform)'`; \
+ 	  rm -f $(DESTDIR)$(bindir)/$${ld}$(EXEEXT); \
+ 	  ln $(DESTDIR)$(bindir)/$${n}$(EXEEXT) $(DESTDIR)$(bindir)/$${ld}$(EXEEXT) >/dev/null 2>/dev/null \
+-	  || $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$${ld}$(EXEEXT); \
++	  || $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$${ld}$(EXEEXT); \
+ 	  if test "$(bindir)" != "$(tooldir)/bin"; then \
+ 	    rm -f $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
+ 	    ln $(DESTDIR)$(bindir)/$${n}$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT) >/dev/null 2>/dev/null \
+-	    || $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
++	    || $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
+ 	  fi; \
+ 	fi
+ 
+diff --git a/gold/Makefile.in b/gold/Makefile.in
+index 3bd9fae..661613e 100644
+--- a/gold/Makefile.in
++++ b/gold/Makefile.in
+@@ -23,12 +23,12 @@
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+-# 
++#
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+-# 
++#
+ # You should have received a copy of the GNU General Public License
+ # along with this program; see the file COPYING3.  If not see
+ # <http://www.gnu.org/licenses/>.
+@@ -1295,21 +1295,22 @@ check: libgold.a
+ install-exec-local: ld-new$(EXEEXT)
+ 	$(mkinstalldirs) $(DESTDIR)$(bindir) $(DESTDIR)$(tooldir)/bin
+ 	n=`echo $(installed_linker) | sed '$(transform)'`; \
+-	$(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$${n}$(EXEEXT); \
++	$(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) \
++	  ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$${n}$(EXEEXT); \
+ 	if test "$(bindir)" != "$(tooldir)/bin"; then \
+ 	  rm -f $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
+ 	  ln $(DESTDIR)$(bindir)/$${n}$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT) >/dev/null 2>/dev/null \
+-	  || $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
++	  || $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
+ 	fi; \
+ 	if test "x$(install_as_default)" = "xyes"; then \
+ 	  ld=`echo ld | sed '$(transform)'`; \
+ 	  rm -f $(DESTDIR)$(bindir)/$${ld}$(EXEEXT); \
+ 	  ln $(DESTDIR)$(bindir)/$${n}$(EXEEXT) $(DESTDIR)$(bindir)/$${ld}$(EXEEXT) >/dev/null 2>/dev/null \
+-	  || $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$${ld}$(EXEEXT); \
++	  || $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$${ld}$(EXEEXT); \
+ 	  if test "$(bindir)" != "$(tooldir)/bin"; then \
+ 	    rm -f $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
+ 	    ln $(DESTDIR)$(bindir)/$${n}$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT) >/dev/null 2>/dev/null \
+-	    || $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
++	    || $(INSTALL_PROGRAM_ENV) $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
+ 	  fi; \
+ 	fi
+ 
+diff --git a/ld/ChangeLog b/ld/ChangeLog
+index 1687785..2474ee2 100644
+--- a/ld/ChangeLog
++++ b/ld/ChangeLog
+@@ -1,3 +1,9 @@
++2013-12-10  Roland McGrath  <mcgrathr@google.com>
++
++	* Makefile.am (install-exec-local): Prefix libtool invocation with
++	$(INSTALL_PROGRAM_ENV).
++	* Makefile.in: Regenerate.
++
+ 2013-11-25  Yufeng Zhang  <yufeng.zhang@arm.com>
+ 
+ 	Backport from master
+diff --git a/ld/Makefile.am b/ld/Makefile.am
+index b2b2a6e..b6d4306 100644
+--- a/ld/Makefile.am
++++ b/ld/Makefile.am
+@@ -1,17 +1,17 @@
+ ## Process this file with automake to generate Makefile.in
+ #
+-#   Copyright 2012 Free Software Foundation
++#   Copyright 2012, 2013 Free Software Foundation
+ #
+ # This file is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+-# 
++#
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+-# 
++#
+ # You should have received a copy of the GNU General Public License
+ # along with this program; see the file COPYING3.  If not see
+ # <http://www.gnu.org/licenses/>.
+@@ -2317,17 +2317,17 @@ install-exec-local: ld-new$(EXEEXT) install-binPROGRAMS
+ 	if test "$(bindir)" != "$(tooldir)/bin"; then \
+ 	  rm -f $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
+ 	  ln $(DESTDIR)$(bindir)/$$n$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT) >/dev/null 2>/dev/null \
+-	  || $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
++	  || $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
+ 	fi; \
+ 	if test "x$(install_as_default)" = "xyes"; then \
+ 	  ld=`echo ld | sed '$(transform)'`; \
+ 	  rm -f $(DESTDIR)$(bindir)/$$ld$(EXEEXT); \
+ 	  ln $(DESTDIR)$(bindir)/$$n$(EXEEXT) $(DESTDIR)$(bindir)/$$ld$(EXEEXT) >/dev/null 2>/dev/null \
+-	  || $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$$ld$(EXEEXT); \
++	  || $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$$ld$(EXEEXT); \
+ 	  if test "$(bindir)" != "$(tooldir)/bin"; then \
+ 	    rm -f $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
+ 	    ln $(DESTDIR)$(bindir)/$$n$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT) >/dev/null 2>/dev/null \
+-	    || $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
++	    || $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
+ 	  fi; \
+ 	fi
+ 
+diff --git a/ld/Makefile.in b/ld/Makefile.in
+index b95a3d1..987a068 100644
+--- a/ld/Makefile.in
++++ b/ld/Makefile.in
+@@ -16,18 +16,18 @@
+ @SET_MAKE@
+ 
+ #
+-#   Copyright 2012 Free Software Foundation
++#   Copyright 2012, 2013 Free Software Foundation
+ #
+ # This file is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
+ # the Free Software Foundation; either version 3 of the License, or
+ # (at your option) any later version.
+-# 
++#
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU General Public License for more details.
+-# 
++#
+ # You should have received a copy of the GNU General Public License
+ # along with this program; see the file COPYING3.  If not see
+ # <http://www.gnu.org/licenses/>.
+@@ -3733,17 +3733,17 @@ install-exec-local: ld-new$(EXEEXT) install-binPROGRAMS
+ 	if test "$(bindir)" != "$(tooldir)/bin"; then \
+ 	  rm -f $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
+ 	  ln $(DESTDIR)$(bindir)/$$n$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT) >/dev/null 2>/dev/null \
+-	  || $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
++	  || $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/$(installed_linker)$(EXEEXT); \
+ 	fi; \
+ 	if test "x$(install_as_default)" = "xyes"; then \
+ 	  ld=`echo ld | sed '$(transform)'`; \
+ 	  rm -f $(DESTDIR)$(bindir)/$$ld$(EXEEXT); \
+ 	  ln $(DESTDIR)$(bindir)/$$n$(EXEEXT) $(DESTDIR)$(bindir)/$$ld$(EXEEXT) >/dev/null 2>/dev/null \
+-	  || $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$$ld$(EXEEXT); \
++	  || $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(bindir)/$$ld$(EXEEXT); \
+ 	  if test "$(bindir)" != "$(tooldir)/bin"; then \
+ 	    rm -f $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
+ 	    ln $(DESTDIR)$(bindir)/$$n$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT) >/dev/null 2>/dev/null \
+-	    || $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
++	    || $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) ld-new$(EXEEXT) $(DESTDIR)$(tooldir)/bin/ld$(EXEEXT); \
+ 	  fi; \
+ 	fi
+ 
+-- 
+2.0.3
+

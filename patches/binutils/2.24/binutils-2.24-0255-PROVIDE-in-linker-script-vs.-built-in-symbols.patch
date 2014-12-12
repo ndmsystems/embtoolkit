@@ -1,0 +1,46 @@
+From e8d903889d79da551212ad7b2e78af886905767e Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Sat, 7 Jun 2014 13:58:53 +0930
+Subject: [PATCH 255/330] PROVIDE in linker script vs. built-in symbols
+
+	* ldexp.c (exp_fold_tree_1 <etree_provide>): Make PROVIDEd
+	linker script symbol value override a built-in linker symbol.
+---
+ ld/ChangeLog | 4 ++++
+ ld/ldexp.c   | 5 ++++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/ld/ChangeLog b/ld/ChangeLog
+index 9e3303d..0a8eb72 100644
+--- a/ld/ChangeLog
++++ b/ld/ChangeLog
+@@ -1,6 +1,10 @@
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Backport mainline patches
++	2014-06-07  Alan Modra  <amodra@gmail.com>
++	* ldexp.c (exp_fold_tree_1 <etree_provide>): Make PROVIDEd
++	linker script symbol value override a built-in linker symbol.
++
+ 	2014-02-19  Alan Modra  <amodra@gmail.com>
+ 	* emultempl/ppc64elf.em (params): Init new field.
+ 	(ppc_create_output_section_statements): Set params.save_restore_funcs
+diff --git a/ld/ldexp.c b/ld/ldexp.c
+index 49e7c65..6556b08 100644
+--- a/ld/ldexp.c
++++ b/ld/ldexp.c
+@@ -889,7 +889,10 @@ exp_fold_tree_1 (etree_type *tree)
+ 	      if (h == NULL
+ 		  || (h->type != bfd_link_hash_new
+ 		      && h->type != bfd_link_hash_undefined
+-		      && h->type != bfd_link_hash_common))
++		      && h->type != bfd_link_hash_common
++		      && !(h->type == bfd_link_hash_defined
++			   && (h->u.def.section->flags
++			       & SEC_LINKER_CREATED) != 0)))
+ 		{
+ 		  /* Do nothing.  The symbol was never referenced, or was
+ 		     defined by some object.  */
+-- 
+2.0.3
+

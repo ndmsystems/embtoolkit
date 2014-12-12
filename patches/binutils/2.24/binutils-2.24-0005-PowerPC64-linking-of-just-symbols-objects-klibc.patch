@@ -1,0 +1,50 @@
+From c2a2508939c74fa0760b7afa6bc25ac2438c42a2 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Tue, 3 Dec 2013 15:01:20 +1030
+Subject: [PATCH 005/330] PowerPC64 linking of --just-symbols objects (klibc)
+
+With -mcmodel=medium we can't assume that a -R object doesn't use
+toc-relative addressing if there's no toc.  Lots of things are
+accessed via r2, not just the toc/got section.  Also, testing for
+.opd is plain wrong for ELFv2.
+
+	* elf64-ppc.c (ppc64_elf_link_just_syms): Remove .got check.
+	Handle ELFv2.
+---
+ bfd/ChangeLog   | 5 +++++
+ bfd/elf64-ppc.c | 6 ++----
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index 5d9ef7c..ed9a65b 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,3 +1,8 @@
++2013-12-05  Alan Modra  <amodra@gmail.com>
++
++	* elf64-ppc.c (ppc64_elf_link_just_syms): Remove .got check.
++	Handle ELFv2.
++
+ 2013-12-02  Tristan Gingold  <gingold@adacore.com>
+ 
+ 	* configure.in: Bump version to 2.24.0
+diff --git a/bfd/elf64-ppc.c b/bfd/elf64-ppc.c
+index bf13a5d..e069a7e 100644
+--- a/bfd/elf64-ppc.c
++++ b/bfd/elf64-ppc.c
+@@ -5001,10 +5001,8 @@ ppc64_elf_link_just_syms (asection *sec, struct bfd_link_info *info)
+       && (sec->owner->flags & (EXEC_P | DYNAMIC)) != 0
+       && is_ppc64_elf (sec->owner))
+     {
+-      asection *got = bfd_get_section_by_name (sec->owner, ".got");
+-      if (got != NULL
+-	  && got->size >= elf_backend_got_header_size
+-	  && bfd_get_section_by_name (sec->owner, ".opd") != NULL)
++      if (abiversion (sec->owner) >= 2
++	  || bfd_get_section_by_name (sec->owner, ".opd") != NULL)
+ 	sec->has_toc_reloc = 1;
+     }
+   _bfd_elf_link_just_syms (sec, info);
+-- 
+2.0.3
+

@@ -1,0 +1,476 @@
+From 6ba6b186e88877ced684251568dbd24bbb39f05f Mon Sep 17 00:00:00 2001
+From: Ilya Tocar <ilya.tocar@intel.com>
+Date: Tue, 8 Jul 2014 13:45:43 +0400
+Subject: [PATCH 284/330] Fix disasm of vmovsd/vmovss with different length
+ values.
+
+gas/testsuite
+
+	* gas/i386/evex-lig256-intel.d: Updated.
+	* gas/i386/evex-lig256.d: Updated.
+	* gas/i386/evex-lig512-intel.d: Updated.
+	* gas/i386/evex-lig512-intel.d: Updated.
+	* gas/i386/x86-64-evex-lig256-intel.d: Updated.
+	* gas/i386/x86-64-evex-lig256.d: Updated.
+	* gas/i386/x86-64-evex-lig512-intel.d: Updated.
+	* gas/i386/x86-64-evex-lig512-intel.d: Updated.
+
+opcodes
+
+	* i386-dis-evex.h (EVEX_W_0F10_P_1_M_1): Fix vmovss.
+	(EVEX_W_0F10_P_3_M_1): Fix vmovsd.
+---
+ gas/testsuite/ChangeLog                           | 11 +++++++++++
+ gas/testsuite/gas/i386/evex-lig256-intel.d        | 16 ++++++++--------
+ gas/testsuite/gas/i386/evex-lig256.d              | 16 ++++++++--------
+ gas/testsuite/gas/i386/evex-lig512-intel.d        | 16 ++++++++--------
+ gas/testsuite/gas/i386/evex-lig512.d              | 16 ++++++++--------
+ gas/testsuite/gas/i386/x86-64-evex-lig256-intel.d | 16 ++++++++--------
+ gas/testsuite/gas/i386/x86-64-evex-lig256.d       | 16 ++++++++--------
+ gas/testsuite/gas/i386/x86-64-evex-lig512-intel.d | 16 ++++++++--------
+ gas/testsuite/gas/i386/x86-64-evex-lig512.d       | 16 ++++++++--------
+ opcodes/ChangeLog                                 |  5 +++++
+ opcodes/i386-dis-evex.h                           |  4 ++--
+ 11 files changed, 82 insertions(+), 66 deletions(-)
+
+diff --git a/gas/testsuite/ChangeLog b/gas/testsuite/ChangeLog
+index 04b20d4..1f96c17 100644
+--- a/gas/testsuite/ChangeLog
++++ b/gas/testsuite/ChangeLog
+@@ -1,3 +1,14 @@
++2014-07-08  Ilya Tocar  <ilya.tocar@intel.com>
++
++	* gas/i386/evex-lig256-intel.d: Updated.
++	* gas/i386/evex-lig256.d: Updated.
++	* gas/i386/evex-lig512-intel.d: Updated.
++	* gas/i386/evex-lig512-intel.d: Updated.
++	* gas/i386/x86-64-evex-lig256-intel.d: Updated.
++	* gas/i386/x86-64-evex-lig256.d: Updated.
++	* gas/i386/x86-64-evex-lig512-intel.d: Updated.
++	* gas/i386/x86-64-evex-lig512-intel.d: Updated.
++
+ 2014-03-20  Ilya Tocar  <ilya.tocar@intel.com>
+ 
+ 	* gas/i386/avx512pf-intel.d: Change memory size for vgatherpf0qps,
+diff --git a/gas/testsuite/gas/i386/evex-lig256-intel.d b/gas/testsuite/gas/i386/evex-lig256-intel.d
+index ac25f70..86fa6c9 100644
+--- a/gas/testsuite/gas/i386/evex-lig256-intel.d
++++ b/gas/testsuite/gas/i386/evex-lig256-intel.d
+@@ -1241,8 +1241,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 b2 00 04 00 00 	vmovsd QWORD PTR \[edx\+0x400\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 72 80 	vmovsd QWORD PTR \[edx-0x400\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 b2 f8 fb ff ff 	vmovsd QWORD PTR \[edx-0x408\]\{k7\},xmm6
+-[ 	]*[a-f0-9]+:	62 f1 d7 2f 10 f4    	vmovsd xmm6\{k7\},xmm5,ymm4
+-[ 	]*[a-f0-9]+:	62 f1 d7 af 10 f4    	vmovsd xmm6\{k7\}\{z\},xmm5,ymm4
++[ 	]*[a-f0-9]+:	62 f1 d7 2f 10 f4    	vmovsd xmm6\{k7\},xmm5,xmm4
++[ 	]*[a-f0-9]+:	62 f1 d7 af 10 f4    	vmovsd xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 10 31    	vmovss xmm6\{k7\},DWORD PTR \[ecx\]
+ [ 	]*[a-f0-9]+:	62 f1 7e af 10 31    	vmovss xmm6\{k7\}\{z\},DWORD PTR \[ecx\]
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 10 b4 f4 c0 1d fe ff 	vmovss xmm6\{k7\},DWORD PTR \[esp\+esi\*8-0x1e240\]
+@@ -1256,8 +1256,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 b2 00 02 00 00 	vmovss DWORD PTR \[edx\+0x200\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 72 80 	vmovss DWORD PTR \[edx-0x200\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 b2 fc fd ff ff 	vmovss DWORD PTR \[edx-0x204\]\{k7\},xmm6
+-[ 	]*[a-f0-9]+:	62 f1 56 2f 10 f4    	vmovss xmm6\{k7\},xmm5,ymm4
+-[ 	]*[a-f0-9]+:	62 f1 56 af 10 f4    	vmovss xmm6\{k7\}\{z\},xmm5,ymm4
++[ 	]*[a-f0-9]+:	62 f1 56 2f 10 f4    	vmovss xmm6\{k7\},xmm5,xmm4
++[ 	]*[a-f0-9]+:	62 f1 56 af 10 f4    	vmovss xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 2f 59 f4    	vmulsd xmm6\{k7\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 af 59 f4    	vmulsd xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 1f 59 f4    	vmulsd xmm6\{k7\},xmm5,xmm4,\{rn-sae\}
+@@ -2768,8 +2768,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 b2 00 04 00 00 	vmovsd QWORD PTR \[edx\+0x400\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 72 80 	vmovsd QWORD PTR \[edx-0x400\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 b2 f8 fb ff ff 	vmovsd QWORD PTR \[edx-0x408\]\{k7\},xmm6
+-[ 	]*[a-f0-9]+:	62 f1 d7 2f 10 f4    	vmovsd xmm6\{k7\},xmm5,ymm4
+-[ 	]*[a-f0-9]+:	62 f1 d7 af 10 f4    	vmovsd xmm6\{k7\}\{z\},xmm5,ymm4
++[ 	]*[a-f0-9]+:	62 f1 d7 2f 10 f4    	vmovsd xmm6\{k7\},xmm5,xmm4
++[ 	]*[a-f0-9]+:	62 f1 d7 af 10 f4    	vmovsd xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 10 31    	vmovss xmm6\{k7\},DWORD PTR \[ecx\]
+ [ 	]*[a-f0-9]+:	62 f1 7e af 10 31    	vmovss xmm6\{k7\}\{z\},DWORD PTR \[ecx\]
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 10 b4 f4 c0 1d fe ff 	vmovss xmm6\{k7\},DWORD PTR \[esp\+esi\*8-0x1e240\]
+@@ -2783,8 +2783,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 b2 00 02 00 00 	vmovss DWORD PTR \[edx\+0x200\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 72 80 	vmovss DWORD PTR \[edx-0x200\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 b2 fc fd ff ff 	vmovss DWORD PTR \[edx-0x204\]\{k7\},xmm6
+-[ 	]*[a-f0-9]+:	62 f1 56 2f 10 f4    	vmovss xmm6\{k7\},xmm5,ymm4
+-[ 	]*[a-f0-9]+:	62 f1 56 af 10 f4    	vmovss xmm6\{k7\}\{z\},xmm5,ymm4
++[ 	]*[a-f0-9]+:	62 f1 56 2f 10 f4    	vmovss xmm6\{k7\},xmm5,xmm4
++[ 	]*[a-f0-9]+:	62 f1 56 af 10 f4    	vmovss xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 2f 59 f4    	vmulsd xmm6\{k7\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 af 59 f4    	vmulsd xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 1f 59 f4    	vmulsd xmm6\{k7\},xmm5,xmm4,\{rn-sae\}
+diff --git a/gas/testsuite/gas/i386/evex-lig256.d b/gas/testsuite/gas/i386/evex-lig256.d
+index 2f0de71..7e99258 100644
+--- a/gas/testsuite/gas/i386/evex-lig256.d
++++ b/gas/testsuite/gas/i386/evex-lig256.d
+@@ -1241,8 +1241,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 b2 00 04 00 00 	vmovsd %xmm6,0x400\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 72 80 	vmovsd %xmm6,-0x400\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 b2 f8 fb ff ff 	vmovsd %xmm6,-0x408\(%edx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 d7 2f 10 f4    	vmovsd %ymm4,%xmm5,%xmm6\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 d7 af 10 f4    	vmovsd %ymm4,%xmm5,%xmm6\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 f1 d7 2f 10 f4    	vmovsd %xmm4,%xmm5,%xmm6\{%k7\}
++[ 	]*[a-f0-9]+:	62 f1 d7 af 10 f4    	vmovsd %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 10 31    	vmovss \(%ecx\),%xmm6\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e af 10 31    	vmovss \(%ecx\),%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 10 b4 f4 c0 1d fe ff 	vmovss -0x1e240\(%esp,%esi,8\),%xmm6\{%k7\}
+@@ -1256,8 +1256,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 b2 00 02 00 00 	vmovss %xmm6,0x200\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 72 80 	vmovss %xmm6,-0x200\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 b2 fc fd ff ff 	vmovss %xmm6,-0x204\(%edx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 56 2f 10 f4    	vmovss %ymm4,%xmm5,%xmm6\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 56 af 10 f4    	vmovss %ymm4,%xmm5,%xmm6\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 f1 56 2f 10 f4    	vmovss %xmm4,%xmm5,%xmm6\{%k7\}
++[ 	]*[a-f0-9]+:	62 f1 56 af 10 f4    	vmovss %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 2f 59 f4    	vmulsd %xmm4,%xmm5,%xmm6\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 af 59 f4    	vmulsd %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 1f 59 f4    	vmulsd \{rn-sae\},%xmm4,%xmm5,%xmm6\{%k7\}
+@@ -2768,8 +2768,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 b2 00 04 00 00 	vmovsd %xmm6,0x400\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 72 80 	vmovsd %xmm6,-0x400\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 ff 2f 11 b2 f8 fb ff ff 	vmovsd %xmm6,-0x408\(%edx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 d7 2f 10 f4    	vmovsd %ymm4,%xmm5,%xmm6\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 d7 af 10 f4    	vmovsd %ymm4,%xmm5,%xmm6\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 f1 d7 2f 10 f4    	vmovsd %xmm4,%xmm5,%xmm6\{%k7\}
++[ 	]*[a-f0-9]+:	62 f1 d7 af 10 f4    	vmovsd %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 10 31    	vmovss \(%ecx\),%xmm6\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e af 10 31    	vmovss \(%ecx\),%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 10 b4 f4 c0 1d fe ff 	vmovss -0x1e240\(%esp,%esi,8\),%xmm6\{%k7\}
+@@ -2783,8 +2783,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 b2 00 02 00 00 	vmovss %xmm6,0x200\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 72 80 	vmovss %xmm6,-0x200\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 2f 11 b2 fc fd ff ff 	vmovss %xmm6,-0x204\(%edx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 56 2f 10 f4    	vmovss %ymm4,%xmm5,%xmm6\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 56 af 10 f4    	vmovss %ymm4,%xmm5,%xmm6\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 f1 56 2f 10 f4    	vmovss %xmm4,%xmm5,%xmm6\{%k7\}
++[ 	]*[a-f0-9]+:	62 f1 56 af 10 f4    	vmovss %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 2f 59 f4    	vmulsd %xmm4,%xmm5,%xmm6\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 af 59 f4    	vmulsd %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 1f 59 f4    	vmulsd \{rn-sae\},%xmm4,%xmm5,%xmm6\{%k7\}
+diff --git a/gas/testsuite/gas/i386/evex-lig512-intel.d b/gas/testsuite/gas/i386/evex-lig512-intel.d
+index 43e1650..200b1e3 100644
+--- a/gas/testsuite/gas/i386/evex-lig512-intel.d
++++ b/gas/testsuite/gas/i386/evex-lig512-intel.d
+@@ -1241,8 +1241,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 b2 00 04 00 00 	vmovsd QWORD PTR \[edx\+0x400\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 72 80 	vmovsd QWORD PTR \[edx-0x400\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 b2 f8 fb ff ff 	vmovsd QWORD PTR \[edx-0x408\]\{k7\},xmm6
+-[ 	]*[a-f0-9]+:	62 f1 d7 4f 10 f4    	vmovsd xmm6\{k7\},xmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f1 d7 cf 10 f4    	vmovsd xmm6\{k7\}\{z\},xmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f1 d7 4f 10 f4    	vmovsd xmm6\{k7\},xmm5,xmm4
++[ 	]*[a-f0-9]+:	62 f1 d7 cf 10 f4    	vmovsd xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 10 31    	vmovss xmm6\{k7\},DWORD PTR \[ecx\]
+ [ 	]*[a-f0-9]+:	62 f1 7e cf 10 31    	vmovss xmm6\{k7\}\{z\},DWORD PTR \[ecx\]
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 10 b4 f4 c0 1d fe ff 	vmovss xmm6\{k7\},DWORD PTR \[esp\+esi\*8-0x1e240\]
+@@ -1256,8 +1256,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 b2 00 02 00 00 	vmovss DWORD PTR \[edx\+0x200\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 72 80 	vmovss DWORD PTR \[edx-0x200\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 b2 fc fd ff ff 	vmovss DWORD PTR \[edx-0x204\]\{k7\},xmm6
+-[ 	]*[a-f0-9]+:	62 f1 56 4f 10 f4    	vmovss xmm6\{k7\},xmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f1 56 cf 10 f4    	vmovss xmm6\{k7\}\{z\},xmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f1 56 4f 10 f4    	vmovss xmm6\{k7\},xmm5,xmm4
++[ 	]*[a-f0-9]+:	62 f1 56 cf 10 f4    	vmovss xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 4f 59 f4    	vmulsd xmm6\{k7\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 cf 59 f4    	vmulsd xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 1f 59 f4    	vmulsd xmm6\{k7\},xmm5,xmm4,\{rn-sae\}
+@@ -2768,8 +2768,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 b2 00 04 00 00 	vmovsd QWORD PTR \[edx\+0x400\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 72 80 	vmovsd QWORD PTR \[edx-0x400\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 b2 f8 fb ff ff 	vmovsd QWORD PTR \[edx-0x408\]\{k7\},xmm6
+-[ 	]*[a-f0-9]+:	62 f1 d7 4f 10 f4    	vmovsd xmm6\{k7\},xmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f1 d7 cf 10 f4    	vmovsd xmm6\{k7\}\{z\},xmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f1 d7 4f 10 f4    	vmovsd xmm6\{k7\},xmm5,xmm4
++[ 	]*[a-f0-9]+:	62 f1 d7 cf 10 f4    	vmovsd xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 10 31    	vmovss xmm6\{k7\},DWORD PTR \[ecx\]
+ [ 	]*[a-f0-9]+:	62 f1 7e cf 10 31    	vmovss xmm6\{k7\}\{z\},DWORD PTR \[ecx\]
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 10 b4 f4 c0 1d fe ff 	vmovss xmm6\{k7\},DWORD PTR \[esp\+esi\*8-0x1e240\]
+@@ -2783,8 +2783,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 b2 00 02 00 00 	vmovss DWORD PTR \[edx\+0x200\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 72 80 	vmovss DWORD PTR \[edx-0x200\]\{k7\},xmm6
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 b2 fc fd ff ff 	vmovss DWORD PTR \[edx-0x204\]\{k7\},xmm6
+-[ 	]*[a-f0-9]+:	62 f1 56 4f 10 f4    	vmovss xmm6\{k7\},xmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f1 56 cf 10 f4    	vmovss xmm6\{k7\}\{z\},xmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f1 56 4f 10 f4    	vmovss xmm6\{k7\},xmm5,xmm4
++[ 	]*[a-f0-9]+:	62 f1 56 cf 10 f4    	vmovss xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 4f 59 f4    	vmulsd xmm6\{k7\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 cf 59 f4    	vmulsd xmm6\{k7\}\{z\},xmm5,xmm4
+ [ 	]*[a-f0-9]+:	62 f1 d7 1f 59 f4    	vmulsd xmm6\{k7\},xmm5,xmm4,\{rn-sae\}
+diff --git a/gas/testsuite/gas/i386/evex-lig512.d b/gas/testsuite/gas/i386/evex-lig512.d
+index 4bdb88c..a3c85b8 100644
+--- a/gas/testsuite/gas/i386/evex-lig512.d
++++ b/gas/testsuite/gas/i386/evex-lig512.d
+@@ -1241,8 +1241,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 b2 00 04 00 00 	vmovsd %xmm6,0x400\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 72 80 	vmovsd %xmm6,-0x400\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 b2 f8 fb ff ff 	vmovsd %xmm6,-0x408\(%edx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 d7 4f 10 f4    	vmovsd %zmm4,%xmm5,%xmm6\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 d7 cf 10 f4    	vmovsd %zmm4,%xmm5,%xmm6\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 f1 d7 4f 10 f4    	vmovsd %xmm4,%xmm5,%xmm6\{%k7\}
++[ 	]*[a-f0-9]+:	62 f1 d7 cf 10 f4    	vmovsd %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 10 31    	vmovss \(%ecx\),%xmm6\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e cf 10 31    	vmovss \(%ecx\),%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 10 b4 f4 c0 1d fe ff 	vmovss -0x1e240\(%esp,%esi,8\),%xmm6\{%k7\}
+@@ -1256,8 +1256,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 b2 00 02 00 00 	vmovss %xmm6,0x200\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 72 80 	vmovss %xmm6,-0x200\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 b2 fc fd ff ff 	vmovss %xmm6,-0x204\(%edx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 56 4f 10 f4    	vmovss %zmm4,%xmm5,%xmm6\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 56 cf 10 f4    	vmovss %zmm4,%xmm5,%xmm6\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 f1 56 4f 10 f4    	vmovss %xmm4,%xmm5,%xmm6\{%k7\}
++[ 	]*[a-f0-9]+:	62 f1 56 cf 10 f4    	vmovss %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 4f 59 f4    	vmulsd %xmm4,%xmm5,%xmm6\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 cf 59 f4    	vmulsd %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 1f 59 f4    	vmulsd \{rn-sae\},%xmm4,%xmm5,%xmm6\{%k7\}
+@@ -2768,8 +2768,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 b2 00 04 00 00 	vmovsd %xmm6,0x400\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 72 80 	vmovsd %xmm6,-0x400\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 ff 4f 11 b2 f8 fb ff ff 	vmovsd %xmm6,-0x408\(%edx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 d7 4f 10 f4    	vmovsd %zmm4,%xmm5,%xmm6\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 d7 cf 10 f4    	vmovsd %zmm4,%xmm5,%xmm6\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 f1 d7 4f 10 f4    	vmovsd %xmm4,%xmm5,%xmm6\{%k7\}
++[ 	]*[a-f0-9]+:	62 f1 d7 cf 10 f4    	vmovsd %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 10 31    	vmovss \(%ecx\),%xmm6\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e cf 10 31    	vmovss \(%ecx\),%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 10 b4 f4 c0 1d fe ff 	vmovss -0x1e240\(%esp,%esi,8\),%xmm6\{%k7\}
+@@ -2783,8 +2783,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 b2 00 02 00 00 	vmovss %xmm6,0x200\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 72 80 	vmovss %xmm6,-0x200\(%edx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 7e 4f 11 b2 fc fd ff ff 	vmovss %xmm6,-0x204\(%edx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 56 4f 10 f4    	vmovss %zmm4,%xmm5,%xmm6\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f1 56 cf 10 f4    	vmovss %zmm4,%xmm5,%xmm6\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 f1 56 4f 10 f4    	vmovss %xmm4,%xmm5,%xmm6\{%k7\}
++[ 	]*[a-f0-9]+:	62 f1 56 cf 10 f4    	vmovss %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 4f 59 f4    	vmulsd %xmm4,%xmm5,%xmm6\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 cf 59 f4    	vmulsd %xmm4,%xmm5,%xmm6\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 f1 d7 1f 59 f4    	vmulsd \{rn-sae\},%xmm4,%xmm5,%xmm6\{%k7\}
+diff --git a/gas/testsuite/gas/i386/x86-64-evex-lig256-intel.d b/gas/testsuite/gas/i386/x86-64-evex-lig256-intel.d
+index 8e27347..d925b37 100644
+--- a/gas/testsuite/gas/i386/x86-64-evex-lig256-intel.d
++++ b/gas/testsuite/gas/i386/x86-64-evex-lig256-intel.d
+@@ -1339,8 +1339,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 b2 00 04 00 00 	vmovsd QWORD PTR \[rdx\+0x400\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 72 80 	vmovsd QWORD PTR \[rdx-0x400\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 b2 f8 fb ff ff 	vmovsd QWORD PTR \[rdx-0x408\]\{k7\},xmm30
+-[ 	]*[a-f0-9]+:	62 01 97 27 10 f4    	vmovsd xmm30\{k7\},xmm29,ymm28
+-[ 	]*[a-f0-9]+:	62 01 97 a7 10 f4    	vmovsd xmm30\{k7\}\{z\},xmm29,ymm28
++[ 	]*[a-f0-9]+:	62 01 97 27 10 f4    	vmovsd xmm30\{k7\},xmm29,xmm28
++[ 	]*[a-f0-9]+:	62 01 97 a7 10 f4    	vmovsd xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 10 31    	vmovss xmm30\{k7\},DWORD PTR \[rcx\]
+ [ 	]*[a-f0-9]+:	62 61 7e af 10 31    	vmovss xmm30\{k7\}\{z\},DWORD PTR \[rcx\]
+ [ 	]*[a-f0-9]+:	62 21 7e 2f 10 b4 f0 23 01 00 00 	vmovss xmm30\{k7\},DWORD PTR \[rax\+r14\*8\+0x123\]
+@@ -1354,8 +1354,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 b2 00 02 00 00 	vmovss DWORD PTR \[rdx\+0x200\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 72 80 	vmovss DWORD PTR \[rdx-0x200\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 b2 fc fd ff ff 	vmovss DWORD PTR \[rdx-0x204\]\{k7\},xmm30
+-[ 	]*[a-f0-9]+:	62 01 16 27 10 f4    	vmovss xmm30\{k7\},xmm29,ymm28
+-[ 	]*[a-f0-9]+:	62 01 16 a7 10 f4    	vmovss xmm30\{k7\}\{z\},xmm29,ymm28
++[ 	]*[a-f0-9]+:	62 01 16 27 10 f4    	vmovss xmm30\{k7\},xmm29,xmm28
++[ 	]*[a-f0-9]+:	62 01 16 a7 10 f4    	vmovss xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 27 59 f4    	vmulsd xmm30\{k7\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 a7 59 f4    	vmulsd xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 17 59 f4    	vmulsd xmm30\{k7\},xmm29,xmm28,\{rn-sae\}
+@@ -3082,8 +3082,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 b2 00 04 00 00 	vmovsd QWORD PTR \[rdx\+0x400\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 72 80 	vmovsd QWORD PTR \[rdx-0x400\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 b2 f8 fb ff ff 	vmovsd QWORD PTR \[rdx-0x408\]\{k7\},xmm30
+-[ 	]*[a-f0-9]+:	62 01 97 27 10 f4    	vmovsd xmm30\{k7\},xmm29,ymm28
+-[ 	]*[a-f0-9]+:	62 01 97 a7 10 f4    	vmovsd xmm30\{k7\}\{z\},xmm29,ymm28
++[ 	]*[a-f0-9]+:	62 01 97 27 10 f4    	vmovsd xmm30\{k7\},xmm29,xmm28
++[ 	]*[a-f0-9]+:	62 01 97 a7 10 f4    	vmovsd xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 10 31    	vmovss xmm30\{k7\},DWORD PTR \[rcx\]
+ [ 	]*[a-f0-9]+:	62 61 7e af 10 31    	vmovss xmm30\{k7\}\{z\},DWORD PTR \[rcx\]
+ [ 	]*[a-f0-9]+:	62 21 7e 2f 10 b4 f0 34 12 00 00 	vmovss xmm30\{k7\},DWORD PTR \[rax\+r14\*8\+0x1234\]
+@@ -3097,8 +3097,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 b2 00 02 00 00 	vmovss DWORD PTR \[rdx\+0x200\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 72 80 	vmovss DWORD PTR \[rdx-0x200\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 b2 fc fd ff ff 	vmovss DWORD PTR \[rdx-0x204\]\{k7\},xmm30
+-[ 	]*[a-f0-9]+:	62 01 16 27 10 f4    	vmovss xmm30\{k7\},xmm29,ymm28
+-[ 	]*[a-f0-9]+:	62 01 16 a7 10 f4    	vmovss xmm30\{k7\}\{z\},xmm29,ymm28
++[ 	]*[a-f0-9]+:	62 01 16 27 10 f4    	vmovss xmm30\{k7\},xmm29,xmm28
++[ 	]*[a-f0-9]+:	62 01 16 a7 10 f4    	vmovss xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 27 59 f4    	vmulsd xmm30\{k7\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 a7 59 f4    	vmulsd xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 17 59 f4    	vmulsd xmm30\{k7\},xmm29,xmm28,\{rn-sae\}
+diff --git a/gas/testsuite/gas/i386/x86-64-evex-lig256.d b/gas/testsuite/gas/i386/x86-64-evex-lig256.d
+index 27a4f4c..7f76350 100644
+--- a/gas/testsuite/gas/i386/x86-64-evex-lig256.d
++++ b/gas/testsuite/gas/i386/x86-64-evex-lig256.d
+@@ -1339,8 +1339,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 b2 00 04 00 00 	vmovsd %xmm30,0x400\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 72 80 	vmovsd %xmm30,-0x400\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 b2 f8 fb ff ff 	vmovsd %xmm30,-0x408\(%rdx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 97 27 10 f4    	vmovsd %ymm28,%xmm29,%xmm30\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 97 a7 10 f4    	vmovsd %ymm28,%xmm29,%xmm30\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 01 97 27 10 f4    	vmovsd %xmm28,%xmm29,%xmm30\{%k7\}
++[ 	]*[a-f0-9]+:	62 01 97 a7 10 f4    	vmovsd %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 10 31    	vmovss \(%rcx\),%xmm30\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e af 10 31    	vmovss \(%rcx\),%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 21 7e 2f 10 b4 f0 23 01 00 00 	vmovss 0x123\(%rax,%r14,8\),%xmm30\{%k7\}
+@@ -1354,8 +1354,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 b2 00 02 00 00 	vmovss %xmm30,0x200\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 72 80 	vmovss %xmm30,-0x200\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 b2 fc fd ff ff 	vmovss %xmm30,-0x204\(%rdx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 16 27 10 f4    	vmovss %ymm28,%xmm29,%xmm30\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 16 a7 10 f4    	vmovss %ymm28,%xmm29,%xmm30\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 01 16 27 10 f4    	vmovss %xmm28,%xmm29,%xmm30\{%k7\}
++[ 	]*[a-f0-9]+:	62 01 16 a7 10 f4    	vmovss %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 01 97 27 59 f4    	vmulsd %xmm28,%xmm29,%xmm30\{%k7\}
+ [ 	]*[a-f0-9]+:	62 01 97 a7 59 f4    	vmulsd %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 01 97 17 59 f4    	vmulsd \{rn-sae\},%xmm28,%xmm29,%xmm30\{%k7\}
+@@ -3082,8 +3082,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 b2 00 04 00 00 	vmovsd %xmm30,0x400\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 72 80 	vmovsd %xmm30,-0x400\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 ff 2f 11 b2 f8 fb ff ff 	vmovsd %xmm30,-0x408\(%rdx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 97 27 10 f4    	vmovsd %ymm28,%xmm29,%xmm30\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 97 a7 10 f4    	vmovsd %ymm28,%xmm29,%xmm30\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 01 97 27 10 f4    	vmovsd %xmm28,%xmm29,%xmm30\{%k7\}
++[ 	]*[a-f0-9]+:	62 01 97 a7 10 f4    	vmovsd %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 10 31    	vmovss \(%rcx\),%xmm30\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e af 10 31    	vmovss \(%rcx\),%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 21 7e 2f 10 b4 f0 34 12 00 00 	vmovss 0x1234\(%rax,%r14,8\),%xmm30\{%k7\}
+@@ -3097,8 +3097,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 b2 00 02 00 00 	vmovss %xmm30,0x200\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 72 80 	vmovss %xmm30,-0x200\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e 2f 11 b2 fc fd ff ff 	vmovss %xmm30,-0x204\(%rdx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 16 27 10 f4    	vmovss %ymm28,%xmm29,%xmm30\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 16 a7 10 f4    	vmovss %ymm28,%xmm29,%xmm30\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 01 16 27 10 f4    	vmovss %xmm28,%xmm29,%xmm30\{%k7\}
++[ 	]*[a-f0-9]+:	62 01 16 a7 10 f4    	vmovss %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 01 97 27 59 f4    	vmulsd %xmm28,%xmm29,%xmm30\{%k7\}
+ [ 	]*[a-f0-9]+:	62 01 97 a7 59 f4    	vmulsd %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 01 97 17 59 f4    	vmulsd \{rn-sae\},%xmm28,%xmm29,%xmm30\{%k7\}
+diff --git a/gas/testsuite/gas/i386/x86-64-evex-lig512-intel.d b/gas/testsuite/gas/i386/x86-64-evex-lig512-intel.d
+index 0b25f56..ea3e380 100644
+--- a/gas/testsuite/gas/i386/x86-64-evex-lig512-intel.d
++++ b/gas/testsuite/gas/i386/x86-64-evex-lig512-intel.d
+@@ -1339,8 +1339,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 b2 00 04 00 00 	vmovsd QWORD PTR \[rdx\+0x400\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 72 80 	vmovsd QWORD PTR \[rdx-0x400\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 b2 f8 fb ff ff 	vmovsd QWORD PTR \[rdx-0x408\]\{k7\},xmm30
+-[ 	]*[a-f0-9]+:	62 01 97 47 10 f4    	vmovsd xmm30\{k7\},xmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 01 97 c7 10 f4    	vmovsd xmm30\{k7\}\{z\},xmm29,zmm28
++[ 	]*[a-f0-9]+:	62 01 97 47 10 f4    	vmovsd xmm30\{k7\},xmm29,xmm28
++[ 	]*[a-f0-9]+:	62 01 97 c7 10 f4    	vmovsd xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 10 31    	vmovss xmm30\{k7\},DWORD PTR \[rcx\]
+ [ 	]*[a-f0-9]+:	62 61 7e cf 10 31    	vmovss xmm30\{k7\}\{z\},DWORD PTR \[rcx\]
+ [ 	]*[a-f0-9]+:	62 21 7e 4f 10 b4 f0 23 01 00 00 	vmovss xmm30\{k7\},DWORD PTR \[rax\+r14\*8\+0x123\]
+@@ -1354,8 +1354,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 b2 00 02 00 00 	vmovss DWORD PTR \[rdx\+0x200\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 72 80 	vmovss DWORD PTR \[rdx-0x200\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 b2 fc fd ff ff 	vmovss DWORD PTR \[rdx-0x204\]\{k7\},xmm30
+-[ 	]*[a-f0-9]+:	62 01 16 47 10 f4    	vmovss xmm30\{k7\},xmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 01 16 c7 10 f4    	vmovss xmm30\{k7\}\{z\},xmm29,zmm28
++[ 	]*[a-f0-9]+:	62 01 16 47 10 f4    	vmovss xmm30\{k7\},xmm29,xmm28
++[ 	]*[a-f0-9]+:	62 01 16 c7 10 f4    	vmovss xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 47 59 f4    	vmulsd xmm30\{k7\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 c7 59 f4    	vmulsd xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 17 59 f4    	vmulsd xmm30\{k7\},xmm29,xmm28,\{rn-sae\}
+@@ -3082,8 +3082,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 b2 00 04 00 00 	vmovsd QWORD PTR \[rdx\+0x400\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 72 80 	vmovsd QWORD PTR \[rdx-0x400\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 b2 f8 fb ff ff 	vmovsd QWORD PTR \[rdx-0x408\]\{k7\},xmm30
+-[ 	]*[a-f0-9]+:	62 01 97 47 10 f4    	vmovsd xmm30\{k7\},xmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 01 97 c7 10 f4    	vmovsd xmm30\{k7\}\{z\},xmm29,zmm28
++[ 	]*[a-f0-9]+:	62 01 97 47 10 f4    	vmovsd xmm30\{k7\},xmm29,xmm28
++[ 	]*[a-f0-9]+:	62 01 97 c7 10 f4    	vmovsd xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 10 31    	vmovss xmm30\{k7\},DWORD PTR \[rcx\]
+ [ 	]*[a-f0-9]+:	62 61 7e cf 10 31    	vmovss xmm30\{k7\}\{z\},DWORD PTR \[rcx\]
+ [ 	]*[a-f0-9]+:	62 21 7e 4f 10 b4 f0 34 12 00 00 	vmovss xmm30\{k7\},DWORD PTR \[rax\+r14\*8\+0x1234\]
+@@ -3097,8 +3097,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 b2 00 02 00 00 	vmovss DWORD PTR \[rdx\+0x200\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 72 80 	vmovss DWORD PTR \[rdx-0x200\]\{k7\},xmm30
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 b2 fc fd ff ff 	vmovss DWORD PTR \[rdx-0x204\]\{k7\},xmm30
+-[ 	]*[a-f0-9]+:	62 01 16 47 10 f4    	vmovss xmm30\{k7\},xmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 01 16 c7 10 f4    	vmovss xmm30\{k7\}\{z\},xmm29,zmm28
++[ 	]*[a-f0-9]+:	62 01 16 47 10 f4    	vmovss xmm30\{k7\},xmm29,xmm28
++[ 	]*[a-f0-9]+:	62 01 16 c7 10 f4    	vmovss xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 47 59 f4    	vmulsd xmm30\{k7\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 c7 59 f4    	vmulsd xmm30\{k7\}\{z\},xmm29,xmm28
+ [ 	]*[a-f0-9]+:	62 01 97 17 59 f4    	vmulsd xmm30\{k7\},xmm29,xmm28,\{rn-sae\}
+diff --git a/gas/testsuite/gas/i386/x86-64-evex-lig512.d b/gas/testsuite/gas/i386/x86-64-evex-lig512.d
+index f51b1d7..22de4cb 100644
+--- a/gas/testsuite/gas/i386/x86-64-evex-lig512.d
++++ b/gas/testsuite/gas/i386/x86-64-evex-lig512.d
+@@ -1339,8 +1339,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 b2 00 04 00 00 	vmovsd %xmm30,0x400\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 72 80 	vmovsd %xmm30,-0x400\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 b2 f8 fb ff ff 	vmovsd %xmm30,-0x408\(%rdx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 97 47 10 f4    	vmovsd %zmm28,%xmm29,%xmm30\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 97 c7 10 f4    	vmovsd %zmm28,%xmm29,%xmm30\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 01 97 47 10 f4    	vmovsd %xmm28,%xmm29,%xmm30\{%k7\}
++[ 	]*[a-f0-9]+:	62 01 97 c7 10 f4    	vmovsd %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 10 31    	vmovss \(%rcx\),%xmm30\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e cf 10 31    	vmovss \(%rcx\),%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 21 7e 4f 10 b4 f0 23 01 00 00 	vmovss 0x123\(%rax,%r14,8\),%xmm30\{%k7\}
+@@ -1354,8 +1354,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 b2 00 02 00 00 	vmovss %xmm30,0x200\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 72 80 	vmovss %xmm30,-0x200\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 b2 fc fd ff ff 	vmovss %xmm30,-0x204\(%rdx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 16 47 10 f4    	vmovss %zmm28,%xmm29,%xmm30\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 16 c7 10 f4    	vmovss %zmm28,%xmm29,%xmm30\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 01 16 47 10 f4    	vmovss %xmm28,%xmm29,%xmm30\{%k7\}
++[ 	]*[a-f0-9]+:	62 01 16 c7 10 f4    	vmovss %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 01 97 47 59 f4    	vmulsd %xmm28,%xmm29,%xmm30\{%k7\}
+ [ 	]*[a-f0-9]+:	62 01 97 c7 59 f4    	vmulsd %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 01 97 17 59 f4    	vmulsd \{rn-sae\},%xmm28,%xmm29,%xmm30\{%k7\}
+@@ -3082,8 +3082,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 b2 00 04 00 00 	vmovsd %xmm30,0x400\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 72 80 	vmovsd %xmm30,-0x400\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 ff 4f 11 b2 f8 fb ff ff 	vmovsd %xmm30,-0x408\(%rdx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 97 47 10 f4    	vmovsd %zmm28,%xmm29,%xmm30\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 97 c7 10 f4    	vmovsd %zmm28,%xmm29,%xmm30\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 01 97 47 10 f4    	vmovsd %xmm28,%xmm29,%xmm30\{%k7\}
++[ 	]*[a-f0-9]+:	62 01 97 c7 10 f4    	vmovsd %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 10 31    	vmovss \(%rcx\),%xmm30\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e cf 10 31    	vmovss \(%rcx\),%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 21 7e 4f 10 b4 f0 34 12 00 00 	vmovss 0x1234\(%rax,%r14,8\),%xmm30\{%k7\}
+@@ -3097,8 +3097,8 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 b2 00 02 00 00 	vmovss %xmm30,0x200\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 72 80 	vmovss %xmm30,-0x200\(%rdx\)\{%k7\}
+ [ 	]*[a-f0-9]+:	62 61 7e 4f 11 b2 fc fd ff ff 	vmovss %xmm30,-0x204\(%rdx\)\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 16 47 10 f4    	vmovss %zmm28,%xmm29,%xmm30\{%k7\}
+-[ 	]*[a-f0-9]+:	62 01 16 c7 10 f4    	vmovss %zmm28,%xmm29,%xmm30\{%k7\}\{z\}
++[ 	]*[a-f0-9]+:	62 01 16 47 10 f4    	vmovss %xmm28,%xmm29,%xmm30\{%k7\}
++[ 	]*[a-f0-9]+:	62 01 16 c7 10 f4    	vmovss %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 01 97 47 59 f4    	vmulsd %xmm28,%xmm29,%xmm30\{%k7\}
+ [ 	]*[a-f0-9]+:	62 01 97 c7 59 f4    	vmulsd %xmm28,%xmm29,%xmm30\{%k7\}\{z\}
+ [ 	]*[a-f0-9]+:	62 01 97 17 59 f4    	vmulsd \{rn-sae\},%xmm28,%xmm29,%xmm30\{%k7\}
+diff --git a/opcodes/ChangeLog b/opcodes/ChangeLog
+index e5f06da..0e229d9 100644
+--- a/opcodes/ChangeLog
++++ b/opcodes/ChangeLog
+@@ -1,3 +1,8 @@
++2014-07-08  Ilya Tocar  <ilya.tocar@intel.com>
++
++	* i386-dis-evex.h (EVEX_W_0F10_P_1_M_1): Fix vmovss.
++	(EVEX_W_0F10_P_3_M_1): Fix vmovsd.
++
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	* msp430-decode.c: Regenerate.
+diff --git a/opcodes/i386-dis-evex.h b/opcodes/i386-dis-evex.h
+index 0d17846..524e7c5 100644
+--- a/opcodes/i386-dis-evex.h
++++ b/opcodes/i386-dis-evex.h
+@@ -2213,7 +2213,7 @@ static const struct dis386 evex_table[][256] = {
+   },
+   /* EVEX_W_0F10_P_1_M_1 */
+   {
+-    { "vmovss",	{ XMScalar, VexScalar, EXx } },
++    { "vmovss",	{ XMScalar, VexScalar, EXxmm_md } },
+   },
+   /* EVEX_W_0F10_P_2 */
+   {
+@@ -2228,7 +2228,7 @@ static const struct dis386 evex_table[][256] = {
+   /* EVEX_W_0F10_P_3_M_1 */
+   {
+     { Bad_Opcode },
+-    { "vmovsd",	{ XMScalar, VexScalar, EXx } },
++    { "vmovsd",	{ XMScalar, VexScalar, EXxmm_mq } },
+   },
+   /* EVEX_W_0F11_P_0 */
+   {
+-- 
+2.0.3
+

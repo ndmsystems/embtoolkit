@@ -1,0 +1,109 @@
+From ed5869dc3a333c7e9c5ffab8016b6c4bff48d1d6 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Fri, 14 Mar 2014 15:01:53 +1030
+Subject: [PATCH 247/330] Fix overflow handling of VLE_SDA21
+
+bfd/
+	* elf32-ppc.c (ppc_elf_relocate_section): Correct overflow
+	handling for VLE_SDA21 relocs.
+ld/testsuite/
+	* ld-powerpc/vle.ld: Place .PPC.EMB.sdata0 within 32k of 0.
+	* ld-powerpc/vle-reloc-3.d: Update.
+---
+ bfd/ChangeLog                         |  4 ++++
+ bfd/elf32-ppc.c                       | 12 +++++++-----
+ ld/testsuite/ChangeLog                |  4 ++++
+ ld/testsuite/ld-powerpc/vle-reloc-3.d |  2 +-
+ ld/testsuite/ld-powerpc/vle.ld        |  3 ++-
+ 5 files changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index f6ccd39..0156629 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,6 +1,10 @@
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Backport mainline patches
++	2014-03-14  Alan Modra  <amodra@gmail.com>
++	* elf32-ppc.c (ppc_elf_relocate_section): Correct overflow
++	handling for VLE_SDA21 relocs.
++
+ 	2014-03-08  Alan Modra  <amodra@gmail.com>
+ 	* elf32-ppc.c (ppc_elf_howto_raw): Correct overflow check for
+ 	many relocations.  Correct bitsize and rightshift too for a number
+diff --git a/bfd/elf32-ppc.c b/bfd/elf32-ppc.c
+index 8fd437b..14083b9 100644
+--- a/bfd/elf32-ppc.c
++++ b/bfd/elf32-ppc.c
+@@ -8855,11 +8855,12 @@ ppc_elf_relocate_section (bfd *output_bfd,
+ 		/* And the final 11 bits of the value to bits 21 to 31.  */
+ 		insn |= relocation & 0x7ff;
+ 
+-		/* Use _bfd_final_link_relocate to report overflow,
+-		   but do so with a value that won't modify the insn.  */
+-		if (relocation + 0x80000 > 0x100000)
+-		  addend = 0x100000;
+-		relocation = 0;
++		bfd_put_32 (output_bfd, insn, contents + rel->r_offset);
++
++		if (r_type == R_PPC_VLE_SDA21
++		    && ((relocation + 0x80000) & 0xffffffff) > 0x100000)
++		  goto overflow;
++		continue;
+ 	      }
+ 	    else if (r_type == R_PPC_EMB_SDA21
+ 		     || r_type == R_PPC_VLE_SDA21
+@@ -9156,6 +9157,7 @@ ppc_elf_relocate_section (bfd *output_bfd,
+ 	{
+ 	  if (r == bfd_reloc_overflow)
+ 	    {
++	    overflow:
+ 	      if (warned)
+ 		continue;
+ 	      if (h != NULL
+diff --git a/ld/testsuite/ChangeLog b/ld/testsuite/ChangeLog
+index e92ffe2..f3d5c32 100644
+--- a/ld/testsuite/ChangeLog
++++ b/ld/testsuite/ChangeLog
+@@ -1,6 +1,10 @@
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Apply mainline patches
++	2014-03-14  Alan Modra  <amodra@gmail.com>
++	* ld-powerpc/vle.ld: Place .PPC.EMB.sdata0 within 32k of 0.
++	* ld-powerpc/vle-reloc-3.d: Update.
++
+ 	2014-02-10  H.J. Lu  <hongjiu.lu@intel.com>
+ 	PR gold/16530
+ 	* ld-elf/dynamic-1.c: New file.
+diff --git a/ld/testsuite/ld-powerpc/vle-reloc-3.d b/ld/testsuite/ld-powerpc/vle-reloc-3.d
+index e29f4f0..584c483 100644
+--- a/ld/testsuite/ld-powerpc/vle-reloc-3.d
++++ b/ld/testsuite/ld-powerpc/vle-reloc-3.d
+@@ -5,4 +5,4 @@ Disassembly of section .text:
+ 01800094 <sda21_test>:
+  1800094:	1c ad 80 08 	e_add16i r5,r13,-32760
+  1800098:	1c a2 80 04 	e_add16i r5,r2,-32764
+- 180009c:	70 00 00 ac 	e_li    r0,172
++ 180009c:	70 b0 78 04 	e_li    r5,-32764
+diff --git a/ld/testsuite/ld-powerpc/vle.ld b/ld/testsuite/ld-powerpc/vle.ld
+index 01b6598..ff92a05 100644
+--- a/ld/testsuite/ld-powerpc/vle.ld
++++ b/ld/testsuite/ld-powerpc/vle.ld
+@@ -2,10 +2,11 @@ SECTIONS
+ {
+   . = 0x01800000 + SIZEOF_HEADERS;
+   .text : { *(.text) }
+-  .PPC.EMB.sdata0 : { *(.PPC.EMB.sdata0) }
+   .sdata2 : { PROVIDE (_SDA2_BASE_ = 32768); *(.sdata2) }
+   . = ALIGN (0x10000) + (. & (0x10000 - 1));
+   .data : { *(.data) }
+   .sdata : { PROVIDE (_SDA_BASE_ = 32768); *(.sdata) }
++  . = 0xffff8000;
++  .PPC.EMB.sdata0 : { *(.PPC.EMB.sdata0) }
+   /DISCARD/ : { *(*) }
+ }
+-- 
+2.0.3
+

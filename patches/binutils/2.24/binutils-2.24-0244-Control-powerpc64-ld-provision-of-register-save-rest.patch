@@ -1,0 +1,165 @@
+From ce678f3d432ae01b7d89907b825877bd43b90f27 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Wed, 19 Feb 2014 14:23:12 +1030
+Subject: [PATCH 244/330] Control powerpc64-ld provision of register
+ save/restore
+
+This patch allows the user to override powerpc64-ld's default for
+providing linker generated register save and restore functions as used
+by gcc -Os code.  Normally these are not provided by ld -r, so Linux
+kernel modules have needed to include their own copies.
+
+bfd/
+	* elf64-ppc.h (struct ppc64_elf_params): Add save_restore_funcs.
+	* elf64-ppc.c (ppc64_elf_func_desc_adjust): Use it to control
+	provision of out-of-line register save/restore routines.
+ld/
+	* emultempl/ppc64elf.em (params): Init new field.
+	(ppc_create_output_section_statements): Set params.save_restore_funcs
+	default.
+	(PARSE_AND_LIST_*): Add support for --save-restore-funcs and
+	--no-save-restore-funcs.
+---
+ bfd/ChangeLog            |  5 +++++
+ bfd/elf64-ppc.c          |  2 +-
+ bfd/elf64-ppc.h          |  3 +++
+ ld/ChangeLog             |  7 +++++++
+ ld/emultempl/ppc64elf.em | 26 ++++++++++++++++++++++++--
+ 5 files changed, 40 insertions(+), 3 deletions(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index 2f3405d..31e7ec5 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,6 +1,11 @@
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Backport mainline patches
++	2014-02-19  Alan Modra  <amodra@gmail.com>
++	* elf64-ppc.h (struct ppc64_elf_params): Add save_restore_funcs.
++	* elf64-ppc.c (ppc64_elf_func_desc_adjust): Use it to control
++	provision of out-of-line register save/restore routines.
++
+ 	2014-02-17  Alan Modra  <amodra@gmail.com>
+ 	* elf64-ppc.h (struct ppc64_elf_params): Define.
+ 	(ppc64_elf_init_stub_bfd, ppc64_elf_edit_opd, ppc64_elf_tls_setup,
+diff --git a/bfd/elf64-ppc.c b/bfd/elf64-ppc.c
+index cb4409e..971426e 100644
+--- a/bfd/elf64-ppc.c
++++ b/bfd/elf64-ppc.c
+@@ -6841,7 +6841,7 @@ ppc64_elf_func_desc_adjust (bfd *obfd ATTRIBUTE_UNUSED,
+ 
+   /* Provide any missing _save* and _rest* functions.  */
+   htab->sfpr->size = 0;
+-  if (!info->relocatable)
++  if (htab->params->save_restore_funcs)
+     for (i = 0; i < sizeof (funcs) / sizeof (funcs[0]); i++)
+       if (!sfpr_define (info, &funcs[i]))
+ 	return FALSE;
+diff --git a/bfd/elf64-ppc.h b/bfd/elf64-ppc.h
+index 3a2299a..c4c7688 100644
+--- a/bfd/elf64-ppc.h
++++ b/bfd/elf64-ppc.h
+@@ -55,6 +55,9 @@ struct ppc64_elf_params
+ 
+   /* Whether to emit symbols for stubs.  */
+   int emit_stub_syms;
++
++  /* Whether to generate out-of-line register save/restore for gcc -Os code.  */
++  int save_restore_funcs;
+ };
+ 
+ bfd_boolean ppc64_elf_init_stub_bfd
+diff --git a/ld/ChangeLog b/ld/ChangeLog
+index 75e2aaa..9e3303d 100644
+--- a/ld/ChangeLog
++++ b/ld/ChangeLog
+@@ -1,6 +1,13 @@
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Backport mainline patches
++	2014-02-19  Alan Modra  <amodra@gmail.com>
++	* emultempl/ppc64elf.em (params): Init new field.
++	(ppc_create_output_section_statements): Set params.save_restore_funcs
++	default.
++	(PARSE_AND_LIST_*): Add support for --save-restore-funcs and
++	--no-save-restore-funcs.
++
+ 	2014-02-17  Alan Modra  <amodra@gmail.com>
+ 	* emultemps/ppc64elf.em (params): New static struct replacing
+ 	various other static vars.  Adjust code throughout file.
+diff --git a/ld/emultempl/ppc64elf.em b/ld/emultempl/ppc64elf.em
+index a9e1b58..12bfe41 100644
+--- a/ld/emultempl/ppc64elf.em
++++ b/ld/emultempl/ppc64elf.em
+@@ -39,7 +39,7 @@ static struct ppc64_elf_params params = { NULL,
+ 					  &ppc_layout_sections_again,
+ 					  1, 0, 0,
+ 					  ${DEFAULT_PLT_STATIC_CHAIN-0}, -1, 0,
+-					  0, -1};
++					  0, -1, -1};
+ 
+ /* Fake input file for stubs.  */
+ static lang_input_statement_type *stub_file;
+@@ -96,6 +96,8 @@ ppc_create_output_section_statements (void)
+   stub_file->the_bfd->flags |= BFD_LINKER_CREATED;
+   ldlang_add_file (stub_file);
+   params.stub_bfd = stub_file->the_bfd;
++  if (params.save_restore_funcs < 0)
++    params.save_restore_funcs = !link_info.relocatable;
+   if (!ppc64_elf_init_stub_bfd (&link_info, &params))
+     einfo ("%F%P: can not init BFD: %E\n");
+ }
+@@ -648,7 +650,9 @@ PARSE_AND_LIST_PROLOGUE=${PARSE_AND_LIST_PROLOGUE}'
+ #define OPTION_NO_PLT_ALIGN		(OPTION_PLT_ALIGN + 1)
+ #define OPTION_STUBSYMS			(OPTION_NO_PLT_ALIGN + 1)
+ #define OPTION_NO_STUBSYMS		(OPTION_STUBSYMS + 1)
+-#define OPTION_DOTSYMS			(OPTION_NO_STUBSYMS + 1)
++#define OPTION_SAVRES			(OPTION_NO_STUBSYMS + 1)
++#define OPTION_NO_SAVRES		(OPTION_SAVRES + 1)
++#define OPTION_DOTSYMS			(OPTION_NO_SAVRES + 1)
+ #define OPTION_NO_DOTSYMS		(OPTION_DOTSYMS + 1)
+ #define OPTION_NO_TLS_OPT		(OPTION_NO_DOTSYMS + 1)
+ #define OPTION_NO_TLS_GET_ADDR_OPT	(OPTION_NO_TLS_OPT + 1)
+@@ -671,6 +675,8 @@ PARSE_AND_LIST_LONGOPTS=${PARSE_AND_LIST_LONGOPTS}'
+   { "no-emit-stub-syms", no_argument, NULL, OPTION_NO_STUBSYMS },
+   { "dotsyms", no_argument, NULL, OPTION_DOTSYMS },
+   { "no-dotsyms", no_argument, NULL, OPTION_NO_DOTSYMS },
++  { "save-restore-funcs", no_argument, NULL, OPTION_SAVRES },
++  { "no-save-restore-funcs", no_argument, NULL, OPTION_NO_SAVRES },
+   { "no-tls-optimize", no_argument, NULL, OPTION_NO_TLS_OPT },
+   { "no-tls-get-addr-optimize", no_argument, NULL, OPTION_NO_TLS_GET_ADDR_OPT },
+   { "no-opd-optimize", no_argument, NULL, OPTION_NO_OPD_OPT },
+@@ -725,6 +731,14 @@ PARSE_AND_LIST_OPTIONS=${PARSE_AND_LIST_OPTIONS}'
+   --no-dotsyms                Don'\''t do anything special in version scripts.\n"
+ 		   ));
+   fprintf (file, _("\
++  --save-restore-funcs        Provide register save and restore routines used\n\
++                                by gcc -Os code.  Defaults to on for normal\n\
++                                final link, off for ld -r.\n"
++		   ));
++  fprintf (file, _("\
++  --no-save-restore-funcs     Don'\''t provide these routines.\n"
++		   ));
++  fprintf (file, _("\
+   --no-tls-optimize           Don'\''t try to optimize TLS accesses.\n"
+ 		   ));
+   fprintf (file, _("\
+@@ -807,6 +821,14 @@ PARSE_AND_LIST_ARGS_CASES=${PARSE_AND_LIST_ARGS_CASES}'
+       dotsyms = 0;
+       break;
+ 
++    case OPTION_SAVRES:
++      params.save_restore_funcs = 1;
++      break;
++
++    case OPTION_NO_SAVRES:
++      params.save_restore_funcs = 0;
++      break;
++
+     case OPTION_NO_TLS_OPT:
+       no_tls_opt = 1;
+       break;
+-- 
+2.0.3
+

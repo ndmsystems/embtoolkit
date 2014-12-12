@@ -1,0 +1,118 @@
+From f46f847c9888f3d7354facc5db65af538302706a Mon Sep 17 00:00:00 2001
+From: Ilya Tocar <ilya.tocar@intel.com>
+Date: Thu, 17 Jul 2014 13:59:32 +0400
+Subject: [PATCH 294/330] Properly handle EVEX register aliases
+
+gas/
+
+	* config/tc-i386.c (parse_register): Set need_vrex.
+
+gas/testsuite/
+
+	* gas/i386/x86-64-equ.d: New.
+	* gas/i386/x86-64-equ.s: New.
+	* gas/i386/i386.exp: Run x86-64-equ.
+---
+ gas/ChangeLog                       |  7 +++++++
+ gas/config/tc-i386.c                |  2 ++
+ gas/testsuite/ChangeLog             |  9 +++++++++
+ gas/testsuite/gas/i386/i386.exp     |  1 +
+ gas/testsuite/gas/i386/x86-64-equ.d | 11 +++++++++++
+ gas/testsuite/gas/i386/x86-64-equ.s | 10 ++++++++++
+ 6 files changed, 40 insertions(+)
+ create mode 100644 gas/testsuite/gas/i386/x86-64-equ.d
+ create mode 100644 gas/testsuite/gas/i386/x86-64-equ.s
+
+diff --git a/gas/ChangeLog b/gas/ChangeLog
+index cbdf74f..fa74e3d 100644
+--- a/gas/ChangeLog
++++ b/gas/ChangeLog
+@@ -1,3 +1,10 @@
++2014-07-17  Ilya Tocar  <ilya.tocar@intel.com>
++
++	Backport mainline patches
++	2014-07-17  Ilya Tocar  <ilya.tocar@intel.com>
++
++	* config/tc-i386.c (parse_register): Set need_vrex.
++
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Backport mainline patches
+diff --git a/gas/config/tc-i386.c b/gas/config/tc-i386.c
+index b0a584b..4d93906 100644
+--- a/gas/config/tc-i386.c
++++ b/gas/config/tc-i386.c
+@@ -9410,6 +9410,8 @@ parse_register (char *reg_string, char **end_op)
+ 	  know (e->X_add_number >= 0
+ 		&& (valueT) e->X_add_number < i386_regtab_size);
+ 	  r = i386_regtab + e->X_add_number;
++	  if ((r->reg_flags & RegVRex))
++	    i.need_vrex = 1;
+ 	  *end_op = input_line_pointer;
+ 	}
+       *input_line_pointer = c;
+diff --git a/gas/testsuite/ChangeLog b/gas/testsuite/ChangeLog
+index 1f96c17..52cb17f 100644
+--- a/gas/testsuite/ChangeLog
++++ b/gas/testsuite/ChangeLog
+@@ -1,3 +1,12 @@
++2014-07-17  Ilya Tocar  <ilya.tocar@intel.com>
++
++	Backport mainline patches
++	2014-07-17  Ilya Tocar  <ilya.tocar@intel.com>
++
++	* gas/i386/x86-64-equ.d: New.
++	* gas/i386/x86-64-equ.s: New.
++	* gas/i386/i386.exp: Run x86-64-equ.
++
+ 2014-07-08  Ilya Tocar  <ilya.tocar@intel.com>
+ 
+ 	* gas/i386/evex-lig256-intel.d: Updated.
+diff --git a/gas/testsuite/gas/i386/i386.exp b/gas/testsuite/gas/i386/i386.exp
+index 19fe0f3..30953f2 100644
+--- a/gas/testsuite/gas/i386/i386.exp
++++ b/gas/testsuite/gas/i386/i386.exp
+@@ -570,6 +570,7 @@ if [expr ([istarget "i*86-*-*"] || [istarget "x86_64-*-*"]) && [gas_64_check]] t
+     run_dump_test "x86-64-xsaves-intel"
+     run_dump_test "x86-64-prefetchwt1"
+     run_dump_test "x86-64-prefetchwt1-intel"
++    run_dump_test "x86-64-equ"
+ 
+     if { ![istarget "*-*-aix*"]
+       && ![istarget "*-*-beos*"]
+diff --git a/gas/testsuite/gas/i386/x86-64-equ.d b/gas/testsuite/gas/i386/x86-64-equ.d
+new file mode 100644
+index 0000000..3ecb0bb
+--- /dev/null
++++ b/gas/testsuite/gas/i386/x86-64-equ.d
+@@ -0,0 +1,11 @@
++#objdump: -drw
++#name: evex equates
++
++.*: +file format .*
++
++Disassembly of section .text:
++
++0+000 <_start>:
++[ 	]*[a-f0-9]+:	62 e1 76 08 58 c8    	vaddss %xmm0,%xmm1,%xmm17
++[ 	]*[a-f0-9]+:	62 b1 76 08 58 c1    	vaddss %xmm17,%xmm1,%xmm0
++#pass
+diff --git a/gas/testsuite/gas/i386/x86-64-equ.s b/gas/testsuite/gas/i386/x86-64-equ.s
+new file mode 100644
+index 0000000..26cfd72
+--- /dev/null
++++ b/gas/testsuite/gas/i386/x86-64-equ.s
+@@ -0,0 +1,10 @@
++ .text
++_start:
++
++ .set	ACC, %xmm17
++	vaddss   %xmm0,%xmm1,ACC
++
++ .intel_syntax noprefix
++
++ .set	ACC, xmm17
++	vaddss   xmm0,xmm1,ACC
+-- 
+2.0.3
+

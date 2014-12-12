@@ -1,0 +1,22 @@
+From a511efd7e5e7dd8410a1319895c29134b7d3ede9 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Wed, 12 Mar 2014 09:30:44 +1030
+Subject: [PATCH 123/330] daily update
+
+---
+ bfd/version.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bfd/version.h b/bfd/version.h
+index abe0397..383df16 100644
+--- a/bfd/version.h
++++ b/bfd/version.h
+@@ -1,4 +1,4 @@
+-#define BFD_VERSION_DATE 20140311
++#define BFD_VERSION_DATE 20140312
+ #define BFD_VERSION @bfd_version@
+ #define BFD_VERSION_STRING  @bfd_version_package@ @bfd_version_string@
+ #define REPORT_BUGS_TO @report_bugs_to@
+-- 
+2.0.3
+

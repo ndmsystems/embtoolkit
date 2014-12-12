@@ -1,0 +1,98 @@
+From 9da92c3812d5b5ddca09b4732939f1645d89bc59 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Mon, 13 Jan 2014 13:51:16 +1030
+Subject: [PATCH 240/330] Error on shared lib call to @local ifunc
+
+On powerpc32, making ifuncs have non-default visibility in shared
+libraries or pies can result in runtime failures.  The problem is that
+if gcc is told that a given function has non-default visibility, then
+calls to that function are assumed to be local (which is true) and
+thus need not go via a plt call stub (which is false for ifunc).  If
+the caller has no other reason to set up the got pointer (r30), code
+won't be emitted to do so.  However, a pic plt call stub makes use of
+r30 to load the plt entry.  So a call to an ifunc, which always needs
+a plt entry, will fail.
+
+This patch makes ld emit an error for the problem case, and allows
+calls to non-default visibility ifuncs to work in normal executables.
+I also fix some cases where ifuncs fail when using the old bss-plt.
+
+	* elf32-ppc.c (ppc_elf_check_relocs): For @local call to ifunc,
+	error when shared and force a plt call otherwise.
+	(ppc_elf_size_dynamic_sections): Don't emit DT_PPC_GOT unless
+	plt_type == PLT_NEW.
+	(ppc_elf_relocate_section): Add missing test to resolve ifuncs to
+	the appropriate call stub.
+---
+ bfd/ChangeLog   | 11 +++++++++++
+ bfd/elf32-ppc.c | 21 +++++++++++++++++++--
+ 2 files changed, 30 insertions(+), 2 deletions(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index aa1ec43..b73af54 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,3 +1,14 @@
++2014-06-12  Alan Modra  <amodra@gmail.com>
++
++	Backport mainline patches
++	2014-01-13  Alan Modra  <amodra@gmail.com>
++	* elf32-ppc.c (ppc_elf_check_relocs): For @local call to ifunc,
++	error when shared and force a plt call otherwise.
++	(ppc_elf_size_dynamic_sections): Don't emit DT_PPC_GOT unless
++	plt_type == PLT_NEW.
++	(ppc_elf_relocate_section): Add missing test to resolve ifuncs to
++	the appropriate call stub.
++
+ 2014-04-16  Alan Modra  <amodra@gmail.com>
+ 
+ 	Apply mainline patches for ppc476 workaround
+diff --git a/bfd/elf32-ppc.c b/bfd/elf32-ppc.c
+index 47ef46a..6f0f23e 100644
+--- a/bfd/elf32-ppc.c
++++ b/bfd/elf32-ppc.c
+@@ -4296,6 +4296,20 @@ ppc_elf_check_relocs (bfd *abfd,
+ 	      htab->plt_type = PLT_OLD;
+ 	      htab->old_bfd = abfd;
+ 	    }
++	  if (h != NULL && h->type == STT_GNU_IFUNC)
++	    {
++	      if (info->shared)
++		{
++		  info->callbacks->einfo (_("%P: %H: @local call to ifunc %s\n"),
++					  abfd, sec, rel->r_offset,
++					  h->root.root.string);
++		  bfd_set_error (bfd_error_bad_value);
++		  return FALSE;
++		}
++	      h->needs_plt = 1;
++	      if (!update_plt_info (abfd, &h->plt.plist, NULL, 0))
++		return FALSE;
++	    }
+ 	  break;
+ 
+ 	  /* This relocation describes the C++ object vtable hierarchy.
+@@ -6488,7 +6502,9 @@ ppc_elf_size_dynamic_sections (bfd *output_bfd ATTRIBUTE_UNUSED,
+ 	    return FALSE;
+ 	}
+ 
+-      if (htab->glink != NULL && htab->glink->size != 0)
++      if (htab->plt_type == PLT_NEW
++	  && htab->glink != NULL
++	  && htab->glink->size != 0)
+ 	{
+ 	  if (!add_dynamic_entry (DT_PPC_GOT, 0))
+ 	    return FALSE;
+@@ -7965,7 +7981,8 @@ ppc_elf_relocate_section (bfd *output_bfd,
+ 	      unresolved_reloc = FALSE;
+ 	      if (htab->plt_type == PLT_NEW
+ 		  || !htab->elf.dynamic_sections_created
+-		  || h == NULL)
++		  || h == NULL
++		  || h->dynindx == -1)
+ 		relocation = (htab->glink->output_section->vma
+ 			      + htab->glink->output_offset
+ 			      + (ent->glink_offset & ~1));
+-- 
+2.0.3
+

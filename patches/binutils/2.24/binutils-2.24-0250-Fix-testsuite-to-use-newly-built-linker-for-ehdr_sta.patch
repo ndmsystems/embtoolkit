@@ -1,0 +1,74 @@
+From 0211120ecff9945c97c5e36a6e35ee423b987841 Mon Sep 17 00:00:00 2001
+From: Cary Coutant <ccoutant@google.com>
+Date: Fri, 30 May 2014 10:21:27 -0700
+Subject: [PATCH 250/330] Fix testsuite to use newly-built linker for
+ ehdr_start_test_4, and fix check script to look for the right binding.
+
+gold/
+	* testsuite/Makefile.am (ehdr_start_test_4): Fix typo in -B option.
+	* testsuite/Makefile.in: Regenerate.
+	* testsuite/ehdr_start_test_4.sh: Look for "U" instead of "w".
+---
+ gold/ChangeLog                      | 5 +++++
+ gold/testsuite/Makefile.am          | 2 +-
+ gold/testsuite/Makefile.in          | 2 +-
+ gold/testsuite/ehdr_start_test_4.sh | 2 +-
+ 4 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/gold/ChangeLog b/gold/ChangeLog
+index aa856fa..9bed0e7 100644
+--- a/gold/ChangeLog
++++ b/gold/ChangeLog
+@@ -1,6 +1,11 @@
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Backport mainline patches
++	2014-05-30  Cary Coutant  <ccoutant@google.com>
++	* testsuite/Makefile.am (ehdr_start_test_4): Fix typo in -B option.
++	* testsuite/Makefile.in: Regenerate.
++	* testsuite/ehdr_start_test_4.sh: Look for "U" instead of "w".
++
+ 	2014-05-15  Alan Modra  <amodra@gmail.com>
+ 	* powerpc.cc (do_plt_fde_location): Handle zero length .glink.
+ 	Compare FDE contents with DW_CFA_nop rather than 0.
+diff --git a/gold/testsuite/Makefile.am b/gold/testsuite/Makefile.am
+index c76c0e6..ea7fadc 100644
+--- a/gold/testsuite/Makefile.am
++++ b/gold/testsuite/Makefile.am
+@@ -2179,7 +2179,7 @@ MOSTLYCLEANFILES += ehdr_start_test_4
+ ehdr_start_test_4.syms: ehdr_start_test_4
+ 	$(TEST_NM) ehdr_start_test_4 > $@
+ ehdr_start_test_4: ehdr_start_test_4.o gcctestdir/ld
+-	$(CXXLINK) -Bgcctestdir/ld/ -Wl,-Ttext=0x100100 $<
++	$(CXXLINK) -Bgcctestdir/ -Wl,-Ttext=0x100100 $<
+ ehdr_start_test_4.o: ehdr_start_test.cc
+ 	$(CXXCOMPILE) -c -DEHDR_START_WEAK -o $@ $<
+ 
+diff --git a/gold/testsuite/Makefile.in b/gold/testsuite/Makefile.in
+index 73b84e3..dcdb26d 100644
+--- a/gold/testsuite/Makefile.in
++++ b/gold/testsuite/Makefile.in
+@@ -5506,7 +5506,7 @@ uninstall-am:
+ @GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_4.syms: ehdr_start_test_4
+ @GCC_TRUE@@NATIVE_LINKER_TRUE@	$(TEST_NM) ehdr_start_test_4 > $@
+ @GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_4: ehdr_start_test_4.o gcctestdir/ld
+-@GCC_TRUE@@NATIVE_LINKER_TRUE@	$(CXXLINK) -Bgcctestdir/ld/ -Wl,-Ttext=0x100100 $<
++@GCC_TRUE@@NATIVE_LINKER_TRUE@	$(CXXLINK) -Bgcctestdir/ -Wl,-Ttext=0x100100 $<
+ @GCC_TRUE@@NATIVE_LINKER_TRUE@ehdr_start_test_4.o: ehdr_start_test.cc
+ @GCC_TRUE@@NATIVE_LINKER_TRUE@	$(CXXCOMPILE) -c -DEHDR_START_WEAK -o $@ $<
+ 
+diff --git a/gold/testsuite/ehdr_start_test_4.sh b/gold/testsuite/ehdr_start_test_4.sh
+index ad0a5a7..5e3d20f 100755
+--- a/gold/testsuite/ehdr_start_test_4.sh
++++ b/gold/testsuite/ehdr_start_test_4.sh
+@@ -35,6 +35,6 @@ check()
+     fi
+ }
+ 
+-check ehdr_start_test_4.syms "w __ehdr_start"
++check ehdr_start_test_4.syms "U __ehdr_start"
+ 
+ exit 0
+-- 
+2.0.3
+

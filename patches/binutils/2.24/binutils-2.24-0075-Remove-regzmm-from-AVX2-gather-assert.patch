@@ -1,0 +1,53 @@
+From ae3073542fd4d35d203164c1fde0bebb36f2069c Mon Sep 17 00:00:00 2001
+From: Michael Zolotukhin <michael.v.zolotukhin@gmail.com>
+Date: Wed, 22 Jan 2014 11:39:02 -0800
+Subject: [PATCH 075/330] Remove regzmm from AVX2 gather assert
+
+Since regzmm can't be used in AVX2 gather instructions, there is no need
+to check regzmm in AVX2 gather assert.
+
+2014-01-22  Michael Zolotukhin  <michael.v.zolotukhin@gmail.com>
+
+	* config/tc-i386.c (check_VecOperands): Remove regzmm from AVX2
+	gather assert.
+---
+ gas/ChangeLog        | 5 +++++
+ gas/config/tc-i386.c | 6 ++----
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/gas/ChangeLog b/gas/ChangeLog
+index a9ae5a8..3a29052 100644
+--- a/gas/ChangeLog
++++ b/gas/ChangeLog
+@@ -1,5 +1,10 @@
+ 2014-01-31  Michael Zolotukhin  <michael.v.zolotukhin@gmail.com>
+ 
++	* config/tc-i386.c (check_VecOperands): Remove regzmm from AVX2
++	gather assert.
++
++2014-01-22  Michael Zolotukhin  <michael.v.zolotukhin@gmail.com>
++
+ 	PR gas/16489
+ 	* config/tc-i386.c (check_VecOperands): Add check for invalid
+ 	register set in AVX512 gathers.
+diff --git a/gas/config/tc-i386.c b/gas/config/tc-i386.c
+index c855ac0..939902d 100644
+--- a/gas/config/tc-i386.c
++++ b/gas/config/tc-i386.c
+@@ -4372,11 +4372,9 @@ check_VecOperands (const insn_template *t)
+       if (i.reg_operands == 2 && !i.mask)
+ 	{
+ 	  gas_assert (i.types[0].bitfield.regxmm
+-		      || i.types[0].bitfield.regymm
+-		      || i.types[0].bitfield.regzmm);
++		      || i.types[0].bitfield.regymm);
+ 	  gas_assert (i.types[2].bitfield.regxmm
+-		      || i.types[2].bitfield.regymm
+-		      || i.types[2].bitfield.regzmm);
++		      || i.types[2].bitfield.regymm);
+ 	  if (operand_check == check_none)
+ 	    return 0;
+ 	  if (register_number (i.op[0].regs)
+-- 
+2.0.3
+

@@ -1,0 +1,1120 @@
+From b7077fab44c0ebf3352e8dd44503b0f82b5c91c7 Mon Sep 17 00:00:00 2001
+From: Ilya Tocar <ilya.tocar@intel.com>
+Date: Thu, 20 Feb 2014 18:31:11 +0400
+Subject: [PATCH 135/330] Change cpu for vptestnmd and vptestnmq instructions.
+
+In latest release of AVX512 spec
+http://download-software.intel.com/sites/default/files/managed/50/1a/319433-018.pdf
+Vptestnmq and vptestnmq instructions have CPUID AVX512F, not AVX512CD.
+This patch fixes it.
+
+opcodes/
+
+        * i386-opc.tbl: Change CPU of vptestnmq, vptestnmd from CpuAVX512CD,
+        to CpuAVX512F.
+        * i386-tbl.h: Regenerate.
+
+gas/testsuite/
+
+        * gas/i386/avx512cd-intel.d: Remove vptestnmq, vptestnmd.
+        * gas/i386/avx512cd.s: Ditto.
+        * gas/i386/avx512cd.d: Ditto.
+        * gas/i386/x86-64-avx512cd-intel.d: Ditto.
+        * gas/i386/x86-64-avx512cd.s: Ditto.
+        * gas/i386/x86-64-avx512cd.d: Ditto.
+        * gas/i386/avx512f-intel.d: Add vptestnmq, vptestnmd.
+        * gas/i386/avx512f.s: Ditto.
+        * gas/i386/avx512f.d: Ditto.
+        * gas/i386/x86-64-avx512f-intel.d: Ditto.
+        * gas/i386/x86-64-avx512f.s: Ditto.
+        * gas/i386/x86-64-avx512f.d: Ditto.
+---
+ gas/testsuite/ChangeLog                        | 18 ++++++++
+ gas/testsuite/gas/i386/avx512cd-intel.d        | 52 ---------------------
+ gas/testsuite/gas/i386/avx512cd.d              | 52 ---------------------
+ gas/testsuite/gas/i386/avx512cd.s              | 56 ----------------------
+ gas/testsuite/gas/i386/avx512f-intel.d         | 52 +++++++++++++++++++++
+ gas/testsuite/gas/i386/avx512f.d               | 52 +++++++++++++++++++++
+ gas/testsuite/gas/i386/avx512f.s               | 55 ++++++++++++++++++++++
+ gas/testsuite/gas/i386/x86-64-avx512cd-intel.d | 52 ---------------------
+ gas/testsuite/gas/i386/x86-64-avx512cd.d       | 52 ---------------------
+ gas/testsuite/gas/i386/x86-64-avx512cd.s       | 56 ----------------------
+ gas/testsuite/gas/i386/x86-64-avx512f-intel.d  | 52 +++++++++++++++++++++
+ gas/testsuite/gas/i386/x86-64-avx512f.d        | 52 +++++++++++++++++++++
+ gas/testsuite/gas/i386/x86-64-avx512f.s        | 55 ++++++++++++++++++++++
+ opcodes/ChangeLog                              |  9 ++++
+ opcodes/i386-opc.tbl                           |  7 ++-
+ opcodes/i386-tbl.h                             | 64 +++++++++++++-------------
+ 16 files changed, 380 insertions(+), 356 deletions(-)
+
+diff --git a/gas/testsuite/ChangeLog b/gas/testsuite/ChangeLog
+index 0c91fac..8ef5bc0 100644
+--- a/gas/testsuite/ChangeLog
++++ b/gas/testsuite/ChangeLog
+@@ -1,6 +1,24 @@
+ 2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
+ 
+ 	Backport from master
++	2014-02-20  Ilya Tocar  <ilya.tocar@intel.com>
++
++	* gas/i386/avx512cd-intel.d: Remove vptestnmq, vptestnmd.
++	* gas/i386/avx512cd.s: Ditto.
++	* gas/i386/avx512cd.d: Ditto.
++	* gas/i386/x86-64-avx512cd-intel.d: Ditto.
++	* gas/i386/x86-64-avx512cd.s: Ditto.
++	* gas/i386/x86-64-avx512cd.d: Ditto.
++	* gas/i386/avx512f-intel.d: Add vptestnmq, vptestnmd.
++	* gas/i386/avx512f.s: Ditto.
++	* gas/i386/avx512f.d: Ditto.
++	* gas/i386/x86-64-avx512f-intel.d: Ditto.
++	* gas/i386/x86-64-avx512f.s: Ditto.
++	* gas/i386/x86-64-avx512f.d: Ditto.
++
++2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
++
++	Backport from master
+ 	2014-02-12  Ilya Tocar  <ilya.tocar@intel.com>
+ 
+ 	* gas/i386/clflushopt-intel.d: New.
+diff --git a/gas/testsuite/gas/i386/avx512cd-intel.d b/gas/testsuite/gas/i386/avx512cd-intel.d
+index f48a7dd..c690c3a 100644
+--- a/gas/testsuite/gas/i386/avx512cd-intel.d
++++ b/gas/testsuite/gas/i386/avx512cd-intel.d
+@@ -65,32 +65,6 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 b2 00 04 00 00 	vplzcntq zmm6,QWORD PTR \[edx\+0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 72 80 	vplzcntq zmm6,QWORD PTR \[edx-0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 b2 f8 fb ff ff 	vplzcntq zmm6,QWORD PTR \[edx-0x408\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 ec    	vptestnmd k5,zmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f2 56 4f 27 ec    	vptestnmd k5\{k7\},zmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 29    	vptestnmd k5,zmm5,ZMMWORD PTR \[ecx\]
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 ac f4 c0 1d fe ff 	vptestnmd k5,zmm5,ZMMWORD PTR \[esp\+esi\*8-0x1e240\]
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 28    	vptestnmd k5,zmm5,DWORD PTR \[eax\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 7f 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx\+0x1fc0\]
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa 00 20 00 00 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx\+0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 80 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx-0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa c0 df ff ff 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx-0x2040\]
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 7f 	vptestnmd k5,zmm5,DWORD PTR \[edx\+0x1fc\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa 00 02 00 00 	vptestnmd k5,zmm5,DWORD PTR \[edx\+0x200\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 80 	vptestnmd k5,zmm5,DWORD PTR \[edx-0x200\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa fc fd ff ff 	vptestnmd k5,zmm5,DWORD PTR \[edx-0x204\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ec    	vptestnmq k5,zmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f2 d6 4f 27 ec    	vptestnmq k5\{k7\},zmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 29    	vptestnmq k5,zmm5,ZMMWORD PTR \[ecx\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ac f4 c0 1d fe ff 	vptestnmq k5,zmm5,ZMMWORD PTR \[esp\+esi\*8-0x1e240\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 28    	vptestnmq k5,zmm5,QWORD PTR \[eax\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 7f 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx\+0x1fc0\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa 00 20 00 00 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx\+0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 80 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx-0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa c0 df ff ff 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx-0x2040\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 7f 	vptestnmq k5,zmm5,QWORD PTR \[edx\+0x3f8\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa 00 04 00 00 	vptestnmq k5,zmm5,QWORD PTR \[edx\+0x400\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 80 	vptestnmq k5,zmm5,QWORD PTR \[edx-0x400\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa f8 fb ff ff 	vptestnmq k5,zmm5,QWORD PTR \[edx-0x408\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 f2 7e 48 3a f6    	vpbroadcastmw2d zmm6,k6
+ [ 	]*[a-f0-9]+:	62 f2 fe 48 2a f6    	vpbroadcastmb2q zmm6,k6
+ [ 	]*[a-f0-9]+:	62 f2 7d 48 c4 f5    	vpconflictd zmm6,zmm5
+@@ -149,32 +123,6 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 b2 00 04 00 00 	vplzcntq zmm6,QWORD PTR \[edx\+0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 72 80 	vplzcntq zmm6,QWORD PTR \[edx-0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 b2 f8 fb ff ff 	vplzcntq zmm6,QWORD PTR \[edx-0x408\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 ec    	vptestnmd k5,zmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f2 56 4f 27 ec    	vptestnmd k5\{k7\},zmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 29    	vptestnmd k5,zmm5,ZMMWORD PTR \[ecx\]
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 ac f4 c0 1d fe ff 	vptestnmd k5,zmm5,ZMMWORD PTR \[esp\+esi\*8-0x1e240\]
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 28    	vptestnmd k5,zmm5,DWORD PTR \[eax\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 7f 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx\+0x1fc0\]
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa 00 20 00 00 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx\+0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 80 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx-0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa c0 df ff ff 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx-0x2040\]
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 7f 	vptestnmd k5,zmm5,DWORD PTR \[edx\+0x1fc\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa 00 02 00 00 	vptestnmd k5,zmm5,DWORD PTR \[edx\+0x200\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 80 	vptestnmd k5,zmm5,DWORD PTR \[edx-0x200\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa fc fd ff ff 	vptestnmd k5,zmm5,DWORD PTR \[edx-0x204\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ec    	vptestnmq k5,zmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f2 d6 4f 27 ec    	vptestnmq k5\{k7\},zmm5,zmm4
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 29    	vptestnmq k5,zmm5,ZMMWORD PTR \[ecx\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ac f4 c0 1d fe ff 	vptestnmq k5,zmm5,ZMMWORD PTR \[esp\+esi\*8-0x1e240\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 28    	vptestnmq k5,zmm5,QWORD PTR \[eax\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 7f 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx\+0x1fc0\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa 00 20 00 00 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx\+0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 80 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx-0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa c0 df ff ff 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx-0x2040\]
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 7f 	vptestnmq k5,zmm5,QWORD PTR \[edx\+0x3f8\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa 00 04 00 00 	vptestnmq k5,zmm5,QWORD PTR \[edx\+0x400\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 80 	vptestnmq k5,zmm5,QWORD PTR \[edx-0x400\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa f8 fb ff ff 	vptestnmq k5,zmm5,QWORD PTR \[edx-0x408\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 f2 7e 48 3a f6    	vpbroadcastmw2d zmm6,k6
+ [ 	]*[a-f0-9]+:	62 f2 fe 48 2a f6    	vpbroadcastmb2q zmm6,k6
+ #pass
+diff --git a/gas/testsuite/gas/i386/avx512cd.d b/gas/testsuite/gas/i386/avx512cd.d
+index 4e9e2e0..8f786e3 100644
+--- a/gas/testsuite/gas/i386/avx512cd.d
++++ b/gas/testsuite/gas/i386/avx512cd.d
+@@ -64,32 +64,6 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 b2 00 04 00 00 	vplzcntq 0x400\(%edx\)\{1to8\},%zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 72 80 	vplzcntq -0x400\(%edx\)\{1to8\},%zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 b2 f8 fb ff ff 	vplzcntq -0x408\(%edx\)\{1to8\},%zmm6
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 ec    	vptestnmd %zmm4,%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 4f 27 ec    	vptestnmd %zmm4,%zmm5,%k5\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 29    	vptestnmd \(%ecx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 ac f4 c0 1d fe ff 	vptestnmd -0x1e240\(%esp,%esi,8\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 28    	vptestnmd \(%eax\)\{1to16\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 7f 	vptestnmd 0x1fc0\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa 00 20 00 00 	vptestnmd 0x2000\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 80 	vptestnmd -0x2000\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa c0 df ff ff 	vptestnmd -0x2040\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 7f 	vptestnmd 0x1fc\(%edx\)\{1to16\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa 00 02 00 00 	vptestnmd 0x200\(%edx\)\{1to16\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 80 	vptestnmd -0x200\(%edx\)\{1to16\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa fc fd ff ff 	vptestnmd -0x204\(%edx\)\{1to16\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ec    	vptestnmq %zmm4,%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 4f 27 ec    	vptestnmq %zmm4,%zmm5,%k5\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 29    	vptestnmq \(%ecx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ac f4 c0 1d fe ff 	vptestnmq -0x1e240\(%esp,%esi,8\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 28    	vptestnmq \(%eax\)\{1to8\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 7f 	vptestnmq 0x1fc0\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa 00 20 00 00 	vptestnmq 0x2000\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 80 	vptestnmq -0x2000\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa c0 df ff ff 	vptestnmq -0x2040\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 7f 	vptestnmq 0x3f8\(%edx\)\{1to8\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa 00 04 00 00 	vptestnmq 0x400\(%edx\)\{1to8\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 80 	vptestnmq -0x400\(%edx\)\{1to8\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa f8 fb ff ff 	vptestnmq -0x408\(%edx\)\{1to8\},%zmm5,%k5
+ [ 	]*[a-f0-9]+:	62 f2 7e 48 3a f6    	vpbroadcastmw2d %k6,%zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fe 48 2a f6    	vpbroadcastmb2q %k6,%zmm6
+ [ 	]*[a-f0-9]+:	62 f2 7d 48 c4 f5    	vpconflictd %zmm5,%zmm6
+@@ -148,32 +122,6 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 b2 00 04 00 00 	vplzcntq 0x400\(%edx\)\{1to8\},%zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 72 80 	vplzcntq -0x400\(%edx\)\{1to8\},%zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fd 58 44 b2 f8 fb ff ff 	vplzcntq -0x408\(%edx\)\{1to8\},%zmm6
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 ec    	vptestnmd %zmm4,%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 4f 27 ec    	vptestnmd %zmm4,%zmm5,%k5\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 29    	vptestnmd \(%ecx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 ac f4 c0 1d fe ff 	vptestnmd -0x1e240\(%esp,%esi,8\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 28    	vptestnmd \(%eax\)\{1to16\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 7f 	vptestnmd 0x1fc0\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa 00 20 00 00 	vptestnmd 0x2000\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 80 	vptestnmd -0x2000\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa c0 df ff ff 	vptestnmd -0x2040\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 7f 	vptestnmd 0x1fc\(%edx\)\{1to16\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa 00 02 00 00 	vptestnmd 0x200\(%edx\)\{1to16\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 80 	vptestnmd -0x200\(%edx\)\{1to16\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa fc fd ff ff 	vptestnmd -0x204\(%edx\)\{1to16\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ec    	vptestnmq %zmm4,%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 4f 27 ec    	vptestnmq %zmm4,%zmm5,%k5\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 29    	vptestnmq \(%ecx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ac f4 c0 1d fe ff 	vptestnmq -0x1e240\(%esp,%esi,8\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 28    	vptestnmq \(%eax\)\{1to8\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 7f 	vptestnmq 0x1fc0\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa 00 20 00 00 	vptestnmq 0x2000\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 80 	vptestnmq -0x2000\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa c0 df ff ff 	vptestnmq -0x2040\(%edx\),%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 7f 	vptestnmq 0x3f8\(%edx\)\{1to8\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa 00 04 00 00 	vptestnmq 0x400\(%edx\)\{1to8\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 80 	vptestnmq -0x400\(%edx\)\{1to8\},%zmm5,%k5
+-[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa f8 fb ff ff 	vptestnmq -0x408\(%edx\)\{1to8\},%zmm5,%k5
+ [ 	]*[a-f0-9]+:	62 f2 7e 48 3a f6    	vpbroadcastmw2d %k6,%zmm6
+ [ 	]*[a-f0-9]+:	62 f2 fe 48 2a f6    	vpbroadcastmb2q %k6,%zmm6
+ #pass
+diff --git a/gas/testsuite/gas/i386/avx512cd.s b/gas/testsuite/gas/i386/avx512cd.s
+index 6f4869f..eace8ce 100644
+--- a/gas/testsuite/gas/i386/avx512cd.s
++++ b/gas/testsuite/gas/i386/avx512cd.s
+@@ -64,34 +64,6 @@ _start:
+ 	vplzcntq	-1024(%edx){1to8}, %zmm6	 # AVX512CD Disp8
+ 	vplzcntq	-1032(%edx){1to8}, %zmm6	 # AVX512CD
+ 
+-	vptestnmd	%zmm4, %zmm5, %k5	 # AVX512CD
+-	vptestnmd	%zmm4, %zmm5, %k5{%k7}	 # AVX512CD
+-	vptestnmd	(%ecx), %zmm5, %k5	 # AVX512CD
+-	vptestnmd	-123456(%esp,%esi,8), %zmm5, %k5	 # AVX512CD
+-	vptestnmd	(%eax){1to16}, %zmm5, %k5	 # AVX512CD
+-	vptestnmd	8128(%edx), %zmm5, %k5	 # AVX512CD Disp8
+-	vptestnmd	8192(%edx), %zmm5, %k5	 # AVX512CD
+-	vptestnmd	-8192(%edx), %zmm5, %k5	 # AVX512CD Disp8
+-	vptestnmd	-8256(%edx), %zmm5, %k5	 # AVX512CD
+-	vptestnmd	508(%edx){1to16}, %zmm5, %k5	 # AVX512CD Disp8
+-	vptestnmd	512(%edx){1to16}, %zmm5, %k5	 # AVX512CD
+-	vptestnmd	-512(%edx){1to16}, %zmm5, %k5	 # AVX512CD Disp8
+-	vptestnmd	-516(%edx){1to16}, %zmm5, %k5	 # AVX512CD
+-
+-	vptestnmq	%zmm4, %zmm5, %k5	 # AVX512CD
+-	vptestnmq	%zmm4, %zmm5, %k5{%k7}	 # AVX512CD
+-	vptestnmq	(%ecx), %zmm5, %k5	 # AVX512CD
+-	vptestnmq	-123456(%esp,%esi,8), %zmm5, %k5	 # AVX512CD
+-	vptestnmq	(%eax){1to8}, %zmm5, %k5	 # AVX512CD
+-	vptestnmq	8128(%edx), %zmm5, %k5	 # AVX512CD Disp8
+-	vptestnmq	8192(%edx), %zmm5, %k5	 # AVX512CD
+-	vptestnmq	-8192(%edx), %zmm5, %k5	 # AVX512CD Disp8
+-	vptestnmq	-8256(%edx), %zmm5, %k5	 # AVX512CD
+-	vptestnmq	1016(%edx){1to8}, %zmm5, %k5	 # AVX512CD Disp8
+-	vptestnmq	1024(%edx){1to8}, %zmm5, %k5	 # AVX512CD
+-	vptestnmq	-1024(%edx){1to8}, %zmm5, %k5	 # AVX512CD Disp8
+-	vptestnmq	-1032(%edx){1to8}, %zmm5, %k5	 # AVX512CD
+-
+ 	vpbroadcastmw2d	%k6, %zmm6	 # AVX512CD
+ 
+ 	vpbroadcastmb2q	%k6, %zmm6	 # AVX512CD
+@@ -157,34 +129,6 @@ _start:
+ 	vplzcntq	zmm6, [edx-1024]{1to8}	 # AVX512CD Disp8
+ 	vplzcntq	zmm6, [edx-1032]{1to8}	 # AVX512CD
+ 
+-	vptestnmd	k5, zmm5, zmm4	 # AVX512CD
+-	vptestnmd	k5{k7}, zmm5, zmm4	 # AVX512CD
+-	vptestnmd	k5, zmm5, ZMMWORD PTR [ecx]	 # AVX512CD
+-	vptestnmd	k5, zmm5, ZMMWORD PTR [esp+esi*8-123456]	 # AVX512CD
+-	vptestnmd	k5, zmm5, [eax]{1to16}	 # AVX512CD
+-	vptestnmd	k5, zmm5, ZMMWORD PTR [edx+8128]	 # AVX512CD Disp8
+-	vptestnmd	k5, zmm5, ZMMWORD PTR [edx+8192]	 # AVX512CD
+-	vptestnmd	k5, zmm5, ZMMWORD PTR [edx-8192]	 # AVX512CD Disp8
+-	vptestnmd	k5, zmm5, ZMMWORD PTR [edx-8256]	 # AVX512CD
+-	vptestnmd	k5, zmm5, [edx+508]{1to16}	 # AVX512CD Disp8
+-	vptestnmd	k5, zmm5, [edx+512]{1to16}	 # AVX512CD
+-	vptestnmd	k5, zmm5, [edx-512]{1to16}	 # AVX512CD Disp8
+-	vptestnmd	k5, zmm5, [edx-516]{1to16}	 # AVX512CD
+-
+-	vptestnmq	k5, zmm5, zmm4	 # AVX512CD
+-	vptestnmq	k5{k7}, zmm5, zmm4	 # AVX512CD
+-	vptestnmq	k5, zmm5, ZMMWORD PTR [ecx]	 # AVX512CD
+-	vptestnmq	k5, zmm5, ZMMWORD PTR [esp+esi*8-123456]	 # AVX512CD
+-	vptestnmq	k5, zmm5, [eax]{1to8}	 # AVX512CD
+-	vptestnmq	k5, zmm5, ZMMWORD PTR [edx+8128]	 # AVX512CD Disp8
+-	vptestnmq	k5, zmm5, ZMMWORD PTR [edx+8192]	 # AVX512CD
+-	vptestnmq	k5, zmm5, ZMMWORD PTR [edx-8192]	 # AVX512CD Disp8
+-	vptestnmq	k5, zmm5, ZMMWORD PTR [edx-8256]	 # AVX512CD
+-	vptestnmq	k5, zmm5, [edx+1016]{1to8}	 # AVX512CD Disp8
+-	vptestnmq	k5, zmm5, [edx+1024]{1to8}	 # AVX512CD
+-	vptestnmq	k5, zmm5, [edx-1024]{1to8}	 # AVX512CD Disp8
+-	vptestnmq	k5, zmm5, [edx-1032]{1to8}	 # AVX512CD
+-
+ 	vpbroadcastmw2d	zmm6, k6	 # AVX512CD
+ 
+ 	vpbroadcastmb2q	zmm6, k6	 # AVX512CD
+diff --git a/gas/testsuite/gas/i386/avx512f-intel.d b/gas/testsuite/gas/i386/avx512f-intel.d
+index 5a7236b..5bc0314 100644
+--- a/gas/testsuite/gas/i386/avx512f-intel.d
++++ b/gas/testsuite/gas/i386/avx512f-intel.d
+@@ -6623,6 +6623,32 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 b2 00 04 00 00 	vpermi2pd zmm6,zmm5,QWORD PTR \[edx\+0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 72 80 	vpermi2pd zmm6,zmm5,QWORD PTR \[edx-0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 b2 f8 fb ff ff 	vpermi2pd zmm6,zmm5,QWORD PTR \[edx-0x408\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 ec    	vptestnmd k5,zmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f2 56 4f 27 ec    	vptestnmd k5\{k7\},zmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 29    	vptestnmd k5,zmm5,ZMMWORD PTR \[ecx\]
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 ac f4 c0 1d fe ff 	vptestnmd k5,zmm5,ZMMWORD PTR \[esp\+esi\*8-0x1e240\]
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 28    	vptestnmd k5,zmm5,DWORD PTR \[eax\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 7f 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx\+0x1fc0\]
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa 00 20 00 00 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx\+0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 80 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx-0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa c0 df ff ff 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx-0x2040\]
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 7f 	vptestnmd k5,zmm5,DWORD PTR \[edx\+0x1fc\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa 00 02 00 00 	vptestnmd k5,zmm5,DWORD PTR \[edx\+0x200\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 80 	vptestnmd k5,zmm5,DWORD PTR \[edx-0x200\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa fc fd ff ff 	vptestnmd k5,zmm5,DWORD PTR \[edx-0x204\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ec    	vptestnmq k5,zmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f2 d6 4f 27 ec    	vptestnmq k5\{k7\},zmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 29    	vptestnmq k5,zmm5,ZMMWORD PTR \[ecx\]
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ac f4 c0 1d fe ff 	vptestnmq k5,zmm5,ZMMWORD PTR \[esp\+esi\*8-0x1e240\]
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 28    	vptestnmq k5,zmm5,QWORD PTR \[eax\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 7f 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx\+0x1fc0\]
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa 00 20 00 00 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx\+0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 80 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx-0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa c0 df ff ff 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx-0x2040\]
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 7f 	vptestnmq k5,zmm5,QWORD PTR \[edx\+0x3f8\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa 00 04 00 00 	vptestnmq k5,zmm5,QWORD PTR \[edx\+0x400\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 80 	vptestnmq k5,zmm5,QWORD PTR \[edx-0x400\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa f8 fb ff ff 	vptestnmq k5,zmm5,QWORD PTR \[edx-0x408\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 f1 d5 48 58 f4    	vaddpd zmm6,zmm5,zmm4
+ [ 	]*[a-f0-9]+:	62 f1 d5 4f 58 f4    	vaddpd zmm6\{k7\},zmm5,zmm4
+ [ 	]*[a-f0-9]+:	62 f1 d5 cf 58 f4    	vaddpd zmm6\{k7\}\{z\},zmm5,zmm4
+@@ -13237,4 +13263,30 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 b2 00 04 00 00 	vpermi2pd zmm6,zmm5,QWORD PTR \[edx\+0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 72 80 	vpermi2pd zmm6,zmm5,QWORD PTR \[edx-0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 b2 f8 fb ff ff 	vpermi2pd zmm6,zmm5,QWORD PTR \[edx-0x408\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 ec    	vptestnmd k5,zmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f2 56 4f 27 ec    	vptestnmd k5\{k7\},zmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 29    	vptestnmd k5,zmm5,ZMMWORD PTR \[ecx\]
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 ac f4 c0 1d fe ff 	vptestnmd k5,zmm5,ZMMWORD PTR \[esp\+esi\*8-0x1e240\]
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 28    	vptestnmd k5,zmm5,DWORD PTR \[eax\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 7f 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx\+0x1fc0\]
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa 00 20 00 00 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx\+0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 80 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx-0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa c0 df ff ff 	vptestnmd k5,zmm5,ZMMWORD PTR \[edx-0x2040\]
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 7f 	vptestnmd k5,zmm5,DWORD PTR \[edx\+0x1fc\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa 00 02 00 00 	vptestnmd k5,zmm5,DWORD PTR \[edx\+0x200\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 80 	vptestnmd k5,zmm5,DWORD PTR \[edx-0x200\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa fc fd ff ff 	vptestnmd k5,zmm5,DWORD PTR \[edx-0x204\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ec    	vptestnmq k5,zmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f2 d6 4f 27 ec    	vptestnmq k5\{k7\},zmm5,zmm4
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 29    	vptestnmq k5,zmm5,ZMMWORD PTR \[ecx\]
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ac f4 c0 1d fe ff 	vptestnmq k5,zmm5,ZMMWORD PTR \[esp\+esi\*8-0x1e240\]
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 28    	vptestnmq k5,zmm5,QWORD PTR \[eax\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 7f 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx\+0x1fc0\]
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa 00 20 00 00 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx\+0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 80 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx-0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa c0 df ff ff 	vptestnmq k5,zmm5,ZMMWORD PTR \[edx-0x2040\]
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 7f 	vptestnmq k5,zmm5,QWORD PTR \[edx\+0x3f8\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa 00 04 00 00 	vptestnmq k5,zmm5,QWORD PTR \[edx\+0x400\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 80 	vptestnmq k5,zmm5,QWORD PTR \[edx-0x400\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa f8 fb ff ff 	vptestnmq k5,zmm5,QWORD PTR \[edx-0x408\]\{1to8\}
+ #pass
+diff --git a/gas/testsuite/gas/i386/avx512f.d b/gas/testsuite/gas/i386/avx512f.d
+index ad225ee..e5533f9 100644
+--- a/gas/testsuite/gas/i386/avx512f.d
++++ b/gas/testsuite/gas/i386/avx512f.d
+@@ -6622,6 +6622,32 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 b2 00 04 00 00 	vpermi2pd 0x400\(%edx\)\{1to8\},%zmm5,%zmm6
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 72 80 	vpermi2pd -0x400\(%edx\)\{1to8\},%zmm5,%zmm6
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 b2 f8 fb ff ff 	vpermi2pd -0x408\(%edx\)\{1to8\},%zmm5,%zmm6
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 ec    	vptestnmd %zmm4,%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 4f 27 ec    	vptestnmd %zmm4,%zmm5,%k5\{%k7\}
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 29    	vptestnmd \(%ecx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 ac f4 c0 1d fe ff 	vptestnmd -0x1e240\(%esp,%esi,8\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 28    	vptestnmd \(%eax\)\{1to16\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 7f 	vptestnmd 0x1fc0\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa 00 20 00 00 	vptestnmd 0x2000\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 80 	vptestnmd -0x2000\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa c0 df ff ff 	vptestnmd -0x2040\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 7f 	vptestnmd 0x1fc\(%edx\)\{1to16\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa 00 02 00 00 	vptestnmd 0x200\(%edx\)\{1to16\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 80 	vptestnmd -0x200\(%edx\)\{1to16\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa fc fd ff ff 	vptestnmd -0x204\(%edx\)\{1to16\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ec    	vptestnmq %zmm4,%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 4f 27 ec    	vptestnmq %zmm4,%zmm5,%k5\{%k7\}
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 29    	vptestnmq \(%ecx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ac f4 c0 1d fe ff 	vptestnmq -0x1e240\(%esp,%esi,8\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 28    	vptestnmq \(%eax\)\{1to8\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 7f 	vptestnmq 0x1fc0\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa 00 20 00 00 	vptestnmq 0x2000\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 80 	vptestnmq -0x2000\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa c0 df ff ff 	vptestnmq -0x2040\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 7f 	vptestnmq 0x3f8\(%edx\)\{1to8\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa 00 04 00 00 	vptestnmq 0x400\(%edx\)\{1to8\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 80 	vptestnmq -0x400\(%edx\)\{1to8\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa f8 fb ff ff 	vptestnmq -0x408\(%edx\)\{1to8\},%zmm5,%k5
+ [ 	]*[a-f0-9]+:	62 f1 d5 48 58 f4    	vaddpd %zmm4,%zmm5,%zmm6
+ [ 	]*[a-f0-9]+:	62 f1 d5 4f 58 f4    	vaddpd %zmm4,%zmm5,%zmm6\{%k7\}
+ [ 	]*[a-f0-9]+:	62 f1 d5 cf 58 f4    	vaddpd %zmm4,%zmm5,%zmm6\{%k7\}\{z\}
+@@ -13236,4 +13262,30 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 b2 00 04 00 00 	vpermi2pd 0x400\(%edx\)\{1to8\},%zmm5,%zmm6
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 72 80 	vpermi2pd -0x400\(%edx\)\{1to8\},%zmm5,%zmm6
+ [ 	]*[a-f0-9]+:	62 f2 d5 58 77 b2 f8 fb ff ff 	vpermi2pd -0x408\(%edx\)\{1to8\},%zmm5,%zmm6
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 ec    	vptestnmd %zmm4,%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 4f 27 ec    	vptestnmd %zmm4,%zmm5,%k5\{%k7\}
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 29    	vptestnmd \(%ecx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 ac f4 c0 1d fe ff 	vptestnmd -0x1e240\(%esp,%esi,8\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 28    	vptestnmd \(%eax\)\{1to16\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 7f 	vptestnmd 0x1fc0\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa 00 20 00 00 	vptestnmd 0x2000\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 6a 80 	vptestnmd -0x2000\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 48 27 aa c0 df ff ff 	vptestnmd -0x2040\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 7f 	vptestnmd 0x1fc\(%edx\)\{1to16\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa 00 02 00 00 	vptestnmd 0x200\(%edx\)\{1to16\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 6a 80 	vptestnmd -0x200\(%edx\)\{1to16\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 56 58 27 aa fc fd ff ff 	vptestnmd -0x204\(%edx\)\{1to16\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ec    	vptestnmq %zmm4,%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 4f 27 ec    	vptestnmq %zmm4,%zmm5,%k5\{%k7\}
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 29    	vptestnmq \(%ecx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 ac f4 c0 1d fe ff 	vptestnmq -0x1e240\(%esp,%esi,8\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 28    	vptestnmq \(%eax\)\{1to8\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 7f 	vptestnmq 0x1fc0\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa 00 20 00 00 	vptestnmq 0x2000\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 6a 80 	vptestnmq -0x2000\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 48 27 aa c0 df ff ff 	vptestnmq -0x2040\(%edx\),%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 7f 	vptestnmq 0x3f8\(%edx\)\{1to8\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa 00 04 00 00 	vptestnmq 0x400\(%edx\)\{1to8\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 6a 80 	vptestnmq -0x400\(%edx\)\{1to8\},%zmm5,%k5
++[ 	]*[a-f0-9]+:	62 f2 d6 58 27 aa f8 fb ff ff 	vptestnmq -0x408\(%edx\)\{1to8\},%zmm5,%k5
+ #pass
+diff --git a/gas/testsuite/gas/i386/avx512f.s b/gas/testsuite/gas/i386/avx512f.s
+index bd833c2..ae11922 100644
+--- a/gas/testsuite/gas/i386/avx512f.s
++++ b/gas/testsuite/gas/i386/avx512f.s
+@@ -7234,6 +7234,34 @@ _start:
+ 	vpermi2pd	-1024(%edx){1to8}, %zmm5, %zmm6	 # AVX512F Disp8
+ 	vpermi2pd	-1032(%edx){1to8}, %zmm5, %zmm6	 # AVX512F
+ 
++	vptestnmd	%zmm4, %zmm5, %k5	 # AVX512F
++	vptestnmd	%zmm4, %zmm5, %k5{%k7}	 # AVX512F
++	vptestnmd	(%ecx), %zmm5, %k5	 # AVX512F
++	vptestnmd	-123456(%esp,%esi,8), %zmm5, %k5	 # AVX512F
++	vptestnmd	(%eax){1to16}, %zmm5, %k5	 # AVX512F
++	vptestnmd	8128(%edx), %zmm5, %k5	 # AVX512F Disp8
++	vptestnmd	8192(%edx), %zmm5, %k5	 # AVX512F
++	vptestnmd	-8192(%edx), %zmm5, %k5	 # AVX512F Disp8
++	vptestnmd	-8256(%edx), %zmm5, %k5	 # AVX512F
++	vptestnmd	508(%edx){1to16}, %zmm5, %k5	 # AVX512F Disp8
++	vptestnmd	512(%edx){1to16}, %zmm5, %k5	 # AVX512F
++	vptestnmd	-512(%edx){1to16}, %zmm5, %k5	 # AVX512F Disp8
++	vptestnmd	-516(%edx){1to16}, %zmm5, %k5	 # AVX512F
++
++	vptestnmq	%zmm4, %zmm5, %k5	 # AVX512F
++	vptestnmq	%zmm4, %zmm5, %k5{%k7}	 # AVX512F
++	vptestnmq	(%ecx), %zmm5, %k5	 # AVX512F
++	vptestnmq	-123456(%esp,%esi,8), %zmm5, %k5	 # AVX512F
++	vptestnmq	(%eax){1to8}, %zmm5, %k5	 # AVX512F
++	vptestnmq	8128(%edx), %zmm5, %k5	 # AVX512F Disp8
++	vptestnmq	8192(%edx), %zmm5, %k5	 # AVX512F
++	vptestnmq	-8192(%edx), %zmm5, %k5	 # AVX512F Disp8
++	vptestnmq	-8256(%edx), %zmm5, %k5	 # AVX512F
++	vptestnmq	1016(%edx){1to8}, %zmm5, %k5	 # AVX512F Disp8
++	vptestnmq	1024(%edx){1to8}, %zmm5, %k5	 # AVX512F
++	vptestnmq	-1024(%edx){1to8}, %zmm5, %k5	 # AVX512F Disp8
++	vptestnmq	-1032(%edx){1to8}, %zmm5, %k5	 # AVX512F
++
+ 	.intel_syntax noprefix
+ 	vaddpd	zmm6, zmm5, zmm4	 # AVX512F
+ 	vaddpd	zmm6{k7}, zmm5, zmm4	 # AVX512F
+@@ -14465,3 +14493,30 @@ _start:
+ 	vpermi2pd	zmm6, zmm5, [edx-1024]{1to8}	 # AVX512F Disp8
+ 	vpermi2pd	zmm6, zmm5, [edx-1032]{1to8}	 # AVX512F
+ 
++	vptestnmd	k5, zmm5, zmm4	 # AVX512F
++	vptestnmd	k5{k7}, zmm5, zmm4	 # AVX512F
++	vptestnmd	k5, zmm5, ZMMWORD PTR [ecx]	 # AVX512F
++	vptestnmd	k5, zmm5, ZMMWORD PTR [esp+esi*8-123456]	 # AVX512F
++	vptestnmd	k5, zmm5, [eax]{1to16}	 # AVX512F
++	vptestnmd	k5, zmm5, ZMMWORD PTR [edx+8128]	 # AVX512F Disp8
++	vptestnmd	k5, zmm5, ZMMWORD PTR [edx+8192]	 # AVX512F
++	vptestnmd	k5, zmm5, ZMMWORD PTR [edx-8192]	 # AVX512F Disp8
++	vptestnmd	k5, zmm5, ZMMWORD PTR [edx-8256]	 # AVX512F
++	vptestnmd	k5, zmm5, [edx+508]{1to16}	 # AVX512F Disp8
++	vptestnmd	k5, zmm5, [edx+512]{1to16}	 # AVX512F
++	vptestnmd	k5, zmm5, [edx-512]{1to16}	 # AVX512F Disp8
++	vptestnmd	k5, zmm5, [edx-516]{1to16}	 # AVX512F
++
++	vptestnmq	k5, zmm5, zmm4	 # AVX512F
++	vptestnmq	k5{k7}, zmm5, zmm4	 # AVX512F
++	vptestnmq	k5, zmm5, ZMMWORD PTR [ecx]	 # AVX512F
++	vptestnmq	k5, zmm5, ZMMWORD PTR [esp+esi*8-123456]	 # AVX512F
++	vptestnmq	k5, zmm5, [eax]{1to8}	 # AVX512F
++	vptestnmq	k5, zmm5, ZMMWORD PTR [edx+8128]	 # AVX512F Disp8
++	vptestnmq	k5, zmm5, ZMMWORD PTR [edx+8192]	 # AVX512F
++	vptestnmq	k5, zmm5, ZMMWORD PTR [edx-8192]	 # AVX512F Disp8
++	vptestnmq	k5, zmm5, ZMMWORD PTR [edx-8256]	 # AVX512F
++	vptestnmq	k5, zmm5, [edx+1016]{1to8}	 # AVX512F Disp8
++	vptestnmq	k5, zmm5, [edx+1024]{1to8}	 # AVX512F
++	vptestnmq	k5, zmm5, [edx-1024]{1to8}	 # AVX512F Disp8
++	vptestnmq	k5, zmm5, [edx-1032]{1to8}	 # AVX512F
+diff --git a/gas/testsuite/gas/i386/x86-64-avx512cd-intel.d b/gas/testsuite/gas/i386/x86-64-avx512cd-intel.d
+index a8f7798..a79e10e 100644
+--- a/gas/testsuite/gas/i386/x86-64-avx512cd-intel.d
++++ b/gas/testsuite/gas/i386/x86-64-avx512cd-intel.d
+@@ -65,32 +65,6 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 b2 00 04 00 00 	vplzcntq zmm30,QWORD PTR \[rdx\+0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 72 80 	vplzcntq zmm30,QWORD PTR \[rdx-0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 b2 f8 fb ff ff 	vplzcntq zmm30,QWORD PTR \[rdx-0x408\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 92 16 40 27 ec    	vptestnmd k5,zmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 92 16 47 27 ec    	vptestnmd k5\{k7\},zmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 29    	vptestnmd k5,zmm29,ZMMWORD PTR \[rcx\]
+-[ 	]*[a-f0-9]+:	62 b2 16 40 27 ac f0 23 01 00 00 	vptestnmd k5,zmm29,ZMMWORD PTR \[rax\+r14\*8\+0x123\]
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 29    	vptestnmd k5,zmm29,DWORD PTR \[rcx\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 7f 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx\+0x1fc0\]
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa 00 20 00 00 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx\+0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 80 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx-0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa c0 df ff ff 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx-0x2040\]
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 7f 	vptestnmd k5,zmm29,DWORD PTR \[rdx\+0x1fc\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa 00 02 00 00 	vptestnmd k5,zmm29,DWORD PTR \[rdx\+0x200\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 80 	vptestnmd k5,zmm29,DWORD PTR \[rdx-0x200\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa fc fd ff ff 	vptestnmd k5,zmm29,DWORD PTR \[rdx-0x204\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 92 96 40 27 ec    	vptestnmq k5,zmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 92 96 47 27 ec    	vptestnmq k5\{k7\},zmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 29    	vptestnmq k5,zmm29,ZMMWORD PTR \[rcx\]
+-[ 	]*[a-f0-9]+:	62 b2 96 40 27 ac f0 23 01 00 00 	vptestnmq k5,zmm29,ZMMWORD PTR \[rax\+r14\*8\+0x123\]
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 29    	vptestnmq k5,zmm29,QWORD PTR \[rcx\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 7f 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx\+0x1fc0\]
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa 00 20 00 00 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx\+0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 80 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx-0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa c0 df ff ff 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx-0x2040\]
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 7f 	vptestnmq k5,zmm29,QWORD PTR \[rdx\+0x3f8\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa 00 04 00 00 	vptestnmq k5,zmm29,QWORD PTR \[rdx\+0x400\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 80 	vptestnmq k5,zmm29,QWORD PTR \[rdx-0x400\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa f8 fb ff ff 	vptestnmq k5,zmm29,QWORD PTR \[rdx-0x408\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 62 7e 48 3a f6    	vpbroadcastmw2d zmm30,k6
+ [ 	]*[a-f0-9]+:	62 62 fe 48 2a f6    	vpbroadcastmb2q zmm30,k6
+ [ 	]*[a-f0-9]+:	62 02 7d 48 c4 f5    	vpconflictd zmm30,zmm29
+@@ -149,32 +123,6 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 b2 00 04 00 00 	vplzcntq zmm30,QWORD PTR \[rdx\+0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 72 80 	vplzcntq zmm30,QWORD PTR \[rdx-0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 b2 f8 fb ff ff 	vplzcntq zmm30,QWORD PTR \[rdx-0x408\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 92 16 40 27 ec    	vptestnmd k5,zmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 92 16 47 27 ec    	vptestnmd k5\{k7\},zmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 29    	vptestnmd k5,zmm29,ZMMWORD PTR \[rcx\]
+-[ 	]*[a-f0-9]+:	62 b2 16 40 27 ac f0 34 12 00 00 	vptestnmd k5,zmm29,ZMMWORD PTR \[rax\+r14\*8\+0x1234\]
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 29    	vptestnmd k5,zmm29,DWORD PTR \[rcx\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 7f 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx\+0x1fc0\]
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa 00 20 00 00 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx\+0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 80 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx-0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa c0 df ff ff 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx-0x2040\]
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 7f 	vptestnmd k5,zmm29,DWORD PTR \[rdx\+0x1fc\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa 00 02 00 00 	vptestnmd k5,zmm29,DWORD PTR \[rdx\+0x200\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 80 	vptestnmd k5,zmm29,DWORD PTR \[rdx-0x200\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa fc fd ff ff 	vptestnmd k5,zmm29,DWORD PTR \[rdx-0x204\]\{1to16\}
+-[ 	]*[a-f0-9]+:	62 92 96 40 27 ec    	vptestnmq k5,zmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 92 96 47 27 ec    	vptestnmq k5\{k7\},zmm29,zmm28
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 29    	vptestnmq k5,zmm29,ZMMWORD PTR \[rcx\]
+-[ 	]*[a-f0-9]+:	62 b2 96 40 27 ac f0 34 12 00 00 	vptestnmq k5,zmm29,ZMMWORD PTR \[rax\+r14\*8\+0x1234\]
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 29    	vptestnmq k5,zmm29,QWORD PTR \[rcx\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 7f 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx\+0x1fc0\]
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa 00 20 00 00 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx\+0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 80 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx-0x2000\]
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa c0 df ff ff 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx-0x2040\]
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 7f 	vptestnmq k5,zmm29,QWORD PTR \[rdx\+0x3f8\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa 00 04 00 00 	vptestnmq k5,zmm29,QWORD PTR \[rdx\+0x400\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 80 	vptestnmq k5,zmm29,QWORD PTR \[rdx-0x400\]\{1to8\}
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa f8 fb ff ff 	vptestnmq k5,zmm29,QWORD PTR \[rdx-0x408\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 62 7e 48 3a f6    	vpbroadcastmw2d zmm30,k6
+ [ 	]*[a-f0-9]+:	62 62 fe 48 2a f6    	vpbroadcastmb2q zmm30,k6
+ #pass
+diff --git a/gas/testsuite/gas/i386/x86-64-avx512cd.d b/gas/testsuite/gas/i386/x86-64-avx512cd.d
+index ff9de77..8a2e631 100644
+--- a/gas/testsuite/gas/i386/x86-64-avx512cd.d
++++ b/gas/testsuite/gas/i386/x86-64-avx512cd.d
+@@ -64,32 +64,6 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 b2 00 04 00 00 	vplzcntq 0x400\(%rdx\)\{1to8\},%zmm30
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 72 80 	vplzcntq -0x400\(%rdx\)\{1to8\},%zmm30
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 b2 f8 fb ff ff 	vplzcntq -0x408\(%rdx\)\{1to8\},%zmm30
+-[ 	]*[a-f0-9]+:	62 92 16 40 27 ec    	vptestnmd %zmm28,%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 92 16 47 27 ec    	vptestnmd %zmm28,%zmm29,%k5\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 29    	vptestnmd \(%rcx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 b2 16 40 27 ac f0 23 01 00 00 	vptestnmd 0x123\(%rax,%r14,8\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 29    	vptestnmd \(%rcx\)\{1to16\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 7f 	vptestnmd 0x1fc0\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa 00 20 00 00 	vptestnmd 0x2000\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 80 	vptestnmd -0x2000\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa c0 df ff ff 	vptestnmd -0x2040\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 7f 	vptestnmd 0x1fc\(%rdx\)\{1to16\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa 00 02 00 00 	vptestnmd 0x200\(%rdx\)\{1to16\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 80 	vptestnmd -0x200\(%rdx\)\{1to16\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa fc fd ff ff 	vptestnmd -0x204\(%rdx\)\{1to16\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 92 96 40 27 ec    	vptestnmq %zmm28,%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 92 96 47 27 ec    	vptestnmq %zmm28,%zmm29,%k5\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 29    	vptestnmq \(%rcx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 b2 96 40 27 ac f0 23 01 00 00 	vptestnmq 0x123\(%rax,%r14,8\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 29    	vptestnmq \(%rcx\)\{1to8\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 7f 	vptestnmq 0x1fc0\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa 00 20 00 00 	vptestnmq 0x2000\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 80 	vptestnmq -0x2000\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa c0 df ff ff 	vptestnmq -0x2040\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 7f 	vptestnmq 0x3f8\(%rdx\)\{1to8\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa 00 04 00 00 	vptestnmq 0x400\(%rdx\)\{1to8\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 80 	vptestnmq -0x400\(%rdx\)\{1to8\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa f8 fb ff ff 	vptestnmq -0x408\(%rdx\)\{1to8\},%zmm29,%k5
+ [ 	]*[a-f0-9]+:	62 62 7e 48 3a f6    	vpbroadcastmw2d %k6,%zmm30
+ [ 	]*[a-f0-9]+:	62 62 fe 48 2a f6    	vpbroadcastmb2q %k6,%zmm30
+ [ 	]*[a-f0-9]+:	62 02 7d 48 c4 f5    	vpconflictd %zmm29,%zmm30
+@@ -148,32 +122,6 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 b2 00 04 00 00 	vplzcntq 0x400\(%rdx\)\{1to8\},%zmm30
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 72 80 	vplzcntq -0x400\(%rdx\)\{1to8\},%zmm30
+ [ 	]*[a-f0-9]+:	62 62 fd 58 44 b2 f8 fb ff ff 	vplzcntq -0x408\(%rdx\)\{1to8\},%zmm30
+-[ 	]*[a-f0-9]+:	62 92 16 40 27 ec    	vptestnmd %zmm28,%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 92 16 47 27 ec    	vptestnmd %zmm28,%zmm29,%k5\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 29    	vptestnmd \(%rcx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 b2 16 40 27 ac f0 34 12 00 00 	vptestnmd 0x1234\(%rax,%r14,8\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 29    	vptestnmd \(%rcx\)\{1to16\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 7f 	vptestnmd 0x1fc0\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa 00 20 00 00 	vptestnmd 0x2000\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 80 	vptestnmd -0x2000\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa c0 df ff ff 	vptestnmd -0x2040\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 7f 	vptestnmd 0x1fc\(%rdx\)\{1to16\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa 00 02 00 00 	vptestnmd 0x200\(%rdx\)\{1to16\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 80 	vptestnmd -0x200\(%rdx\)\{1to16\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa fc fd ff ff 	vptestnmd -0x204\(%rdx\)\{1to16\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 92 96 40 27 ec    	vptestnmq %zmm28,%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 92 96 47 27 ec    	vptestnmq %zmm28,%zmm29,%k5\{%k7\}
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 29    	vptestnmq \(%rcx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 b2 96 40 27 ac f0 34 12 00 00 	vptestnmq 0x1234\(%rax,%r14,8\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 29    	vptestnmq \(%rcx\)\{1to8\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 7f 	vptestnmq 0x1fc0\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa 00 20 00 00 	vptestnmq 0x2000\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 80 	vptestnmq -0x2000\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa c0 df ff ff 	vptestnmq -0x2040\(%rdx\),%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 7f 	vptestnmq 0x3f8\(%rdx\)\{1to8\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa 00 04 00 00 	vptestnmq 0x400\(%rdx\)\{1to8\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 80 	vptestnmq -0x400\(%rdx\)\{1to8\},%zmm29,%k5
+-[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa f8 fb ff ff 	vptestnmq -0x408\(%rdx\)\{1to8\},%zmm29,%k5
+ [ 	]*[a-f0-9]+:	62 62 7e 48 3a f6    	vpbroadcastmw2d %k6,%zmm30
+ [ 	]*[a-f0-9]+:	62 62 fe 48 2a f6    	vpbroadcastmb2q %k6,%zmm30
+ #pass
+diff --git a/gas/testsuite/gas/i386/x86-64-avx512cd.s b/gas/testsuite/gas/i386/x86-64-avx512cd.s
+index 1d6e015..832874e 100644
+--- a/gas/testsuite/gas/i386/x86-64-avx512cd.s
++++ b/gas/testsuite/gas/i386/x86-64-avx512cd.s
+@@ -64,34 +64,6 @@ _start:
+ 	vplzcntq	-1024(%rdx){1to8}, %zmm30	 # AVX512CD Disp8
+ 	vplzcntq	-1032(%rdx){1to8}, %zmm30	 # AVX512CD
+ 
+-	vptestnmd	%zmm28, %zmm29, %k5	 # AVX512CD
+-	vptestnmd	%zmm28, %zmm29, %k5{%k7}	 # AVX512CD
+-	vptestnmd	(%rcx), %zmm29, %k5	 # AVX512CD
+-	vptestnmd	0x123(%rax,%r14,8), %zmm29, %k5	 # AVX512CD
+-	vptestnmd	(%rcx){1to16}, %zmm29, %k5	 # AVX512CD
+-	vptestnmd	8128(%rdx), %zmm29, %k5	 # AVX512CD Disp8
+-	vptestnmd	8192(%rdx), %zmm29, %k5	 # AVX512CD
+-	vptestnmd	-8192(%rdx), %zmm29, %k5	 # AVX512CD Disp8
+-	vptestnmd	-8256(%rdx), %zmm29, %k5	 # AVX512CD
+-	vptestnmd	508(%rdx){1to16}, %zmm29, %k5	 # AVX512CD Disp8
+-	vptestnmd	512(%rdx){1to16}, %zmm29, %k5	 # AVX512CD
+-	vptestnmd	-512(%rdx){1to16}, %zmm29, %k5	 # AVX512CD Disp8
+-	vptestnmd	-516(%rdx){1to16}, %zmm29, %k5	 # AVX512CD
+-
+-	vptestnmq	%zmm28, %zmm29, %k5	 # AVX512CD
+-	vptestnmq	%zmm28, %zmm29, %k5{%k7}	 # AVX512CD
+-	vptestnmq	(%rcx), %zmm29, %k5	 # AVX512CD
+-	vptestnmq	0x123(%rax,%r14,8), %zmm29, %k5	 # AVX512CD
+-	vptestnmq	(%rcx){1to8}, %zmm29, %k5	 # AVX512CD
+-	vptestnmq	8128(%rdx), %zmm29, %k5	 # AVX512CD Disp8
+-	vptestnmq	8192(%rdx), %zmm29, %k5	 # AVX512CD
+-	vptestnmq	-8192(%rdx), %zmm29, %k5	 # AVX512CD Disp8
+-	vptestnmq	-8256(%rdx), %zmm29, %k5	 # AVX512CD
+-	vptestnmq	1016(%rdx){1to8}, %zmm29, %k5	 # AVX512CD Disp8
+-	vptestnmq	1024(%rdx){1to8}, %zmm29, %k5	 # AVX512CD
+-	vptestnmq	-1024(%rdx){1to8}, %zmm29, %k5	 # AVX512CD Disp8
+-	vptestnmq	-1032(%rdx){1to8}, %zmm29, %k5	 # AVX512CD
+-
+ 	vpbroadcastmw2d	%k6, %zmm30	 # AVX512CD
+ 
+ 	vpbroadcastmb2q	%k6, %zmm30	 # AVX512CD
+@@ -157,34 +129,6 @@ _start:
+ 	vplzcntq	zmm30, [rdx-1024]{1to8}	 # AVX512CD Disp8
+ 	vplzcntq	zmm30, [rdx-1032]{1to8}	 # AVX512CD
+ 
+-	vptestnmd	k5, zmm29, zmm28	 # AVX512CD
+-	vptestnmd	k5{k7}, zmm29, zmm28	 # AVX512CD
+-	vptestnmd	k5, zmm29, ZMMWORD PTR [rcx]	 # AVX512CD
+-	vptestnmd	k5, zmm29, ZMMWORD PTR [rax+r14*8+0x1234]	 # AVX512CD
+-	vptestnmd	k5, zmm29, [rcx]{1to16}	 # AVX512CD
+-	vptestnmd	k5, zmm29, ZMMWORD PTR [rdx+8128]	 # AVX512CD Disp8
+-	vptestnmd	k5, zmm29, ZMMWORD PTR [rdx+8192]	 # AVX512CD
+-	vptestnmd	k5, zmm29, ZMMWORD PTR [rdx-8192]	 # AVX512CD Disp8
+-	vptestnmd	k5, zmm29, ZMMWORD PTR [rdx-8256]	 # AVX512CD
+-	vptestnmd	k5, zmm29, [rdx+508]{1to16}	 # AVX512CD Disp8
+-	vptestnmd	k5, zmm29, [rdx+512]{1to16}	 # AVX512CD
+-	vptestnmd	k5, zmm29, [rdx-512]{1to16}	 # AVX512CD Disp8
+-	vptestnmd	k5, zmm29, [rdx-516]{1to16}	 # AVX512CD
+-
+-	vptestnmq	k5, zmm29, zmm28	 # AVX512CD
+-	vptestnmq	k5{k7}, zmm29, zmm28	 # AVX512CD
+-	vptestnmq	k5, zmm29, ZMMWORD PTR [rcx]	 # AVX512CD
+-	vptestnmq	k5, zmm29, ZMMWORD PTR [rax+r14*8+0x1234]	 # AVX512CD
+-	vptestnmq	k5, zmm29, [rcx]{1to8}	 # AVX512CD
+-	vptestnmq	k5, zmm29, ZMMWORD PTR [rdx+8128]	 # AVX512CD Disp8
+-	vptestnmq	k5, zmm29, ZMMWORD PTR [rdx+8192]	 # AVX512CD
+-	vptestnmq	k5, zmm29, ZMMWORD PTR [rdx-8192]	 # AVX512CD Disp8
+-	vptestnmq	k5, zmm29, ZMMWORD PTR [rdx-8256]	 # AVX512CD
+-	vptestnmq	k5, zmm29, [rdx+1016]{1to8}	 # AVX512CD Disp8
+-	vptestnmq	k5, zmm29, [rdx+1024]{1to8}	 # AVX512CD
+-	vptestnmq	k5, zmm29, [rdx-1024]{1to8}	 # AVX512CD Disp8
+-	vptestnmq	k5, zmm29, [rdx-1032]{1to8}	 # AVX512CD
+-
+ 	vpbroadcastmw2d	zmm30, k6	 # AVX512CD
+ 
+ 	vpbroadcastmb2q	zmm30, k6	 # AVX512CD
+diff --git a/gas/testsuite/gas/i386/x86-64-avx512f-intel.d b/gas/testsuite/gas/i386/x86-64-avx512f-intel.d
+index ff9b409..7f2cabe 100644
+--- a/gas/testsuite/gas/i386/x86-64-avx512f-intel.d
++++ b/gas/testsuite/gas/i386/x86-64-avx512f-intel.d
+@@ -7003,6 +7003,32 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 b2 00 04 00 00 	vpermi2pd zmm30,zmm29,QWORD PTR \[rdx\+0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 72 80 	vpermi2pd zmm30,zmm29,QWORD PTR \[rdx-0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 b2 f8 fb ff ff 	vpermi2pd zmm30,zmm29,QWORD PTR \[rdx-0x408\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 92 16 40 27 ec    	vptestnmd k5,zmm29,zmm28
++[ 	]*[a-f0-9]+:	62 92 16 47 27 ec    	vptestnmd k5\{k7\},zmm29,zmm28
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 29    	vptestnmd k5,zmm29,ZMMWORD PTR \[rcx\]
++[ 	]*[a-f0-9]+:	62 b2 16 40 27 ac f0 23 01 00 00 	vptestnmd k5,zmm29,ZMMWORD PTR \[rax\+r14\*8\+0x123\]
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 29    	vptestnmd k5,zmm29,DWORD PTR \[rcx\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 7f 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx\+0x1fc0\]
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa 00 20 00 00 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx\+0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 80 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx-0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa c0 df ff ff 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx-0x2040\]
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 7f 	vptestnmd k5,zmm29,DWORD PTR \[rdx\+0x1fc\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa 00 02 00 00 	vptestnmd k5,zmm29,DWORD PTR \[rdx\+0x200\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 80 	vptestnmd k5,zmm29,DWORD PTR \[rdx-0x200\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa fc fd ff ff 	vptestnmd k5,zmm29,DWORD PTR \[rdx-0x204\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 92 96 40 27 ec    	vptestnmq k5,zmm29,zmm28
++[ 	]*[a-f0-9]+:	62 92 96 47 27 ec    	vptestnmq k5\{k7\},zmm29,zmm28
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 29    	vptestnmq k5,zmm29,ZMMWORD PTR \[rcx\]
++[ 	]*[a-f0-9]+:	62 b2 96 40 27 ac f0 23 01 00 00 	vptestnmq k5,zmm29,ZMMWORD PTR \[rax\+r14\*8\+0x123\]
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 29    	vptestnmq k5,zmm29,QWORD PTR \[rcx\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 7f 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx\+0x1fc0\]
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa 00 20 00 00 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx\+0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 80 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx-0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa c0 df ff ff 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx-0x2040\]
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 7f 	vptestnmq k5,zmm29,QWORD PTR \[rdx\+0x3f8\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa 00 04 00 00 	vptestnmq k5,zmm29,QWORD PTR \[rdx\+0x400\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 80 	vptestnmq k5,zmm29,QWORD PTR \[rdx-0x400\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa f8 fb ff ff 	vptestnmq k5,zmm29,QWORD PTR \[rdx-0x408\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 01 95 40 58 f4    	vaddpd zmm30,zmm29,zmm28
+ [ 	]*[a-f0-9]+:	62 01 95 47 58 f4    	vaddpd zmm30\{k7\},zmm29,zmm28
+ [ 	]*[a-f0-9]+:	62 01 95 c7 58 f4    	vaddpd zmm30\{k7\}\{z\},zmm29,zmm28
+@@ -13997,4 +14023,30 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 b2 00 04 00 00 	vpermi2pd zmm30,zmm29,QWORD PTR \[rdx\+0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 72 80 	vpermi2pd zmm30,zmm29,QWORD PTR \[rdx-0x400\]\{1to8\}
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 b2 f8 fb ff ff 	vpermi2pd zmm30,zmm29,QWORD PTR \[rdx-0x408\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 92 16 40 27 ec    	vptestnmd k5,zmm29,zmm28
++[ 	]*[a-f0-9]+:	62 92 16 47 27 ec    	vptestnmd k5\{k7\},zmm29,zmm28
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 29    	vptestnmd k5,zmm29,ZMMWORD PTR \[rcx\]
++[ 	]*[a-f0-9]+:	62 b2 16 40 27 ac f0 34 12 00 00 	vptestnmd k5,zmm29,ZMMWORD PTR \[rax\+r14\*8\+0x1234\]
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 29    	vptestnmd k5,zmm29,DWORD PTR \[rcx\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 7f 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx\+0x1fc0\]
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa 00 20 00 00 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx\+0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 80 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx-0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa c0 df ff ff 	vptestnmd k5,zmm29,ZMMWORD PTR \[rdx-0x2040\]
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 7f 	vptestnmd k5,zmm29,DWORD PTR \[rdx\+0x1fc\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa 00 02 00 00 	vptestnmd k5,zmm29,DWORD PTR \[rdx\+0x200\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 80 	vptestnmd k5,zmm29,DWORD PTR \[rdx-0x200\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa fc fd ff ff 	vptestnmd k5,zmm29,DWORD PTR \[rdx-0x204\]\{1to16\}
++[ 	]*[a-f0-9]+:	62 92 96 40 27 ec    	vptestnmq k5,zmm29,zmm28
++[ 	]*[a-f0-9]+:	62 92 96 47 27 ec    	vptestnmq k5\{k7\},zmm29,zmm28
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 29    	vptestnmq k5,zmm29,ZMMWORD PTR \[rcx\]
++[ 	]*[a-f0-9]+:	62 b2 96 40 27 ac f0 34 12 00 00 	vptestnmq k5,zmm29,ZMMWORD PTR \[rax\+r14\*8\+0x1234\]
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 29    	vptestnmq k5,zmm29,QWORD PTR \[rcx\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 7f 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx\+0x1fc0\]
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa 00 20 00 00 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx\+0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 80 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx-0x2000\]
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa c0 df ff ff 	vptestnmq k5,zmm29,ZMMWORD PTR \[rdx-0x2040\]
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 7f 	vptestnmq k5,zmm29,QWORD PTR \[rdx\+0x3f8\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa 00 04 00 00 	vptestnmq k5,zmm29,QWORD PTR \[rdx\+0x400\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 80 	vptestnmq k5,zmm29,QWORD PTR \[rdx-0x400\]\{1to8\}
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa f8 fb ff ff 	vptestnmq k5,zmm29,QWORD PTR \[rdx-0x408\]\{1to8\}
+ #pass
+diff --git a/gas/testsuite/gas/i386/x86-64-avx512f.d b/gas/testsuite/gas/i386/x86-64-avx512f.d
+index a25ff9b..d672fa5 100644
+--- a/gas/testsuite/gas/i386/x86-64-avx512f.d
++++ b/gas/testsuite/gas/i386/x86-64-avx512f.d
+@@ -7002,6 +7002,32 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 b2 00 04 00 00 	vpermi2pd 0x400\(%rdx\)\{1to8\},%zmm29,%zmm30
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 72 80 	vpermi2pd -0x400\(%rdx\)\{1to8\},%zmm29,%zmm30
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 b2 f8 fb ff ff 	vpermi2pd -0x408\(%rdx\)\{1to8\},%zmm29,%zmm30
++[ 	]*[a-f0-9]+:	62 92 16 40 27 ec    	vptestnmd %zmm28,%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 92 16 47 27 ec    	vptestnmd %zmm28,%zmm29,%k5\{%k7\}
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 29    	vptestnmd \(%rcx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 b2 16 40 27 ac f0 23 01 00 00 	vptestnmd 0x123\(%rax,%r14,8\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 29    	vptestnmd \(%rcx\)\{1to16\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 7f 	vptestnmd 0x1fc0\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa 00 20 00 00 	vptestnmd 0x2000\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 80 	vptestnmd -0x2000\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa c0 df ff ff 	vptestnmd -0x2040\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 7f 	vptestnmd 0x1fc\(%rdx\)\{1to16\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa 00 02 00 00 	vptestnmd 0x200\(%rdx\)\{1to16\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 80 	vptestnmd -0x200\(%rdx\)\{1to16\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa fc fd ff ff 	vptestnmd -0x204\(%rdx\)\{1to16\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 92 96 40 27 ec    	vptestnmq %zmm28,%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 92 96 47 27 ec    	vptestnmq %zmm28,%zmm29,%k5\{%k7\}
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 29    	vptestnmq \(%rcx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 b2 96 40 27 ac f0 23 01 00 00 	vptestnmq 0x123\(%rax,%r14,8\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 29    	vptestnmq \(%rcx\)\{1to8\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 7f 	vptestnmq 0x1fc0\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa 00 20 00 00 	vptestnmq 0x2000\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 80 	vptestnmq -0x2000\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa c0 df ff ff 	vptestnmq -0x2040\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 7f 	vptestnmq 0x3f8\(%rdx\)\{1to8\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa 00 04 00 00 	vptestnmq 0x400\(%rdx\)\{1to8\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 80 	vptestnmq -0x400\(%rdx\)\{1to8\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa f8 fb ff ff 	vptestnmq -0x408\(%rdx\)\{1to8\},%zmm29,%k5
+ [ 	]*[a-f0-9]+:	62 01 95 40 58 f4    	vaddpd %zmm28,%zmm29,%zmm30
+ [ 	]*[a-f0-9]+:	62 01 95 47 58 f4    	vaddpd %zmm28,%zmm29,%zmm30\{%k7\}
+ [ 	]*[a-f0-9]+:	62 01 95 c7 58 f4    	vaddpd %zmm28,%zmm29,%zmm30\{%k7\}\{z\}
+@@ -13996,4 +14022,30 @@ Disassembly of section .text:
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 b2 00 04 00 00 	vpermi2pd 0x400\(%rdx\)\{1to8\},%zmm29,%zmm30
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 72 80 	vpermi2pd -0x400\(%rdx\)\{1to8\},%zmm29,%zmm30
+ [ 	]*[a-f0-9]+:	62 62 95 50 77 b2 f8 fb ff ff 	vpermi2pd -0x408\(%rdx\)\{1to8\},%zmm29,%zmm30
++[ 	]*[a-f0-9]+:	62 92 16 40 27 ec    	vptestnmd %zmm28,%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 92 16 47 27 ec    	vptestnmd %zmm28,%zmm29,%k5\{%k7\}
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 29    	vptestnmd \(%rcx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 b2 16 40 27 ac f0 34 12 00 00 	vptestnmd 0x1234\(%rax,%r14,8\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 29    	vptestnmd \(%rcx\)\{1to16\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 7f 	vptestnmd 0x1fc0\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa 00 20 00 00 	vptestnmd 0x2000\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 6a 80 	vptestnmd -0x2000\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 40 27 aa c0 df ff ff 	vptestnmd -0x2040\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 7f 	vptestnmd 0x1fc\(%rdx\)\{1to16\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa 00 02 00 00 	vptestnmd 0x200\(%rdx\)\{1to16\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 6a 80 	vptestnmd -0x200\(%rdx\)\{1to16\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 16 50 27 aa fc fd ff ff 	vptestnmd -0x204\(%rdx\)\{1to16\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 92 96 40 27 ec    	vptestnmq %zmm28,%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 92 96 47 27 ec    	vptestnmq %zmm28,%zmm29,%k5\{%k7\}
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 29    	vptestnmq \(%rcx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 b2 96 40 27 ac f0 34 12 00 00 	vptestnmq 0x1234\(%rax,%r14,8\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 29    	vptestnmq \(%rcx\)\{1to8\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 7f 	vptestnmq 0x1fc0\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa 00 20 00 00 	vptestnmq 0x2000\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 6a 80 	vptestnmq -0x2000\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 40 27 aa c0 df ff ff 	vptestnmq -0x2040\(%rdx\),%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 7f 	vptestnmq 0x3f8\(%rdx\)\{1to8\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa 00 04 00 00 	vptestnmq 0x400\(%rdx\)\{1to8\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 6a 80 	vptestnmq -0x400\(%rdx\)\{1to8\},%zmm29,%k5
++[ 	]*[a-f0-9]+:	62 f2 96 50 27 aa f8 fb ff ff 	vptestnmq -0x408\(%rdx\)\{1to8\},%zmm29,%k5
+ #pass
+diff --git a/gas/testsuite/gas/i386/x86-64-avx512f.s b/gas/testsuite/gas/i386/x86-64-avx512f.s
+index 856153b..1bacbda 100644
+--- a/gas/testsuite/gas/i386/x86-64-avx512f.s
++++ b/gas/testsuite/gas/i386/x86-64-avx512f.s
+@@ -7632,6 +7632,34 @@ _start:
+ 	vpermi2pd	-1024(%rdx){1to8}, %zmm29, %zmm30	 # AVX512F Disp8
+ 	vpermi2pd	-1032(%rdx){1to8}, %zmm29, %zmm30	 # AVX512F
+ 
++	vptestnmd	%zmm28, %zmm29, %k5	 # AVX512CD
++	vptestnmd	%zmm28, %zmm29, %k5{%k7}	 # AVX512CD
++	vptestnmd	(%rcx), %zmm29, %k5	 # AVX512CD
++	vptestnmd	0x123(%rax,%r14,8), %zmm29, %k5	 # AVX512CD
++	vptestnmd	(%rcx){1to16}, %zmm29, %k5	 # AVX512CD
++	vptestnmd	8128(%rdx), %zmm29, %k5	 # AVX512CD Disp8
++	vptestnmd	8192(%rdx), %zmm29, %k5	 # AVX512CD
++	vptestnmd	-8192(%rdx), %zmm29, %k5	 # AVX512CD Disp8
++	vptestnmd	-8256(%rdx), %zmm29, %k5	 # AVX512CD
++	vptestnmd	508(%rdx){1to16}, %zmm29, %k5	 # AVX512CD Disp8
++	vptestnmd	512(%rdx){1to16}, %zmm29, %k5	 # AVX512CD
++	vptestnmd	-512(%rdx){1to16}, %zmm29, %k5	 # AVX512CD Disp8
++	vptestnmd	-516(%rdx){1to16}, %zmm29, %k5	 # AVX512CD
++
++	vptestnmq	%zmm28, %zmm29, %k5	 # AVX512CD
++	vptestnmq	%zmm28, %zmm29, %k5{%k7}	 # AVX512CD
++	vptestnmq	(%rcx), %zmm29, %k5	 # AVX512CD
++	vptestnmq	0x123(%rax,%r14,8), %zmm29, %k5	 # AVX512CD
++	vptestnmq	(%rcx){1to8}, %zmm29, %k5	 # AVX512CD
++	vptestnmq	8128(%rdx), %zmm29, %k5	 # AVX512CD Disp8
++	vptestnmq	8192(%rdx), %zmm29, %k5	 # AVX512CD
++	vptestnmq	-8192(%rdx), %zmm29, %k5	 # AVX512CD Disp8
++	vptestnmq	-8256(%rdx), %zmm29, %k5	 # AVX512CD
++	vptestnmq	1016(%rdx){1to8}, %zmm29, %k5	 # AVX512CD Disp8
++	vptestnmq	1024(%rdx){1to8}, %zmm29, %k5	 # AVX512CD
++	vptestnmq	-1024(%rdx){1to8}, %zmm29, %k5	 # AVX512CD Disp8
++	vptestnmq	-1032(%rdx){1to8}, %zmm29, %k5	 # AVX512CD
++
+ 	.intel_syntax noprefix
+ 	vaddpd	zmm30, zmm29, zmm28	 # AVX512F
+ 	vaddpd	zmm30{k7}, zmm29, zmm28	 # AVX512F
+@@ -15261,3 +15289,30 @@ _start:
+ 	vpermi2pd	zmm30, zmm29, [rdx-1024]{1to8}	 # AVX512F Disp8
+ 	vpermi2pd	zmm30, zmm29, [rdx-1032]{1to8}	 # AVX512F
+ 
++	vptestnmd	k5, zmm29, zmm28	 # AVX512CD
++	vptestnmd	k5{k7}, zmm29, zmm28	 # AVX512CD
++	vptestnmd	k5, zmm29, ZMMWORD PTR [rcx]	 # AVX512CD
++	vptestnmd	k5, zmm29, ZMMWORD PTR [rax+r14*8+0x1234]	 # AVX512CD
++	vptestnmd	k5, zmm29, [rcx]{1to16}	 # AVX512CD
++	vptestnmd	k5, zmm29, ZMMWORD PTR [rdx+8128]	 # AVX512CD Disp8
++	vptestnmd	k5, zmm29, ZMMWORD PTR [rdx+8192]	 # AVX512CD
++	vptestnmd	k5, zmm29, ZMMWORD PTR [rdx-8192]	 # AVX512CD Disp8
++	vptestnmd	k5, zmm29, ZMMWORD PTR [rdx-8256]	 # AVX512CD
++	vptestnmd	k5, zmm29, [rdx+508]{1to16}	 # AVX512CD Disp8
++	vptestnmd	k5, zmm29, [rdx+512]{1to16}	 # AVX512CD
++	vptestnmd	k5, zmm29, [rdx-512]{1to16}	 # AVX512CD Disp8
++	vptestnmd	k5, zmm29, [rdx-516]{1to16}	 # AVX512CD
++
++	vptestnmq	k5, zmm29, zmm28	 # AVX512CD
++	vptestnmq	k5{k7}, zmm29, zmm28	 # AVX512CD
++	vptestnmq	k5, zmm29, ZMMWORD PTR [rcx]	 # AVX512CD
++	vptestnmq	k5, zmm29, ZMMWORD PTR [rax+r14*8+0x1234]	 # AVX512CD
++	vptestnmq	k5, zmm29, [rcx]{1to8}	 # AVX512CD
++	vptestnmq	k5, zmm29, ZMMWORD PTR [rdx+8128]	 # AVX512CD Disp8
++	vptestnmq	k5, zmm29, ZMMWORD PTR [rdx+8192]	 # AVX512CD
++	vptestnmq	k5, zmm29, ZMMWORD PTR [rdx-8192]	 # AVX512CD Disp8
++	vptestnmq	k5, zmm29, ZMMWORD PTR [rdx-8256]	 # AVX512CD
++	vptestnmq	k5, zmm29, [rdx+1016]{1to8}	 # AVX512CD Disp8
++	vptestnmq	k5, zmm29, [rdx+1024]{1to8}	 # AVX512CD
++	vptestnmq	k5, zmm29, [rdx-1024]{1to8}	 # AVX512CD Disp8
++	vptestnmq	k5, zmm29, [rdx-1032]{1to8}	 # AVX512CD
+diff --git a/opcodes/ChangeLog b/opcodes/ChangeLog
+index cf3ee7a..38f2d10 100644
+--- a/opcodes/ChangeLog
++++ b/opcodes/ChangeLog
+@@ -1,6 +1,15 @@
+ 2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
+ 
+ 	Backport from master
++	2014-02-20  Ilya Tocar  <ilya.tocar@intel.com>
++
++	* i386-opc.tbl: Change CPU of vptestnmq, vptestnmd from CpuAVX512CD,
++	to CpuAVX512F.
++	* i386-tbl.h: Regenerate.
++
++2014-03-20  H.J. Lu  <hongjiu.lu@intel.com>
++
++	Backport from master
+ 	2014-02-12  Ilya Tocar  <ilya.tocar@intel.com>
+ 
+ 	* i386-dis.c (MOD enum): Add MOD_0FC7_REG_3, MOD_0FC7_REG_4,
+diff --git a/opcodes/i386-opc.tbl b/opcodes/i386-opc.tbl
+index a6b5b9f..2d64f58 100644
+--- a/opcodes/i386-opc.tbl
++++ b/opcodes/i386-opc.tbl
+@@ -4216,6 +4216,9 @@ vsqrtpd, 3, 0x6651, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=0|VexW
+ vunpckhps, 3, 0x15, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=0|VexVVVV=1|VexW=1|Broadcast=1|Disp8MemShift=6|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegZMM|Dword|ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM, RegZMM }
+ vunpcklps, 3, 0x14, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=3|VexOpcode=0|VexVVVV=1|VexW=1|Broadcast=1|Disp8MemShift=6|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegZMM|Dword|ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM, RegZMM }
+ 
++vptestnmd, 3, 0xF327, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|VexOpcode=1|VexVVVV=1|VexW=1|Broadcast=1|Disp8MemShift=6|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegZMM|Dword|ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM, RegMask }
++vptestnmq, 3, 0xF327, None, 1, CpuAVX512F, Modrm|EVex=1|Masking=2|VexOpcode=1|VexVVVV=1|VexW=2|VecESize=1|Broadcast=2|Disp8MemShift=6|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegZMM|Qword|ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM, RegMask }
++
+ // AVX512F instructions end.
+ 
+ // AVX512CD instructions.
+@@ -4232,10 +4235,6 @@ vplzcntd, 2, 0x6644, None, 1, CpuAVX512CD, Modrm|EVex=1|Masking=3|VexOpcode=1|Ve
+ 
+ vplzcntq, 2, 0x6644, None, 1, CpuAVX512CD, Modrm|EVex=1|Masking=3|VexOpcode=1|VexW=2|VecESize=1|Broadcast=2|Disp8MemShift=6|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegZMM|Qword|ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM }
+ 
+-vptestnmd, 3, 0xF327, None, 1, CpuAVX512CD, Modrm|EVex=1|Masking=2|VexOpcode=1|VexVVVV=1|VexW=1|Broadcast=1|Disp8MemShift=6|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegZMM|Dword|ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM, RegMask }
+-
+-vptestnmq, 3, 0xF327, None, 1, CpuAVX512CD, Modrm|EVex=1|Masking=2|VexOpcode=1|VexVVVV=1|VexW=2|VecESize=1|Broadcast=2|Disp8MemShift=6|IgnoreSize|No_bSuf|No_wSuf|No_lSuf|No_sSuf|No_qSuf|No_ldSuf, { RegZMM|Qword|ZMMword|Unspecified|BaseIndex|Disp8|Disp16|Disp32|Disp32S|Vec_Disp8, RegZMM, RegMask }
+-
+ // AVX512CD instructions end.
+ 
+ // AVX512ER instructions.
+diff --git a/opcodes/i386-tbl.h b/opcodes/i386-tbl.h
+index 399d4d4..b509da1 100644
+--- a/opcodes/i386-tbl.h
++++ b/opcodes/i386-tbl.h
+@@ -60857,67 +60857,73 @@ const insn_template i386_optab[] =
+       { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+-  { "vpbroadcastmb2q", 2, 0xF32A, None, 1,
++  { "vptestnmd", 3, 0xF327, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
++        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+     { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 
+       1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-      0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
++      0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 2, 0, 1, 0, 0, 6, 0, 0, 0, 
+       0, 0 },
+-    { { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    { { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 
++	  0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } },
++      { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+-      { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++      { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+-  { "vpbroadcastmw2d", 2, 0xF33A, None, 1,
++  { "vptestnmq", 3, 0xF327, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
++        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+     { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 
+       1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-      0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++      0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 1, 2, 1, 2, 0, 0, 6, 0, 0, 0, 
+       0, 0 },
+-    { { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++    { { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++	  1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } },
++      { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+-      { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++      { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+-  { "vpconflictd", 2, 0x66C4, None, 1,
++  { "vpbroadcastmb2q", 2, 0xF32A, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+     { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 
+       1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-      0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 3, 0, 1, 0, 0, 6, 0, 0, 0, 
++      0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+       0, 0 },
+-    { { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 
+-	  0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } },
++    { { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+       { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+-  { "vpconflictq", 2, 0x66C4, None, 1,
++  { "vpbroadcastmw2d", 2, 0xF33A, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+     { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 
+       1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-      0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 1, 3, 1, 2, 0, 0, 6, 0, 0, 0, 
++      0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+       0, 0 },
+-    { { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } },
++    { { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
++	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+       { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+-  { "vplzcntd", 2, 0x6644, None, 1,
++  { "vpconflictd", 2, 0x66C4, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+@@ -60932,7 +60938,7 @@ const insn_template i386_optab[] =
+       { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+-  { "vplzcntq", 2, 0x6644, None, 1,
++  { "vpconflictq", 2, 0x66C4, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+@@ -60947,41 +60953,35 @@ const insn_template i386_optab[] =
+       { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+-  { "vptestnmd", 3, 0xF327, None, 1,
++  { "vplzcntd", 2, 0x6644, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+     { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 
+       1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-      0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 2, 0, 1, 0, 0, 6, 0, 0, 0, 
++      0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 3, 0, 1, 0, 0, 6, 0, 0, 0, 
+       0, 0 },
+     { { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 
+ 	  0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } },
+       { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+-      { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+-  { "vptestnmq", 3, 0xF327, None, 1,
++  { "vplzcntq", 2, 0x6644, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+     { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 
+       1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-      0, 0, 1, 2, 1, 0, 0, 0, 0, 0, 1, 2, 1, 2, 0, 0, 6, 0, 0, 0, 
++      0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 1, 3, 1, 2, 0, 0, 6, 0, 0, 0, 
+       0, 0 },
+     { { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0 } },
+       { { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+-      { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+ 	  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } } },
+   { "vexp2pd", 2, 0x66C8, None, 1,
+     { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+-- 
+2.0.3
+

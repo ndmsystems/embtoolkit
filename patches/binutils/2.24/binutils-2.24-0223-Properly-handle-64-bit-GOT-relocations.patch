@@ -1,0 +1,62 @@
+From 58a19a05d4e88b74e17cfae6f1c1c5c5e7be1537 Mon Sep 17 00:00:00 2001
+From: "H.J. Lu" <hjl.tools@gmail.com>
+Date: Tue, 27 May 2014 12:19:33 -0700
+Subject: [PATCH 223/330] Properly handle 64-bit GOT relocations
+
+This patch fixes 2 issues:
+
+1. Since the GOT offset is always negative, we need to use signed int
+to support 64-bit GOT relocations.
+2. R_X86_64_PLTOFF64 uses the address of GLOBAL_OFFSET_TABLE, which is
+the address of the .got.plt section, not the .got section.
+
+	PR gold/16945
+	* x86_64.cc (Target_x86_64::Relocate::relocate): Use signed int
+	for got_offset.  Properly get GOT address for R_X86_64_PLTOFF64.
+---
+ gold/ChangeLog | 6 ++++++
+ gold/x86_64.cc | 7 +++++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/gold/ChangeLog b/gold/ChangeLog
+index 2d20fa7..c267e19 100644
+--- a/gold/ChangeLog
++++ b/gold/ChangeLog
+@@ -1,3 +1,9 @@
++2014-05-27  H.J. Lu  <hongjiu.lu@intel.com>
++
++	PR gold/16945
++	* x86_64.cc (Target_x86_64::Relocate::relocate): Use signed int
++	for got_offset.  Properly get GOT address for R_X86_64_PLTOFF64.
++
+ 2014-05-06  Cary Coutant  <ccoutant@google.com>
+ 
+ 	PR gold/16900
+diff --git a/gold/x86_64.cc b/gold/x86_64.cc
+index 96a69c2..355285b 100644
+--- a/gold/x86_64.cc
++++ b/gold/x86_64.cc
+@@ -3326,7 +3326,9 @@ Target_x86_64<size>::Relocate::relocate(
+   // We need to subtract the size of the GOT section to get
+   // the actual offset to use in the relocation.
+   bool have_got_offset = false;
+-  unsigned int got_offset = 0;
++  // Since the actual offset is always negative, we use signed int to
++  // support 64-bit GOT relocations.
++  int got_offset = 0;
+   switch (r_type)
+     {
+     case elfcpp::R_X86_64_GOT32:
+@@ -3429,7 +3431,8 @@ Target_x86_64<size>::Relocate::relocate(
+ 	gold_assert(gsym->has_plt_offset()
+ 		    || gsym->final_value_is_known());
+ 	typename elfcpp::Elf_types<size>::Elf_Addr got_address;
+-	got_address = target->got_section(NULL, NULL)->address();
++	// This is the address of GLOBAL_OFFSET_TABLE.
++	got_address = target->got_plt_section()->address();
+ 	Relocate_functions<size, false>::rela64(view, object, psymval,
+ 						addend - got_address);
+       }
+-- 
+2.0.3
+

@@ -1,0 +1,45 @@
+From 314ddfca8a218d0e43b5d0a64f8081591734d292 Mon Sep 17 00:00:00 2001
+From: Roland McGrath <mcgrathr@google.com>
+Date: Thu, 9 Jan 2014 10:13:10 -0800
+Subject: [PATCH 052/330] Fix buffer underrun in i386-dis.c.
+
+opcodes/
+	* i386-dis.c (print_insn): Do not touch all_prefixes[-1] when
+	last_rex_prefix is -1.
+
+(cherry picked from commit e2e6193d65a20e6b7fccba288e5d1bc45b78d194)
+---
+ opcodes/ChangeLog  | 6 ++++++
+ opcodes/i386-dis.c | 2 +-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/opcodes/ChangeLog b/opcodes/ChangeLog
+index 0b72d5b..c168d65 100644
+--- a/opcodes/ChangeLog
++++ b/opcodes/ChangeLog
+@@ -1,3 +1,9 @@
++2014-01-09  Bradley Nelson  <bradnelson@google.com>
++	    Roland McGrath  <mcgrathr@google.com>
++
++	* i386-dis.c (print_insn): Do not touch all_prefixes[-1] when
++	last_rex_prefix is -1.
++
+ 2013-11-20  Yufeng Zhang  <yufeng.zhang@arm.com>
+ 
+ 	* aarch64-opc.c (aarch64_pstatefields): Update.
+diff --git a/opcodes/i386-dis.c b/opcodes/i386-dis.c
+index 8e55724..d278272 100644
+--- a/opcodes/i386-dis.c
++++ b/opcodes/i386-dis.c
+@@ -12635,7 +12635,7 @@ print_insn (bfd_vma pc, disassemble_info *info)
+     }
+ 
+   /* Check if the REX prefix is used.  */
+-  if (rex_ignored == 0 && (rex ^ rex_used) == 0)
++  if (rex_ignored == 0 && (rex ^ rex_used) == 0 && last_rex_prefix >= 0)
+     all_prefixes[last_rex_prefix] = 0;
+ 
+   /* Check if the SEG prefix is used.  */
+-- 
+2.0.3
+

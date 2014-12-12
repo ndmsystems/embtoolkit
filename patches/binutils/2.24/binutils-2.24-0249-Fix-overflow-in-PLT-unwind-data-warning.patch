@@ -1,0 +1,69 @@
+From a59a57ffe3e393726af851a0ae9654b2922f22ee Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Thu, 15 May 2014 18:37:43 +0930
+Subject: [PATCH 249/330] Fix "overflow in PLT unwind data" warning
+
+When linking statically, it's possible to hit this warning with IFUNC
+or very large executables, due to .glink being unused.
+
+	* powerpc.cc (do_plt_fde_location): Handle zero length .glink.
+	Compare FDE contents with DW_CFA_nop rather than 0.
+---
+ gold/ChangeLog  |  4 ++++
+ gold/powerpc.cc | 18 ++++++++++++++++--
+ 2 files changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/gold/ChangeLog b/gold/ChangeLog
+index bbd3527..aa856fa 100644
+--- a/gold/ChangeLog
++++ b/gold/ChangeLog
+@@ -1,6 +1,10 @@
+ 2014-06-12  Alan Modra  <amodra@gmail.com>
+ 
+ 	Backport mainline patches
++	2014-05-15  Alan Modra  <amodra@gmail.com>
++	* powerpc.cc (do_plt_fde_location): Handle zero length .glink.
++	Compare FDE contents with DW_CFA_nop rather than 0.
++
+ 	2014-03-07  Alan Modra  <amodra@gmail.com>
+ 	* powerpc.cc (Powerpc_relocate_functions::Overflow_check): Add
+ 	CHECK_UNSIGNED, CHECK_LOW_INSN, CHECK_HIGH_INSN.
+diff --git a/gold/powerpc.cc b/gold/powerpc.cc
+index d10977e..7728fb4 100644
+--- a/gold/powerpc.cc
++++ b/gold/powerpc.cc
+@@ -2851,7 +2851,21 @@ Target_powerpc<size, big_endian>::do_plt_fde_location(const Output_data* plt,
+   if (plt == this->glink_)
+     {
+       // See Output_data_glink::do_write() for glink contents.
+-      if (size == 64)
++      if (len == 0)
++	{
++	  gold_assert(parameters->doing_static_link());
++	  // Static linking may need stubs, to support ifunc and long
++	  // branches.  We need to create an output section for
++	  // .eh_frame early in the link process, to have a place to
++	  // attach stub .eh_frame info.  We also need to have
++	  // registered a CIE that matches the stub CIE.  Both of
++	  // these requirements are satisfied by creating an FDE and
++	  // CIE for .glink, even though static linking will leave
++	  // .glink zero length.
++	  // ??? Hopefully generating an FDE with a zero address range
++	  // won't confuse anything that consumes .eh_frame info.
++	}
++      else if (size == 64)
+ 	{
+ 	  // There is one word before __glink_PLTresolve
+ 	  address += 8;
+@@ -2863,7 +2877,7 @@ Target_powerpc<size, big_endian>::do_plt_fde_location(const Output_data* plt,
+ 	  // The first covers the branch table, the second
+ 	  // __glink_PLTresolve at the end of glink.
+ 	  off_t resolve_size = this->glink_->pltresolve_size;
+-	  if (oview[9] == 0)
++	  if (oview[9] == elfcpp::DW_CFA_nop)
+ 	    len -= resolve_size;
+ 	  else
+ 	    {
+-- 
+2.0.3
+

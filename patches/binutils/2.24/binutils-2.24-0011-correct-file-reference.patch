@@ -1,0 +1,24 @@
+From 9eb155f2a29ae18f296945743012d6f63de92aa2 Mon Sep 17 00:00:00 2001
+From: Alan Modra <amodra@gmail.com>
+Date: Sun, 8 Dec 2013 15:42:32 +1030
+Subject: [PATCH 011/330] correct file reference
+
+---
+ bfd/ChangeLog | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bfd/ChangeLog b/bfd/ChangeLog
+index 1011b28..30543c2 100644
+--- a/bfd/ChangeLog
++++ b/bfd/ChangeLog
+@@ -1,6 +1,6 @@
+ 2013-12-08  Alan Modra  <amodra@gmail.com>
+ 
+-	* elf64-ppc.c (_bfd_elf_add_default_symbol): Set dynamic_def
++	* elflink.c (_bfd_elf_add_default_symbol): Set dynamic_def
+ 	and ref_dynamic_nonweak when chaining together indirect
+ 	symbols.
+ 
+-- 
+2.0.3
+

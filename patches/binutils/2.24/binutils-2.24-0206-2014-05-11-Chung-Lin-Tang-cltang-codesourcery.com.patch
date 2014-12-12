@@ -1,0 +1,49 @@
+From 2af301076c60151ea25d1862285e76edc9261b8a Mon Sep 17 00:00:00 2001
+From: Chung-Lin Tang <cltang@codesourcery.com>
+Date: Sun, 11 May 2014 10:09:47 -0700
+Subject: [PATCH 206/330] 2014-05-11  Chung-Lin Tang  <cltang@codesourcery.com>
+
+	Backport from master
+
+	2014-05-11  Chung-Lin Tang  <cltang@codesourcery.com>
+	* emulparams/nios2linux.sh (OTHER_GOT_SYMBOLS): Wrap _gp in HIDDEN(),
+	and gp in PROVIDE_HIDDEN.
+---
+ ld/ChangeLog                | 8 ++++++++
+ ld/emulparams/nios2linux.sh | 4 ++--
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/ld/ChangeLog b/ld/ChangeLog
+index 6344f4b..c024b00 100644
+--- a/ld/ChangeLog
++++ b/ld/ChangeLog
+@@ -1,3 +1,11 @@
++2014-05-11  Chung-Lin Tang  <cltang@codesourcery.com>
++
++	Backport from master
++
++	2014-05-11  Chung-Lin Tang  <cltang@codesourcery.com>
++	* emulparams/nios2linux.sh (OTHER_GOT_SYMBOLS): Wrap _gp in HIDDEN(),
++	and gp in PROVIDE_HIDDEN.
++
+ 2014-04-16  Alan Modra  <amodra@gmail.com>
+ 
+ 	Apply mainline patches for ppc476 workaround
+diff --git a/ld/emulparams/nios2linux.sh b/ld/emulparams/nios2linux.sh
+index aa409a9..edb6ec6 100644
+--- a/ld/emulparams/nios2linux.sh
++++ b/ld/emulparams/nios2linux.sh
+@@ -6,8 +6,8 @@ LITTLE_OUTPUT_FORMAT="elf32-littlenios2"
+ BIG_OUTPUT_FORMAT="elf32-bignios2"
+ TEXT_START_ADDR=0x2000
+ OTHER_GOT_SYMBOLS='
+-  _gp = ALIGN(16) + 0x7ff0;
+-  PROVIDE(gp = _gp);
++  HIDDEN (_gp = ALIGN(16) + 0x7ff0);
++  PROVIDE_HIDDEN (gp = _gp);
+ '
+ ARCH=nios2
+ MACHINE=
+-- 
+2.0.3
+
