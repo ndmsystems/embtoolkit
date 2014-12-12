@@ -60,7 +60,7 @@ export Q
 #
 -include .config
 
-EMBTK_BUILD := $(if $(CONFIG_EMBTK_DOTCONFIG),startbuild,xconfig)
+EMBTK_BUILD := $(if $(CONFIG_EMBTK_DOTCONFIG),startbuild,menuconfig)
 
 All: $(EMBTK_BUILD)
 
