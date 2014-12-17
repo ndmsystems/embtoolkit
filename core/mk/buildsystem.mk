@@ -78,7 +78,9 @@ clean: toolchain_clean rmallpath
 	$(Q)$(if $(__bsystem_xtoolchain_decompressed),rm -rf $(__bsystem_xtoolchain_decompressed))
 
 distclean: clean
-	$(Q)rm -rf dl/* src/*.git src/*.svn .config.old
+	$(Q)find src -maxdepth 2 -depth -type d -name '*.git' ! -name '.git' -exec rm -rf {} \;
+	$(Q)find src -maxdepth 2 -depth -type d -name '*.svn' ! -name '.svn' -exec rm -rf {} \;
+	$(Q)rm -rf dl/* .config.old
 	$(Q)rm -rf $(embtk_generated)
 
 
