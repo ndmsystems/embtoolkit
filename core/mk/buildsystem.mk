@@ -80,7 +80,7 @@ clean: toolchain_clean rmallpath
 distclean: clean
 	$(Q)find src -maxdepth 2 -depth -type d -name '*.git' ! -name '.git' -exec rm -rf {} \;
 	$(Q)find src -maxdepth 2 -depth -type d -name '*.svn' ! -name '.svn' -exec rm -rf {} \;
-	$(Q)rm -rf dl/* .config.old
+	$(Q)rm -rf .ccache/ dl/* .config.old
 	$(Q)rm -rf $(embtk_generated)
 
 
