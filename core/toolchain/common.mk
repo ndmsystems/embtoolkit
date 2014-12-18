@@ -37,7 +37,7 @@ __xtools_compiler-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)    := clangllvm-$(call emb
 __xtools_compiler-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN) := clangllvm-$(call embtk_pkg_version,llvm_host)
 __xtools_compiler-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)     := gcc-$(call embtk_pkg_version,gcc)
 __xtools_compiler-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)  := gcc-$(call embtk_pkg_version,gcc)
-__xtools_bins := $(__xtools_compiler-y)-$(embtk_clib)-$(embtk_clib_version)
+__xtools_bins := $(__xtools_compiler-y)-$(embtk_binutils)-$(embtk_binutils_version)-$(embtk_clib)-$(embtk_clib_version)
 
 TOOLCHAIN_DIR := $(embtk_generated)/toolchains/toolchain-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)
 

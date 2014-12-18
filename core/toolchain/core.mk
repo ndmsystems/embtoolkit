@@ -24,7 +24,7 @@
 ################################################################################
 
 TOOLCHAIN_NAME		:= toolchain
-TOOLCHAIN_VERSION	:= $(HOST_ARCH)-target-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)
+TOOLCHAIN_VERSION	:= $(HOST_ARCH)-target-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)-$(EMBTK_DATE)
 TOOLCHAIN_PACKAGE	:= toolchain-$(TOOLCHAIN_VERSION).tar.bz2
 TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
