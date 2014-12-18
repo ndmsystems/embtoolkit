@@ -26,12 +26,25 @@
 #
 # Target machine info
 #
+
+# Need addition for SVN.
+__embtk_get_pkgversion_human =						\
+	$(strip								\
+		$(if $(call __embtk_pkg_usegit,$(1)),			\
+		$(__embtk_pkg_gitbranch),				\
+		$(embtk_get_pkgversion))\
+	)
+
 embtk_os-$(CONFIG_EMBTK_OS_LINUX)	:= linux
 embtk_os				:= $(or $(embtk_os-y),invalid-os)
+embtk_os_version			:= $(call __embtk_get_pkgversion_human,$(embtk_os))
 
 embtk_clib-$(CONFIG_EMBTK_CLIB_EGLIBC)	:= eglibc
 embtk_clib-$(CONFIG_EMBTK_CLIB_GLIBC)	:= glibc
 embtk_clib-$(CONFIG_EMBTK_CLIB_MUSL)	:= musl
 embtk_clib-$(CONFIG_EMBTK_CLIB_UCLIBC)	:= uclibc
 embtk_clib				:= $(or $(embtk_clib-y),invalid-clib)
-embtk_clib_version			:= $(call embtk_get_pkgversion,$(embtk_clib))
+embtk_clib_version			:= $(call __embtk_get_pkgversion_human,$(embtk_clib))
+
+embtk_binutils				:= binutils
+embtk_binutils_version			:= $(call __embtk_get_pkgversion_human,$(embtk_binutils))

@@ -45,6 +45,8 @@ EMBTK_HOMEURL		:= "http://www.embtoolkit.org"
 EMBTK_ROOT		:= $(shell pwd)
 EMBTK_DOTCONFIG 	:= "$(EMBTK_ROOT)/.config"
 
+EMBTK_DATE		:= $(shell date +%d%m%y)
+
 include core/mk/host-support.mk
 
 ifeq ($(V),)

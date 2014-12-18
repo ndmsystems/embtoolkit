@@ -85,6 +85,6 @@ embtk_musl_dlinker	:= ld-musl-arm$(__embtk_arm_endian)$(if $(CONFIG_EMBTK_HARDFL
 
 # Some cross compiler variables
 __xtools_env_float	:= $(if $(CONFIG_EMBTK_SOFTFLOAT),sf,hf)
-__xtools_archos		:= $(GNU_TARGET)
+__xtools_archos		:= $(GNU_TARGET)-$(embtk_os_version)
 __xtools_env		:= $(EMBTK_MCU_FLAG)-$(__xtools_env_float)
 __xtools_env_abi	:= eabi

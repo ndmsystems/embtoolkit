@@ -158,5 +158,5 @@ embtk_musl_dlinker	:= ld-musl-mips$(__embtk_mips_endian)$(if $(CONFIG_EMBTK_SOFT
 #
 
 # Some cross compiler variables
-__xtools_archos			:= mips$(__embtk_mips_64bit)$(__embtk_mips_endian)-$(embtk_os)
+__xtools_archos			:= mips$(__embtk_mips_64bit)$(__embtk_mips_endian)-$(embtk_os)-$(embtk_os_version)
 __xtools_env			:= $(GNU_TARGET_ARCH)$(__xtools_env_float)-$(__xtools_env_abi)
