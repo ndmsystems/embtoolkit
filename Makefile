@@ -26,7 +26,7 @@ VERSION			:= 1
 PATCHLEVEL		:= 7
 SUBLEVEL		:= 0
 EXTRAVERSION		:=
-EMBTK_VERSION		:= 							\
+EMBTK_VERSION		:=							\
 	$(shell									\
 	dversion=$(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION);		\
 	if [ -e .git ]; then							\
@@ -39,6 +39,11 @@ EMBTK_VERSION		:= 							\
 			echo $$version;						\
 		fi;								\
 	else echo $$dversion; fi)
+EMBTK_VERSION_GIT_HUMAN :=							\
+	$(shell									\
+	if [ -e .git ]; then							\
+		echo $$(git describe --tags --dirty);				\
+	fi)
 EMBTK_BUGURL		:= "http://bugs.embtoolkit.org/projects/embtoolkit"
 EMBTK_HOMEURL		:= "http://www.embtoolkit.org"
 
