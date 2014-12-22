@@ -23,6 +23,11 @@
 # \date         July 2009
 ################################################################################
 
+config EMBTK_TOOLCHAIN_STATIC
+	bool "Build Static Toolchain"
+	help
+		Build static host binaries.
+
 menu "Cross Compiler environment"
 choice
 	prompt "Cross Compiler environment setup"
