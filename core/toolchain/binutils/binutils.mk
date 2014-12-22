@@ -38,7 +38,9 @@ BINUTILS_CONFIGURE_OPTS	+= --disable-nls --disable-multilib
 BINUTILS_CONFIGURE_OPTS	+= --enable-gold --enable-plugins
 BINUTILS_CONFIGURE_OPTS	+= --target=$(STRICT_GNU_TARGET)
 
-BINUTILS_MAKE_OPTS	:= LDFLAGS="-all-static"
+ifeq ($(EMBTK_TOOLCHAIN_STATIC),y)
+  BINUTILS_MAKE_OPTS	:= LDFLAGS="-all-static"
+endif
 
 BINUTILS_PREFIX		:= $(embtk_tools)
 
