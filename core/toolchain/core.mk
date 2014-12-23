@@ -26,7 +26,7 @@
 __embtk_toolchain_version_prefix := $(if $(EMBTK_VERSION_GIT_HUMAN),$(EMBTK_VERSION_GIT_HUMAN)-)
 
 TOOLCHAIN_NAME		:= toolchain
-TOOLCHAIN_VERSION	:= $(__embtk_toolchain_version_prefix)$(HOST_ARCH)-target-$(__xtools_archos)-$(__xtools_bins)-$(__xtools_env)-$(EMBTK_DATE)
+TOOLCHAIN_VERSION	:= $(__embtk_toolchain_version_prefix)$(__xtools_archos)-$(__xtools_bins)-$(EMBTK_DATE)
 TOOLCHAIN_PACKAGE	:= toolchain-$(TOOLCHAIN_VERSION).tar.bz2
 TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
@@ -58,6 +58,25 @@ __embtk_xtool_compiler-rt-$(CONFIG_EMBTK_HAVE_COMPILER-RT) := compiler-rt_instal
 endif
 
 #
+# Generating toolchain information file
+#
+
+__embtk_toolchain_info_file := $(embtk_generated)/info.txt
+
+define __embtk_toolchain_info_file_gen
+	$(if $(EMBTK_VERSION_GIT_HUMAN),
+		printf "Tag:\t\t%s\n\n" "$(EMBTK_VERSION_GIT_HUMAN)" > "$(1)",
+		echo -n > "$(1)")
+	printf "Host:\t\t%s\n" "$(HOST_ARCH)" >> "$(1)"
+	printf "Target:\t\t%s (%s)\n\n" "$(__xtools_archos)" "$(__xtools_env)" >> "$(1)"
+	printf "Binutils:\t%s\n" "$(embtk_binutils_version)" >> "$(1)"
+	printf "C library:\t%s (%s)\n" "$(embtk_clib)" "$(embtk_clib_version)" >> "$(1)"
+	printf "Compiler:\t%s (%s)\n" $$(echo "$(__xtools_compiler-y)" | cut -d '-' -f 1) \
+		$$(echo "$(__xtools_compiler-y)" | cut -d '-' -f 2-) >> "$(1)"
+	printf "Linux:\t\t%s\n" "$(embtk_os_version)" >> "$(1)"
+endef
+
+#
 # Toolchain core build recipe
 #
 __embtk_toolchain_deps-y	= $(patsubst %_install,%,$(EMBTK_TOOLCHAIN_DEPS-y))
@@ -80,6 +99,7 @@ define __embtk_toolchain_core_build
 				$(call embtk_install_xpkg,$(dep)))
 	$(call __embtk_setinstalled_pkg,toolchain)
 	$(call __embtk_pkg_gen_dotkconfig_f,toolchain)
+	$(call __embtk_toolchain_info_file_gen,$(__embtk_toolchain_info_file))
 endef
 
 
