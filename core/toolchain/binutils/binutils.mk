@@ -37,6 +37,7 @@ BINUTILS_CONFIGURE_OPTS	:= --disable-werror --with-sysroot=$(embtk_sysroot)
 BINUTILS_CONFIGURE_OPTS	+= --disable-nls --disable-multilib
 BINUTILS_CONFIGURE_OPTS	+= --enable-gold --enable-plugins
 BINUTILS_CONFIGURE_OPTS	+= --target=$(STRICT_GNU_TARGET)
+BINUTILS_CONFIGURE_OPTS	+= --with-zlib=no
 
 ifeq ($(EMBTK_TOOLCHAIN_STATIC),y)
   BINUTILS_MAKE_OPTS	:= LDFLAGS="-all-static"
