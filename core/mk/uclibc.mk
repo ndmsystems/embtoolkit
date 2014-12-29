@@ -50,13 +50,13 @@ EMBTK_UCLIBC_CFLAGS	+= $(EMBTK_TARGET_MARCH) -pipe
 #
 # uClibc libraries make options.
 #
-
 UCLIBC_MAKE_OPTS	:= PREFIX="$(embtk_sysroot)/"
 UCLIBC_MAKE_OPTS	+= CROSS_COMPILER_PREFIX="$(CROSS_COMPILE)"
 UCLIBC_MAKE_OPTS	+= MULTILIB_DIR="/$(LIBDIR)/"
 UCLIBC_MAKE_OPTS	+= RUNTIME_PREFIX="/" DEVEL_PREFIX="/usr/"
 UCLIBC_MAKE_OPTS	+= KERNEL_HEADERS="$(embtk_sysroot)/usr/include/"
 UCLIBC_MAKE_OPTS	+= UCLIBC_EXTRA_CFLAGS="$(EMBTK_UCLIBC_CFLAGS)"
+UCLIBC_MAKE_OPTS	+= HOSTCC="$(HOSTCC)"
 
 # FIXME: unset incorrect variables in uClibc (mainline) Rules.mak for MIPS
 ifeq ($(CONFIG_EMBTK_ARCH_MIPS),y)
@@ -105,7 +105,7 @@ endef
 define __embtk_install_uclibc_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) distclean
 	$(embtk_configure_uclibc)
-	$(MAKE) -C $(UCLIBC_BUILD_DIR) silentoldconfig
+	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) silentoldconfig
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_headers
 	$(MAKE) -C $(UCLIBC_BUILD_DIR) $(UCLIBC_MAKE_OPTS) install_startfiles
 	$(__embtk_install_uclibc_dummy)
