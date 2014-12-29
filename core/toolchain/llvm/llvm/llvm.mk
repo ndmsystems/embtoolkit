@@ -24,13 +24,13 @@
 ################################################################################
 
 LLVM_HOST_NAME		:= llvm
-LLVM_HOST_VERSION	:= $(call embtk_get_pkgversion,llvm_host)
+LLVM_HOST_VERSION	:= $(call embtk_pkg_version,llvm_host)
 LLVM_HOST_SITE		:= http://llvm.org/releases/$(LLVM_HOST_VERSION)
 #LLVM_HOST_GIT_SITE	:= http://llvm.org/git/llvm.git
 LLVM_HOST_GIT_SITE	:= git://www.embtoolkit.org/llvm.git
-LLVM_HOST_PACKAGE	:= llvm-$(LLVM_HOST_VERSION).src.tar.gz
+LLVM_HOST_PACKAGE	:= llvm-$(LLVM_HOST_VERSION).src.tar.xz
 LLVM_HOST_SRC_DIR	:= $(embtk_toolsb)/llvm-$(LLVM_HOST_VERSION).src
-LLVM_HOST_BUILD_DIR	:= $(embtk_toolsb)/llvm-build
+LLVM_HOST_BUILD_DIR	:= $(embtk_toolsb)/llvm-$(LLVM_HOST_VERSION)-build
 
 LLVM_HOST_DEPS			:= clang_host_install
 

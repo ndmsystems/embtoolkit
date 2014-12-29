@@ -30,10 +30,11 @@ config EMBTK_HOST_HAVE_LLVM
 #
 # llvm version
 #
-config EMBTK_LLVM_HOST_VERSION_3_4_1
+config EMBTK_LLVM_HOST_VERSION_3_5_0
 	bool
 	select EMBTK_LLVM_HOST_NEED_PATCH
-config EMBTK_LLVM_HOST_VERSION_3_3
+
+config EMBTK_LLVM_HOST_VERSION_3_4_1
 	bool
 	select EMBTK_LLVM_HOST_NEED_PATCH
 
@@ -59,7 +60,7 @@ config EMBTK_LLVM_HOST_GIT_REVISION
 	help
 	 Chechout a specific revision instead of the latest.
 
-config EMBTK_LLVM_HOST_REFSPEC
+config EMBTK_LLVM_HOST_CATEGORY
 	string
 	default "toolchain"
 
@@ -68,8 +69,8 @@ config EMBTK_LLVM_HOST_REFSPEC
 #
 config EMBTK_LLVM_HOST_VERSION_STRING
 	string
+	default "3.5.0"		if EMBTK_LLVM_HOST_VERSION_3_5_0
 	default "3.4.1"		if EMBTK_LLVM_HOST_VERSION_3_4_1
-	default "3.3"		if EMBTK_LLVM_HOST_VERSION_3_3
 	default "git"		if EMBTK_LLVM_HOST_VERSION_GIT
 
 

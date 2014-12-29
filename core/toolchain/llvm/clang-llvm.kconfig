@@ -31,14 +31,16 @@ choice
 	help
 	 Version of llvm you wish
 
+	config EMBTK_CLANG_HOST_LLVM_HOST_VERSION_3_5_0
+		bool "clang/llvm-3.5.0"
+		select EMBTK_LLVM_HOST_VERSION_3_5_0
+		select EMBTK_CLANG_HOST_VERSION_3_5_0
+
 	config EMBTK_CLANG_HOST_LLVM_HOST_VERSION_3_4_1
 		bool "clang/llvm-3.4.1"
 		select EMBTK_LLVM_HOST_VERSION_3_4_1
 		select EMBTK_CLANG_HOST_VERSION_3_4_1
-	config EMBTK_CLANG_HOST_LLVM_HOST_VERSION_3_3
-		bool "clang/llvm-3.3"
-		select EMBTK_LLVM_HOST_VERSION_3_3
-		select EMBTK_CLANG_HOST_VERSION_3_3
+
 	config EMBTK_CLANG_HOST_LLVM_HOST_VERSION_GIT
 		bool "Use clang/llvm git repository"
 		select EMBTK_LLVM_HOST_VERSION_GIT

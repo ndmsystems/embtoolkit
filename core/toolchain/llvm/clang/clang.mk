@@ -24,11 +24,11 @@
 ################################################################################
 
 CLANG_HOST_NAME		:= clang
-CLANG_HOST_VERSION	:= $(call embtk_get_pkgversion,clang_host)
+CLANG_HOST_VERSION	:= $(call embtk_pkg_version,clang_host)
 CLANG_HOST_SITE		:= http://llvm.org/releases/$(CLANG_HOST_VERSION)
 #CLANG_HOST_GIT_SITE	:= http://llvm.org/git/clang.git
 CLANG_HOST_GIT_SITE	:= git://www.embtoolkit.org/clang.git
-CLANG_HOST_PACKAGE	:= clang-$(CLANG_HOST_VERSION).src.tar.gz
+CLANG_HOST_PACKAGE	:= clang-$(CLANG_HOST_VERSION).src.tar.xz
 CLANG_HOST_SRC_DIR	:= $(embtk_toolsb)/clang-$(CLANG_HOST_VERSION).src
 CLANG_HOST_BUILD_DIR	:= $(embtk_toolsb)/clang-$(CLANG_HOST_VERSION)-build
 CLANG_HOST_KEEP_SRC_DIR	:= y
