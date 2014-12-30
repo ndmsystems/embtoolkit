@@ -69,10 +69,8 @@ source "core/toolchain/toolchain.kconfig"
 endmenu
 
 menu "Toolchain Addons - Debugging systems"
-source "core/toolchain/addons/gdb/gdb.kconfig"
 source "packages/misc/ncurses/ncurses.kconfig"
-source "core/toolchain/addons/ltrace/ltrace.kconfig"
-source "core/toolchain/addons/strace/strace.kconfig"
+source "core/toolchain/addons.kconfig"
 endmenu
 
 menu "Target build options"
@@ -99,7 +97,7 @@ config EMBTK_HAVE_ROOTFS
 	default y
 	help
 	 If you want to build a root filesystem for your target, and include
-	 some packages within it, you must say yes here.
+	 some packages within, you must say yes here.
 	 Select the root filesystem type in "Type of root filesystem to build".
 	 Select packages in "Packages to include in your root filesystem".
 
