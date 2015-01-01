@@ -1,0 +1,87 @@
+################################################################################
+# Embtoolkit
+# Copyright(C) 2009-2015 Abdoulaye Walsimou GAYE.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         linux-generic.kconfig
+# \brief	linux kernel custom kconfig
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         December 2014
+################################################################################
+
+choice
+	prompt "Custom linux kernel source from"
+
+	config EMBTK_LINUX_SRC_CUSTOM_TARBALL
+		bool "tarball archive"
+		help
+		 Download a remote tarball and uncompress it.
+		 Note: If if the tarball is in the format linux-x.y.tar.gz,
+		 the uncompressed source tree is assumed to be linux-x.y
+
+	config EMBTK_LINUX_SRC_CUSTOM_GIT
+		bool "Git repository"
+		select EMBTK_LINUX_VERSION_GIT
+		help
+		 Use linux kernel source tree from a git repository.
+endchoice
+
+#
+# Custom tarball options
+#
+config EMBTK_LINUX_SRC_CUSTOM_URL
+	string "tarball URL (mandatory)"
+	depends on EMBTK_LINUX_SRC_CUSTOM_TARBALL
+	default "https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.14.27.tar.xz"
+	help
+	 Full URL of the tarball to download.
+
+config EMBTK_LINUX_VERSION_STRING
+	string
+	depends on EMBTK_LINUX_SRC_CUSTOM_TARBALL
+	default "custom"
+
+#
+# GIT repository options
+#
+config EMBTK_LINUX_VERSION_GIT
+	bool
+
+config EMBTK_LINUX_GIT_SITE
+	string "Repository URL (mandatory)"
+	depends on EMBTK_LINUX_VERSION_GIT
+	default "git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
+	help
+	 The the git repository URL to use.
+
+config EMBTK_LINUX_GIT_BRANCH
+	string "Branch to use"
+	depends on EMBTK_LINUX_VERSION_GIT
+	default "master"
+	help
+	 The branch of the git repository to use, the default is master.
+
+config EMBTK_LINUX_GIT_REVISION
+	string "Checkout a specific revision instead of the latest"
+	depends on EMBTK_LINUX_VERSION_GIT
+	help
+	 Chechout a specific revision instead of the latest.
+
+config EMBTK_LINUX_REFSPEC
+	string
+	depends on EMBTK_LINUX_VERSION_GIT
+	default "toolchain"

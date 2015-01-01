@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2015 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,8 +27,9 @@ LINUX_HEADERS_NAME	:= linux
 LINUX_HEADERS_VERSION	:= $(LINUX_VERSION)
 LINUX_HEADERS_SITE	:= $(LINUX_SITE)
 LINUX_HEADERS_PACKAGE	:= $(LINUX_PACKAGE)
-LINUX_HEADERS_SRC_DIR	:= $(LINUX_SRC_DIR)
-LINUX_HEADERS_BUILD_DIR	:= $(LINUX_BUILD_DIR)
+LINUX_HEADERS_SRC_DIR	:= $(call embtk_pkg_srcdir,linux)
+LINUX_HEADERS_BUILD_DIR	:= $(call embtk_pkg_srcdir,linux)
+
 LINUX_HEADERS_KEEP_SRC_DIR  := $(LINUX_KEEP_SRC_DIR)
 LINUX_HEADERS_KCONFIGS_NAME := LINUX
 
@@ -48,5 +49,5 @@ define embtk_install_linux_headers
 endef
 
 define embtk_cleanup_linux_headers
-	[ -d $(LINUX_BUILD_DIR) ] && $(call __embtk_unsetinstalled_pkg,linux_headers) ||:
+	[ -d $(LINUX_HEADERS_BUILD_DIR) ] && $(call __embtk_unsetinstalled_pkg,linux_headers) ||:
 endef

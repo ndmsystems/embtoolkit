@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2015 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -64,6 +64,20 @@ __embtk_pkg_mirror2		= $(strip $($(PKGV)_MIRROR2))
 __embtk_pkg_mirror3		= $(strip $($(PKGV)_MIRROR3))
 __embtk_pkg_package		= $(strip $($(PKGV)_PACKAGE))
 __embtk_pkg_package_remote	= $(or $(strip $($(PKGV)_PACKAGE_REMOTE)),$(__embtk_pkg_package))
+__embtk_pkg_tarball_fmt		= $(or $(__embtk_pkg_tarball_targz),\
+					$(__embtk_pkg_tarball_tgz),\
+					$(__embtk_pkg_tarball_tarbz2),\
+					$(__embtk_pkg_tarball_tbz2),\
+					$(__embtk_pkg_tarball_tarxz),\
+					$(__embtk_pkg_tarball_txz),\
+					$(__embtk_pkg_tarball_tar))
+__embtk_pkg_tarball_targz	= $(if $(filter %.tar.gz,$(__embtk_pkg_package)),tar.gz)
+__embtk_pkg_tarball_tgz		= $(if $(filter %.tgz,$(__embtk_pkg_package)),tgz)
+__embtk_pkg_tarball_tarbz2	= $(if $(filter %.tar.bz2,$(__embtk_pkg_package)),tar.bz2)
+__embtk_pkg_tarball_tbz2	= $(if $(filter %.tbz2,$(__embtk_pkg_package)),tbz2)
+__embtk_pkg_tarball_tarxz	= $(if $(filter %.tar.xz,$(__embtk_pkg_package)),tar.xz)
+__embtk_pkg_tarball_txz		= $(if $(filter %.txz,$(__embtk_pkg_package)),txz)
+__embtk_pkg_tarball_tar		= $(if $(filter %.tar,$(__embtk_pkg_package)),tar)
 
 __embtk_pkg_refspec		= $(or $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_REFSPEC)),$(__embtk_$(pkgv)_category))
 
@@ -144,3 +158,4 @@ __embtk_pkg_usewaf-y		= $(CONFIG_EMBTK_$(PKGV)_USE_WAF)
 # Variables/macros defined here exported for use externally
 #
 embtk_pkg_srcdir                = $(__embtk_pkg_srcdir)
+embtk_pkg_tarball_fmt		= $(__embtk_pkg_tarball_fmt)

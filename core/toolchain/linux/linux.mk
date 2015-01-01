@@ -1,6 +1,6 @@
 #################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2015 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ endef
 ifeq ($(embtk_buildhost_os),macos)
 define embtk_beforeinstall_linux
 	cp $(EMBTK_ROOT)/scripts/unifdef.c					\
-		$(LINUX_SRC_DIR)/scripts/unifdef.c
+		$(pembtk_linux_srcdir)/scripts/unifdef.c
 endef
 endif
 
@@ -114,8 +114,9 @@ LINUX_MODULES_NAME	:= linux
 LINUX_MODULES_VERSION	:= $(LINUX_VERSION)
 LINUX_MODULES_SITE	:= $(LINUX_SITE)
 LINUX_MODULES_PACKAGE	:= $(LINUX_PACKAGE)
-LINUX_MODULES_SRC_DIR	:= $(LINUX_SRC_DIR)
-LINUX_MODULES_BUILD_DIR	:= $(LINUX_BUILD_DIR)
+LINUX_MODULES_SRC_DIR	:= $(pembtk_linux_srcdir)
+LINUX_MODULES_BUILD_DIR	:= $(pembtk_linux_srcdir)
+
 LINUX_MODULES_KCONFIGS_NAME := LINUX
 LINUX_MODULES_KEEP_SRC_DIR  := $(LINUX_KEEP_SRC_DIR)
 
