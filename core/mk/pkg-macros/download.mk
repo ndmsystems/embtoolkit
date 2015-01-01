@@ -85,11 +85,8 @@ define __embtk_download_pkg_from_svn
 endef
 
 define __embtk_gitclone_pkg
-	(git clone $(__embtk_pkg_gitsite) $(__embtk_pkg_localgit) &&		\
-	$(if $(findstring master,$(__embtk_pkg_gitbranch)),,			\
-		cd $(__embtk_pkg_localgit);					\
-		git checkout -b $(__embtk_pkg_gitbranch)			\
-					origin/$(__embtk_pkg_gitbranch) &&)	\
+	(git clone --branch=$(__embtk_pkg_gitbranch)				\
+		$(__embtk_pkg_gitsite) $(__embtk_pkg_localgit) &&		\
 	$(if $(findstring HEAD,$(__embtk_pkg_gitrev)),,				\
 		cd $(__embtk_pkg_localgit);					\
 		git reset --hard $(__embtk_pkg_gitrev) &&)			\
