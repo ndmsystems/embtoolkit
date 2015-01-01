@@ -139,3 +139,8 @@ ___embtk_pkg_configuredir	= $(strip $($(PKGV)_CONFIGURE_DIR))
 __embtk_pkg_configuredir	= $(if $(___embtk_pkg_configuredir),$(___embtk_pkg_configuredir)/)
 
 __embtk_pkg_usewaf-y		= $(CONFIG_EMBTK_$(PKGV)_USE_WAF)
+
+#
+# Variables/macros defined here exported for use externally
+#
+embtk_pkg_srcdir                = $(__embtk_pkg_srcdir)
