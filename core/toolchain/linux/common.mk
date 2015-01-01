@@ -36,7 +36,8 @@ LINUX_VERSION	:= $(call embtk_pkg_version,linux)
 LINUX_SITE	:= $(pembtk_linux_site)
 LINUX_PACKAGE	:= linux-$(LINUX_VERSION).tar.xz
 LINUX_SRC_DIR	:= $(embtk_toolsb)/linux-$(LINUX_VERSION)
-LINUX_BUILD_DIR	:= $(embtk_toolsb)/linux-$(LINUX_VERSION)
+LINUX_BUILD_DIR	:= $(call embtk_pkg_srcdir,linux)
+
 LINUX_KEEP_SRC_DIR := $(CONFIG_EMBTK_BUILD_LINUX_KERNEL)
 
 #
