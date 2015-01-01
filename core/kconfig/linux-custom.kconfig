@@ -37,6 +37,7 @@ choice
 		bool "Git repository"
 		select EMBTK_LINUX_VERSION_GIT
 		select EMBTK_LINUX_HEADERS_VERSION_GIT
+		select EMBTK_LINUX_MODULES_VERSION_GIT
 		help
 		 Use linux kernel source tree from a git repository.
 endchoice
@@ -109,6 +110,32 @@ config EMBTK_LINUX_HEADERS_GIT_REVISION
 	default EMBTK_LINUX_GIT_REVISION
 
 config EMBTK_LINUX_HEADERS_REFSPEC
+	string
+	depends on EMBTK_LINUX_VERSION_GIT
+	default EMBTK_LINUX_REFSPEC
+
+#
+# linux modules git options
+#
+config EMBTK_LINUX_MODULES_VERSION_GIT
+	bool
+
+config EMBTK_LINUX_MODULES_GIT_SITE
+	string
+	depends on EMBTK_LINUX_VERSION_GIT
+	default EMBTK_LINUX_GIT_SITE
+
+config EMBTK_LINUX_MODULES_GIT_BRANCH
+	string
+	depends on EMBTK_LINUX_VERSION_GIT
+	default EMBTK_LINUX_GIT_BRANCH
+
+config EMBTK_LINUX_MODULES_GIT_REVISION
+	string
+	depends on EMBTK_LINUX_VERSION_GIT
+	default EMBTK_LINUX_GIT_REVISION
+
+config EMBTK_LINUX_MODULES_REFSPEC
 	string
 	depends on EMBTK_LINUX_VERSION_GIT
 	default EMBTK_LINUX_REFSPEC
