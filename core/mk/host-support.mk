@@ -88,3 +88,27 @@ endif
 HOSTCXXFLAGS		= $(HOSTCFLAGS)
 
 export HOSTCC HOSTCXX HOSTCFLAGS HOSTCXXFLAGS HOSTLDFLAGS
+
+HOSTJAVA		:=							\
+	$(shell									\
+	if [ -n "$$(command -v java 2>/dev/null)" ]; then			\
+		echo "$$(command -v java)";					\
+	else									\
+		echo java;							\
+	fi)
+
+HOSTJAVAC		:=							\
+	$(shell									\
+	if [ -n "$$(command -v javac 2>/dev/null)" ]; then			\
+		echo "$$(command -v javac)";					\
+	else									\
+		echo javac;							\
+	fi)
+
+HOSTJAR			:=							\
+	$(shell									\
+	if [ -n "$$(command -v jar 2>/dev/null)" ]; then			\
+		echo "$$(command -v jar)";					\
+	else									\
+		echo jar;							\
+	fi)
