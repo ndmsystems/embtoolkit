@@ -57,6 +57,9 @@ include packages/development/development.mk
 # Graphics packages
 include packages/graphics/graphics.mk
 
+# java packages
+include packages/java/java.mk
+
 # Mathematics packages
 include packages/math/math.mk
 

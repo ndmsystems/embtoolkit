@@ -1,0 +1,56 @@
+################################################################################
+# Embtoolkit
+# Copyright(C) 2009-2015 Abdoulaye Walsimou GAYE.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         classpath.kconfig
+# \brief	classpath.kconfig of Embtoolkit
+# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
+# \date         October 2014
+################################################################################
+
+config EMBTK_HAVE_CLASSPATH
+	bool "Have classpath"
+	select EMBTK_HAVE_ZLIB
+	select KEMBTK_EGLIBC_OPTION_EGLIBC_INET if EMBTK_CLIB_EGLIBC
+	select KEMBTK_UCLIBC_UCLIBC_HAS_NETWORK_SUPPORT if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_HAS_IPV4 if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_HAS_IPV6 if EMBTK_CLIB_UCLIBC
+	help
+	 GNU Classpath, Essential Libraries for Java, is a GNU project to create
+	 free core class libraries for use with virtual machines and compilers
+	 for the java programming language.
+
+choice
+	prompt "classpath version you wish"
+	depends on EMBTK_HAVE_CLASSPATH
+	help
+	 Here you can choose which version of classpath you want to use.
+
+	config  EMBTK_CLASSPATH_VERSION_0_99
+		bool "classpath-0.99"
+		select EMBTK_CLASSPATH_NEED_PATCH
+endchoice
+
+config EMBTK_CLASSPATH_VERSION_STRING
+	string
+	default "0.99"		if EMBTK_CLASSPATH_VERSION_0_99
+
+config EMBTK_CLASSPATH_NEED_PATCH
+	bool
+config EMBTK_CLASSPATH_NEED_AUTORECONF
+	bool
