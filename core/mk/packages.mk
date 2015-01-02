@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2009-2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2015 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -110,6 +110,14 @@ download_% %_download:
 # Decompress generic implicit rule
 %_decompress:
 	$(call embtk_decompress_pkg,$*)
+
+# Autoreconf an autotooled package
+%_autoreconf:
+	$(call embtk_autoreconf_pkg,$*)
+
+# Autoreconf an autotooled host package
+%_host_autoreconf:
+	$(call embtk_autoreconf_hostpkg,$*)
 
 # clean generic implicit rule
 %_clean:
