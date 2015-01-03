@@ -37,6 +37,7 @@ JAMVM_SHARES := jamvm
 JAMVM_CONFIGURE_OPTS := --disable-int-inlining
 JAMVM_CONFIGURE_OPTS += --disable-ffi
 JAMVM_CONFIGURE_OPTS += --disable-zip
+JAMVM_CONFIGURE_OPTS += --with-classpath-install-dir=/usr
 
 JAMVM_DEPS := classpath_install
 
