@@ -85,6 +85,12 @@ __embtk_mk_pathnotexist = $(shell test -e $(1) || echo y)
 __embtk_mk_uquote	= $(subst ",,$(strip $(1)))
 embtk_uquote		= $(call __embtk_mk_uquote,$(1))
 
+#
+# embtk_shell_quote
+# A macro to quote a string for use in shell variable.
+#
+embtk_shell_quote = $(subst ','\'',$(1))
+
 # Macro to print messages
 embtk_pwarning	= $(call embtk_echo_yellow,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ WARNING: $(call __embtk_mk_uquote,$(1))\\n$(__embtk_msg_h)")
 embtk_perror	= $(call embtk_echo_red,"$(__embtk_msg_h)\\n~~ EmbToolkit ~~ ERROR: $(call __embtk_mk_uquote,$(1))\\n$(__embtk_msg_h)")
