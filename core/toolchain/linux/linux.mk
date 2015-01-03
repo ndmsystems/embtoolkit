@@ -37,7 +37,7 @@ pembtk_linux_extsrcdir		:= $(call embtk_abspath,$(CONFIG_EMBTK_LINUX_BUILD_EXTSR
 pembtk_linux_srcdir		:= $(or $(pembtk_linux_extsrcdir),$(LINUX_BUILD_DIR))
 pembtk_linux_modules-y		:= $(shell grep MODULES=y "$(pembtk_linux_dotconfig_f)" 2>/dev/null)
 pembtk_linux_extracmd		:= $(call embtk_uquote,$(CONFIG_EMBTK_LINUX_BUILD_EXTRACMD))
-pembtk_linux_extracmd		:= $(filer-out modules_install,$(pembtk_linux_extracmd))
+pembtk_linux_extracmd		:= $(filter-out modules_install,$(pembtk_linux_extracmd))
 
 define pembtk_linux_check_dotconfig
 	if [ "x" = "x$(pembtk_linux_dotconfig_f)" ]; then			\
