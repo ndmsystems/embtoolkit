@@ -17,16 +17,39 @@
 #
 ################################################################################
 #
-# \file         java.mk
-# \brief	java.mk of Embtoolkit
+# \file         jamvm.kconfig
+# \brief	jamvm.kconfig of Embtoolkit
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         October 2014
 ################################################################################
 
-embtk_pkgincdir := packages/java
+config EMBTK_HAVE_JAMVM
+	bool "Have JamVM"
+	select EMBTK_HAVE_CLASSPATH
+	help
+	 JamVM is an extremely small Java Virtual Machine which conforms to the
+	 JVM specification version 2 (blue book).
+	 It is designed to support the full specification, and includes support
+	 for object finalisation, Soft/Weak/Phantom References, class-unloading,
+	 the Java Native Interface (JNI) and the Reflection API.
+	 See http://jamvm.sourceforge.net
 
-# gnu classpath
-$(call embtk_include_pkg,classpath)
+choice
+	prompt "jamvm version you wish"
+	depends on EMBTK_HAVE_JAMVM
+	help
+	 Here you can choose which version of jamvm you want to use.
 
-# jamvm
-$(call embtk_include_pkg,jamvm)
+	config  EMBTK_JAMVM_VERSION_2_0_0
+		bool "jamvm-2.0.0"
+		select EMBTK_JAMVM_NEED_PATCH
+endchoice
+
+config EMBTK_JAMVM_VERSION_STRING
+	string
+	default "2.0.0"	if EMBTK_JAMVM_VERSION_2_0_0
+
+config EMBTK_JAMVM_NEED_PATCH
+	bool
+config EMBTK_JAMVM_NEED_AUTORECONF
+	bool

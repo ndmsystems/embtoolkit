@@ -25,3 +25,6 @@
 
 # gnu classpath
 source packages/java/classpath/classpath.kconfig
+
+# jamvm
+source packages/java/jamvm/jamvm.kconfig
