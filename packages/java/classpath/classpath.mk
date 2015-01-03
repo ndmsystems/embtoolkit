@@ -71,6 +71,7 @@ CLASSPATH_CONFIGURE_OPTS += --disable-Werror
 CLASSPATH_CONFIGURE_OPTS += --without-x
 CLASSPATH_CONFIGURE_OPTS += --disable-xmlj
 CLASSPATH_CONFIGURE_OPTS += --with-jar="$(HOSTJAR)"
+CLASSPATH_CONFIGURE_OPTS += --with-glibj=flat
 
 CLASSPATH_DEPS := zlib_install
 
