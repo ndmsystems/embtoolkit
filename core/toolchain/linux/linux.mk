@@ -30,6 +30,7 @@
 ifeq ($(embtk_buildhost_os),macos)
 LINUX_DEPS := libelf_host_install
 endif
+LINUX_DEPS += mkimage_install
 
 pembtk_linux_dotconfig_f	:= $(call embtk_abspath,$(CONFIG_EMBTK_LINUX_DOTCONFIG))
 pembtk_linux_extsrc-y		:= $(CONFIG_EMBTK_LINUX_BUILD_USE_EXTSRC)
