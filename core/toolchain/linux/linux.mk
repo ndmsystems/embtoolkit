@@ -132,6 +132,7 @@ endef
 define pembtk_install_linux_modules
 	$(call embtk_pinfo,"Install linux kernel modules...")
 	$(embtk_configure_linux)
+	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS) modules
 	$(MAKE) -C $(pembtk_linux_srcdir) $(LINUX_MAKE_OPTS)			\
 		INSTALL_MOD_PATH=$(embtk_rootfs) modules_install
 	rm -rf $(embtk_rootfs)/lib/modules/*/build
