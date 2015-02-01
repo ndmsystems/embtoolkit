@@ -31,10 +31,10 @@ choice
 	help
 	 Version of llvm you wish
 
-	config EMBTK_CLANG_HOST_LLVM_HOST_VERSION_3_5_0
-		bool "clang/llvm-3.5.0"
-		select EMBTK_LLVM_HOST_VERSION_3_5_0
-		select EMBTK_CLANG_HOST_VERSION_3_5_0
+	config EMBTK_CLANG_HOST_LLVM_HOST_VERSION_3_5_1
+		bool "clang/llvm-3.5.1"
+		select EMBTK_LLVM_HOST_VERSION_3_5_1
+		select EMBTK_CLANG_HOST_VERSION_3_5_1
 
 	config EMBTK_CLANG_HOST_LLVM_HOST_VERSION_3_4_1
 		bool "clang/llvm-3.4.1"

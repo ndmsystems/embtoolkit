@@ -30,7 +30,7 @@ config EMBTK_HOST_HAVE_LLVM
 #
 # llvm version
 #
-config EMBTK_LLVM_HOST_VERSION_3_5_0
+config EMBTK_LLVM_HOST_VERSION_3_5_1
 	bool
 	select EMBTK_LLVM_HOST_NEED_PATCH
 
@@ -69,7 +69,7 @@ config EMBTK_LLVM_HOST_CATEGORY
 #
 config EMBTK_LLVM_HOST_VERSION_STRING
 	string
-	default "3.5.0"		if EMBTK_LLVM_HOST_VERSION_3_5_0
+	default "3.5.1"		if EMBTK_LLVM_HOST_VERSION_3_5_1
 	default "3.4.1"		if EMBTK_LLVM_HOST_VERSION_3_4_1
 	default "git"		if EMBTK_LLVM_HOST_VERSION_GIT
 
