@@ -26,6 +26,7 @@
 config EMBTK_HAVE_COMPILER-RT
 	bool
 	default y
+	select EMBTK_GCC_LANGUAGE_CPP
 	select EMBTK_COMPILER-RT_VERSION_3_3
 
 #
