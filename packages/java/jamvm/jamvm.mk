@@ -25,7 +25,7 @@
 
 JAMVM_NAME	:= jamvm
 JAMVM_VERSION	:= $(call embtk_pkg_version,jamvm)
-JAMVM_SITE	:= "http://sourceforge.net/projects/jamvm/files/jamvm/JamVM $(JAMVM_VERSION)"
+JAMVM_SITE	:= $(embtk_ftp/packages-mirror)
 JAMVM_PACKAGE	:= jamvm-$(JAMVM_VERSION).tar.gz
 JAMVM_SRC_DIR	:= $(embtk_pkgb)/jamvm-$(JAMVM_VERSION)
 JAMVM_BUILD_DIR	:= $(embtk_pkgb)/jamvm-$(JAMVM_VERSION)-build
