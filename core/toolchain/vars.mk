@@ -38,15 +38,10 @@ __TARGETCC-$(embtk_toolchain_use_llvm-y)	:= $(TARGETCLANG)
 __TARGETCXX-$(embtk_toolchain_use_llvm-y)	:= $(TARGETCLANGXX)
 
 #
-# FIXME: remove this when clang++ will support exceptions in c++ for arm,
-# as exceptions seem to work for mips.
+# c++ exceptions handling on arm work only since llvm-3.5.x
 #
-ifeq ($(CONFIG_EMBTK_ARCH_MIPS),y)
-__TARGETCXX-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= $(TARGETCLANGXX)
-__TARGETCXX-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= $(TARGETCLANGXX)
-else
-__TARGETCXX-$(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN)		:= $(TARGETGCXX)
-__TARGETCXX-$(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN)	:= $(TARGETGCXX)
+ifeq ($(CONFIG_EMBTK_ARCH_ARM)$(CONFIG_EMBTK_LLVM_HOST_VERSION_3_4_1),yy)
+__TARGETCXX-$(embtk_toolchain_use_llvm-y) := $(TARGETGCXX)
 endif
 
 TARGETCC		:= $(__TARGETCC-y)
@@ -88,8 +83,7 @@ __TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_TARGET_WITH_DEBUG_DATA),-g)
 
 # cflags for clang
 __clang_cflags		:= -Qunused-arguments
-__TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_LLVM_ONLY_TOOLCHAIN),$(__clang_cflags))
-__TARGET_CFLAGS		+= $(if $(CONFIG_EMBTK_LLVM_DEFAULT_TOOLCHAIN),$(__clang_cflags))
+__TARGET_CFLAGS		+= $(if $(embtk_toolchain_use_llvm-y),$(__clang_cflags))
 
 TARGET_CFLAGS		:= $(strip $(__TARGET_CFLAGS))
 TARGET_CXXFLAGS		:= $(filter-out $(__clang_cflags),$(TARGET_CFLAGS))
