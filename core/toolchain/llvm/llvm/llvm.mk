@@ -44,7 +44,7 @@ LLVM_HOST_CONFIGURE_OPTS	+= $(LLVM_HOST_WITH_CPU) $(LLVM_HOST_WITH_ABI)
 LLVM_HOST_CONFIGURE_OPTS	+= $(LLVM_HOST_WITH_FLOAT) $(LLVM_HOST_WITH_FPU)
 LLVM_HOST_CONFIGURE_OPTS	+= $(LLVM_HOST_WITH_HASHSTYLE)
 LLVM_HOST_CONFIGURE_OPTS	+= --with-default-sysroot=$(embtk_sysroot)
-LLVM_HOST_CONFIGURE_OPTS	+= --enable-optimized --disable-jit --disable-zlib
+LLVM_HOST_CONFIGURE_OPTS	+= --enable-optimized --disable-jit --enable-zlib
 LLVM_HOST_CONFIGURE_OPTS	+= --with-bug-report-url=$(EMBTK_BUGURL)
 LLVM_HOST_CONFIGURE_OPTS	+= --with-binutils-include=$(__embtk_binutils_inc)
 

@@ -25,6 +25,7 @@
 
 config EMBTK_HOST_HAVE_ZLIB
 	bool
+	default y
 	help
 	 zlib is a compression library.
 
