@@ -24,13 +24,15 @@
 ################################################################################
 
 ZLIB_HOST_NAME		:= zlib
-ZLIB_HOST_VERSION	:= $(call embtk_get_pkgversion,zlib_host)
-ZLIB_HOST_SITE		:= http://zlib.net
-ZLIB_HOST_PACKAGE	:= zlib-$(ZLIB_HOST_VERSION).tar.bz2
+ZLIB_HOST_VERSION	:= $(call embtk_pkg_version,zlib_host)
+ZLIB_HOST_SITE		:= http://sourceforge.net/projects/libpng/files/zlib/$(ZLIB_HOST_VERSION)
+ZLIB_HOST_PACKAGE	:= zlib-$(ZLIB_HOST_VERSION).tar.xz
 ZLIB_HOST_SRC_DIR	:= $(embtk_toolsb)/zlib-$(ZLIB_HOST_VERSION)
 ZLIB_HOST_BUILD_DIR	:= $(embtk_toolsb)/zlib-$(ZLIB_HOST_VERSION)
 
-ZLIB_HOST_CONFIGURE_ENV		:= CC=$(HOSTCC_CACHED)
+ZLIB_HOST_CONFIGURE_ENV  := CC=$(HOSTCC_CACHED)
+ZLIB_HOST_CONFIGURE_OPTS := --static
+ZLIB_HOST_MAKE_OPTS      := ARFLAGS="rcvs"
 
 define embtk_install_zlib_host
 	$(call embtk_makeinstall_hostpkg,zlib_host)

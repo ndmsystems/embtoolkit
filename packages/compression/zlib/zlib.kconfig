@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2010-2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2009-2015 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,23 +26,21 @@
 config EMBTK_HAVE_ZLIB
 	bool "Have zlib in target"
 	help
-		zlib is a compression library.
+	 zlib is a compression library.
 
 choice
 	prompt "zlib version to use"
 	depends on EMBTK_HAVE_ZLIB
 	help
-		zlib version to use
+	 zlib version to use
 
-	config EMBTK_ZLIB_VERSION_1_2_7
-		bool "zlib-1.2.7"
+	config EMBTK_ZLIB_VERSION_1_2_8
+		bool "zlib-1.2.8"
 endchoice
 
 config EMBTK_ZLIB_VERSION_STRING
 	string
-	default "1.2.7"		if EMBTK_ZLIB_VERSION_1_2_7
+	default "1.2.8"		if EMBTK_ZLIB_VERSION_1_2_8
 
 config EMBTK_ZLIB_NEED_PATCH
-	bool
-config EMBTK_ZLIB_NEED_AUTORECONF
 	bool
