@@ -56,7 +56,6 @@ endif
 ifeq ($(embtk_buildhost_os),macos)
 EMBTK_TOOLCHAIN_PREDEPS-y += findutils_host_install
 endif
-EMBTK_TOOLCHAIN_PREDEPS-y += zlib_host_install
 
 #
 # Toolchain macros evaluating if core and addons need to be built

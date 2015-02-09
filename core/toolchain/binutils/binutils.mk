@@ -23,13 +23,15 @@
 # \date         May 2009
 ################################################################################
 
-BINUTILS_NAME		:= binutils
-BINUTILS_VERSION	:= $(call embtk_pkg_version,binutils)
-BINUTILS_SITE		:= http://ftp.gnu.org/gnu/binutils
-BINUTILS_GIT_SITE	:= git://sourceware.org/git/binutils.git
-BINUTILS_PACKAGE	:= binutils-$(BINUTILS_VERSION).tar.bz2
-BINUTILS_SRC_DIR	:= $(embtk_toolsb)/binutils-$(BINUTILS_VERSION)
-BINUTILS_BUILD_DIR	:= $(embtk_toolsb)/binutils-$(BINUTILS_VERSION)-build
+BINUTILS_NAME      := binutils
+BINUTILS_VERSION   := $(call embtk_pkg_version,binutils)
+BINUTILS_SITE      := http://ftp.gnu.org/gnu/binutils
+BINUTILS_GIT_SITE  := git://sourceware.org/git/binutils.git
+BINUTILS_PACKAGE   := binutils-$(BINUTILS_VERSION).tar.bz2
+BINUTILS_SRC_DIR   := $(embtk_toolsb)/binutils-$(BINUTILS_VERSION)
+BINUTILS_BUILD_DIR := $(embtk_toolsb)/binutils-$(BINUTILS_VERSION)-build
+
+BINUTILS_DEPS      := zlib_host_install
 
 BINUTILS_KEEP_SRC_DIR	:= $(embtk_toolchain_has_llvm-y)
 

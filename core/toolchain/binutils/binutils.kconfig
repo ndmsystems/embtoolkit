@@ -25,6 +25,7 @@
 
 config EMBTK_HAVE_BINUTILS
 	bool
+	select EMBTK_HOST_HAVE_ZLIB
 	default y
 
 choice
