@@ -359,7 +359,7 @@ config KEMBTK_UCLIBC_LDSO_GNU_HASH_SUPPORT
 
 choice
 	prompt "Thread support"
-	default KEMBTK_UCLIBC_LINUXTHREADS_NEW
+	default KEMBTK_UCLIBC_UCLIBC_HAS_THREADS_NATIVE
 	help
 	  If you want to compile uClibc with pthread support, then answer Y.
 	  This will increase the size of uClibc by adding a bunch of locking
