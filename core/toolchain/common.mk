@@ -91,10 +91,8 @@ endef
 # Toolchain compress/uncompress macros
 #
 define __embtk_toolchain_compress
-	cd $(embtk_generated);							\
-	tar -cjf $(TOOLCHAIN_PACKAGE)						\
-		$(notdir $(embtk_sysroot)) $(notdir $(embtk_tools)) &&		\
-	mv $(TOOLCHAIN_PACKAGE) $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
+	tar -C $(embtk_generated) -cjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)	\
+		$(notdir $(embtk_sysroot)) $(notdir $(embtk_tools))
 endef
 
 define __embtk_toolchain_decompress
@@ -105,6 +103,6 @@ define __embtk_toolchain_decompress
 endef
 define ___embtk_toolchain_decompress
 	rm -rf $(embtk_sysroot) $(embtk_tools)
-	cd $(embtk_generated) && tar xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
+	tar -C $(embtk_generated) -xjf $(TOOLCHAIN_DIR)/$(TOOLCHAIN_PACKAGE)
 	$(__embtk_toolchain_mkinitdirs)
 endef

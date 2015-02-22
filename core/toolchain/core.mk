@@ -31,6 +31,7 @@ TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
 
 # Include .kconfig symbols if any
 -include $(call __embtk_pkg_dotkconfig_f,toolchain)
+__embtk_toolchain_installed := $(__embtk_toolchain_runrecipe-y)
 
 __embtk_xtool_gcc3-$(CONFIG_EMBTK_GCC_ONLY_TOOLCHAIN)        := gcc3_install
 __embtk_xtool_gcc3-$(CONFIG_EMBTK_GCC_DEFAULT_TOOLCHAIN)     := gcc3_install

@@ -29,7 +29,7 @@ TOOLCHAIN_ADDONS_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain_addons
 
 # Include .kconfig symbols if any
 -include $(call __embtk_pkg_dotkconfig_f,toolchain_addons)
-
+__embtk_toolchain_addons_installed := $(__embtk_toolchain_addons_runrecipe-y)
 
 #
 # Toolchain addons build recipe
