@@ -127,7 +127,7 @@ endef
 # A macro to test if a package build recipe needs to be run or not.
 #
 __embtk_pkg_runrecipe-y		= $(or $(__embtk_pkg_ninstalled-y),$(__embtk_pkg_confchanged-y),$(__embtk_pkg_configurechanged-y))
-__embtk_pkg_installed-y		= $(or $(__embtk_$(pkgv)_installed),$(wildcard $(__embtk_pkg_dotinstalled_f)))
+__embtk_pkg_installed-y		= $(or $(__embtk_$(pkgv)_installed),$(and $(wildcard $(__embtk_pkg_dotinstalled_f)),$(__embtk_$(pkgv)_installed)))
 __embtk_pkg_ninstalled-y	= $(if $(__embtk_pkg_installed-y),,y)
 __embtk_pkg_confchanged-y	= $(call __embtk_strneq,$(__embtk_pkg_kconfigs_all_v),$(__embtk_$(pkgv)_okconfigs))
 __embtk_pkg_configurechanged-y	= $(call __embtk_strneq,$(__embtk_pkg_configureopts),$(__embtk_$(pkgv)_oconfigureopts))
