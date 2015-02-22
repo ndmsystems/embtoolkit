@@ -25,6 +25,7 @@
 
 config EMBTK_GCC_LANGUAGE_CPP
 	bool "Support C++"
+	default y
 	select EMBTK_GCC1_LANGUAGE_CPP
 	select EMBTK_GCC2_LANGUAGE_CPP
 	select EMBTK_GCC3_LANGUAGE_CPP
