@@ -31,7 +31,6 @@ LINUX_HEADERS_SRC_DIR	:= $(call embtk_pkg_srcdir,linux)
 LINUX_HEADERS_BUILD_DIR	:= $(call embtk_pkg_srcdir,linux)
 
 LINUX_HEADERS_KEEP_SRC_DIR  := $(LINUX_KEEP_SRC_DIR)
-LINUX_HEADERS_KCONFIGS_NAME := LINUX
 
 #
 # linux headers install
