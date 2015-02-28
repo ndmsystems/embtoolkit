@@ -58,7 +58,7 @@ config EMBTK_COMPILER-RT_GIT_REVISION
 	help
 	 Chechout a specific revision instead of the latest.
 
-config EMBTK_COMPILER-RT_REFSPEC
+config EMBTK_COMPILER-RT_CATEGORY
 	string
 	default "toolchain"
 

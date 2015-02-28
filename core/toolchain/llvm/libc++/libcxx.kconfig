@@ -62,7 +62,7 @@ config EMBTK_LIBCXX_GIT_REVISION
 	help
 	 Chechout a specific revision instead of the latest.
 
-config EMBTK_LIBCXX_REFSPEC
+config EMBTK_LIBCXX_CATEGORY
 	string
 	default "toolchain"
 
