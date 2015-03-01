@@ -79,7 +79,10 @@ __embtk_pkg_tarball_tarxz	= $(if $(filter %.tar.xz,$(__embtk_pkg_package)),tar.x
 __embtk_pkg_tarball_txz		= $(if $(filter %.txz,$(__embtk_pkg_package)),txz)
 __embtk_pkg_tarball_tar		= $(if $(filter %.tar,$(__embtk_pkg_package)),tar)
 
-__embtk_pkg_refspec		= $(or $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_REFSPEC)),$(__embtk_$(pkgv)_category))
+__embtk_pkg_category		= $(call embtk_uquote,$(CONFIG_EMBTK_$(PKGV)_CATEGORY))
+# FIXME: drop __embtk_pkg_refspec in favor of __embtk_pkg_category
+___embtk_pkg_refspec		= $(call embtk_uquote,$(CONFIG_EMBTK_$(PKGV)_REFSPEC))
+__embtk_pkg_refspec		= $(or $(___embtk_pkg_refspec),$(__embtk_pkg_category),$(__embtk_$(pkgv)_category))
 
 __embtk_pkg_usesvn		= $(if $(CONFIG_EMBTK_$(PKGV)_VERSION_SVN),svn)
 __embtk_pkg_svnsite		= $(or $(call __embtk_mk_uquote,$(CONFIG_EMBTK_$(PKGV)_SVN_SITE)),$(strip $($(PKGV)_SVN_SITE)))
