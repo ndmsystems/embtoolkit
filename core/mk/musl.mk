@@ -37,8 +37,21 @@ __embtk_musl_v	+= "Cross Compiler $(embtk_targetcc_name-v) [$(embtk_host_uname)]
 __embtk_musl_cflags := $(TARGET_CFLAGS)
 __embtk_musl_cflags += $(if $(embtk_toolchain_use_llvm-y),-Wno-unknown-warning-option)
 
+#
+# musl fixup:
+# 1: clang does not support -frounding-math cflag
+#
+define pembtk_musl_fixup
+	$(if $(embtk_toolchain_use_llvm-y),
+	configure=$(call __embtk_pkg_srcdir,musl)/configure;			\
+	sed -e '/tryflag[[:space:]]CFLAGS_C99FSE[[:space:]]-frounding-math/d'	\
+		< $$configure > $$configure.tmp;				\
+	mv $$configure.tmp $$configure; chmod 0755 $$configure)
+endef
+
 define embtk_beforeinstall_musl
 	$(MAKE) -C $(MUSL_BUILD_DIR) distclean
+	$(pembtk_musl_fixup)
 	cd $(MUSL_SRC_DIR);							\
 		CC=$(TARGETCC_CACHED)						\
 		CROSS_COMPILE="$(CROSS_COMPILE)"				\
