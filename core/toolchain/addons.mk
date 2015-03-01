@@ -36,7 +36,6 @@ __embtk_toolchain_addons_installed := $(__embtk_toolchain_addons_runrecipe-y)
 #
 __embtk_toolchain_addons-y    = $(patsubst %_install,%,$(EMBTK_TOOLCHAIN_ADDONS_DEPS-y))
 __embtk_toolchain_addons-n    = $(patsubst %_install,%,$(EMBTK_TOOLCHAIN_ADDONS_DEPS-))
-__embtk_toolsaddons_build_msg = $(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain ADDONS - please wait...")
 
 define __embtk_toolchain_addons_build
 	$(__embtk_toolsaddons_build_msg)

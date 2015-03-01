@@ -61,7 +61,6 @@ endif
 #
 __embtk_toolchain_deps-y	= $(patsubst %_install,%,$(EMBTK_TOOLCHAIN_DEPS-y))
 __embtk_toolchain_built_msg	= $(call embtk_pinfo,"New $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain successfully built!")
-__embtk_toolchain_building_msg	= $(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) CORE toolchain - please wait...")
 
 define __embtk_toolchain_core_build
 	$(__embtk_toolchain_building_msg)

@@ -44,11 +44,14 @@ define __embtk_toolchain_build
 	$(eval __xtool_build        := $(if $(__embtk_toolchain_runrecipe-y),core))
 	$(eval __xtool_addons_build := $(if $(__embtk_toolchain_addons_runrecipe-y),addons))
 	$(eval __xtool_build_args   := $(strip $(__xtool_build) $(__xtool_addons_build)))
+	$(if $(__xtool_build),
+		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) CORE toolchain - please wait..."))
 	$(__embtk_toolchain_mkinitdirs)
 	$(foreach pdep,$(__embtk_toolchain_predeps-y),$(call embtk_install_xpkg,$(pdep)))
 	$(if $(__xtool_build),
 		$(call __embtk_toolchain_core_build,$(__xtool_build_args)))
 	$(if $(__xtool_addons_build),
+		$(call embtk_pinfo,"Building new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain ADDONS - please wait...")
 		$(call __embtk_toolchain_addons_build,$(__xtool_build_args)))
 	$(if $(__xtool_build_args),
 		$(call embtk_pinfo,"Packaging new $(GNU_TARGET)/$(EMBTK_MCU_FLAG) toolchain - please wait...")
