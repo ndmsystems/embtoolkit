@@ -28,6 +28,10 @@ choice
 	help
 	 Here you can choose which Linux kernel headers you want to use.
 
+	config EMBTK_LINUX_VERSION_3_19_X
+		bool "linux-3.19.x"
+		help
+		 Use a linux-3.19.x version.
 	config EMBTK_LINUX_VERSION_3_18_X
 		bool "linux-3.18.x"
 		help
@@ -137,6 +141,10 @@ choice
 		help
 		 Use a linux-2.6.32.x version.
 endchoice
+
+if EMBTK_LINUX_VERSION_3_19_X
+source core/kconfig/linux-kconfigs/linux-3.19.kconfig
+endif
 
 if EMBTK_LINUX_VERSION_3_18_X
 source core/kconfig/linux-kconfigs/linux-3.18.kconfig
