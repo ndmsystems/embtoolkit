@@ -32,7 +32,9 @@ ZLIB_HOST_BUILD_DIR	:= $(embtk_toolsb)/zlib-$(ZLIB_HOST_VERSION)
 
 ZLIB_HOST_CONFIGURE_ENV  := CC=$(HOSTCC_CACHED)
 ZLIB_HOST_CONFIGURE_OPTS := --static
+ifeq ($(embtk_buildhost-macos),)
 ZLIB_HOST_MAKE_OPTS      := ARFLAGS="rcvs"
+endif
 
 define embtk_install_zlib_host
 	$(call embtk_makeinstall_hostpkg,zlib_host)
