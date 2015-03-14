@@ -39,20 +39,29 @@ HOST_BUILD		:= $(HOST_ARCH)
 export HOST_ARCH HOST_BUILD
 
 ifeq ($(findstring linux,$(HOST_ARCH)),linux)
-embtk_buildhost_os	:= linux
-embtk_buildhost_os_type	:= linux
+embtk_buildhost_os      := linux
+embtk_buildhost_os_type := linux
+embtk_buildhost-linux   := y
 else ifeq ($(findstring freebsd,$(HOST_ARCH)),freebsd)
-embtk_buildhost_os	:= freebsd
-embtk_buildhost_os_type	:= bsd
+embtk_buildhost_os      := freebsd
+embtk_buildhost_os_type := bsd
+embtk_buildhost-freebsd := y
+embtk_buildhost-bsd     := y
 else ifeq ($(findstring netbsd,$(HOST_ARCH)),netbsd)
 embtk_buildhost_os	:= netbsd
-embtk_buildhost_os_type	:= bsd
+embtk_buildhost_os_type := bsd
+embtk_buildhost-netbsd  := y
+embtk_buildhost-bsd     := y
 else ifeq ($(findstring openbsd,$(HOST_ARCH)),openbsd)
-embtk_buildhost_os	:= openbsd
-embtk_buildhost_os_type	:= bsd
+embtk_buildhost_os      := openbsd
+embtk_buildhost_os_type := bsd
+embtk_buildhost-openbsd := y
+embtk_buildhost-bsd     := y
 else ifeq ($(findstring apple,$(HOST_ARCH)),apple)
-embtk_buildhost_os	:= macos
-embtk_buildhost_os_type	:= bsd
+embtk_buildhost_os      := macos
+embtk_buildhost_os_type := bsd
+embtk_buildhost-macos   := y
+embtk_buildhost-bsd     := y
 else
 embtk_buildhost_os	:= unknown-host-os
 endif
