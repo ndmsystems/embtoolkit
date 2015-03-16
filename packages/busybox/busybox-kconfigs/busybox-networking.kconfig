@@ -155,7 +155,6 @@ config KEMBTK_BUSYB_ARPING
 
 config KEMBTK_BUSYB_BRCTL
 	bool "brctl"
-	default y
 	select KEMBTK_BUSYB_PLATFORM_LINUX
 	help
 	  Manage ethernet bridges.
