@@ -1,0 +1,45 @@
+From 892d99d923abb1da7fe8a34412d3a2b19cf34937 Mon Sep 17 00:00:00 2001
+From: dje <dje@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 30 Oct 2014 15:00:54 +0000
+Subject: [PATCH 03/19]         Backported from mainline.         2014-10-30 
+ David Edelsohn  <dje.gcc@gmail.com>
+
+        * configure.host (aix4.3+, 5+): Do not use -G in link command.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@216937 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ libstdc++-v3/ChangeLog      | 7 +++++++
+ libstdc++-v3/configure.host | 1 -
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/libstdc++-v3/ChangeLog b/libstdc++-v3/ChangeLog
+index 3656410..3eca6af 100644
+--- a/libstdc++-v3/ChangeLog
++++ b/libstdc++-v3/ChangeLog
+@@ -1,3 +1,10 @@
++2014-10-30  David Edelsohn
++
++	Backported from mainline.
++	2014-10-30  David Edelsohn  <dje.gcc@gmail.com>
++
++	* configure.host (aix4.3+, 5+): Do not use -G in link command.
++
+ 2014-10-30  Release Manager
+ 
+ 	* GCC 4.9.2 released.
+diff --git a/libstdc++-v3/configure.host b/libstdc++-v3/configure.host
+index c168454..a5c038c 100644
+--- a/libstdc++-v3/configure.host
++++ b/libstdc++-v3/configure.host
+@@ -219,7 +219,6 @@ case "${host_os}" in
+     os_include_dir="os/aix"
+     atomicity_dir="os/aix"
+     atomic_word_dir="os/aix"
+-    OPT_LDFLAGS="-Wl,-G"
+     ;;
+   aix4.*)
+     os_include_dir="os/generic"
+-- 
+2.0.3
+

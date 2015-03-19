@@ -1,0 +1,32 @@
+From e62d56ff02f798cfeb899fa9f5af198a85ec8f41 Mon Sep 17 00:00:00 2001
+From: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+Date: Sat, 1 Mar 2014 22:35:17 +0100
+Subject: [PATCH 11/19] [MUSL]MIPS: add dynamic linker name
+
+Signed-off-by: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+
+Conflicts:
+	gcc/config/mips/linux.h
+---
+ gcc/config/mips/linux.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/gcc/config/mips/linux.h b/gcc/config/mips/linux.h
+index e539422..0d5e93f 100644
+--- a/gcc/config/mips/linux.h
++++ b/gcc/config/mips/linux.h
+@@ -23,3 +23,11 @@ along with GCC; see the file COPYING3.  If not see
+ #undef UCLIBC_DYNAMIC_LINKER
+ #define UCLIBC_DYNAMIC_LINKER \
+   "%{mnan=2008:/lib/ld-uClibc-mipsn8.so.0;:/lib/ld-uClibc.so.0}"
++
++#undef MUSL_DYNAMIC_LINKER
++#if TARGET_ENDIAN_DEFAULT == 0 /* LE */
++#define MUSL_DYNAMIC_LINKER_E "%{EB:;:el}"
++#else
++#define MUSL_DYNAMIC_LINKER_E "%{EL:el}"
++#endif
++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E ".so.1"
+-- 
+2.0.3
+

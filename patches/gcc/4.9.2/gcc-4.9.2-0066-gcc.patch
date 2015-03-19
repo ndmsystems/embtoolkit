@@ -1,0 +1,48 @@
+From 68a9552f2928bc579a526a79b19b65e646bef953 Mon Sep 17 00:00:00 2001
+From: olegendo <olegendo@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sat, 22 Nov 2014 04:45:46 +0000
+Subject: [PATCH 66/67] gcc/ 	Backport from mainline 	2014-11-20  Segher
+ Boessenkool  <segher@kernel.crashing.org>
+
+	PR target/60111
+	* config/sh/sh.c: Use signed char for signed field.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217958 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog      | 8 ++++++++
+ gcc/config/sh/sh.c | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index f66747f..3ac09f5 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,11 @@
++2014-11-22  Oleg Endo  <olegendo@gcc.gnu.org>
++
++	Backport from mainline
++	2014-11-20  Segher Boessenkool  <segher@kernel.crashing.org>
++
++	PR target/60111
++	* config/sh/sh.c: Use signed char for signed field.
++
+ 2014-11-21  Bill Schmidt  <wschmidt@linux.vnet.ibm.com>
+ 
+ 	PR target/63673
+diff --git a/gcc/config/sh/sh.c b/gcc/config/sh/sh.c
+index 3d4553a..0679818 100644
+--- a/gcc/config/sh/sh.c
++++ b/gcc/config/sh/sh.c
+@@ -2957,7 +2957,7 @@ enum
+ struct ashl_lshr_sequence
+ {
+   char insn_count;
+-  char amount[6];
++  signed char amount[6];
+   char clobbers_t;
+ };
+ 
+-- 
+2.0.3
+

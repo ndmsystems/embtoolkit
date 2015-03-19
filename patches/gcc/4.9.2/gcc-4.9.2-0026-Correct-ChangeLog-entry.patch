@@ -1,0 +1,23 @@
+From b0232e7518837a1d6e8ba6d8297d6eb17f6f7bd3 Mon Sep 17 00:00:00 2001
+From: dje <dje@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 5 Nov 2014 14:51:16 +0000
+Subject: [PATCH 26/36] Correct ChangeLog entry.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217130 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ libstdc++-v3/ChangeLog | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libstdc++-v3/ChangeLog b/libstdc++-v3/ChangeLog
+index 3eca6af..1e28b2b 100644
+--- a/libstdc++-v3/ChangeLog
++++ b/libstdc++-v3/ChangeLog
+@@ -1,4 +1,4 @@
+-2014-10-30  David Edelsohn
++2014-10-30  David Edelsohn  <dje.gcc@gmail.com>
+ 
+ 	Backported from mainline.
+ 	2014-10-30  David Edelsohn  <dje.gcc@gmail.com>
+-- 
+2.0.3
+

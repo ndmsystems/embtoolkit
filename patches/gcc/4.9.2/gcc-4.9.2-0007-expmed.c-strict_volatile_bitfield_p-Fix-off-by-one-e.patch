@@ -1,0 +1,89 @@
+From ad5c2606cedd8f4e931ccba9a3241159df91af2b Mon Sep 17 00:00:00 2001
+From: dj <dj@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 31 Oct 2014 21:03:50 +0000
+Subject: [PATCH 07/19] * expmed.c (strict_volatile_bitfield_p): Fix off-by-one
+ error. * gcc.dg/20141029-1.c: New.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@216989 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                     |  4 ++++
+ gcc/expmed.c                      |  2 +-
+ gcc/testsuite/ChangeLog           |  4 ++++
+ gcc/testsuite/gcc.dg/20141029-1.c | 28 ++++++++++++++++++++++++++++
+ 4 files changed, 37 insertions(+), 1 deletion(-)
+ create mode 100644 gcc/testsuite/gcc.dg/20141029-1.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index aa76d2b..0253fc2 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,7 @@
++2014-10-31  DJ Delorie  <dj@redhat.com>
++
++	* expmed.c (strict_volatile_bitfield_p): Fix off-by-one error.
++
+ 2014-10-31  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+ 
+ 	* config/aarch64/aarch64-elf-raw.h (CA53_ERR_835769_SPEC): Define.
+diff --git a/gcc/expmed.c b/gcc/expmed.c
+index 6e9975d..cee002b 100644
+--- a/gcc/expmed.c
++++ b/gcc/expmed.c
+@@ -463,7 +463,7 @@ strict_volatile_bitfield_p (rtx op0, unsigned HOST_WIDE_INT bitsize,
+   /* Check for cases where the C++ memory model applies.  */
+   if (bitregion_end != 0
+       && (bitnum - bitnum % modesize < bitregion_start
+-	  || bitnum - bitnum % modesize + modesize > bitregion_end))
++	  || bitnum - bitnum % modesize + modesize - 1 > bitregion_end))
+     return false;
+ 
+   return true;
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index be16d9c..96699338 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,7 @@
++2014-10-31  DJ Delorie  <dj@redhat.com>
++
++	* gcc.dg/20141029-1.c: New.
++
+ 2014-10-31  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR sanitizer/63697
+diff --git a/gcc/testsuite/gcc.dg/20141029-1.c b/gcc/testsuite/gcc.dg/20141029-1.c
+new file mode 100644
+index 0000000..b25af57
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/20141029-1.c
+@@ -0,0 +1,28 @@
++/* { dg-do compile } */
++/* { dg-options "-fstrict-volatile-bitfields -fdump-rtl-final" } */
++
++#define PERIPH (*(volatile struct system_periph *)0x81234)
++
++struct system_periph {
++  union {
++    unsigned short WORD;
++    struct {
++      unsigned short a:1;
++      unsigned short b:1;
++      unsigned short  :5;
++      unsigned short c:1;
++      unsigned short  :8;
++    } BIT;
++  } ALL;
++};
++
++void
++foo()
++{
++  while (1)
++    {
++      PERIPH.ALL.BIT.a = 1;
++    }
++}
++/* { dg-final { scan-rtl-dump-times "mem/v(/.)*:HI" 4 "final" } } */
++/* { dg-final { cleanup-rtl-dump "final" } } */
+-- 
+2.0.3
+

@@ -1,0 +1,27 @@
+From dfe2cd39b49ddf3d87aaa73fffa75fdebaa35d02 Mon Sep 17 00:00:00 2001
+From: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+Date: Sat, 1 Mar 2014 22:31:04 +0100
+Subject: [PATCH 09/19] [MUSL] remove use of fixincludes
+
+Signed-off-by: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+---
+ fixincludes/mkfixinc.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fixincludes/mkfixinc.sh b/fixincludes/mkfixinc.sh
+index 6653fed..0d96c8c 100755
+--- a/fixincludes/mkfixinc.sh
++++ b/fixincludes/mkfixinc.sh
+@@ -19,7 +19,8 @@ case $machine in
+     powerpc-*-eabi*    | \
+     powerpc-*-rtems*   | \
+     powerpcle-*-eabisim* | \
+-    powerpcle-*-eabi* )
++    powerpcle-*-eabi* | \
++    *-musl* )
+ 	#  IF there is no include fixing,
+ 	#  THEN create a no-op fixer and exit
+ 	(echo "#! /bin/sh" ; echo "exit 0" ) > ${target}
+-- 
+2.0.3
+

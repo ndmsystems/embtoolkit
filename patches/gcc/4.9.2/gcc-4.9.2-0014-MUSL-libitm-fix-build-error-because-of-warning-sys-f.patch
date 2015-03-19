@@ -1,0 +1,27 @@
+From 4de8b788e20f7f7ea2df043d392b9ada0cddbd6b Mon Sep 17 00:00:00 2001
+From: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+Date: Sat, 1 Mar 2014 22:47:00 +0100
+Subject: [PATCH 14/19] [MUSL]libitm: fix build error because of warning
+ <sys/fcntl.h>
+
+Signed-off-by: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+---
+ libitm/config/arm/hwcap.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libitm/config/arm/hwcap.cc b/libitm/config/arm/hwcap.cc
+index 11ef0f6..fd55708 100644
+--- a/libitm/config/arm/hwcap.cc
++++ b/libitm/config/arm/hwcap.cc
+@@ -40,7 +40,7 @@ int GTM_hwcap HIDDEN = 0
+ 
+ #ifdef __linux__
+ #include <unistd.h>
+-#include <sys/fcntl.h>
++#include <fcntl.h>
+ #include <elf.h>
+ 
+ static void __attribute__((constructor))
+-- 
+2.0.3
+

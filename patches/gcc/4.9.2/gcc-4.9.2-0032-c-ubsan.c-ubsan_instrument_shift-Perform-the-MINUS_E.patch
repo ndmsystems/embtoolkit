@@ -1,0 +1,125 @@
+From e341170f6775b8a80b701ed4bbf6967b61d38efa Mon Sep 17 00:00:00 2001
+From: mpolacek <mpolacek@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 7 Nov 2014 12:03:38 +0000
+Subject: [PATCH 32/36] 	* c-ubsan.c (ubsan_instrument_shift): Perform the
+ MINUS_EXPR 	in unsigned type.
+
+	* c-c++-common/ubsan/undefined-2.c: New test.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217216 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                                  |  8 ++++++++
+ gcc/c-family/c-ubsan.c                         | 11 ++++++-----
+ gcc/testsuite/ChangeLog                        |  4 ++++
+ gcc/testsuite/c-c++-common/ubsan/undefined-2.c | 26 ++++++++++++++++++++++++++
+ 4 files changed, 44 insertions(+), 5 deletions(-)
+ create mode 100644 gcc/testsuite/c-c++-common/ubsan/undefined-2.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 4c2a65c..f92c228 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,11 @@
++2014-11-07  Marek Polacek  <polacek@redhat.com>
++
++	Backported from mainline
++	2014-10-23  Marek Polacek  <polacek@redhat.com>
++
++	* c-ubsan.c (ubsan_instrument_shift): Perform the MINUS_EXPR
++	in unsigned type.
++
+ 2014-11-06  John David Anglin  <danglin@gcc.gnu.org>
+ 
+ 	* config/pa/pa.md (trap): New insn.  Add "trap" to attribute type.
+diff --git a/gcc/c-family/c-ubsan.c b/gcc/c-family/c-ubsan.c
+index e89ebc1..2c0d009 100644
+--- a/gcc/c-family/c-ubsan.c
++++ b/gcc/c-family/c-ubsan.c
+@@ -98,19 +98,19 @@ ubsan_instrument_shift (location_t loc, enum tree_code code,
+   tree op1_utype = unsigned_type_for (type1);
+   HOST_WIDE_INT op0_prec = TYPE_PRECISION (type0);
+   tree uprecm1 = build_int_cst (op1_utype, op0_prec - 1);
+-  tree precm1 = build_int_cst (type1, op0_prec - 1);
+ 
+   t = fold_convert_loc (loc, op1_utype, op1);
+   t = fold_build2 (GT_EXPR, boolean_type_node, t, uprecm1);
+ 
+   /* For signed x << y, in C99/C11, the following:
+-     (unsigned) x >> (precm1 - y)
++     (unsigned) x >> (uprecm1 - y)
+      if non-zero, is undefined.  */
+   if (code == LSHIFT_EXPR
+       && !TYPE_UNSIGNED (type0)
+       && flag_isoc99)
+     {
+-      tree x = fold_build2 (MINUS_EXPR, integer_type_node, precm1, op1);
++      tree x = fold_build2 (MINUS_EXPR, unsigned_type_node, uprecm1,
++			    fold_convert (op1_utype, op1));
+       tt = fold_convert_loc (loc, unsigned_type_for (type0), op0);
+       tt = fold_build2 (RSHIFT_EXPR, TREE_TYPE (tt), tt, x);
+       tt = fold_build2 (NE_EXPR, boolean_type_node, tt,
+@@ -118,13 +118,14 @@ ubsan_instrument_shift (location_t loc, enum tree_code code,
+     }
+ 
+   /* For signed x << y, in C++11/C++14, the following:
+-     x < 0 || ((unsigned) x >> (precm1 - y))
++     x < 0 || ((unsigned) x >> (uprecm1 - y))
+      if > 1, is undefined.  */
+   if (code == LSHIFT_EXPR
+       && !TYPE_UNSIGNED (TREE_TYPE (op0))
+       && (cxx_dialect == cxx11 || cxx_dialect == cxx1y))
+     {
+-      tree x = fold_build2 (MINUS_EXPR, integer_type_node, precm1, op1);
++      tree x = fold_build2 (MINUS_EXPR, unsigned_type_node, uprecm1,
++			    fold_convert (op1_utype, op1));
+       tt = fold_convert_loc (loc, unsigned_type_for (type0), op0);
+       tt = fold_build2 (RSHIFT_EXPR, TREE_TYPE (tt), tt, x);
+       tt = fold_build2 (GT_EXPR, boolean_type_node, tt,
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 1f3cf84..426bf2c 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,7 @@
++2014-11-07  Marek Polacek  <polacek@redhat.com>
++
++	* c-c++-common/ubsan/undefined-2.c: New test.
++
+ 2014-11-05  Uros Bizjak  <ubizjak@gmail.com>
+ 
+ 	PR target/63538
+diff --git a/gcc/testsuite/c-c++-common/ubsan/undefined-2.c b/gcc/testsuite/c-c++-common/ubsan/undefined-2.c
+new file mode 100644
+index 0000000..fd5b4d3
+--- /dev/null
++++ b/gcc/testsuite/c-c++-common/ubsan/undefined-2.c
+@@ -0,0 +1,26 @@
++/* { dg-do run } */
++/* { dg-options "-fsanitize=undefined" } */
++/* { dg-additional-options "-std=gnu11" { target c } } */
++/* { dg-additional-options "-std=c++11" { target c++ } } */
++
++#include <stdio.h>
++
++volatile int w, z;
++
++__attribute__ ((noinline, noclone)) int
++foo (int x, int y)
++{
++  z++;
++  return x << y;
++}
++
++int
++main ()
++{
++  fputs ("1st\n", stderr);
++  w = foo (0, -__INT_MAX__);
++  return 0;
++}
++
++/* { dg-output "1st(\n|\r\n|\r)" } */
++/* { dg-output "\[^\n\r]*shift exponent -\[^\n\r]* is negative\[^\n\r]*(\n|\r\n|\r)" } */
+-- 
+2.0.3
+

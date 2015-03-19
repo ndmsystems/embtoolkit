@@ -1,0 +1,52 @@
+From ecaa9dbfee7f8dee26027118094e73be3d66b1d4 Mon Sep 17 00:00:00 2001
+From: fyang <fyang@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 14 Nov 2014 16:02:28 +0000
+Subject: [PATCH 51/67]         Backport from mainline         2014-11-14 
+ Felix Yang  <felix.yang@huawei.com>                     Jiji Jiang 
+ <jiangjiji@huawei.com>
+
+        * config/aarch64/aarch64-simd.md (*aarch64_simd_ld1r<mode>): Use
+        VALL mode iterator instead of VALLDI.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217574 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                      | 9 +++++++++
+ gcc/config/aarch64/aarch64-simd.md | 4 ++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 24d1953..965c695 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,12 @@
++2014-11-14  Felix Yang  <felix.yang@huawei.com>
++
++	Backport from mainline
++	2014-11-14  Felix Yang  <felix.yang@huawei.com>
++		    Jiji Jiang  <jiangjiji@huawei.com>
++
++	* config/aarch64/aarch64-simd.md (*aarch64_simd_ld1r<mode>): Use
++	VALL mode iterator instead of VALLDI.
++
+ 2014-11-13  Teresa Johnson  <tejohnson@google.com>
+ 
+ 	PR tree-optimization/63841
+diff --git a/gcc/config/aarch64/aarch64-simd.md b/gcc/config/aarch64/aarch64-simd.md
+index 851e77a..30e9f60 100644
+--- a/gcc/config/aarch64/aarch64-simd.md
++++ b/gcc/config/aarch64/aarch64-simd.md
+@@ -4565,8 +4565,8 @@
+ })
+ 
+ (define_insn "*aarch64_simd_ld1r<mode>"
+-  [(set (match_operand:VALLDI 0 "register_operand" "=w")
+-	(vec_duplicate:VALLDI
++  [(set (match_operand:VALL 0 "register_operand" "=w")
++	(vec_duplicate:VALL
+ 	  (match_operand:<VEL> 1 "aarch64_simd_struct_operand" "Utv")))]
+   "TARGET_SIMD"
+   "ld1r\\t{%0.<Vtype>}, %1"
+-- 
+2.0.3
+

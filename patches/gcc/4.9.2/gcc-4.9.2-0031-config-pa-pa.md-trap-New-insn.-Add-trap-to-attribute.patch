@@ -1,0 +1,86 @@
+From 69f4277513d3b260a1ec69a96b232841e0d09617 Mon Sep 17 00:00:00 2001
+From: danglin <danglin@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 7 Nov 2014 00:56:41 +0000
+Subject: [PATCH 31/36] 	* config/pa/pa.md (trap): New insn.  Add "trap" to
+ attribute type. 	Don't allow trap insn in in_branch_delay,
+ in_nullified_branch_delay 	or in_call_delay.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217209 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog       |  6 ++++++
+ gcc/config/pa/pa.md | 17 +++++++++++++----
+ 2 files changed, 19 insertions(+), 4 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index de4e9a9..4c2a65c 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,9 @@
++2014-11-06  John David Anglin  <danglin@gcc.gnu.org>
++
++	* config/pa/pa.md (trap): New insn.  Add "trap" to attribute type.
++	Don't allow trap insn in in_branch_delay, in_nullified_branch_delay
++	or in_call_delay.
++	
+ 2014-11-06  Daniel Hellstrom  <daniel@gaisler.com>
+ 
+ 	* config.gcc (sparc*-*-*): Accept mcpu=leon3v7 processor.
+diff --git a/gcc/config/pa/pa.md b/gcc/config/pa/pa.md
+index a9421ac..f4f966a 100644
+--- a/gcc/config/pa/pa.md
++++ b/gcc/config/pa/pa.md
+@@ -123,7 +123,7 @@
+ ;; type "binary" insns have two input operands (1,2) and one output (0)
+ 
+ (define_attr "type"
+-  "move,unary,binary,shift,nullshift,compare,load,store,uncond_branch,branch,cbranch,fbranch,call,sibcall,dyncall,fpload,fpstore,fpalu,fpcc,fpmulsgl,fpmuldbl,fpdivsgl,fpdivdbl,fpsqrtsgl,fpsqrtdbl,multi,milli,sh_func_adrs,parallel_branch,fpstore_load,store_fpload"
++  "move,unary,binary,shift,nullshift,compare,load,store,uncond_branch,branch,cbranch,fbranch,call,sibcall,dyncall,fpload,fpstore,fpalu,fpcc,fpmulsgl,fpmuldbl,fpdivsgl,fpdivdbl,fpsqrtsgl,fpsqrtdbl,multi,milli,sh_func_adrs,parallel_branch,fpstore_load,store_fpload,trap"
+   (const_string "binary"))
+ 
+ (define_attr "pa_combine_type"
+@@ -166,7 +166,7 @@
+ ;; For conditional branches. Frame related instructions are not allowed
+ ;; because they confuse the unwind support.
+ (define_attr "in_branch_delay" "false,true"
+-  (if_then_else (and (eq_attr "type" "!uncond_branch,branch,cbranch,fbranch,call,sibcall,dyncall,multi,milli,sh_func_adrs,parallel_branch")
++  (if_then_else (and (eq_attr "type" "!uncond_branch,branch,cbranch,fbranch,call,sibcall,dyncall,multi,milli,sh_func_adrs,parallel_branch,trap")
+ 		     (eq_attr "length" "4")
+ 		     (not (match_test "RTX_FRAME_RELATED_P (insn)")))
+ 		(const_string "true")
+@@ -175,7 +175,7 @@
+ ;; Disallow instructions which use the FPU since they will tie up the FPU
+ ;; even if the instruction is nullified.
+ (define_attr "in_nullified_branch_delay" "false,true"
+-  (if_then_else (and (eq_attr "type" "!uncond_branch,branch,cbranch,fbranch,call,sibcall,dyncall,multi,milli,sh_func_adrs,fpcc,fpalu,fpmulsgl,fpmuldbl,fpdivsgl,fpdivdbl,fpsqrtsgl,fpsqrtdbl,parallel_branch")
++  (if_then_else (and (eq_attr "type" "!uncond_branch,branch,cbranch,fbranch,call,sibcall,dyncall,multi,milli,sh_func_adrs,fpcc,fpalu,fpmulsgl,fpmuldbl,fpdivsgl,fpdivdbl,fpsqrtsgl,fpsqrtdbl,parallel_branch,trap")
+ 		     (eq_attr "length" "4")
+ 		     (not (match_test "RTX_FRAME_RELATED_P (insn)")))
+ 		(const_string "true")
+@@ -184,7 +184,7 @@
+ ;; For calls and millicode calls.  Allow unconditional branches in the
+ ;; delay slot.
+ (define_attr "in_call_delay" "false,true"
+-  (cond [(and (eq_attr "type" "!uncond_branch,branch,cbranch,fbranch,call,sibcall,dyncall,multi,milli,sh_func_adrs,parallel_branch")
++  (cond [(and (eq_attr "type" "!uncond_branch,branch,cbranch,fbranch,call,sibcall,dyncall,multi,milli,sh_func_adrs,parallel_branch,trap")
+ 	      (eq_attr "length" "4")
+ 	      (not (match_test "RTX_FRAME_RELATED_P (insn)")))
+ 	   (const_string "true")
+@@ -5331,6 +5331,15 @@
+   [(set_attr "type" "binary,binary")
+    (set_attr "length" "4,4")])
+ 
++;; Trap instructions.
++
++(define_insn "trap"
++  [(trap_if (const_int 1) (const_int 0))]
++  ""
++  "{addit|addi,tc},<> 1,%%r0,%%r0"
++  [(set_attr "type" "trap")
++   (set_attr "length" "4")])
++
+ ;; Clobbering a "register_operand" instead of a match_scratch
+ ;; in operand3 of millicode calls avoids spilling %r1 and
+ ;; produces better code.
+-- 
+2.0.3
+

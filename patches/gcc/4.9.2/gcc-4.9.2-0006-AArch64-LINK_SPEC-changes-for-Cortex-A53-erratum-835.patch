@@ -1,0 +1,83 @@
+From 46b832bde6bcf4bedaa599e0e8793401a62e9928 Mon Sep 17 00:00:00 2001
+From: ktkachov <ktkachov@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 31 Oct 2014 14:32:34 +0000
+Subject: [PATCH 06/19] [AArch64] LINK_SPEC changes for Cortex-A53 erratum
+ 835769 workaround
+
+    * config/aarch64/aarch64-elf-raw.h (CA53_ERR_835769_SPEC): Define.
+    (LINK_SPEC): Include CA53_ERR_835769_SPEC.
+    * config/aarch64/aarch64-linux.h (CA53_ERR_835769_SPEC): Define.
+    (LINK_SPEC): Include CA53_ERR_835769_SPEC.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@216979 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                        |  7 +++++++
+ gcc/config/aarch64/aarch64-elf-raw.h | 11 ++++++++++-
+ gcc/config/aarch64/aarch64-linux.h   | 11 ++++++++++-
+ 3 files changed, 27 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 88eb5bd..aa76d2b 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,10 @@
++2014-10-31  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
++
++	* config/aarch64/aarch64-elf-raw.h (CA53_ERR_835769_SPEC): Define.
++	(LINK_SPEC): Include CA53_ERR_835769_SPEC.
++	* config/aarch64/aarch64-linux.h (CA53_ERR_835769_SPEC): Define.
++	(LINK_SPEC): Include CA53_ERR_835769_SPEC.
++
+ 2014-10-31  Jakub Jelinek  <jakub@redhat.com>
+ 
+ 	PR sanitizer/63697
+diff --git a/gcc/config/aarch64/aarch64-elf-raw.h b/gcc/config/aarch64/aarch64-elf-raw.h
+index adec7e7..eafdd55 100644
+--- a/gcc/config/aarch64/aarch64-elf-raw.h
++++ b/gcc/config/aarch64/aarch64-elf-raw.h
+@@ -25,9 +25,18 @@
+ #define STARTFILE_SPEC " crti%O%s crtbegin%O%s crt0%O%s"
+ #define ENDFILE_SPEC " crtend%O%s crtn%O%s"
+ 
++#ifdef TARGET_FIX_ERR_A53_835769_DEFAULT
++#define CA53_ERR_835769_SPEC \
++  " %{!mno-fix-cortex-a53-835769:--fix-cortex-a53-835769}"
++#else
++#define CA53_ERR_835769_SPEC \
++  " %{mfix-cortex-a53-835769:--fix-cortex-a53-835769}"
++#endif
++
+ #ifndef LINK_SPEC
+ #define LINK_SPEC "%{mbig-endian:-EB} %{mlittle-endian:-EL} -X \
+-  -maarch64elf%{mabi=ilp32*:32}%{mbig-endian:b}"
++  -maarch64elf%{mabi=ilp32*:32}%{mbig-endian:b}" \
++  CA53_ERR_835769_SPEC
+ #endif
+ 
+ #endif /* GCC_AARCH64_ELF_RAW_H */
+diff --git a/gcc/config/aarch64/aarch64-linux.h b/gcc/config/aarch64/aarch64-linux.h
+index 57893fc..c47fbae 100644
+--- a/gcc/config/aarch64/aarch64-linux.h
++++ b/gcc/config/aarch64/aarch64-linux.h
+@@ -35,7 +35,16 @@
+    %{mbig-endian:-EB} %{mlittle-endian:-EL}     \
+    -maarch64linux%{mbig-endian:b}"
+ 
+-#define LINK_SPEC LINUX_TARGET_LINK_SPEC
++#ifdef TARGET_FIX_ERR_A53_835769_DEFAULT
++#define CA53_ERR_835769_SPEC \
++  " %{!mno-fix-cortex-a53-835769:--fix-cortex-a53-835769}"
++#else
++#define CA53_ERR_835769_SPEC \
++  " %{mfix-cortex-a53-835769:--fix-cortex-a53-835769}"
++#endif
++
++#define LINK_SPEC LINUX_TARGET_LINK_SPEC \
++                  CA53_ERR_835769_SPEC
+ 
+ #define TARGET_OS_CPP_BUILTINS()		\
+   do						\
+-- 
+2.0.3
+

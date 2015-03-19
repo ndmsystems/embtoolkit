@@ -1,0 +1,109 @@
+From 647a1dd9b80ec31b2e93e9324572e0417cb26c54 Mon Sep 17 00:00:00 2001
+From: paolo <paolo@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 11 Nov 2014 22:23:44 +0000
+Subject: [PATCH 43/67] /cp 2014-11-11  Paolo Carlini 
+ <paolo.carlini@oracle.com>
+
+	PR c++/63265
+	* pt.c (tsubst_copy_and_build, case COND_EXPR): Maybe fold to
+	constant the condition.
+
+/testsuite
+2014-11-11  Paolo Carlini  <paolo.carlini@oracle.com>
+
+	PR c++/63265
+	* g++.dg/cpp0x/constexpr-63265.C: New.
+
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217380 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/cp/ChangeLog                             |  6 ++++++
+ gcc/cp/pt.c                                  |  7 +++++--
+ gcc/testsuite/ChangeLog                      |  5 +++++
+ gcc/testsuite/g++.dg/cpp0x/constexpr-63265.C | 19 +++++++++++++++++++
+ 4 files changed, 35 insertions(+), 2 deletions(-)
+ create mode 100644 gcc/testsuite/g++.dg/cpp0x/constexpr-63265.C
+
+diff --git a/gcc/cp/ChangeLog b/gcc/cp/ChangeLog
+index d79d629..7c25432 100644
+--- a/gcc/cp/ChangeLog
++++ b/gcc/cp/ChangeLog
+@@ -1,3 +1,9 @@
++2014-11-11  Paolo Carlini  <paolo.carlini@oracle.com>
++
++	PR c++/63265
++	* pt.c (tsubst_copy_and_build, case COND_EXPR): Maybe fold to
++	constant the condition.
++
+ 2014-10-30  Release Manager
+ 
+ 	* GCC 4.9.2 released.
+diff --git a/gcc/cp/pt.c b/gcc/cp/pt.c
+index 0f98909..c0b8b92 100644
+--- a/gcc/cp/pt.c
++++ b/gcc/cp/pt.c
+@@ -14875,11 +14875,13 @@ tsubst_copy_and_build (tree t,
+     case COND_EXPR:
+       {
+ 	tree cond = RECUR (TREE_OPERAND (t, 0));
++	tree folded_cond = (maybe_constant_value
++			    (fold_non_dependent_expr_sfinae (cond, tf_none)));
+ 	tree exp1, exp2;
+ 
+-	if (TREE_CODE (cond) == INTEGER_CST)
++	if (TREE_CODE (folded_cond) == INTEGER_CST)
+ 	  {
+-	    if (integer_zerop (cond))
++	    if (integer_zerop (folded_cond))
+ 	      {
+ 		++c_inhibit_evaluation_warnings;
+ 		exp1 = RECUR (TREE_OPERAND (t, 1));
+@@ -14893,6 +14895,7 @@ tsubst_copy_and_build (tree t,
+ 		exp2 = RECUR (TREE_OPERAND (t, 2));
+ 		--c_inhibit_evaluation_warnings;
+ 	      }
++	    cond = folded_cond;
+ 	  }
+ 	else
+ 	  {
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index 45690e2..9e4011d 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,8 @@
++2014-11-11  Paolo Carlini  <paolo.carlini@oracle.com>
++
++	PR c++/63265
++	* g++.dg/cpp0x/constexpr-63265.C: New.
++
+ 2014-11-09  H.J. Lu  <hongjiu.lu@intel.com>
+ 
+ 	Backported from mainline
+diff --git a/gcc/testsuite/g++.dg/cpp0x/constexpr-63265.C b/gcc/testsuite/g++.dg/cpp0x/constexpr-63265.C
+new file mode 100644
+index 0000000..aa0ce5e
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/cpp0x/constexpr-63265.C
+@@ -0,0 +1,19 @@
++// PR c++/63265
++// { dg-do compile { target c++11 } }
++
++#define LSHIFT (sizeof(unsigned int) * __CHAR_BIT__)
++
++template <int lshift>
++struct SpuriouslyWarns1 {
++    static constexpr unsigned int v = lshift < LSHIFT ? 1U << lshift : 0;
++};
++
++static_assert(SpuriouslyWarns1<LSHIFT>::v == 0, "Impossible occurred");
++
++template <int lshift>
++struct SpuriouslyWarns2 {
++    static constexpr bool okay = lshift < LSHIFT;
++    static constexpr unsigned int v = okay ? 1U << lshift : 0;
++};
++
++static_assert(SpuriouslyWarns2<LSHIFT>::v == 0, "Impossible occurred");
+-- 
+2.0.3
+

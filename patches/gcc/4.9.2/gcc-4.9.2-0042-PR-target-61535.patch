@@ -1,0 +1,104 @@
+From dc866551a6a4a73d6f6a02bb55f8ff6b9179101b Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 11 Nov 2014 22:15:15 +0000
+Subject: [PATCH 42/67] 	PR target/61535 	* config/sparc/sparc.c
+ (function_arg_vector_value): Deal with vectors 	smaller than 8 bytes. 
+ (sparc_function_arg_1): Tweak. 	(sparc_function_value_1): Tweak.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217379 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog            |  8 ++++++++
+ gcc/config/sparc/sparc.c | 34 +++++++++++++++++-----------------
+ 2 files changed, 25 insertions(+), 17 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index fd02c88..9a700aa 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,11 @@
++2014-11-11  Eric Botcazou  <ebotcazou@adacore.com>
++
++	PR target/61535
++	* config/sparc/sparc.c (function_arg_vector_value): Deal with vectors
++	smaller than 8 bytes.
++	(sparc_function_arg_1): Tweak.
++	(sparc_function_value_1): Tweak.
++
+ 2014-11-08  Eric Botcazou  <ebotcazou@adacore.com>
+ 
+ 	* config/arm/arm.c (arm_set_return_address): Mark the store as frame
+diff --git a/gcc/config/sparc/sparc.c b/gcc/config/sparc/sparc.c
+index b77e808..d00c7b6 100644
+--- a/gcc/config/sparc/sparc.c
++++ b/gcc/config/sparc/sparc.c
+@@ -6804,28 +6804,30 @@ function_arg_union_value (int size, enum machine_mode mode, int slotno,
+ }
+ 
+ /* Used by function_arg and sparc_function_value_1 to implement the conventions
+-   for passing and returning large (BLKmode) vectors.
++   for passing and returning BLKmode vectors.
+    Return an expression valid as a return value for the FUNCTION_ARG
+    and TARGET_FUNCTION_VALUE.
+ 
+-   SIZE is the size in bytes of the vector (at least 8 bytes).
++   SIZE is the size in bytes of the vector.
+    REGNO is the FP hard register the vector will be passed in.  */
+ 
+ static rtx
+ function_arg_vector_value (int size, int regno)
+ {
+-  int i, nregs = size / 8;
+-  rtx regs;
+-
+-  regs = gen_rtx_PARALLEL (BLKmode, rtvec_alloc (nregs));
++  const int nregs = MAX (1, size / 8);
++  rtx regs = gen_rtx_PARALLEL (BLKmode, rtvec_alloc (nregs));
+ 
+-  for (i = 0; i < nregs; i++)
+-    {
++  if (size < 8)
++    XVECEXP (regs, 0, 0)
++      = gen_rtx_EXPR_LIST (VOIDmode,
++			   gen_rtx_REG (SImode, regno),
++			   const0_rtx);
++  else
++    for (int i = 0; i < nregs; i++)
+       XVECEXP (regs, 0, i)
+ 	= gen_rtx_EXPR_LIST (VOIDmode,
+ 			     gen_rtx_REG (DImode, regno + 2*i),
+ 			     GEN_INT (i*8));
+-    }
+ 
+   return regs;
+ }
+@@ -6871,10 +6873,9 @@ sparc_function_arg_1 (cumulative_args_t cum_v, enum machine_mode mode,
+ 		  || (TARGET_ARCH64 && size <= 16));
+ 
+       if (mode == BLKmode)
+-	return function_arg_vector_value (size,
+-					  SPARC_FP_ARG_FIRST + 2*slotno);
+-      else
+-	mclass = MODE_FLOAT;
++	return function_arg_vector_value (size, SPARC_FP_ARG_FIRST + 2*slotno);
++
++      mclass = MODE_FLOAT;
+     }
+ 
+   if (TARGET_ARCH32)
+@@ -7318,10 +7319,9 @@ sparc_function_value_1 (const_tree type, enum machine_mode mode,
+ 		  || (TARGET_ARCH64 && size <= 32));
+ 
+       if (mode == BLKmode)
+-	return function_arg_vector_value (size,
+-					  SPARC_FP_ARG_FIRST);
+-      else
+-	mclass = MODE_FLOAT;
++	return function_arg_vector_value (size, SPARC_FP_ARG_FIRST);
++
++      mclass = MODE_FLOAT;
+     }
+ 
+   if (TARGET_ARCH64 && type)
+-- 
+2.0.3
+
