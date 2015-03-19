@@ -1,0 +1,63 @@
+From bad8e457b8405fe04173df752d99b072dc389ec5 Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sat, 8 Nov 2014 09:17:59 +0000
+Subject: [PATCH 36/36] 	* config/arm/arm.c (arm_set_return_address): Mark the
+ store as frame 	related, if any. 	(thumb_set_return_address):
+ Likewise.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217252 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog        |  7 ++++++-
+ gcc/config/arm/arm.c | 12 ++++++++++--
+ 2 files changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 0e25640..fd02c88 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,6 +1,11 @@
++2014-11-08  Eric Botcazou  <ebotcazou@adacore.com>
++
++	* config/arm/arm.c (arm_set_return_address): Mark the store as frame
++	related, if any.
++	(thumb_set_return_address): Likewise.
++
+ 2014-11-07  Daniel Hellstrom  <daniel@gaisler.com>
+ 
+-	Backport from mainline
+ 	* config.gcc (sparc-*-rtems*): Clean away unused t-elf.
+ 	* config/sparc/t-rtems: Add leon3v7 and muser-mode multilibs.
+ 
+diff --git a/gcc/config/arm/arm.c b/gcc/config/arm/arm.c
+index 439a4de..5e2571c 100644
+--- a/gcc/config/arm/arm.c
++++ b/gcc/config/arm/arm.c
+@@ -28492,7 +28492,11 @@ arm_set_return_address (rtx source, rtx scratch)
+ 
+ 	  addr = plus_constant (Pmode, addr, delta);
+ 	}
+-      emit_move_insn (gen_frame_mem (Pmode, addr), source);
++      /* The store needs to be marked as frame related in order to prevent
++	 DSE from deleting it as dead if it is based on fp.  */
++      rtx insn = emit_move_insn (gen_frame_mem (Pmode, addr), source);
++      RTX_FRAME_RELATED_P (insn) = 1;
++      add_reg_note (insn, REG_CFA_RESTORE, gen_rtx_REG (Pmode, LR_REGNUM));
+     }
+ }
+ 
+@@ -28544,7 +28548,11 @@ thumb_set_return_address (rtx source, rtx scratch)
+       else
+ 	addr = plus_constant (Pmode, addr, delta);
+ 
+-      emit_move_insn (gen_frame_mem (Pmode, addr), source);
++      /* The store needs to be marked as frame related in order to prevent
++	 DSE from deleting it as dead if it is based on fp.  */
++      rtx insn = emit_move_insn (gen_frame_mem (Pmode, addr), source);
++      RTX_FRAME_RELATED_P (insn) = 1;
++      add_reg_note (insn, REG_CFA_RESTORE, gen_rtx_REG (Pmode, LR_REGNUM));
+     }
+   else
+     emit_move_insn (gen_rtx_REG (Pmode, LR_REGNUM), source);
+-- 
+2.0.3
+

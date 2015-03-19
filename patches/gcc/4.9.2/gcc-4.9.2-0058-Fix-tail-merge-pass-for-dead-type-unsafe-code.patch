@@ -1,0 +1,212 @@
+From 8953c928db1f2b3b6ae5222401376dc6e8f68a66 Mon Sep 17 00:00:00 2001
+From: vries <vries@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Wed, 19 Nov 2014 10:50:42 +0000
+Subject: [PATCH 58/67] Fix tail-merge pass for dead type-unsafe code
+
+2014-11-19  Tom de Vries  <tom@codesourcery.com>
+
+	Backport from mainline
+	PR tree-optimization/62167
+	* tree-ssa-tail-merge.c (stmt_local_def): Handle statements with vuse
+	conservatively.
+	(gimple_equal_p): Don't use vn_valueize to compare for lhs equality of
+	assigns.
+
+	* gcc.dg/pr51879-12.c: Add xfails.
+	* gcc.dg/pr62167-run.c: New test.
+	* gcc.dg/pr62167.c: New test.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217763 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog                      |  9 +++++++
+ gcc/testsuite/ChangeLog            |  8 ++++++
+ gcc/testsuite/gcc.dg/pr51879-12.c  |  4 +--
+ gcc/testsuite/gcc.dg/pr62167-run.c | 47 +++++++++++++++++++++++++++++++++++
+ gcc/testsuite/gcc.dg/pr62167.c     | 50 ++++++++++++++++++++++++++++++++++++++
+ gcc/tree-ssa-tail-merge.c          |  6 +++--
+ 6 files changed, 120 insertions(+), 4 deletions(-)
+ create mode 100644 gcc/testsuite/gcc.dg/pr62167-run.c
+ create mode 100644 gcc/testsuite/gcc.dg/pr62167.c
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 3ef171b..b4fcfe8 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,12 @@
++2014-11-19  Tom de Vries  <tom@codesourcery.com>
++
++	Backport from mainline
++	PR tree-optimization/62167
++	* tree-ssa-tail-merge.c (stmt_local_def): Handle statements with vuse
++	conservatively.
++	(gimple_equal_p): Don't use vn_valueize to compare for lhs equality of
++	assigns.
++
+ 2014-11-16  Eric Botcazou  <ebotcazou@adacore.com>
+ 
+ 	* doc/tm.texi.in (TARGET_FLAGS_REGNUM): Move around.
+diff --git a/gcc/testsuite/ChangeLog b/gcc/testsuite/ChangeLog
+index cae384f..d07681f 100644
+--- a/gcc/testsuite/ChangeLog
++++ b/gcc/testsuite/ChangeLog
+@@ -1,3 +1,11 @@
++2014-11-19  Tom de Vries  <tom@codesourcery.com>
++
++	Backport from mainline
++	PR tree-optimization/62167
++	* gcc.dg/pr51879-12.c: Add xfails.
++	* gcc.dg/pr62167-run.c: New test.
++	* gcc.dg/pr62167.c: New test.
++
+ 2014-11-13  Teresa Johnson  <tejohnson@google.com>
+ 
+ 	PR tree-optimization/63841
+diff --git a/gcc/testsuite/gcc.dg/pr51879-12.c b/gcc/testsuite/gcc.dg/pr51879-12.c
+index 1b25e29..7490e33 100644
+--- a/gcc/testsuite/gcc.dg/pr51879-12.c
++++ b/gcc/testsuite/gcc.dg/pr51879-12.c
+@@ -24,6 +24,6 @@ foo (int y)
+   baz (a);
+ }
+ 
+-/* { dg-final { scan-tree-dump-times "bar \\(" 1 "pre"} } */
+-/* { dg-final { scan-tree-dump-times "bar2 \\(" 1 "pre"} } */
++/* { dg-final { scan-tree-dump-times "bar \\(" 1 "pre" { xfail *-*-* } } } */
++/* { dg-final { scan-tree-dump-times "bar2 \\(" 1 "pre" { xfail *-*-* } } } */
+ /* { dg-final { cleanup-tree-dump "pre" } } */
+diff --git a/gcc/testsuite/gcc.dg/pr62167-run.c b/gcc/testsuite/gcc.dg/pr62167-run.c
+new file mode 100644
+index 0000000..37214a3
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/pr62167-run.c
+@@ -0,0 +1,47 @@
++/* { dg-do run } */
++/* { dg-options "-O2 -ftree-tail-merge" } */
++
++struct node
++{
++  struct node *next;
++  struct node *prev;
++};
++
++struct node node;
++
++struct head
++{
++  struct node *first;
++};
++
++struct head heads[5];
++
++int k = 2;
++
++struct head *head = &heads[2];
++
++int
++main ()
++{
++  struct node *p;
++
++  node.next = (void*)0;
++
++  node.prev = (void *)head;
++
++  head->first = &node;
++
++  struct node *n = head->first;
++
++  struct head *h = &heads[k];
++
++  heads[2].first = n->next;
++
++  if ((void*)n->prev == (void *)h)
++    p = h->first;
++  else
++    /* Dead tbaa-unsafe load from ((struct node *)&heads[2])->next.  */
++    p = n->prev->next;
++
++  return !(p == (void*)0);
++}
+diff --git a/gcc/testsuite/gcc.dg/pr62167.c b/gcc/testsuite/gcc.dg/pr62167.c
+new file mode 100644
+index 0000000..f8c31a0
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/pr62167.c
+@@ -0,0 +1,50 @@
++/* { dg-do compile } */
++/* { dg-options "-O2 -ftree-tail-merge -fdump-tree-pre" } */
++
++struct node
++{
++  struct node *next;
++  struct node *prev;
++};
++
++struct node node;
++
++struct head
++{
++  struct node *first;
++};
++
++struct head heads[5];
++
++int k = 2;
++
++struct head *head = &heads[2];
++
++int
++main ()
++{
++  struct node *p;
++
++  node.next = (void*)0;
++
++  node.prev = (void *)head;
++
++  head->first = &node;
++
++  struct node *n = head->first;
++
++  struct head *h = &heads[k];
++
++  heads[2].first = n->next;
++
++  if ((void*)n->prev == (void *)h)
++    p = h->first;
++  else
++    /* Dead tbaa-unsafe load from ((struct node *)&heads[2])->next.  */
++    p = n->prev->next;
++
++  return !(p == (void*)0);
++}
++
++/* { dg-final { scan-tree-dump-not "Removing basic block" "pre"} } */
++/* { dg-final { cleanup-tree-dump "pre" } } */
+diff --git a/gcc/tree-ssa-tail-merge.c b/gcc/tree-ssa-tail-merge.c
+index 1aa96a6..6efe02e 100644
+--- a/gcc/tree-ssa-tail-merge.c
++++ b/gcc/tree-ssa-tail-merge.c
+@@ -314,7 +314,8 @@ stmt_local_def (gimple stmt)
+ 
+   if (gimple_vdef (stmt) != NULL_TREE
+       || gimple_has_side_effects (stmt)
+-      || gimple_could_trap_p_1 (stmt, false, false))
++      || gimple_could_trap_p_1 (stmt, false, false)
++      || gimple_vuse (stmt) != NULL_TREE)
+     return false;
+ 
+   def_p = SINGLE_SSA_DEF_OPERAND (stmt, SSA_OP_DEF);
+@@ -1164,7 +1165,8 @@ gimple_equal_p (same_succ same_succ, gimple s1, gimple s2)
+ 						 gimple_assign_rhs1 (s2)));
+       else if (TREE_CODE (lhs1) == SSA_NAME
+ 	       && TREE_CODE (lhs2) == SSA_NAME)
+-	return vn_valueize (lhs1) == vn_valueize (lhs2);
++	return operand_equal_p (gimple_assign_rhs1 (s1),
++				gimple_assign_rhs1 (s2), 0);
+       return false;
+ 
+     case GIMPLE_COND:
+-- 
+2.0.3
+

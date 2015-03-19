@@ -1,0 +1,27 @@
+From 43ea34c464ad08ba62125dd24987d6e21acd2f17 Mon Sep 17 00:00:00 2001
+From: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+Date: Sat, 3 May 2014 19:57:29 +0200
+Subject: [PATCH 19/19] [EMBTK]Fix mips64 build after musl support for arm and
+ mips32
+
+Signed-off-by: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+---
+ gcc/config/mips/linux64.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/config/mips/linux64.h b/gcc/config/mips/linux64.h
+index 7ad3b2a..ef40dbc 100644
+--- a/gcc/config/mips/linux64.h
++++ b/gcc/config/mips/linux64.h
+@@ -39,6 +39,7 @@ along with GCC; see the file COPYING3.  If not see
+   "%{mnan=2008:/lib32/ld-uClibc-mipsn8.so.0;:/lib32/ld-uClibc.so.0}"
+ 
+ #define BIONIC_DYNAMIC_LINKERN32 "/system/bin/linker32"
++#define MUSL_DYNAMIC_LINKERN32 "/lib32/ld-musl.so.1"
+ #define GNU_USER_DYNAMIC_LINKERN32 \
+   CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKERN32, UCLIBC_DYNAMIC_LINKERN32, \
+-			 BIONIC_DYNAMIC_LINKERN32)
++			 BIONIC_DYNAMIC_LINKERN32, MUSL_DYNAMIC_LINKERN32)
+-- 
+2.0.3
+

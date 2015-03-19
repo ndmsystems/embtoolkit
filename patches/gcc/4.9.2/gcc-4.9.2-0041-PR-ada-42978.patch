@@ -1,0 +1,43 @@
+From cbb6382282abc8d6454de0ae08e9abc66bd1c57b Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Tue, 11 Nov 2014 12:30:00 +0000
+Subject: [PATCH 41/67] 	PR ada/42978 	* mlib-utl.adb (ar): Output the
+ options passed to ranlib.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217347 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ada/ChangeLog    | 5 +++++
+ gcc/ada/mlib-utl.adb | 4 ++++
+ 2 files changed, 9 insertions(+)
+
+diff --git a/gcc/ada/ChangeLog b/gcc/ada/ChangeLog
+index de30982..f103160 100644
+--- a/gcc/ada/ChangeLog
++++ b/gcc/ada/ChangeLog
+@@ -1,3 +1,8 @@
++2014-11-11  Simon Wright  <simon@pushface.org>
++
++	PR ada/42978
++	* mlib-utl.adb (ar): Output the options passed to ranlib.
++
+ 2014-10-30  Release Manager
+ 
+ 	* GCC 4.9.2 released.
+diff --git a/gcc/ada/mlib-utl.adb b/gcc/ada/mlib-utl.adb
+index 756add1..7e2d56b 100644
+--- a/gcc/ada/mlib-utl.adb
++++ b/gcc/ada/mlib-utl.adb
+@@ -282,6 +282,10 @@ package body MLib.Utl is
+          if not Opt.Quiet_Output then
+             Write_Str  (Ranlib_Name.all);
+             Write_Char (' ');
++            for J in Ranlib_Options'Range loop
++               Write_Str  (Ranlib_Options (J).all);
++               Write_Char (' ');
++            end loop;
+             Write_Line (Arguments (Ar_Options'Length + 1).all);
+          end if;
+ 
+-- 
+2.0.3
+

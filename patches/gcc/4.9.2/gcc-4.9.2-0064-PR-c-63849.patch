@@ -1,0 +1,93 @@
+From 4c193d286ff33512bbdb60f1a50935eee97c7a8c Mon Sep 17 00:00:00 2001
+From: jason <jason@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 21 Nov 2014 21:36:04 +0000
+Subject: [PATCH 64/67] 	PR c++/63849 	* mangle.c (decl_mangling_context):
+ Use template_type_parameter_p.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217951 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/cp/ChangeLog                           |  5 ++++
+ gcc/cp/mangle.c                            |  3 +--
+ gcc/testsuite/g++.dg/cpp0x/alias-decl-44.C | 43 ++++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+), 2 deletions(-)
+ create mode 100644 gcc/testsuite/g++.dg/cpp0x/alias-decl-44.C
+
+diff --git a/gcc/cp/ChangeLog b/gcc/cp/ChangeLog
+index 7c25432..2dfc5d3 100644
+--- a/gcc/cp/ChangeLog
++++ b/gcc/cp/ChangeLog
+@@ -1,3 +1,8 @@
++2014-11-21  Jason Merrill  <jason@redhat.com>
++
++	PR c++/63849
++	* mangle.c (decl_mangling_context): Use template_type_parameter_p.
++
+ 2014-11-11  Paolo Carlini  <paolo.carlini@oracle.com>
+ 
+ 	PR c++/63265
+diff --git a/gcc/cp/mangle.c b/gcc/cp/mangle.c
+index c8f57d3..d944d5e 100644
+--- a/gcc/cp/mangle.c
++++ b/gcc/cp/mangle.c
+@@ -763,8 +763,7 @@ decl_mangling_context (tree decl)
+       if (extra)
+ 	return extra;
+     }
+-    else if (TREE_CODE (decl) == TYPE_DECL
+-	     && TREE_CODE (TREE_TYPE (decl)) == TEMPLATE_TYPE_PARM)
++  else if (template_type_parameter_p (decl))
+      /* template type parms have no mangling context.  */
+       return NULL_TREE;
+   return CP_DECL_CONTEXT (decl);
+diff --git a/gcc/testsuite/g++.dg/cpp0x/alias-decl-44.C b/gcc/testsuite/g++.dg/cpp0x/alias-decl-44.C
+new file mode 100644
+index 0000000..bd20b54
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/cpp0x/alias-decl-44.C
+@@ -0,0 +1,43 @@
++// PR c++/63849
++// { dg-do compile { target c++11 } }
++
++template <class _T, class...>
++using First = _T;            // we should not use this
++                             // alias with only
++                             // one pack parameter (?)
++
++template <template <class...> class _Successor,
++          int,
++          class... _Xs>
++struct Overlay
++{
++    using O = _Successor<_Xs...>;
++};
++
++template <class... _Pack>
++struct List
++{
++    template <int _s>
++    using O = typename Overlay<List, _s, _Pack...>::O;
++
++    template <template <class...> class _S>
++    using Pass = _S<_Pack...>;
++
++    template <int _i>
++    using At = typename O<_i>
++    ::template Pass<First>;
++};
++
++template <int _i>
++using At = typename List<int, char>
++::template At<_i>;
++
++template <int _i>
++void func_crash(At<_i>&) {}
++
++int main(int argc, char *argv[])
++{
++    char ccc;
++    int iii;
++    func_crash<0>(iii);
++}
+-- 
+2.0.3
+

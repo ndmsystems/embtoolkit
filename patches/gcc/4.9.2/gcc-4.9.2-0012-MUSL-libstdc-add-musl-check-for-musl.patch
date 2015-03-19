@@ -1,0 +1,41 @@
+From c34f29fecce062b3d9bc49794daab332e3bfbfb8 Mon Sep 17 00:00:00 2001
+From: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+Date: Sat, 1 Mar 2014 22:41:24 +0100
+Subject: [PATCH 12/19] [MUSL]libstdc++: add musl check for musl
+
+Signed-off-by: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+---
+ libstdc++-v3/configure.host | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/libstdc++-v3/configure.host b/libstdc++-v3/configure.host
+index a5c038c..168c4ca 100644
+--- a/libstdc++-v3/configure.host
++++ b/libstdc++-v3/configure.host
+@@ -263,6 +263,13 @@ case "${host_os}" in
+     os_include_dir="os/bsd/freebsd"
+     ;;
+   gnu* | linux* | kfreebsd*-gnu | knetbsd*-gnu)
++    # check for musl by target
++    case "${host_os}" in
++      *-musl*)
++        os_include_dir="os/generic"
++        ;;
++      *)
++
+     if [ "$uclibc" = "yes" ]; then
+       os_include_dir="os/uclibc"
+     elif [ "$bionic" = "yes" ]; then
+@@ -271,6 +278,9 @@ case "${host_os}" in
+       os_include_dir="os/gnu-linux"
+     fi
+     ;;
++
++    esac
++    ;;
+   hpux*)
+     os_include_dir="os/hpux"
+     ;;
+-- 
+2.0.3
+

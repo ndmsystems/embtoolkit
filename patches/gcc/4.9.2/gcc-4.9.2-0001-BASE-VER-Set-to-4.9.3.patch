@@ -1,0 +1,51 @@
+From 84a4713962eb632bc75f235566ba1d47690bbf10 Mon Sep 17 00:00:00 2001
+From: jakub <jakub@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Thu, 30 Oct 2014 09:56:05 +0000
+Subject: [PATCH 01/19] 	* BASE-VER: Set to 4.9.3. 	* DEV-PHASE: Set to
+ prerelease.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@216911 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/BASE-VER  | 2 +-
+ gcc/ChangeLog | 7 ++++++-
+ gcc/DEV-PHASE | 1 +
+ 3 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/BASE-VER b/gcc/BASE-VER
+index dad10c7..c01c413 100644
+--- a/gcc/BASE-VER
++++ b/gcc/BASE-VER
+@@ -1 +1 @@
+-4.9.2
++4.9.3
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index b6654c6..ff4371c 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,8 @@
++2014-10-30  Jakub Jelinek  <jakub@redhat.com>
++
++	* BASE-VER: Set to 4.9.3.
++	* DEV-PHASE: Set to prerelease.
++
+ 2014-10-30  Release Manager
+ 
+ 	* GCC 4.9.2 released.
+@@ -1504,7 +1509,7 @@
+ 	* omp-low.c (create_omp_child_function): Don't set DECL_NAMELESS
+ 	on the FUNCTION_DECL.
+ 
+-	* BASE-VER: Set to 4.9.1.
++	* BASE-VER: Set to 4.9.2.
+ 	* DEV-PHASE: Set to prerelease.
+ 
+ 2014-07-16  Release Manager
+diff --git a/gcc/DEV-PHASE b/gcc/DEV-PHASE
+index e69de29..373fbc6 100644
+--- a/gcc/DEV-PHASE
++++ b/gcc/DEV-PHASE
+@@ -0,0 +1 @@
++prerelease
+-- 
+2.0.3
+

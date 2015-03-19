@@ -1,0 +1,77 @@
+From 6da76d32795e99e0d9ec1fdf4d2b295a995f3a11 Mon Sep 17 00:00:00 2001
+From: ebotcazou <ebotcazou@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Sun, 16 Nov 2014 15:50:33 +0000
+Subject: [PATCH 54/67] 	* doc/tm.texi.in (TARGET_FLAGS_REGNUM): Move around. 
+ * doc/tm.texi: Regenerate.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-4_9-branch@217629 138bc75d-0d04-0410-961f-82ee72b054a4
+---
+ gcc/ChangeLog      | 5 +++++
+ gcc/doc/tm.texi    | 8 ++++----
+ gcc/doc/tm.texi.in | 4 ++--
+ 3 files changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/gcc/ChangeLog b/gcc/ChangeLog
+index 965c695..3ef171b 100644
+--- a/gcc/ChangeLog
++++ b/gcc/ChangeLog
+@@ -1,3 +1,8 @@
++2014-11-16  Eric Botcazou  <ebotcazou@adacore.com>
++
++	* doc/tm.texi.in (TARGET_FLAGS_REGNUM): Move around.
++	* doc/tm.texi: Regenerate.
++
+ 2014-11-14  Felix Yang  <felix.yang@huawei.com>
+ 
+ 	Backport from mainline
+diff --git a/gcc/doc/tm.texi b/gcc/doc/tm.texi
+index 18a95d6..3ad6646 100644
+--- a/gcc/doc/tm.texi
++++ b/gcc/doc/tm.texi
+@@ -4441,10 +4441,6 @@ to return a nonzero value when it is required, the compiler will run out
+ of spill registers and print a fatal error message.
+ @end deftypefn
+ 
+-@deftypevr {Target Hook} {unsigned int} TARGET_FLAGS_REGNUM
+-If the target has a dedicated flags register, and it needs to use the post-reload comparison elimination pass, then this value should be set appropriately.
+-@end deftypevr
+-
+ @node Scalar Return
+ @subsection How Scalar Function Values Are Returned
+ @cindex return values in registers
+@@ -6146,6 +6142,10 @@ same.  If they are, it returns that mode.  If they are different, it
+ returns @code{VOIDmode}.
+ @end deftypefn
+ 
++@deftypevr {Target Hook} {unsigned int} TARGET_FLAGS_REGNUM
++If the target has a dedicated flags register, and it needs to use the post-reload comparison elimination pass, then this value should be set appropriately.
++@end deftypevr
++
+ @node Costs
+ @section Describing Relative Costs of Operations
+ @cindex costs of instructions
+diff --git a/gcc/doc/tm.texi.in b/gcc/doc/tm.texi.in
+index 0fb4cf2..0c8335d 100644
+--- a/gcc/doc/tm.texi.in
++++ b/gcc/doc/tm.texi.in
+@@ -3714,8 +3714,6 @@ stack.
+ 
+ @hook TARGET_SMALL_REGISTER_CLASSES_FOR_MODE_P
+ 
+-@hook TARGET_FLAGS_REGNUM
+-
+ @node Scalar Return
+ @subsection How Scalar Function Values Are Returned
+ @cindex return values in registers
+@@ -4686,6 +4684,8 @@ like:
+ 
+ @hook TARGET_CC_MODES_COMPATIBLE
+ 
++@hook TARGET_FLAGS_REGNUM
++
+ @node Costs
+ @section Describing Relative Costs of Operations
+ @cindex costs of instructions
+-- 
+2.0.3
+

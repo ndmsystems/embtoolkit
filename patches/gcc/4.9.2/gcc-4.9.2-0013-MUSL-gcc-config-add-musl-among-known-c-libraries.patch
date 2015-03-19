@@ -1,0 +1,49 @@
+From b96bf8998cd9a16ebdedb980f6aee0a6f5acbae1 Mon Sep 17 00:00:00 2001
+From: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+Date: Sat, 1 Mar 2014 22:43:28 +0100
+Subject: [PATCH 13/19] [MUSL]gcc config: add musl among known c libraries
+
+Signed-off-by: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
+---
+ gcc/config.gcc       | 5 ++++-
+ gcc/config/linux.opt | 4 ++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/config.gcc b/gcc/config.gcc
+index 9d3fa57..55e69ae 100644
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -594,7 +594,7 @@ case ${target} in
+ esac
+ 
+ # Common C libraries.
+-tm_defines="$tm_defines LIBC_GLIBC=1 LIBC_UCLIBC=2 LIBC_BIONIC=3"
++tm_defines="$tm_defines LIBC_GLIBC=1 LIBC_UCLIBC=2 LIBC_BIONIC=3 LIBC_MUSL=4"
+ 
+ # 32-bit x86 processors supported by --with-arch=.  Each processor
+ # MUST be separated by exactly one space.
+@@ -719,6 +719,9 @@ case ${target} in
+     *-*-*uclibc*)
+       tm_defines="$tm_defines DEFAULT_LIBC=LIBC_UCLIBC"
+       ;;
++    *-*-*musl*)
++      tm_defines="$tm_defines DEFAULT_LIBC=LIBC_MUSL"
++      ;;
+     *)
+       tm_defines="$tm_defines DEFAULT_LIBC=LIBC_GLIBC"
+       ;;
+diff --git a/gcc/config/linux.opt b/gcc/config/linux.opt
+index 435bd87..0c94f14 100644
+--- a/gcc/config/linux.opt
++++ b/gcc/config/linux.opt
+@@ -30,3 +30,7 @@ Use GNU C library
+ muclibc
+ Target Report RejectNegative Var(linux_libc,LIBC_UCLIBC) Negative(mbionic)
+ Use uClibc C library
++
++mmusl
++Target Report RejectNegative Var(linux_libc,LIBC_MUSL) Negative(mglibc)
++Use musl C library
+-- 
+2.0.3
+
