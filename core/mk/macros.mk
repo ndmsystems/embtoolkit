@@ -139,6 +139,7 @@ include core/mk/pkg-macros/vars.mk
 include core/mk/pkg-macros/include.mk
 include core/mk/pkg-macros/pkg-config.mk
 include core/mk/pkg-macros/libtool.mk
+include core/mk/pkg-macros/sites.mk
 include core/mk/pkg-macros/download.mk
 include core/mk/pkg-macros/configure.mk
 include core/mk/pkg-macros/install.mk
