@@ -58,10 +58,13 @@ __embtk_patch_site		= $(embtk_ftp)
 __embtk_patch_url		= $(__embtk_patch_site)/$(__embtk_pkg_name)/$(__embtk_pkg_version)
 __embtk_pkg_patch_site		= $(strip $(or $($(PKGV)_PATCH_SITE),$(__embtk_patch_url)))
 __embtk_pkg_patch_f		= $(strip $(embtk_dldir))/$(__embtk_pkg_name)-$(__embtk_pkg_version).patch
-__embtk_pkg_mirror		= $(embtk_ftp/packages-mirror)
+
+___embtk_pkg_mirror             = $(call embtk_uquote,$(CONFIG_EMBTK_$(PKGV)_MIRRORS)) $($(PKGV)_MIRRORS)
+__embtk_pkg_mirror		= $(___embtk_pkg_mirror) $(embtk_ftp/packages-mirror)
 __embtk_pkg_mirror1		= $(strip $($(PKGV)_MIRROR1))
 __embtk_pkg_mirror2		= $(strip $($(PKGV)_MIRROR2))
 __embtk_pkg_mirror3		= $(strip $($(PKGV)_MIRROR3))
+__embtk_pkg_mirrors             = $(strip $(__embtk_pkg_mirror1) $(__embtk_pkg_mirror2) $(__embtk_pkg_mirror3) $(__embtk_pkg_mirror))
 __embtk_pkg_package		= $(strip $($(PKGV)_PACKAGE))
 __embtk_pkg_package_remote	= $(or $(strip $($(PKGV)_PACKAGE_REMOTE)),$(__embtk_pkg_package))
 __embtk_pkg_tarball_fmt		= $(or $(__embtk_pkg_tarball_targz),\

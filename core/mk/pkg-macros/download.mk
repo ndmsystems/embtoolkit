@@ -116,32 +116,20 @@ define __embtk_download_pkg_from_tarball
 	$(call embtk_echo_blue,"\tCategory      : $(__embtk_$(pkgv)_category)"))
 	$(call embtk_echo_blue,"\tDependency of : $(or $(__embtk_pkg_depof),N/A)")
 	test -e $(__embtk_pkg_package_f) ||					\
-	$(call embtk_wget,							\
-		$(__embtk_pkg_package),						\
-		$(__embtk_pkg_site),						\
-		$(__embtk_pkg_package_remote)) ||				\
-	$(if $(__embtk_pkg_mirror1),						\
-		$(call embtk_wget,						\
-			$(__embtk_pkg_package),					\
-			$(__embtk_pkg_mirror1),					\
-			$(__embtk_pkg_package_remote)) ||)			\
-	$(if $(__embtk_pkg_mirror2),						\
-		$(call embtk_wget,						\
-			$(__embtk_pkg_package),					\
-			$(__embtk_pkg_mirror2),					\
-			$(__embtk_pkg_package_remote)) ||)			\
-	$(if $(__embtk_pkg_mirror3),						\
-		$(call embtk_wget,						\
-			$(__embtk_pkg_package),					\
-			$(__embtk_pkg_mirror3),					\
-			$(__embtk_pkg_package_remote)) ||)			\
-	$(call embtk_wget,							\
-		$(__embtk_pkg_package),						\
-		$(__embtk_pkg_mirror),						\
-		$(__embtk_pkg_package)) ||					\
+	$(foreach m,$(__embtk_pkg_site) $(__embtk_pkg_mirrors),			\
+		$(call __embtk_download_pkg_tarball,$(1),$(m)) ||)		\
 	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_package_f))
 	$(call __embtk_download_pkg_patches,$(1)) ||				\
 	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_patch_f))
+endef
+#
+# Download package tarball from a given site and check its hash if specified
+# $(1): package name
+# $(2): site
+#
+define __embtk_download_pkg_tarball
+	$(call embtk_wget,							\
+		$(__embtk_pkg_package),$(2),$(__embtk_pkg_package_remote))
 endef
 
 __embtk_pkgdl_src = $(or $(__embtk_pkg_usegit),$(__embtk_pkg_usesvn),tarball)
