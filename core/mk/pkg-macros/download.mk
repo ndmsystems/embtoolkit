@@ -115,7 +115,7 @@ define __embtk_download_pkg_from_tarball
 	$(if $(__embtk_$(pkgv)_category),
 	$(call embtk_echo_blue,"\tCategory      : $(__embtk_$(pkgv)_category)"))
 	$(call embtk_echo_blue,"\tDependency of : $(or $(__embtk_pkg_depof),N/A)")
-	test -e $(__embtk_pkg_package_f) ||					\
+	test -e $(__embtk_pkg_package_f) && $(__embtk_checktarball_pkg) ||	\
 	$(foreach m,$(__embtk_pkg_site) $(__embtk_pkg_mirrors),			\
 		$(call __embtk_download_pkg_tarball,$(1),$(m)) ||)		\
 	$(call __embtk_download_pkg_exitfailure,$(__embtk_pkg_package_f))
@@ -129,8 +129,32 @@ endef
 #
 define __embtk_download_pkg_tarball
 	$(call embtk_wget,							\
-		$(__embtk_pkg_package),$(2),$(__embtk_pkg_package_remote))
+		$(__embtk_pkg_package),$(2),$(__embtk_pkg_package_remote)) &&	\
+	$(__embtk_checktarball_pkg)
 endef
+define __embtk_checktarball_pkg
+	$(or $(__embtk_md5tarball_pkg),
+		$(__embtk_sha1tarball_pkg),
+		$(__embtk_sha256tarball_pkg),
+		$(__embtk_sha512tarball_pkg),
+		true)
+endef
+__embtk_md5tarball_pkg    = $(if $(__embtk_pkg_md5),$(call __embtk_md5_cmd,$(__embtk_pkg_md5),$(__embtk_pkg_package_f)))
+__embtk_sha1tarball_pkg   = $(if $(__embtk_pkg_sha1),$(call __embtk_sha1_cmd,$(__embtk_pkg_sha1),$(__embtk_pkg_package_f)))
+__embtk_sha256tarball_pkg = $(if $(__embtk_pkg_sha256),$(call __embtk_sha1_cmd,$(__embtk_pkg_sha256),$(__embtk_pkg_package_f)))
+__embtk_sha512tarball_pkg = $(if $(__embtk_pkg_sha512),$(call __embtk_sha1_cmd,$(__embtk_pkg_sha512),$(__embtk_pkg_package_f)))
+
+ifeq ($(embtk_buildhost-bsd),y)
+__embtk_md5_cmd    = md5   -c $(1) $(2) >/dev/null 2>&1
+__embtk_sha1_cmd   = sha1  -c $(1) $(2) >/dev/null 2>&1
+__embtk_sha256_cmd = sh256 -c $(1) $(2) >/dev/null 2>&1
+__embtk_sha512_cmd = sh512 -c $(1) $(2) >/dev/null 2>&1
+else
+__embtk_md5_cmd    = printf 'MD5 ($(2)) = $(1)'    | md5sum    -c - >/dev/null 2>&1
+__embtk_sha1_cmd   = printf 'SHA1 ($(2)) = $(1)'   | sha1sum   -c - >/dev/null 2>&1
+__embtk_sha256_cmd = printf 'SHA256 ($(2)) = $(1)' | sha256sum -c - >/dev/null 2>&1
+__embtk_sha512_cmd = printf 'SHA512 ($(2)) = $(1)' | sha512sum -c - >/dev/null 2>&1
+endif
 
 __embtk_pkgdl_src = $(or $(__embtk_pkg_usegit),$(__embtk_pkg_usesvn),tarball)
 define embtk_download_pkg

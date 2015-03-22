@@ -81,6 +81,10 @@ __embtk_pkg_tarball_tbz2	= $(if $(filter %.tbz2,$(__embtk_pkg_package)),tbz2)
 __embtk_pkg_tarball_tarxz	= $(if $(filter %.tar.xz,$(__embtk_pkg_package)),tar.xz)
 __embtk_pkg_tarball_txz		= $(if $(filter %.txz,$(__embtk_pkg_package)),txz)
 __embtk_pkg_tarball_tar		= $(if $(filter %.tar,$(__embtk_pkg_package)),tar)
+__embtk_pkg_md5                 = $(call embtk_uquote,$(CONFIG_EMBTK_$(PKGV)_MD5))
+__embtk_pkg_sha1                = $(call embtk_uquote,$(CONFIG_EMBTK_$(PKGV)_SHA1))
+__embtk_pkg_sha256              = $(call embtk_uquote,$(CONFIG_EMBTK_$(PKGV)_SHA256))
+__embtk_pkg_sha512              = $(call embtk_uquote,$(CONFIG_EMBTK_$(PKGV)_SHA512))
 
 __embtk_pkg_category		= $(call embtk_uquote,$(CONFIG_EMBTK_$(PKGV)_CATEGORY))
 # FIXME: drop __embtk_pkg_refspec in favor of __embtk_pkg_category
