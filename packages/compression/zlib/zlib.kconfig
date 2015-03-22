@@ -42,5 +42,9 @@ config EMBTK_ZLIB_VERSION_STRING
 	string
 	default "1.2.8"		if EMBTK_ZLIB_VERSION_1_2_8
 
+config EMBTK_ZLIB_SHA1
+	string
+	default "b598beb7acc96347cbd1020b71aef7871d374677"
+
 config EMBTK_ZLIB_NEED_PATCH
 	bool
