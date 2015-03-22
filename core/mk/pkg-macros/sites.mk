@@ -28,4 +28,5 @@ embtk_sites_sf_mirrors += tenet
 embtk_sites_sf_mirrors += ufpr
 embtk_sites_sf_mirrors += waix
 
-embtk_sites_sf := $(foreach m,$(embtk_sites_sf_mirrors),http://${m}.dl.sourceforge.net/project)
+embtk_sites_sf        := $(foreach m,$(embtk_sites_sf_mirrors),http://${m}.dl.sourceforge.net/project)
+embtk_sites_sf_subdir  = $(addsuffix /$(1),$(embtk_sites_sf))
