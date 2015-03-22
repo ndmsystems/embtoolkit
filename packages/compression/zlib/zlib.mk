@@ -23,12 +23,13 @@
 # \date         June 2009
 ################################################################################
 
-ZLIB_NAME		:= zlib
-ZLIB_VERSION		:= $(call embtk_get_pkgversion,zlib)
-ZLIB_SITE		:= http://sourceforge.net/projects/libpng/files/zlib/$(ZLIB_VERSION)
-ZLIB_PACKAGE		:= zlib-$(ZLIB_VERSION).tar.xz
-ZLIB_SRC_DIR		:= $(embtk_pkgb)/zlib-$(ZLIB_VERSION)
-ZLIB_BUILD_DIR		:= $(embtk_pkgb)/zlib-$(ZLIB_VERSION)
+ZLIB_NAME      := zlib
+ZLIB_VERSION   := $(call embtk_get_pkgversion,zlib)
+ZLIB_SITE      := http://zlib.net
+ZLIB_MIRRORS   := $(addsuffix /libpng/zlib/$(ZLIB_VERSION),$(embtk_sites_sf))
+ZLIB_PACKAGE   := zlib-$(ZLIB_VERSION).tar.xz
+ZLIB_SRC_DIR   := $(embtk_pkgb)/zlib-$(ZLIB_VERSION)
+ZLIB_BUILD_DIR := $(embtk_pkgb)/zlib-$(ZLIB_VERSION)
 
 
 ZLIB_BINS		:=

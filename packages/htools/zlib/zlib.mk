@@ -23,12 +23,13 @@
 # \date         June 2009
 ################################################################################
 
-ZLIB_HOST_NAME		:= zlib
-ZLIB_HOST_VERSION	:= $(call embtk_pkg_version,zlib_host)
-ZLIB_HOST_SITE		:= http://sourceforge.net/projects/libpng/files/zlib/$(ZLIB_HOST_VERSION)
-ZLIB_HOST_PACKAGE	:= zlib-$(ZLIB_HOST_VERSION).tar.xz
-ZLIB_HOST_SRC_DIR	:= $(embtk_toolsb)/zlib-$(ZLIB_HOST_VERSION)
-ZLIB_HOST_BUILD_DIR	:= $(embtk_toolsb)/zlib-$(ZLIB_HOST_VERSION)
+ZLIB_HOST_NAME      := zlib
+ZLIB_HOST_VERSION   := $(call embtk_pkg_version,zlib_host)
+ZLIB_HOST_SITE      := http://zlib.net
+ZLIB_HOST_MIRRORS   := $(addsuffix /libpng/zlib/$(ZLIB_HOST_VERSION),$(embtk_sites_sf))
+ZLIB_HOST_PACKAGE   := zlib-$(ZLIB_HOST_VERSION).tar.xz
+ZLIB_HOST_SRC_DIR   := $(embtk_toolsb)/zlib-$(ZLIB_HOST_VERSION)
+ZLIB_HOST_BUILD_DIR := $(embtk_toolsb)/zlib-$(ZLIB_HOST_VERSION)
 
 ZLIB_HOST_CONFIGURE_ENV  := CC=$(HOSTCC_CACHED)
 ZLIB_HOST_CONFIGURE_OPTS := --static
