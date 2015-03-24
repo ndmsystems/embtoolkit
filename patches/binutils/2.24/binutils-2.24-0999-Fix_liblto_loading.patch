@@ -1,0 +1,68 @@
+commit 92b1b67865c719e83d12578e584ca5e20d172eac
+Author: Markus Trippelsdorf <markus@trippelsdorf.de>
+Date:   Thu Apr 3 11:33:17 2014 +0100
+
+    This patch allows one to place the gcc's liblto_plugin in the lib/bfd-plugins directory
+    and have it loaded by default (as long as the --target option isn't used).
+    
+    	PR binutils/14698
+    	ar.c: Set plugin_target early if plugins are supported.
+    	nm.c: Likewise.
+
+diff --git a/binutils/ar.c b/binutils/ar.c
+index 69f20f9..ebd9528 100644
+--- a/binutils/ar.c
++++ b/binutils/ar.c
+@@ -138,7 +138,11 @@ static int show_version = 0;
+ 
+ static int show_help = 0;
+ 
++#if BFD_SUPPORTS_PLUGINS
++static const char *plugin_target = "plugin";
++#else
+ static const char *plugin_target = NULL;
++#endif
+ 
+ static const char *target = NULL;
+ 
+@@ -571,7 +575,6 @@ decode_options (int argc, char **argv)
+           break;
+ 	case OPTION_PLUGIN:
+ #if BFD_SUPPORTS_PLUGINS
+-	  plugin_target = "plugin";
+ 	  bfd_plugin_set_plugin (optarg);
+ #else
+ 	  fprintf (stderr, _("sorry - this program has been built without plugin support\n"));
+@@ -632,7 +635,6 @@ ranlib_main (int argc, char **argv)
+ 	  /* PR binutils/13493: Support plugins.  */
+ 	case OPTION_PLUGIN:
+ #if BFD_SUPPORTS_PLUGINS
+-	  plugin_target = "plugin";
+ 	  bfd_plugin_set_plugin (optarg);
+ #else
+ 	  fprintf (stderr, _("sorry - this program has been built without plugin support\n"));
+diff --git a/binutils/nm.c b/binutils/nm.c
+index 15c48a3..2a44a84 100644
+--- a/binutils/nm.c
++++ b/binutils/nm.c
+@@ -175,7 +175,11 @@ static char other_format[] = "%02x";
+ static char desc_format[] = "%04x";
+ 
+ static char *target = NULL;
+-static char *plugin_target = NULL;
++#if BFD_SUPPORTS_PLUGINS
++static const char *plugin_target = "plugin";
++#else
++static const char *plugin_target = NULL;
++#endif
+ 
+ /* Used to cache the line numbers for a BFD.  */
+ static bfd *lineno_cache_bfd;
+@@ -1646,7 +1650,6 @@ main (int argc, char **argv)
+ 
+ 	case OPTION_PLUGIN:	/* --plugin */
+ #if BFD_SUPPORTS_PLUGINS
+-	  plugin_target = "plugin";
+ 	  bfd_plugin_set_plugin (optarg);
+ #else
+ 	  fatal (_("sorry - this program has been built without plugin support\n"));
