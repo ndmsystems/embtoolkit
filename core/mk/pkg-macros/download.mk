@@ -145,11 +145,22 @@ __embtk_sha256tarball_pkg = $(if $(__embtk_pkg_sha256),$(call __embtk_sha1_cmd,$
 __embtk_sha512tarball_pkg = $(if $(__embtk_pkg_sha512),$(call __embtk_sha1_cmd,$(__embtk_pkg_sha512),$(__embtk_pkg_package_f)))
 
 ifeq ($(embtk_buildhost-bsd),y)
-__embtk_md5_cmd    = md5   -c $(1) $(2) >/dev/null 2>&1
-__embtk_sha1_cmd   = sha1  -c $(1) $(2) >/dev/null 2>&1
-__embtk_sha256_cmd = sh256 -c $(1) $(2) >/dev/null 2>&1
-__embtk_sha512_cmd = sh512 -c $(1) $(2) >/dev/null 2>&1
+# BSD systems
+
+__embtk_md5_cmd    = md5    -c $(1) $(2) >/dev/null 2>&1
+ifeq ($(embtk_buildhost-freebsd),y)
+__embtk_sha1_cmd   = sha1   -c $(1) $(2) >/dev/null 2>&1
+__embtk_sha256_cmd = sha256 -c $(1) $(2) >/dev/null 2>&1
+__embtk_sha512_cmd = sha512 -c $(1) $(2) >/dev/null 2>&1
 else
+# WTF:  perl is needed on mac os x and other BSD?
+__embtk_sha1_cmd   = printf '$(1) $(2)' | shasum -a 1   -c - >/dev/null 2>&1
+__embtk_sha256_cmd = printf '$(1) $(2)' | shasum -a 256 -c - >/dev/null 2>&1
+__embtk_sha512_cmd = printf '$(1) $(2)' | shasum -a 512 -c - >/dev/null 2>&1
+endif
+
+else
+# Not BSD systems (ie linux)
 __embtk_md5_cmd    = printf 'MD5 ($(2)) = $(1)'    | md5sum    -c - >/dev/null 2>&1
 __embtk_sha1_cmd   = printf 'SHA1 ($(2)) = $(1)'   | sha1sum   -c - >/dev/null 2>&1
 __embtk_sha256_cmd = printf 'SHA256 ($(2)) = $(1)' | sha256sum -c - >/dev/null 2>&1
