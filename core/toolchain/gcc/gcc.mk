@@ -167,6 +167,9 @@ define embtk_postinstallonce_gcc3
 		$(embtk_cleanup_gcc1)
 		$(embtk_cleanup_gcc2)
 		$(embtk_cleanup_gcc3))
+	mkdir -p $(embtk_tools)/lib/bfd-plugins
+	cd $(embtk_tools)/lib/bfd-plugins && \
+	find ../../libexec/gcc/ -name 'liblto_plugin.so' -exec ln -sf {} . \;
 endef
 
 #
