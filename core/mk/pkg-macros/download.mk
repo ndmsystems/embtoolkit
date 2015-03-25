@@ -141,8 +141,8 @@ define __embtk_checktarball_pkg
 endef
 __embtk_md5tarball_pkg    = $(if $(__embtk_pkg_md5),$(call __embtk_md5_cmd,$(__embtk_pkg_md5),$(__embtk_pkg_package_f)))
 __embtk_sha1tarball_pkg   = $(if $(__embtk_pkg_sha1),$(call __embtk_sha1_cmd,$(__embtk_pkg_sha1),$(__embtk_pkg_package_f)))
-__embtk_sha256tarball_pkg = $(if $(__embtk_pkg_sha256),$(call __embtk_sha1_cmd,$(__embtk_pkg_sha256),$(__embtk_pkg_package_f)))
-__embtk_sha512tarball_pkg = $(if $(__embtk_pkg_sha512),$(call __embtk_sha1_cmd,$(__embtk_pkg_sha512),$(__embtk_pkg_package_f)))
+__embtk_sha256tarball_pkg = $(if $(__embtk_pkg_sha256),$(call __embtk_sha256_cmd,$(__embtk_pkg_sha256),$(__embtk_pkg_package_f)))
+__embtk_sha512tarball_pkg = $(if $(__embtk_pkg_sha512),$(call __embtk_sha512_cmd,$(__embtk_pkg_sha512),$(__embtk_pkg_package_f)))
 
 ifeq ($(embtk_buildhost-bsd),y)
 # BSD systems
