@@ -154,9 +154,9 @@ __embtk_sha256_cmd = sha256 -c $(1) $(2) >/dev/null 2>&1
 __embtk_sha512_cmd = sha512 -c $(1) $(2) >/dev/null 2>&1
 else
 # WTF:  perl is needed on mac os x and other BSD?
-__embtk_sha1_cmd   = printf '$(1) $(2)' | shasum -a 1   -c - >/dev/null 2>&1
-__embtk_sha256_cmd = printf '$(1) $(2)' | shasum -a 256 -c - >/dev/null 2>&1
-__embtk_sha512_cmd = printf '$(1) $(2)' | shasum -a 512 -c - >/dev/null 2>&1
+__embtk_sha1_cmd   = printf '$(1)  $(2)' | shasum -a 1   -c - >/dev/null 2>&1
+__embtk_sha256_cmd = printf '$(1)  $(2)' | shasum -a 256 -c - >/dev/null 2>&1
+__embtk_sha512_cmd = printf '$(1)  $(2)' | shasum -a 512 -c - >/dev/null 2>&1
 endif
 
 else
