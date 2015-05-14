@@ -25,9 +25,9 @@
 
 UCLIBC_NAME		:= uClibc
 UCLIBC_VERSION		:= $(call embtk_get_pkgversion,uClibc)
-UCLIBC_SITE		:= http://www.uclibc.org/downloads
-UCLIBC_GIT_SITE		:= git://git.busybox.net/uClibc
-UCLIBC_PACKAGE		:= uClibc-$(UCLIBC_VERSION).tar.bz2
+UCLIBC_SITE		:= https://github.com/ndmsystems/uClibc/archive
+UCLIBC_GIT_SITE		:= https://github.com/ndmsystems/uClibc
+UCLIBC_PACKAGE		:= $(UCLIBC_VERSION).tar.gz
 UCLIBC_SRC_DIR		:= $(embtk_toolsb)/uClibc-$(UCLIBC_VERSION)
 UCLIBC_BUILD_DIR	:= $(call __embtk_pkg_srcdir,uClibc)
 
