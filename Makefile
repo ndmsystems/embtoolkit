@@ -22,6 +22,13 @@
 # \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
 # \date         May 2009
 ################################################################################
+INTERP			:= bash
+SHELL_EXEC		:= $(shell which $(INTERP))
+
+ifneq ($(origin SHELL),command line)
+SHELL			:= $(or $(SHELL_EXEC),$(error No "$(INTERP)" interpreter found))
+endif
+
 VERSION			:= 1
 PATCHLEVEL		:= 7
 SUBLEVEL		:= 0
