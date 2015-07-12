@@ -35,7 +35,8 @@ BINUTILS_KEEP_SRC_DIR	:= $(embtk_toolchain_has_llvm-y)
 
 BINUTILS_CONFIGURE_OPTS	:= --disable-werror --with-sysroot=$(embtk_sysroot)
 BINUTILS_CONFIGURE_OPTS	+= --disable-nls --disable-multilib
-BINUTILS_CONFIGURE_OPTS	+= --enable-gold --enable-plugins
+BINUTILS_CONFIGURE_OPTS	+= \
+	$(if $(CONFIG_EMBTK_GCC_ENABLE_LTO),--enable-gold --enable-plugins)
 BINUTILS_CONFIGURE_OPTS	+= --target=$(STRICT_GNU_TARGET)
 BINUTILS_CONFIGURE_OPTS	+= --with-zlib=no
 

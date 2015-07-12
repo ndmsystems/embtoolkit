@@ -39,6 +39,8 @@ choice
 		bool "gcc-4.8.x"
 	config EMBTK_GCC_VERSION_4_7_X
 		bool "gcc-4.7.x"
+	config EMBTK_GCC_VERSION_4_3_X
+		bool "gcc-4.3.x"
 	config EMBTK_GCC_VERSION_GIT
 		bool "Use GCC git repository"
 		help
@@ -80,6 +82,17 @@ choice
 		bool "gcc-4.7.4"
 endchoice
 
+# GCC-4.3.x
+choice
+	prompt "Version of gcc-4.3.x you wish"
+	depends on EMBTK_GCC_VERSION_4_3_X
+	help
+	 gcc-4.3.x version used.
+
+	config EMBTK_GCC_VERSION_4_3_4
+		bool "gcc-4.3.4"
+endchoice
+
 #
 # GIT repository options
 #
@@ -108,6 +121,7 @@ config EMBTK_GCC_VERSION_STRING
 	default "4.9.2"		if EMBTK_GCC_VERSION_4_9_2
 	default "4.8.3"		if EMBTK_GCC_VERSION_4_8_3
 	default "4.7.4"		if EMBTK_GCC_VERSION_4_7_4
+	default "4.3.4"		if EMBTK_GCC_VERSION_4_3_4
 	default "git"		if EMBTK_GCC_VERSION_GIT
 
 config EMBTK_GCC_NEED_PATCH
@@ -122,6 +136,12 @@ config EMBTK_GCC_NEED_AUTORECONF
 	select EMBTK_GCC2_NEED_AUTORECONF
 	select EMBTK_GCC3_NEED_AUTORECONF
 
+config EMBTK_GCC_ENABLE_LTO
+	bool
+	help
+	 Enable link time optimization (requires GCC >= 4.8)
+	default y if EMBTK_GCC_VERSION_4_8_X || EMBTK_GCC_VERSION_4_9_X
+	depends on EMBTK_GCC_VERSION_4_8_X || EMBTK_GCC_VERSION_4_9_X
 
 #
 # GCC1 virtual packages

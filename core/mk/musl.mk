@@ -34,7 +34,7 @@ MUSL_BUILD_DIR		:= $(call __embtk_pkg_srcdir,musl)
 __embtk_musl_v 		= "$(MUSL_VERSION) -"
 __embtk_musl_v 		+= "Cross Compiler $(embtk_targetcc_name-v) [$(embtk_host_uname)]"
 
-__embtk_musl_flags_flto	:= -flto=$(or $(CONFIG_EMBTK_NUMBER_BUILD_JOBS),1)
+__embtk_musl_flags_flto	:= $(if $(CONFIG_EMBTK_GCC_ENABLE_LTO),-flto=$(or $(CONFIG_EMBTK_NUMBER_BUILD_JOBS),1))
 
 __embtk_musl_cflags 	:= $(TARGET_CFLAGS)
 __embtk_musl_cflags 	+= $(if $(embtk_toolchain_use_llvm-y),-Wno-unknown-warning-option)
