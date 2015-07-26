@@ -1,0 +1,49 @@
+################################################################################
+# Embtoolkit
+# Copyright(C) 2012 Averell KINOUANI.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+################################################################################
+#
+# \file         dnsmasq.kconfig
+# \brief	dnsmasq.kconfig of Embtoolkit
+# \author       Averell KINOUANI <akinouani@embtoolkit.org>
+# \date         February 2015
+################################################################################
+
+config EMBTK_HAVE_DNSMASQ
+	bool "Have dnsmasq"
+	help
+	 Dnsmasq provides network infrastructure for small networks: DNS, DHCP, router advertisement and network boot.
+	 Supported platforms include Linux (with glibc and uclibc), Android, *BSD, and Mac OS X. Dnsmasq is included 
+	 in most Linux distributions and the ports systems of FreeBSD, OpenBSD and NetBSD. Dnsmasq provides full IPv6 support. 
+choice
+	prompt "dnsmasq version you wish"
+	depends on EMBTK_HAVE_DNSMASQ
+	help
+	 Here you can choose which version of dnsmasq you want to use.
+
+	config  EMBTK_DNSMASQ_VERSION_2_72
+		bool "dnsmasq-2.72"
+endchoice
+
+config EMBTK_DNSMASQ_VERSION_STRING
+	string
+	default "2.72"		if EMBTK_DNSMASQ_VERSION_2_72
+
+config EMBTK_DNSMASQ_NEED_PATCH
+	bool
+config EMBTK_DNSMASQ_NEED_AUTORECONF
+	bool

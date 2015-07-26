@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012-2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012 Averell KINOUANI.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,39 +17,20 @@
 #
 ################################################################################
 #
-# \file         net.kconfig
-# \brief	net.kconfig of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2012
+# \file         radvd.mk
+# \brief	radvd.mk of Embtoolkit
+# \author       Averell KINOUANI <a.kinouani@embtoolkit.org>
+# \date         February 2015
 ################################################################################
 
-# fcgi
-source packages/net/fcgi/fcgi.kconfig
+RADVD_NAME		:= radvd
+RADVD_VERSION		:= $(call embtk_get_pkgversion,radvd)
+RADVD_SITE		:= http://www.litech.org/radvd/dist/
+RADVD_PACKAGE		:= radvd-$(RADVD_VERSION).tar.gz
+RADVD_SRC_DIR		:= $(embtk_pkgb)/radvd-$(RADVD_VERSION)
+RADVD_BUILD_DIR	        := $(embtk_pkgb)/radvd-$(RADVD_VERSION)
 
-# Iptables
-source packages/net/iptables/iptables.kconfig
+RADVD_SBINS		:= radvd
 
-# LIBNL
-source packages/net/libnl/libnl.kconfig
-
-# libpcap
-source packages/net/libpcap/libpcap.kconfig
-
-# librsync
-source packages/net/librsync/librsync.kconfig
-
-# libtirpc
-source packages/net/libtirpc/libtirpc.kconfig
-
-# tcpdump
-source packages/net/tcpdump/tcpdump.kconfig
-
-# radvd
-source packages/net/radvd/radvd.kconfig
-
-# dnsmasq
-source packages/net/dnsmasq/dnsmasq.kconfig
-
-# odhcp6c
-source packages/net/odhcp6c/odhcp6c.kconfig
-
+RADVD_CONFIGURE_OPTS  	:= --program-transform-name=radvd
+RADVD_CONFIGURE_OPTS	+= --without-check

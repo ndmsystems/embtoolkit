@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012-2014 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012 Averell KINOUANI.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,39 +17,32 @@
 #
 ################################################################################
 #
-# \file         net.kconfig
-# \brief	net.kconfig of Embtoolkit
-# \author       Abdoulaye Walsimou GAYE <awg@embtoolkit.org>
-# \date         May 2012
+# \file         odhcp6c.kconfig
+# \brief	odhcp6c.kconfig of Embtoolkit
+# \author       Averell KINOUANI <akinouani@embtoolkit.org>
+# \date         February 2015
 ################################################################################
 
-# fcgi
-source packages/net/fcgi/fcgi.kconfig
+config EMBTK_HAVE_ODHCP6C
+	bool "Have odhcp6c"
+	help
+	 odhcp6c is a minimal DHCPv6 and RA-client for use in embedded Linux systems
+	 especially routers.
+choice
+	prompt "odhcp6c version you wish"
+	depends on EMBTK_HAVE_ODHCP6C
+	help
+	 Here you can choose which version of odhcp6c you want to use.
 
-# Iptables
-source packages/net/iptables/iptables.kconfig
+	config  EMBTK_ODHCP6C_VERSION_1_1
+		bool "odhcp6c-1.1"
+endchoice
 
-# LIBNL
-source packages/net/libnl/libnl.kconfig
+config EMBTK_ODHCP6C_VERSION_STRING
+	string
+	default "1.1"		if EMBTK_ODHCP6C_VERSION_1_1
 
-# libpcap
-source packages/net/libpcap/libpcap.kconfig
-
-# librsync
-source packages/net/librsync/librsync.kconfig
-
-# libtirpc
-source packages/net/libtirpc/libtirpc.kconfig
-
-# tcpdump
-source packages/net/tcpdump/tcpdump.kconfig
-
-# radvd
-source packages/net/radvd/radvd.kconfig
-
-# dnsmasq
-source packages/net/dnsmasq/dnsmasq.kconfig
-
-# odhcp6c
-source packages/net/odhcp6c/odhcp6c.kconfig
-
+config EMBTK_ODHCP6C_NEED_PATCH
+	bool
+config EMBTK_ODHCP6C_NEED_AUTORECONF
+	bool

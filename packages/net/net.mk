@@ -45,3 +45,12 @@ $(call embtk_include_pkg,libtirpc)
 
 # tcpdump
 $(call embtk_include_pkg,tcpdump)
+
+# radvd
+$(call embtk_include_pkg,radvd)
+
+# dnsmasq
+$(call embtk_include_pkg,dnsmasq)
+
+# odhcp6c
+$(call embtk_include_pkg,odhcp6c)
