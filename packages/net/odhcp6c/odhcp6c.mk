@@ -19,7 +19,7 @@
 #
 # \file         odhcp6c.mk
 # \brief	odhcp6c.mk of Embtoolkit
-# \author       Averell KINOUANI <a.kinouani@embtoolkit.org>
+# \author       Averell KINOUANI <averell.kinouani@embtoolkit.org>
 # \date         July 2015
 ################################################################################
 
