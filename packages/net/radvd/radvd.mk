@@ -19,7 +19,7 @@
 #
 # \file         radvd.mk
 # \brief	radvd.mk of Embtoolkit
-# \author       Averell KINOUANI <a.kinouani@embtoolkit.org>
+# \author       Averell KINOUANI <averell.kinouani@embtoolkit.org>
 # \date         February 2015
 ################################################################################
 
