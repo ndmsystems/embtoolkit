@@ -19,7 +19,7 @@
 #
 # \file         dnsmasq.mk
 # \brief	dnsmasq.mk of Embtoolkit
-# \author       Averell KINOUANI <a.kinouani@embtoolkit.org>
+# \author       Averell KINOUANI <averell.kinouani@embtoolkit.org>
 # \date         February 2015
 ################################################################################
 
