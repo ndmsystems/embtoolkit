@@ -54,8 +54,8 @@ choice
 	help
 	 gcc-4.9.x version used.
 
-	config EMBTK_GCC_VERSION_4_9_2
-		bool "gcc-4.9.2"
+	config EMBTK_GCC_VERSION_4_9_3
+		bool "gcc-4.9.3"
 		select EMBTK_GCC_NEED_PATCH
 endchoice
 
@@ -107,7 +107,7 @@ config EMBTK_GCC_REFSPEC
 #
 config EMBTK_GCC_VERSION_STRING
 	string
-	default "4.9.2"		if EMBTK_GCC_VERSION_4_9_2
+	default "4.9.3"		if EMBTK_GCC_VERSION_4_9_3
 	default "4.8.3"		if EMBTK_GCC_VERSION_4_8_3
 	default "4.7.4"		if EMBTK_GCC_VERSION_4_7_4
 	default "git"		if EMBTK_GCC_VERSION_GIT
