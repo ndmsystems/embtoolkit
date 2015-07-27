@@ -33,8 +33,8 @@ choice
 	help
 	 Which musl version to use.
 
-	config EMBTK_MUSL_VERSION_1_1_6
-		bool "musl-1.1.6"
+	config EMBTK_MUSL_VERSION_1_1_10
+		bool "musl-1.1.10"
 		select EMBTK_MUSL_NEED_PATCH
 	config EMBTK_MUSL_VERSION_GIT
 		bool "Use musl git"
@@ -44,7 +44,7 @@ endchoice
 
 config EMBTK_MUSL_VERSION_STRING
 	string
-	default "1.1.6"		if EMBTK_MUSL_VERSION_1_1_6
+	default "1.1.10"	if EMBTK_MUSL_VERSION_1_1_10
 	default "git"		if EMBTK_MUSL_VERSION_GIT
 
 config EMBTK_MUSL_CATEGORY
