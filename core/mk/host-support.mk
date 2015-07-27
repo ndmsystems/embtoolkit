@@ -62,6 +62,10 @@ embtk_buildhost_os      := macos
 embtk_buildhost_os_type := bsd
 embtk_buildhost-macos   := y
 embtk_buildhost-bsd     := y
+else ifeq ($(findstring cygwin,$(HOST_ARCH)),cygwin)
+embtk_buildhost_os      := cygwin
+embtk_buildhost_os_type := cygwin
+embtk_buildhost-cygwin  := y
 else
 embtk_buildhost_os	:= unknown-host-os
 endif
@@ -89,6 +93,10 @@ HOSTCXX			:=							\
 HOSTCFLAGS		= -Wall -O2 -I$(embtk_htools)/usr/include
 HOSTCXXFLAGS		= -Wall -O2 -I$(embtk_htools)/usr/include
 HOSTLDFLAGS		=
+
+ifeq ($(embtk_buildhost_os),cygwin)
+HOSTLDFLAGS		+= -lintl
+endif
 
 ifeq ($(embtk_buildhost_os),macos)
 HOSTCFLAGS		+= -I/opt/local/include -I$(embtk_includedir)

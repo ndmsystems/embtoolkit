@@ -42,6 +42,10 @@ embtk_glibc_cflags	:= $(subst -O0,-O1,$(__embtk_glibc_cflags))
 # Hard or soft floating point in glibc?
 embtk_glibc_floattype := $(if $(CONFIG_EMBTK_SOFTFLOAT),--with-fp=no,--with-fp=yes)
 
+
+#
+# BSD systems compat
+#
 ifeq ($(embtk_buildhost_os_type),bsd)
 embtk_glibc_buildcflags		:= -I/opt/local/include -I/usr/local/include -Dstat64=stat
 ifeq ($(embtk_buildhost_os),macos)
@@ -49,6 +53,15 @@ embtk_glibc_buildcflags	:= $(filter-out -Dstat64=stat,$(embtk_glibc_buildcflags)
 endif
 embtk_glibc_buildldflags	:= -L/opt/local/lib -L/usr/local/lib -lintl
 endif
+
+#
+# cygwin compat
+#
+ifeq ($(embtk_buildhost_os_type),cygwin)
+embtk_glibc_buildcflags		:= -Dstat64=stat
+embtk_glibc_buildldflags	:= -lintl
+endif
+
 
 #
 # glibc install

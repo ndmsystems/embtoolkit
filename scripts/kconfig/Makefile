@@ -127,6 +127,7 @@ help:
 
 # lxdialog stuff
 check-lxdialog  := $(srctree)/$(src)/lxdialog/check-lxdialog.sh
+check-lxdialog  := $(subst //,/,$(check-lxdialog))
 
 # Use recursively expanded variables so we do not call gcc unless
 # we really need to do so. (Do not call gcc as part of make mrproper)
@@ -201,7 +202,8 @@ $(obj)/dochecklxdialog:
 always := dochecklxdialog
 
 # Add environment specific flags
-HOST_EXTRACFLAGS += $(shell $(CONFIG_SHELL) $(srctree)/$(src)/check.sh $(HOSTCC) $(HOSTCFLAGS))
+check-sh-script := $(subst //,/,$(srctree)/$(src)/check.sh)
+HOST_EXTRACFLAGS += $(shell $(CONFIG_SHELL) $(check-sh-script) $(HOSTCC) $(HOSTCFLAGS))
 
 # generated files seem to need this to find local include files
 HOSTCFLAGS_zconf.lex.o	:= -I$(src)
