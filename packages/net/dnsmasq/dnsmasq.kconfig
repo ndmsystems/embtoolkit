@@ -27,8 +27,8 @@ config EMBTK_HAVE_DNSMASQ
 	bool "Have dnsmasq"
 	help
 	 Dnsmasq provides network infrastructure for small networks: DNS, DHCP, router advertisement and network boot.
-	 Supported platforms include Linux (with glibc and uclibc), Android, *BSD, and Mac OS X. Dnsmasq is included 
-	 in most Linux distributions and the ports systems of FreeBSD, OpenBSD and NetBSD. Dnsmasq provides full IPv6 support. 
+	 Supported platforms include Linux (with glibc and uclibc), Android, *BSD, and Mac OS X. Dnsmasq is included
+	 in most Linux distributions and the ports systems of FreeBSD, OpenBSD and NetBSD. Dnsmasq provides full IPv6 support.
 choice
 	prompt "dnsmasq version you wish"
 	depends on EMBTK_HAVE_DNSMASQ
