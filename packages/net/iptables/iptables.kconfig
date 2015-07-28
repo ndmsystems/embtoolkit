@@ -39,8 +39,9 @@ choice
 	depends on EMBTK_HAVE_IPTABLES
 	help
 		Here you can choose which version of iptables you want to use.
-	config  EMBTK_IPTABLES_VERSION_1_4_19_1
-		bool "iptables-1.4.19.1"
+
+	config  EMBTK_IPTABLES_VERSION_1_4_21
+                bool "iptables-1.4.21"
 
 endchoice
 
@@ -53,7 +54,7 @@ config EMBTK_IPTABLES_HAVE_LIBIPQ
 
 config EMBTK_IPTABLES_VERSION_STRING
 	string
-	default "1.4.19.1"	if EMBTK_IPTABLES_VERSION_1_4_19_1
+	default "1.4.21"	if EMBTK_IPTABLES_VERSION_1_4_21
 
 config EMBTK_IPTABLES_NEED_PATCH
 	bool
