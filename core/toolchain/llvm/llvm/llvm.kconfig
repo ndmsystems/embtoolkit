@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012-2014 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
+# Copyright(C) 2012-2015 Abdoulaye Walsimou GAYE <awg@embtoolkit.org>.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ config EMBTK_HOST_HAVE_LLVM
 #
 # llvm version
 #
-config EMBTK_LLVM_HOST_VERSION_3_5_1
+config EMBTK_LLVM_HOST_VERSION_3_5_2
 	bool
 	select EMBTK_LLVM_HOST_NEED_PATCH
 
@@ -69,7 +69,7 @@ config EMBTK_LLVM_HOST_CATEGORY
 #
 config EMBTK_LLVM_HOST_VERSION_STRING
 	string
-	default "3.5.1"		if EMBTK_LLVM_HOST_VERSION_3_5_1
+	default "3.5.2"		if EMBTK_LLVM_HOST_VERSION_3_5_2
 	default "3.4.1"		if EMBTK_LLVM_HOST_VERSION_3_4_1
 	default "git"		if EMBTK_LLVM_HOST_VERSION_GIT
 
