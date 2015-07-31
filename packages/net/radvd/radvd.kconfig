@@ -38,8 +38,6 @@ choice
 
 	config  EMBTK_RADVD_VERSION_2_11
 		bool "radvd-2.11"
-	config  EMBTK_RADVD_VERSION_2_10
-		bool "radvd-2.10"
 endchoice
 
 config EMBTK_RADVD_VERSION_STRING
