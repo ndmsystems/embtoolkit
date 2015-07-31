@@ -1,6 +1,6 @@
 ################################################################################
 # Embtoolkit
-# Copyright(C) 2012 Abdoulaye Walsimou GAYE.
+# Copyright(C) 2012-2015 Abdoulaye Walsimou GAYE.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,17 +23,18 @@
 # \date         December 2012
 ################################################################################
 
-TCPDUMP_NAME		:= tcpdump
-TCPDUMP_VERSION		:= $(call embtk_get_pkgversion,tcpdump)
-TCPDUMP_SITE		:= http://www.tcpdump.org/release
-TCPDUMP_PACKAGE		:= tcpdump-$(TCPDUMP_VERSION).tar.gz
-TCPDUMP_SRC_DIR		:= $(embtk_pkgb)/tcpdump-$(TCPDUMP_VERSION)
-TCPDUMP_BUILD_DIR	:= $(embtk_pkgb)/tcpdump-$(TCPDUMP_VERSION)
+TCPDUMP_NAME      := tcpdump
+TCPDUMP_VERSION   := $(call embtk_pkg_version,tcpdump)
+TCPDUMP_SITE      := http://www.tcpdump.org/release
+TCPDUMP_PACKAGE   := tcpdump-$(TCPDUMP_VERSION).tar.gz
+TCPDUMP_SRC_DIR   := $(embtk_pkgb)/tcpdump-$(TCPDUMP_VERSION)
+TCPDUMP_BUILD_DIR := $(embtk_pkgb)/tcpdump-$(TCPDUMP_VERSION)-build
 
-TCPDUMP_SBINS		:= tcpdump
+TCPDUMP_SBINS := tcpdump*
 
-TCPDUMP_CONFIGURE_ENV	:= ac_cv_linux_vers=2
-TCPDUMP_CONFIGURE_ENV	+= td_cv_buggygetaddrinfo=no
-TCPDUMP_CONFIGURE_OPTS	:= --without-smi --without-crypto --enable-ipv6
+TCPDUMP_CONFIGURE_ENV := ac_cv_linux_vers=2
+TCPDUMP_CONFIGURE_ENV += td_cv_buggygetaddrinfo=no
 
-TCPDUMP_DEPS		:= libpcap_install
+TCPDUMP_CONFIGURE_OPTS := --without-smi --without-crypto --disable-ipv6
+
+TCPDUMP_DEPS := libpcap_install
