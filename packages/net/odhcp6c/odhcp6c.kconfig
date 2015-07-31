@@ -25,9 +25,12 @@
 
 config EMBTK_HAVE_ODHCP6C
 	bool "Have odhcp6c"
+	select KEMBTK_UCLIBC_UCLIBC_HAS_NETWORK_SUPPORT if EMBTK_CLIB_UCLIBC
+	select KEMBTK_UCLIBC_UCLIBC_HAS_IPV6 if EMBTK_CLIB_UCLIBC
 	help
-	 odhcp6c is a minimal DHCPv6 and RA-client for use in embedded Linux systems
-	 especially routers.
+	 odhcp6c is a minimal DHCPv6 and RA-client for use in embedded Linux
+	 systems especially routers.
+
 choice
 	prompt "odhcp6c version you wish"
 	depends on EMBTK_HAVE_ODHCP6C
