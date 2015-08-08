@@ -41,6 +41,8 @@ choice
 		bool "gcc-4.7.x"
 	config EMBTK_GCC_VERSION_4_3_X
 		bool "gcc-4.3.x"
+	config EMBTK_GCC_VERSION_4_1_X
+		bool "gcc-4.1.x"
 	config EMBTK_GCC_VERSION_GIT
 		bool "Use GCC git repository"
 		help
@@ -93,6 +95,17 @@ choice
 		bool "gcc-4.3.4"
 endchoice
 
+# GCC-4.1.x
+choice
+	prompt "Version of gcc-4.1.x you wish"
+	depends on EMBTK_GCC_VERSION_4_1_X
+	help
+	 gcc-4.1.x version used.
+
+	config EMBTK_GCC_VERSION_4_1_2
+		bool "gcc-4.1.2"
+endchoice
+
 #
 # GIT repository options
 #
@@ -122,6 +135,7 @@ config EMBTK_GCC_VERSION_STRING
 	default "4.8.3"		if EMBTK_GCC_VERSION_4_8_3
 	default "4.7.4"		if EMBTK_GCC_VERSION_4_7_4
 	default "4.3.4"		if EMBTK_GCC_VERSION_4_3_4
+	default "4.1.2"		if EMBTK_GCC_VERSION_4_1_2
 	default "git"		if EMBTK_GCC_VERSION_GIT
 
 config EMBTK_GCC_NEED_PATCH

@@ -1,0 +1,23 @@
+diff -Nuar gcc-4.1.2/gcc/config/mips/mips.h gcc-4.1.2-patched/gcc/config/mips/mips.h
+--- gcc-4.1.2/gcc/config/mips/mips.h	2008-07-12 12:00:46.000000000 +0400
++++ gcc-4.1.2-patched/gcc/config/mips/mips.h	2015-07-11 17:13:23.689855126 +0300
+@@ -2798,3 +2798,7 @@
+ #ifndef HAVE_AS_TLS
+ #define HAVE_AS_TLS 0
+ #endif
++
++/* This is necessary to avoid a warning about comparing different enum
++   types.  */
++#define mips_tune_attr ((enum attr_cpu) mips_tune)
+diff -Nuar gcc-4.1.2/gcc/config/mips/mips.md gcc-4.1.2-patched/gcc/config/mips/mips.md
+--- gcc-4.1.2/gcc/config/mips/mips.md	2008-07-10 00:06:20.000000000 +0400
++++ gcc-4.1.2-patched/gcc/config/mips/mips.md	2015-07-11 17:13:43.401952874 +0300
+@@ -336,7 +336,7 @@
+ ;; with the processor_type enumeration in mips.h.
+ (define_attr "cpu"
+   "r3000,4kc,4kp,5kc,5kf,20kc,24k,24kx,m4k,r3900,r6000,r4000,r4100,r4111,r4120,r4130,r4300,r4600,r4650,r5000,r5400,r5500,r7000,r8000,r9000,sb1,sr71000"
+-  (const (symbol_ref "mips_tune")))
++  (const (symbol_ref "mips_tune_attr")))
+ 
+ ;; The type of hardware hazard associated with this instruction.
+ ;; DELAY means that the next instruction cannot read the result
