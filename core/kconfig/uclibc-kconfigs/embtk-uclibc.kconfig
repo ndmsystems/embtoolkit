@@ -28,9 +28,7 @@
 # Embtk specific
 #
 
-comment "----------------------------------------------------------------------"
-comment "----- uClibc C library configuration"
-comment "----------------------------------------------------------------------"
+comment "uClibc C library configuration"
 
 choice
 	prompt "uClibc version to use"

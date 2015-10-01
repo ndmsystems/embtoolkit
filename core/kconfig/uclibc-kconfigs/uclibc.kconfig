@@ -114,9 +114,7 @@ config KEMBTK_UCLIBC_TARGET_c6x
 	bool
 	default n
 
-comment "----------------"
 comment "Target Architecture Features and Options"
-comment "----------------"
 
 if KEMBTK_UCLIBC_TARGET_arm
 source core/kconfig/uclibc-kconfigs/uclibc-arm.kconfig
@@ -133,9 +131,7 @@ config KEMBTK_UCLIBC_TARGET_SUBARCH
 source core/kconfig/uclibc-kconfigs/uclibc-arch.kconfig
 
 
-comment "----------------"
 comment "General Library Settings"
-comment "----------------"
 
 config KEMBTK_UCLIBC_HAVE_NO_PIC
 	bool
@@ -798,9 +794,7 @@ config KEMBTK_UCLIBC_UCLIBC_FALLBACK_TO_ETC_LOCALTIME
 	  Most people will answer Y.
 
 
-comment "----------------"
 comment "Advanced Library Settings"
-comment "----------------"
 
 config KEMBTK_UCLIBC_UCLIBC_PWD_BUFFER_SIZE
 	int "Buffer size for getpwnam() and friends"
@@ -1233,9 +1227,7 @@ config KEMBTK_UCLIBC_UCLIBC_HAS_LIBNSL_STUB
 endif
 
 
-comment "----------------"
 comment "String and Stdio Support"
-comment "----------------"
 
 config KEMBTK_UCLIBC_UCLIBC_HAS_STRING_GENERIC_OPT
 	bool "Use faster (but larger) generic string functions"
@@ -1758,9 +1750,7 @@ config KEMBTK_UCLIBC_UCLIBC_HAS_GNU_GETSUBOPT
 	  Most people will answer Y.
 
 
-comment "----------------"
 comment "Big and Tall"
-comment "----------------"
 
 config KEMBTK_UCLIBC_UCLIBC_HAS_REGEX
 	bool "Regular Expression Support"
@@ -1887,9 +1877,7 @@ config KEMBTK_UCLIBC_UCLIBC_HAS_UTMPX
 
 
 
-#comment "----------------"
 #comment "Library Installation Options"
-#comment "----------------"
 
 config KEMBTK_UCLIBC_RUNTIME_PREFIX
 	string
@@ -1960,9 +1948,7 @@ config KEMBTK_UCLIBC_HARDWIRED_ABSPATH
 
 
 
-comment "----------------"
 comment "Security options"
-comment "----------------"
 
 config KEMBTK_UCLIBC_UCLIBC_BUILD_PIE
 	bool "Build utilities as ET_DYN/PIE executables"
@@ -2131,9 +2117,7 @@ config KEMBTK_UCLIBC_UCLIBC_BUILD_NOEXECSTACK
 	  You should probably say Y.
 
 
-comment "----------------"
 comment "uClibc development/debugging options"
-comment "----------------"
 
 config KEMBTK_UCLIBC_CROSS_COMPILER_PREFIX
 	string
