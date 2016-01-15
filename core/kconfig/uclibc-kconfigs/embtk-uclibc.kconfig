@@ -38,10 +38,6 @@ choice
 	config EMBTK_UCLIBC_VERSION_0_9_33_2
 		bool "uClibc-0.9.33.2"
 		select EMBTK_UCLIBC_NEED_PATCH
-	config EMBTK_UCLIBC_VERSION_0_9_33_NDM_2
-		bool "uClibc-0.9.33-ndm-2"
-	config EMBTK_UCLIBC_VERSION_0_9_33_NDM_3
-		bool "uClibc-0.9.33-ndm-3"
 	config EMBTK_UCLIBC_VERSION_GIT
 		bool "Use a branch of uClibc git repository"
 		help
@@ -51,8 +47,6 @@ endchoice
 config EMBTK_UCLIBC_VERSION_STRING
 	string
 	default "0.9.33.2"		if EMBTK_UCLIBC_VERSION_0_9_33_2
-	default "0.9.33-ndm-2"	if EMBTK_UCLIBC_VERSION_0_9_33_NDM_2
-	default "0.9.33-ndm-3"	if EMBTK_UCLIBC_VERSION_0_9_33_NDM_3
 	default "git"			if EMBTK_UCLIBC_VERSION_GIT
 
 config EMBTK_UCLIBC_REFSPEC
