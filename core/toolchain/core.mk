@@ -26,7 +26,7 @@
 __embtk_toolchain_version_prefix := $(if $(EMBTK_VERSION_GIT_HUMAN),$(EMBTK_VERSION_GIT_HUMAN)-)
 
 TOOLCHAIN_NAME		:= toolchain
-TOOLCHAIN_VERSION	:= $(__embtk_toolchain_version_prefix)$(__xtools_archos)-$(__xtools_bins)-$(EMBTK_DATE)
+TOOLCHAIN_VERSION	:= $(__embtk_toolchain_version_prefix)$(__xtools_archos)-$(embtk_os_version)-$(__xtools_bins)-$(EMBTK_DATE)
 TOOLCHAIN_PACKAGE	:= toolchain-$(TOOLCHAIN_VERSION).tar.bz2
 TOOLCHAIN_SRC_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
 TOOLCHAIN_BUILD_DIR	:= $(TOOLCHAIN_DIR)/.embtk-toolchain
