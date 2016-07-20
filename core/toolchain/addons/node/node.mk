@@ -6,8 +6,8 @@ NODE_HOST_SRC_DIR	:= $(embtk_toolsb)/node-v$(NODE_HOST_VERSION)
 NODE_HOST_BUILD_DIR	:= $(embtk_toolsb)/node-v$(NODE_HOST_VERSION)
 NODE_HOST_DESTDIR	:= $(embtk_tools)
 
-ifeq ($(EMBTK_TOOLCHAIN_STATIC),y)
-  NODE_HOST_MAKE_OPTS	:= LDFLAGS=-static
+ifeq ($(CONFIG_EMBTK_NODE_HOST_STATIC),y)
+  NODE_HOST_CONFIGURE_OPTS := --fully-static
 endif
 
 define embtk_install_node_host
@@ -16,5 +16,6 @@ endef
 
 define embtk_beforeinstall_node_host
 	cd $(NODE_HOST_BUILD_DIR); 					\
-	$(CONFIG_SHELL) $(NODE_HOST_SRC_DIR)/configure --prefix=/
+	$(CONFIG_SHELL) $(NODE_HOST_SRC_DIR)/configure --prefix=/	\
+		$(NODE_HOST_CONFIGURE_OPTS)
 endef

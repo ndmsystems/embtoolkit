@@ -7,7 +7,12 @@ config EMBTK_HOST_HAVE_NODE
 
 config EMBTK_NODE_HOST_VERSION_STRING
 	string
-	default	"0.10.30"
+	default	"4.4.7"
 
 config EMBTK_NODE_HOST_NEED_PATCH
 	bool
+
+config EMBTK_NODE_HOST_STATIC
+	bool "Build a static node"
+	depends on EMBTK_HOST_HAVE_NODE
+	default y
